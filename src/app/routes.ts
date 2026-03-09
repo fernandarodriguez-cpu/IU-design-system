@@ -1,0 +1,31 @@
+import { createBrowserRouter } from 'react-router';
+import { AppShell } from './components/layout/AppShell';
+import { HomePage } from './pages/HomePage';
+import { TokensPage } from './pages/TokensPage';
+import { AtomsPage } from './pages/AtomsPage';
+import { MoleculesPage } from './pages/MoleculesPage';
+import { OrganismsPage } from './pages/OrganismsPage';
+import { TemplatesPage } from './pages/TemplatesPage';
+import { AccessibilityPage } from './pages/AccessibilityPage';
+import { ChangelogPage } from './pages/ChangelogPage';
+import { FigmaExportPage } from './pages/FigmaExportPage';
+import { AIExportPage } from './pages/AIExportPage';
+
+export const router = createBrowserRouter([
+  {
+    path: '/',
+    Component: AppShell,
+    children: [
+      { index: true, Component: HomePage },
+      { path: 'tokens', Component: TokensPage },
+      { path: 'atoms/:id', Component: AtomsPage },
+      { path: 'molecules/:id', Component: MoleculesPage },
+      { path: 'organisms/:id', Component: OrganismsPage },
+      { path: 'templates/:id', Component: TemplatesPage },
+      { path: 'accessibility', Component: AccessibilityPage },
+      { path: 'changelog', Component: ChangelogPage },
+      { path: 'figma-export', Component: FigmaExportPage },
+      { path: 'ai-export', Component: AIExportPage },
+    ],
+  },
+]);
