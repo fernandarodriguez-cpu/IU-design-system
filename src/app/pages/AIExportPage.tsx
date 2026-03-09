@@ -2,11 +2,11 @@
  * AIExportPage — Genera y descarga un archivo .md completo con todo
  * el sistema de diseno Khor, optimizado como prompt/guia para IAs.
  */
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import {
   Download, Copy, Check, Eye, EyeOff, FileText,
   Bot, Sparkles, Info, Zap, Settings2,
-  ChevronDown, ChevronRight,
+  ChevronDown, ChevronRight, MousePointerClick,
 } from 'lucide-react';
 import { KButton, KText, KBadge, KAlert, KSwitch } from '../components/design-system/atoms';
 import { KCardSection, KTabs } from '../components/design-system/organisms';
@@ -14,6 +14,9 @@ import { kToast } from '../components/design-system/organisms';
 import { khorTokens } from '../theme/khor-theme';
 
 const t = khorTokens;
+
+/* ─── Version (must match ChangelogPage & AppShell) ─── */
+const KHOR_VERSION = '2.4.0';
 
 /* ─── Sections config ───────────────────────── */
 interface SectionConfig {
@@ -27,10 +30,10 @@ const defaultSections: SectionConfig[] = [
   { id: 'header', label: 'Encabezado y contexto', description: 'Nombre, version, stack tecnologico y proposito del sistema.', enabled: true },
   { id: 'tokens', label: 'Design Tokens', description: 'Colores de marca, neutrales, feedback, tipografia, espaciado, radios y sombras.', enabled: true },
   { id: 'darkmode', label: 'Dark Mode', description: 'Tokens alternativos para modo oscuro y CSS variables.', enabled: true },
-  { id: 'atoms', label: 'Atomos (18)', description: 'API completa de cada atomo: props, variantes, ejemplos de uso.', enabled: true },
-  { id: 'molecules', label: 'Moleculas (12)', description: 'API completa de cada molecula con composicion de atomos.', enabled: true },
-  { id: 'organisms', label: 'Organismos (8)', description: 'API de organismos complejos: tablas, modales, drawers, tabs, toast.', enabled: true },
-  { id: 'templates', label: 'Templates (4)', description: 'Patrones de pagina: Login, Dashboard, CRUD Table, Formulario Multi-Paso.', enabled: true },
+  { id: 'atoms', label: 'Atomos (27)', description: 'API completa de 27 atomos: 18 base + 9 extendidos (ButtonGroup, InputPassword, FloatButton, etc.).', enabled: true },
+  { id: 'molecules', label: 'Moleculas (33)', description: 'API completa de 33 moleculas: 12 base + 10 extendidas + 11 wave3 (DatePicker, ColorPicker, Transfer, etc.).', enabled: true },
+  { id: 'organisms', label: 'Organismos (13)', description: 'API de 13 organismos: 8 base + 5 extendidos (Upload, Tree, Tour, ModalConfirm, FormList).', enabled: true },
+  { id: 'templates', label: 'Templates y Patrones', description: 'Patrones de pagina: Login, Dashboard, CRUD Table, Formulario Multi-Paso, y convenciones.', enabled: true },
   { id: 'layout', label: 'Layout (AppShell)', description: 'Estructura sidebar + header + canvas con dimensiones y comportamiento.', enabled: true },
   { id: 'patterns', label: 'Patrones y Convenciones', description: 'Naming, imports, espaciado, responsive, accesibilidad.', enabled: true },
   { id: 'examples', label: 'Ejemplos de Codigo', description: 'Snippets listos para copiar/pegar de casos de uso comunes.', enabled: true },
@@ -49,7 +52,7 @@ function generateMarkdown(sections: SectionConfig[]): string {
 > Usalo como contexto/prompt en cualquier IA generativa (ChatGPT, Claude, Figma Make, Cursor, v0, etc.)
 > para que genere interfaces consistentes con nuestra marca.
 
-**Version:** 1.0.0
+**Version:** ${KHOR_VERSION}
 **Generado:** ${today}
 **Stack:** React 19 + TypeScript + Tailwind CSS v4 + Radix UI + Lucide React + Recharts + Sonner
 **Fuentes:** Raleway (titulos/UI) + Plus Jakarta Sans (cuerpo secundario)
@@ -239,7 +242,7 @@ style={{ backgroundColor: 'var(--card)', color: 'var(--foreground)' }}
 
   if (enabled.has('atoms')) {
     parts.push(`
-## Atomos (18 componentes)
+## Atomos (27 componentes)
 
 Los atomos son la unidad mas pequena e indivisible de la interfaz.
 Importar: \`import { KButton, KInput, ... } from './components/design-system/atoms'\`
@@ -512,12 +515,134 @@ interface KSpinProps {
 <KSpin size="lg" tip="Cargando datos..." />
 \`\`\`
 
+### KButtonGroup
+Grupo de botones con diseño uniforme.
+\`\`\`tsx
+interface KButtonGroupProps {
+  children: ReactNode;
+  size?: 'sm' | 'md' | 'lg';
+  className?: string;
+}
+
+<KButtonGroup size="md">
+  <KButton variant="primary">Opcion 1</KButton>
+  <KButton variant="secondary">Opcion 2</KButton>
+  <KButton variant="outline">Opcion 3</KButton>
+</KButtonGroup>
+\`\`\`
+
+### KInputPassword
+Input de password con visibilidad toggle.
+\`\`\`tsx
+interface KInputPasswordProps {
+  placeholder?: string;
+  value?: string;
+  onChange?: (e) => void;
+  size?: 'sm' | 'md' | 'lg';
+  className?: string;
+}
+
+<KInputPassword placeholder="Password" />
+\`\`\`
+
+### KFloatButton
+Boton flotante para acciones rapidas.
+\`\`\`tsx
+interface KFloatButtonProps {
+  icon: ReactNode;
+  onClick?: () => void;
+  size?: 'sm' | 'md' | 'lg';
+  className?: string;
+}
+
+<KFloatButton icon={<Plus size={20} />} onClick={handleAdd} size="md" />
+\`\`\`
+
+### KInputSearch
+Input de busqueda con boton de buscar, loading y clear.
+\`\`\`tsx
+interface KInputSearchProps {
+  value?: string;
+  onChange?: (value: string) => void;
+  onSearch?: (value: string) => void;
+  placeholder?: string;
+  enterButton?: boolean;
+  loading?: boolean;
+  allowClear?: boolean;
+  className?: string;
+}
+\`\`\`
+
+### KAffix
+Wrapper que fija un elemento al hacer scroll (sticky).
+\`\`\`tsx
+interface KAffixProps {
+  offsetTop?: number;
+  offsetBottom?: number;
+  children: ReactNode;
+  className?: string;
+}
+\`\`\`
+
+### KSpace
+Contenedor de espaciado automatico entre elementos.
+\`\`\`tsx
+interface KSpaceProps {
+  direction?: 'horizontal' | 'vertical';
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  wrap?: boolean;
+  align?: 'start' | 'center' | 'end';
+  children: ReactNode;
+  className?: string;
+}
+\`\`\`
+
+### KImage
+Imagen con fallback, preview lightbox y estados de error.
+\`\`\`tsx
+interface KImageProps {
+  src: string;
+  alt?: string;
+  width?: number | string;
+  height?: number | string;
+  fallback?: string;
+  preview?: boolean;         // Lightbox al hacer clic
+  className?: string;
+}
+\`\`\`
+
+### KWatermark
+Marca de agua superpuesta sobre contenido.
+\`\`\`tsx
+interface KWatermarkProps {
+  text: string;
+  fontSize?: number;
+  color?: string;
+  rotate?: number;
+  gap?: number;
+  children: ReactNode;
+  className?: string;
+}
+\`\`\`
+
+### KQRCode
+Generador de codigos QR visual.
+\`\`\`tsx
+interface KQRCodeProps {
+  value: string;
+  size?: number;             // Default: 128
+  color?: string;
+  bgColor?: string;
+  className?: string;
+}
+\`\`\`
+
 ---`);
   }
 
   if (enabled.has('molecules')) {
     parts.push(`
-## Moleculas (12 componentes)
+## Moleculas (33 componentes)
 
 Combinaciones de atomos que forman unidades funcionales reutilizables.
 Importar: \`import { KFormField, KSearchInput, ... } from './components/design-system/molecules'\`
@@ -668,12 +793,297 @@ interface KAccordionProps {
 }
 \`\`\`
 
+### KDatePicker
+Selector de fecha con calendario.
+\`\`\`tsx
+interface KDatePickerProps {
+  value?: Date;
+  onChange?: (date: Date) => void;
+  placeholder?: string;
+  disabled?: boolean;
+  size?: 'sm' | 'md' | 'lg';
+  className?: string;
+}
+
+<KDatePicker placeholder="Selecciona una fecha" />
+\`\`\`
+
+### KColorPicker
+Selector de color con paleta.
+\`\`\`tsx
+interface KColorPickerProps {
+  value?: string;            // Hex color
+  onChange?: (color: string) => void;
+  disabled?: boolean;
+  size?: 'sm' | 'md' | 'lg';
+  className?: string;
+}
+
+<KColorPicker value="#FF9500" />
+\`\`\`
+
+### KTransfer
+Componente de transferencia de elementos entre listas.
+\`\`\`tsx
+interface KTransferProps {
+  dataSource: { key: string; title: string }[];
+  targetKeys?: string[];
+  onChange?: (targetKeys: string[]) => void;
+  size?: 'sm' | 'md' | 'lg';
+  className?: string;
+}
+
+<KTransfer
+  dataSource={[
+    { key: '1', title: 'Item 1' },
+    { key: '2', title: 'Item 2' },
+    { key: '3', title: 'Item 3' },
+  ]}
+  targetKeys={['2']}
+  onChange={handleTransferChange}
+/>
+\`\`\`
+
+### KInputNumber
+Input numerico con controles +/- y precision.
+\`\`\`tsx
+interface KInputNumberProps {
+  value?: number;
+  onChange?: (value: number | undefined) => void;
+  min?: number; max?: number; step?: number;
+  precision?: number;
+  disabled?: boolean;
+  controls?: boolean;        // Botones +/-, default: true
+  size?: 'sm' | 'md' | 'lg';
+  className?: string;
+}
+\`\`\`
+
+### KSegmented
+Control segmentado tipo toggle group.
+\`\`\`tsx
+interface KSegmentedProps {
+  options: { label: string; value: string; icon?: ReactNode; disabled?: boolean }[];
+  value?: string;
+  onChange?: (value: string) => void;
+  block?: boolean;
+  size?: 'sm' | 'md' | 'lg';
+  className?: string;
+}
+\`\`\`
+
+### KAutocomplete
+Input con sugerencias de autocompletado.
+\`\`\`tsx
+interface KAutocompleteProps {
+  options: { label: string; value: string }[];
+  value?: string;
+  onChange?: (value: string) => void;
+  placeholder?: string;
+  onSearch?: (query: string) => void;
+  className?: string;
+}
+\`\`\`
+
+### KDateRangePicker
+Selector de rango de fechas con presets y hover preview.
+\`\`\`tsx
+interface KDateRangePickerProps {
+  value?: [Date, Date];
+  onChange?: (range: [Date, Date]) => void;
+  placeholder?: string;
+  presets?: { label: string; range: [Date, Date] }[];
+  disabled?: boolean;
+  className?: string;
+}
+\`\`\`
+
+### KSelectAdvanced
+Select avanzado con busqueda, multi-seleccion, tags y grupos.
+\`\`\`tsx
+interface KSelectAdvancedProps {
+  options: { label: string; value: string; group?: string }[];
+  value?: string | string[];
+  onChange?: (value: string | string[]) => void;
+  multiple?: boolean;
+  searchable?: boolean;
+  placeholder?: string;
+  className?: string;
+}
+\`\`\`
+
+### KDescriptions
+Lista de descripciones clave-valor tipo ficha tecnica.
+\`\`\`tsx
+interface KDescriptionsProps {
+  title?: string;
+  extra?: ReactNode;
+  bordered?: boolean;
+  column?: number;           // Default: 3
+  layout?: 'horizontal' | 'vertical';
+  items: { label: string; children: ReactNode; span?: number }[];
+  className?: string;
+}
+\`\`\`
+
+### KPopconfirm
+Confirmacion inline antes de ejecutar acciones.
+\`\`\`tsx
+interface KPopconfirmProps {
+  title: string;
+  description?: string;
+  onConfirm?: () => void;
+  onCancel?: () => void;
+  okText?: string;
+  cancelText?: string;
+  children: ReactNode;       // Trigger element
+  className?: string;
+}
+\`\`\`
+
+### KResult
+Pagina de resultado (exito, error, 403, 404, 500).
+\`\`\`tsx
+interface KResultProps {
+  status: 'success' | 'error' | 'info' | 'warning' | '403' | '404' | '500';
+  title: string;
+  subTitle?: string;
+  extra?: ReactNode;         // Botones de accion
+  className?: string;
+}
+\`\`\`
+
+### KTimeline
+Linea de tiempo vertical con items y estados.
+\`\`\`tsx
+interface KTimelineProps {
+  items: { children: ReactNode; color?: string; dot?: ReactNode; label?: string }[];
+  mode?: 'left' | 'right' | 'alternate';
+  pending?: ReactNode;
+  reverse?: boolean;
+  className?: string;
+}
+\`\`\`
+
+### KCascader
+Selector en cascada multinivel.
+\`\`\`tsx
+interface KCascaderProps {
+  options: { label: string; value: string; children?: CascaderOption[] }[];
+  value?: string[];
+  onChange?: (value: string[]) => void;
+  placeholder?: string;
+  disabled?: boolean;
+  className?: string;
+}
+\`\`\`
+
+### KStatistic
+Estadistica con titulo, valor, prefijo/sufijo y tendencia.
+\`\`\`tsx
+interface KStatisticProps {
+  title: string;
+  value: number | string;
+  precision?: number;
+  prefix?: ReactNode;
+  suffix?: ReactNode;
+  trend?: 'up' | 'down';
+  trendValue?: string;
+  loading?: boolean;
+  className?: string;
+}
+\`\`\`
+
+### KTimePicker
+Selector de hora con formato 12h/24h.
+\`\`\`tsx
+interface KTimePickerProps {
+  value?: string;
+  onChange?: (time: string) => void;
+  placeholder?: string;
+  disabled?: boolean;
+  format?: '12h' | '24h';
+  className?: string;
+}
+\`\`\`
+
+### KMentions
+Input con @menciones y sugerencias contextuales.
+\`\`\`tsx
+interface KMentionsProps {
+  value?: string;
+  onChange?: (value: string) => void;
+  options: { label: string; value: string }[];
+  placeholder?: string;
+  trigger?: string;          // Default: '@'
+  className?: string;
+}
+\`\`\`
+
+### KAnchor
+Navegacion lateral con scroll spy automatico.
+\`\`\`tsx
+interface KAnchorProps {
+  items: { key: string; href: string; title: string; children?: AnchorItem[] }[];
+  offsetTop?: number;
+  className?: string;
+}
+\`\`\`
+
+### KList
+Lista de items con bordes, headers y loading.
+\`\`\`tsx
+interface KListProps {
+  items: { title?: string; description?: string; avatar?: ReactNode; extra?: ReactNode }[];
+  bordered?: boolean;
+  size?: 'sm' | 'md' | 'lg';
+  header?: ReactNode;
+  footer?: ReactNode;
+  loading?: boolean;
+  className?: string;
+}
+\`\`\`
+
+### KDividerExtended
+Divisor con texto, orientacion y estilo dashed.
+\`\`\`tsx
+interface KDividerExtendedProps {
+  children?: ReactNode;      // Texto dentro del divisor
+  orientation?: 'horizontal' | 'vertical';
+  dashed?: boolean;
+  className?: string;
+}
+\`\`\`
+
+### KTreeSelect
+Select con estructura de arbol desplegable.
+\`\`\`tsx
+interface KTreeSelectProps {
+  data: { key: string; title: string; children?: TreeNode[] }[];
+  value?: string;
+  onChange?: (value: string) => void;
+  placeholder?: string;
+  disabled?: boolean;
+  className?: string;
+}
+\`\`\`
+
+### KNotificationContainer
+Sistema de notificaciones persistentes (no toast).
+\`\`\`tsx
+// Uso programatico:
+import { kNotify } from './molecules-wave3';
+
+kNotify({ title: 'Nueva tarea', description: 'Te asignaron...', type: 'info' });
+kNotify({ title: 'Completado', description: 'Proceso terminado', type: 'success' });
+\`\`\`
+
 ---`);
   }
 
   if (enabled.has('organisms')) {
     parts.push(`
-## Organismos (8 componentes)
+## Organismos (13 componentes)
 
 Componentes complejos que conforman secciones completas de UI.
 Importar: \`import { KDataTable, KModal, ... } from './components/design-system/organisms'\`
@@ -777,10 +1187,10 @@ kToast({ type: 'info', title: 'Info', description: 'Proceso en curso.' });
 <KToastProvider />
 \`\`\`
 
-### SparklineCell
+### KSparklineCell
 Mini-grafico de linea para usar dentro de tablas o cards.
 \`\`\`tsx
-interface SparklineCellProps {
+interface KSparklineCellProps {
   data: number[];
   color?: string;
   width?: number;
@@ -788,7 +1198,7 @@ interface SparklineCellProps {
 }
 \`\`\`
 
-### CommandBar (KCommandBar)
+### KCommandBar
 Barra de comandos global activada con Ctrl+K / Cmd+K.
 \`\`\`tsx
 // Integrado en AppShell, no requiere configuracion manual.
@@ -797,12 +1207,114 @@ Barra de comandos global activada con Ctrl+K / Cmd+K.
 // Historial persiste en localStorage.
 \`\`\`
 
+### KUpload
+Componente de subida de archivos.
+\`\`\`tsx
+interface KUploadProps {
+  onUpload?: (files: File[]) => void;
+  multiple?: boolean;
+  accept?: string;           // MIME types
+  size?: 'sm' | 'md' | 'lg';
+  className?: string;
+}
+
+<KUpload onUpload={handleUpload} multiple accept="image/*" size="md" />
+\`\`\`
+
+### KTree
+Arbol de navegacion o seleccion.
+\`\`\`tsx
+interface KTreeProps {
+  data: { key: string; title: string; children?: KTreeProps['data'] }[];
+  selectedKeys?: string[];
+  onSelect?: (keys: string[]) => void;
+  size?: 'sm' | 'md' | 'lg';
+  className?: string;
+}
+
+<KTree
+  data={[
+    { key: '1', title: 'Item 1' },
+    { key: '2', title: 'Item 2', children: [
+      { key: '2-1', title: 'Subitem 1' },
+      { key: '2-2', title: 'Subitem 2' },
+    ] },
+  ]}
+  selectedKeys={['2-1']}
+  onSelect={handleSelect}
+/>
+\`\`\`
+
+### KTour
+Guia de usuario para introducir nuevas funcionalidades.
+\`\`\`tsx
+interface KTourProps {
+  steps: { key: string; title: string; content: ReactNode; target: string }[];
+  current?: number;
+  onStepChange?: (index: number) => void;
+  size?: 'sm' | 'md' | 'lg';
+  className?: string;
+}
+
+<KTour
+  steps={[
+    { key: 'step1', title: 'Paso 1', content: <KText>Descripción del paso 1</KText>, target: '#element1' },
+    { key: 'step2', title: 'Paso 2', content: <KText>Descripción del paso 2</KText>, target: '#element2' },
+  ]}
+  current={0}
+  onStepChange={handleStepChange}
+/>
+\`\`\`
+
+### KModalConfirm
+Modal de confirmacion para acciones criticas.
+\`\`\`tsx
+interface KModalConfirmProps {
+  open: boolean;
+  onClose: () => void;
+  title: string;
+  description: string;
+  onConfirm: () => void;
+  size?: 'sm' | 'md' | 'lg';
+  className?: string;
+}
+
+<KModalConfirm
+  open={confirmOpen}
+  onClose={() => setConfirmOpen(false)}
+  title="Confirmar eliminación"
+  description="¿Estás seguro de que quieres eliminar este elemento?"
+  onConfirm={handleDelete}
+/>
+\`\`\`
+
+### KFormList
+Lista de formularios dinámicos para entradas múltiples.
+\`\`\`tsx
+interface KFormListProps {
+  fields: { key: string; name: string }[];
+  onAdd?: () => void;
+  onRemove?: (key: string) => void;
+  size?: 'sm' | 'md' | 'lg';
+  className?: string;
+}
+
+<KFormList
+  fields={[
+    { key: '1', name: 'Campo 1' },
+    { key: '2', name: 'Campo 2' },
+  ]}
+  onAdd={handleAddField}
+  onRemove={handleRemoveField}
+/>
+\`\`\`
+
 ---`);
   }
 
   if (enabled.has('templates')) {
     parts.push(`
-## Templates (4 patrones de pagina)
+## Templates y Patrones (4 patrones de pagina)
 
 ### Login Template
 Pantalla de inicio de sesion con formulario centrado, logo y fondo navy.
@@ -823,6 +1335,12 @@ Tabla de datos completa con busqueda, paginacion, modal de crear/editar y drawer
 Wizard de 4 pasos con validacion por paso, stepper visual y resumen final.
 - Componentes usados: KSteps, KFormField, KInput, KSelectField, KRadio, KCheckbox, KButton
 - Patron: paso 1 (datos) → paso 2 (config) → paso 3 (revision) → paso 4 (confirmacion)
+
+### Convenciones de Paginas
+- **Rutas:** Todas las paginas deben estar en \`/src/app/pages\` y seguir la estructura de carpetas.
+- **Componentes:** Usa componentes de \`design-system\` para mantener consistencia.
+- **Estilos:** Usa Tailwind CSS para estilos y \`khorTokens\` para tokens.
+- **Accesibilidad:** Asegura que todos los componentes sean accesibles y cumplan con WCAG AA.
 
 ---`);
   }
@@ -896,19 +1414,34 @@ const router = createBrowserRouter([
 
 ### Imports
 \`\`\`tsx
-// Atomos
+// Atomos base (18)
 import { KButton, KInput, KBadge, KTag, KAvatar, KSwitch, KCheckbox, KRadio,
          KTooltip, KProgress, KText, KDivider, KAlert, KSkeleton, KSlider,
          KRate, KSpin, KTextArea } from './components/design-system/atoms';
 
-// Moleculas
+// Atomos extendidos (9)
+import { KButtonGroup, KInputPassword, KInputSearch, KFloatButton,
+         KAffix, KSpace, KImage, KWatermark, KQRCode } from './components/design-system/atoms-extended';
+
+// Moleculas base (12)
 import { KFormField, KSearchInput, KStatCard, KNavItem, KSelectField,
          KUserCell, KEmptyState, KBreadcrumb, KSteps, KDropdownMenu,
          KPopover, KAccordion } from './components/design-system/molecules';
 
-// Organismos
+// Moleculas extendidas (10)
+import { KInputNumber, KSegmented, KAutocomplete, KDatePicker, KDateRangePicker,
+         KSelectAdvanced, KDescriptions, KPopconfirm, KResult, KTimeline } from './components/design-system/molecules-extended';
+
+// Moleculas wave3 (11)
+import { KCascader, KStatistic, KTimePicker, KMentions, KColorPicker,
+         KAnchor, KList, KTransfer, KDividerExtended, KTreeSelect } from './components/design-system/molecules-wave3';
+
+// Organismos base (8)
 import { KDataTable, KModal, KDrawer, KCardSection, KTabs,
-         KToastProvider, kToast } from './components/design-system/organisms';
+         KToastProvider, kToast, KSparklineCell } from './components/design-system/organisms';
+
+// Organismos extendidos (5)
+import { KUpload, KTree, KTour, KModalConfirm, KFormList } from './components/design-system/organisms-extended';
 
 // Tokens
 import { khorTokens } from './theme/khor-theme';
@@ -1089,6 +1622,7 @@ export function AIExportPage() {
   const [copied, setCopied] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [expandedPreview, setExpandedPreview] = useState(false);
+  const previewRef = useRef<HTMLPreElement>(null);
 
   const markdown = useMemo(() => generateMarkdown(sections), [sections]);
   const words = useMemo(() => wordCount(markdown), [markdown]);
@@ -1115,13 +1649,56 @@ export function AIExportPage() {
   };
 
   const handleCopy = async () => {
+    // Try clipboard API first, then fallback to execCommand
+    let success = false;
     try {
       await navigator.clipboard.writeText(markdown);
+      success = true;
+    } catch {
+      // Fallback: create a hidden textarea, select and copy
+      try {
+        const textarea = document.createElement('textarea');
+        textarea.value = markdown;
+        textarea.style.position = 'fixed';
+        textarea.style.left = '-9999px';
+        textarea.style.top = '-9999px';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        success = document.execCommand('copy');
+        document.body.removeChild(textarea);
+      } catch {
+        success = false;
+      }
+    }
+
+    if (success) {
       setCopied(true);
       kToast({ type: 'success', title: 'Copiado', description: 'Todo el markdown fue copiado al portapapeles.' });
       setTimeout(() => setCopied(false), 2000);
-    } catch {
-      kToast({ type: 'error', title: 'Error', description: 'No se pudo copiar al portapapeles.' });
+    } else {
+      kToast({
+        type: 'warning',
+        title: 'No se pudo copiar automaticamente',
+        description: 'Usa el boton "Seleccionar todo" en la vista previa y copia manualmente con Ctrl+C / Cmd+C.',
+      });
+      // Auto-show preview so user can use "select all"
+      setShowPreview(true);
+      setExpandedPreview(true);
+    }
+  };
+
+  const handleSelectAll = () => {
+    if (previewRef.current) {
+      const range = document.createRange();
+      range.selectNodeContents(previewRef.current);
+      const selection = window.getSelection();
+      if (selection) {
+        selection.removeAllRanges();
+        selection.addRange(range);
+      }
+      kToast({ type: 'info', title: 'Texto seleccionado', description: 'Ahora presiona Ctrl+C (o Cmd+C) para copiar.' });
     }
   };
 
@@ -1155,7 +1732,7 @@ export function AIExportPage() {
       <KAlert
         type="info"
         title="Prompt portatil para IAs generativas"
-        description="Este archivo .md contiene tokens, APIs de componentes, patrones y ejemplos del sistema Khor. Pegalo como contexto en ChatGPT, Claude, Cursor, Figma Make, v0 o cualquier asistente IA para que genere interfaces 100% consistentes con tu marca."
+        description="Este archivo .md contiene tokens, APIs de componentes, patrones y ejemplos del sistema Khor. Pegalo como contexto en ChatGPT, Claude, Cursor, Figma Make, v0 o cualquier asistente IA para que genere interfaces 100% consistentes con Khor."
         className="mb-6"
       />
 
@@ -1364,20 +1941,41 @@ export function AIExportPage() {
               {expandedPreview ? 'Colapsar' : 'Expandir completo'}
             </button>
           </div>
-          <pre style={{
-            padding: 20,
-            margin: 0,
-            fontSize: 12,
-            lineHeight: 1.6,
-            color: 'var(--foreground)',
-            fontFamily: "'Plus Jakarta Sans', monospace",
-            whiteSpace: 'pre-wrap',
-            wordBreak: 'break-word',
-            maxHeight: expandedPreview ? 'none' : 500,
-            overflow: expandedPreview ? 'visible' : 'auto',
-          }}>
+          <pre
+            ref={previewRef}
+            style={{
+              padding: 20,
+              margin: 0,
+              fontSize: 12,
+              lineHeight: 1.6,
+              color: 'var(--foreground)',
+              fontFamily: "'Plus Jakarta Sans', monospace",
+              whiteSpace: 'pre-wrap',
+              wordBreak: 'break-word',
+              maxHeight: expandedPreview ? 'none' : 500,
+              overflow: expandedPreview ? 'visible' : 'auto',
+            }}
+          >
             {markdown}
           </pre>
+          <div style={{ padding: '12px 20px', borderTop: '1px solid var(--border)', display: 'flex', gap: 8 }}>
+            <KButton
+              variant="outline"
+              icon={copied ? <Check size={16} /> : <Copy size={16} />}
+              onClick={handleCopy}
+              style={{ flex: 1 }}
+            >
+              {copied ? 'Copiado!' : 'Copiar al portapapeles'}
+            </KButton>
+            <KButton
+              variant="ghost"
+              icon={<MousePointerClick size={16} />}
+              onClick={handleSelectAll}
+              style={{ flex: 1 }}
+            >
+              Seleccionar todo (Ctrl+C)
+            </KButton>
+          </div>
         </div>
       )}
     </div>

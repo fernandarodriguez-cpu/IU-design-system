@@ -181,27 +181,39 @@ export function KNavItem({ icon, label, active, badge, onClick, collapsed, class
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
-        display: 'flex', alignItems: 'center', gap: collapsed ? 0 : 12,
+        display: 'flex', alignItems: 'center', gap: collapsed ? 0 : 10,
         justifyContent: collapsed ? 'center' : 'flex-start',
-        width: '100%', padding: '10px 16px',
-        borderRadius: t.radius.md, border: 'none', cursor: 'pointer',
-        fontFamily: font, fontSize: 14,
+        width: '100%', padding: collapsed ? '10px' : '0 16px',
+        borderRadius: 0, border: 'none', cursor: 'pointer',
+        fontFamily: font, fontSize: 12,
         fontWeight: active ? 600 : 400,
-        color: active ? '#FFFFFF' : 'rgba(255,255,255,0.7)',
-        backgroundColor: active ? 'rgba(224,77,54,0.2)' : hovered ? 'rgba(255,255,255,0.08)' : 'transparent',
+        color: active ? '#FFFFFF' : hovered ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.7)',
+        backgroundColor: active ? '#202f73' : hovered ? 'rgba(255,255,255,0.06)' : 'transparent',
         transition: 'all 0.15s ease',
+        position: 'relative',
+        height: 40,
+        lineHeight: '40px',
       }}
     >
-      {icon}
-      {!collapsed && <span style={{ flex: 1, textAlign: 'left' }}>{label}</span>}
+      <span style={{ display: 'flex', alignItems: 'center', color: active ? '#FFFFFF' : 'rgba(255,255,255,0.7)' }}>
+        {icon}
+      </span>
+      {!collapsed && <span style={{ flex: 1, textAlign: 'left', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{label}</span>}
       {!collapsed && badge !== undefined && badge > 0 && (
         <span style={{
           backgroundColor: t.colors.brand.primary, color: '#fff',
-          fontSize: 11, fontWeight: 600, padding: '1px 7px',
-          borderRadius: 99, minWidth: 20, textAlign: 'center',
+          fontSize: 10, fontWeight: 600, padding: '1px 6px',
+          borderRadius: 99, minWidth: 18, textAlign: 'center',
         }}>
           {badge}
         </span>
+      )}
+      {/* Indicador visual activo — barra roja derecha */}
+      {active && (
+        <div style={{
+          position: 'absolute', top: 0, right: 0, bottom: 0, width: 4,
+          backgroundColor: '#E04D36', borderRadius: '2px 0 0 2px',
+        }} />
       )}
     </button>
   );

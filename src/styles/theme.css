@@ -275,3 +275,40 @@
     font-family: var(--font-primary);
   }
 }
+
+/* ── Khor Custom Scrollbars ── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--khor-neutral-300);
+  border-radius: 99px;
+  transition: background 0.2s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--khor-primary);
+}
+
+/* Sidebar scrollbar — más sutil sobre fondo oscuro */
+aside ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+}
+aside ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--khor-neutral-300) transparent;
+}
+aside * {
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}

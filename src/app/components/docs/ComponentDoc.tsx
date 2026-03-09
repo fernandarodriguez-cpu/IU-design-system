@@ -5,7 +5,7 @@
  * código descargable y documentación de props.
  */
 import React, { useState } from 'react';
-import { Eye, Code, Settings, BookOpen } from 'lucide-react';
+import { Eye, Code, Settings, BookOpen, Copy, Check } from 'lucide-react';
 import { CodeBlock } from './CodeBlock';
 import { khorTokens } from '../../theme/khor-theme';
 
@@ -46,6 +46,13 @@ export function ComponentDoc({
   ];
 
   const [active, setActive] = useState<TabKey>('preview');
+  const [copied, setCopied] = useState(false);
+
+  const handleQuickCopy = async () => {
+    await navigator.clipboard.writeText(code);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
     <div style={{ fontFamily: font }}>
@@ -56,8 +63,26 @@ export function ComponentDoc({
             {category}
           </span>
         </div>
-        <h2 style={{ margin: 0, fontSize: 30, fontWeight: 700, color: t.colors.brand.navy }}>{name}</h2>
-        <p style={{ margin: '8px 0 0', fontSize: 16, color: t.colors.neutral[500], lineHeight: 1.5 }}>{description}</p>
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16 }}>
+          <div>
+            <h2 style={{ margin: 0, fontSize: 30, fontWeight: 700, color: 'var(--foreground)' }}>{name}</h2>
+            <p style={{ margin: '8px 0 0', fontSize: 16, color: 'var(--muted-foreground)', lineHeight: 1.5 }}>{description}</p>
+          </div>
+          <button
+            onClick={handleQuickCopy}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px',
+              borderRadius: t.radius.md, border: `1px solid var(--border)`,
+              backgroundColor: copied ? t.colors.feedback.successLight : 'var(--card)',
+              color: copied ? t.colors.feedback.success : 'var(--muted-foreground)',
+              cursor: 'pointer', fontSize: 13, fontWeight: 500, fontFamily: font,
+              flexShrink: 0, transition: 'all 0.15s ease',
+            }}
+          >
+            {copied ? <Check size={14} /> : <Copy size={14} />}
+            {copied ? 'Copiado' : 'Copiar Snippet'}
+          </button>
+        </div>
       </div>
 
       {/* Tab Navigation */}
@@ -102,7 +127,7 @@ export function ComponentDoc({
       {active === 'docs' && (
         <div>
           {/* Props Table */}
-          <h4 style={{ fontSize: 16, fontWeight: 600, color: t.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Propiedades</h4>
+          <h4 style={{ fontSize: 16, fontWeight: 600, color: 'var(--foreground)', marginBottom: 12, marginTop: 0 }}>Propiedades</h4>
           <div style={{ overflowX: 'auto', borderRadius: t.radius.md, border: `1px solid ${t.colors.neutral[200]}` }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
               <thead>
@@ -114,8 +139,8 @@ export function ComponentDoc({
               </thead>
               <tbody>
                 {props.map((p, i) => (
-                  <tr key={p.name} style={{ backgroundColor: i % 2 === 0 ? '#fff' : t.colors.neutral[100] }}>
-                    <td style={{ padding: '10px 16px', fontWeight: 500, color: t.colors.brand.navy, borderBottom: `1px solid ${t.colors.neutral[200]}` }}>
+                  <tr key={p.name} style={{ backgroundColor: i % 2 === 0 ? 'var(--card)' : t.colors.neutral[100] }}>
+                    <td style={{ padding: '10px 16px', fontWeight: 500, color: 'var(--foreground)', borderBottom: `1px solid ${t.colors.neutral[200]}` }}>
                       <code style={{ backgroundColor: 'rgba(5,23,88,0.06)', padding: '2px 6px', borderRadius: 4, fontSize: 12 }}>{p.name}</code>
                     </td>
                     <td style={{ padding: '10px 16px', color: t.colors.brand.primary, borderBottom: `1px solid ${t.colors.neutral[200]}` }}>
@@ -139,7 +164,7 @@ export function ComponentDoc({
           {/* Guidelines */}
           {guidelines && guidelines.length > 0 && (
             <div style={{ marginTop: 24 }}>
-              <h4 style={{ fontSize: 16, fontWeight: 600, color: t.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Guías de Uso</h4>
+              <h4 style={{ fontSize: 16, fontWeight: 600, color: 'var(--foreground)', marginBottom: 12, marginTop: 0 }}>Guías de Uso</h4>
               <ul style={{ paddingLeft: 20, color: t.colors.neutral[500], fontSize: 14, lineHeight: 1.8, margin: 0 }}>
                 {guidelines.map((g, i) => <li key={i}>{g}</li>)}
               </ul>
@@ -150,9 +175,9 @@ export function ComponentDoc({
           {aiNotes && (
             <div style={{
               marginTop: 24, padding: 16, borderRadius: t.radius.md,
-              backgroundColor: '#E3F2FD', border: `1px solid ${t.colors.brand.navy}20`,
+              backgroundColor: t.colors.feedback.infoLight, border: `1px solid var(--border)`,
             }}>
-              <h4 style={{ fontSize: 14, fontWeight: 600, color: t.colors.brand.navy, margin: '0 0 8px' }}>Notas para Agente IA</h4>
+              <h4 style={{ fontSize: 14, fontWeight: 600, color: 'var(--foreground)', margin: '0 0 8px' }}>Notas para Agente IA</h4>
               <p style={{ margin: 0, fontSize: 13, color: t.colors.neutral[500], lineHeight: 1.6 }}>{aiNotes}</p>
             </div>
           )}

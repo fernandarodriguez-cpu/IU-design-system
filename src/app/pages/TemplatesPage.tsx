@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router';
 import { KButton, KInput, KText, KCheckbox, KBadge, KAvatar, KProgress, KAlert } from '../components/design-system/atoms';
 import { KFormField, KStatCard, KUserCell, KSearchInput, KBreadcrumb, KSteps, KSelectField } from '../components/design-system/molecules';
-import { KDataTable, SparklineCell, KCardSection, KTabs, KModal } from '../components/design-system/organisms';
+import { KDataTable, KSparklineCell, KCardSection, KTabs, KModal } from '../components/design-system/organisms';
 import { CodeBlock } from '../components/docs/CodeBlock';
 import {
   Users, DollarSign, TrendingUp, BarChart3, Mail, Lock, Eye,
@@ -116,7 +116,7 @@ function CrudTemplate() {
           { key: 'dept', title: 'Departamento', dataIndex: 'dept', sortable: true },
           { key: 'status', title: 'Estado', dataIndex: 'status', render: (v: string) => <KBadge status={v as any} label={statusLabels[v] || v} /> },
           { key: 'salary', title: 'Salario', dataIndex: 'salary', sortable: true },
-          { key: 'trend', title: 'Tendencia', dataIndex: 'trend', width: 100, render: (v: number[]) => <SparklineCell data={v} /> },
+          { key: 'trend', title: 'Tendencia', dataIndex: 'trend', width: 100, render: (v: number[]) => <KSparklineCell data={v} /> },
         ]}
         data={mockData}
         searchPlaceholder="Buscar empleados..."
@@ -263,9 +263,9 @@ function DashboardPage() {
     description: 'Vista de listado con tabla de datos, búsqueda, filtros, ordenamiento, paginación y sparklines. La estructura estándar para gestionar cualquier entidad.',
     preview: <CrudTemplate />,
     code: `// Template: CRUD Table
-// Componentes: KDataTable, SparklineCell, KBadge, KUserCell, KBreadcrumb, KButton
+// Componentes: KDataTable, KSparklineCell, KBadge, KUserCell, KBreadcrumb, KButton
 
-import { KDataTable, SparklineCell } from '@khor/design-system/organisms';
+import { KDataTable, KSparklineCell } from '@khor/design-system/organisms';
 import { KUserCell, KBreadcrumb } from '@khor/design-system/molecules';
 import { KBadge, KButton } from '@khor/design-system/atoms';
 
@@ -277,7 +277,7 @@ function EmployeesPage() {
     { key: 'status', title: 'Estado', dataIndex: 'status',
       render: (v) => <KBadge status={v} label={statusMap[v]} /> },
     { key: 'trend', title: 'Tendencia', dataIndex: 'trend',
-      render: (v) => <SparklineCell data={v} /> },
+      render: (v) => <KSparklineCell data={v} /> },
   ];
 
   return (

@@ -1,45 +1,50 @@
 /* ─────────────────────────────────────────────
    Khor Design Tokens  (JavaScript)
    Fuente de verdad para tokens consumidos en JS.
-   Basado en los lineamientos de global-styles.md
+   
+   v2.0: Migrado a CSS custom properties var()
+   para soporte automático de Dark Mode.
+   Los componentes que usen estos tokens en inline
+   styles responderán automáticamente al toggle
+   de tema .dark en el <html>.
    ───────────────────────────────────────────── */
 
 export const khorTokens = {
   colors: {
     brand: {
-      primary: '#E04D36',
-      primaryHover: '#e8644f',
-      primaryActive: '#c9442f',
-      navy: '#051758',
-      navyHover: '#0a2270',
-      navyActive: '#030f40',
-      accent: '#FF9500',
-      accentHover: '#ffaa33',
-      accentActive: '#e68600',
+      primary: 'var(--khor-primary)',
+      primaryHover: 'var(--khor-primary-hover)',
+      primaryActive: 'var(--khor-primary-active)',
+      navy: 'var(--khor-navy)',
+      navyHover: 'var(--khor-navy-hover)',
+      navyActive: 'var(--khor-navy-active)',
+      accent: 'var(--khor-accent)',
+      accentHover: 'var(--khor-accent-hover)',
+      accentActive: 'var(--khor-accent-active)',
     },
     neutral: {
-      50: '#FFFFFF',
-      100: '#EDF0F1',
-      200: '#D5DBE0',
-      300: '#A0AEC0',
-      400: '#718096',
-      500: '#4A5568',
-      900: '#000000',
+      50: 'var(--khor-neutral-50)',
+      100: 'var(--khor-neutral-100)',
+      200: 'var(--khor-neutral-200)',
+      300: 'var(--khor-neutral-300)',
+      400: 'var(--khor-neutral-400)',
+      500: 'var(--khor-neutral-500)',
+      900: 'var(--khor-neutral-900)',
     },
     feedback: {
-      success: '#2E7D32',
-      successLight: '#E8F5E9',
-      error: '#D32F2F',
-      errorLight: '#FFEBEE',
-      warning: '#FF9500',
-      warningLight: '#FFF3E0',
-      info: '#051758',
-      infoLight: '#E3F2FD',
+      success: 'var(--khor-success)',
+      successLight: 'var(--khor-success-light)',
+      error: 'var(--khor-error)',
+      errorLight: 'var(--khor-error-light)',
+      warning: 'var(--khor-warning)',
+      warningLight: 'var(--khor-warning-light)',
+      info: 'var(--khor-info)',
+      infoLight: 'var(--khor-info-light)',
     },
   },
   typography: {
-    fontPrimary: "'Raleway', sans-serif",
-    fontSecondary: "'Plus Jakarta Sans', sans-serif",
+    fontPrimary: "var(--font-primary, 'Raleway', sans-serif)",
+    fontSecondary: "var(--font-secondary, 'Plus Jakarta Sans', sans-serif)",
     h1: { size: 38, weight: 700, lineHeight: 1.2 },
     h2: { size: 30, weight: 700, lineHeight: 1.2 },
     h3: { size: 24, weight: 600, lineHeight: 1.3 },
@@ -55,15 +60,15 @@ export const khorTokens = {
     xl: 40,
   },
   shadows: {
-    sm: '0 2px 4px rgba(0,0,0,0.05)',
-    md: '0 4px 12px rgba(0,0,0,0.08)',
-    lg: '0 12px 32px rgba(5,23,88,0.12)',
+    sm: 'var(--khor-shadow-sm)',
+    md: 'var(--khor-shadow-md)',
+    lg: 'var(--khor-shadow-lg)',
   },
   radius: {
-    sm: 6,
-    md: 8,
-    lg: 10,
-    xl: 14,
+    sm: 'var(--khor-radius-sm, 6px)' as unknown as number,
+    md: 'var(--khor-radius-md, 8px)' as unknown as number,
+    lg: 'var(--khor-radius-lg, 10px)' as unknown as number,
+    xl: 'var(--khor-radius-xl, 14px)' as unknown as number,
   },
   layout: {
     sidebarWidth: 260,
@@ -75,4 +80,18 @@ export const khorTokens = {
     lg: 24,
     strokeWidth: 2,
   },
+} as const;
+
+/**
+ * Static color values for contexts that can't use CSS variables
+ * (e.g., canvas drawing, programmatic color calculations).
+ * These are LIGHT MODE ONLY and won't respond to dark mode.
+ */
+export const khorStaticColors = {
+  primary: '#E04D36',
+  primaryHover: '#e8644f',
+  navy: '#051758',
+  accent: '#FF9500',
+  white: '#FFFFFF',
+  black: '#000000',
 } as const;

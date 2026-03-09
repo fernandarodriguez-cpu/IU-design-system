@@ -15,8 +15,19 @@ import {
   Users, DollarSign, TrendingUp, Calendar, Home,
   Settings, FileText, Inbox, Search, BarChart3,
   Edit, Trash2, Copy, Share2, MoreHorizontal, Info,
+  CheckCircle, Clock, AlertTriangle, GitCommit, Tag,
 } from 'lucide-react';
 import { khorTokens } from '../theme/khor-theme';
+import {
+  KInputNumber, KSegmented, KAutocomplete, KDatePicker,
+  KDateRangePicker, KSelectAdvanced, KDescriptions,
+  KPopconfirm, KResult, KTimeline,
+} from '../components/design-system/molecules-extended';
+import {
+  KCascader, KStatistic, KTimePicker, KMentions,
+  KColorPicker, KAnchor, KList, KDividerExtended,
+  KTreeSelect, KTransfer,
+} from '../components/design-system/molecules-wave3';
 
 interface MoleculeEntry {
   id: string;
@@ -794,6 +805,148 @@ import { KInput } from '@khor/design-system/atoms';
     ],
     guidelines: ['Usa single para FAQs y multiple para configuraciones.', 'El título debe ser descriptivo del contenido.'],
   },
+  /* ═══ MOLÉCULAS EXTENDIDAS (v2.0 Nexus) ═══ */
+  'input-number': {
+    id: 'input-number', name: 'KInputNumber',
+    description: 'Input numerico con controles +/- integrados, limites min/max, paso configurable y precision decimal.',
+    preview: (<div style={{ display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'flex-start' }}><KInputNumber value={42} min={0} max={100} /><KInputNumber value={3.14} step={0.01} precision={2} size="lg" /><KInputNumber value={10} disabled /></div>),
+    code: `import { KInputNumber } from '@khor/molecules-extended';\n\n<KInputNumber value={qty} onChange={setQty} min={0} max={100} />`,
+    filename: 'KInputNumber.tsx',
+    props: [{ name: 'value', type: 'number', description: 'Valor controlado.' },{ name: 'onChange', type: '(v: number | undefined) => void', description: 'Callback.' },{ name: 'min', type: 'number', description: 'Valor minimo.' },{ name: 'max', type: 'number', description: 'Valor maximo.' },{ name: 'step', type: 'number', default: '1', description: 'Incremento.' },{ name: 'precision', type: 'number', description: 'Decimales.' },{ name: 'size', type: "'sm'|'md'|'lg'", default: "'md'", description: 'Tamano.' }],
+    guidelines: ['Usa precision para valores monetarios.', 'Define min/max para evitar valores invalidos.'],
+  },
+  'segmented': {
+    id: 'segmented', name: 'KSegmented',
+    description: 'Control segmentado tipo iOS para alternar entre opciones mutuamente excluyentes.',
+    preview: (<div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}><KSegmented options={['Diario', 'Semanal', 'Mensual']} value="Semanal" /><KSegmented options={[{ label: 'Lista', value: 'list', icon: <FileText size={14} /> }, { label: 'Tabla', value: 'table', icon: <BarChart3 size={14} /> }]} value="list" /></div>),
+    code: `import { KSegmented } from '@khor/molecules-extended';\n\n<KSegmented options={['Diario','Semanal','Mensual']} value={period} onChange={setPeriod} />`,
+    filename: 'KSegmented.tsx',
+    props: [{ name: 'options', type: '(string | KSegmentedOption)[]', required: true, description: 'Opciones.' },{ name: 'value', type: 'string', description: 'Seleccionado.' },{ name: 'onChange', type: '(v: string) => void', description: 'Callback.' },{ name: 'block', type: 'boolean', default: 'false', description: 'Full width.' },{ name: 'size', type: "'sm'|'md'|'lg'", default: "'md'", description: 'Tamano.' }],
+    guidelines: ['Usa para 2-5 opciones.', 'Soporta iconos junto al label.'],
+  },
+  'autocomplete': {
+    id: 'autocomplete', name: 'KAutocomplete',
+    description: 'Input con sugerencias filtradas en tiempo real, opciones con descripcion y estado de carga.',
+    preview: (<div style={{ maxWidth: 400 }}><KAutocomplete placeholder="Buscar departamento..." options={[{ value: 'rh', label: 'Recursos Humanos', description: '45 empleados' },{ value: 'tech', label: 'Tecnologia', description: '32 empleados' },{ value: 'fin', label: 'Finanzas', description: '18 empleados' }]} allowClear /></div>),
+    code: `import { KAutocomplete } from '@khor/molecules-extended';\n\n<KAutocomplete placeholder="Buscar..." options={depts} onSelect={(opt) => setDept(opt.value)} allowClear />`,
+    filename: 'KAutocomplete.tsx',
+    props: [{ name: 'options', type: 'KAutocompleteOption[]', required: true, description: 'Opciones con value, label, description.' },{ name: 'onSelect', type: '(opt) => void', description: 'Al seleccionar.' },{ name: 'loading', type: 'boolean', description: 'Spinner.' },{ name: 'allowClear', type: 'boolean', description: 'Boton limpiar.' }],
+    guidelines: ['Usa para listas largas donde el usuario filtra.'],
+  },
+  'date-picker': {
+    id: 'date-picker', name: 'KDatePicker',
+    description: 'Selector de fecha con calendario desplegable, navegacion mensual y formato en espanol.',
+    preview: (<div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}><KDatePicker placeholder="Fecha de ingreso" /><KDatePicker value={new Date()} disabled /></div>),
+    code: `import { KDatePicker } from '@khor/molecules-extended';\n\n<KDatePicker value={date} onChange={setDate} minDate={new Date()} />`,
+    filename: 'KDatePicker.tsx',
+    props: [{ name: 'value', type: 'Date', description: 'Fecha seleccionada.' },{ name: 'onChange', type: '(d: Date | undefined) => void', description: 'Callback.' },{ name: 'minDate', type: 'Date', description: 'Fecha minima.' },{ name: 'maxDate', type: 'Date', description: 'Fecha maxima.' }],
+    guidelines: ['Formato espanol por defecto.', 'Usa minDate/maxDate para restringir.'],
+  },
+  'date-range': {
+    id: 'date-range', name: 'KDateRangePicker',
+    description: 'Selector de rango de fechas con presets (Hoy, 7 dias, 30 dias, Este mes) y calendario dual.',
+    preview: (<div><KDateRangePicker placeholder="Seleccionar periodo" /></div>),
+    code: `import { KDateRangePicker } from '@khor/molecules-extended';\n\n<KDateRangePicker value={range} onChange={setRange} />`,
+    filename: 'KDateRangePicker.tsx',
+    props: [{ name: 'value', type: 'KDateRange', description: 'Rango { from, to }.' },{ name: 'onChange', type: '(r) => void', description: 'Callback.' },{ name: 'presets', type: 'KDateRangePreset[]', description: 'Rangos predefinidos.' }],
+    guidelines: ['Incluye presets para rangos comunes.', 'Ideal para filtros de dashboards.'],
+  },
+  'select-advanced': {
+    id: 'select-advanced', name: 'KSelectAdvanced',
+    description: 'Select avanzado con modo multiple (tags), busqueda y maxTagCount para overflow.',
+    preview: (<div style={{ maxWidth: 400, display: 'flex', flexDirection: 'column', gap: 16 }}><KSelectAdvanced placeholder="Departamentos..." mode="multiple" options={[{ label: 'Recursos Humanos', value: 'rh' },{ label: 'Tecnologia', value: 'tech' },{ label: 'Finanzas', value: 'fin' },{ label: 'Marketing', value: 'mkt' }]} value={['rh', 'tech']} allowClear /><KSelectAdvanced placeholder="Rol..." options={[{ label: 'Admin', value: 'admin' },{ label: 'Editor', value: 'editor' },{ label: 'Viewer', value: 'viewer' }]} /></div>),
+    code: `import { KSelectAdvanced } from '@khor/molecules-extended';\n\n<KSelectAdvanced mode="multiple" options={depts} value={selected} onChange={setSelected} allowClear />`,
+    filename: 'KSelectAdvanced.tsx',
+    props: [{ name: 'options', type: 'KSelectAdvancedOption[]', required: true, description: 'Opciones.' },{ name: 'mode', type: "'single'|'multiple'|'tags'", default: "'single'", description: 'Modo.' },{ name: 'value', type: 'string | string[]', description: 'Seleccionados.' },{ name: 'maxTagCount', type: 'number', default: '3', description: 'Tags visibles.' },{ name: 'allowClear', type: 'boolean', description: 'Boton limpiar.' }],
+    guidelines: ['Usa mode="multiple" para multi-seleccion.'],
+  },
+  'descriptions': {
+    id: 'descriptions', name: 'KDescriptions',
+    description: 'Lista clave-valor para detalles de registro. Layout horizontal/vertical, bordes y columnas.',
+    preview: (<KDescriptions title="Detalle del Empleado" bordered items={[{ label: 'Nombre', children: 'Maria Garcia' },{ label: 'Email', children: 'maria@khor.com' },{ label: 'Depto', children: 'RH' },{ label: 'Puesto', children: 'Gerente' },{ label: 'Ingreso', children: '15 Ene 2023' },{ label: 'Estado', children: 'Activo' }]} />),
+    code: `import { KDescriptions } from '@khor/molecules-extended';\n\n<KDescriptions title="Detalle" bordered column={3} items={[{ label: 'Nombre', children: 'Maria' }]} />`,
+    filename: 'KDescriptions.tsx',
+    props: [{ name: 'items', type: 'KDescriptionItem[]', required: true, description: 'Pares label-children.' },{ name: 'bordered', type: 'boolean', description: 'Bordes.' },{ name: 'column', type: 'number', default: '3', description: 'Columnas.' },{ name: 'layout', type: "'horizontal'|'vertical'", default: "'horizontal'", description: 'Orientacion.' }],
+    guidelines: ['Usa bordered para detalle formal.', 'column=2 en sidepanels.'],
+  },
+  'popconfirm': {
+    id: 'popconfirm', name: 'KPopconfirm',
+    description: 'Popover de confirmacion ligero para acciones destructivas sin interrumpir el flujo.',
+    preview: (<div style={{ display: 'flex', gap: 16 }}><KPopconfirm title="Eliminar empleado?" description="No se puede deshacer." onConfirm={() => {}}><KButton variant="danger" size="sm" icon={<Trash2 size={14} />}>Eliminar</KButton></KPopconfirm><KPopconfirm title="Aprobar?" onConfirm={() => {}}><KButton variant="primary" size="sm" icon={<CheckCircle size={14} />}>Aprobar</KButton></KPopconfirm></div>),
+    code: `import { KPopconfirm } from '@khor/molecules-extended';\n\n<KPopconfirm title="Eliminar?" onConfirm={handleDelete}>\n  <KButton variant="danger">Eliminar</KButton>\n</KPopconfirm>`,
+    filename: 'KPopconfirm.tsx',
+    props: [{ name: 'title', type: 'ReactNode', required: true, description: 'Titulo.' },{ name: 'description', type: 'ReactNode', description: 'Descripcion.' },{ name: 'onConfirm', type: '() => void | Promise', description: 'Al confirmar (soporta async).' },{ name: 'placement', type: "'top'|'bottom'|'left'|'right'", default: "'top'", description: 'Lado.' }],
+    guidelines: ['Para acciones de bajo impacto. Para criticas, usa KModalConfirm.'],
+  },
+  'result': {
+    id: 'result', name: 'KResult',
+    description: 'Pagina de resultado/estado: exito, error, warnings, 404, 403, 500.',
+    preview: (<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}><KResult status="success" title="Empleado registrado" subTitle="Maria Garcia fue agregada." extra={<KButton variant="primary" size="sm">Ver perfil</KButton>} /><KResult status="error" title="Error al procesar" subTitle="Problema al guardar." extra={<KButton variant="secondary" size="sm">Reintentar</KButton>} /></div>),
+    code: `import { KResult } from '@khor/molecules-extended';\n\n<KResult status="success" title="Operacion exitosa" extra={<KButton>Continuar</KButton>} />`,
+    filename: 'KResult.tsx',
+    props: [{ name: 'status', type: "'success'|'error'|'info'|'warning'|'404'|'403'|'500'", required: true, description: 'Tipo.' },{ name: 'title', type: 'ReactNode', required: true, description: 'Titulo.' },{ name: 'subTitle', type: 'ReactNode', description: 'Subtitulo.' },{ name: 'extra', type: 'ReactNode', description: 'Acciones.' }],
+    guidelines: ['Siempre incluye accion que lleve al usuario de vuelta.'],
+  },
+  'timeline': {
+    id: 'timeline', name: 'KTimeline',
+    description: 'Linea de tiempo vertical para historial de eventos con modos left, right y alternate.',
+    preview: (<KTimeline items={[{ children: 'Empleado registrado', label: '9 Mar 2026', color: khorTokens.colors.feedback.success, dot: <CheckCircle size={14} /> },{ children: 'Documentos verificados', label: '8 Mar 2026' },{ children: 'Asignado a Tecnologia', label: '7 Mar 2026', dot: <GitCommit size={14} /> },{ children: 'Solicitud creada', label: '5 Mar 2026' }]} pending="Procesando..." />),
+    code: `import { KTimeline } from '@khor/molecules-extended';\n\n<KTimeline items={[{ children: 'Evento', label: 'Fecha' }]} pending="En proceso..." />`,
+    filename: 'KTimeline.tsx',
+    props: [{ name: 'items', type: 'KTimelineItem[]', required: true, description: 'Eventos.' },{ name: 'mode', type: "'left'|'alternate'|'right'", default: "'left'", description: 'Layout.' },{ name: 'pending', type: 'boolean | ReactNode', description: 'Ultimo evento pendiente.' },{ name: 'reverse', type: 'boolean', description: 'Invertir orden.' }],
+    guidelines: ['Usa para historial de actividades.', 'dot custom permite iconos por evento.'],
+  },
+  /* ═══ WAVE 3 — Componentes finales ═══ */
+  'cascader': { id: 'cascader', name: 'KCascader', description: 'Selector en cascada para datos jerárquicos. Los paneles se expanden al seleccionar.',
+    preview: (<div style={{ maxWidth: 300 }}><KCascader options={[{ value: 'mx', label: 'México', children: [{ value: 'cdmx', label: 'CDMX' }, { value: 'gdl', label: 'Guadalajara' }] }, { value: 'us', label: 'EE.UU.', children: [{ value: 'ny', label: 'New York' }] }]} /></div>),
+    code: `<KCascader options={locationData} value={loc} onChange={setLoc} />`, filename: 'KCascader.tsx',
+    props: [{ name: 'options', type: 'KCascaderOption[]', required: true, description: 'Opciones jerárquicas.' }, { name: 'value', type: 'string[]', description: 'Ruta seleccionada.' }],
+    guidelines: ['Ideal para ubicaciones o categorías jerárquicas.'] },
+  'statistic': { id: 'statistic', name: 'KStatistic', description: 'Valor estadístico grande con título, prefijo/sufijo y tendencia.',
+    preview: (<div style={{ display: 'flex', gap: 32 }}><KStatistic title="Empleados activos" value={1247} trend="up" trendValue="+12.5%" /><KStatistic title="Nómina mensual" value={2400000} prefix="$" suffix="MXN" trend="down" trendValue="-3.2%" /></div>),
+    code: `<KStatistic title="Empleados" value={1247} trend="up" trendValue="+12%" />`, filename: 'KStatistic.tsx',
+    props: [{ name: 'value', type: 'number | string', required: true, description: 'Valor.' }, { name: 'title', type: 'ReactNode', description: 'Título.' }],
+    guidelines: ['Usa para métricas sueltas. Para tarjetas con sparkline, usa KStatCard.'] },
+  'time-picker': { id: 'time-picker', name: 'KTimePicker', description: 'Selector de hora estilizado. Complementa a KDatePicker.',
+    preview: (<div style={{ display: 'flex', gap: 12 }}><KTimePicker placeholder="Hora de entrada" /><KTimePicker value="09:00" disabled /></div>),
+    code: `<KTimePicker value={time} onChange={setTime} />`, filename: 'KTimePicker.tsx',
+    props: [{ name: 'value', type: 'string', description: 'Hora (HH:mm).' }, { name: 'onChange', type: '(v) => void', description: 'Callback.' }],
+    guidelines: ['Combina con KDatePicker para fecha y hora completa.'] },
+  'mentions': { id: 'mentions', name: 'KMentions', description: 'Textarea con soporte para @menciones y sugerencias.',
+    preview: (<div style={{ maxWidth: 400 }}><KMentions options={[{ value: 'maria', label: 'María García' }, { value: 'juan', label: 'Juan Pérez' }, { value: 'ana', label: 'Ana López' }]} placeholder="Escribe @ para mencionar..." /></div>),
+    code: `<KMentions options={users} value={comment} onChange={setComment} />`, filename: 'KMentions.tsx',
+    props: [{ name: 'options', type: 'KMentionOption[]', required: true, description: 'Usuarios mencionables.' }],
+    guidelines: ['Ideal para comentarios y notas colaborativas.'] },
+  'color-picker': { id: 'color-picker', name: 'KColorPicker', description: 'Selector de color con paleta de presets, input hex y color nativo.',
+    preview: (<div style={{ display: 'flex', gap: 16 }}><KColorPicker value="#E04D36" /><KColorPicker value="#051758" /></div>),
+    code: `<KColorPicker value={color} onChange={setColor} />`, filename: 'KColorPicker.tsx',
+    props: [{ name: 'value', type: 'string', description: 'Color hex.' }, { name: 'onChange', type: '(c) => void', description: 'Callback.' }],
+    guidelines: ['Incluye los colores Khor como presets por defecto.'] },
+  'anchor': { id: 'anchor', name: 'KAnchor', description: 'Navegación lateral con scroll spy automático.',
+    preview: (<KAnchor items={[{ key: 'intro', title: 'Introducción', href: '#intro' }, { key: 'install', title: 'Instalación', href: '#install' }, { key: 'usage', title: 'Uso básico', href: '#usage' }]} />),
+    code: `<KAnchor items={[{ key: 'sec1', title: 'Sección 1', href: '#sec1' }]} />`, filename: 'KAnchor.tsx',
+    props: [{ name: 'items', type: 'KAnchorLink[]', required: true, description: 'Links con key, title, href.' }],
+    guidelines: ['Ideal para documentación y páginas largas.'] },
+  'list': { id: 'list', name: 'KList', description: 'Lista estructurada con avatar, título, descripción y acciones.',
+    preview: (<KList bordered header="Empleados recientes" items={[{ key: '1', title: 'María García', description: 'Gerente de RH · Hace 2h' }, { key: '2', title: 'Juan Pérez', description: 'Desarrollador Sr. · Hace 5h' }, { key: '3', title: 'Ana López', description: 'Contadora · Ayer' }]} />),
+    code: `<KList bordered header="Título" items={data} />`, filename: 'KList.tsx',
+    props: [{ name: 'items', type: 'KListItem[]', required: true, description: 'Elementos.' }, { name: 'bordered', type: 'boolean', description: 'Bordes.' }],
+    guidelines: ['Usa avatar para listas de usuarios.'] },
+  'divider-ext': { id: 'divider-ext', name: 'KDividerExtended', description: 'Divisor con soporte para texto central y estilo dashed.',
+    preview: (<div><KDividerExtended /><KDividerExtended>O continúa con</KDividerExtended><KDividerExtended dashed /></div>),
+    code: `<KDividerExtended>O continúa con</KDividerExtended>`, filename: 'KDividerExtended.tsx',
+    props: [{ name: 'children', type: 'ReactNode', description: 'Texto central.' }, { name: 'dashed', type: 'boolean', description: 'Estilo dashed.' }],
+    guidelines: ['Usa con texto para separar secciones semánticas.'] },
+  'tree-select': { id: 'tree-select', name: 'KTreeSelect', description: 'Select con dropdown en forma de árbol jerárquico.',
+    preview: (<div style={{ maxWidth: 300 }}><KTreeSelect data={[{ key: 'rh', title: 'Recursos Humanos', children: [{ key: 'rec', title: 'Reclutamiento' }, { key: 'cap', title: 'Capacitación' }] }, { key: 'tech', title: 'Tecnología', children: [{ key: 'fe', title: 'Frontend' }, { key: 'be', title: 'Backend' }] }]} placeholder="Seleccionar área..." /></div>),
+    code: `<KTreeSelect data={orgTree} value={area} onChange={setArea} />`, filename: 'KTreeSelect.tsx',
+    props: [{ name: 'data', type: 'KTreeSelectNode[]', required: true, description: 'Nodos jerárquicos.' }, { name: 'value', type: 'string', description: 'Key seleccionado.' }],
+    guidelines: ['Ideal para estructuras organizacionales.'] },
+  'transfer': { id: 'transfer', name: 'KTransfer', description: 'Transferencia dual-list para mover elementos entre dos columnas.',
+    preview: (<KTransfer showSearch dataSource={[{ key: '1', label: 'María García' }, { key: '2', label: 'Juan Pérez' }, { key: '3', label: 'Ana López' }, { key: '4', label: 'Carlos Ruiz' }, { key: '5', label: 'Laura Díaz' }]} targetKeys={['2', '4']} onChange={() => {}} titles={['Disponibles', 'Asignados']} />),
+    code: `<KTransfer dataSource={employees} targetKeys={assigned} onChange={setAssigned} showSearch />`, filename: 'KTransfer.tsx',
+    props: [{ name: 'dataSource', type: 'KTransferItem[]', required: true, description: 'Elementos.' }, { name: 'targetKeys', type: 'string[]', required: true, description: 'Keys a la derecha.' }],
+    guidelines: ['Usa para asignación masiva de empleados a equipos.'] },
 };
 
 export function MoleculesPage() {
@@ -803,8 +956,8 @@ export function MoleculesPage() {
   if (!mol) {
     return (
       <div style={{ textAlign: 'center', padding: 64, fontFamily: khorTokens.typography.fontPrimary }}>
-        <KText variant="h2" color="navy">Molecula no encontrada</KText>
-        <KText variant="body-md" color="secondary">Selecciona una molecula del menu lateral.</KText>
+        <KText variant="h2" color="navy">Molécula no encontrada</KText>
+        <KText variant="body-md" color="secondary">Selecciona una molécula del menú lateral.</KText>
       </div>
     );
   }

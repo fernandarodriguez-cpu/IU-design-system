@@ -16,9 +16,9 @@ import { kToast } from '../components/design-system/organisms';
 import { khorTokens } from '../theme/khor-theme';
 
 const stats = [
-  { title: 'Átomos', value: 18, icon: <Atom size={20} />, sparkData: [2, 5, 8, 9, 11, 14, 17, 18] },
-  { title: 'Moléculas', value: 12, icon: <Layers size={20} />, sparkData: [1, 3, 5, 7, 9, 11, 12] },
-  { title: 'Organismos', value: 8, icon: <Box size={20} />, sparkData: [1, 2, 4, 5, 7, 8, 8] },
+  { title: 'Átomos', value: 27, icon: <Atom size={20} />, sparkData: [2, 5, 8, 12, 15, 18, 22, 27] },
+  { title: 'Moléculas', value: 33, icon: <Layers size={20} />, sparkData: [1, 5, 9, 12, 18, 22, 28, 33] },
+  { title: 'Organismos', value: 13, icon: <Box size={20} />, sparkData: [1, 2, 4, 5, 8, 10, 12, 13] },
   { title: 'Templates', value: 4, icon: <Palette size={20} />, sparkData: [0, 1, 2, 3, 4, 4] },
 ];
 
@@ -96,9 +96,9 @@ khor-design-system/
 ├── atoms/
 │   └── index.tsx            ← 18 átomos
 ├── molecules/
-│   └── index.tsx            ← 12 moléculas
+│   └── index.tsx            ← 22 moléculas
 ├── organisms/
-│   └── index.tsx            ← 8 organismos
+│   └── index.tsx            ← 13 organismos
 └── README.md
 \`\`\`
 
@@ -120,14 +120,14 @@ import { KDataTable, kToast } from './organisms';
 
 ## Componentes
 
-### Átomos (18)
-KButton, KInput, KTextArea, KBadge, KTag, KAvatar, KSwitch, KCheckbox, KRadio, KTooltip, KProgress, KText, KDivider, KAlert, KSkeleton, KSlider, KRate, KSpin
+### Átomos (27)
+KButton, KInput, KTextArea, KBadge, KTag, KAvatar, KSwitch, KCheckbox, KRadio, KTooltip, KProgress, KText, KDivider, KAlert, KSkeleton, KSlider, KRate, KSpin, KButtonGroup, KInputPassword, KInputSearch, KFloatButton, KImage, KAffix, KSpace, KQRCode, KWatermark
 
-### Moléculas (12)
-KFormField, KSearchInput, KStatCard, KNavItem, KSelectField, KUserCell, KEmptyState, KBreadcrumb, KSteps, KDropdownMenu, KPopover, KAccordion
+### Moléculas (33)
+KFormField, KSearchInput, KStatCard, KNavItem, KSelectField, KUserCell, KEmptyState, KBreadcrumb, KSteps, KDropdownMenu, KPopover, KAccordion, KInputNumber, KSegmented, KAutocomplete, KDatePicker, KDateRangePicker, KSelectAdvanced, KDescriptions, KPopconfirm, KResult, KTimeline, KCascader, KStatistic, KTimePicker, KMentions, KColorPicker, KAnchor, KList, KDividerExt, KTreeSelect, KTransfer, KNotification
 
-### Organismos (8)
-KDataTable, SparklineCell, KModal, KDrawer, KCardSection, KTabs, KToastManager, CommandBar (placeholder)
+### Organismos (13)
+KDataTable (v2 TanStack), KSparklineCell, KModal, KDrawer, KCardSection, KTabs, KToastManager, KCommandBar, KUpload, KTree, KTour, KModalConfirm, KFormList
 
 ### Templates (4)
 Login, Dashboard, CRUD Table, Formulario Multi-Paso
@@ -186,11 +186,11 @@ export { KSpin } from './KSpin';
 `;
 
   const moleculesCatalog = `/**
- * KHOR DESIGN SYSTEM — MOLÉCULAS (12 componentes)
+ * KHOR DESIGN SYSTEM — MOLÉCULAS (22 componentes)
  *
  * KFormField, KSearchInput, KStatCard, KNavItem,
  * KSelectField, KUserCell, KEmptyState, KBreadcrumb,
- * KSteps, KDropdownMenu, KPopover, KAccordion
+ * KSteps, KDropdownMenu, KPopover, KAccordion, KInputNumber, KSegmented, KAutocomplete, KDatePicker, KDateRangePicker, KSelectAdvanced, KDescriptions, KPopconfirm, KResult, KTimeline
  *
  * Base: Custom + Radix + Khor Tokens
  */
@@ -207,25 +207,40 @@ export { KSteps } from './KSteps';
 export { KDropdownMenu } from './KDropdownMenu';
 export { KPopover } from './KPopover';
 export { KAccordion } from './KAccordion';
+export { KInputNumber } from './KInputNumber';
+export { KSegmented } from './KSegmented';
+export { KAutocomplete } from './KAutocomplete';
+export { KDatePicker } from './KDatePicker';
+export { KDateRangePicker } from './KDateRangePicker';
+export { KSelectAdvanced } from './KSelectAdvanced';
+export { KDescriptions } from './KDescriptions';
+export { KPopconfirm } from './KPopconfirm';
+export { KResult } from './KResult';
+export { KTimeline } from './KTimeline';
 `;
 
   const organismsCatalog = `/**
- * KHOR DESIGN SYSTEM — ORGANISMOS (8 componentes)
+ * KHOR DESIGN SYSTEM — ORGANISMOS (13 componentes)
  *
- * KDataTable, SparklineCell, KModal, KDrawer,
- * KCardSection, KTabs, KToastManager, KCommandBarPlaceholder
+ * KDataTable (v2 TanStack), KSparklineCell, KModal, KDrawer,
+ * KCardSection, KTabs, KToastManager, KCommandBar, KUpload, KTree, KTour, KModalConfirm, KFormList
  *
  * Base: Radix + Custom + Khor Tokens
  */
 
 export { KDataTable } from './KDataTable';
-export { SparklineCell } from './SparklineCell';
+export { KSparklineCell } from './KSparklineCell';
 export { KModal } from './KModal';
 export { KDrawer } from './KDrawer';
 export { KCardSection } from './KCardSection';
 export { KTabs } from './KTabs';
 export { KToastProvider, kToast } from './KToastManager';
-export { KCommandBarPlaceholder } from './KCommandBar';
+export { KCommandBar } from './KCommandBar';
+export { KUpload } from './KUpload';
+export { KTree } from './KTree';
+export { KTour } from './KTour';
+export { KModalConfirm } from './KModalConfirm';
+export { KFormList } from './KFormList';
 `;
 
   ds.folder('atoms')!.file('index.tsx', atomsCatalog);
@@ -281,7 +296,6 @@ export function HomePage() {
         }} />
         <div style={{ position: 'relative', zIndex: 1 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-            <KBadge status="success" label="v1.0.0" />
             <KBadge status="info" label="Radix UI + Tailwind" />
             <KBadge status="warning" label="IA Ready" />
           </div>
@@ -411,7 +425,7 @@ export function HomePage() {
           </p>
         </div>
         <KButton variant="primary" size="lg" icon={<Download size={18} />} onClick={handleDownloadZip}>
-          Descargar v1.0.0
+          Descargar
         </KButton>
       </div>
 

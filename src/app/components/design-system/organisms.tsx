@@ -11,17 +11,29 @@
 import React, { useState, useMemo } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import * as RadixTabs from '@radix-ui/react-tabs';
-import { LineChart, Line, ResponsiveContainer } from 'recharts';
+import { LineChart, Line } from 'recharts';
 import { toast, Toaster } from 'sonner';
-import { X, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, ArrowUp, ArrowDown } from 'lucide-react';
-import { KButton, KText } from './atoms';
+import { X, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, ArrowUp, ArrowDown, Download, Columns3, Check } from 'lucide-react';
+import {
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+  type ColumnDef,
+  type SortingState,
+  type VisibilityState,
+  type RowSelectionState,
+} from '@tanstack/react-table';
+import { KButton, KText, KCheckbox } from './atoms';
 import { KSearchInput } from './molecules';
 import { khorTokens } from '../../theme/khor-theme';
 
 const t = khorTokens;
 const font = t.typography.fontPrimary;
 
-/* ─── KDataTable ────────────────────────────── */
+/* ─── KDataTable v2 (TanStack React Table) ──── */
 export interface KDataTableColumn<T = any> {
   key: string;
   title: string;
@@ -29,6 +41,7 @@ export interface KDataTableColumn<T = any> {
   render?: (value: any, record: T, index: number) => React.ReactNode;
   sortable?: boolean;
   width?: number | string;
+  hidden?: boolean;
 }
 
 export interface KDataTableProps<T = any> {
@@ -40,97 +53,222 @@ export interface KDataTableProps<T = any> {
   actions?: React.ReactNode;
   rowKey?: string;
   pageSize?: number;
+  pageSizes?: number[];
   onRowClick?: (record: T) => void;
+  enableRowSelection?: boolean;
+  enableColumnToggle?: boolean;
+  enableExport?: boolean;
+  stickyHeader?: boolean;
+  maxHeight?: string | number;
+  onSelectionChange?: (selectedRows: T[]) => void;
   className?: string;
 }
 
 export function KDataTable<T extends Record<string, any>>({
   columns, data, loading, searchable = true, searchPlaceholder = 'Buscar en tabla...',
-  actions, rowKey = 'id', pageSize = 10, onRowClick, className,
+  actions, rowKey = 'id', pageSize = 10, pageSizes = [10, 20, 50],
+  onRowClick, enableRowSelection, enableColumnToggle, enableExport,
+  stickyHeader, maxHeight, onSelectionChange, className,
 }: KDataTableProps<T>) {
   const [search, setSearch] = useState('');
-  const [page, setPage] = useState(1);
-  const [sortKey, setSortKey] = useState<string | null>(null);
-  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+  const [colMenuOpen, setColMenuOpen] = useState(false);
+
+  const tanstackColumns = useMemo<ColumnDef<T, any>[]>(() => {
+    const cols: ColumnDef<T, any>[] = [];
+    if (enableRowSelection) {
+      cols.push({
+        id: '__select',
+        header: ({ table }) => (
+          <KCheckbox
+            checked={table.getIsAllPageRowsSelected()}
+            indeterminate={table.getIsSomePageRowsSelected() && !table.getIsAllPageRowsSelected()}
+            onChange={(v) => table.toggleAllPageRowsSelected(v)}
+          />
+        ),
+        cell: ({ row }) => (
+          <KCheckbox
+            checked={row.getIsSelected()}
+            onChange={(v) => row.toggleSelected(v)}
+          />
+        ),
+        enableSorting: false,
+        enableHiding: false,
+        size: 44,
+      });
+    }
+    columns.forEach((col) => {
+      cols.push({
+        id: col.key,
+        accessorKey: col.dataIndex,
+        header: col.title,
+        cell: (info) => col.render
+          ? col.render(info.getValue(), info.row.original, info.row.index)
+          : info.getValue(),
+        enableSorting: col.sortable ?? false,
+        size: typeof col.width === 'number' ? col.width : undefined,
+      });
+    });
+    return cols;
+  }, [columns, enableRowSelection]);
 
   const filtered = useMemo(() => {
-    let d = search
-      ? data.filter((row) => Object.values(row).some((v) => String(v).toLowerCase().includes(search.toLowerCase())))
-      : data;
-    if (sortKey) {
-      const col = columns.find((c) => c.key === sortKey);
-      if (col) {
-        d = [...d].sort((a, b) => {
-          const av = a[col.dataIndex];
-          const bv = b[col.dataIndex];
-          const cmp = typeof av === 'number' ? av - bv : String(av).localeCompare(String(bv));
-          return sortDir === 'asc' ? cmp : -cmp;
-        });
-      }
-    }
-    return d;
-  }, [data, search, sortKey, sortDir, columns]);
+    if (!search) return data;
+    return data.filter((row) =>
+      Object.values(row).some((v) =>
+        String(v).toLowerCase().includes(search.toLowerCase())
+      )
+    );
+  }, [data, search]);
 
-  const totalPages = Math.ceil(filtered.length / pageSize);
-  const paged = filtered.slice((page - 1) * pageSize, page * pageSize);
+  const table = useReactTable({
+    data: filtered,
+    columns: tanstackColumns,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    onSortingChange: setSorting,
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: (updater) => {
+      setRowSelection(updater);
+      setTimeout(() => {
+        const selected = table.getSelectedRowModel().rows.map((r) => r.original);
+        onSelectionChange?.(selected);
+      }, 0);
+    },
+    state: { sorting, columnVisibility, rowSelection },
+    initialState: { pagination: { pageSize } },
+  });
 
-  const handleSort = (key: string) => {
-    if (sortKey === key) {
-      setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
-    } else {
-      setSortKey(key);
-      setSortDir('asc');
-    }
+  const handleExportCSV = () => {
+    const visibleCols = columns.filter((c) => columnVisibility[c.key] !== false);
+    const headers = visibleCols.map((c) => c.title).join(',');
+    const rows = table.getFilteredRowModel().rows.map((row) =>
+      visibleCols.map((c) => {
+        const val = row.original[c.dataIndex];
+        return typeof val === 'string' && val.includes(',') ? `"${val}"` : String(val ?? '');
+      }).join(',')
+    );
+    const csv = [headers, ...rows].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `export-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
   };
+
+  const totalFiltered = table.getFilteredRowModel().rows.length;
+  const selectedCount = table.getFilteredSelectedRowModel().rows.length;
+  const pageIndex = table.getState().pagination.pageIndex;
+  const pageCount = table.getPageCount();
+  const currentPageSize = table.getState().pagination.pageSize;
 
   return (
     <div className={className} style={{ backgroundColor: t.colors.neutral[50], borderRadius: t.radius.lg, boxShadow: t.shadows.sm, overflow: 'hidden', border: `1px solid ${t.colors.neutral[200]}` }}>
-      {(searchable || actions) && (
-        <div style={{ padding: '16px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, borderBottom: `1px solid ${t.colors.neutral[200]}` }}>
-          {searchable && <KSearchInput placeholder={searchPlaceholder} value={search} onChange={(v) => { setSearch(v); setPage(1); }} size="md" />}
-          <div style={{ display: 'flex', gap: 8 }}>{actions}</div>
+      {/* Toolbar */}
+      {(searchable || actions || enableColumnToggle || enableExport) && (
+        <div style={{ padding: '16px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, borderBottom: `1px solid ${t.colors.neutral[200]}`, flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: 1, minWidth: 200 }}>
+            {searchable && <KSearchInput placeholder={searchPlaceholder} value={search} onChange={(v) => setSearch(v)} size="md" />}
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            {enableExport && (
+              <button onClick={handleExportCSV} style={{ ...toolBtnStyle, gap: 6 }}>
+                <Download size={14} /> CSV
+              </button>
+            )}
+            {enableColumnToggle && (
+              <div style={{ position: 'relative' }}>
+                <button onClick={() => setColMenuOpen(!colMenuOpen)} onBlur={() => setTimeout(() => setColMenuOpen(false), 150)} style={{ ...toolBtnStyle, gap: 6 }}>
+                  <Columns3 size={14} /> Columnas
+                </button>
+                {colMenuOpen && (
+                  <div style={{
+                    position: 'absolute', top: '100%', right: 0, marginTop: 4, minWidth: 180,
+                    backgroundColor: t.colors.neutral[50], borderRadius: t.radius.md,
+                    border: `1px solid ${t.colors.neutral[200]}`, boxShadow: t.shadows.md,
+                    zIndex: 50, padding: '4px 0',
+                  }}>
+                    {table.getAllLeafColumns().filter((c) => c.id !== '__select' && c.getCanHide()).map((col) => (
+                      <label key={col.id} style={{
+                        display: 'flex', alignItems: 'center', gap: 8, padding: '6px 12px',
+                        fontSize: 13, fontFamily: font, cursor: 'pointer', color: t.colors.neutral[900],
+                      }}>
+                        <KCheckbox checked={col.getIsVisible()} onChange={(v) => col.toggleVisibility(v)} />
+                        {typeof col.columnDef.header === 'string' ? col.columnDef.header : col.id}
+                      </label>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+            {actions}
+          </div>
         </div>
       )}
-      <div style={{ overflowX: 'auto' }}>
+      {/* Table */}
+      <div style={{ overflowX: 'auto', maxHeight: maxHeight || undefined, overflowY: maxHeight ? 'auto' : undefined }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: font, fontSize: 14 }}>
-          <thead>
-            <tr style={{ backgroundColor: t.colors.neutral[100] }}>
-              {columns.map((col) => (
-                <th
-                  key={col.key}
-                  onClick={() => col.sortable && handleSort(col.key)}
-                  style={{
-                    padding: '10px 16px', textAlign: 'left', fontWeight: 600, fontSize: 12,
-                    color: t.colors.neutral[500], borderBottom: `1px solid ${t.colors.neutral[200]}`,
-                    cursor: col.sortable ? 'pointer' : 'default', userSelect: 'none',
-                    width: col.width, whiteSpace: 'nowrap',
-                  }}
-                >
-                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
-                    {col.title}
-                    {col.sortable && sortKey === col.key && (sortDir === 'asc' ? <ArrowUp size={12} /> : <ArrowDown size={12} />)}
-                  </span>
-                </th>
-              ))}
-            </tr>
+          <thead style={stickyHeader ? { position: 'sticky', top: 0, zIndex: 10 } : undefined}>
+            {table.getHeaderGroups().map((hg) => (
+              <tr key={hg.id} style={{ backgroundColor: t.colors.neutral[100] }}>
+                {hg.headers.map((header) => (
+                  <th
+                    key={header.id}
+                    onClick={header.column.getCanSort() ? header.column.getToggleSortingHandler() : undefined}
+                    style={{
+                      padding: '10px 16px', textAlign: 'left', fontWeight: 600, fontSize: 12,
+                      color: t.colors.neutral[500], borderBottom: `1px solid ${t.colors.neutral[200]}`,
+                      cursor: header.column.getCanSort() ? 'pointer' : 'default', userSelect: 'none',
+                      width: header.getSize() !== 150 ? header.getSize() : undefined, whiteSpace: 'nowrap',
+                      backgroundColor: t.colors.neutral[100],
+                    }}
+                  >
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                      {header.column.getIsSorted() === 'asc' && <ArrowUp size={12} />}
+                      {header.column.getIsSorted() === 'desc' && <ArrowDown size={12} />}
+                    </span>
+                  </th>
+                ))}
+              </tr>
+            ))}
           </thead>
           <tbody>
             {loading ? (
-              <tr><td colSpan={columns.length} style={{ padding: 40, textAlign: 'center', color: t.colors.neutral[300] }}>Cargando...</td></tr>
-            ) : paged.length === 0 ? (
-              <tr><td colSpan={columns.length} style={{ padding: 40, textAlign: 'center', color: t.colors.neutral[300] }}>Sin resultados</td></tr>
+              Array.from({ length: 5 }).map((_, i) => (
+                <tr key={`skel-${i}`}>
+                  {tanstackColumns.filter((c) => columnVisibility[(c as any).id] !== false).map((_, j) => (
+                    <td key={j} style={{ padding: '14px 16px', borderBottom: `1px solid ${t.colors.neutral[200]}` }}>
+                      <div className="animate-pulse" style={{ height: 14, borderRadius: 4, backgroundColor: t.colors.neutral[200], width: `${60 + Math.random() * 30}%` }} />
+                    </td>
+                  ))}
+                </tr>
+              ))
+            ) : table.getRowModel().rows.length === 0 ? (
+              <tr><td colSpan={tanstackColumns.length} style={{ padding: 40, textAlign: 'center', color: t.colors.neutral[300], fontFamily: font }}>Sin resultados</td></tr>
             ) : (
-              paged.map((row, ri) => (
+              table.getRowModel().rows.map((row) => (
                 <tr
-                  key={row[rowKey] || ri}
-                  onClick={() => onRowClick?.(row)}
-                  style={{ cursor: onRowClick ? 'pointer' : 'default', borderBottom: `1px solid ${t.colors.neutral[200]}`, transition: 'background-color 0.1s ease' }}
-                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(224,77,54,0.04)'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
+                  key={row.id}
+                  data-selected={row.getIsSelected() || undefined}
+                  onClick={() => onRowClick?.(row.original)}
+                  style={{
+                    cursor: onRowClick ? 'pointer' : 'default',
+                    borderBottom: `1px solid ${t.colors.neutral[200]}`,
+                    transition: 'background-color 0.1s ease',
+                    backgroundColor: row.getIsSelected() ? 'rgba(224,77,54,0.06)' : undefined,
+                  }}
+                  onMouseEnter={(e) => { if (!row.getIsSelected()) e.currentTarget.style.backgroundColor = 'rgba(224,77,54,0.03)'; }}
+                  onMouseLeave={(e) => { if (!row.getIsSelected()) e.currentTarget.style.backgroundColor = 'transparent'; }}
                 >
-                  {columns.map((col) => (
-                    <td key={col.key} style={{ padding: '12px 16px', color: t.colors.neutral[900] }}>
-                      {col.render ? col.render(row[col.dataIndex], row, ri) : row[col.dataIndex]}
+                  {row.getVisibleCells().map((cell) => (
+                    <td key={cell.id} style={{ padding: '12px 16px', color: t.colors.neutral[900] }}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </td>
                   ))}
                 </tr>
@@ -139,20 +277,53 @@ export function KDataTable<T extends Record<string, any>>({
           </tbody>
         </table>
       </div>
-      {/* Pagination */}
-      <div style={{ padding: '12px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: `1px solid ${t.colors.neutral[200]}`, fontSize: 13, color: t.colors.neutral[400] }}>
-        <span>{filtered.length} registros</span>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-          <button onClick={() => setPage(1)} disabled={page === 1} style={paginBtnStyle(page === 1)}><ChevronsLeft size={14} /></button>
-          <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1} style={paginBtnStyle(page === 1)}><ChevronLeft size={14} /></button>
-          <span style={{ padding: '0 8px', fontWeight: 500 }}>{page} / {totalPages || 1}</span>
-          <button onClick={() => setPage((p) => Math.min(totalPages, p + 1))} disabled={page >= totalPages} style={paginBtnStyle(page >= totalPages)}><ChevronRight size={14} /></button>
-          <button onClick={() => setPage(totalPages)} disabled={page >= totalPages} style={paginBtnStyle(page >= totalPages)}><ChevronsRight size={14} /></button>
+      {/* Footer / Pagination */}
+      <div style={{ padding: '12px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: `1px solid ${t.colors.neutral[200]}`, fontSize: 13, color: t.colors.neutral[400], fontFamily: font, flexWrap: 'wrap', gap: 8 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span>{totalFiltered} registros</span>
+          {enableRowSelection && selectedCount > 0 && (
+            <span style={{ color: t.colors.brand.primary, fontWeight: 500 }}>
+              · {selectedCount} seleccionados
+            </span>
+          )}
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          {pageSizes.length > 1 && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span>Filas:</span>
+              <select
+                value={currentPageSize}
+                onChange={(e) => table.setPageSize(Number(e.target.value))}
+                style={{
+                  padding: '2px 6px', borderRadius: t.radius.sm, border: `1px solid ${t.colors.neutral[200]}`,
+                  backgroundColor: t.colors.neutral[50], fontFamily: font, fontSize: 13, color: t.colors.neutral[500],
+                  cursor: 'pointer', outline: 'none',
+                }}
+              >
+                {pageSizes.map((s) => <option key={s} value={s}>{s}</option>)}
+              </select>
+            </div>
+          )}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+            <button onClick={() => table.setPageIndex(0)} disabled={!table.getCanPreviousPage()} style={paginBtnStyle(!table.getCanPreviousPage())}><ChevronsLeft size={14} /></button>
+            <button onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()} style={paginBtnStyle(!table.getCanPreviousPage())}><ChevronLeft size={14} /></button>
+            <span style={{ padding: '0 8px', fontWeight: 500 }}>{pageIndex + 1} / {pageCount || 1}</span>
+            <button onClick={() => table.nextPage()} disabled={!table.getCanNextPage()} style={paginBtnStyle(!table.getCanNextPage())}><ChevronRight size={14} /></button>
+            <button onClick={() => table.setPageIndex(pageCount - 1)} disabled={!table.getCanNextPage()} style={paginBtnStyle(!table.getCanNextPage())}><ChevronsRight size={14} /></button>
+          </div>
         </div>
       </div>
     </div>
   );
 }
+
+const toolBtnStyle: React.CSSProperties = {
+  display: 'inline-flex', alignItems: 'center', padding: '6px 12px',
+  borderRadius: khorTokens.radius.md, border: `1px solid ${khorTokens.colors.neutral[200]}`,
+  backgroundColor: khorTokens.colors.neutral[50], fontFamily: khorTokens.typography.fontPrimary,
+  fontSize: 13, fontWeight: 500, color: khorTokens.colors.neutral[500], cursor: 'pointer',
+  transition: 'all 0.15s ease',
+};
 
 function paginBtnStyle(disabled: boolean): React.CSSProperties {
   return {
@@ -164,23 +335,21 @@ function paginBtnStyle(disabled: boolean): React.CSSProperties {
   };
 }
 
-/* ─── SparklineCell (para tablas) ───────────── */
-export interface SparklineCellProps {
+/* ─── KSparklineCell (para tablas) ──────────── */
+export interface KSparklineCellProps {
   data: number[];
   color?: string;
   width?: number;
   height?: number;
 }
 
-export function SparklineCell({ data, color = t.colors.brand.primary, width = 80, height = 24 }: SparklineCellProps) {
+export function KSparklineCell({ data, color = t.colors.brand.primary, width = 80, height = 24 }: KSparklineCellProps) {
   const chartData = data.map((v, i) => ({ i, v }));
   return (
     <div style={{ width, height, minWidth: width }}>
-      <ResponsiveContainer width={width} height={height}>
-        <LineChart data={chartData}>
-          <Line type="monotone" dataKey="v" stroke={color} strokeWidth={1.5} dot={false} />
-        </LineChart>
-      </ResponsiveContainer>
+      <LineChart width={width} height={height} data={chartData}>
+        <Line type="monotone" dataKey="v" stroke={color} strokeWidth={1.5} dot={false} />
+      </LineChart>
     </div>
   );
 }

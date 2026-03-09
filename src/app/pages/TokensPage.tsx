@@ -27,15 +27,19 @@ function ColorSwatch({ name, hex, desc }: { name: string; hex: string; desc: str
   );
 }
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function Section({ title, id, children }: { title: string; id?: string; children: React.ReactNode }) {
   return (
-    <div style={{
-      backgroundColor: khorTokens.colors.neutral[50],
-      borderRadius: khorTokens.radius.lg,
-      padding: 28,
-      boxShadow: khorTokens.shadows.sm,
-      marginBottom: 20,
-    }}>
+    <div
+      id={id}
+      style={{
+        backgroundColor: khorTokens.colors.neutral[50],
+        borderRadius: khorTokens.radius.lg,
+        padding: 28,
+        boxShadow: khorTokens.shadows.sm,
+        marginBottom: 20,
+        scrollMarginTop: 24,
+      }}
+    >
       <h3 style={{ margin: '0 0 20px', fontSize: 20, fontWeight: 700, color: khorTokens.colors.brand.navy }}>{title}</h3>
       {children}
     </div>
@@ -54,7 +58,7 @@ export function TokensPage() {
       </div>
 
       {/* Brand Colors */}
-      <Section title="1. Colores de Identidad (Brand)">
+      <Section title="1. Colores de Identidad (Brand)" id="colores">
         <p style={{ fontSize: 14, color: khorTokens.colors.neutral[400], marginTop: 0, marginBottom: 16 }}>
           El Rojo es energia y accion; el Navy es estabilidad y estructura profesional.
         </p>
@@ -82,7 +86,7 @@ export function TokensPage() {
       </Section>
 
       {/* Feedback */}
-      <Section title="3. Colores de Feedback">
+      <Section title="3. Colores de Retroalimentación">
         <p style={{ fontSize: 14, color: khorTokens.colors.neutral[400], marginTop: 0, marginBottom: 16 }}>
           Colores con significado universal para comunicar estados del sistema sin ambiguedad.
         </p>
@@ -97,7 +101,7 @@ export function TokensPage() {
       </Section>
 
       {/* Interaction States */}
-      <Section title="4. Estados de Interaccion">
+      <Section title="4. Estados de Interacción">
         <div style={{ overflowX: 'auto', borderRadius: khorTokens.radius.md, border: `1px solid ${khorTokens.colors.neutral[200]}` }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
             <thead>
@@ -147,7 +151,7 @@ export function TokensPage() {
       </Section>
 
       {/* Typography */}
-      <Section title="5. Tipografia">
+      <Section title="5. Tipografía" id="tipografia">
         <p style={{ fontSize: 14, color: khorTokens.colors.neutral[400], marginTop: 0, marginBottom: 16 }}>
           Fuente principal: <strong>Raleway</strong> | Fuente secundaria: <strong>Plus Jakarta Sans</strong>
         </p>
@@ -174,7 +178,7 @@ export function TokensPage() {
       </Section>
 
       {/* Spacing */}
-      <Section title="6. Espaciado (Sistema Modular 8px)">
+      <Section title="6. Espaciado (Sistema Modular 8px)" id="espaciado">
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           {[
             { token: 'spacing.xs', value: '4px', desc: 'Entre icono y texto.' },
@@ -201,7 +205,7 @@ export function TokensPage() {
       </Section>
 
       {/* Shadows */}
-      <Section title="7. Sombras y Elevacion">
+      <Section title="7. Sombras y Elevación" id="sombras">
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 20 }}>
           {[
             { label: 'Elevation Low (sm)', shadow: khorTokens.shadows.sm, desc: 'Tarjetas simples' },
@@ -223,7 +227,7 @@ export function TokensPage() {
       </Section>
 
       {/* Code Export */}
-      <Section title="8. Tokens en Codigo">
+      <Section title="8. Tokens en Código" id="codigo">
         <CodeBlock
           filename="khor-theme.ts"
           code={`import { khorTokens } from '@khor/design-system/theme';

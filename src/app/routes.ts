@@ -10,6 +10,9 @@ import { AccessibilityPage } from './pages/AccessibilityPage';
 import { ChangelogPage } from './pages/ChangelogPage';
 import { FigmaExportPage } from './pages/FigmaExportPage';
 import { AIExportPage } from './pages/AIExportPage';
+import { PatternsPage } from './pages/PatternsPage';
+import { ThemingPage } from './pages/ThemingPage';
+import { WCAGCheckerPage } from './pages/WCAGCheckerPage';
 
 export const router = createBrowserRouter([
   {
@@ -23,6 +26,9 @@ export const router = createBrowserRouter([
       { path: 'organisms/:id', Component: OrganismsPage },
       { path: 'templates/:id', Component: TemplatesPage },
       { path: 'accessibility', Component: AccessibilityPage },
+      { path: 'wcag-checker', Component: WCAGCheckerPage },
+      { path: 'patterns', Component: PatternsPage },
+      { path: 'theming', Component: ThemingPage },
       { path: 'changelog', Component: ChangelogPage },
       { path: 'figma-export', Component: FigmaExportPage },
       { path: 'ai-export', Component: AIExportPage },

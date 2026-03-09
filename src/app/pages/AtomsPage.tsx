@@ -15,6 +15,10 @@ import {
   Bell, Star, Heart, Search, AlertCircle, Info,
 } from 'lucide-react';
 import { khorTokens } from '../theme/khor-theme';
+import {
+  KButtonGroup, KInputPassword, KInputSearch, KFloatButton,
+  KImage, KSpace, KQRCode, KWatermark,
+} from '../components/design-system/atoms-extended';
 
 /* ─── Playground Wrappers ───────────────────── */
 function ButtonPlayground() {
@@ -1138,6 +1142,52 @@ const atoms: Record<string, AtomEntry> = {
     ],
     guidelines: ['Usa showCount con maxLength para campos con limite de caracteres.', 'rows=3-4 para campos cortos, 6+ para descripciones largas.'],
   },
+  /* ═══ ÁTOMOS EXTENDIDOS (Wave 3) ═══ */
+  'button-group': { id: 'button-group', name: 'KButtonGroup', description: 'Agrupa botones relacionados en una fila unificada con bordes compartidos.',
+    preview: (<KButtonGroup><KButton variant="secondary" size="sm">Anterior</KButton><KButton variant="secondary" size="sm">Siguiente</KButton></KButtonGroup>),
+    code: `<KButtonGroup>\n  <KButton variant="secondary">Anterior</KButton>\n  <KButton variant="secondary">Siguiente</KButton>\n</KButtonGroup>`, filename: 'KButtonGroup.tsx',
+    props: [{ name: 'children', type: 'ReactNode', required: true, description: 'Botones a agrupar.' }],
+    guidelines: ['Usa para acciones relacionadas como paginación o vistas.'] },
+  'input-password': { id: 'input-password', name: 'KInputPassword', description: 'Input de contraseña con toggle de visibilidad (ojo abierto/cerrado).',
+    preview: (<div style={{ maxWidth: 300 }}><KInputPassword placeholder="Ingresa tu contraseña" /></div>),
+    code: `<KInputPassword value={pass} onChange={setPass} />`, filename: 'KInputPassword.tsx',
+    props: [{ name: 'value', type: 'string', description: 'Valor.' }, { name: 'onChange', type: '(v) => void', description: 'Callback.' }, { name: 'error', type: 'string', description: 'Error.' }],
+    guidelines: ['Siempre incluye el toggle de visibilidad.'] },
+  'input-search': { id: 'input-search', name: 'KInputSearch', description: 'Input de búsqueda con botón "Buscar" integrado y soporte para Enter.',
+    preview: (<div style={{ maxWidth: 400 }}><KInputSearch placeholder="Buscar empleados..." enterButton allowClear /></div>),
+    code: `<KInputSearch onSearch={handleSearch} enterButton allowClear />`, filename: 'KInputSearch.tsx',
+    props: [{ name: 'onSearch', type: '(v) => void', description: 'Al buscar.' }, { name: 'enterButton', type: 'boolean | string', description: 'Botón de búsqueda.' }, { name: 'allowClear', type: 'boolean', description: 'Botón limpiar.' }],
+    guidelines: ['Usa enterButton para búsquedas con acción explícita.'] },
+  'float-button': { id: 'float-button', name: 'KFloatButton', description: 'Botón flotante (FAB) fijo en la esquina de la pantalla. Ideal para acciones principales.',
+    preview: (<div style={{ position: 'relative', height: 80, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}><KText variant="small" color="muted" className="p-4">El botón flotante aparece fijo en la esquina inferior derecha.</KText></div>),
+    code: `<KFloatButton icon={<Plus />} onClick={handleAdd} tooltip="Nuevo empleado" />`, filename: 'KFloatButton.tsx',
+    props: [{ name: 'icon', type: 'ReactNode', description: 'Ícono del botón.' }, { name: 'onClick', type: '() => void', description: 'Callback.' }, { name: 'type', type: "'primary'|'default'", description: 'Estilo.' }],
+    guidelines: ['Solo un FAB por pantalla. Usa para la acción más importante.'] },
+  'image': { id: 'image', name: 'KImage', description: 'Imagen con preview lightbox al hacer clic, fallback para errores de carga y bordes redondeados.',
+    preview: (<KImage src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=200&h=150&fit=crop" width={200} height={150} alt="Equipo" />),
+    code: `<KImage src="/photo.jpg" width={200} height={150} preview />`, filename: 'KImage.tsx',
+    props: [{ name: 'src', type: 'string', required: true, description: 'URL de la imagen.' }, { name: 'preview', type: 'boolean', default: 'true', description: 'Habilitar lightbox.' }, { name: 'fallback', type: 'string', description: 'URL de imagen de fallback.' }],
+    guidelines: ['Usa preview para imágenes que necesitan verse en grande.'] },
+  'affix': { id: 'affix', name: 'KAffix', description: 'Envuelve contenido para fijarlo al viewport al hacer scroll. Útil para toolbars o filtros.',
+    preview: (<div style={{ padding: 16, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}><KText variant="body-md" color="secondary">KAffix fija su contenido al hacer scroll. Usa offsetTop para definir la distancia desde arriba.</KText></div>),
+    code: `<KAffix offsetTop={64}>\n  <Toolbar />\n</KAffix>`, filename: 'KAffix.tsx',
+    props: [{ name: 'offsetTop', type: 'number', description: 'Distancia desde arriba para activar.' }, { name: 'offsetBottom', type: 'number', description: 'Distancia desde abajo.' }],
+    guidelines: ['offsetTop=64 para respetar el header de 64px.'] },
+  'space': { id: 'space', name: 'KSpace', description: 'Componente de layout para espaciar elementos con gap consistente. Soporta dirección y wrap.',
+    preview: (<KSpace size="md" wrap><KButton variant="primary" size="sm">Guardar</KButton><KButton variant="secondary" size="sm">Cancelar</KButton><KButton variant="ghost" size="sm">Descartar</KButton></KSpace>),
+    code: `<KSpace direction="horizontal" size="md" wrap>\n  <KButton>A</KButton>\n  <KButton>B</KButton>\n</KSpace>`, filename: 'KSpace.tsx',
+    props: [{ name: 'direction', type: "'horizontal'|'vertical'", default: "'horizontal'", description: 'Dirección.' }, { name: 'size', type: "number|'sm'|'md'|'lg'", default: "'md'", description: 'Espacio entre elementos.' }, { name: 'wrap', type: 'boolean', description: 'Permitir wrap.' }],
+    guidelines: ['Usa en lugar de divs con gap manual para consistencia.'] },
+  'qrcode': { id: 'qrcode', name: 'KQRCode', description: 'Generador visual de código QR a partir de texto o URL. Usa canvas para renderizado.',
+    preview: (<div style={{ display: 'flex', gap: 16 }}><KQRCode value="https://khor.app" size={100} /><KQRCode value="https://khor.app/empleados" size={80} color="#051758" /></div>),
+    code: `<KQRCode value="https://khor.app" size={128} />`, filename: 'KQRCode.tsx',
+    props: [{ name: 'value', type: 'string', required: true, description: 'Texto o URL a codificar.' }, { name: 'size', type: 'number', default: '128', description: 'Tamaño en px.' }, { name: 'color', type: 'string', description: 'Color de los módulos.' }],
+    guidelines: ['Nota: patrón visual representativo. Para QR reales, integra una librería como qrcode.'] },
+  'watermark': { id: 'watermark', name: 'KWatermark', description: 'Overlay de marca de agua sobre cualquier contenido. Útil para documentos confidenciales o previews.',
+    preview: (<KWatermark text="CONFIDENCIAL"><div style={{ padding: 32, backgroundColor: khorTokens.colors.neutral[50], borderRadius: khorTokens.radius.lg, minHeight: 120 }}><KText variant="body-md">Este contenido tiene marca de agua.</KText></div></KWatermark>),
+    code: `<KWatermark text="BORRADOR">\n  <DocumentPreview />\n</KWatermark>`, filename: 'KWatermark.tsx',
+    props: [{ name: 'text', type: 'string', required: true, description: 'Texto de la marca de agua.' }, { name: 'fontSize', type: 'number', default: '14', description: 'Tamaño de fuente.' }, { name: 'rotate', type: 'number', default: '-22', description: 'Ángulo de rotación.' }],
+    guidelines: ['Usa para documentos confidenciales o borradores.'] },
 };
 
 export function AtomsPage() {
@@ -1147,8 +1197,8 @@ export function AtomsPage() {
   if (!atom) {
     return (
       <div style={{ textAlign: 'center', padding: 64, fontFamily: khorTokens.typography.fontPrimary }}>
-        <KText variant="h2" color="navy">Atomo no encontrado</KText>
-        <KText variant="body-md" color="secondary">Selecciona un atomo del menu lateral.</KText>
+        <KText variant="h2" color="navy">Átomo no encontrado</KText>
+        <KText variant="body-md" color="secondary">Selecciona un átomo del menú lateral.</KText>
       </div>
     );
   }

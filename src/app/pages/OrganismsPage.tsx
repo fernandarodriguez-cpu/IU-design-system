@@ -6,7 +6,7 @@ import { useParams } from 'react-router';
 import { ComponentDoc } from '../components/docs/ComponentDoc';
 import type { PropDef } from '../components/docs/ComponentDoc';
 import {
-  KDataTable, SparklineCell, KModal, KDrawer,
+  KDataTable, KSparklineCell, KModal, KDrawer,
   KCardSection, KTabs, KToastProvider, kToast,
 } from '../components/design-system/organisms';
 import { KButton, KBadge, KText, KInput } from '../components/design-system/atoms';
@@ -18,6 +18,11 @@ import {
 } from 'lucide-react';
 import { khorTokens } from '../theme/khor-theme';
 import { KCommandBarPreview } from '../components/design-system/command-bar';
+import {
+  KUpload, KTree, KTour, KModalConfirm, KFormList,
+  type KUploadFile, type KTreeNode, type KFormListField,
+} from '../components/design-system/organisms-extended';
+import { Trash2, FolderOpen, Folder, File } from 'lucide-react';
 
 /* ─── Mock Data ─────────────────────────────── */
 const mockEmployees = [
@@ -44,7 +49,7 @@ const tableColumns = [
   { key: 'salary', title: 'Salario', dataIndex: 'salary', sortable: true },
   {
     key: 'trend', title: 'Tendencia', dataIndex: 'trend', width: 100,
-    render: (v: number[]) => <SparklineCell data={v} />,
+    render: (v: number[]) => <KSparklineCell data={v} />,
   },
 ];
 
@@ -399,7 +404,7 @@ const organisms: Record<string, OrganismEntry> = {
       />
     ),
     playground: <DataTablePlayground />,
-    code: `import { KDataTable, SparklineCell } from '@khor/design-system/organisms';
+    code: `import { KDataTable, KSparklineCell } from '@khor/design-system/organisms';
 
 const columns = [
   {
@@ -420,7 +425,7 @@ const columns = [
     key: 'trend',
     title: 'Tendencia',
     dataIndex: 'trend',
-    render: (v) => <SparklineCell data={v} />,
+    render: (v) => <KSparklineCell data={v} />,
   },
 ];
 
@@ -444,7 +449,7 @@ const columns = [
       { name: 'onRowClick', type: '(record) => void', description: 'Callback al hacer click en una fila.' },
     ],
     guidelines: [
-      'Usa SparklineCell para mostrar tendencias en columnas numericas.',
+      'Usa KSparklineCell para mostrar tendencias en columnas numericas.',
       'Siempre incluye al menos un boton de accion principal (Nuevo, Exportar, etc).',
       'Las columnas con sortable: true permiten ordenamiento automatico.',
     ],
@@ -452,29 +457,29 @@ const columns = [
   },
   sparkline: {
     id: 'sparkline',
-    name: 'SparklineCell',
+    name: 'KSparklineCell',
     description: 'Mini grafico de linea disenado para celdas de tabla. Muestra tendencias en un espacio minimo usando recharts.',
     preview: (
       <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', alignItems: 'center' }}>
         <div style={{ textAlign: 'center' }}>
           <p style={{ fontSize: 12, color: khorTokens.colors.neutral[400], marginBottom: 8 }}>Crecimiento</p>
-          <SparklineCell data={[20, 25, 30, 35, 40, 45, 50]} color={khorTokens.colors.feedback.success} width={100} height={32} />
+          <KSparklineCell data={[20, 25, 30, 35, 40, 45, 50]} color={khorTokens.colors.feedback.success} width={100} height={32} />
         </div>
         <div style={{ textAlign: 'center' }}>
           <p style={{ fontSize: 12, color: khorTokens.colors.neutral[400], marginBottom: 8 }}>Decrecimiento</p>
-          <SparklineCell data={[50, 48, 42, 38, 35, 30, 28]} color={khorTokens.colors.feedback.error} width={100} height={32} />
+          <KSparklineCell data={[50, 48, 42, 38, 35, 30, 28]} color={khorTokens.colors.feedback.error} width={100} height={32} />
         </div>
         <div style={{ textAlign: 'center' }}>
           <p style={{ fontSize: 12, color: khorTokens.colors.neutral[400], marginBottom: 8 }}>Estable</p>
-          <SparklineCell data={[40, 42, 39, 41, 40, 42, 41]} color={khorTokens.colors.brand.primary} width={100} height={32} />
+          <KSparklineCell data={[40, 42, 39, 41, 40, 42, 41]} color={khorTokens.colors.brand.primary} width={100} height={32} />
         </div>
         <div style={{ textAlign: 'center' }}>
           <p style={{ fontSize: 12, color: khorTokens.colors.neutral[400], marginBottom: 8 }}>Accent</p>
-          <SparklineCell data={[10, 15, 12, 20, 25, 22, 30]} color={khorTokens.colors.brand.accent} width={100} height={32} />
+          <KSparklineCell data={[10, 15, 12, 20, 25, 22, 30]} color={khorTokens.colors.brand.accent} width={100} height={32} />
         </div>
       </div>
     ),
-    code: `import { SparklineCell } from '@khor/design-system/organisms';
+    code: `import { KSparklineCell } from '@khor/design-system/organisms';
 
 // Dentro de una columna de KDataTable
 {
@@ -482,7 +487,7 @@ const columns = [
   title: 'Tendencia',
   dataIndex: 'trend',
   render: (data) => (
-    <SparklineCell
+    <KSparklineCell
       data={data}
       color="#2E7D32"
       width={80}
@@ -490,7 +495,7 @@ const columns = [
     />
   ),
 }`,
-    filename: 'SparklineCell.tsx',
+    filename: 'KSparklineCell.tsx',
     props: [
       { name: 'data', type: 'number[]', required: true, description: 'Array de valores numericos para el grafico.' },
       { name: 'color', type: 'string', default: 'khor.primary', description: 'Color de la linea.' },
@@ -727,6 +732,90 @@ const { open, setOpen } = useCommandBar();
     ],
     aiNotes: 'El Command Bar es la interfaz principal de búsqueda. Contiene un registro de todos los componentes con keywords en español e inglés para máxima encontrabilidad.',
   },
+  /* ═══ ORGANISMOS EXTENDIDOS (v2.0 Nexus) ═══ */
+  'upload': {
+    id: 'upload', name: 'KUpload',
+    description: 'Componente de subida de archivos con zona de drag & drop, lista de archivos con estado (subiendo, completado, error), progreso y previews de imagen.',
+    preview: (<KUpload multiple accept="image/*,.pdf" maxSize={5 * 1024 * 1024} />),
+    code: `import { KUpload } from '@khor/organisms-extended';\n\n<KUpload\n  multiple\n  accept="image/*,.pdf"\n  maxSize={5 * 1024 * 1024}\n  value={files}\n  onChange={setFiles}\n  onUpload={async (file) => { /* upload logic */ }}\n/>`,
+    filename: 'KUpload.tsx',
+    props: [
+      { name: 'multiple', type: 'boolean', description: 'Permitir multiples archivos.' },
+      { name: 'accept', type: 'string', description: 'Tipos de archivo aceptados.' },
+      { name: 'maxSize', type: 'number', description: 'Tamano maximo en bytes.' },
+      { name: 'maxFiles', type: 'number', description: 'Limite de archivos.' },
+      { name: 'value', type: 'KUploadFile[]', description: 'Lista de archivos.' },
+      { name: 'onChange', type: '(files) => void', description: 'Callback al cambiar.' },
+      { name: 'onUpload', type: '(file: File) => Promise<KUploadFile>', description: 'Funcion de subida custom.' },
+      { name: 'listType', type: "'text' | 'picture'", default: "'text'", description: 'Tipo de lista.' },
+    ],
+    guidelines: ['Define maxSize para evitar uploads excesivos.', 'Usa onUpload para integracion con API.'],
+  },
+  'tree': {
+    id: 'tree', name: 'KTree',
+    description: 'Vista de arbol expandible/colapsable con soporte para seleccion, checkboxes, iconos y lineas de conexion. Ideal para jerarquias de carpetas o categorias.',
+    preview: (<KTree showLine showIcon data={[{ key: 'rh', title: 'Recursos Humanos', children: [{ key: 'rh-1', title: 'Reclutamiento', isLeaf: true },{ key: 'rh-2', title: 'Capacitacion', isLeaf: true }] },{ key: 'tech', title: 'Tecnologia', children: [{ key: 'tech-1', title: 'Frontend', isLeaf: true },{ key: 'tech-2', title: 'Backend', isLeaf: true },{ key: 'tech-3', title: 'DevOps', isLeaf: true }] },{ key: 'fin', title: 'Finanzas', isLeaf: true }]} defaultExpandAll />),
+    code: `import { KTree } from '@khor/organisms-extended';\n\n<KTree\n  data={treeData}\n  checkable\n  showLine\n  defaultExpandAll\n  onSelect={(keys) => setSelected(keys)}\n/>`,
+    filename: 'KTree.tsx',
+    props: [
+      { name: 'data', type: 'KTreeNode[]', required: true, description: 'Nodos con key, title y children.' },
+      { name: 'checkable', type: 'boolean', description: 'Mostrar checkboxes.' },
+      { name: 'showLine', type: 'boolean', description: 'Lineas de conexion.' },
+      { name: 'showIcon', type: 'boolean', default: 'true', description: 'Iconos de carpeta/archivo.' },
+      { name: 'defaultExpandAll', type: 'boolean', description: 'Expandir todo por defecto.' },
+      { name: 'onSelect', type: '(keys, info) => void', description: 'Al seleccionar nodo.' },
+      { name: 'onCheck', type: '(keys) => void', description: 'Al checkear nodo.' },
+    ],
+    guidelines: ['Usa showLine para jerarquias profundas.', 'defaultExpandAll para arboles pequenos.'],
+  },
+  'tour': {
+    id: 'tour', name: 'KTour',
+    description: 'Tour guiado paso a paso para onboarding. Resalta elementos de la UI con mascara, muestra cards con titulo, descripcion y navegacion entre pasos.',
+    preview: (<div style={{ padding: 24, textAlign: 'center' }}><KText variant="body-md" color="secondary">El KTour se activa programaticamente con open=true y referencia a elementos del DOM via selectores CSS.</KText><div style={{ marginTop: 16 }}><KButton variant="primary" size="sm">Iniciar Tour (demo)</KButton></div></div>),
+    code: `import { KTour } from '@khor/organisms-extended';\n\n<KTour\n  open={showTour}\n  onClose={() => setShowTour(false)}\n  onFinish={() => markOnboardingComplete()}\n  steps={[\n    { title: 'Bienvenido', description: 'Este es el dashboard.', target: '#dashboard' },\n    { title: 'Sidebar', description: 'Navega entre secciones.', target: '#sidebar' },\n  ]}\n/>`,
+    filename: 'KTour.tsx',
+    props: [
+      { name: 'steps', type: 'KTourStep[]', required: true, description: 'Pasos con title, description, target y placement.' },
+      { name: 'open', type: 'boolean', description: 'Activar el tour.' },
+      { name: 'onClose', type: '() => void', description: 'Al cerrar.' },
+      { name: 'onFinish', type: '() => void', description: 'Al completar todos los pasos.' },
+      { name: 'mask', type: 'boolean', default: 'true', description: 'Mascara de fondo.' },
+    ],
+    guidelines: ['Usa target con selectores CSS o funciones.', 'Maximo 5-7 pasos por tour.'],
+  },
+  'modal-confirm': {
+    id: 'modal-confirm', name: 'KModalConfirm',
+    description: 'Modal de confirmacion declarativo con tipos (confirm, info, success, warning, error). Soporta callbacks async y boton danger.',
+    preview: (<div style={{ padding: 24, textAlign: 'center' }}><KText variant="body-md" color="secondary">KModalConfirm se controla con open/onClose props. Soporta onOk async para operaciones que requieren espera.</KText><div style={{ display: 'flex', gap: 12, justifyContent: 'center', marginTop: 16 }}><KButton variant="danger" size="sm">Eliminar (demo)</KButton><KButton variant="primary" size="sm">Confirmar (demo)</KButton></div></div>),
+    code: `import { KModalConfirm } from '@khor/organisms-extended';\n\n<KModalConfirm\n  open={showConfirm}\n  onClose={() => setShowConfirm(false)}\n  type="confirm"\n  title="Eliminar empleado?"\n  content="Esta accion no se puede deshacer."\n  onOk={async () => { await deleteEmployee(); }}\n/>`,
+    filename: 'KModalConfirm.tsx',
+    props: [
+      { name: 'open', type: 'boolean', required: true, description: 'Visibilidad.' },
+      { name: 'onClose', type: '() => void', required: true, description: 'Al cerrar.' },
+      { name: 'type', type: "'confirm'|'info'|'success'|'warning'|'error'", default: "'confirm'", description: 'Tipo de confirmacion.' },
+      { name: 'title', type: 'ReactNode', description: 'Titulo.' },
+      { name: 'content', type: 'ReactNode', description: 'Contenido.' },
+      { name: 'onOk', type: '() => void | Promise', description: 'Callback al aceptar (soporta async).' },
+      { name: 'showCancel', type: 'boolean', default: 'true', description: 'Mostrar boton cancelar.' },
+    ],
+    guidelines: ['Usa type="error" con variant="danger" para eliminaciones.', 'onOk async muestra loading automaticamente.'],
+  },
+  'form-list': {
+    id: 'form-list', name: 'KFormList',
+    description: 'Lista dinamica de campos de formulario. Permite agregar, eliminar y reordenar filas. Ideal para formularios con items repetibles.',
+    preview: (<KFormList value={[{ key: 'f1', name: 'Juan', role: 'Dev' },{ key: 'f2', name: 'Maria', role: 'PM' }]} renderItem={(field, idx, ops) => (<div style={{ display: 'flex', gap: 8 }}><KInput placeholder="Nombre" value={field.name} /><KInput placeholder="Rol" value={field.role} /></div>)} addText="Agregar miembro" maxItems={5} />),
+    code: `import { KFormList } from '@khor/organisms-extended';\n\n<KFormList\n  value={members}\n  onChange={setMembers}\n  renderItem={(field, idx, { remove }) => (\n    <div style={{ display: 'flex', gap: 8 }}>\n      <KInput placeholder="Nombre" />\n      <KInput placeholder="Rol" />\n    </div>\n  )}\n  addText="Agregar miembro"\n  maxItems={10}\n/>`,
+    filename: 'KFormList.tsx',
+    props: [
+      { name: 'value', type: 'KFormListField[]', description: 'Array de campos.' },
+      { name: 'onChange', type: '(fields) => void', description: 'Callback al cambiar.' },
+      { name: 'renderItem', type: '(field, index, ops) => ReactNode', required: true, description: 'Render de cada fila.' },
+      { name: 'addText', type: 'string', default: "'Agregar campo'", description: 'Texto del boton agregar.' },
+      { name: 'maxItems', type: 'number', description: 'Limite de filas.' },
+      { name: 'minItems', type: 'number', default: '0', description: 'Minimo de filas.' },
+    ],
+    guidelines: ['Usa maxItems para evitar formularios demasiado largos.', 'renderItem recibe operaciones remove, etc.'],
+  },
 };
 
 export function OrganismsPage() {
@@ -737,7 +826,7 @@ export function OrganismsPage() {
     return (
       <div style={{ textAlign: 'center', padding: 64, fontFamily: khorTokens.typography.fontPrimary }}>
         <KText variant="h2" color="navy">Organismo no encontrado</KText>
-        <KText variant="body-md" color="secondary">Selecciona un organismo del menu lateral.</KText>
+        <KText variant="body-md" color="secondary">Selecciona un organismo del menú lateral.</KText>
       </div>
     );
   }
