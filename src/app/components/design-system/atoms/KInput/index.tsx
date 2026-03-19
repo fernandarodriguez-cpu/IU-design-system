@@ -14,27 +14,37 @@ const sizeToAntd = (size?: 'sm' | 'md' | 'lg'): InputProps['size'] => {
 
 export interface KInputProps extends Omit<InputProps, 'size'> {
   size?: 'sm' | 'md' | 'lg';
-  error?: string; // mapeado a status="error"
+  /** Mensaje de error: activa status="error" y muestra texto bajo el input */
+  error?: string;
+  /** Mensaje de advertencia: activa status="warning" y muestra texto bajo el input */
+  warning?: string;
+  /** Ancho completo del contenedor */
   block?: boolean;
+  /** Estilo visual del input: outlined (borde), borderless (sin borde), filled (fondo sólido) */
+  variant?: 'outlined' | 'borderless' | 'filled';
 }
 
 export const KInput = React.forwardRef<InputRef, KInputProps>(function KInput(
-  { size = 'md', error, status, style, block, ...rest },
+  { size = 'md', error, warning, status, style, block, variant = 'outlined', ...rest },
   ref,
 ) {
-  const resolvedStatus = error ? 'error' : status;
+  const resolvedStatus = error ? 'error' : warning ? 'warning' : status;
+  const feedbackMsg = error || warning;
+  const feedbackColor = error ? t.colors.feedback.error : t.colors.feedback.warning;
+
   return (
     <div style={{ width: block ? '100%' : undefined }}>
       <Input
         ref={ref}
         size={sizeToAntd(size)}
         status={resolvedStatus}
+        variant={variant}
         style={{ fontFamily: font, borderRadius: t.radius.md, ...style }}
         {...rest}
       />
-      {error && (
-        <p style={{ color: t.colors.feedback.error, fontSize: 12, marginTop: 4, fontFamily: font }}>
-          {error}
+      {feedbackMsg && (
+        <p style={{ color: feedbackColor, fontSize: 12, marginTop: 4, fontFamily: font }}>
+          {feedbackMsg}
         </p>
       )}
     </div>
@@ -44,24 +54,30 @@ export const KInput = React.forwardRef<InputRef, KInputProps>(function KInput(
 export interface KInputPasswordProps extends Omit<InputProps, 'size' | 'type'> {
   size?: 'sm' | 'md' | 'lg';
   error?: string;
+  warning?: string;
+  variant?: 'outlined' | 'borderless' | 'filled';
 }
 
 export const KInputPassword = React.forwardRef<InputRef, KInputPasswordProps>(function KInputPassword(
-  { size = 'md', error, status, style, ...rest },
+  { size = 'md', error, warning, status, style, variant = 'outlined', ...rest },
   ref,
 ) {
+  const resolvedStatus = error ? 'error' : warning ? 'warning' : status;
+  const feedbackMsg = error || warning;
+  const feedbackColor = error ? t.colors.feedback.error : t.colors.feedback.warning;
   return (
     <div>
       <Input.Password
         ref={ref}
         size={sizeToAntd(size)}
-        status={error ? 'error' : status}
+        status={resolvedStatus}
+        variant={variant}
         style={{ fontFamily: font, borderRadius: t.radius.md, ...style }}
         {...rest}
       />
-      {error && (
-        <p style={{ color: t.colors.feedback.error, fontSize: 12, marginTop: 4, fontFamily: font }}>
-          {error}
+      {feedbackMsg && (
+        <p style={{ color: feedbackColor, fontSize: 12, marginTop: 4, fontFamily: font }}>
+          {feedbackMsg}
         </p>
       )}
     </div>
@@ -72,16 +88,18 @@ export interface KInputSearchProps extends Omit<InputProps, 'size'> {
   size?: 'sm' | 'md' | 'lg';
   onSearch?: (value: string) => void;
   loading?: boolean;
+  variant?: 'outlined' | 'borderless' | 'filled';
 }
 
 export const KInputSearch = React.forwardRef<InputRef, KInputSearchProps>(function KInputSearch(
-  { size = 'md', style, ...rest },
+  { size = 'md', style, variant = 'outlined', ...rest },
   ref,
 ) {
   return (
     <Input.Search
       ref={ref}
       size={sizeToAntd(size)}
+      variant={variant}
       style={{ fontFamily: font, ...style }}
       {...rest}
     />

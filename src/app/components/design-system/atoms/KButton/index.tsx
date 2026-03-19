@@ -29,7 +29,7 @@ const sizeToAntd = (size?: KButtonSize): ButtonProps['size'] => {
 };
 
 export const KButton = React.forwardRef<HTMLButtonElement, KButtonProps>(function KButton(
-  { variant, kVariant, size = 'md', style, children, iconPosition, ...rest },
+  { variant, kVariant, size = 'md', shape = 'default', htmlType = 'button', style, children, iconPosition, ...rest },
   ref,
 ) {
   const resolvedVariant = kVariant ?? variant ?? 'primary';
@@ -43,7 +43,9 @@ export const KButton = React.forwardRef<HTMLButtonElement, KButtonProps>(functio
       ref={ref}
       {...antdProps}
       size={sizeToAntd(size)}
-      style={{ fontFamily: font, borderRadius: t.radius.md, ...navyStyle, ...style }}
+      shape={shape}
+      htmlType={htmlType}
+      style={{ fontFamily: font, borderRadius: shape === 'default' ? t.radius.md : undefined, ...navyStyle, ...style }}
       {...rest}
     >
       {children}

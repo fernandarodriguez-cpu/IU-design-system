@@ -22,6 +22,8 @@ import { khorTokens } from '../theme/khor-theme';
 function ButtonPlayground() {
   const [variant, setVariant] = useState<any>('primary');
   const [size, setSize] = useState<any>('md');
+  const [shape, setShape] = useState<any>('default');
+  const [htmlType, setHtmlType] = useState<any>('button');
   const [loading, setLoading] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [block, setBlock] = useState(false);
@@ -49,6 +51,18 @@ function ButtonPlayground() {
               {['sm', 'md', 'lg'].map((s) => <option key={s} value={s}>{s}</option>)}
             </select>
           </div>
+          <div>
+            <label style={ctrl}>Forma (shape)</label>
+            <select value={shape} onChange={(e) => setShape(e.target.value)} style={sel}>
+              {['default', 'round', 'circle'].map((s) => <option key={s} value={s}>{s}</option>)}
+            </select>
+          </div>
+          <div>
+            <label style={ctrl}>Tipo HTML (htmlType)</label>
+            <select value={htmlType} onChange={(e) => setHtmlType(e.target.value)} style={sel}>
+              {['button', 'submit', 'reset'].map((s) => <option key={s} value={s}>{s}</option>)}
+            </select>
+          </div>
           
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 4 }}>
             <label style={checkStyle}>
@@ -70,8 +84,8 @@ function ButtonPlayground() {
         </div>
       </div>
       <div style={{ flex: 1, minWidth: 280, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32, backgroundColor: ghost ? khorTokens.colors.brand.navy : khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-        <KButton variant={variant} size={size} loading={loading} disabled={disabled} block={block} ghost={ghost} danger={danger} icon={<Save size={16} />}>
-          Guardar Cambios
+        <KButton variant={variant} size={size} shape={shape} htmlType={htmlType} loading={loading} disabled={disabled} block={block} ghost={ghost} danger={danger} icon={<Save size={16} />}>
+          {shape === 'circle' ? '' : 'Guardar Cambios'}
         </KButton>
       </div>
     </div>
@@ -81,9 +95,15 @@ function ButtonPlayground() {
 function InputPlayground() {
   const [val, setVal] = useState('');
   const [error, setError] = useState('');
+  const [warningMsg, setWarningMsg] = useState('');
   const [size, setSize] = useState<any>('md');
+  const [variant, setVariant] = useState<any>('outlined');
   const [disabled, setDisabled] = useState(false);
   const [block, setBlock] = useState(false);
+  const [showCount, setShowCount] = useState(false);
+  const [addonBefore, setAddonBefore] = useState('');
+  const [addonAfter, setAddonAfter] = useState('');
+  const maxLength = showCount ? 100 : undefined;
 
   const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
   const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
@@ -95,27 +115,58 @@ function InputPlayground() {
         <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12 }}>Controles</h4>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <div>
-            <label style={ctrl}>Mensaje de Error</label>
-            <input value={error} onChange={(e) => setError(e.target.value)} placeholder="Dejar vacio para sin error" style={sel} />
-          </div>
-          <div>
             <label style={ctrl}>Tamaño</label>
             <select value={size} onChange={(e) => setSize(e.target.value)} style={sel}>
               {['sm', 'md', 'lg'].map((s) => <option key={s} value={s}>{s}</option>)}
             </select>
           </div>
+          <div>
+            <label style={ctrl}>Variante Visual</label>
+            <select value={variant} onChange={(e) => setVariant(e.target.value)} style={sel}>
+              {['outlined', 'borderless', 'filled'].map((v) => <option key={v} value={v}>{v}</option>)}
+            </select>
+          </div>
+          <div>
+            <label style={ctrl}>Mensaje de Error</label>
+            <input value={error} onChange={(e) => setError(e.target.value)} placeholder="Dejar vacío para sin error" style={sel} />
+          </div>
+          <div>
+            <label style={ctrl}>Mensaje de Advertencia</label>
+            <input value={warningMsg} onChange={(e) => setWarningMsg(e.target.value)} placeholder="Dejar vacío para sin advertencia" style={sel} />
+          </div>
+          <div>
+            <label style={ctrl}>Prefix texto (addonBefore)</label>
+            <input value={addonBefore} onChange={(e) => setAddonBefore(e.target.value)} placeholder="Ej: https://" style={sel} />
+          </div>
+          <div>
+            <label style={ctrl}>Suffix texto (addonAfter)</label>
+            <input value={addonAfter} onChange={(e) => setAddonAfter(e.target.value)} placeholder="Ej: .com" style={sel} />
+          </div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 4 }}>
-            <label style={checkStyle}>
-              <input type="checkbox" checked={disabled} onChange={(e) => setDisabled(e.target.checked)} /> Disabled
-            </label>
-            <label style={checkStyle}>
-              <input type="checkbox" checked={block} onChange={(e) => setBlock(e.target.checked)} /> Block
-            </label>
+            <label style={checkStyle}><input type="checkbox" checked={disabled} onChange={(e) => setDisabled(e.target.checked)} /> Disabled</label>
+            <label style={checkStyle}><input type="checkbox" checked={block} onChange={(e) => setBlock(e.target.checked)} /> Block</label>
+            <label style={checkStyle}><input type="checkbox" checked={showCount} onChange={(e) => setShowCount(e.target.checked)} /> Show Count (max 100)</label>
           </div>
         </div>
       </div>
       <div style={{ flex: 1, minWidth: 280, display: 'flex', flexDirection: 'column', gap: 12, padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg, alignItems: 'center', justifyContent: 'center' }}>
-        <KInput size={size} block={block} placeholder="Escribe aqui..." prefix={<Mail size={16} />} value={val} onChange={(e) => setVal(e.target.value)} error={error || undefined} disabled={disabled} allowClear />
+        <KInput
+          size={size}
+          block={block}
+          variant={variant}
+          placeholder="Escribe aqui..."
+          prefix={<Mail size={16} />}
+          value={val}
+          onChange={(e) => setVal(e.target.value)}
+          error={error || undefined}
+          warning={warningMsg || undefined}
+          disabled={disabled}
+          allowClear
+          showCount={showCount}
+          maxLength={maxLength}
+          addonBefore={addonBefore || undefined}
+          addonAfter={addonAfter || undefined}
+        />
       </div>
     </div>
   );
@@ -148,6 +199,8 @@ function BadgePlayground() {
 function TagPlayground() {
   const [color, setColor] = useState<any>('primary');
   const [closable, setClosable] = useState(false);
+  const [bordered, setBordered] = useState(true);
+  const [showIcon, setShowIcon] = useState(false);
   const [text, setText] = useState('Etiqueta');
   const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
   const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
@@ -159,10 +212,12 @@ function TagPlayground() {
           <div><label style={ctrl}>Color</label><select value={color} onChange={(e) => setColor(e.target.value)} style={sel}>{['primary','navy','accent','success','error','warning','default'].map(c=><option key={c}>{c}</option>)}</select></div>
           <div><label style={ctrl}>Texto</label><input value={text} onChange={(e) => setText(e.target.value)} style={sel}/></div>
           <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={closable} onChange={(e) => setClosable(e.target.checked)} /> Closable</label>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={bordered} onChange={(e) => setBordered(e.target.checked)} /> Bordered</label>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={showIcon} onChange={(e) => setShowIcon(e.target.checked)} /> Con Icono (Star)</label>
         </div>
       </div>
       <div style={{ flex: 1, minWidth: 240, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-        <KTag color={color} closable={closable} onClose={() => {}}>{text}</KTag>
+        <KTag color={color} closable={closable} bordered={bordered} icon={showIcon ? <Star size={12} /> : undefined} onClose={() => {}}>{text}</KTag>
       </div>
     </div>
   );
@@ -200,6 +255,8 @@ function SpacePlayground() {
 function AvatarPlayground() {
   const [size, setSize] = useState<any>('default');
   const [status, setStatus] = useState<any>('online');
+  const [shape, setShape] = useState<any>('circle');
+  const [gap, setGap] = useState(4);
   const [name, setName] = useState('Maria Garcia');
   const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
   const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
@@ -209,12 +266,15 @@ function AvatarPlayground() {
         <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <div><label style={ctrl}>Nombre</label><input value={name} onChange={(e) => setName(e.target.value)} style={sel}/></div>
-          <div><label style={ctrl}>Tamano</label><select value={size} onChange={(e) => setSize(e.target.value)} style={sel}>{['small','default','large'].map(s=><option key={s}>{s}</option>)}</select></div>
-          <div><label style={ctrl}>Estado</label><select value={status} onChange={(e) => setStatus(e.target.value)} style={sel}>{['online','offline','busy','away','none'].map(s=><option key={s}>{s}</option>)}</select></div>
+          <div><label style={ctrl}>Tamaño</label><select value={size} onChange={(e) => setSize(e.target.value)} style={sel}>{['small','default','large'].map(s=><option key={s}>{s}</option>)}</select></div>
+          <div><label style={ctrl}>Forma (shape)</label><select value={shape} onChange={(e) => setShape(e.target.value)} style={sel}>{['circle','square'].map(s=><option key={s}>{s}</option>)}</select></div>
+          <div><label style={ctrl}>Estado de Presencia</label><select value={status} onChange={(e) => setStatus(e.target.value)} style={sel}>{['online','offline','busy','away','none'].map(s=><option key={s}>{s}</option>)}</select></div>
+          <div><label style={ctrl}>Gap texto: {gap}px</label><input type="range" min={0} max={16} value={gap} onChange={(e) => setGap(Number(e.target.value))} style={{ width: '100%' }} /></div>
         </div>
       </div>
-      <div style={{ flex: 1, minWidth: 240, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-        <KAvatar name={name} size={size} status={status === 'none' ? undefined : status} />
+      <div style={{ flex: 1, minWidth: 240, display: 'flex', gap: 16, alignItems: 'center', justifyContent: 'center', padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
+        <KAvatar name={name} size={size} shape={shape} gap={gap} status={status === 'none' ? undefined : status} />
+        <KAvatar name="JD" size={size} shape={shape} gap={gap} />
       </div>
     </div>
   );
@@ -269,6 +329,7 @@ function RadioPlayground() {
   const [value, setValue] = useState('1');
   const [direction, setDirection] = useState<any>('horizontal');
   const [variant, setVariant] = useState<any>('default');
+  const [buttonStyle, setButtonStyle] = useState<any>('solid');
   const [size, setSize] = useState<any>('md');
   const [disabled, setDisabled] = useState(false);
   const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
@@ -278,14 +339,15 @@ function RadioPlayground() {
       <div style={{ flex: 1, minWidth: 240 }}>
         <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <div><label style={ctrl}>Variante</label><select value={variant} onChange={(e) => setVariant(e.target.value)} style={sel}>{['default','button'].map(v=><option key={v}>{v}</option>)}</select></div>
-          <div><label style={ctrl}>Direccion</label><select value={direction} onChange={(e) => setDirection(e.target.value)} style={sel}>{['horizontal','vertical'].map(d=><option key={d}>{d}</option>)}</select></div>
+          <div><label style={ctrl}>Tipo</label><select value={variant} onChange={(e) => setVariant(e.target.value)} style={sel}>{['default','button'].map(v=><option key={v}>{v}</option>)}</select></div>
+          {variant === 'button' && <div><label style={ctrl}>Button Style</label><select value={buttonStyle} onChange={(e) => setButtonStyle(e.target.value)} style={sel}>{['solid','outline'].map(b=><option key={b}>{b}</option>)}</select></div>}
+          <div><label style={ctrl}>Dirección</label><select value={direction} onChange={(e) => setDirection(e.target.value)} style={sel}>{['horizontal','vertical'].map(d=><option key={d}>{d}</option>)}</select></div>
           <div><label style={ctrl}>Tamaño</label><select value={size} onChange={(e) => setSize(e.target.value)} style={sel}>{['sm','md','lg'].map(s=><option key={s}>{s}</option>)}</select></div>
           <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer', marginTop: 4 }}><input type="checkbox" checked={disabled} onChange={(e) => setDisabled(e.target.checked)} /> Disabled</label>
         </div>
       </div>
       <div style={{ flex: 1, minWidth: 280, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-        <KRadio options={[{label:'Empleado',value:'1'},{label:'Contratista',value:'2'},{label:'Becario',value:'3'}]} value={value} onChange={(e) => setValue(e.target.value)} direction={direction} variant={variant} size={size} disabled={disabled} />
+        <KRadio options={[{label:'Empleado',value:'1'},{label:'Contratista',value:'2'},{label:'Becario',value:'3'}]} value={value} onChange={(e) => setValue(e.target.value)} direction={direction} variant={variant} buttonStyle={buttonStyle} size={size} disabled={disabled} />
       </div>
     </div>
   );
@@ -647,15 +709,19 @@ const atoms: Record<string, AtomEntry> = {
 </KButton>`,
     filename: 'KButton.tsx',
     props: [
-      { name: 'variant', type: "'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'navy'", default: "'primary'", description: 'Variante visual del boton.' },
-      { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Tamano del boton.' },
-      { name: 'icon', type: 'ReactNode', description: 'Icono Lucide a mostrar. Tamano recomendado: 16px.' },
-      { name: 'iconPosition', type: "'start' | 'end'", default: "'start'", description: 'Posicion del icono.' },
-      { name: 'loading', type: 'boolean', default: 'false', description: 'Muestra spinner de carga.' },
-      { name: 'disabled', type: 'boolean', default: 'false', description: 'Desactiva el boton (greyscale + 50% opacity).' },
-      { name: 'block', type: 'boolean', default: 'false', description: 'Ancho completo.' },
-      { name: 'onClick', type: '() => void', description: 'Callback al hacer click.' },
-      { name: 'children', type: 'ReactNode', required: true, description: 'Contenido del boton.' },
+      { name: 'variant', type: "'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'navy' | 'dashed' | 'link' | 'text'", default: "'primary'", description: 'Variante visual del botón.' },
+      { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Tamaño del botón.' },
+      { name: 'shape', type: "'default' | 'round' | 'circle'", default: "'default'", description: 'Forma del botón. circle requiere solo un icon, sin children.' },
+      { name: 'htmlType', type: "'button' | 'submit' | 'reset'", default: "'button'", description: 'Tipo HTML del botón para integración con formularios.' },
+      { name: 'icon', type: 'ReactNode', description: 'Icono Lucide. Tamaño recomendado: 16px.' },
+      { name: 'iconPosition', type: "'start' | 'end'", default: "'start'", description: 'Posición del icono relativa al texto.' },
+      { name: 'loading', type: 'boolean', default: 'false', description: 'Muestra spinner de carga y deshabilita el botón.' },
+      { name: 'disabled', type: 'boolean', default: 'false', description: 'Desactiva el botón.' },
+      { name: 'block', type: 'boolean', default: 'false', description: 'Ancho completo del contenedor.' },
+      { name: 'danger', type: 'boolean', default: 'false', description: 'Activa estilo de peligro/destrucción.' },
+      { name: 'ghost', type: 'boolean', default: 'false', description: 'Botón transparente con borde color primario.' },
+      { name: 'onClick', type: '(e: MouseEvent) => void', description: 'Callback al hacer click.' },
+      { name: 'children', type: 'ReactNode', required: true, description: 'Contenido del botón.' },
     ],
     guidelines: [
       'Usa variant="primary" para la accion principal de una pantalla (maximo 1 por vista).',
@@ -708,15 +774,22 @@ const atoms: Record<string, AtomEntry> = {
 />`,
     filename: 'KInput.tsx',
     props: [
-      { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Tamano del input.' },
-      { name: 'placeholder', type: 'string', description: 'Texto placeholder.' },
-      { name: 'prefix', type: 'ReactNode', description: 'Icono o elemento al inicio.' },
-      { name: 'suffix', type: 'ReactNode', description: 'Icono o elemento al final.' },
-      { name: 'error', type: 'string', description: 'Mensaje de error. Activa estado visual de error.' },
+      { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Tamaño del input.' },
+      { name: 'variant', type: "'outlined' | 'borderless' | 'filled'", default: "'outlined'", description: 'Estilo visual: con borde, sin borde, o con fondo sólido.' },
+      { name: 'placeholder', type: 'string', description: 'Texto placeholder cuando el input está vacío.' },
+      { name: 'prefix', type: 'ReactNode', description: 'Icono o elemento posicionado al inicio del input.' },
+      { name: 'suffix', type: 'ReactNode', description: 'Icono o elemento posicionado al final del input.' },
+      { name: 'addonBefore', type: 'ReactNode | string', description: 'Complemento antes del input (fuera del borde).' },
+      { name: 'addonAfter', type: 'ReactNode | string', description: 'Complemento después del input (fuera del borde).' },
+      { name: 'error', type: 'string', description: 'Mensaje de error. Activa borde rojo y muestra texto de error.' },
+      { name: 'warning', type: 'string', description: 'Mensaje de advertencia. Activa borde amarillo y muestra texto de aviso.' },
       { name: 'disabled', type: 'boolean', default: 'false', description: 'Desactiva el input.' },
+      { name: 'block', type: 'boolean', default: 'false', description: 'Ancho completo del contenedor.' },
+      { name: 'allowClear', type: 'boolean', description: 'Muestra botón para limpiar el contenido.' },
+      { name: 'showCount', type: 'boolean', description: 'Muestra contador de caracteres escritos.' },
+      { name: 'maxLength', type: 'number', description: 'Límite máximo de caracteres.' },
       { name: 'type', type: "'text' | 'password' | 'number' | 'email'", default: "'text'", description: 'Tipo de input HTML.' },
-      { name: 'allowClear', type: 'boolean', description: 'Muestra boton de limpiar.' },
-      { name: 'onChange', type: '(e) => void', description: 'Callback al cambiar valor.' },
+      { name: 'onChange', type: '(e: ChangeEvent<HTMLInputElement>) => void', description: 'Callback al cambiar valor.' },
     ],
     guidelines: [
       'Siempre usa un prefix icon para indicar el tipo de dato esperado.',
@@ -784,9 +857,11 @@ const atoms: Record<string, AtomEntry> = {
 <KTag color="primary" closable onClose={() => {}}>Removible</KTag>`,
     filename: 'KTag.tsx',
     props: [
-      { name: 'color', type: "'primary' | 'navy' | 'accent' | 'success' | 'error' | 'warning' | 'default'", default: "'default'", description: 'Color semantico del tag.' },
+      { name: 'color', type: "'primary' | 'navy' | 'accent' | 'success' | 'error' | 'warning' | 'info' | 'default'", default: "'default'", description: 'Color semántico del tag. Puede ser cualquier color hex también.' },
+      { name: 'icon', type: 'ReactNode', description: 'Icono a mostrar antes del texto. Usar lucide-react, tamaño 12px.' },
+      { name: 'bordered', type: 'boolean', default: 'true', description: 'Muestra u oculta el borde del tag.' },
       { name: 'closable', type: 'boolean', default: 'false', description: 'Permite cerrar/eliminar el tag.' },
-      { name: 'onClose', type: '() => void', description: 'Callback al cerrar.' },
+      { name: 'onClose', type: '() => void', description: 'Callback al cerrar el tag.' },
       { name: 'children', type: 'ReactNode', required: true, description: 'Contenido del tag.' },
     ],
     guidelines: [
@@ -815,10 +890,13 @@ const atoms: Record<string, AtomEntry> = {
 <KAvatar src="/avatar.jpg" size="md" />`,
     filename: 'KAvatar.tsx',
     props: [
-      { name: 'src', type: 'string', description: 'URL de la imagen del avatar.' },
-      { name: 'name', type: 'string', description: 'Nombre del usuario. Se generan iniciales automaticamente.' },
-      { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Tamano: sm=32px, md=40px, lg=56px.' },
-      { name: 'status', type: "'online' | 'offline' | 'busy' | 'away'", description: 'Indicador de estado con punto de color.' },
+      { name: 'src', type: 'string', description: 'URL de imagen del avatar.' },
+      { name: 'name', type: 'string', description: 'Nombre de usuario. Se generan las iniciales automáticamente (primeras 2).' },
+      { name: 'size', type: "'small' | 'default' | 'large' | number", default: "'default'", description: 'Tamaño del avatar. Acepta valor numérico en px.' },
+      { name: 'shape', type: "'circle' | 'square'", default: "'circle'", description: 'Forma del avatar.' },
+      { name: 'gap', type: 'number', default: '4', description: 'Distancia entre el borde y el texto de iniciales (px).' },
+      { name: 'status', type: "'online' | 'offline' | 'busy' | 'away'", description: 'Indicador de presencia con punto de color.' },
+      { name: 'icon', type: 'ReactNode', description: 'Icono a mostrar en lugar de imagen o iniciales.' },
     ],
     guidelines: [
       'Cuando hay imagen, usala. Si no, las iniciales se generan del nombre.',
@@ -922,14 +1000,16 @@ const atoms: Record<string, AtomEntry> = {
 <KRadio variant="button" options={...} />`,
     filename: 'KRadio.tsx',
     props: [
-      { name: 'options', type: '{ label: string; value: string | number }[]', required: true, description: 'Opciones del grupo.' },
-      { name: 'value', type: 'string | number', description: 'Valor seleccionado.' },
-      { name: 'onChange', type: '(e) => void', description: 'Callback al seleccionar.' },
-      { name: 'direction', type: "'horizontal' | 'vertical'", default: "'horizontal'", description: 'Orientacion del grupo.' },
-      { name: 'variant', type: "'default' | 'button'", default: "'default'", description: 'Estilo: radio clasico o botones.' },
-      { name: 'disabled', type: 'boolean', default: 'false', description: 'Desactiva todas las opciones.' },
+      { name: 'options', type: '{ label: string; value: string | number; disabled?: boolean }[]', required: true, description: 'Array de opciones del grupo de radio.' },
+      { name: 'value', type: 'string | number', description: 'Valor actualmente seleccionado (controlado).' },
+      { name: 'onChange', type: '(e: RadioChangeEvent) => void', description: 'Callback al cambiar la selección.' },
+      { name: 'direction', type: "'horizontal' | 'vertical'", default: "'horizontal'", description: 'Orientación del grupo de opciones.' },
+      { name: 'variant', type: "'default' | 'button'", default: "'default'", description: 'Estilo visual: radio clásico o grupo de botones.' },
+      { name: 'buttonStyle', type: "'solid' | 'outline'", default: "'solid'", description: 'Aplica solo cuando variant="button". solid=relleno, outline=solo borde.' },
+      { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Tamaño del grupo de radio (aplica especialmente a buttons).' },
+      { name: 'disabled', type: 'boolean', default: 'false', description: 'Deshabilita todas las opciones del grupo.' },
     ],
-    guidelines: ['Maximo 5-6 opciones. Para mas, usa KSelectField.', 'variant="button" ideal para filtros y toggles de vista.'],
+    guidelines: ['Máximo 5-6 opciones. Para más opciones, usa KSelectField.', 'variant="button" ideal para filtros y toggles de vista.', 'KRadioItem puede usarse standalone para casos personalizados.'],
   },
   tooltip: {
     id: 'tooltip',

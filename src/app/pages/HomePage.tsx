@@ -26,12 +26,12 @@ const principles = [
   {
     icon: <Component size={24} />,
     title: 'Atomic Design',
-    description: 'Arquitectura modular basada en atomos, moleculas, organismos y templates para maxima reutilizacion.',
+    description: 'Arquitectura modular basada en átomos, moleculas, organismos y templates para máxima reutilización.',
   },
   {
     icon: <Sparkles size={24} />,
     title: 'IA Agent Ready',
-    description: 'Componentes semanticos preparados para ser interpretados y generados por agentes de IA.',
+    description: 'Componentes semánticos preparados para ser interpretados y generados por agentes de IA.',
   },
   {
     icon: <Zap size={24} />,
@@ -41,12 +41,12 @@ const principles = [
   {
     icon: <Shield size={24} />,
     title: 'Consistencia',
-    description: 'Fuente unica de verdad para todos los productos Khor. Un lenguaje visual unificado.',
+    description: 'Fuente única de verdad para todos los productos Khor. Un lenguaje visual unificado.',
   },
   {
     icon: <Smartphone size={24} />,
     title: 'Responsive',
-    description: 'Componentes adaptados para web y mobile con grid de 12 columnas y breakpoints definidos.',
+    description: 'Componentes adaptados para web y móvil con grid de 12 columnas y breakpoints definidos.',
   },
 ];
 

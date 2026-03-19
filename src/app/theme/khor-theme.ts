@@ -83,15 +83,30 @@ export const khorTokens = {
 } as const;
 
 /**
- * Static color values for contexts that can't use CSS variables
- * (e.g., canvas drawing, programmatic color calculations).
- * These are LIGHT MODE ONLY and won't respond to dark mode.
+ * Static token values for contexts that can't use CSS variables 
+ * (like Ant Design's ConfigProvider which needs raw strings/numbers to calculate derivatives).
  */
-export const khorStaticColors = {
-  primary: '#E04D36',
-  primaryHover: '#e8644f',
-  navy: '#051758',
-  accent: '#FF9500',
-  white: '#FFFFFF',
-  black: '#000000',
+export const khorStaticTokens = {
+  colors: {
+    primary: '#E04D36',
+    primaryHover: '#e8644f',
+    navy: '#051758',
+    accent: '#FF9500',
+    success: '#2E7D32',
+    error: '#D32F2F',
+    warning: '#FF9500', // Or #E68600
+    info: '#051758',
+    white: '#FFFFFF',
+    black: '#000000',
+  },
+  radius: {
+    sm: 6,
+    md: 8,
+    lg: 10,
+    xl: 14,
+  },
+  typography: {
+    fontPrimary: "'Raleway', sans-serif",
+    fontSecondary: "'Plus Jakarta Sans', sans-serif",
+  }
 } as const;

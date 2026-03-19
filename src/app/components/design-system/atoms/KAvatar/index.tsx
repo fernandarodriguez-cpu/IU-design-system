@@ -7,10 +7,14 @@ const t = khorTokens;
 const font = t.typography.fontPrimary;
 
 export interface KAvatarProps extends AvatarProps {
-  /** Compat: nombre completo para generar iniciales */
+  /** Nombre completo para generar iniciales automáticamente */
   name?: string;
-  /** Compat: estado online/offline/busy/away */
+  /** Estado de presencia: online | offline | busy | away */
   status?: 'online' | 'offline' | 'busy' | 'away';
+  /** Forma del avatar. Default: 'circle' */
+  shape?: 'circle' | 'square';
+  /** Distancia entre los bordes del avatar y el texto de las iniciales (px) */
+  gap?: number;
 }
 
 const statusColorMap = {
@@ -22,7 +26,7 @@ const statusColorMap = {
 
 const statusSizeMap = { small: 8, default: 10, large: 14 };
 
-export function KAvatar({ name, status, src, style, size = 'default', children, ...rest }: KAvatarProps) {
+export function KAvatar({ name, status, src, style, size = 'default', shape = 'circle', gap, children, ...rest }: KAvatarProps) {
   const initials = name ? name.split(' ').map((w: string) => w[0]).join('').toUpperCase().slice(0, 2) : undefined;
   const dotSize = typeof size === 'number' ? Math.max(8, size * 0.22) : (statusSizeMap[size as keyof typeof statusSizeMap] || 10);
 
@@ -30,6 +34,8 @@ export function KAvatar({ name, status, src, style, size = 'default', children, 
     <Avatar
       src={src}
       size={size}
+      shape={shape}
+      gap={gap}
       style={{
         backgroundColor: !src && !rest.icon ? t.colors.brand.navy : undefined,
         fontFamily: font,

@@ -8,8 +8,12 @@ const font = t.typography.fontPrimary;
 
 export type KTagColor = 'primary' | 'navy' | 'accent' | 'success' | 'error' | 'warning' | 'info' | 'default';
 
-export interface KTagProps extends Omit<TagProps, 'color'> {
+export interface KTagProps extends Omit<TagProps, 'color' | 'bordered'> {
   color?: KTagColor | string;
+  /** Icono a mostrar antes del texto del tag */
+  icon?: React.ReactNode;
+  /** Muestra o oculta el borde. Default: true */
+  bordered?: boolean;
 }
 
 const tagColorMap: Record<KTagColor, string> = {
@@ -23,11 +27,13 @@ const tagColorMap: Record<KTagColor, string> = {
   default: t.colors.neutral[500],
 };
 
-export function KTag({ color = 'default', style, children, ...rest }: KTagProps) {
+export function KTag({ color = 'default', style, children, icon, bordered = true, ...rest }: KTagProps) {
   const resolvedColor = tagColorMap[color as KTagColor] ?? color;
   return (
     <Tag
       color={resolvedColor}
+      icon={icon}
+      bordered={bordered}
       style={{ fontFamily: font, borderRadius: 6, fontSize: 12, ...style }}
       {...rest}
     >

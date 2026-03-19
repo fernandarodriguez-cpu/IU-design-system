@@ -7,7 +7,7 @@ export { default as KTag, KCheckableTag } from './KTag';
 export { default as KAvatar, KAvatarGroup } from './KAvatar';
 export { default as KSwitch } from './KSwitch';
 export { default as KCheckbox, KCheckboxGroup } from './KCheckbox';
-export { default as KRadio } from './KRadio';
+export { default as KRadio, KRadioItem } from './KRadio';
 export { default as KTooltip } from './KTooltip';
 export { default as KProgress } from './KProgress';
 export { default as KText, KLink, KParagraph } from './KText';
