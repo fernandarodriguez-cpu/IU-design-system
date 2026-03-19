@@ -3,7 +3,7 @@
 import * as React from "react";
 
 import { cn } from "./utils";
-import { useTokens } from "../../utils/useTokens";
+import { useTokens } from "./useTokens";
 
 function Table({ className, ...props }: React.ComponentProps<"table">) {
   return (

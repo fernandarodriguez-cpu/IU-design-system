@@ -1,10 +1,10 @@
 "use client";
 
 import * as React from "react";
-import { cva, type VariantProps } from "class-variance-authority@0.7.1";
-import { X, Loader2 } from "lucide-react@0.487.0";
+import { cva, type VariantProps } from "class-variance-authority";
+import { X, Loader2 } from "lucide-react";
 import { cn } from "./utils";
-import { useTokens } from "../../utils/useTokens";
+import { useTokens } from "./useTokens";
 
 // ==================== TYPES ====================
 

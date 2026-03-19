@@ -1,12 +1,12 @@
 "use client";
 
 import * as React from "react";
-import * as CheckboxPrimitive from "@radix-ui/react-checkbox@1.1.4";
-import { Check, Minus } from "lucide-react@0.487.0";
+import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
+import { Check, Minus } from "lucide-react";
 import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "./utils";
-import { useTokens } from "../../utils/useTokens";
+import { useTokens } from "./useTokens";
 
 // ============================================================================
 // CHECKBOX VARIANTS (Ant Design Pattern)

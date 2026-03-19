@@ -3,7 +3,7 @@
 import * as React from "react";
 import { Input, InputProps } from "./input";
 import { Button } from "./button";
-import { Search, Loader2 } from "lucide-react@0.487.0";
+import { Search, Loader2 } from "lucide-react";
 import { cn } from "./utils";
 
 // ==================== TYPES ====================

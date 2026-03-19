@@ -1,10 +1,10 @@
 "use client";
 
 import * as React from "react";
-import * as TooltipPrimitive from "@radix-ui/react-tooltip@1.1.8";
+import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 
 import { cn } from "./utils";
-import { useTokens } from "../../utils/useTokens";
+import { useTokens } from "./useTokens";
 
 function TooltipProvider({
   delayDuration = 0,

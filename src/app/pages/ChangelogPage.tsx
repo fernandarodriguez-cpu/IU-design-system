@@ -9,7 +9,7 @@ import {
   Tag, GitBranch, Calendar, Package, Zap, Star,
   ChevronDown, ChevronRight,
 } from 'lucide-react';
-import { KButton, KBadge, KText } from '../components/design-system/atoms';
+import { KButton, KBadge, KText } from '../components/design-system/atoms/index';
 import { khorTokens } from '../theme/khor-theme';
 
 const t = khorTokens;
@@ -42,6 +42,26 @@ const changeTypeConfig: Record<ChangeType, { color: string; bg: string; icon: Re
 };
 
 const changelog: VersionEntry[] = [
+  {
+    version: '2.5.0',
+    date: '10 Mar 2026',
+    codename: 'Eclipse',
+    summary: 'Sincronización global de marca con Ant Design 5 y cierre total de brechas (Gap Closure). El sistema ahora utiliza ConfigProvider para inyectar tokens de Khor automáticamente en todos los componentes subordinados, asegurando una identidad visual coherente y soporte nativo para Dark Mode.',
+    highlights: [
+      'Sincronización de Marca: Integración de ConfigProvider para inyectar colores (#E04D36), tipografía y radii en AntD.',
+      'Cierre de Gaps: 100% de las propiedades de AntD expuestas en Átomos, Moléculas y Organismos.',
+      'Refactorización Pro: KSlider (range), KSegmented (icon mapping) y KDataTable (columnas fijas y ellipsis).',
+      'Estabilidad: Verificación completa de tipos y build de producción (Zero Errors).',
+    ],
+    changes: [
+      { type: 'changed', component: 'App', componentPath: '/', description: 'Implementación de ConfigProvider para inyección global de tokens Khor en componentes Ant Design.' },
+      { type: 'changed', description: 'Átomos actualizados: KButton (href, shape), KInput (status, block), KBadge (overflow, offset), KAvatar (icon, gap) ahora exponen API completa de AntD.' },
+      { type: 'changed', description: 'Moléculas actualizadas: KSlider (soporte range), KSegmented (objetos con icono), KDatePicker (presets, status), KPopconfirm (okButtonProps).' },
+      { type: 'added', component: 'KDataTable', componentPath: '/organisms/data-table', description: 'Soporte para columnas fijas (fixed) y truncado inteligente (ellipsis) integrado en el motor de tablas.' },
+      { type: 'fixed', description: 'Resolución de conflictos de tipos en KSlider y KSegmented causados por uniones de tipos de Ant Design 5.' },
+    ],
+    stats: { added: 1, changed: 3, fixed: 1 },
+  },
   {
     version: '2.4.0',
     date: '9 Mar 2026',

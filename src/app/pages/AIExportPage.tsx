@@ -8,9 +8,9 @@ import {
   Bot, Sparkles, Info, Zap, Settings2,
   ChevronDown, ChevronRight, MousePointerClick,
 } from 'lucide-react';
-import { KButton, KText, KBadge, KAlert, KSwitch } from '../components/design-system/atoms';
-import { KCardSection, KTabs } from '../components/design-system/organisms';
-import { kToast } from '../components/design-system/organisms';
+import { KButton, KText, KBadge, KAlert, KSwitch } from '../components/design-system/atoms/index';
+import { KCardSection, KTabs } from '../components/design-system/organisms/index';
+import { kToast } from '../components/design-system/organisms/index';
 import { khorTokens } from '../theme/khor-theme';
 
 const t = khorTokens;
@@ -245,7 +245,7 @@ style={{ backgroundColor: 'var(--card)', color: 'var(--foreground)' }}
 ## Atomos (27 componentes)
 
 Los atomos son la unidad mas pequena e indivisible de la interfaz.
-Importar: \`import { KButton, KInput, ... } from './components/design-system/atoms'\`
+Importar: \`import { KButton, KInput, ... } from './components/design-system/atoms/index'\`
 
 ### KButton
 Boton principal del sistema con 6 variantes y 3 tamanos.
@@ -645,7 +645,7 @@ interface KQRCodeProps {
 ## Moleculas (33 componentes)
 
 Combinaciones de atomos que forman unidades funcionales reutilizables.
-Importar: \`import { KFormField, KSearchInput, ... } from './components/design-system/molecules'\`
+Importar: \`import { KFormField, KSearchInput, ... } from './components/design-system/molecules/index'\`
 
 ### KFormField
 Wrapper de formulario con label, error y hint.
@@ -1086,7 +1086,7 @@ kNotify({ title: 'Completado', description: 'Proceso terminado', type: 'success'
 ## Organismos (13 componentes)
 
 Componentes complejos que conforman secciones completas de UI.
-Importar: \`import { KDataTable, KModal, ... } from './components/design-system/organisms'\`
+Importar: \`import { KDataTable, KModal, ... } from './components/design-system/organisms/index'\`
 
 ### KDataTable
 Tabla de datos con sorting, paginacion, busqueda y acciones.
@@ -1417,7 +1417,7 @@ const router = createBrowserRouter([
 // Atomos base (18)
 import { KButton, KInput, KBadge, KTag, KAvatar, KSwitch, KCheckbox, KRadio,
          KTooltip, KProgress, KText, KDivider, KAlert, KSkeleton, KSlider,
-         KRate, KSpin, KTextArea } from './components/design-system/atoms';
+         KRate, KSpin, KTextArea } from './components/design-system/atoms/index';
 
 // Atomos extendidos (9)
 import { KButtonGroup, KInputPassword, KInputSearch, KFloatButton,
@@ -1426,7 +1426,7 @@ import { KButtonGroup, KInputPassword, KInputSearch, KFloatButton,
 // Moleculas base (12)
 import { KFormField, KSearchInput, KStatCard, KNavItem, KSelectField,
          KUserCell, KEmptyState, KBreadcrumb, KSteps, KDropdownMenu,
-         KPopover, KAccordion } from './components/design-system/molecules';
+         KPopover, KAccordion } from './components/design-system/molecules/index';
 
 // Moleculas extendidas (10)
 import { KInputNumber, KSegmented, KAutocomplete, KDatePicker, KDateRangePicker,
@@ -1438,7 +1438,7 @@ import { KCascader, KStatistic, KTimePicker, KMentions, KColorPicker,
 
 // Organismos base (8)
 import { KDataTable, KModal, KDrawer, KCardSection, KTabs,
-         KToastProvider, kToast, KSparklineCell } from './components/design-system/organisms';
+         KToastProvider, kToast, KSparklineCell } from './components/design-system/organisms/index';
 
 // Organismos extendidos (5)
 import { KUpload, KTree, KTour, KModalConfirm, KFormList } from './components/design-system/organisms-extended';

@@ -1,11 +1,11 @@
 "use client";
 
 import * as React from "react";
-import * as PopoverPrimitive from "@radix-ui/react-popover@1.1.3";
-import { cva, type VariantProps } from "class-variance-authority@0.7.1";
-import { Check, X, Pipette, Shuffle, Heart, Trash2 } from "lucide-react@0.487.0";
+import * as PopoverPrimitive from "@radix-ui/react-popover";
+import { cva, type VariantProps } from "class-variance-authority";
+import { Check, X, Pipette, Shuffle, Heart, Trash2 } from "lucide-react";
 import { cn } from "./utils";
-import { useTokens } from "../../utils/useTokens";
+import { useTokens } from "./useTokens";
 import { Input } from "./input";
 import { Button } from "./button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./tabs";

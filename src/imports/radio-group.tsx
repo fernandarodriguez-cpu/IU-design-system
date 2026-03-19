@@ -1,12 +1,12 @@
 "use client";
 
 import * as React from "react";
-import * as RadioGroupPrimitive from "@radix-ui/react-radio-group@1.2.3";
-import { Circle } from "lucide-react@0.487.0";
+import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
+import { Circle } from "lucide-react";
 import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "./utils";
-import { useTokens } from "../../utils/useTokens";
+import { useTokens } from "./useTokens";
 
 // ============================================================================
 // RADIO VARIANTS (Ant Design Pattern)

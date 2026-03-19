@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { cn } from "./utils";
-import { VariantProps } from "class-variance-authority@0.7.1";
+import { VariantProps } from "class-variance-authority";
 import { buttonVariants } from "./button";
 
 // ==================== TYPES ====================

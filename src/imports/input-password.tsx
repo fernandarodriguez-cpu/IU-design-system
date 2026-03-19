@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { Input, InputProps } from "./input";
-import { Eye, EyeOff } from "lucide-react@0.487.0";
+import { Eye, EyeOff } from "lucide-react";
 
 // ==================== TYPES ====================
 

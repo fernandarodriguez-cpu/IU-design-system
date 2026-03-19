@@ -9,8 +9,14 @@ import {
   KFormField, KSearchInput, KStatCard, KNavItem,
   KSelectField, KUserCell, KEmptyState,
   KBreadcrumb, KSteps, KDropdownMenu, KPopover, KAccordion,
-} from '../components/design-system/molecules';
-import { KButton, KInput, KText } from '../components/design-system/atoms';
+  KInputNumber, KSegmented, KAutocomplete, KDatePicker,
+  KDateRangePicker, KSelectAdvanced, KDescriptions,
+  KPopconfirm, KResult, KTimeline,
+  KCascader, KStatistic, KTimePicker, KMentions,
+  KColorPicker, KAnchor, KList, KDividerExtended,
+  KTreeSelect, KTransfer,
+} from '../components/design-system/molecules/index';
+import { KButton, KInput, KText } from '../components/design-system/atoms/index';
 import {
   Users, DollarSign, TrendingUp, Calendar, Home,
   Settings, FileText, Inbox, Search, BarChart3,
@@ -18,16 +24,6 @@ import {
   CheckCircle, Clock, AlertTriangle, GitCommit, Tag,
 } from 'lucide-react';
 import { khorTokens } from '../theme/khor-theme';
-import {
-  KInputNumber, KSegmented, KAutocomplete, KDatePicker,
-  KDateRangePicker, KSelectAdvanced, KDescriptions,
-  KPopconfirm, KResult, KTimeline,
-} from '../components/design-system/molecules-extended';
-import {
-  KCascader, KStatistic, KTimePicker, KMentions,
-  KColorPicker, KAnchor, KList, KDividerExtended,
-  KTreeSelect, KTransfer,
-} from '../components/design-system/molecules-wave3';
 
 interface MoleculeEntry {
   id: string;
@@ -124,6 +120,8 @@ function SelectFieldPlayground() {
   const [required, setRequired] = useState(false);
   const [error, setError] = useState('');
   const [disabled, setDisabled] = useState(false);
+  const [allowClear, setAllowClear] = useState(true);
+  const [size, setSize] = useState<any>('middle');
   const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
   const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
   return (
@@ -131,14 +129,34 @@ function SelectFieldPlayground() {
       <div style={{ flex: 1, minWidth: 240 }}>
         <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div><label style={ctrl}>Tamano</label><select value={size} onChange={(e) => setSize(e.target.value)} style={sel}>{['small','middle','large'].map(s=><option key={s}>{s}</option>)}</select></div>
           <div><label style={ctrl}>Error</label><input value={error} onChange={(e) => setError(e.target.value)} placeholder="Dejar vacio" style={sel} /></div>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={required} onChange={(e) => setRequired(e.target.checked)} /> Required</label>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={disabled} onChange={(e) => setDisabled(e.target.checked)} /> Disabled</label>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 4 }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={required} onChange={(e) => setRequired(e.target.checked)} /> Required</label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={disabled} onChange={(e) => setDisabled(e.target.checked)} /> Disabled</label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={allowClear} onChange={(e) => setAllowClear(e.target.checked)} /> Allow Clear</label>
+          </div>
           <p style={{ fontSize: 12, color: khorTokens.colors.neutral[400], margin: 0 }}>Seleccionado: {value || '(ninguno)'}</p>
         </div>
       </div>
       <div style={{ flex: 1, minWidth: 300, padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-        <KSelectField label="Departamento" placeholder="Seleccionar..." options={[{label:'Recursos Humanos',value:'rh'},{label:'Tecnologia',value:'tech'},{label:'Finanzas',value:'fin'},{label:'Operaciones',value:'ops'}]} value={value} onChange={setValue} required={required} error={error || undefined} disabled={disabled} />
+        <KSelectField
+          label="Departamento"
+          placeholder="Seleccionar..."
+          options={[
+            { label: 'Recursos Humanos', value: 'rh' },
+            { label: 'Tecnologia', value: 'tech' },
+            { label: 'Finanzas', value: 'fin' },
+            { label: 'Operaciones', value: 'ops' }
+          ]}
+          value={value}
+          onChange={setValue}
+          disabled={disabled}
+          allowClear={allowClear}
+          size={size}
+          status={error ? 'error' : undefined}
+        />
+        {error && <div style={{ color: khorTokens.colors.feedback.error, fontSize: 12, marginTop: 4 }}>{error}</div>}
       </div>
     </div>
   );
@@ -147,7 +165,9 @@ function SelectFieldPlayground() {
 function UserCellPlayground() {
   const [name, setName] = useState('Maria Garcia');
   const [role, setRole] = useState('Gerente de RH');
-  const [status, setStatus] = useState<any>('online');
+  const [email, setEmail] = useState('');
+  const [avatar, setAvatar] = useState('https://i.pravatar.cc/150?img=47');
+  const [size, setSize] = useState<any>('md');
   const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
   const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
   return (
@@ -156,12 +176,14 @@ function UserCellPlayground() {
         <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <div><label style={ctrl}>Nombre</label><input value={name} onChange={(e) => setName(e.target.value)} style={sel} /></div>
-          <div><label style={ctrl}>Rol</label><input value={role} onChange={(e) => setRole(e.target.value)} style={sel} /></div>
-          <div><label style={ctrl}>Estado</label><select value={status} onChange={(e) => setStatus(e.target.value)} style={sel}>{['online','offline','busy','away'].map(s=><option key={s}>{s}</option>)}</select></div>
+          <div><label style={ctrl}>Rol alternativo (si no hay email)</label><input value={role} onChange={(e) => setRole(e.target.value)} style={sel} /></div>
+          <div><label style={ctrl}>Email (prioridad sobre rol)</label><input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="opcional" style={sel} /></div>
+          <div><label style={ctrl}>URL de Avatar</label><input value={avatar} onChange={(e) => setAvatar(e.target.value)} placeholder="Dejar vacio para iniciales" style={sel} /></div>
+          <div><label style={ctrl}>Tamano</label><select value={size} onChange={(e) => setSize(e.target.value)} style={sel}>{['sm','md'].map(s=><option key={s}>{s}</option>)}</select></div>
         </div>
       </div>
       <div style={{ flex: 1, minWidth: 240, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-        <KUserCell name={name} role={role} status={status} />
+        <KUserCell name={name} role={role || undefined} email={email || undefined} avatar={avatar || undefined} size={size} />
       </div>
     </div>
   );
@@ -228,11 +250,11 @@ function AccordionPlayground() {
         <div><label style={ctrl}>Tipo</label><select value={type} onChange={(e) => setType(e.target.value)} style={sel}>{['single','multiple'].map(t=><option key={t}>{t}</option>)}</select></div>
       </div>
       <div style={{ flex: 2, minWidth: 350, padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-        <KAccordion type={type} items={[
-          { key: '1', title: 'Como registro un empleado?', children: <KText variant="body-md" color="secondary">Navega a Empleados y completa el formulario.</KText> },
-          { key: '2', title: 'Como genero la nomina?', children: <KText variant="body-md" color="secondary">Ve a Nomina, selecciona fechas y confirma.</KText> },
-          { key: '3', title: 'Como exporto reportes?', children: <KText variant="body-md" color="secondary">Usa el boton Exportar en cualquier tabla.</KText> },
-        ]} defaultValue={['1']} />
+        <KAccordion items={[
+          { key: '1', label: 'Como registro un empleado?', children: <KText variant="body-md" color="secondary">Navega a Empleados y completa el formulario.</KText> },
+          { key: '2', label: 'Como genero la nomina?', children: <KText variant="body-md" color="secondary">Ve a Nomina, selecciona fechas y confirma.</KText> },
+          { key: '3', label: 'Como exporto reportes?', children: <KText variant="body-md" color="secondary">Usa el boton Exportar en cualquier tabla.</KText> },
+        ]} defaultActiveKey={['1']} />
       </div>
     </div>
   );
@@ -259,7 +281,8 @@ function EmptyStatePlayground() {
           icon={<Inbox size={48} />}
           title={title}
           description={desc}
-          action={showAction ? <KButton variant="primary" icon={<Users size={16} />}>Agregar</KButton> : undefined}
+          actionLabel={showAction ? "Agregar" : undefined}
+          onAction={() => {}}
         />
       </div>
     </div>
@@ -283,10 +306,14 @@ function DropdownPlayground() {
       </div>
       <div style={{ flex: 1, minWidth: 240, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
         <KDropdownMenu
-          items={items}
-          onSelect={(key) => setLastSelected(key)}
-          trigger={<KButton variant="secondary" icon={<MoreHorizontal size={16} />}>Acciones</KButton>}
-        />
+          menu={{
+            items: items as any,
+            onClick: (info) => setLastSelected(info.key)
+          }}
+          trigger={['click']}
+        >
+          <KButton variant="secondary" icon={<MoreHorizontal size={16} />}>Acciones</KButton>
+        </KDropdownMenu>
       </div>
     </div>
   );
@@ -330,15 +357,17 @@ function PopoverPlayground() {
       </div>
       <div style={{ flex: 1, minWidth: 280, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 48, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
         <KPopover
-          trigger={<KButton variant="secondary" size="sm" icon={<Info size={14} />}>Abrir Popover</KButton>}
+          content={
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <KText variant="body-md" color="default">Informacion del usuario</KText>
+              <KText variant="small" color="secondary">Rol: Administrador</KText>
+              <KText variant="small" color="secondary">Antiguedad: 3 anos</KText>
+              <KButton variant="primary" size="sm">Ver perfil completo</KButton>
+            </div>
+          }
           side={side}
         >
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            <KText variant="body-md" color="primary">Informacion del usuario</KText>
-            <KText variant="small" color="secondary">Rol: Administrador</KText>
-            <KText variant="small" color="secondary">Antiguedad: 3 anos</KText>
-            <KButton variant="primary" size="sm">Ver perfil completo</KButton>
-          </div>
+          <KButton variant="secondary" size="sm" icon={<Info size={14} />}>Abrir Popover</KButton>
         </KPopover>
       </div>
     </div>
@@ -364,8 +393,8 @@ const molecules: Record<string, MoleculeEntry> = {
       </div>
     ),
     playground: <FormFieldPlayground />,
-    code: `import { KFormField } from '@khor/design-system/molecules';
-import { KInput } from '@khor/design-system/atoms';
+    code: `import { KFormField } from '@khor/design-system/molecules/index';
+import { KInput } from '@khor/design-system/atoms/index';
 
 <KFormField label="Nombre Completo" required>
   <KInput placeholder="Ej: Maria Garcia" />
@@ -412,7 +441,7 @@ import { KInput } from '@khor/design-system/atoms';
       </div>
     ),
     playground: <SearchInputPlayground />,
-    code: `import { KSearchInput } from '@khor/design-system/molecules';
+    code: `import { KSearchInput } from '@khor/design-system/molecules/index';
 
 <KSearchInput
   placeholder="Buscar empleados..."
@@ -441,7 +470,7 @@ import { KInput } from '@khor/design-system/atoms';
       </div>
     ),
     playground: <StatCardPlayground />,
-    code: `import { KStatCard } from '@khor/design-system/molecules';
+    code: `import { KStatCard } from '@khor/design-system/molecules/index';
 
 <KStatCard
   title="Total Empleados"
@@ -481,7 +510,7 @@ import { KInput } from '@khor/design-system/atoms';
       </div>
     ),
     playground: <NavItemPlayground />,
-    code: `import { KNavItem } from '@khor/design-system/molecules';
+    code: `import { KNavItem } from '@khor/design-system/molecules/index';
 
 <KNavItem
   icon={<Home size={18} />}
@@ -522,18 +551,17 @@ import { KInput } from '@khor/design-system/atoms';
             { label: 'Finanzas', value: 'fin' },
             { label: 'Operaciones', value: 'ops' },
           ]}
-          required
         />
         <KSelectField
           label="Con Error"
           placeholder="Seleccionar..."
           options={[{ label: 'Opcion 1', value: '1' }]}
-          error="Campo obligatorio"
+          status="error"
         />
       </div>
     ),
     playground: <SelectFieldPlayground />,
-    code: `import { KSelectField } from '@khor/design-system/molecules';
+    code: `import { KSelectField } from '@khor/design-system/molecules/index';
 
 <KSelectField
   label="Departamento"
@@ -565,14 +593,14 @@ import { KInput } from '@khor/design-system/atoms';
     description: 'Celda de usuario con avatar, nombre, rol y estado. Ideal para tablas y listas de empleados.',
     preview: (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 300 }}>
-        <KUserCell name="Maria Garcia" role="Gerente de RH" status="online" />
-        <KUserCell name="Juan Perez" role="Desarrollador Sr." status="busy" />
-        <KUserCell name="Ana Lopez" role="Contadora" status="away" />
-        <KUserCell name="Carlos Ruiz" role="Becario" status="offline" />
+        <KUserCell name="Maria Garcia" role="Gerente de RH" />
+        <KUserCell name="Juan Perez" role="Desarrollador Sr." />
+        <KUserCell name="Ana Lopez" role="Contadora" />
+        <KUserCell name="Carlos Ruiz" role="Becario" />
       </div>
     ),
     playground: <UserCellPlayground />,
-    code: `import { KUserCell } from '@khor/design-system/molecules';
+    code: `import { KUserCell } from '@khor/design-system/molecules/index';
 
 <KUserCell
   name="Maria Garcia"
@@ -598,11 +626,12 @@ import { KInput } from '@khor/design-system/atoms';
         icon={<Inbox size={48} />}
         title="No hay empleados registrados"
         description="Agrega tu primer empleado para comenzar a gestionar tu equipo."
-        action={<KButton variant="primary" icon={<Users size={16} />}>Agregar Empleado</KButton>}
+        actionLabel="Agregar Empleado"
+        onAction={() => {}}
       />
     ),
     playground: <EmptyStatePlayground />,
-    code: `import { KEmptyState } from '@khor/design-system/molecules';
+    code: `import { KEmptyState } from '@khor/design-system/molecules/index';
 
 <KEmptyState
   icon={<Inbox size={48} />}
@@ -629,12 +658,12 @@ import { KInput } from '@khor/design-system/atoms';
     description: 'Navegación jerárquica que muestra la ubicación del usuario dentro de la aplicación. Ideal para páginas con múltiples niveles de profundidad.',
     preview: (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-        <KBreadcrumb items={[{ label: 'Inicio', onClick: () => {} }, { label: 'Empleados', onClick: () => {} }, { label: 'María García' }]} />
-        <KBreadcrumb items={[{ label: 'Dashboard', onClick: () => {} }, { label: 'Nóminas', onClick: () => {} }, { label: 'Enero 2026', onClick: () => {} }, { label: 'Detalle' }]} />
+        <KBreadcrumb items={[{ title: 'Inicio' }, { title: 'Empleados' }, { title: 'María García' }]} />
+        <KBreadcrumb items={[{ title: 'Dashboard' }, { title: 'Nóminas' }, { title: 'Enero 2026' }, { title: 'Detalle' }]} />
       </div>
     ),
     playground: <BreadcrumbPlayground />,
-    code: `import { KBreadcrumb } from '@khor/design-system/molecules';
+    code: `import { KBreadcrumb } from '@khor/design-system/molecules/index';
 
 <KBreadcrumb items={[
   { label: 'Inicio', onClick: () => navigate('/') },
@@ -666,7 +695,7 @@ import { KInput } from '@khor/design-system/atoms';
       </div>
     ),
     playground: <StepsPlayground />,
-    code: `import { KSteps } from '@khor/design-system/molecules';
+    code: `import { KSteps } from '@khor/design-system/molecules/index';
 
 <KSteps
   current={currentStep}
@@ -693,27 +722,34 @@ import { KInput } from '@khor/design-system/atoms';
     preview: (
       <div style={{ display: 'flex', gap: 24 }}>
         <KDropdownMenu
-          trigger={<KButton variant="secondary" size="sm">Acciones</KButton>}
-          items={[
-            { key: 'edit', label: 'Editar', icon: <Edit size={14} /> },
-            { key: 'copy', label: 'Duplicar', icon: <Copy size={14} /> },
-            { key: 'share', label: 'Compartir', icon: <Share2 size={14} /> },
-            { key: 'div', label: '', divider: true },
-            { key: 'delete', label: 'Eliminar', icon: <Trash2 size={14} />, danger: true },
-          ]}
-          onSelect={(key) => console.log(key)}
-        />
+          menu={{
+            items: [
+              { key: 'edit', label: 'Editar', icon: <Edit size={14} /> },
+              { key: 'copy', label: 'Duplicar', icon: <Copy size={14} /> },
+              { key: 'share', label: 'Compartir', icon: <Share2 size={14} /> },
+              { type: 'divider' },
+              { key: 'delete', label: 'Eliminar', icon: <Trash2 size={14} />, danger: true },
+            ],
+            onClick: (info) => console.log(info.key)
+          }}
+        >
+          <KButton variant="secondary" size="sm">Acciones</KButton>
+        </KDropdownMenu>
         <KDropdownMenu
-          items={[
-            { key: 'view', label: 'Ver detalle' },
-            { key: 'edit', label: 'Editar' },
-            { key: 'disabled', label: 'No disponible', disabled: true },
-          ]}
-        />
+          menu={{
+            items: [
+              { key: 'view', label: 'Ver detalle' },
+              { key: 'edit', label: 'Editar' },
+              { key: 'disabled', label: 'No disponible', disabled: true },
+            ]
+          }}
+        >
+          <KButton variant="secondary" size="sm">Más</KButton>
+        </KDropdownMenu>
       </div>
     ),
     playground: <DropdownPlayground />,
-    code: `import { KDropdownMenu } from '@khor/design-system/molecules';
+    code: `import { KDropdownMenu } from '@khor/design-system/molecules/index';
 
 <KDropdownMenu
   trigger={<KButton variant="secondary" size="sm">Acciones</KButton>}
@@ -739,18 +775,20 @@ import { KInput } from '@khor/design-system/atoms';
     preview: (
       <div style={{ display: 'flex', gap: 16 }}>
         <KPopover
-          trigger={<KButton variant="secondary" size="sm" icon={<Info size={14} />}>Ver detalles</KButton>}
+          content={
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <KText variant="body-md" color="navy">Información del Empleado</KText>
+              <KText variant="small" color="secondary">Departamento: Recursos Humanos</KText>
+              <KText variant="small" color="secondary">Antigüedad: 3 años</KText>
+              <KButton variant="primary" size="sm">Ver perfil completo</KButton>
+            </div>
+          }
         >
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            <KText variant="body-md" color="navy">Información del Empleado</KText>
-            <KText variant="small" color="secondary">Departamento: Recursos Humanos</KText>
-            <KText variant="small" color="secondary">Antigüedad: 3 años</KText>
-            <KButton variant="primary" size="sm">Ver perfil completo</KButton>
-          </div>
+          <KButton variant="secondary" size="sm" icon={<Info size={14} />}>Ver detalles</KButton>
         </KPopover>
       </div>
     ),
-    code: `import { KPopover } from '@khor/design-system/molecules';
+    code: `import { KPopover } from '@khor/design-system/molecules/index';
 
 <KPopover
   trigger={<KButton variant="secondary">Detalles</KButton>}
@@ -778,24 +816,23 @@ import { KInput } from '@khor/design-system/atoms';
       <div style={{ maxWidth: 500 }}>
         <KAccordion
           items={[
-            { key: '1', title: '¿Cómo registro un nuevo empleado?', children: <KText variant="body-md" color="secondary">Navega a Empleados → Nuevo y completa el formulario con los datos personales, puesto y documentos requeridos.</KText> },
-            { key: '2', title: '¿Cómo genero la nómina?', children: <KText variant="body-md" color="secondary">Ve a Nómina → Generar Periodo, selecciona las fechas y revisa los conceptos antes de confirmar.</KText> },
-            { key: '3', title: '¿Cómo exporto reportes?', children: <KText variant="body-md" color="secondary">En cualquier tabla, usa el botón Exportar para descargar en formato CSV o Excel.</KText> },
+            { key: '1', label: '¿Cómo registro un nuevo empleado?', children: <KText variant="body-md" color="secondary">Navega a Empleados → Nuevo y completa el formulario con los datos personales, puesto y documentos requeridos.</KText> },
+            { key: '2', label: '¿Cómo genero la nómina?', children: <KText variant="body-md" color="secondary">Ve a Nómina → Generar Periodo, selecciona las fechas y revisa los conceptos antes de confirmar.</KText> },
+            { key: '3', label: '¿Cómo exporto reportes?', children: <KText variant="body-md" color="secondary">En cualquier tabla, usa el botón Exportar para descargar en formato CSV o Excel.</KText> },
           ]}
-          defaultValue={['1']}
+          defaultActiveKey={['1']}
         />
       </div>
     ),
     playground: <AccordionPlayground />,
-    code: `import { KAccordion } from '@khor/design-system/molecules';
+    code: `import { KAccordion } from '@khor/design-system/molecules/index';
 
 <KAccordion
-  type="single"
   items={[
-    { key: '1', title: 'Pregunta 1', children: <p>Respuesta 1</p> },
-    { key: '2', title: 'Pregunta 2', children: <p>Respuesta 2</p> },
+    { key: '1', label: 'Pregunta 1', children: <p>Respuesta 1</p> },
+    { key: '2', label: 'Pregunta 2', children: <p>Respuesta 2</p> },
   ]}
-  defaultValue={['1']}
+  defaultActiveKey={['1']}
 />`,
     filename: 'KAccordion.tsx',
     props: [
@@ -818,7 +855,7 @@ import { KInput } from '@khor/design-system/atoms';
   'segmented': {
     id: 'segmented', name: 'KSegmented',
     description: 'Control segmentado tipo iOS para alternar entre opciones mutuamente excluyentes.',
-    preview: (<div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}><KSegmented options={['Diario', 'Semanal', 'Mensual']} value="Semanal" /><KSegmented options={[{ label: 'Lista', value: 'list', icon: <FileText size={14} /> }, { label: 'Tabla', value: 'table', icon: <BarChart3 size={14} /> }]} value="list" /></div>),
+    preview: (<div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}><KSegmented options={['Diario', 'Semanal', 'Mensual']} value="Semanal" /><KSegmented options={[{ label: 'Lista', value: 'list' }, { label: 'Tabla', value: 'table' }]} value="list" /></div>),
     code: `import { KSegmented } from '@khor/molecules-extended';\n\n<KSegmented options={['Diario','Semanal','Mensual']} value={period} onChange={setPeriod} />`,
     filename: 'KSegmented.tsx',
     props: [{ name: 'options', type: '(string | KSegmentedOption)[]', required: true, description: 'Opciones.' },{ name: 'value', type: 'string', description: 'Seleccionado.' },{ name: 'onChange', type: '(v: string) => void', description: 'Callback.' },{ name: 'block', type: 'boolean', default: 'false', description: 'Full width.' },{ name: 'size', type: "'sm'|'md'|'lg'", default: "'md'", description: 'Tamano.' }],
@@ -845,7 +882,7 @@ import { KInput } from '@khor/design-system/atoms';
   'date-range': {
     id: 'date-range', name: 'KDateRangePicker',
     description: 'Selector de rango de fechas con presets (Hoy, 7 dias, 30 dias, Este mes) y calendario dual.',
-    preview: (<div><KDateRangePicker placeholder="Seleccionar periodo" /></div>),
+    preview: (<div><KDateRangePicker placeholder={['Inicio', 'Fin']} /></div>),
     code: `import { KDateRangePicker } from '@khor/molecules-extended';\n\n<KDateRangePicker value={range} onChange={setRange} />`,
     filename: 'KDateRangePicker.tsx',
     props: [{ name: 'value', type: 'KDateRange', description: 'Rango { from, to }.' },{ name: 'onChange', type: '(r) => void', description: 'Callback.' },{ name: 'presets', type: 'KDateRangePreset[]', description: 'Rangos predefinidos.' }],

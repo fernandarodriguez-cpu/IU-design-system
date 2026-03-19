@@ -12,8 +12,8 @@ import {
   ChevronDown, ChevronRight, Sparkles, Menu, X, Search,
   Shield, Clock, Figma, Moon, Sun, Bot, Brush, BookOpen,
 } from 'lucide-react';
-import { KNavItem } from '../design-system/molecules';
-import { KText } from '../design-system/atoms';
+import { KNavItem } from '../design-system/molecules/index';
+import { KText } from '../design-system/atoms/index';
 import { khorTokens } from '../../theme/khor-theme';
 import { KCommandBar, useCommandBar } from '../design-system/command-bar';
 import { useTheme } from '../../theme/theme-context';
@@ -130,13 +130,18 @@ const navigation: NavSection[] = [
     title: 'Organismos',
     icon: <Box size={18} strokeWidth={2} />,
     items: [
+      { label: 'KCalendar', path: '/organisms/calendar' },
       { label: 'KCardSection', path: '/organisms/card-section' },
+      { label: 'KCarousel', path: '/organisms/carousel' },
       { label: 'KCommandBar', path: '/organisms/command-bar' },
       { label: 'KDataTable', path: '/organisms/data-table' },
       { label: 'KDrawer', path: '/organisms/drawer' },
-      { label: 'KFormList', path: '/organisms/form-list' },
+      { label: 'KForm', path: '/organisms/form' },
       { label: 'KModal', path: '/organisms/modal' },
       { label: 'KModalConfirm', path: '/organisms/modal-confirm' },
+      { label: 'KNotification', path: '/organisms/notification' },
+      { label: 'KMessage', path: '/organisms/message' },
+      { label: 'KPagination', path: '/organisms/pagination' },
       { label: 'KSparklineCell', path: '/organisms/sparkline' },
       { label: 'KTabs', path: '/organisms/tabs' },
       { label: 'KToastManager', path: '/organisms/toast-manager' },
@@ -231,147 +236,147 @@ export function AppShell() {
             const isDirectActive = isDirectLink && location.pathname === section.path;
 
             return (
-            <div key={section.title} style={{ marginBottom: 4 }}>
-              {collapsed ? (
-                /* ── Collapsed: solo icono de sección ── */
-                <button
-                  onClick={() => {
-                    if (isDirectLink) {
-                      navigate(section.path!);
-                    } else {
-                      setCollapsed(false);
-                    }
-                  }}
-                  title={section.title}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    width: '100%',
-                    height: 44,
-                    padding: 0,
-                    border: 'none',
-                    background: isDirectActive ? 'rgba(255,255,255,0.12)' : 'none',
-                    color: isDirectActive ? '#FFFFFF' : 'rgba(255,255,255,0.6)',
-                    cursor: 'pointer',
-                    borderRadius: 8,
-                    transition: 'all 0.15s ease',
-                    position: 'relative',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.08)';
-                    e.currentTarget.style.color = '#FFFFFF';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = isDirectActive ? 'rgba(255,255,255,0.12)' : 'transparent';
-                    e.currentTarget.style.color = isDirectActive ? '#FFFFFF' : 'rgba(255,255,255,0.6)';
-                  }}
-                >
-                  {isDirectActive && (
-                    <div style={{ position: 'absolute', left: 0, top: '50%', transform: 'translateY(-50%)', width: 3, height: 20, borderRadius: '0 3px 3px 0', backgroundColor: '#E04D36' }} />
-                  )}
-                  {section.icon}
-                </button>
-              ) : isDirectLink ? (
-                /* ── Expanded: direct link (no sub-items) ── */
-                <button
-                  onClick={() => navigate(section.path!)}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 8,
-                    width: '100%',
-                    padding: '8px 12px',
-                    border: 'none',
-                    background: isDirectActive ? 'rgba(255,255,255,0.12)' : 'none',
-                    color: isDirectActive ? '#FFFFFF' : 'rgba(255,255,255,0.7)',
-                    fontSize: 13,
-                    fontWeight: 600,
-                    cursor: 'pointer',
-                    fontFamily: khorTokens.typography.fontPrimary,
-                    borderRadius: 8,
-                    transition: 'all 0.15s ease',
-                    position: 'relative',
-                    textTransform: 'uppercase',
-                    letterSpacing: 1,
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!isDirectActive) {
-                      e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.06)';
-                      e.currentTarget.style.color = '#FFFFFF';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!isDirectActive) {
-                      e.currentTarget.style.backgroundColor = 'transparent';
-                      e.currentTarget.style.color = 'rgba(255,255,255,0.7)';
-                    }
-                  }}
-                >
-                  {isDirectActive && (
-                    <div style={{ position: 'absolute', left: 0, top: '50%', transform: 'translateY(-50%)', width: 3, height: 20, borderRadius: '0 3px 3px 0', backgroundColor: '#E04D36' }} />
-                  )}
-                  {section.icon}
-                  <span>{section.title}</span>
-                </button>
-              ) : (
-                /* ── Expanded: cabecera de sección + sub-items ── */
-                <>
+              <div key={section.title} style={{ marginBottom: 4 }}>
+                {collapsed ? (
+                  /* ── Collapsed: solo icono de sección ── */
                   <button
-                    onClick={() => toggleSection(section.title)}
+                    onClick={() => {
+                      if (isDirectLink) {
+                        navigate(section.path!);
+                      } else {
+                        setCollapsed(false);
+                      }
+                    }}
+                    title={section.title}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: '100%',
+                      height: 44,
+                      padding: 0,
+                      border: 'none',
+                      background: isDirectActive ? 'rgba(255,255,255,0.12)' : 'none',
+                      color: isDirectActive ? '#FFFFFF' : 'rgba(255,255,255,0.6)',
+                      cursor: 'pointer',
+                      borderRadius: 8,
+                      transition: 'all 0.15s ease',
+                      position: 'relative',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.08)';
+                      e.currentTarget.style.color = '#FFFFFF';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = isDirectActive ? 'rgba(255,255,255,0.12)' : 'transparent';
+                      e.currentTarget.style.color = isDirectActive ? '#FFFFFF' : 'rgba(255,255,255,0.6)';
+                    }}
+                  >
+                    {isDirectActive && (
+                      <div style={{ position: 'absolute', left: 0, top: '50%', transform: 'translateY(-50%)', width: 3, height: 20, borderRadius: '0 3px 3px 0', backgroundColor: '#E04D36' }} />
+                    )}
+                    {section.icon}
+                  </button>
+                ) : isDirectLink ? (
+                  /* ── Expanded: direct link (no sub-items) ── */
+                  <button
+                    onClick={() => navigate(section.path!)}
                     style={{
                       display: 'flex',
                       alignItems: 'center',
                       gap: 8,
                       width: '100%',
-                      padding: '6px 12px',
+                      padding: '8px 12px',
                       border: 'none',
-                      background: 'none',
-                      color: 'rgba(255,255,255,0.4)',
-                      fontSize: 11,
+                      background: isDirectActive ? 'rgba(255,255,255,0.12)' : 'none',
+                      color: isDirectActive ? '#FFFFFF' : 'rgba(255,255,255,0.7)',
+                      fontSize: 13,
                       fontWeight: 600,
-                      textTransform: 'uppercase',
-                      letterSpacing: 1,
                       cursor: 'pointer',
                       fontFamily: khorTokens.typography.fontPrimary,
+                      borderRadius: 8,
+                      transition: 'all 0.15s ease',
+                      position: 'relative',
+                      textTransform: 'uppercase',
+                      letterSpacing: 1,
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!isDirectActive) {
+                        e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.06)';
+                        e.currentTarget.style.color = '#FFFFFF';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isDirectActive) {
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                        e.currentTarget.style.color = 'rgba(255,255,255,0.7)';
+                      }
                     }}
                   >
+                    {isDirectActive && (
+                      <div style={{ position: 'absolute', left: 0, top: '50%', transform: 'translateY(-50%)', width: 3, height: 20, borderRadius: '0 3px 3px 0', backgroundColor: '#E04D36' }} />
+                    )}
                     {section.icon}
-                    <span style={{ flex: 1, textAlign: 'left' }}>{section.title}</span>
-                    {openSections[section.title] ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
+                    <span>{section.title}</span>
                   </button>
-                  {openSections[section.title] && section.items && (
-                    <div style={{ marginTop: 2 }}>
-                      {section.items.map((item) => {
-                        const [itemPath, itemHash] = item.path.split('#');
-                        const isActive = itemHash
-                          ? location.pathname === itemPath && location.hash === `#${itemHash}`
-                          : location.pathname === item.path;
-                        return (
-                          <KNavItem
-                            key={item.path}
-                            icon={<NavDot />}
-                            label={item.label}
-                            active={isActive}
-                            onClick={() => {
-                              if (itemHash) {
-                                navigate(itemPath);
-                                setTimeout(() => {
-                                  const el = document.getElementById(itemHash);
-                                  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                                }, 100);
-                              } else {
-                                navigate(item.path);
-                              }
-                            }}
-                          />
-                        );
-                      })}
-                    </div>
-                  )}
-                </>
-              )}
-            </div>
+                ) : (
+                  /* ── Expanded: cabecera de sección + sub-items ── */
+                  <>
+                    <button
+                      onClick={() => toggleSection(section.title)}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 8,
+                        width: '100%',
+                        padding: '6px 12px',
+                        border: 'none',
+                        background: 'none',
+                        color: 'rgba(255,255,255,0.4)',
+                        fontSize: 11,
+                        fontWeight: 600,
+                        textTransform: 'uppercase',
+                        letterSpacing: 1,
+                        cursor: 'pointer',
+                        fontFamily: khorTokens.typography.fontPrimary,
+                      }}
+                    >
+                      {section.icon}
+                      <span style={{ flex: 1, textAlign: 'left' }}>{section.title}</span>
+                      {openSections[section.title] ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
+                    </button>
+                    {openSections[section.title] && section.items && (
+                      <div style={{ marginTop: 2 }}>
+                        {section.items.map((item) => {
+                          const [itemPath, itemHash] = item.path.split('#');
+                          const isActive = itemHash
+                            ? location.pathname === itemPath && location.hash === `#${itemHash}`
+                            : location.pathname === item.path;
+                          return (
+                            <KNavItem
+                              key={item.path}
+                              icon={<NavDot />}
+                              label={item.label}
+                              active={isActive}
+                              onClick={() => {
+                                if (itemHash) {
+                                  navigate(itemPath);
+                                  setTimeout(() => {
+                                    const el = document.getElementById(itemHash);
+                                    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                  }, 100);
+                                } else {
+                                  navigate(item.path);
+                                }
+                              }}
+                            />
+                          );
+                        })}
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
             );
           })}
         </nav>
@@ -429,7 +434,7 @@ export function AppShell() {
               backgroundColor: 'var(--khor-success-light)',
               color: 'var(--khor-success)',
             }}>
-              v2.4.0
+              v2.5.0
             </span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>

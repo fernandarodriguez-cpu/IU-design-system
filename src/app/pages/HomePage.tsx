@@ -8,17 +8,17 @@ import {
   Atom, Layers, Box, Palette, ArrowRight,
   Component, Sparkles, Zap, Shield, Smartphone,
   Download, Package, Loader2,
-  ShieldCheck, Figma, Clock, Bot,
+  ShieldCheck, Figma, Clock, Bot, Brush,
 } from 'lucide-react';
-import { KButton, KText, KBadge } from '../components/design-system/atoms';
-import { KStatCard } from '../components/design-system/molecules';
-import { kToast } from '../components/design-system/organisms';
+import { KButton, KText, KBadge } from '../components/design-system/atoms/index';
+import { KStatCard } from '../components/design-system/molecules/index';
+import { kToast } from '../components/design-system/organisms/index';
 import { khorTokens } from '../theme/khor-theme';
 
 const stats = [
   { title: 'Átomos', value: 27, icon: <Atom size={20} />, sparkData: [2, 5, 8, 12, 15, 18, 22, 27] },
-  { title: 'Moléculas', value: 33, icon: <Layers size={20} />, sparkData: [1, 5, 9, 12, 18, 22, 28, 33] },
-  { title: 'Organismos', value: 13, icon: <Box size={20} />, sparkData: [1, 2, 4, 5, 8, 10, 12, 13] },
+  { title: 'Moléculas', value: 32, icon: <Layers size={20} />, sparkData: [1, 5, 9, 12, 18, 22, 28, 32] },
+  { title: 'Organismos', value: 18, icon: <Box size={20} />, sparkData: [1, 2, 4, 5, 8, 10, 12, 18] },
   { title: 'Templates', value: 4, icon: <Palette size={20} />, sparkData: [0, 1, 2, 3, 4, 4] },
 ];
 
@@ -59,7 +59,7 @@ async function handleDownloadZip() {
   const ds = zip.folder('khor-design-system')!;
 
   // README
-  ds.file('README.md', `# Khor Design System v1.0.0
+  ds.file('README.md', `# Khor Design System v2.5.0
 
 > Fuente única de verdad para construir aplicaciones SaaS Khor.
 
@@ -96,9 +96,9 @@ khor-design-system/
 ├── atoms/
 │   └── index.tsx            ← 18 átomos
 ├── molecules/
-│   └── index.tsx            ← 22 moléculas
+│   └── index.tsx            ← 32 moléculas
 ├── organisms/
-│   └── index.tsx            ← 13 organismos
+│   └── index.tsx            ← 18 organismos
 └── README.md
 \`\`\`
 
@@ -121,13 +121,13 @@ import { KDataTable, kToast } from './organisms';
 ## Componentes
 
 ### Átomos (27)
-KButton, KInput, KTextArea, KBadge, KTag, KAvatar, KSwitch, KCheckbox, KRadio, KTooltip, KProgress, KText, KDivider, KAlert, KSkeleton, KSlider, KRate, KSpin, KButtonGroup, KInputPassword, KInputSearch, KFloatButton, KImage, KAffix, KSpace, KQRCode, KWatermark
+KAffix, KAlert, KAvatar, KBadge, KButton, KButtonGroup, KCheckbox, KDivider, KFloatButton, KImage, KInput, KInputPassword, KInputSearch, KProgress, KQRCode, KRadio, KRate, KSkeleton, KSlider, KSpace, KSpin, KSwitch, KTag, KTextArea, KTooltip, KTypography, KWatermark
 
-### Moléculas (33)
-KFormField, KSearchInput, KStatCard, KNavItem, KSelectField, KUserCell, KEmptyState, KBreadcrumb, KSteps, KDropdownMenu, KPopover, KAccordion, KInputNumber, KSegmented, KAutocomplete, KDatePicker, KDateRangePicker, KSelectAdvanced, KDescriptions, KPopconfirm, KResult, KTimeline, KCascader, KStatistic, KTimePicker, KMentions, KColorPicker, KAnchor, KList, KDividerExt, KTreeSelect, KTransfer, KNotification
+### Moléculas (32)
+KAccordion, KAnchor, KAutocomplete, KBreadcrumb, KCascader, KColorPicker, KDatePicker, KDateRangePicker, KDescriptions, KDividerExt, KDropdownMenu, KEmptyState, KFormField, KInputNumber, KList, KMentions, KNavItem, KPopconfirm, KPopover, KResult, KSearchInput, KSegmented, KSelectAdvanced, KSelectField, KStatCard, KStatistic, KSteps, KTimeline, KTimePicker, KTransfer, KTreeSelect, KUserCell
 
-### Organismos (13)
-KDataTable (v2 TanStack), KSparklineCell, KModal, KDrawer, KCardSection, KTabs, KToastManager, KCommandBar, KUpload, KTree, KTour, KModalConfirm, KFormList
+### Organismos (18)
+KCalendar, KCardSection, KCarousel, KCommandBar, KDataTable, KDrawer, KForm, KModal, KModalConfirm, KNotification, KMessage, KPagination, KSparklineCell, KTabs, KToastManager, KTour, KTree, KUpload
 
 ### Templates (4)
 Login, Dashboard, CRUD Table, Formulario Multi-Paso
@@ -186,11 +186,9 @@ export { KSpin } from './KSpin';
 `;
 
   const moleculesCatalog = `/**
- * KHOR DESIGN SYSTEM — MOLÉCULAS (22 componentes)
+ * KHOR DESIGN SYSTEM — MOLÉCULAS (32 componentes)
  *
- * KFormField, KSearchInput, KStatCard, KNavItem,
- * KSelectField, KUserCell, KEmptyState, KBreadcrumb,
- * KSteps, KDropdownMenu, KPopover, KAccordion, KInputNumber, KSegmented, KAutocomplete, KDatePicker, KDateRangePicker, KSelectAdvanced, KDescriptions, KPopconfirm, KResult, KTimeline
+ * KAccordion, KAnchor, KAutocomplete, KBreadcrumb, KCascader, KColorPicker, KDatePicker, KDateRangePicker, KDescriptions, KDividerExt, KDropdownMenu, KEmptyState, KFormField, KInputNumber, KList, KMentions, KNavItem, KPopconfirm, KPopover, KResult, KSearchInput, KSegmented, KSelectAdvanced, KSelectField, KStatCard, KStatistic, KSteps, KTimeline, KTimePicker, KTransfer, KTreeSelect, KUserCell
  *
  * Base: Custom + Radix + Khor Tokens
  */
@@ -220,10 +218,9 @@ export { KTimeline } from './KTimeline';
 `;
 
   const organismsCatalog = `/**
- * KHOR DESIGN SYSTEM — ORGANISMOS (13 componentes)
+ * KHOR DESIGN SYSTEM — ORGANISMOS (18 componentes)
  *
- * KDataTable (v2 TanStack), KSparklineCell, KModal, KDrawer,
- * KCardSection, KTabs, KToastManager, KCommandBar, KUpload, KTree, KTour, KModalConfirm, KFormList
+ * KCalendar, KCardSection, KCarousel, KCommandBar, KDataTable, KDrawer, KForm, KModal, KModalConfirm, KNotification, KMessage, KPagination, KSparklineCell, KTabs, KToastManager, KTour, KTree, KUpload
  *
  * Base: Radix + Custom + Khor Tokens
  */
@@ -252,7 +249,7 @@ export { KFormList } from './KFormList';
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'khor-design-system-v1.0.0.zip';
+  a.download = 'khor-design-system-v2.5.0.zip';
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
@@ -296,8 +293,9 @@ export function HomePage() {
         }} />
         <div style={{ position: 'relative', zIndex: 1 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-            <KBadge status="info" label="Radix UI + Tailwind" />
-            <KBadge status="warning" label="IA Ready" />
+            <KBadge khorStatus="info" label="v2.5.0 Stable" />
+            <KBadge khorStatus="success" label="Ant Design 5 Sync" />
+            <KBadge khorStatus="warning" label="IA Ready" />
           </div>
           <h1 style={{ margin: '0 0 12px', fontSize: 38, fontWeight: 700, color: '#fff' }}>
             Khor Design System
@@ -388,9 +386,9 @@ export function HomePage() {
           fontFamily: "'Plus Jakarta Sans', monospace",
           lineHeight: 1.8,
         }}>
-          <div><span style={{ color: '#89b4fa' }}>import</span> {'{ KButton, KInput, KBadge }'} <span style={{ color: '#89b4fa' }}>from</span> <span style={{ color: '#a6e3a1' }}>'@khor/design-system/atoms'</span>;</div>
-          <div><span style={{ color: '#89b4fa' }}>import</span> {'{ KFormField, KStatCard }'} <span style={{ color: '#89b4fa' }}>from</span> <span style={{ color: '#a6e3a1' }}>'@khor/design-system/molecules'</span>;</div>
-          <div><span style={{ color: '#89b4fa' }}>import</span> {'{ KDataTable, kToast }'} <span style={{ color: '#89b4fa' }}>from</span> <span style={{ color: '#a6e3a1' }}>'@khor/design-system/organisms'</span>;</div>
+          <div><span style={{ color: '#89b4fa' }}>import</span> {'{ KButton, KInput, KBadge }'} <span style={{ color: '#89b4fa' }}>from</span> <span style={{ color: '#a6e3a1' }}>'@khor/design-system/atoms/index'</span>;</div>
+          <div><span style={{ color: '#89b4fa' }}>import</span> {'{ KFormField, KStatCard }'} <span style={{ color: '#89b4fa' }}>from</span> <span style={{ color: '#a6e3a1' }}>'@khor/design-system/molecules/index'</span>;</div>
+          <div><span style={{ color: '#89b4fa' }}>import</span> {'{ KDataTable, kToast }'} <span style={{ color: '#89b4fa' }}>from</span> <span style={{ color: '#a6e3a1' }}>'@khor/design-system/organisms/index'</span>;</div>
           <br />
           <div style={{ color: '#6c7086' }}>{'// Usa los componentes con tokens Khor integrados'}</div>
           <div>{'<KButton variant="primary" size="md">Guardar</KButton>'}</div>
@@ -442,10 +440,12 @@ export function HomePage() {
         </h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16 }}>
           {[
-            { icon: <ShieldCheck size={24} />, title: 'Accesibilidad WCAG', desc: 'Auditoría completa con scores por componente, verificaciones de teclado, screen reader y contraste.', path: '/accessibility', color: khorTokens.colors.feedback.success },
+            { icon: <Brush size={24} />, title: 'Theming en Vivo', desc: 'Personaliza colores, tipografía, bordes y escalas en tiempo real con exportación a CSS/SCSS.', path: '/theming', color: khorTokens.colors.brand.primary },
+            { icon: <Shield size={24} />, title: 'Contraste WCAG', desc: 'Verificador de contraste para asegurar accesibilidad visual en todos los pares de colores.', path: '/wcag-checker', color: khorTokens.colors.brand.accent },
+            { icon: <ShieldCheck size={24} />, title: 'Accesibilidad WCAG', desc: 'Auditoría completa con scores por componente, verificaciones de teclado y screen readers.', path: '/accessibility', color: khorTokens.colors.feedback.success },
             { icon: <Figma size={24} />, title: 'Exportar a Figma', desc: 'Descarga tokens como Figma Variables, Figma Styles o W3C Design Tokens JSON.', path: '/figma-export', color: '#A259FF' },
-            { icon: <Clock size={24} />, title: 'Changelog', desc: 'Historial interactivo de versiones con timeline, filtros y links a componentes modificados.', path: '/changelog', color: khorTokens.colors.brand.primary },
-            { icon: <Bot size={24} />, title: 'Guia para IA', desc: 'Genera un .md con tokens, APIs y patrones para usar como prompt en ChatGPT, Claude, Cursor o Figma Make.', path: '/ai-export', color: '#8B5CF6' },
+            { icon: <Clock size={24} />, title: 'Changelog', desc: 'Historial interactivo de versiones con timeline, filtros y links a componentes.', path: '/changelog', color: '#1976D2' },
+            { icon: <Bot size={24} />, title: 'Guia para IA', desc: 'Genera un .md con tokens, APIs y patrones para prompt-engineering en agentes de IA.', path: '/ai-export', color: '#8B5CF6' },
           ].map((tool) => (
             <button
               key={tool.title}

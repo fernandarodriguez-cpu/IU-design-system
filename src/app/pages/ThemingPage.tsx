@@ -9,8 +9,8 @@ import {
   Type, Maximize, Square, Eye, Layers, Zap, Droplets,
   ChevronDown, ChevronRight, Sparkles,
 } from 'lucide-react';
-import { KButton, KInput, KBadge, KSwitch, KProgress, KAlert, KAvatar, KTag, KCheckbox } from '../components/design-system/atoms';
-import { KStatCard, KFormField, KSearchInput } from '../components/design-system/molecules';
+import { KButton, KInput, KBadge, KSwitch, KProgress, KAlert, KAvatar, KTag, KCheckbox } from '../components/design-system/atoms/index';
+import { KStatCard, KFormField, KSearchInput } from '../components/design-system/molecules/index';
 import { khorTokens } from '../theme/khor-theme';
 
 const t = khorTokens;

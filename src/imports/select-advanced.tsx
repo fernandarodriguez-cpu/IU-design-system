@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { X } from "lucide-react@0.487.0";
+import { X } from "lucide-react";
 import { cn } from "./utils";
 import { Badge } from "./badge";
 

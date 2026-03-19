@@ -9,9 +9,9 @@ import {
   Mail, Lock, Eye, EyeOff, AlertCircle, Copy,
   ChevronLeft, ChevronRight, Settings, Bell, Moon, Sun, Globe,
 } from 'lucide-react';
-import { KButton, KInput, KBadge, KAlert, KSwitch, KCheckbox } from '../components/design-system/atoms';
-import { KFormField, KStatCard, KSelectField, KSearchInput, KSteps } from '../components/design-system/molecules';
-import { KCardSection, KTabs } from '../components/design-system/organisms';
+import { KButton, KInput, KBadge, KAlert, KSwitch, KCheckbox } from '../components/design-system/atoms/index';
+import { KFormField, KStatCard, KSelectField, KSearchInput, KSteps } from '../components/design-system/molecules/index';
+import { KCardSection, KTabs } from '../components/design-system/organisms/index';
 import { CodeBlock } from '../components/docs/CodeBlock';
 import { khorTokens } from '../theme/khor-theme';
 

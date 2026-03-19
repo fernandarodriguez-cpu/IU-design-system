@@ -9,16 +9,14 @@ import {
   KButton, KInput, KTextArea, KBadge, KTag, KAvatar,
   KSwitch, KCheckbox, KRadio, KTooltip, KProgress, KText, KDivider,
   KAlert, KSkeleton, KSlider, KRate, KSpin,
-} from '../components/design-system/atoms';
+  KButtonGroup, KInputPassword, KInputSearch, KFloatButton,
+  KImage, KSpace, KQRCode, KWatermark,
+} from '../components/design-system/atoms/index';
 import {
   Plus, Save, Trash2, Download, Mail, Lock, User,
   Bell, Star, Heart, Search, AlertCircle, Info,
 } from 'lucide-react';
 import { khorTokens } from '../theme/khor-theme';
-import {
-  KButtonGroup, KInputPassword, KInputSearch, KFloatButton,
-  KImage, KSpace, KQRCode, KWatermark,
-} from '../components/design-system/atoms-extended';
 
 /* ─── Playground Wrappers ───────────────────── */
 function ButtonPlayground() {
@@ -26,6 +24,13 @@ function ButtonPlayground() {
   const [size, setSize] = useState<any>('md');
   const [loading, setLoading] = useState(false);
   const [disabled, setDisabled] = useState(false);
+  const [block, setBlock] = useState(false);
+  const [ghost, setGhost] = useState(false);
+  const [danger, setDanger] = useState(false);
+  
+  const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
+  const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
+  const checkStyle = { display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' };
 
   return (
     <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
@@ -33,27 +38,39 @@ function ButtonPlayground() {
         <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <div>
-            <label style={{ fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block', marginBottom: 4 }}>Variante</label>
-            <select value={variant} onChange={(e) => setVariant(e.target.value)} style={{ padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' }}>
-              {['primary', 'secondary', 'outline', 'ghost', 'danger', 'navy'].map((v) => <option key={v} value={v}>{v}</option>)}
+            <label style={ctrl}>Variante</label>
+            <select value={variant} onChange={(e) => setVariant(e.target.value)} style={sel}>
+              {['primary', 'secondary', 'outline', 'ghost', 'danger', 'navy', 'dashed', 'link', 'text'].map((v) => <option key={v} value={v}>{v}</option>)}
             </select>
           </div>
           <div>
-            <label style={{ fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block', marginBottom: 4 }}>Tamano</label>
-            <select value={size} onChange={(e) => setSize(e.target.value)} style={{ padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' }}>
+            <label style={ctrl}>Tamaño</label>
+            <select value={size} onChange={(e) => setSize(e.target.value)} style={sel}>
               {['sm', 'md', 'lg'].map((s) => <option key={s} value={s}>{s}</option>)}
             </select>
           </div>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}>
-            <input type="checkbox" checked={loading} onChange={(e) => setLoading(e.target.checked)} /> Loading
-          </label>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}>
-            <input type="checkbox" checked={disabled} onChange={(e) => setDisabled(e.target.checked)} /> Disabled
-          </label>
+          
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 4 }}>
+            <label style={checkStyle}>
+              <input type="checkbox" checked={loading} onChange={(e) => setLoading(e.target.checked)} /> Loading
+            </label>
+            <label style={checkStyle}>
+              <input type="checkbox" checked={disabled} onChange={(e) => setDisabled(e.target.checked)} /> Disabled
+            </label>
+            <label style={checkStyle}>
+              <input type="checkbox" checked={block} onChange={(e) => setBlock(e.target.checked)} /> Block
+            </label>
+            <label style={checkStyle}>
+              <input type="checkbox" checked={ghost} onChange={(e) => setGhost(e.target.checked)} /> Ghost
+            </label>
+            <label style={checkStyle}>
+              <input type="checkbox" checked={danger} onChange={(e) => setDanger(e.target.checked)} /> Danger
+            </label>
+          </div>
         </div>
       </div>
-      <div style={{ flex: 1, minWidth: 280, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-        <KButton variant={variant} size={size} loading={loading} disabled={disabled} icon={<Save size={16} />}>
+      <div style={{ flex: 1, minWidth: 280, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32, backgroundColor: ghost ? khorTokens.colors.brand.navy : khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
+        <KButton variant={variant} size={size} loading={loading} disabled={disabled} block={block} ghost={ghost} danger={danger} icon={<Save size={16} />}>
           Guardar Cambios
         </KButton>
       </div>
@@ -64,7 +81,13 @@ function ButtonPlayground() {
 function InputPlayground() {
   const [val, setVal] = useState('');
   const [error, setError] = useState('');
+  const [size, setSize] = useState<any>('md');
   const [disabled, setDisabled] = useState(false);
+  const [block, setBlock] = useState(false);
+
+  const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
+  const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
+  const checkStyle = { display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' };
 
   return (
     <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
@@ -72,16 +95,27 @@ function InputPlayground() {
         <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12 }}>Controles</h4>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <div>
-            <label style={{ fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block', marginBottom: 4 }}>Mensaje de Error</label>
-            <input value={error} onChange={(e) => setError(e.target.value)} placeholder="Dejar vacio para sin error" style={{ padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' }} />
+            <label style={ctrl}>Mensaje de Error</label>
+            <input value={error} onChange={(e) => setError(e.target.value)} placeholder="Dejar vacio para sin error" style={sel} />
           </div>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}>
-            <input type="checkbox" checked={disabled} onChange={(e) => setDisabled(e.target.checked)} /> Disabled
-          </label>
+          <div>
+            <label style={ctrl}>Tamaño</label>
+            <select value={size} onChange={(e) => setSize(e.target.value)} style={sel}>
+              {['sm', 'md', 'lg'].map((s) => <option key={s} value={s}>{s}</option>)}
+            </select>
+          </div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 4 }}>
+            <label style={checkStyle}>
+              <input type="checkbox" checked={disabled} onChange={(e) => setDisabled(e.target.checked)} /> Disabled
+            </label>
+            <label style={checkStyle}>
+              <input type="checkbox" checked={block} onChange={(e) => setBlock(e.target.checked)} /> Block
+            </label>
+          </div>
         </div>
       </div>
-      <div style={{ flex: 1, minWidth: 280, display: 'flex', flexDirection: 'column', gap: 12, padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-        <KInput placeholder="Escribe aqui..." prefix={<Mail size={16} />} value={val} onChange={(e) => setVal(e.target.value)} error={error || undefined} disabled={disabled} allowClear />
+      <div style={{ flex: 1, minWidth: 280, display: 'flex', flexDirection: 'column', gap: 12, padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg, alignItems: 'center', justifyContent: 'center' }}>
+        <KInput size={size} block={block} placeholder="Escribe aqui..." prefix={<Mail size={16} />} value={val} onChange={(e) => setVal(e.target.value)} error={error || undefined} disabled={disabled} allowClear />
       </div>
     </div>
   );
@@ -134,8 +168,37 @@ function TagPlayground() {
   );
 }
 
-function AvatarPlayground() {
+function SpacePlayground() {
+  const [dir, setDir] = useState<any>('horizontal');
   const [size, setSize] = useState<any>('md');
+  const [align, setAlign] = useState<any>('center');
+  const [wrap, setWrap] = useState(true);
+  const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
+  const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
+  return (
+    <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
+      <div style={{ flex: 1, minWidth: 240 }}>
+        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div><label style={ctrl}>Direccion</label><select value={dir} onChange={(e) => setDir(e.target.value)} style={sel}>{['horizontal','vertical'].map(d=><option key={d}>{d}</option>)}</select></div>
+          <div><label style={ctrl}>Tamano Gap</label><select value={size} onChange={(e) => setSize(e.target.value)} style={sel}>{['sm','md','lg'].map(s=><option key={s}>{s}</option>)}</select></div>
+          <div><label style={ctrl}>Alineacion</label><select value={align} onChange={(e) => setAlign(e.target.value)} style={sel}>{['start','center','end','baseline'].map(a=><option key={a}>{a}</option>)}</select></div>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={wrap} onChange={(e) => setWrap(e.target.checked)} /> Wrap Items</label>
+        </div>
+      </div>
+      <div style={{ flex: 1, minWidth: 280, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
+        <KSpace direction={dir} size={size} align={align} wrap={wrap} className="playground-space">
+          {Array.from({length: 5}).map((_, i) => (
+            <div key={i} style={{ width: 40, height: 40, backgroundColor: khorTokens.colors.brand.primary, borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 14 }}>{i+1}</div>
+          ))}
+        </KSpace>
+      </div>
+    </div>
+  );
+}
+
+function AvatarPlayground() {
+  const [size, setSize] = useState<any>('default');
   const [status, setStatus] = useState<any>('online');
   const [name, setName] = useState('Maria Garcia');
   const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
@@ -146,7 +209,7 @@ function AvatarPlayground() {
         <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <div><label style={ctrl}>Nombre</label><input value={name} onChange={(e) => setName(e.target.value)} style={sel}/></div>
-          <div><label style={ctrl}>Tamano</label><select value={size} onChange={(e) => setSize(e.target.value)} style={sel}>{['sm','md','lg'].map(s=><option key={s}>{s}</option>)}</select></div>
+          <div><label style={ctrl}>Tamano</label><select value={size} onChange={(e) => setSize(e.target.value)} style={sel}>{['small','default','large'].map(s=><option key={s}>{s}</option>)}</select></div>
           <div><label style={ctrl}>Estado</label><select value={status} onChange={(e) => setStatus(e.target.value)} style={sel}>{['online','offline','busy','away','none'].map(s=><option key={s}>{s}</option>)}</select></div>
         </div>
       </div>
@@ -160,6 +223,7 @@ function AvatarPlayground() {
 function SwitchPlayground() {
   const [checked, setChecked] = useState(false);
   const [disabled, setDisabled] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [sizeS, setSizeS] = useState<any>('default');
   const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
   return (
@@ -168,11 +232,14 @@ function SwitchPlayground() {
         <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <div><label style={{ fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block', marginBottom: 4 }}>Tamano</label><select value={sizeS} onChange={(e) => setSizeS(e.target.value)} style={sel}>{['default','small'].map(s=><option key={s}>{s}</option>)}</select></div>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={disabled} onChange={(e) => setDisabled(e.target.checked)} /> Disabled</label>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 4 }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={disabled} onChange={(e) => setDisabled(e.target.checked)} /> Disabled</label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={loading} onChange={(e) => setLoading(e.target.checked)} /> Loading</label>
+          </div>
         </div>
       </div>
       <div style={{ flex: 1, minWidth: 240, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-        <KSwitch label="Notificaciones activas" checked={checked} onChange={setChecked} disabled={disabled} size={sizeS} />
+        <KSwitch label="Notificaciones activas" checked={checked} onChange={setChecked} disabled={disabled} loading={loading} size={sizeS} />
       </div>
     </div>
   );
@@ -202,6 +269,7 @@ function RadioPlayground() {
   const [value, setValue] = useState('1');
   const [direction, setDirection] = useState<any>('horizontal');
   const [variant, setVariant] = useState<any>('default');
+  const [size, setSize] = useState<any>('md');
   const [disabled, setDisabled] = useState(false);
   const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
   const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
@@ -212,11 +280,12 @@ function RadioPlayground() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <div><label style={ctrl}>Variante</label><select value={variant} onChange={(e) => setVariant(e.target.value)} style={sel}>{['default','button'].map(v=><option key={v}>{v}</option>)}</select></div>
           <div><label style={ctrl}>Direccion</label><select value={direction} onChange={(e) => setDirection(e.target.value)} style={sel}>{['horizontal','vertical'].map(d=><option key={d}>{d}</option>)}</select></div>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={disabled} onChange={(e) => setDisabled(e.target.checked)} /> Disabled</label>
+          <div><label style={ctrl}>Tamaño</label><select value={size} onChange={(e) => setSize(e.target.value)} style={sel}>{['sm','md','lg'].map(s=><option key={s}>{s}</option>)}</select></div>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer', marginTop: 4 }}><input type="checkbox" checked={disabled} onChange={(e) => setDisabled(e.target.checked)} /> Disabled</label>
         </div>
       </div>
       <div style={{ flex: 1, minWidth: 280, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-        <KRadio options={[{label:'Empleado',value:'1'},{label:'Contratista',value:'2'},{label:'Becario',value:'3'}]} value={value} onChange={(v) => setValue(v)} direction={direction} variant={variant} disabled={disabled} />
+        <KRadio options={[{label:'Empleado',value:'1'},{label:'Contratista',value:'2'},{label:'Becario',value:'3'}]} value={value} onChange={(e) => setValue(e.target.value)} direction={direction} variant={variant} size={size} disabled={disabled} />
       </div>
     </div>
   );
@@ -271,6 +340,7 @@ function TypographyPlayground() {
 function AlertPlayground() {
   const [type, setType] = useState<any>('info');
   const [closable, setClosable] = useState(true);
+  const [showIcon, setShowIcon] = useState(true);
   const [title, setTitle] = useState('Titulo de alerta');
   const [desc, setDesc] = useState('Descripcion detallada del mensaje.');
   const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
@@ -283,11 +353,39 @@ function AlertPlayground() {
           <div><label style={ctrl}>Tipo</label><select value={type} onChange={(e) => setType(e.target.value)} style={sel}>{['success','error','warning','info'].map(t=><option key={t}>{t}</option>)}</select></div>
           <div><label style={ctrl}>Titulo</label><input value={title} onChange={(e) => setTitle(e.target.value)} style={sel}/></div>
           <div><label style={ctrl}>Descripcion</label><input value={desc} onChange={(e) => setDesc(e.target.value)} style={sel}/></div>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={closable} onChange={(e) => setClosable(e.target.checked)} /> Closable</label>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={closable} onChange={(e) => setClosable(e.target.checked)} /> Closable</label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={showIcon} onChange={(e) => setShowIcon(e.target.checked)} /> Show Icon</label>
+          </div>
         </div>
       </div>
       <div style={{ flex: 1, minWidth: 320, padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-        <KAlert type={type} title={title} description={desc} closable={closable} />
+        <KAlert type={type} title={title} description={desc} closable={closable} showIcon={showIcon} />
+      </div>
+    </div>
+  );
+}
+
+function QRCodePlayground() {
+  const [val, setVal] = useState('https://khor.dev');
+  const [color, setColor] = useState('#000000');
+  const [bgColor, setBgColor] = useState('#ffffff');
+  const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
+  const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
+  return (
+    <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
+      <div style={{ flex: 1, minWidth: 240 }}>
+        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div><label style={ctrl}>Valor / URL</label><input value={val} onChange={(e) => setVal(e.target.value)} style={sel}/></div>
+          <div style={{ display: 'flex', gap: 12 }}>
+            <div style={{ flex: 1 }}><label style={ctrl}>Color</label><input type="color" value={color} onChange={(e) => setColor(e.target.value)} style={{ width: '100%', height: 32, padding: 0, border: 'none', cursor: 'pointer' }} /></div>
+            <div style={{ flex: 1 }}><label style={ctrl}>Fondo</label><input type="color" value={bgColor} onChange={(e) => setBgColor(e.target.value)} style={{ width: '100%', height: 32, padding: 0, border: 'none', cursor: 'pointer' }} /></div>
+          </div>
+        </div>
+      </div>
+      <div style={{ flex: 1, minWidth: 280, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
+        <KQRCode value={val} color={color} bgColor={bgColor} size={150} />
       </div>
     </div>
   );
@@ -296,6 +394,7 @@ function AlertPlayground() {
 function SkeletonPlayground() {
   const [lines, setLines] = useState(3);
   const [circle, setCircle] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [w, setW] = useState(200);
   const [h, setH] = useState(40);
   const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
@@ -304,14 +403,17 @@ function SkeletonPlayground() {
       <div style={{ flex: 1, minWidth: 240 }}>
         <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={circle} onChange={(e) => setCircle(e.target.checked)} /> Circulo</label>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={circle} onChange={(e) => setCircle(e.target.checked)} /> Circulo</label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={loading} onChange={(e) => setLoading(e.target.checked)} /> Loading</label>
+          </div>
           {!circle && <div><label style={ctrl}>Lineas: {lines}</label><input type="range" min={1} max={6} value={lines} onChange={(e) => setLines(Number(e.target.value))} style={{ width: '100%' }} /></div>}
           <div><label style={ctrl}>Ancho: {w}px</label><input type="range" min={50} max={400} value={w} onChange={(e) => setW(Number(e.target.value))} style={{ width: '100%' }} /></div>
           <div><label style={ctrl}>Alto: {h}px</label><input type="range" min={12} max={100} value={h} onChange={(e) => setH(Number(e.target.value))} style={{ width: '100%' }} /></div>
         </div>
       </div>
       <div style={{ flex: 1, minWidth: 280, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-        {circle ? <KSkeleton circle height={h} /> : <KSkeleton lines={lines} width={w} />}
+        {circle ? <KSkeleton circle height={h} loading={loading} /> : <KSkeleton lines={lines} width={w} loading={loading} />}
       </div>
     </div>
   );
@@ -321,6 +423,7 @@ function SliderPlayground() {
   const [value, setValue] = useState(50);
   const [step, setStep] = useState(1);
   const [disabled, setDisabled] = useState(false);
+  const [showValue, setShowValue] = useState(false);
   const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
   const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
   return (
@@ -329,12 +432,15 @@ function SliderPlayground() {
         <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <div><label style={ctrl}>Step</label><select value={step} onChange={(e) => setStep(Number(e.target.value))} style={sel}>{[1,5,10,25].map(s=><option key={s} value={s}>{s}</option>)}</select></div>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={disabled} onChange={(e) => setDisabled(e.target.checked)} /> Disabled</label>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={disabled} onChange={(e) => setDisabled(e.target.checked)} /> Disabled</label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={showValue} onChange={(e) => setShowValue(e.target.checked)} /> Show Value</label>
+          </div>
           <p style={{ fontSize: 12, color: khorTokens.colors.neutral[400], margin: 0 }}>Valor: {value}</p>
         </div>
       </div>
       <div style={{ flex: 1, minWidth: 280, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-        <div style={{ width: '100%', maxWidth: 300 }}><KSlider value={value} onChange={setValue} min={0} max={100} step={step} disabled={disabled} /></div>
+        <div style={{ width: '100%', maxWidth: 300 }}><KSlider value={value} onChange={setValue} min={0} max={100} step={step} disabled={disabled} showValue={showValue} /></div>
       </div>
     </div>
   );
@@ -345,6 +451,8 @@ function RatePlayground() {
   const [count, setCount] = useState(5);
   const [sizeR, setSizeR] = useState(24);
   const [disabled, setDisabled] = useState(false);
+  const [allowHalf, setAllowHalf] = useState(false);
+  const [allowClear, setAllowClear] = useState(true);
   const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
   return (
     <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
@@ -353,12 +461,16 @@ function RatePlayground() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <div><label style={ctrl}>Estrellas: {count}</label><input type="range" min={3} max={10} value={count} onChange={(e) => setCount(Number(e.target.value))} style={{ width: '100%' }} /></div>
           <div><label style={ctrl}>Tamano: {sizeR}px</label><input type="range" min={16} max={40} value={sizeR} onChange={(e) => setSizeR(Number(e.target.value))} style={{ width: '100%' }} /></div>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={disabled} onChange={(e) => setDisabled(e.target.checked)} /> Disabled</label>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={disabled} onChange={(e) => setDisabled(e.target.checked)} /> Disabled</label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={allowHalf} onChange={(e) => setAllowHalf(e.target.checked)} /> Allow Half</label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={allowClear} onChange={(e) => setAllowClear(e.target.checked)} /> Allow Clear</label>
+          </div>
           <p style={{ fontSize: 12, color: khorTokens.colors.neutral[400], margin: 0 }}>Valor: {value}</p>
         </div>
       </div>
       <div style={{ flex: 1, minWidth: 280, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-        <KRate value={value} onChange={setValue} count={count} size={sizeR} disabled={disabled} />
+        <KRate value={value} onChange={setValue} count={count} size={sizeR} disabled={disabled} allowHalf={allowHalf} allowClear={allowClear} />
       </div>
     </div>
   );
@@ -366,27 +478,31 @@ function RatePlayground() {
 
 function TextAreaPlayground() {
   const [val, setVal] = useState('');
-  const [rows, setRows] = useState(4);
-  const [maxLen, setMaxLen] = useState(200);
-  const [showCount, setShowCount] = useState(true);
   const [error, setError] = useState('');
   const [disabled, setDisabled] = useState(false);
+
   const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
   const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
+  const checkStyle = { display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' };
+
   return (
     <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
-      <div style={{ flex: 1, minWidth: 240 }}>
+      <div style={{ flex: 1, minWidth: 280 }}>
         <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <div><label style={ctrl}>Filas: {rows}</label><input type="range" min={2} max={8} value={rows} onChange={(e) => setRows(Number(e.target.value))} style={{ width: '100%' }} /></div>
-          <div><label style={ctrl}>Max caracteres: {maxLen}</label><input type="range" min={50} max={500} step={50} value={maxLen} onChange={(e) => setMaxLen(Number(e.target.value))} style={{ width: '100%' }} /></div>
-          <div><label style={ctrl}>Error</label><input value={error} onChange={(e) => setError(e.target.value)} placeholder="Dejar vacio" style={sel} /></div>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={showCount} onChange={(e) => setShowCount(e.target.checked)} /> Mostrar contador</label>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={disabled} onChange={(e) => setDisabled(e.target.checked)} /> Disabled</label>
+          <div>
+            <label style={ctrl}>Mensaje de Error</label>
+            <input value={error} onChange={(e) => setError(e.target.value)} placeholder="Dejar vacio para sin error" style={sel} />
+          </div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 4 }}>
+            <label style={checkStyle}>
+              <input type="checkbox" checked={disabled} onChange={(e) => setDisabled(e.target.checked)} /> Disabled
+            </label>
+          </div>
         </div>
       </div>
-      <div style={{ flex: 1, minWidth: 320, padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-        <KTextArea placeholder="Escribe aqui..." rows={rows} maxLength={maxLen} showCount={showCount} error={error || undefined} disabled={disabled} value={val} onChange={(e) => setVal(e.target.value)} />
+      <div style={{ flex: 1, minWidth: 280, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
+        <KTextArea placeholder="Describe el motivo de la solicitud..." value={val} onChange={(e) => setVal(e.target.value)} error={error || undefined} rows={4} disabled={disabled} />
       </div>
     </div>
   );
@@ -395,6 +511,7 @@ function TextAreaPlayground() {
 function SpinPlayground() {
   const [sizeS, setSizeS] = useState<any>('md');
   const [tip, setTip] = useState('Cargando...');
+  const [color, setColor] = useState('');
   const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
   const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
   return (
@@ -404,10 +521,11 @@ function SpinPlayground() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <div><label style={ctrl}>Tamano</label><select value={sizeS} onChange={(e) => setSizeS(e.target.value)} style={sel}>{['sm','md','lg'].map(s=><option key={s}>{s}</option>)}</select></div>
           <div><label style={ctrl}>Texto</label><input value={tip} onChange={(e) => setTip(e.target.value)} style={sel}/></div>
+          <div><label style={ctrl}>Color Hex</label><input value={color} onChange={(e) => setColor(e.target.value)} placeholder="#0052cc" style={sel}/></div>
         </div>
       </div>
       <div style={{ flex: 1, minWidth: 240, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-        <KSpin size={sizeS} tip={tip || undefined} />
+        <KSpin size={sizeS} tip={tip || undefined} color={color || undefined} />
       </div>
     </div>
   );
@@ -507,7 +625,7 @@ const atoms: Record<string, AtomEntry> = {
       </div>
     ),
     playground: <ButtonPlayground />,
-    code: `import { KButton } from '@khor/design-system/atoms';
+    code: `import { KButton } from '@khor/design-system/atoms/index';
 
 // Variantes disponibles: primary | secondary | outline | ghost | danger | navy
 // Tamanos: sm | md | lg
@@ -563,7 +681,7 @@ const atoms: Record<string, AtomEntry> = {
       </div>
     ),
     playground: <InputPlayground />,
-    code: `import { KInput, KTextArea } from '@khor/design-system/atoms';
+    code: `import { KInput, KTextArea } from '@khor/design-system/atoms/index';
 
 <KInput
   placeholder="Email"
@@ -616,13 +734,13 @@ const atoms: Record<string, AtomEntry> = {
         <KBadge status="success" label="Activo" />
         <KBadge status="error" label="Rechazado" />
         <KBadge status="warning" label="Pendiente" />
-        <KBadge status="info" label="En Revision" />
+        <KBadge status="processing" label="En Revision" />
         <KBadge status="default" label="Borrador" />
         <KBadge status="success" label="Sin punto" dot={false} />
       </div>
     ),
     playground: <BadgePlayground />,
-    code: `import { KBadge } from '@khor/design-system/atoms';
+    code: `import { KBadge } from '@khor/design-system/atoms/index';
 
 <KBadge status="success" label="Activo" />
 <KBadge status="error" label="Rechazado" />
@@ -658,7 +776,7 @@ const atoms: Record<string, AtomEntry> = {
       </div>
     ),
     playground: <TagPlayground />,
-    code: `import { KTag } from '@khor/design-system/atoms';
+    code: `import { KTag } from '@khor/design-system/atoms/index';
 
 <KTag color="primary">Departamento RH</KTag>
 <KTag color="navy">Gerencia</KTag>
@@ -682,15 +800,15 @@ const atoms: Record<string, AtomEntry> = {
     description: 'Avatar de usuario con soporte para imagen, iniciales automaticas y indicador de estado (online/offline/busy/away).',
     preview: (
       <div style={{ display: 'flex', gap: 16, alignItems: 'center', flexWrap: 'wrap' }}>
-        <KAvatar name="Maria Garcia" size="sm" status="online" />
-        <KAvatar name="Juan Perez" size="md" status="busy" />
-        <KAvatar name="Ana Lopez" size="lg" status="away" />
-        <KAvatar name="Carlos Ruiz" size="md" status="offline" />
-        <KAvatar name="Laura Diaz" size="lg" />
+        <KAvatar name="Juan Perez" size="small" status="online" />
+        <KAvatar name="Maria Garcia" size="default" status="busy" />
+        <KAvatar name="Ana Lopez" size="large" status="away" />
+        <KAvatar name="Carlos Ruiz" size="default" status="offline" />
+        <KAvatar name="Diana Diaz" size="large" />
       </div>
     ),
     playground: <AvatarPlayground />,
-    code: `import { KAvatar } from '@khor/design-system/atoms';
+    code: `import { KAvatar } from '@khor/design-system/atoms/index';
 
 <KAvatar name="Maria Garcia" size="md" status="online" />
 <KAvatar name="Juan Perez" size="lg" status="busy" />
@@ -721,7 +839,7 @@ const atoms: Record<string, AtomEntry> = {
       </div>
     ),
     playground: <SwitchPlayground />,
-    code: `import { KSwitch } from '@khor/design-system/atoms';
+    code: `import { KSwitch } from '@khor/design-system/atoms/index';
 
 <KSwitch
   label="Notificaciones activas"
@@ -751,7 +869,7 @@ const atoms: Record<string, AtomEntry> = {
       </div>
     ),
     playground: <CheckboxPlayground />,
-    code: `import { KCheckbox } from '@khor/design-system/atoms';
+    code: `import { KCheckbox } from '@khor/design-system/atoms/index';
 
 <KCheckbox
   label="Acepto los terminos"
@@ -789,7 +907,7 @@ const atoms: Record<string, AtomEntry> = {
       </div>
     ),
     playground: <RadioPlayground />,
-    code: `import { KRadio } from '@khor/design-system/atoms';
+    code: `import { KRadio } from '@khor/design-system/atoms/index';
 
 <KRadio
   options={[
@@ -829,7 +947,7 @@ const atoms: Record<string, AtomEntry> = {
         </KTooltip>
       </div>
     ),
-    code: `import { KTooltip } from '@khor/design-system/atoms';
+    code: `import { KTooltip } from '@khor/design-system/atoms/index';
 
 <KTooltip title="Guardar cambios" placement="top">
   <KButton variant="primary">Guardar</KButton>
@@ -850,6 +968,7 @@ const atoms: Record<string, AtomEntry> = {
     preview: (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 400 }}>
         <KProgress percent={30} />
+        <KProgress percent={30} status="normal" />
         <KProgress percent={70} strokeColor={khorTokens.colors.brand.accent} />
         <KProgress percent={100} status="success" />
         <KProgress percent={50} status="exception" />
@@ -857,7 +976,7 @@ const atoms: Record<string, AtomEntry> = {
       </div>
     ),
     playground: <ProgressPlayground />,
-    code: `import { KProgress } from '@khor/design-system/atoms';
+    code: `import { KProgress } from '@khor/design-system/atoms/index';
 
 <KProgress percent={75} />
 <KProgress percent={100} status="success" />
@@ -897,7 +1016,7 @@ const atoms: Record<string, AtomEntry> = {
       </div>
     ),
     playground: <TypographyPlayground />,
-    code: `import { KText } from '@khor/design-system/atoms';
+    code: `import { KText } from '@khor/design-system/atoms/index';
 
 <KText variant="h1">Titulo Principal</KText>
 <KText variant="h2" color="navy">Subtitulo</KText>
@@ -934,7 +1053,7 @@ const atoms: Record<string, AtomEntry> = {
       </div>
     ),
     playground: <AlertPlayground />,
-    code: `import { KAlert } from '@khor/design-system/atoms';
+    code: `import { KAlert } from '@khor/design-system/atoms/index';
 
 <KAlert type="success" title="Guardado exitoso" description="Los cambios fueron aplicados." closable />
 <KAlert type="error" title="Error" description="No se pudo procesar la solicitud." />
@@ -980,7 +1099,7 @@ const atoms: Record<string, AtomEntry> = {
       </div>
     ),
     playground: <SkeletonPlayground />,
-    code: `import { KSkeleton } from '@khor/design-system/atoms';
+    code: `import { KSkeleton } from '@khor/design-system/atoms/index';
 
 <KSkeleton lines={3} />
 <KSkeleton circle height={48} />
@@ -1006,7 +1125,7 @@ const atoms: Record<string, AtomEntry> = {
       </div>
     ),
     playground: <SliderPlayground />,
-    code: `import { KSlider } from '@khor/design-system/atoms';
+    code: `import { KSlider } from '@khor/design-system/atoms/index';
 
 <KSlider value={volume} onChange={setVolume} min={0} max={100} step={1} />
 <KSlider defaultValue={50} disabled />`,
@@ -1035,7 +1154,7 @@ const atoms: Record<string, AtomEntry> = {
       </div>
     ),
     playground: <RatePlayground />,
-    code: `import { KRate } from '@khor/design-system/atoms';
+    code: `import { KRate } from '@khor/design-system/atoms/index';
 
 <KRate value={rating} onChange={setRating} />
 <KRate defaultValue={4} count={5} size={28} />
@@ -1064,7 +1183,7 @@ const atoms: Record<string, AtomEntry> = {
       </div>
     ),
     playground: <SpinPlayground />,
-    code: `import { KSpin } from '@khor/design-system/atoms';
+    code: `import { KSpin } from '@khor/design-system/atoms/index';
 
 <KSpin size="md" tip="Cargando..." />
 <KSpin size="lg" tip="Procesando datos..." />
@@ -1090,7 +1209,7 @@ const atoms: Record<string, AtomEntry> = {
         <KText variant="small" color="muted">Texto adicional</KText>
       </div>
     ),
-    code: `import { KDivider } from '@khor/design-system/atoms';
+    code: `import { KDivider } from '@khor/design-system/atoms/index';
 
 <div>
   <p>Contenido A</p>
@@ -1116,7 +1235,7 @@ const atoms: Record<string, AtomEntry> = {
       </div>
     ),
     playground: <TextAreaPlayground />,
-    code: `import { KTextArea } from '@khor/design-system/atoms';
+    code: `import { KTextArea } from '@khor/design-system/atoms/index';
 
 <KTextArea
   placeholder="Descripcion..."
@@ -1154,7 +1273,7 @@ const atoms: Record<string, AtomEntry> = {
     props: [{ name: 'value', type: 'string', description: 'Valor.' }, { name: 'onChange', type: '(v) => void', description: 'Callback.' }, { name: 'error', type: 'string', description: 'Error.' }],
     guidelines: ['Siempre incluye el toggle de visibilidad.'] },
   'input-search': { id: 'input-search', name: 'KInputSearch', description: 'Input de búsqueda con botón "Buscar" integrado y soporte para Enter.',
-    preview: (<div style={{ maxWidth: 400 }}><KInputSearch placeholder="Buscar empleados..." enterButton allowClear /></div>),
+    preview: (<div style={{ maxWidth: 400 }}><KInputSearch placeholder="Buscar empleado..." allowClear /></div>),
     code: `<KInputSearch onSearch={handleSearch} enterButton allowClear />`, filename: 'KInputSearch.tsx',
     props: [{ name: 'onSearch', type: '(v) => void', description: 'Al buscar.' }, { name: 'enterButton', type: 'boolean | string', description: 'Botón de búsqueda.' }, { name: 'allowClear', type: 'boolean', description: 'Botón limpiar.' }],
     guidelines: ['Usa enterButton para búsquedas con acción explícita.'] },

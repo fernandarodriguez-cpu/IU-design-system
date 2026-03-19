@@ -2,7 +2,7 @@ import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "./utils";
-import { useTheme } from "../../contexts/ThemeContext";
+import { useTheme } from "../app/theme/theme-context";
 
 // ============================================================================
 // CARD VARIANTS (Ant Design Pattern)

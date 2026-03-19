@@ -7,10 +7,10 @@ import {
   Download, Copy, Check, Eye, FileJson, Palette,
   Type, Maximize, Square, ArrowRight, Info, ExternalLink,
 } from 'lucide-react';
-import { KButton, KText, KBadge } from '../components/design-system/atoms';
-import { KCardSection, KTabs } from '../components/design-system/organisms';
+import { KButton, KText, KBadge } from '../components/design-system/atoms/index';
+import { KCardSection, KTabs } from '../components/design-system/organisms/index';
 import { khorTokens } from '../theme/khor-theme';
-import { kToast } from '../components/design-system/organisms';
+import { kToast } from '../components/design-system/organisms/index';
 
 const t = khorTokens;
 

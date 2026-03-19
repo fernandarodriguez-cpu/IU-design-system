@@ -4,9 +4,9 @@
  */
 import React, { useState } from 'react';
 import { useParams } from 'react-router';
-import { KButton, KInput, KText, KCheckbox, KBadge, KAvatar, KProgress, KAlert } from '../components/design-system/atoms';
-import { KFormField, KStatCard, KUserCell, KSearchInput, KBreadcrumb, KSteps, KSelectField } from '../components/design-system/molecules';
-import { KDataTable, KSparklineCell, KCardSection, KTabs, KModal } from '../components/design-system/organisms';
+import { KButton, KInput, KText, KCheckbox, KBadge, KAvatar, KProgress, KAlert } from '../components/design-system/atoms/index';
+import { KFormField, KStatCard, KUserCell, KSearchInput, KBreadcrumb, KSteps, KSelectField } from '../components/design-system/molecules/index';
+import { KDataTable, KSparklineCell, KCardSection, KTabs, KModal } from '../components/design-system/organisms/index';
 import { CodeBlock } from '../components/docs/CodeBlock';
 import {
   Users, DollarSign, TrendingUp, BarChart3, Mail, Lock, Eye,
@@ -210,8 +210,8 @@ const templates: Record<string, TemplateEntry> = {
     code: `// Template: Login Page
 // Componentes utilizados: KButton, KInput, KFormField, KCheckbox, KText
 
-import { KButton, KInput, KCheckbox, KText } from '@khor/design-system/atoms';
-import { KFormField } from '@khor/design-system/molecules';
+import { KButton, KInput, KCheckbox, KText } from '@khor/design-system/atoms/index';
+import { KFormField } from '@khor/design-system/molecules/index';
 
 function LoginPage() {
   return (
@@ -237,9 +237,9 @@ function LoginPage() {
     code: `// Template: Dashboard
 // Componentes: KStatCard, KCardSection, KBadge, KAvatar, KAlert, KText
 
-import { KStatCard } from '@khor/design-system/molecules';
-import { KCardSection } from '@khor/design-system/organisms';
-import { KBadge, KAvatar, KAlert, KText } from '@khor/design-system/atoms';
+import { KStatCard } from '@khor/design-system/molecules/index';
+import { KCardSection } from '@khor/design-system/organisms/index';
+import { KBadge, KAvatar, KAlert, KText } from '@khor/design-system/atoms/index';
 
 function DashboardPage() {
   return (
@@ -265,9 +265,9 @@ function DashboardPage() {
     code: `// Template: CRUD Table
 // Componentes: KDataTable, KSparklineCell, KBadge, KUserCell, KBreadcrumb, KButton
 
-import { KDataTable, KSparklineCell } from '@khor/design-system/organisms';
-import { KUserCell, KBreadcrumb } from '@khor/design-system/molecules';
-import { KBadge, KButton } from '@khor/design-system/atoms';
+import { KDataTable, KSparklineCell } from '@khor/design-system/organisms/index';
+import { KUserCell, KBreadcrumb } from '@khor/design-system/molecules/index';
+import { KBadge, KButton } from '@khor/design-system/atoms/index';
 
 function EmployeesPage() {
   const columns = [
@@ -297,9 +297,9 @@ function EmployeesPage() {
     code: `// Template: Multi-Step Form
 // Componentes: KSteps, KFormField, KInput, KSelectField, KCardSection, KButton, KAlert
 
-import { KSteps, KFormField, KSelectField, KBreadcrumb } from '@khor/design-system/molecules';
-import { KCardSection } from '@khor/design-system/organisms';
-import { KButton, KInput, KAlert, KText } from '@khor/design-system/atoms';
+import { KSteps, KFormField, KSelectField, KBreadcrumb } from '@khor/design-system/molecules/index';
+import { KCardSection } from '@khor/design-system/organisms/index';
+import { KButton, KInput, KAlert, KText } from '@khor/design-system/atoms/index';
 
 function NewEmployeeForm() {
   const [step, setStep] = useState(0);
