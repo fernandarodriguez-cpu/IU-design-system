@@ -16,7 +16,7 @@ import { kToast } from '../components/design-system/organisms/index';
 import { khorTokens } from '../theme/khor-theme';
 
 const stats = [
-  { title: 'Átomos', value: 30, icon: <Atom size={20} />, sparkData: [2, 5, 8, 12, 15, 18, 22, 30] },
+  { title: 'Átomos', value: 32, icon: <Atom size={20} />, sparkData: [2, 5, 8, 12, 15, 18, 22, 32] },
   { title: 'Moléculas', value: 33, icon: <Layers size={20} />, sparkData: [1, 5, 9, 12, 18, 22, 28, 33] },
   { title: 'Organismos', value: 24, icon: <Box size={20} />, sparkData: [1, 2, 4, 5, 8, 10, 12, 24] },
   { title: 'Templates', value: 4, icon: <Palette size={20} />, sparkData: [0, 1, 2, 3, 4, 4] },
@@ -120,8 +120,8 @@ import { KDataTable, kToast } from './organisms';
 
 ## Componentes
 
-### Átomos (30)
-KAffix, KAlert, KAvatar, KAvatarGroup, KBadge, KButton, KButtonGroup, KCheckbox, KCheckableTag, KDivider, KFloatButton, KImage, KInput, KInputPassword, KInputSearch, KProgress, KQRCode, KRadio, KRate, KSkeleton, KSlider, KSpace, KSpin, KSwitch, KTag, KTextArea, KTooltip, KTypography, KWatermark, KSpace
+### Átomos (32)
+KAffix, KAlert, KAvatar, KAvatarGroup, KBadge, KButton, KButtonGroup, KCheckbox, KCheckableTag, KCol, KDivider, KFlex, KFloatButton, KImage, KInput, KInputPassword, KInputSearch, KProgress, KQRCode, KRadio, KRate, KRow, KSkeleton, KSlider, KSpace, KSpin, KSwitch, KTag, KTextArea, KTooltip, KTypography, KWatermark
 
 ### Moléculas (33)
 KAccordion, KAnchor, KAutocomplete, KBreadcrumb, KCascader, KColorPicker, KDatePicker, KDateRangePicker, KDescriptions, KDividerExtended, KDropdownMenu, KEmptyState, KFormField, KInputNumber, KList, KMentions, KNavItem, KPopconfirm, KPopover, KResult, KSearchInput, KSegmented, KSelectAdvanced, KSelectField, KStatCard, KStatistic, KSteps, KTimeline, KTimePicker, KTransfer, KTreeSelect, KUserCell, KDividerExtended
@@ -146,7 +146,8 @@ export const khorTokens = ${JSON.stringify(t, null, 2)} as const;
  * Componentes incluidos:
  * KButton, KInput, KTextArea, KBadge, KTag, KAvatar,
  * KSwitch, KCheckbox, KRadio, KTooltip, KProgress,
- * KText, KDivider, KAlert, KSkeleton, KSlider, KRate, KSpin
+ * KText, KDivider, KAlert, KSkeleton, KSlider, KRate, KSpin,
+ * KFlex, KRow, KCol
  *
  * Base: Radix UI + Tailwind + Khor Tokens
  * 
@@ -183,6 +184,8 @@ export { KSkeleton } from './KSkeleton';
 export { KSlider } from './KSlider';
 export { KRate } from './KRate';
 export { KSpin } from './KSpin';
+export { KFlex } from './KFlex';
+export { KRow, KCol } from './KGrid';
 `;
 
   const moleculesCatalog = `/**

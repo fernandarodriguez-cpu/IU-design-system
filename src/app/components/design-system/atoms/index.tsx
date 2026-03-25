@@ -22,3 +22,5 @@ export { default as KSpace } from './KSpace';
 export { default as KImage } from './KImage';
 export { default as KWatermark } from './KWatermark';
 export { default as KQRCode } from './KQRCode';
+export { default as KFlex } from './KFlex';
+export { KRow, KCol } from './KGrid';

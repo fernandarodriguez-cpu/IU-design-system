@@ -10,7 +10,7 @@ import {
   KSwitch, KCheckbox, KRadio, KProgress, KText, KDivider,
   KAlert, KSkeleton, KSlider, KRate, KSpin,
   KButtonGroup, KInputPassword, KInputSearch, KFloatButton,
-  KImage, KSpace, KQRCode, KWatermark,
+  KImage, KSpace, KQRCode, KWatermark, KFlex, KRow, KCol,
 } from '../components/design-system/atoms/index';
 import { KTooltip } from '../components/design-system/molecules/index';
 import { KPagination } from '../components/design-system/organisms/index';
@@ -1452,6 +1452,51 @@ const atoms: Record<string, AtomEntry> = {
     code: `<KWatermark text="BORRADOR">\n  <DocumentPreview />\n</KWatermark>`, filename: 'KWatermark.tsx',
     props: [{ name: 'text', type: 'string', required: true, description: 'Texto de la marca de agua.' }, { name: 'fontSize', type: 'number', default: '14', description: 'Tamaño de fuente.' }, { name: 'rotate', type: 'number', default: '-22', description: 'Ángulo de rotación.' }],
     guidelines: ['Usa para documentos confidenciales o borradores.'] },
+  'flex': {
+    id: 'flex', name: 'KFlex',
+    description: 'Contenedor Flex moderno para alinear y distribuir elementos fácilmente.',
+    preview: (
+      <KFlex gap="middle" align="center" justify="space-between" style={{ padding: 16, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg, width: '100%' }}>
+        <KText variant="body-md">Izquierda</KText>
+        <KFlex gap="small">
+          <KButton size="sm">Aceptar</KButton>
+          <KButton size="sm" variant="outline">Cancelar</KButton>
+        </KFlex>
+      </KFlex>
+    ),
+    code: `<KFlex gap="middle" align="center" justify="space-between">\n  <div>Item 1</div>\n  <div>Item 2</div>\n</KFlex>`,
+    filename: 'KFlex.tsx',
+    props: [
+      { name: 'vertical', type: 'boolean', default: 'false', description: 'Dirección vertical (column).' },
+      { name: 'wrap', type: 'boolean | string', description: 'Propiedad flex-wrap.' },
+      { name: 'justify', type: 'string', description: 'justify-content.' },
+      { name: 'align', type: 'string', description: 'align-items.' },
+      { name: 'gap', type: "string | number | [number, number]", description: 'Espaciado entre items.' },
+    ],
+    guidelines: ['Uso preferente sobre KSpace para layouts complejos o distribuciones no estándar.']
+  },
+  'grid': {
+    id: 'grid', name: 'KGrid (Row/Col)',
+    description: 'Sistema de rejilla responsiva de 24 columnas (Grid System) para crear layouts complejos que se adaptan a cualquier resolución.',
+    preview: (
+      <div style={{ width: '100%' }}>
+        <KRow gutter={[16, 16]}>
+          <KCol xs={24} md={12} lg={8}><div style={{ background: khorTokens.colors.brand.navy, color: '#fff', padding: '16px', textAlign: 'center', borderRadius: 4 }}>Col 8/24 (o 12 en MD)</div></KCol>
+          <KCol xs={24} md={12} lg={8}><div style={{ background: khorTokens.colors.brand.navy, color: '#fff', padding: '16px', textAlign: 'center', borderRadius: 4 }}>Col 8/24 (o 12 en MD)</div></KCol>
+          <KCol xs={24} md={24} lg={8}><div style={{ background: khorTokens.colors.brand.navy, color: '#fff', padding: '16px', textAlign: 'center', borderRadius: 4 }}>Col 8/24 (o 24 en MD)</div></KCol>
+        </KRow>
+      </div>
+    ),
+    code: `import { KRow, KCol } from '@khor/design-system/atoms/index';\n\n<KRow gutter={[16, 16]}>\n  <KCol xs={24} md={12} lg={8}>\n    <Card />\n  </KCol>\n</KRow>`,
+    filename: 'KGrid/index.tsx',
+    props: [
+      { name: 'gutter', type: 'number | [number, number]', description: 'Espaciado entre columnas (horizontal, vertical).' },
+      { name: 'span', type: 'number', description: 'Número de columnas a ocupar (1-24) para KCol.' },
+      { name: 'xs, sm, md, lg, xl, xxl', type: 'number | object', description: 'Ancho responsivo para KCol.' },
+      { name: 'offset', type: 'number', description: 'Número de columnas a desplazar hacia la derecha.' },
+    ],
+    guidelines: ['Usa gutters múltiplos de 8 (ej. 16, 24).', 'Ideal para dashboards y formularios multi-columna.']
+  },
 };
 
 export function AtomsPage() {
