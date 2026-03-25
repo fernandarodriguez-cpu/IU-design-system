@@ -1442,29 +1442,6 @@ const atoms: Record<string, AtomEntry> = {
     ],
     guidelines: ['Usa size="middle" (16px) por defecto para la mayoría de layouts.', 'El split con KDivider vertical es ideal para barras de herramientas.'],
   },
-  'pagination': {
-    id: 'pagination',
-    name: 'KPagination',
-    description: 'Componente de navegación para dividir conjuntos de datos en páginas. Permite saltos rápidos y selección de tamaño de página.',
-    preview: (
-      <div style={{ padding: 16 }}>
-        <KPagination total={50} defaultPageSize={10} current={1} showSizeChanger={false} />
-      </div>
-    ),
-    playground: <PaginationPlayground />,
-    code: `import { KPagination } from '@khor/design-system/organisms/index';\n\n<KPagination total={200} current={page} onChange={setPage} showQuickJumper />`,
-    filename: 'KPagination.tsx',
-    props: [
-      { name: 'current', type: 'number', description: 'Página actual (controlado).' },
-      { name: 'pageSize', type: 'number', description: 'Cantidad de items por página.' },
-      { name: 'total', type: 'number', required: true, description: 'Número total de items.' },
-      { name: 'onChange', type: '(page, pageSize) => void', description: 'Callback al cambiar página.' },
-      { name: 'showSizeChanger', type: 'boolean', default: 'true', description: 'Permite cambiar items por página.' },
-      { name: 'showQuickJumper', type: 'boolean', default: 'false', description: 'Permite saltar a una página específica.' },
-      { name: 'simple', type: 'boolean', description: 'Modo simplificado (Input de página).' },
-    ],
-    guidelines: ['Útil para tablas, listas largas y resultados de búsqueda.', 'Asegura que el diseño sea responsivo activando el modo simple en móviles.'],
-  },
   'qrcode': { id: 'qrcode', name: 'KQRCode', description: 'Generador visual de código QR a partir de texto o URL. Usa canvas para renderizado.',
     preview: (<div style={{ display: 'flex', gap: 16 }}><KQRCode value="https://khor.app" size={100} /><KQRCode value="https://khor.app/empleados" size={80} color="#051758" /></div>),
     code: `<KQRCode value="https://khor.app" size={128} />`, filename: 'KQRCode.tsx',

@@ -16,34 +16,13 @@ import { khorTokens } from '../theme/khor-theme';
 
 const t = khorTokens;
 
+import { KLoginForm } from '../components/design-system/organisms/index';
+
 /* ─── Login Template ────────────────────────── */
 function LoginTemplate() {
-  const [email, setEmail] = useState('');
-  const [pass, setPass] = useState('');
-
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 500, backgroundColor: t.colors.neutral[100], borderRadius: t.radius.lg, padding: 24 }}>
-      <div style={{ width: 400, backgroundColor: t.colors.neutral[50], borderRadius: t.radius.xl, padding: 40, boxShadow: t.shadows.lg }}>
-        <div style={{ textAlign: 'center', marginBottom: 32 }}>
-          <div style={{ width: 48, height: 48, borderRadius: 12, backgroundColor: t.colors.brand.primary, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 20, margin: '0 auto 12px', fontFamily: t.typography.fontPrimary }}>K</div>
-          <KText variant="h3" color="navy">Bienvenido a Khor</KText>
-          <KText variant="body-md" color="secondary">Ingresa tus credenciales para continuar</KText>
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-          <KFormField label="Correo electrónico" required>
-            <KInput placeholder="tu@empresa.com" prefix={<Mail size={16} />} value={email} onChange={(e) => setEmail(e.target.value)} />
-          </KFormField>
-          <KFormField label="Contraseña" required>
-            <KInput type="password" placeholder="••••••••" prefix={<Lock size={16} />} value={pass} onChange={(e) => setPass(e.target.value)} />
-          </KFormField>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <KCheckbox label="Recordarme" />
-            <button style={{ background: 'none', border: 'none', color: t.colors.brand.primary, fontSize: 13, cursor: 'pointer', fontFamily: t.typography.fontPrimary }}>¿Olvidaste tu contraseña?</button>
-          </div>
-          <KButton variant="primary" block>Iniciar Sesión</KButton>
-          <KButton variant="outline" block>Crear cuenta nueva</KButton>
-        </div>
-      </div>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 600, backgroundColor: t.colors.neutral[100], borderRadius: t.radius.lg, padding: 24 }}>
+      <KLoginForm onFinish={(v) => console.log('Login:', v)} />
     </div>
   );
 }
@@ -75,13 +54,13 @@ function DashboardTemplate() {
           ].map((item, i) => (
             <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 0', borderBottom: i < 2 ? `1px solid ${t.colors.neutral[200]}` : 'none' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <KAvatar name={item.name} size="sm" />
+                <KAvatar name={item.name} size="small" />
                 <div>
                   <KText variant="body-md"><strong>{item.name}</strong> {item.action}</KText>
                   <KText variant="caption" color="muted">{item.time}</KText>
                 </div>
               </div>
-              <KBadge status={item.badge} label={item.badge === 'success' ? 'Completado' : item.badge === 'warning' ? 'Atención' : 'Info'} />
+              <KBadge khorStatus={item.badge as any} label={item.badge === 'success' ? 'Completado' : item.badge === 'warning' ? 'Atención' : 'Info'} />
             </div>
           ))}
         </div>
@@ -106,7 +85,7 @@ function CrudTemplate() {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20, fontFamily: t.typography.fontPrimary }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <KBreadcrumb items={[{ label: 'Dashboard', onClick: () => {} }, { label: 'Empleados' }]} />
+          <KBreadcrumb items={[{ title: 'Dashboard' }, { title: 'Empleados' }]} />
           <KText variant="h2" color="navy">Gestión de Empleados</KText>
         </div>
       </div>
@@ -139,7 +118,7 @@ function FormTemplate() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24, fontFamily: t.typography.fontPrimary }}>
       <div>
-        <KBreadcrumb items={[{ label: 'Empleados', onClick: () => {} }, { label: 'Nuevo Empleado' }]} />
+        <KBreadcrumb items={[{ title: 'Empleados' }, { title: 'Nuevo Empleado' }]} />
         <KText variant="h2" color="navy">Registro de Nuevo Empleado</KText>
       </div>
       <KSteps
@@ -282,7 +261,7 @@ function EmployeesPage() {
 
   return (
     <div>
-      <KBreadcrumb items={[{ label: 'Dashboard' }, { label: 'Empleados' }]} />
+      <KBreadcrumb items={[{ title: 'Dashboard' }, { title: 'Empleados' }]} />
       <KDataTable columns={columns} data={employees}
         actions={<KButton variant="primary" size="sm">Nuevo</KButton>} />
     </div>
@@ -306,7 +285,7 @@ function NewEmployeeForm() {
 
   return (
     <div>
-      <KBreadcrumb items={[{ label: 'Empleados' }, { label: 'Nuevo' }]} />
+      <KBreadcrumb items={[{ title: 'Empleados' }, { title: 'Nuevo' }]} />
       <KSteps current={step} onChange={setStep} items={[
         { title: 'Datos Personales' },
         { title: 'Puesto y Salario' },

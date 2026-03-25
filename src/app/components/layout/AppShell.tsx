@@ -101,7 +101,7 @@ const navigation: NavSection[] = [
       { label: 'KDatePicker', path: '/molecules/date-picker' },
       { label: 'KDateRangePicker', path: '/molecules/date-range' },
       { label: 'KDescriptions', path: '/molecules/descriptions' },
-      { label: 'KDividerExt', path: '/molecules/divider-ext' },
+      { label: 'KDividerExtended', path: '/molecules/divider-extended' },
       { label: 'KDropdownMenu', path: '/molecules/dropdown' },
       { label: 'KEmptyState', path: '/molecules/empty-state' },
       { label: 'KFormField', path: '/molecules/form-field' },
@@ -137,6 +137,8 @@ const navigation: NavSection[] = [
       { label: 'KDataTable', path: '/organisms/data-table' },
       { label: 'KDrawer', path: '/organisms/drawer' },
       { label: 'KForm', path: '/organisms/form' },
+      { label: 'KFormList', path: '/organisms/form-list' },
+      { label: 'KLoginForm', path: '/organisms/login-form' },
       { label: 'KModal', path: '/organisms/modal' },
       { label: 'KModalConfirm', path: '/organisms/modal-confirm' },
       { label: 'KNotification', path: '/organisms/notification' },
@@ -434,7 +436,7 @@ export function AppShell() {
               backgroundColor: 'var(--khor-success-light)',
               color: 'var(--khor-success)',
             }}>
-              v2.5.0
+              v2.6.0
             </span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>

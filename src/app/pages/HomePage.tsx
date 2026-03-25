@@ -16,9 +16,9 @@ import { kToast } from '../components/design-system/organisms/index';
 import { khorTokens } from '../theme/khor-theme';
 
 const stats = [
-  { title: 'Átomos', value: 27, icon: <Atom size={20} />, sparkData: [2, 5, 8, 12, 15, 18, 22, 27] },
-  { title: 'Moléculas', value: 32, icon: <Layers size={20} />, sparkData: [1, 5, 9, 12, 18, 22, 28, 32] },
-  { title: 'Organismos', value: 18, icon: <Box size={20} />, sparkData: [1, 2, 4, 5, 8, 10, 12, 18] },
+  { title: 'Átomos', value: 30, icon: <Atom size={20} />, sparkData: [2, 5, 8, 12, 15, 18, 22, 30] },
+  { title: 'Moléculas', value: 33, icon: <Layers size={20} />, sparkData: [1, 5, 9, 12, 18, 22, 28, 33] },
+  { title: 'Organismos', value: 24, icon: <Box size={20} />, sparkData: [1, 2, 4, 5, 8, 10, 12, 24] },
   { title: 'Templates', value: 4, icon: <Palette size={20} />, sparkData: [0, 1, 2, 3, 4, 4] },
 ];
 
@@ -59,7 +59,7 @@ async function handleDownloadZip() {
   const ds = zip.folder('khor-design-system')!;
 
   // README
-  ds.file('README.md', `# Khor Design System v2.5.0
+  ds.file('README.md', `# Khor Design System v2.6.0
 
 > Fuente única de verdad para construir aplicaciones SaaS Khor.
 
@@ -94,11 +94,11 @@ khor-design-system/
 ├── theme/
 │   └── khor-theme.ts        ← Tokens de diseño
 ├── atoms/
-│   └── index.tsx            ← 18 átomos
+│   └── index.tsx            ← 30 átomos
 ├── molecules/
-│   └── index.tsx            ← 32 moléculas
+│   └── index.tsx            ← 33 moléculas
 ├── organisms/
-│   └── index.tsx            ← 18 organismos
+│   └── index.tsx            ← 24 organismos
 └── README.md
 \`\`\`
 
@@ -120,14 +120,14 @@ import { KDataTable, kToast } from './organisms';
 
 ## Componentes
 
-### Átomos (27)
-KAffix, KAlert, KAvatar, KBadge, KButton, KButtonGroup, KCheckbox, KDivider, KFloatButton, KImage, KInput, KInputPassword, KInputSearch, KProgress, KQRCode, KRadio, KRate, KSkeleton, KSlider, KSpace, KSpin, KSwitch, KTag, KTextArea, KTooltip, KTypography, KWatermark
+### Átomos (30)
+KAffix, KAlert, KAvatar, KAvatarGroup, KBadge, KButton, KButtonGroup, KCheckbox, KCheckableTag, KDivider, KFloatButton, KImage, KInput, KInputPassword, KInputSearch, KProgress, KQRCode, KRadio, KRate, KSkeleton, KSlider, KSpace, KSpin, KSwitch, KTag, KTextArea, KTooltip, KTypography, KWatermark, KSpace
 
-### Moléculas (32)
-KAccordion, KAnchor, KAutocomplete, KBreadcrumb, KCascader, KColorPicker, KDatePicker, KDateRangePicker, KDescriptions, KDividerExt, KDropdownMenu, KEmptyState, KFormField, KInputNumber, KList, KMentions, KNavItem, KPopconfirm, KPopover, KResult, KSearchInput, KSegmented, KSelectAdvanced, KSelectField, KStatCard, KStatistic, KSteps, KTimeline, KTimePicker, KTransfer, KTreeSelect, KUserCell
+### Moléculas (33)
+KAccordion, KAnchor, KAutocomplete, KBreadcrumb, KCascader, KColorPicker, KDatePicker, KDateRangePicker, KDescriptions, KDividerExtended, KDropdownMenu, KEmptyState, KFormField, KInputNumber, KList, KMentions, KNavItem, KPopconfirm, KPopover, KResult, KSearchInput, KSegmented, KSelectAdvanced, KSelectField, KStatCard, KStatistic, KSteps, KTimeline, KTimePicker, KTransfer, KTreeSelect, KUserCell, KDividerExtended
 
-### Organismos (18)
-KCalendar, KCardSection, KCarousel, KCommandBar, KDataTable, KDrawer, KForm, KModal, KModalConfirm, KNotification, KMessage, KPagination, KSparklineCell, KTabs, KToastManager, KTour, KTree, KUpload
+### Organismos (24)
+KCalendar, KCardSection, KCarousel, KCommandBar, KDataTable, KDrawer, KForm, KFormItem, KFormList, KLoginForm, KModal, KModalConfirm, KNotification, KMessage, KPagination, KSparklineCell, KTabs, kToast, KToastProvider, KTour, KTree, KUpload, kNotification, kMessage
 
 ### Templates (4)
 Login, Dashboard, CRUD Table, Formulario Multi-Paso
@@ -141,7 +141,7 @@ export const khorTokens = ${JSON.stringify(t, null, 2)} as const;
   // We use dynamic import to get the actual source code of the component files
   // Since we can't read files at runtime in the browser, we embed key content:
   const atomsCatalog = `/**
- * KHOR DESIGN SYSTEM — ÁTOMOS (18 componentes)
+ * KHOR DESIGN SYSTEM — ÁTOMOS (30 componentes)
  * 
  * Componentes incluidos:
  * KButton, KInput, KTextArea, KBadge, KTag, KAvatar,
@@ -186,7 +186,7 @@ export { KSpin } from './KSpin';
 `;
 
   const moleculesCatalog = `/**
- * KHOR DESIGN SYSTEM — MOLÉCULAS (32 componentes)
+ * KHOR DESIGN SYSTEM — MOLÉCULAS (33 componentes)
  *
  * KAccordion, KAnchor, KAutocomplete, KBreadcrumb, KCascader, KColorPicker, KDatePicker, KDateRangePicker, KDescriptions, KDividerExt, KDropdownMenu, KEmptyState, KFormField, KInputNumber, KList, KMentions, KNavItem, KPopconfirm, KPopover, KResult, KSearchInput, KSegmented, KSelectAdvanced, KSelectField, KStatCard, KStatistic, KSteps, KTimeline, KTimePicker, KTransfer, KTreeSelect, KUserCell
  *
@@ -218,7 +218,7 @@ export { KTimeline } from './KTimeline';
 `;
 
   const organismsCatalog = `/**
- * KHOR DESIGN SYSTEM — ORGANISMOS (18 componentes)
+ * KHOR DESIGN SYSTEM — ORGANISMOS (24 componentes)
  *
  * KCalendar, KCardSection, KCarousel, KCommandBar, KDataTable, KDrawer, KForm, KModal, KModalConfirm, KNotification, KMessage, KPagination, KSparklineCell, KTabs, KToastManager, KTour, KTree, KUpload
  *
@@ -249,7 +249,7 @@ export { KFormList } from './KFormList';
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'khor-design-system-v2.5.0.zip';
+  a.download = 'khor-design-system-v2.6.0.zip';
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
@@ -293,7 +293,7 @@ export function HomePage() {
         }} />
         <div style={{ position: 'relative', zIndex: 1 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-            <KBadge khorStatus="info" label="v2.5.0 Stable" />
+            <KBadge khorStatus="info" label="v2.6.0 Stable" />
             <KBadge khorStatus="success" label="Ant Design 5 Sync" />
             <KBadge khorStatus="warning" label="IA Ready" />
           </div>

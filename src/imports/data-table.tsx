@@ -11,7 +11,7 @@ import {
   type SortingState,
   type VisibilityState,
   type RowSelectionState,
-} from "@tanstack/react-table@8.20.5"
+} from "@tanstack/react-table"
 import {
   ChevronDown,
   ChevronUp,

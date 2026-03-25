@@ -43,6 +43,26 @@ const changeTypeConfig: Record<ChangeType, { color: string; bg: string; icon: Re
 
 const changelog: VersionEntry[] = [
   {
+    version: '2.6.0',
+    date: '25 Mar 2026',
+    codename: 'Antigravity',
+    summary: 'Finalización de la Auditoría Integral 2026. El sistema ha sido saneado, refactorizado y optimizado en 10 fases estratégicas. Se resolvieron errores críticos de build, se unificó la arquitectura sobre Ant Design v5 con Khor Design Tokens y se alcanzó el 100% de type-safety en la documentación.',
+    highlights: [
+      'Auditoría de 10 Fases: Revisión y refactorización de 87 componentes (30 Átomos, 33 Moléculas, 24 Organismos).',
+      'Build Stability: Eliminación de imports versionados inválidos y resolución de conflictos de Rollup.',
+      'AntD v5 Alignment: Todos los organismos y patrones ahora envuelven componentes de Ant Design con tokens personalizados.',
+      'Polish Final: Búsqueda global (⌘K) actualizada con índice completo y HomePage con métricas reales.',
+    ],
+    changes: [
+      { type: 'fixed', description: 'Corrección de errores de importación críticos en Molecules y Organisms que impedían el build de producción.' },
+      { type: 'changed', component: 'KCommandBar', description: 'Índice de búsqueda actualizado para incluir los 87 componentes del sistema.' },
+      { type: 'changed', component: 'HomePage', description: 'Estadísticas actualizadas a conteos reales: 30 Átomos, 33 Moléculas, 24 Organismos.' },
+      { type: 'added', description: 'Nuevos Organismos auditados: KFormList, KTree, KUpload, KTour, KCalendar, KCarousel.' },
+      { type: 'changed', component: 'TemplatesPage', description: 'Refactorización de templates para usar organismos estándar (ej: KLoginForm).' },
+    ],
+    stats: { added: 10, changed: 5, fixed: 3 },
+  },
+  {
     version: '2.5.0',
     date: '10 Mar 2026',
     codename: 'Eclipse',

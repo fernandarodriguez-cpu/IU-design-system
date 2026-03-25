@@ -4,17 +4,17 @@ import * as React from "react";
 import {
   useFieldArray,
   useFormContext,
-  type FieldPath,
+  type ArrayPath,
   type FieldValues,
   type UseFieldArrayReturn,
-} from "react-hook-form@7.55.0";
+} from "react-hook-form";
 import { cn } from "./utils";
 
 // ==================== TYPES ====================
 
 export interface FormListProps<
   TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
+  TName extends ArrayPath<TFieldValues> = ArrayPath<TFieldValues>
 > {
   /** Name of the field array */
   name: TName;
@@ -40,7 +40,7 @@ export interface FormListProps<
 
 export function FormList<
   TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
+  TName extends ArrayPath<TFieldValues> = ArrayPath<TFieldValues>
 >({
   name,
   children,

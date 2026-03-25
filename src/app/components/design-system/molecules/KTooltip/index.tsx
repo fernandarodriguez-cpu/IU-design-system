@@ -9,7 +9,9 @@ const font = t.typography.fontPrimary;
 /* ═══════════════════════════════════════════════
    KTooltip — Información contextual al hacer hover
    ═══════════════════════════════════════════════ */
-export interface KTooltipProps extends TooltipProps { }
+export type KTooltipProps = TooltipProps & {
+  children?: React.ReactNode;
+};
 
 export function KTooltip({ 
   title, 

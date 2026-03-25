@@ -9,7 +9,7 @@ import {
   KDataTable, KSparklineCell, KModal, KDrawer,
   KCardSection, KTabs, KToastProvider, kToast,
   KUpload, KTree, KTour, KModalConfirm, KFormList, KCarousel, KCalendar,
-  KForm, KNotification, KMessage, KPagination,
+  KForm, KNotification, KMessage, KPagination, KLoginForm,
   type KUploadFile, type KTreeNode, type KFormListField,
   KCommandBar,
 } from '../components/design-system/organisms/index';
@@ -1001,6 +1001,18 @@ const hide = KMessage.loading('Cargando...', 0);
       { name: 'onChange', type: '(page, size) => void', description: 'Callback al cambiar.' },
     ],
     guidelines: ['Usa debajo de listas o grillas de cards que no usen KDataTable.'],
+  },
+  'login-form': {
+    id: 'login-form', name: 'KLoginForm',
+    description: 'Formulario de inicio de sesión estándar con campos de email y contraseña, validación integrada y estado de carga.',
+    preview: (<KLoginForm onFinish={(v: any) => console.log(v)} />),
+    code: `import { KLoginForm } from '@khor/design-system/organisms/index';\n\n<KLoginForm \n  onFinish={(values) => login(values)} \n  loading={isLoggingIn} \n/>`,
+    filename: 'KLoginForm.tsx',
+    props: [
+      { name: 'onFinish', type: '(values) => void', description: 'Callback al enviar el formulario con éxito.' },
+      { name: 'loading', type: 'boolean', description: 'Muestra estado de carga en el botón.' },
+    ],
+    guidelines: ['Centra el formulario en un contenedor de ancho máximo (ej. 400px).', 'Usa para la pantalla principal de acceso a la plataforma.'],
   },
 };
 
