@@ -11,7 +11,7 @@ import {
   KBreadcrumb, KSteps, KDropdownMenu, KPopover, KAccordion,
   KInputNumber, KSegmented, KAutocomplete, KDatePicker,
   KDateRangePicker, KSelectAdvanced, KDescriptions,
-  KPopconfirm, KResult, KTimeline,
+  KPopconfirm, KResult, KTimeline, KTooltip,
   KCascader, KStatistic, KTimePicker, KMentions,
   KColorPicker, KAnchor, KList, KDividerExtended,
   KTreeSelect, KTransfer,
@@ -570,6 +570,8 @@ function DatePickerPlayground() {
   const [date, setDate] = useState<any>(null);
   const [range, setRange] = useState<any>(null);
   const [picker, setPicker] = useState<any>('date');
+  const [size, setSize] = useState<any>('md');
+  const [showTime, setShowTime] = useState(false);
 
   const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
   const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
@@ -579,18 +581,52 @@ function DatePickerPlayground() {
       <div style={{ flex: 1, minWidth: 200 }}>
         <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <div><label style={ctrl}>Tipo</label><select value={picker} onChange={(e) => setPicker(e.target.value)} style={sel}>{['date','week','month','year'].map(p=><option key={p}>{p}</option>)}</select></div>
+          <div><label style={ctrl}>Tipo</label><select value={picker} onChange={(e) => setPicker(e.target.value)} style={sel}>{['date','week','month','quarter','year'].map(p=><option key={p}>{p}</option>)}</select></div>
+          <div><label style={ctrl}>Tamano</label><select value={size} onChange={(e) => setSize(e.target.value)} style={sel}>{['sm','md','lg'].map(s=><option key={s}>{s}</option>)}</select></div>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={showTime} onChange={(e) => setShowTime(e.target.checked)} /> Mostrar Hora</label>
         </div>
       </div>
       <div style={{ flex: 2, minWidth: 400, padding: 32, display: 'flex', flexDirection: 'column', gap: 24, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
         <div style={{ width: '100%', maxWidth: 300 }}>
           <KText variant="small" strong style={{ marginBottom: 8, display: 'block' }}>Selector Individual</KText>
-          <KDatePicker value={date} onChange={setDate} picker={picker} allowClear />
+          <KDatePicker value={date} onChange={setDate} picker={picker} allowClear size={size} showTime={showTime} />
         </div>
         <div style={{ width: '100%', maxWidth: 400 }}>
           <KText variant="small" strong style={{ marginBottom: 8, display: 'block' }}>Selector de Rango</KText>
           <KDateRangePicker value={range} onChange={setRange} />
         </div>
+      </div>
+    </div>
+  );
+}
+
+function TooltipPlayground() {
+  const [placement, setPlacement] = useState<any>('top');
+  const [trigger, setTrigger] = useState<any>('hover');
+  const [color, setColor] = useState<string | undefined>(undefined);
+
+  const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
+  const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
+
+  return (
+    <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
+      <div style={{ flex: 1, minWidth: 200 }}>
+        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div><label style={ctrl}>Posicion</label><select value={placement} onChange={(e) => setPlacement(e.target.value)} style={sel}>{['top','bottom','left','right','topLeft','topRight','bottomLeft','bottomRight'].map(p=><option key={p}>{p}</option>)}</select></div>
+          <div><label style={ctrl}>Disparador</label><select value={trigger} onChange={(e) => setTrigger(e.target.value)} style={sel}>{['hover','focus','click'].map(t=><option key={t}>{t}</option>)}</select></div>
+          <div><label style={ctrl}>Color (opcional)</label><input value={color || ''} onChange={(e) => setColor(e.target.value || undefined)} placeholder="#E04D36" style={sel} /></div>
+        </div>
+      </div>
+      <div style={{ flex: 2, minWidth: 300, padding: 64, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
+        <KTooltip 
+          title="Este es un mensaje de ayuda o aclaración que aparece al interactuar con el elemento." 
+          placement={placement} 
+          trigger={trigger}
+          color={color}
+        >
+          <KButton variant="secondary">Pasa el cursor aqui</KButton>
+        </KTooltip>
       </div>
     </div>
   );
@@ -741,13 +777,34 @@ function StatisticPlayground() {
 }
 
 function TimePickerPlayground() {
-  const [time, setTime] = useState<string>('12:00:00');
+  const [time, setTime] = useState<string | null>(null);
+  const [use12Hours, setUse12Hours] = useState(false);
+  const [format, setFormat] = useState('HH:mm:ss');
+
+  const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
+  const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
+
   return (
-    <div style={{ padding: 48, display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'center', backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-      <div style={{ width: 200 }}>
-        <KTimePicker value={time ? dayjs(time, 'HH:mm:ss') : undefined} onChange={setTime} />
+    <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
+      <div style={{ flex: 1, minWidth: 200 }}>
+        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div><label style={ctrl}>Formato</label><input value={format} onChange={(e) => setFormat(e.target.value)} style={sel} /></div>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={use12Hours} onChange={(e) => setUse12Hours(e.target.checked)} /> Formato 12h</label>
+        </div>
       </div>
-      <KText variant="small" color="secondary">Seleccionado: {time || '--:--:--'}</KText>
+      <div style={{ flex: 2, minWidth: 300, padding: 48, display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'center', backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
+        <div style={{ width: 200 }}>
+          <KTimePicker 
+            value={time ? dayjs(time, format) : undefined} 
+            onChange={setTime} 
+            use12Hours={use12Hours}
+            format={format}
+            allowClear
+          />
+        </div>
+        <KText variant="small" color="secondary">Seleccionado: {time || '--:--:--'}</KText>
+      </div>
     </div>
   );
 }
@@ -1596,20 +1653,47 @@ import { KInput } from '@khor/design-system/atoms/index';
     description: 'Selector de hora con formato personalizable (12h/24h) y selección de intervalos.',
     preview: (<div><KTimePicker placeholder="Seleccionar..." /></div>),
     code: `import { KTimePicker } from '@khor/design-system/molecules/index';
+import dayjs from 'dayjs';
 
 <KTimePicker 
   format="HH:mm" 
+  use12Hours={false}
   onChange={(time) => console.log(time)} 
 />`,
     filename: 'KTimePicker.tsx',
     playground: <TimePickerPlayground />,
     props: [
-      { name: 'value', type: 'Dayjs', description: 'Valor seleccionado.' },
+      { name: 'value', type: 'string | Dayjs', description: 'Valor seleccionado.' },
       { name: 'onChange', type: '(timeString) => void', description: 'Callback al cambiar la hora.' },
       { name: 'format', type: 'string', default: "'HH:mm:ss'", description: 'Formato de visualización.' },
       { name: 'use12Hours', type: 'boolean', description: 'Usa formato de 12 horas.' },
+      { name: 'allowClear', type: 'boolean', default: 'true', description: 'Permite limpiar la selección.' },
     ],
     guidelines: ['Ideal para agendar citas o definir horarios operativos.', 'Usa "use12Hours" si el contexto cultural lo requiere.'],
+  },
+  'tooltip': {
+    id: 'tooltip', name: 'KTooltip',
+    description: 'Componente de texto informativo que aparece al pasar el cursor sobre un elemento. Ideal para dar contexto adicional sin sobrecargar la interfaz.',
+    preview: (
+      <div style={{ display: 'flex', gap: 32, padding: 16 }}>
+        <KTooltip title="Este es un tooltip exitoso" color={khorTokens.colors.feedback.success}><KText>Pásame el mouse (Éxito)</KText></KTooltip>
+        <KTooltip title="Tooltip estándar"><KText>Pásame el mouse (Default)</KText></KTooltip>
+      </div>
+    ),
+    code: `import { KTooltip } from '@khor/design-system/molecules/index';
+
+<KTooltip title="Ayuda para el usuario">
+  <KButton icon={<Info size={16} />} />
+</KTooltip>`,
+    filename: 'KTooltip.tsx',
+    playground: <TooltipPlayground />,
+    props: [
+      { name: 'title', type: 'ReactNode', required: true, description: 'Contenido del tooltip.' },
+      { name: 'placement', type: "'top' | 'bottom' | 'left' | 'right' ...", default: "'top'", description: 'Posición relativa al elemento.' },
+      { name: 'trigger', type: "'hover' | 'focus' | 'click'", default: "'hover'", description: 'Acción que dispara el tooltip.' },
+      { name: 'color', type: 'string', description: 'Color de fondo personalizado.' },
+    ],
+    guidelines: ['Útil para explicar iconos o abreviaturas.', 'Evita tooltips con demasiado texto; mantén el mensaje corto.'],
   },
   'mentions': {
     id: 'mentions', name: 'KMentions',

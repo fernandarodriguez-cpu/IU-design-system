@@ -1,167 +1,119 @@
-import React, { useState, useRef } from 'react';
-import { Upload as UploadIcon, File as FileIcon, Image as ImageIcon, Loader2, CheckCircle, AlertCircle, X } from 'lucide-react';
+import React from 'react';
+import { Upload, message } from 'antd';
+import type { UploadProps, UploadFile } from 'antd';
+import { Upload as UploadIcon, File as FileIcon, Image as ImageIcon, X } from 'lucide-react';
 import { khorTokens } from '../../../../theme/khor-theme';
-import { KText, KProgress } from '../../atoms';
+import { KText } from '../../atoms';
 
+const { Dragger } = Upload;
 const t = khorTokens;
 const font = t.typography.fontPrimary;
 
 /* ═══════════════════════════════════════════════
-   KUpload — Subida de archivos con drag & drop
+   KUpload — Subida de archivos (Organismo)
    ═══════════════════════════════════════════════ */
-export interface KUploadFile {
-  uid: string;
-  name: string;
-  status: 'uploading' | 'done' | 'error';
-  url?: string;
-  percent?: number;
-  size: number;
-  type: string;
-  error?: string;
-}
+export type { UploadFile as KUploadFile };
 
-export interface KUploadProps {
-  multiple?: boolean;
-  accept?: string;
-  maxSize?: number;
+export interface KUploadProps extends Omit<UploadProps, 'fileList' | 'onChange'> {
+  value?: UploadFile[];
+  onChange?: (files: UploadFile[]) => void;
+  maxSize?: number; // in bytes
   maxFiles?: number;
-  value?: KUploadFile[];
-  onChange?: (files: KUploadFile[]) => void;
-  onUpload?: (file: File) => Promise<KUploadFile>;
-  listType?: 'text' | 'picture';
-  disabled?: boolean;
-  children?: React.ReactNode;
-  className?: string;
-}
-
-function formatFileSize(bytes: number) {
-  if (bytes === 0) return '0 B';
-  const k = 1024;
-  const sizes = ['B', 'KB', 'MB', 'GB'];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
 }
 
 export function KUpload({
-  multiple, accept, maxSize, maxFiles, value = [], onChange, onUpload,
-  listType = 'text', disabled, children, className,
+  multiple,
+  accept,
+  maxSize,
+  maxFiles,
+  value,
+  onChange,
+  listType = 'text',
+  disabled,
+  children,
+  className,
+  style,
+  ...rest
 }: KUploadProps) {
-  const [dragOver, setDragOver] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
 
-  const processFiles = async (files: FileList) => {
-    const arr = Array.from(files);
-    const limited = maxFiles ? arr.slice(0, maxFiles - value.length) : arr;
+  const handleChange: UploadProps['onChange'] = (info) => {
+    let newFileList = [...info.fileList];
 
-    for (const file of limited) {
-      if (maxSize && file.size > maxSize) {
-        const errorFile: KUploadFile = {
-          uid: `${Date.now()}-${Math.random()}`, name: file.name, status: 'error',
-          size: file.size, type: file.type, error: `Excede ${formatFileSize(maxSize)}`,
-        };
-        onChange?.([...value, errorFile]);
-        continue;
-      }
-
-      const uploading: KUploadFile = {
-        uid: `${Date.now()}-${Math.random()}`, name: file.name, status: 'uploading',
-        size: file.size, type: file.type, percent: 0,
-      };
-      onChange?.([...value, uploading]);
-
-      if (onUpload) {
-        try {
-          const result = await onUpload(file);
-          const updated = [...value].map((f) => f.uid === uploading.uid ? { ...result, uid: uploading.uid } : f);
-          onChange?.(updated);
-        } catch {
-          const errored: KUploadFile[] = [...value].map((f) => f.uid === uploading.uid ? { ...f, status: 'error' as const, error: 'Error al subir' } : f);
-          onChange?.(errored);
-        }
-      } else {
-        setTimeout(() => {
-          onChange?.([...value.filter((f) => f.uid !== uploading.uid), { ...uploading, status: 'done', percent: 100, url: URL.createObjectURL(file) }]);
-        }, 1000);
-      }
+    // 1. Limit the number of uploaded files
+    if (maxFiles) {
+      newFileList = newFileList.slice(-maxFiles);
     }
+
+    // 2. Filter out files that exceed maxSize
+    if (maxSize) {
+      newFileList = newFileList.filter(file => {
+        if (file.size && file.size > maxSize) {
+          message.error(`${file.name} excede el tamaño máximo permitido.`);
+          return false;
+        }
+        return true;
+      });
+    }
+
+    onChange?.(newFileList);
   };
 
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault(); setDragOver(false);
-    if (disabled) return;
-    processFiles(e.dataTransfer.files);
+  const uploadProps: UploadProps = {
+    multiple,
+    accept,
+    fileList: value,
+    onChange: handleChange,
+    listType: listType === 'picture' ? 'picture' : 'text',
+    disabled,
+    beforeUpload: (file) => {
+      if (maxSize && file.size > maxSize) {
+        message.error(`${file.name} es demasiado grande.`);
+        return Upload.LIST_IGNORE;
+      }
+      return true;
+    },
+    ...rest,
   };
 
-  const handleRemove = (uid: string) => {
-    onChange?.(value.filter((f) => f.uid !== uid));
-  };
-
-  const isImage = (type: string) => type.startsWith('image/');
+  const defaultContent = (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, padding: '20px 0' }}>
+      <UploadIcon size={32} color={t.colors.neutral[300]} />
+      <KText variant="body-md" color="secondary">
+        Arrastra archivos aquí o <span style={{ color: t.colors.brand.primary, fontWeight: 500 }}>haz click para seleccionar</span>
+      </KText>
+      {maxSize && (
+        <KText variant="caption" color="muted">
+          Máximo {(maxSize / 1024 / 1024).toFixed(1)} MB por archivo
+        </KText>
+      )}
+    </div>
+  );
 
   return (
-    <div className={className} style={{ fontFamily: font }}>
-      <div
-        onClick={() => !disabled && inputRef.current?.click()}
-        onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
-        onDragLeave={() => setDragOver(false)}
-        onDrop={handleDrop}
-        style={{
-          padding: children ? 0 : 32, borderRadius: t.radius.lg,
-          border: children ? 'none' : `2px dashed ${dragOver ? t.colors.brand.primary : t.colors.neutral[200]}`,
-          backgroundColor: children ? 'transparent' : dragOver ? 'rgba(224,77,54,0.04)' : t.colors.neutral[50],
-          cursor: disabled ? 'not-allowed' : 'pointer', transition: 'all 0.15s ease',
-          textAlign: 'center', opacity: disabled ? 0.6 : 1,
-        }}
-      >
-        {children || (
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-            <UploadIcon size={32} color={t.colors.neutral[300]} />
-            <KText variant="body-md" color="secondary">
-              Arrastra archivos aquí o <span style={{ color: t.colors.brand.primary, fontWeight: 500 }}>haz click para seleccionar</span>
-            </KText>
-            {maxSize && <KText variant="caption" color="muted">Máximo {formatFileSize(maxSize)} por archivo</KText>}
-          </div>
-        )}
-      </div>
-      <input
-        ref={inputRef} type="file" multiple={multiple} accept={accept}
-        onChange={(e) => e.target.files && processFiles(e.target.files)}
-        style={{ display: 'none' }}
-      />
-      {value.length > 0 && (
-        <div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 8 }}>
-          {value.map((file) => (
-            <div key={file.uid} style={{
-              display: 'flex', alignItems: 'center', gap: 10, padding: '8px 12px',
-              borderRadius: t.radius.md, border: `1px solid ${file.status === 'error' ? t.colors.feedback.error : t.colors.neutral[200]}`,
-              backgroundColor: file.status === 'error' ? t.colors.feedback.errorLight : t.colors.neutral[50],
-            }}>
-              <span style={{ color: file.status === 'error' ? t.colors.feedback.error : isImage(file.type) ? t.colors.brand.primary : t.colors.neutral[400], flexShrink: 0 }}>
-                {listType === 'picture' && file.url && isImage(file.type) ? (
-                  <img src={file.url} alt={file.name} style={{ width: 32, height: 32, borderRadius: 4, objectFit: 'cover' }} />
-                ) : isImage(file.type) ? <ImageIcon size={18} /> : <FileIcon size={18} />}
-              </span>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: 13, color: t.colors.neutral[900], overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{file.name}</div>
-                <div style={{ fontSize: 11, color: t.colors.neutral[400] }}>
-                  {formatFileSize(file.size)}
-                  {file.error && <span style={{ color: t.colors.feedback.error, marginLeft: 8 }}>{file.error}</span>}
-                </div>
-                {file.status === 'uploading' && <KProgress percent={file.percent || 0} size="small" showInfo={false} />}
-              </div>
-              {file.status === 'done' && <CheckCircle size={16} color={t.colors.feedback.success} />}
-              {file.status === 'error' && <AlertCircle size={16} color={t.colors.feedback.error} />}
-              {file.status === 'uploading' && <Loader2 size={16} className="animate-spin" color={t.colors.brand.primary} />}
-              <button onClick={() => handleRemove(file.uid)} style={{
-                background: 'none', border: 'none', cursor: 'pointer', color: t.colors.neutral[300],
-                display: 'flex', padding: 2, flexShrink: 0,
-              }}>
-                <X size={14} />
-              </button>
-            </div>
-          ))}
-        </div>
+    <div className={className} style={{ fontFamily: font, ...style }}>
+      {children ? (
+        <Upload {...uploadProps}>{children}</Upload>
+      ) : (
+        <Dragger {...uploadProps} style={{ 
+          backgroundColor: t.colors.neutral[50],
+          borderRadius: t.radius.lg,
+          border: `2px dashed ${t.colors.neutral[200]}`,
+        }}>
+          {defaultContent}
+        </Dragger>
       )}
+      <style>{`
+        .ant-upload-list-item-name {
+          font-family: ${font} !important;
+          font-size: 13px !important;
+        }
+        .ant-upload-list-item {
+          border-radius: ${t.radius.md} !important;
+        }
+        .ant-upload-drag:hover {
+          border-color: ${t.colors.brand.primary} !important;
+        }
+      `}</style>
     </div>
   );
 }

@@ -73,7 +73,7 @@ function ModalDemo() {
       <KButton variant="primary" onClick={() => setOpen(true)}>Abrir Modal</KButton>
       <KModal
         open={open}
-        onClose={() => setOpen(false)}
+        onCancel={() => setOpen(false)}
         title="Confirmar Accion"
         footer={
           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
@@ -229,7 +229,7 @@ function ModalPlayground() {
           <p style={{ margin: '4px 0 0', fontSize: 12, color: khorTokens.colors.neutral[300] }}>Título: {title} • Ancho: {width}px</p>
         </div>
       </div>
-      <KModal open={open} onClose={() => setOpen(false)} title={title} width={width}
+      <KModal open={open} onCancel={() => setOpen(false)} title={title} width={width}
         footer={
           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
             <KButton variant="secondary" onClick={() => setOpen(false)}>Cancelar</KButton>
@@ -775,7 +775,11 @@ const { open, setOpen } = useCommandBar();
   'tree': {
     id: 'tree', name: 'KTree',
     description: 'Vista de arbol expandible/colapsable con soporte para seleccion, checkboxes, iconos y lineas de conexion. Ideal para jerarquias de carpetas o categorias.',
-    preview: (<KTree showLine showIcon data={[{ key: 'rh', title: 'Recursos Humanos', children: [{ key: 'rh-1', title: 'Reclutamiento', isLeaf: true }, { key: 'rh-2', title: 'Capacitacion', isLeaf: true }] }, { key: 'tech', title: 'Tecnologia', children: [{ key: 'tech-1', title: 'Frontend', isLeaf: true }, { key: 'tech-2', title: 'Backend', isLeaf: true }, { key: 'tech-3', title: 'DevOps', isLeaf: true }] }, { key: 'fin', title: 'Finanzas', isLeaf: true }]} defaultExpandAll />),
+    preview: (<KTree showLine showIcon data={[
+      { key: 'rh', title: 'Recursos Humanos', children: [{ key: 'rh-1', title: 'Reclutamiento', isLeaf: true }, { key: 'rh-2', title: 'Capacitacion', isLeaf: true }] }, 
+      { key: 'tech', title: 'Tecnologia', children: [{ key: 'tech-1', title: 'Frontend', isLeaf: true }, { key: 'tech-2', title: 'Backend', isLeaf: true }, { key: 'tech-3', title: 'DevOps', isLeaf: true }] }, 
+      { key: 'fin', title: 'Finanzas', isLeaf: true }
+    ]} defaultExpandAll />),
     code: `import { KTree } from '@khor/organisms-extended';\n\n<KTree\n  data={treeData}\n  checkable\n  showLine\n  defaultExpandAll\n  onSelect={(keys) => setSelected(keys)}\n/>`,
     filename: 'KTree.tsx',
     props: [
@@ -824,8 +828,17 @@ const { open, setOpen } = useCommandBar();
   'form-list': {
     id: 'form-list', name: 'KFormList',
     description: 'Lista dinamica de campos de formulario. Permite agregar, eliminar y reordenar filas. Ideal para formularios con items repetibles.',
-    preview: (<KFormList value={[{ key: 'f1', name: 'Juan', role: 'Dev' }, { key: 'f2', name: 'Maria', role: 'PM' }]} renderItem={(field, idx, ops) => (<div style={{ display: 'flex', gap: 8 }}><KInput placeholder="Nombre" value={field.name} /><KInput placeholder="Rol" value={field.role} /></div>)} addText="Agregar miembro" maxItems={5} />),
-    code: `import { KFormList } from '@khor/organisms-extended';\n\n<KFormList\n  value={members}\n  onChange={setMembers}\n  renderItem={(field, idx, { remove }) => (\n    <div style={{ display: 'flex', gap: 8 }}>\n      <KInput placeholder="Nombre" />\n      <KInput placeholder="Rol" />\n    </div>\n  )}\n  addText="Agregar miembro"\n  maxItems={10}\n/>`,
+    preview: (
+      <KForm initialValues={{ members: [{ name: 'Juan', role: 'Dev' }, { name: 'Maria', role: 'PM' }] }}>
+        <KFormList name="members" renderItem={(field, idx, ops) => (
+          <div style={{ display: 'flex', gap: 8 }}>
+            <KForm.Item {...field} name={[field.name, 'name']} noStyle><KInput placeholder="Nombre" /></KForm.Item>
+            <KForm.Item {...field} name={[field.name, 'role']} noStyle><KInput placeholder="Rol" /></KForm.Item>
+          </div>
+        )} addText="Agregar miembro" maxItems={5} />
+      </KForm>
+    ),
+    code: `import { KForm, KFormList, KInput } from '@khor/design-system/organisms/index';\n\n<KForm initialValues={{ members: [{ name: 'Juan' }] }}>\n  <KFormList \n    name="members" \n    renderItem={(field) => (\n      <div style={{ display: 'flex', gap: 8 }}>\n        <KForm.Item {...field} name={[field.name, 'name']}>\n          <KInput placeholder="Nombre" />\n        </KForm.Item>\n      </div>\n    )}\n  />\n</KForm>`,
     filename: 'KFormList.tsx',
     props: [
       { name: 'value', type: 'KFormListField[]', description: 'Array de campos.' },

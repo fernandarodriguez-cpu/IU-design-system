@@ -53,14 +53,14 @@ export function TokensPage() {
         <span style={{ fontSize: 11, fontWeight: 600, color: khorTokens.colors.brand.primary, textTransform: 'uppercase', letterSpacing: 1 }}>FUNDAMENTOS</span>
         <h2 style={{ margin: '4px 0 0', fontSize: 30, fontWeight: 700, color: khorTokens.colors.brand.navy }}>Design Tokens</h2>
         <p style={{ margin: '8px 0 0', fontSize: 16, color: khorTokens.colors.neutral[500] }}>
-          Variables atomicas que definen la identidad visual de todo el sistema Khor.
+          Variables atómicas que definen la identidad visual de todo el sistema Khor.
         </p>
       </div>
 
       {/* Brand Colors */}
       <Section title="1. Colores de Identidad (Brand)" id="colores">
         <p style={{ fontSize: 14, color: khorTokens.colors.neutral[400], marginTop: 0, marginBottom: 16 }}>
-          El Rojo es energia y accion; el Navy es estabilidad y estructura profesional.
+          El Rojo es energía y acción; el Navy es estabilidad y estructura profesional.
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 8 }}>
           <ColorSwatch name="color.brand.primary" hex="#E04D36" desc="Rojo Khor. Acciones principales, branding activo." />
@@ -107,7 +107,7 @@ export function TokensPage() {
             <thead>
               <tr style={{ backgroundColor: khorTokens.colors.neutral[100] }}>
                 <th style={{ padding: '10px 16px', textAlign: 'left', fontWeight: 600, borderBottom: `1px solid ${khorTokens.colors.neutral[200]}` }}>Estado</th>
-                <th style={{ padding: '10px 16px', textAlign: 'left', fontWeight: 600, borderBottom: `1px solid ${khorTokens.colors.neutral[200]}` }}>Logica de Color</th>
+                <th style={{ padding: '10px 16px', textAlign: 'left', fontWeight: 600, borderBottom: `1px solid ${khorTokens.colors.neutral[200]}` }}>Lógica de Color</th>
                 <th style={{ padding: '10px 16px', textAlign: 'left', fontWeight: 600, borderBottom: `1px solid ${khorTokens.colors.neutral[200]}` }}>Resultado Visual</th>
                 <th style={{ padding: '10px 16px', textAlign: 'left', fontWeight: 600, borderBottom: `1px solid ${khorTokens.colors.neutral[200]}` }}>Ejemplo</th>
               </tr>
@@ -140,7 +140,7 @@ export function TokensPage() {
               <tr>
                 <td style={{ padding: '10px 16px', fontWeight: 500 }}>Disabled</td>
                 <td style={{ padding: '10px 16px' }}>Greyscale + Opacity 50%</td>
-                <td style={{ padding: '10px 16px' }}>Pierde saturacion</td>
+                <td style={{ padding: '10px 16px' }}>Pierde saturación</td>
                 <td style={{ padding: '10px 16px' }}>
                   <span style={{ width: 32, height: 24, borderRadius: 4, backgroundColor: '#E04D36', display: 'inline-block', opacity: 0.5, filter: 'grayscale(1)' }} />
                 </td>
@@ -157,11 +157,11 @@ export function TokensPage() {
         </p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           {[
-            { label: 'H1', size: '38px', weight: '700 (Bold)', lh: '1.2', sample: 'Titulo de Seccion Principal' },
-            { label: 'H2', size: '30px', weight: '700 (Bold)', lh: '1.2', sample: 'Titulo de Modulo' },
-            { label: 'H3', size: '24px', weight: '600 (SemiBold)', lh: '1.3', sample: 'Titulo de Tarjeta o Modal' },
-            { label: 'Body LG', size: '16px', weight: '400 (Regular)', lh: '1.5', sample: 'Parrafos de lectura larga y descripciones.' },
-            { label: 'Body MD', size: '14px', weight: '400 (Regular)', lh: '1.5', sample: 'Texto estandar de la interfaz.' },
+            { label: 'H1', size: '38px', weight: '700 (Bold)', lh: '1.2', sample: 'Título de Sección Principal' },
+            { label: 'H2', size: '30px', weight: '700 (Bold)', lh: '1.2', sample: 'Título de Módulo' },
+            { label: 'H3', size: '24px', weight: '600 (SemiBold)', lh: '1.3', sample: 'Título de Tarjeta o Modal' },
+            { label: 'Body LG', size: '16px', weight: '400 (Regular)', lh: '1.5', sample: 'Párrafos de lectura larga y descripciones.' },
+            { label: 'Body MD', size: '14px', weight: '400 (Regular)', lh: '1.5', sample: 'Texto estándar de la interfaz.' },
             { label: 'Small', size: '12px', weight: '500 (Medium)', lh: '1.5', sample: 'Etiquetas, tooltips y captions.' },
           ].map((t) => (
             <div key={t.label} style={{ display: 'flex', alignItems: 'baseline', gap: 16, padding: '12px 0', borderBottom: `1px solid ${khorTokens.colors.neutral[200]}` }}>

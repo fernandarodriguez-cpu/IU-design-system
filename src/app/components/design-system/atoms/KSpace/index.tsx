@@ -1,25 +1,15 @@
 import React from 'react';
+import { Space } from 'antd';
+import type { SpaceProps } from 'antd';
 
-export interface KSpaceProps {
-  direction?: 'horizontal' | 'vertical';
-  size?: number | 'sm' | 'md' | 'lg';
-  wrap?: boolean;
-  align?: 'start' | 'center' | 'end' | 'baseline';
-  children: React.ReactNode;
-  className?: string;
-}
+export interface KSpaceProps extends SpaceProps { }
 
-export function KSpace({ direction = 'horizontal', size = 'md', wrap, align = 'center', children, className }: KSpaceProps) {
-  const gapMap = { sm: 8, md: 16, lg: 24 };
-  const gap = typeof size === 'number' ? size : gapMap[size];
-  return (
-    <div className={className} style={{
-      display: 'flex', flexDirection: direction === 'vertical' ? 'column' : 'row',
-      gap, flexWrap: wrap ? 'wrap' : undefined, alignItems: align,
-    }}>
-      {children}
-    </div>
-  );
+/**
+ * KSpace: Componente de layout para distribuir elementos con espaciado uniforme.
+ * Alineado con Ant Design para soportar funcionalidades avanzadas (split, wrap, custom size).
+ */
+export function KSpace({ size = 'middle', ...props }: KSpaceProps) {
+  return <Space size={size} {...props} />;
 }
 
 export default KSpace;

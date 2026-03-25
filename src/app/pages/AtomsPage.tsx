@@ -7,11 +7,13 @@ import { ComponentDoc } from '../components/docs/ComponentDoc';
 import type { PropDef } from '../components/docs/ComponentDoc';
 import {
   KButton, KInput, KTextArea, KBadge, KTag, KAvatar,
-  KSwitch, KCheckbox, KRadio, KTooltip, KProgress, KText, KDivider,
+  KSwitch, KCheckbox, KRadio, KProgress, KText, KDivider,
   KAlert, KSkeleton, KSlider, KRate, KSpin,
   KButtonGroup, KInputPassword, KInputSearch, KFloatButton,
   KImage, KSpace, KQRCode, KWatermark,
 } from '../components/design-system/atoms/index';
+import { KTooltip } from '../components/design-system/molecules/index';
+import { KPagination } from '../components/design-system/organisms/index';
 import {
   Plus, Save, Trash2, Download, Mail, Lock, User,
   Bell, Star, Heart, Search, AlertCircle, Info,
@@ -225,28 +227,74 @@ function TagPlayground() {
 
 function SpacePlayground() {
   const [dir, setDir] = useState<any>('horizontal');
-  const [size, setSize] = useState<any>('md');
+  const [size, setSize] = useState<any>('middle');
   const [align, setAlign] = useState<any>('center');
   const [wrap, setWrap] = useState(true);
+  const [split, setSplit] = useState(false);
+  
   const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
   const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
+  
   return (
     <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
       <div style={{ flex: 1, minWidth: 240 }}>
         <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <div><label style={ctrl}>Direccion</label><select value={dir} onChange={(e) => setDir(e.target.value)} style={sel}>{['horizontal','vertical'].map(d=><option key={d}>{d}</option>)}</select></div>
-          <div><label style={ctrl}>Tamano Gap</label><select value={size} onChange={(e) => setSize(e.target.value)} style={sel}>{['sm','md','lg'].map(s=><option key={s}>{s}</option>)}</select></div>
-          <div><label style={ctrl}>Alineacion</label><select value={align} onChange={(e) => setAlign(e.target.value)} style={sel}>{['start','center','end','baseline'].map(a=><option key={a}>{a}</option>)}</select></div>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={wrap} onChange={(e) => setWrap(e.target.checked)} /> Wrap Items</label>
+          <div><label style={ctrl}>Dirección</label><select value={dir} onChange={(e) => setDir(e.target.value)} style={sel}>{['horizontal','vertical'].map(d=><option key={d}>{d}</option>)}</select></div>
+          <div><label style={ctrl}>Tamaño (Gap)</label><select value={size} onChange={(e) => setSize(e.target.value)} style={sel}>{['small','middle','large'].map(s=><option key={s}>{s}</option>)}</select></div>
+          <div><label style={ctrl}>Alineación</label><select value={align} onChange={(e) => setAlign(e.target.value)} style={sel}>{['start', 'center', 'end', 'baseline'].map(a=><option key={a}>{a}</option>)}</select></div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 4 }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={wrap} onChange={(e) => setWrap(e.target.checked)} /> Wrap Items</label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={split} onChange={(e) => setSplit(e.target.checked)} /> Show Splitter</label>
+          </div>
         </div>
       </div>
       <div style={{ flex: 1, minWidth: 280, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-        <KSpace direction={dir} size={size} align={align} wrap={wrap} className="playground-space">
-          {Array.from({length: 5}).map((_, i) => (
-            <div key={i} style={{ width: 40, height: 40, backgroundColor: khorTokens.colors.brand.primary, borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 14 }}>{i+1}</div>
+        <KSpace direction={dir} size={size} align={align} wrap={wrap} split={split ? <KDivider type="vertical" /> : undefined} className="playground-space">
+          {Array.from({length: 4}).map((_, i) => (
+            <div key={i} style={{ padding: '8px 16px', backgroundColor: khorTokens.colors.brand.primary, borderRadius: 4, color: '#fff', fontSize: 14 }}>Item {i+1}</div>
           ))}
         </KSpace>
+      </div>
+    </div>
+  );
+}
+
+function PaginationPlayground() {
+  const [current, setCurrent] = useState(1);
+  const [total, setTotal] = useState(500);
+  const [pageSize, setPageSize] = useState(10);
+  const [showQuickJumper, setShowQuickJumper] = useState(false);
+  const [showSizeChanger, setShowSizeChanger] = useState(true);
+  const [simple, setSimple] = useState(false);
+
+  const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
+  const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
+
+  return (
+    <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
+      <div style={{ flex: 1, minWidth: 280 }}>
+        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div><label style={ctrl}>Total Items</label><input type="number" value={total} onChange={(e) => setTotal(Number(e.target.value))} style={sel} /></div>
+          <div><label style={ctrl}>Tamaño página</label><select value={pageSize} onChange={(e) => setPageSize(Number(e.target.value))} style={sel}>{[10, 20, 50, 100].map(p => <option key={p} value={p}>{p}</option>)}</select></div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 4 }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={showQuickJumper} onChange={(e) => setShowQuickJumper(e.target.checked)} /> Quick Jumper</label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={showSizeChanger} onChange={(e) => setShowSizeChanger(e.target.checked)} /> Size Changer</label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={simple} onChange={(e) => setSimple(e.target.checked)} /> Simple Mode</label>
+          </div>
+        </div>
+      </div>
+      <div style={{ flex: 1, minWidth: 280, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
+        <KPagination 
+          current={current} 
+          onChange={setCurrent} 
+          total={total} 
+          pageSize={pageSize} 
+          showQuickJumper={showQuickJumper} 
+          showSizeChanger={showSizeChanger}
+          simple={simple}
+        />
       </div>
     </div>
   );
@@ -1372,11 +1420,51 @@ const atoms: Record<string, AtomEntry> = {
     code: `<KAffix offsetTop={64}>\n  <Toolbar />\n</KAffix>`, filename: 'KAffix.tsx',
     props: [{ name: 'offsetTop', type: 'number', description: 'Distancia desde arriba para activar.' }, { name: 'offsetBottom', type: 'number', description: 'Distancia desde abajo.' }],
     guidelines: ['offsetTop=64 para respetar el header de 64px.'] },
-  'space': { id: 'space', name: 'KSpace', description: 'Componente de layout para espaciar elementos con gap consistente. Soporta dirección y wrap.',
-    preview: (<KSpace size="md" wrap><KButton variant="primary" size="sm">Guardar</KButton><KButton variant="secondary" size="sm">Cancelar</KButton><KButton variant="ghost" size="sm">Descartar</KButton></KSpace>),
-    code: `<KSpace direction="horizontal" size="md" wrap>\n  <KButton>A</KButton>\n  <KButton>B</KButton>\n</KSpace>`, filename: 'KSpace.tsx',
-    props: [{ name: 'direction', type: "'horizontal'|'vertical'", default: "'horizontal'", description: 'Dirección.' }, { name: 'size', type: "number|'sm'|'md'|'lg'", default: "'md'", description: 'Espacio entre elementos.' }, { name: 'wrap', type: 'boolean', description: 'Permitir wrap.' }],
-    guidelines: ['Usa en lugar de divs con gap manual para consistencia.'] },
+  'space': { 
+    id: 'space', name: 'KSpace', 
+    description: 'Componente de layout para espaciar elementos con gap consistente. Soporta dirección, wrap, splitters y tamaños personalizados.',
+    preview: (
+      <KSpace size="middle" wrap split={<KDivider type="vertical" />}>
+        <KText variant="body-md">Item A</KText>
+        <KText variant="body-md">Item B</KText>
+        <KText variant="body-md">Item C</KText>
+      </KSpace>
+    ),
+    playground: <SpacePlayground />,
+    code: `import { KSpace, KDivider } from '@khor/design-system/atoms/index';\n\n<KSpace direction="horizontal" size="middle" wrap split={<KDivider type="vertical" />}>\n  <KButton>A</KButton>\n  <KButton>B</KButton>\n</KSpace>`, 
+    filename: 'KSpace.tsx',
+    props: [
+      { name: 'direction', type: "'horizontal' | 'vertical'", default: "'horizontal'", description: 'Dirección del flujo.' },
+      { name: 'size', type: "number | 'small' | 'middle' | 'large' | [number, number]", default: "'middle'", description: 'Espacio entre elementos.' },
+      { name: 'align', type: "'start' | 'end' | 'center' | 'baseline'", description: 'Alineación de items.' },
+      { name: 'wrap', type: 'boolean', default: 'false', description: 'Permite salto de línea.' },
+      { name: 'split', type: 'ReactNode', description: 'Elemento separador entre items.' },
+    ],
+    guidelines: ['Usa size="middle" (16px) por defecto para la mayoría de layouts.', 'El split con KDivider vertical es ideal para barras de herramientas.'],
+  },
+  'pagination': {
+    id: 'pagination',
+    name: 'KPagination',
+    description: 'Componente de navegación para dividir conjuntos de datos en páginas. Permite saltos rápidos y selección de tamaño de página.',
+    preview: (
+      <div style={{ padding: 16 }}>
+        <KPagination total={50} defaultPageSize={10} current={1} showSizeChanger={false} />
+      </div>
+    ),
+    playground: <PaginationPlayground />,
+    code: `import { KPagination } from '@khor/design-system/organisms/index';\n\n<KPagination total={200} current={page} onChange={setPage} showQuickJumper />`,
+    filename: 'KPagination.tsx',
+    props: [
+      { name: 'current', type: 'number', description: 'Página actual (controlado).' },
+      { name: 'pageSize', type: 'number', description: 'Cantidad de items por página.' },
+      { name: 'total', type: 'number', required: true, description: 'Número total de items.' },
+      { name: 'onChange', type: '(page, pageSize) => void', description: 'Callback al cambiar página.' },
+      { name: 'showSizeChanger', type: 'boolean', default: 'true', description: 'Permite cambiar items por página.' },
+      { name: 'showQuickJumper', type: 'boolean', default: 'false', description: 'Permite saltar a una página específica.' },
+      { name: 'simple', type: 'boolean', description: 'Modo simplificado (Input de página).' },
+    ],
+    guidelines: ['Útil para tablas, listas largas y resultados de búsqueda.', 'Asegura que el diseño sea responsivo activando el modo simple en móviles.'],
+  },
   'qrcode': { id: 'qrcode', name: 'KQRCode', description: 'Generador visual de código QR a partir de texto o URL. Usa canvas para renderizado.',
     preview: (<div style={{ display: 'flex', gap: 16 }}><KQRCode value="https://khor.app" size={100} /><KQRCode value="https://khor.app/empleados" size={80} color="#051758" /></div>),
     code: `<KQRCode value="https://khor.app" size={128} />`, filename: 'KQRCode.tsx',

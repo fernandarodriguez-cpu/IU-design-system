@@ -9,6 +9,7 @@ export { default as KBreadcrumb } from './KBreadcrumb';
 export { default as KSteps } from './KSteps';
 export { default as KDropdownMenu } from './KDropdownMenu';
 export { default as KPopover } from './KPopover';
+export { default as KTooltip } from './KTooltip/index';
 export { default as KAccordion } from './KAccordion';
 export { default as KInputNumber } from './KInputNumber';
 export { default as KSegmented } from './KSegmented';
