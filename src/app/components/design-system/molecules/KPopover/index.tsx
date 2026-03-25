@@ -1,47 +1,59 @@
 import React from 'react';
-import * as Popover from '@radix-ui/react-popover';
+import { Popover } from 'antd';
+import type { PopoverProps } from 'antd';
 import { khorTokens } from '../../../../theme/khor-theme';
 
 const t = khorTokens;
 const font = t.typography.fontPrimary;
 
-export interface KPopoverProps {
-  content: React.ReactNode;
-  children: React.ReactNode;
+export interface KPopoverProps extends Omit<PopoverProps, 'align'> {
+  // Aliases for compatibility with Radix-like API if needed, 
+  // but we prefer AntD placement.
   side?: 'top' | 'bottom' | 'left' | 'right';
   align?: 'start' | 'center' | 'end';
 }
 
-export function KPopover({ children, content, side = 'bottom', align = 'center' }: KPopoverProps) {
+export function KPopover({ 
+  children, 
+  content, 
+  side = 'bottom', 
+  align = 'center', 
+  placement,
+  overlayStyle,
+  ...rest 
+}: KPopoverProps) {
+  // Mapping Radix-like side/align to AntD placement if placement is not provided
+  const getPlacement = () => {
+    if (placement) return placement;
+    
+    const placementMap: Record<string, any> = {
+      'top-start': 'topLeft',
+      'top-center': 'top',
+      'top-end': 'topRight',
+      'bottom-start': 'bottomLeft',
+      'bottom-center': 'bottom',
+      'bottom-end': 'bottomRight',
+      'left-start': 'leftTop',
+      'left-center': 'left',
+      'left-end': 'leftBottom',
+      'right-start': 'rightTop',
+      'right-center': 'right',
+      'right-end': 'rightBottom',
+    };
+
+    const key = `${side}-${align}`;
+    return placementMap[key] || side;
+  };
+
   return (
-    <Popover.Root>
-      <Popover.Trigger asChild>
-        {children}
-      </Popover.Trigger>
-      <Popover.Portal>
-        <Popover.Content
-          side={side}
-          align={align}
-          sideOffset={8}
-          style={{
-            zIndex: 100,
-            backgroundColor: t.colors.neutral[50],
-            borderRadius: t.radius.md,
-            padding: 12,
-            boxShadow: t.shadows.md,
-            border: `1px solid ${t.colors.neutral[200]}`,
-            fontFamily: font,
-            fontSize: 14,
-            animationDuration: '200ms',
-            animationTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
-            maxWidth: 280,
-          }}
-        >
-          {content}
-          <Popover.Arrow style={{ fill: t.colors.neutral[200] }} />
-        </Popover.Content>
-      </Popover.Portal>
-    </Popover.Root>
+    <Popover
+      content={content}
+      placement={getPlacement()}
+      overlayStyle={{ fontFamily: font, ...overlayStyle }}
+      {...rest}
+    >
+      {children}
+    </Popover>
   );
 }
 

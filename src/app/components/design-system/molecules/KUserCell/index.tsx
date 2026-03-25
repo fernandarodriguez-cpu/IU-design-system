@@ -10,17 +10,50 @@ export interface KUserCellProps {
   email?: string;
   avatar?: string;
   role?: string;
-  size?: 'sm' | 'md';
+  size?: 'sm' | 'md' | 'lg';
+  status?: 'online' | 'offline' | 'busy' | 'away';
+  onClick?: () => void;
+  className?: string;
 }
 
-export function KUserCell({ name, email, avatar, role, size = 'md' }: KUserCellProps) {
+export function KUserCell({ 
+  name, 
+  email, 
+  avatar, 
+  role, 
+  size = 'md', 
+  status,
+  onClick,
+  className 
+}: KUserCellProps) {
+  const avatarSize = size === 'sm' ? 32 : size === 'lg' ? 48 : 40;
+
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontFamily: font }}>
-      <KAvatar name={name} src={avatar} size={size === 'sm' ? 32 : 40} />
+    <div 
+      className={className}
+      onClick={onClick}
+      style={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        gap: 12, 
+        fontFamily: font,
+        cursor: onClick ? 'pointer' : 'default'
+      }}
+    >
+      <KAvatar name={name} src={avatar} size={avatarSize} status={status} />
       <div style={{ display: 'flex', flexDirection: 'column' }}>
-        <KText variant={size === 'sm' ? 'body-md' : 'body-md'} strong color="default" style={{ lineHeight: 1.2 }}>{name}</KText>
-        {email && <KText variant="caption" color="secondary">{email}</KText>}
-        {role && !email && <KText variant="caption" color="secondary">{role}</KText>}
+        <KText 
+          variant={size === 'sm' ? 'caption' : 'body-md'} 
+          strong 
+          color="default" 
+          style={{ lineHeight: 1.2 }}
+        >
+          {name}
+        </KText>
+        <div style={{ display: 'flex', flexDirection: 'column', marginTop: size === 'sm' ? 0 : 2 }}>
+          {role && <KText variant="caption" color="secondary">{role}</KText>}
+          {email && <KText variant="caption" color="muted">{email}</KText>}
+        </div>
       </div>
     </div>
   );

@@ -22,6 +22,7 @@ export interface KTextProps {
   strong?: boolean;
   italic?: boolean;
   type?: 'secondary' | 'success' | 'warning' | 'danger';
+  style?: React.CSSProperties;
 }
 
 const textColorMap: Record<string, string> = {
@@ -47,13 +48,14 @@ const textSizeMap: Record<string, React.CSSProperties> = {
 export function KText({
   variant = 'body-md', color = 'default', children, className, as,
   copyable, editable, ellipsis, mark, code, keyboard, underline,
-  delete: del, strong, italic, type, ...rest
+  delete: del, strong, italic, type, style, ...rest
 }: KTextProps) {
   const textStyle: React.CSSProperties = {
     ...textSizeMap[variant],
     color: textColorMap[color],
     fontFamily: font,
     margin: 0,
+    ...style,
   };
 
   const textProps = { copyable, editable, ellipsis, mark, code, keyboard, underline, delete: del, strong, italic, type } as any;

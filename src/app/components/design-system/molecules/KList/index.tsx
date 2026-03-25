@@ -1,4 +1,6 @@
 import React from 'react';
+import { List } from 'antd';
+import type { ListProps } from 'antd';
 import { khorTokens } from '../../../../theme/khor-theme';
 
 const t = khorTokens;
@@ -9,51 +11,32 @@ const font = t.typography.fontPrimary;
    ═══════════════════════════════════════════════ */
 export interface KListItem { key: string; title: React.ReactNode; description?: React.ReactNode; avatar?: React.ReactNode; extra?: React.ReactNode; }
 
-export interface KListProps {
+export interface KListProps extends Omit<ListProps<KListItem>, 'dataSource' | 'renderItem'> {
   items: KListItem[];
-  bordered?: boolean;
-  size?: 'sm' | 'md' | 'lg';
-  header?: React.ReactNode;
-  footer?: React.ReactNode;
-  loading?: boolean;
-  className?: string;
 }
 
-export function KList({ items, bordered, size = 'md', header, footer, loading, className }: KListProps) {
-  const paddings = { sm: '8px 12px', md: '12px 16px', lg: '16px 20px' };
+export function KList({ items, size = 'default', bordered, header, footer, loading, className, style, ...rest }: KListProps) {
   return (
-    <div className={className} style={{
-      border: bordered ? `1px solid ${t.colors.neutral[200]}` : 'none',
-      borderRadius: bordered ? t.radius.lg : 0, fontFamily: font, overflow: 'hidden',
-    }}>
-      {header && <div style={{ padding: paddings[size], borderBottom: `1px solid ${t.colors.neutral[200]}`, fontWeight: 600, fontSize: 14, color: t.colors.neutral[900] }}>{header}</div>}
-      {loading ? (
-        Array.from({ length: 3 }).map((_, i) => (
-          <div key={i} style={{ padding: paddings[size], borderBottom: `1px solid ${t.colors.neutral[200]}` }}>
-            <div className="animate-pulse" style={{ display: 'flex', gap: 12 }}>
-              <div style={{ width: 40, height: 40, borderRadius: '50%', backgroundColor: t.colors.neutral[200] }} />
-              <div style={{ flex: 1 }}>
-                <div style={{ height: 14, width: '60%', borderRadius: 4, backgroundColor: t.colors.neutral[200], marginBottom: 8 }} />
-                <div style={{ height: 12, width: '40%', borderRadius: 4, backgroundColor: t.colors.neutral[200] }} />
-              </div>
-            </div>
-          </div>
-        ))
-      ) : items.map((item) => (
-        <div key={item.key} style={{
-          padding: paddings[size], borderBottom: `1px solid ${t.colors.neutral[200]}`,
-          display: 'flex', alignItems: 'center', gap: 12,
-        }}>
-          {item.avatar}
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontSize: 14, color: t.colors.neutral[900] }}>{item.title}</div>
-            {item.description && <div style={{ fontSize: 13, color: t.colors.neutral[400], marginTop: 2 }}>{item.description}</div>}
-          </div>
-          {item.extra}
-        </div>
-      ))}
-      {footer && <div style={{ padding: paddings[size], borderTop: `1px solid ${t.colors.neutral[200]}`, fontSize: 13, color: t.colors.neutral[400] }}>{footer}</div>}
-    </div>
+    <List
+      dataSource={items}
+      size={size as any}
+      bordered={bordered}
+      header={header}
+      footer={footer}
+      loading={loading}
+      className={className}
+      style={{ fontFamily: font, ...style }}
+      {...rest}
+      renderItem={(item) => (
+        <List.Item extra={item.extra}>
+          <List.Item.Meta
+            avatar={item.avatar}
+            title={item.title}
+            description={item.description}
+          />
+        </List.Item>
+      )}
+    />
   );
 }
 
