@@ -62,7 +62,7 @@ function WizardPatternComponent() {
               <KInput placeholder="Juan Pérez" value={form.cardName} onChange={(e) => setForm({ ...form, cardName: e.target.value })} />
             </KFormField>
             <KFormField label="Número de tarjeta">
-              <KInput placeholder="4242 4242 4242 4242" icon={<DollarSign size={16} />} />
+              <KInput placeholder="4242 4242 4242 4242" prefix={<DollarSign size={16} />} />
             </KFormField>
             <div style={{ display: 'flex', gap: 12 }}>
               <KFormField label="Expiración"><KInput placeholder="MM/AA" /></KFormField>
@@ -79,7 +79,7 @@ function WizardPatternComponent() {
             <p style={{ margin: '0 0 12px', fontSize: 13, color: 'var(--muted-foreground)' }}>
               {form.name || 'Usuario'} &bull; {form.email || 'email@ejemplo.com'} &bull; Plan {form.plan || 'Starter'}
             </p>
-            <KBadge variant="success">Suscripción activa</KBadge>
+            <KBadge khorStatus="success" label="Suscripción activa" />
           </div>
         )}
       </div>

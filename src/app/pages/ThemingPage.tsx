@@ -653,11 +653,11 @@ $khor-space-xl: ${theme.spaceXl}px;`, [theme]);
               {/* Badges & Tags */}
               <PreviewSection title="Badges y Tags">
                 <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
-                  <KBadge variant="primary">Primario</KBadge>
-                  <KBadge variant="success">Éxito</KBadge>
-                  <KBadge variant="warning">Warning</KBadge>
-                  <KBadge variant="error">Error</KBadge>
-                  <KBadge variant="default">Default</KBadge>
+                  <KBadge khorStatus="info" label="Primario" />
+                  <KBadge khorStatus="success" label="Éxito" />
+                  <KBadge khorStatus="warning" label="Warning" />
+                  <KBadge khorStatus="error" label="Error" />
+                  <KBadge khorStatus="default" label="Default" />
                   <KTag>React</KTag>
                   <KTag closable>TypeScript</KTag>
                 </div>

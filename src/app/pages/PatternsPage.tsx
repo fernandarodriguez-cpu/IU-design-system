@@ -111,7 +111,7 @@ export function PatternsPage() {
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                     <h3 style={{ margin: 0, fontSize: 16, fontWeight: 600, color: 'var(--foreground)' }}>{pattern.title}</h3>
-                    <KBadge variant="default">{pattern.category}</KBadge>
+                    <KBadge khorStatus="default" label={pattern.category} />
                   </div>
                   <p style={{ margin: '4px 0 0', fontSize: 13, color: 'var(--muted-foreground)' }}>{pattern.description}</p>
                 </div>

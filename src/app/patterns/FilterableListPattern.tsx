@@ -39,8 +39,8 @@ function FilterableListComponent() {
               <div style={{ fontSize: 14, fontWeight: 500, color: 'var(--foreground)' }}>{u.name}</div>
               <div style={{ fontSize: 12, color: 'var(--muted-foreground)' }}>{u.email}</div>
             </div>
-            <KBadge variant={u.role === 'Admin' ? 'primary' : 'default'}>{u.role}</KBadge>
-            <KBadge variant={u.status === 'Activo' ? 'success' : 'default'}>{u.status}</KBadge>
+            <KBadge khorStatus={u.role === 'Admin' ? 'info' : 'default'} label={u.role} />
+            <KBadge khorStatus={u.status === 'Activo' ? 'success' : 'default'} label={u.status} />
             <div style={{ display: 'flex', gap: 4 }}>
               <KButton variant="ghost" size="sm" icon={<Edit size={14} />} />
               <KButton variant="ghost" size="sm" icon={<Trash2 size={14} />} />
@@ -69,7 +69,7 @@ import { KButton, KBadge } from '@khor/atoms';
 // Lista con badges y acciones
 {users.map(u => (
   <div key={u.id}>
-    <KBadge variant={u.role === 'Admin' ? 'primary' : 'default'}>{u.role}</KBadge>
+    <KBadge khorStatus={u.role === 'Admin' ? 'info' : 'default'} label={u.role} />
     <KButton variant="ghost" size="sm" icon={<Edit size={14} />} />
   </div>
 ))}`,

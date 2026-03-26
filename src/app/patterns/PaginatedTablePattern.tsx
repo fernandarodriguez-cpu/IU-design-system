@@ -51,7 +51,7 @@ function PaginatedTableComponent() {
                 <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)', color: 'var(--foreground)' }}>{r.cliente}</td>
                 <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)', fontWeight: 600, color: 'var(--foreground)' }}>{r.monto}</td>
                 <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)' }}>
-                  <KBadge variant={statusColor(r.estado) as any}>{r.estado}</KBadge>
+                  <KBadge khorStatus={statusColor(r.estado) as any} label={r.estado} />
                 </td>
                 <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)', color: 'var(--muted-foreground)' }}>{r.fecha}</td>
                 <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)' }}>
@@ -103,7 +103,7 @@ import { KButton, KBadge } from '@khor/atoms';
 // Lista con badges y acciones
 {users.map(u => (
   <div key={u.id}>
-    <KBadge variant={u.role === 'Admin' ? 'primary' : 'default'}>{u.role}</KBadge>
+    <KBadge khorStatus={u.role === 'Admin' ? 'info' : 'default'} label={u.role} />
     <KButton variant="ghost" size="sm" icon={<Edit size={14} />} />
   </div>
 ))}`,

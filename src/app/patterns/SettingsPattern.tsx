@@ -24,7 +24,7 @@ function SettingsPatternComponent() {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             <KFormField label="Nombre"><KInput value="Ana García" /></KFormField>
-            <KFormField label="Email"><KInput value="ana@khor.io" icon={<Mail size={16} />} /></KFormField>
+            <KFormField label="Email"><KInput value="ana@khor.io" prefix={<Mail size={16} />} /></KFormField>
           </div>
         </div>
 

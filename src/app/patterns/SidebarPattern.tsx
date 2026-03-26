@@ -124,7 +124,7 @@ function SidebarPatternComponent() {
         <h4 style={{ margin: 0, fontSize: 20, fontWeight: 600, color: 'var(--foreground)' }}>Área de Trabajo Principal</h4>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <span style={{ fontSize: 14, color: 'var(--muted-foreground)' }}>Ruta Activa:</span>
-          <KBadge variant="primary">{activePath}</KBadge>
+          <KBadge khorStatus="info" label={activePath} />
         </div>
         <div style={{ padding: 16, backgroundColor: 'var(--card)', border: '1px solid var(--border)', borderRadius: t.radius.lg }}>
           <p style={{ margin: 0, fontSize: 14, color: 'var(--foreground)', lineHeight: 1.6 }}>

@@ -18,10 +18,10 @@ function LoginPatternComponent() {
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
         <KFormField label="Email">
-          <KInput placeholder="tu@empresa.com" icon={<Mail size={16} />} />
+          <KInput placeholder="tu@empresa.com" prefix={<Mail size={16} />} />
         </KFormField>
         <KFormField label="Contraseña">
-          <KInput type={show ? 'text' : 'password'} placeholder="••••••••" icon={<Lock size={16} />}
+          <KInput type={show ? 'text' : 'password'} placeholder="••••••••" prefix={<Lock size={16} />}
             suffix={<button onClick={() => setShow(!show)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted-foreground)', display: 'flex' }}>{show ? <EyeOff size={16} /> : <Eye size={16} />}</button>}
           />
         </KFormField>
@@ -46,11 +46,11 @@ import { KInput, KButton, KCheckbox } from '@khor/atoms';
 
 // Login form con branding
 <KFormField label="Email">
-  <KInput placeholder="tu@empresa.com" icon={<Mail size={16} />} />
+  <KInput placeholder="tu@empresa.com" prefix={<Mail size={16} />} />
 </KFormField>
 <KFormField label="Contraseña">
   <KInput type={show ? 'text' : 'password'}
-    placeholder="••••••••" icon={<Lock size={16} />}
+    placeholder="••••••••" prefix={<Lock size={16} />}
     suffix={<EyeToggle />}
   />
 </KFormField>
