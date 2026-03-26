@@ -12,11 +12,12 @@ import { KButton, KText, KBadge, KAlert, KSwitch } from '../components/design-sy
 import { KCardSection, KTabs } from '../components/design-system/organisms/index';
 import { kToast } from '../components/design-system/organisms/index';
 import { khorTokens } from '../theme/khor-theme';
+import { patterns } from '../patterns/index';
 
 const t = khorTokens;
 
 /* ─── Version (must match ChangelogPage & AppShell) ─── */
-const KHOR_VERSION = '2.4.0';
+const KHOR_VERSION = '2.7.0';
 
 /* ─── Sections config ───────────────────────── */
 interface SectionConfig {
@@ -1474,8 +1475,19 @@ import { Plus, Edit, Trash2, Download, Search, ... } from 'lucide-react';
 - NO usar \`React.Fragment\` con props inválidos (key, className) — usar \`<span>\` o \`<div style={{ display: 'contents' }}>\`
 - NO anidar \`<button>\` dentro de \`<button>\`
 - NO hardcodear colores — usar tokens o CSS variables
+`);
 
----`);
+    patterns.forEach(p => {
+      parts.push(`
+### Patrón Modular: ${p.title}
+${p.description}
+\`\`\`tsx
+${p.code}
+\`\`\`
+`);
+    });
+
+    parts.push(`---`);
   }
 
   if (enabled.has('examples')) {
@@ -1926,7 +1938,7 @@ export function AIExportPage() {
               <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--foreground)' }}>
                 khor-design-system-ai-guide.md
               </span>
-              <KBadge status="info" label={`${words.toLocaleString()} palabras`} dot={false} />
+              <KBadge khorStatus="info" label={`${words.toLocaleString()} palabras`} dot={false} />
             </div>
             <button
               onClick={() => setExpandedPreview(!expandedPreview)}

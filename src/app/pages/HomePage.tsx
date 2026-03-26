@@ -111,6 +111,7 @@ khor-design-system/
 import { KButton, KInput, KBadge } from './atoms';
 import { KFormField, KStatCard } from './molecules';
 import { KDataTable, kToast } from './organisms';
+import { DashboardStatsPattern, LoginFormPattern } from './patterns';
 \`\`\`
 
 ## Colores de Marca
@@ -134,6 +135,9 @@ KCalendar, KCardSection, KCarousel, KCommandBar, KDataTable, KDrawer, KForm, KFo
 
 ### Templates (4)
 Login, Dashboard, CRUD Table, Formulario Multi-Paso
+
+### Patrones Modulares (8)
+DashboardStatsPattern, FormValidationPattern, FilterableListPattern, LoginFormPattern, PaginatedTablePattern, WizardPattern, SettingsPattern, SidebarPattern
 `);
 
   // Theme tokens
@@ -246,9 +250,36 @@ export { KModalConfirm } from './KModalConfirm';
 export { KFormList } from './KFormList';
 `;
 
+  const patternsCatalog = `/**
+ * KHOR DESIGN SYSTEM — PATRONES (8 componentes)
+ *
+ * DashboardStatsPattern, FormValidationPattern, FilterableListPattern, LoginFormPattern, PaginatedTablePattern, WizardPattern, SettingsPattern, SidebarPattern
+ *
+ * Base: Custom + Khor Tokens
+ */
+
+export { DashboardStatsPattern } from './DashboardStatsPattern';
+export { FormValidationPattern } from './FormValidationPattern';
+export { FilterableListPattern } from './FilterableListPattern';
+export { LoginFormPattern } from './LoginFormPattern';
+export { PaginatedTablePattern } from './PaginatedTablePattern';
+export { WizardPattern } from './WizardPattern';
+export { SettingsPattern } from './SettingsPattern';
+export { SidebarPattern } from './SidebarPattern';
+
+export const patterns = [
+  DashboardStatsPattern, FormValidationPattern, FilterableListPattern,
+  LoginFormPattern, PaginatedTablePattern, WizardPattern,
+  SettingsPattern, SidebarPattern,
+];
+
+export const categories = ['Todos', ...new Set(patterns.map((p) => p.category))];
+`;
+
   ds.folder('atoms')!.file('index.tsx', atomsCatalog);
   ds.folder('molecules')!.file('index.tsx', moleculesCatalog);
   ds.folder('organisms')!.file('index.tsx', organismsCatalog);
+  ds.folder('patterns')!.file('index.ts', patternsCatalog);
 
   // Generate ZIP and download
   const blob = await zip.generateAsync({ type: 'blob' });
