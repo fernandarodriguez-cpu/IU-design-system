@@ -13,6 +13,7 @@ import {
   Shield, Clock, Figma, Moon, Sun, Bot, Brush, BookOpen,
 } from 'lucide-react';
 import { KNavItem } from '../design-system/molecules/index';
+import { patterns } from '../../patterns/index';
 import { KText } from '../design-system/atoms/index';
 import { khorTokens } from '../../theme/khor-theme';
 import { KCommandBar, useCommandBar } from '../design-system/command-bar';
@@ -159,14 +160,7 @@ const navigation: NavSection[] = [
     icon: <BookOpen size={18} strokeWidth={2} />,
     items: [
       { label: 'Todos los Patrones', path: '/patterns' },
-      { label: 'App Sidebar', path: '/patterns/sidebar-navigation' },
-      { label: 'Dashboard Stats', path: '/patterns/dashboard-stats' },
-      { label: 'Form Validation', path: '/patterns/form-validation' },
-      { label: 'Login con Branding', path: '/patterns/login-form' },
-      { label: 'Lista Filtrable', path: '/patterns/filterable-list' },
-      { label: 'Tabla Paginada', path: '/patterns/paginated-table' },
-      { label: 'Wizard Multi-Step', path: '/patterns/wizard-pattern' },
-      { label: 'Settings Page', path: '/patterns/settings-pattern' },
+      ...patterns.map(p => ({ label: p.title, path: `/patterns/${p.id}` })),
       { label: 'TPL: Login', path: '/templates/login' },
       { label: 'TPL: Dashboard', path: '/templates/dashboard' },
       { label: 'TPL: CRUD Table', path: '/templates/crud' },

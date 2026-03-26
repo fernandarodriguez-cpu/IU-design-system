@@ -43,6 +43,25 @@ const changeTypeConfig: Record<ChangeType, { color: string; bg: string; icon: Re
 
 const changelog: VersionEntry[] = [
   {
+    version: '2.7.0',
+    date: '26 Mar 2026',
+    codename: 'Modularity',
+    summary: 'Arquitectura escalable para Patrones/Recipes. Se desacopló el archivo monolítico en módulos independientes, implementando un registro central indexado. La navegación lateral y las páginas ahora se renderizan dinámicamente.',
+    highlights: [
+      'Refactorización DX completa: 8 Patrones modulares en src/app/patterns/',
+      'Enrutamiento aislado: nueva ruta /patterns/:id para vista aislada por cada patrón',
+      'Generación dinámica de menú lateral desde el registro de patrones exportado',
+      'Visibilidad Permanente: los bloques de código fuente siempre están visibles para facilitar el "copiar y pegar"',
+    ],
+    changes: [
+      { type: 'added', description: 'Registro centralizado en src/app/patterns/index.ts con interface unificada que permite extender el design system fácilmente.' },
+      { type: 'changed', component: 'PatternsPage', description: 'Refactorización masiva: el archivo monolítico se redujo drásticamente al extraer los 8 patrones funcionales hacia módulos aislados.' },
+      { type: 'changed', component: 'AppShell', description: 'Navegación lateral del panel principal es completamente dinámica y conectada al registro central.' },
+      { type: 'added', component: 'Router', description: 'Nueva ruta /patterns/:id integrada en routes.ts.' },
+    ],
+    stats: { added: 10, changed: 2, fixed: 0 },
+  },
+  {
     version: '2.6.0',
     date: '25 Mar 2026',
     codename: 'Antigravity',

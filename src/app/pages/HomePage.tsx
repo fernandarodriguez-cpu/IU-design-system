@@ -8,7 +8,7 @@ import {
   Atom, Layers, Box, Palette, ArrowRight,
   Component, Sparkles, Zap, Shield, Smartphone,
   Download, Package, Loader2,
-  ShieldCheck, Figma, Clock, Bot, Brush,
+  ShieldCheck, Figma, Clock, Bot, Brush, BookOpen,
 } from 'lucide-react';
 import { KButton, KText, KBadge } from '../components/design-system/atoms/index';
 import { KStatCard } from '../components/design-system/molecules/index';
@@ -19,6 +19,7 @@ const stats = [
   { title: 'Átomos', value: 32, icon: <Atom size={20} />, sparkData: [2, 5, 8, 12, 15, 18, 22, 32] },
   { title: 'Moléculas', value: 33, icon: <Layers size={20} />, sparkData: [1, 5, 9, 12, 18, 22, 28, 33] },
   { title: 'Organismos', value: 24, icon: <Box size={20} />, sparkData: [1, 2, 4, 5, 8, 10, 12, 24] },
+  { title: 'Patrones', value: 8, icon: <BookOpen size={20} />, sparkData: [0, 1, 2, 3, 4, 5, 6, 8] },
   { title: 'Templates', value: 4, icon: <Palette size={20} />, sparkData: [0, 1, 2, 3, 4, 4] },
 ];
 
@@ -59,7 +60,7 @@ async function handleDownloadZip() {
   const ds = zip.folder('khor-design-system')!;
 
   // README
-  ds.file('README.md', `# Khor Design System v2.6.0
+  ds.file('README.md', `# Khor Design System v2.7.0
 
 > Fuente única de verdad para construir aplicaciones SaaS Khor.
 
@@ -99,6 +100,8 @@ khor-design-system/
 │   └── index.tsx            ← 33 moléculas
 ├── organisms/
 │   └── index.tsx            ← 24 organismos
+├── patterns/
+│   └── index.ts             ← 8 patrones modulares
 └── README.md
 \`\`\`
 
@@ -252,7 +255,7 @@ export { KFormList } from './KFormList';
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'khor-design-system-v2.6.0.zip';
+  a.download = 'khor-design-system-v2.7.0.zip';
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
@@ -296,7 +299,7 @@ export function HomePage() {
         }} />
         <div style={{ position: 'relative', zIndex: 1 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-            <KBadge khorStatus="info" label="v2.6.0 Stable" />
+            <KBadge khorStatus="info" label="v2.7.0 Stable" />
             <KBadge khorStatus="success" label="Ant Design 5 Sync" />
             <KBadge khorStatus="warning" label="IA Ready" />
           </div>
