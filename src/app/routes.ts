@@ -28,6 +28,7 @@ export const router = createBrowserRouter([
       { path: 'accessibility', Component: AccessibilityPage },
       { path: 'wcag-checker', Component: WCAGCheckerPage },
       { path: 'patterns', Component: PatternsPage },
+      { path: 'patterns/:id', Component: PatternsPage },
       { path: 'theming', Component: ThemingPage },
       { path: 'changelog', Component: ChangelogPage },
       { path: 'figma-export', Component: FigmaExportPage },
