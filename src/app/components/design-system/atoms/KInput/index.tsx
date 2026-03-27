@@ -39,7 +39,15 @@ export const KInput = React.forwardRef<InputRef, KInputProps>(function KInput(
         size={sizeToAntd(size)}
         status={resolvedStatus}
         variant={variant}
-        style={{ fontFamily: font, borderRadius: t.radius.md, ...style }}
+        style={{ 
+          fontFamily: font, 
+          borderRadius: 'var(--khor-density-radius)', 
+          height: 'var(--khor-density-height-input)', 
+          fontSize: 'var(--khor-density-font-body)',
+          paddingLeft: 'var(--khor-density-spacing-md)',
+          paddingRight: 'var(--khor-density-spacing-md)',
+          ...style 
+        }}
         {...rest}
       />
       {feedbackMsg && (
@@ -72,7 +80,15 @@ export const KInputPassword = React.forwardRef<InputRef, KInputPasswordProps>(fu
         size={sizeToAntd(size)}
         status={resolvedStatus}
         variant={variant}
-        style={{ fontFamily: font, borderRadius: t.radius.md, ...style }}
+        style={{ 
+          fontFamily: font, 
+          borderRadius: 'var(--khor-density-radius)', 
+          height: 'var(--khor-density-height-input)', 
+          fontSize: 'var(--khor-density-font-body)',
+          paddingLeft: 'var(--khor-density-spacing-md)',
+          paddingRight: 'var(--khor-density-spacing-md)',
+          ...style 
+        }}
         {...rest}
       />
       {feedbackMsg && (
@@ -100,7 +116,13 @@ export const KInputSearch = React.forwardRef<InputRef, KInputSearchProps>(functi
       ref={ref}
       size={sizeToAntd(size)}
       variant={variant}
-      style={{ fontFamily: font, ...style }}
+      style={{ 
+        fontFamily: font, 
+        borderRadius: 'var(--khor-density-radius)', 
+        height: 'var(--khor-density-height-input)', 
+        fontSize: 'var(--khor-density-font-body)',
+        ...style 
+      }}
       {...rest}
     />
   );

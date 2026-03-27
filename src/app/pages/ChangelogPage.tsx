@@ -43,6 +43,44 @@ const changeTypeConfig: Record<ChangeType, { color: string; bg: string; icon: Re
 
 const changelog: VersionEntry[] = [
   {
+    version: '3.1.0',
+    date: '27 Mar 2026',
+    codename: 'Density',
+    summary: 'Implementación del sistema global de Density Tokens y adición escalada de grillas de validación (State Showcase) a lo largo del sistema de componentes.',
+    highlights: [
+      'Density Tokens: Nuevo sistema unificado para controlar compacidad (.khor-compact) y comodidad (.khor-comfortable).',
+      'Tokens en KButton y KInput: Reemplazo de props estáticas de tamaño por custom properties dependientes de la densidad global en uso.',
+      'Auditoría Exhaustiva V2: Incorporación por Olas de reportes sintéticos de accesibilidad a cada componente documentado.',
+    ],
+    changes: [
+      { type: 'added', component: 'theme.css', description: 'Declaración de variables semánticas de densidad (radius, espaciados, fonts, etc) y modificadores (.khor-compact).' },
+      { type: 'changed', component: 'KButton', componentPath: '/atoms/button', description: 'Atado el box-model base a variables del ecosistema Density (height-input, padding, radius_sm/md/lg).' },
+      { type: 'changed', component: 'KInput', componentPath: '/atoms/input', description: 'Refactorización para consumir el density-system y asegurar un tamaño consistente al agrupar con botones.' },
+    ],
+    stats: { added: 12, changed: 5, fixed: 0 },
+  },
+  {
+    version: '3.0.0',
+    date: '27 Mar 2026',
+    codename: 'World-Class',
+    summary: 'Evolución del Khor Design System a un ecosistema de clase mundial. Implementación de nueva arquitectura de tokens semánticos (superficies, bordes y acciones), motion principles, accesibilidad global exhaustiva, y el nuevo Playground Pro con Live Code integrado.',
+    highlights: [
+      'Tokens Semánticos de 2da Capa: Abstracción robusta para dark mode perfecto (Surface, Text, Border, Action).',
+      'Motion Tokens: Curvas de aceleración (ease, bounce, spring) y durations estandarizados globalmente.',
+      'Accesibilidad Global: Focus rings universales, soporte a prefers-reduced-motion y un skip-to-content incorporado.',
+      'Playground Pro: ComponentDoc evolucionado con "State Showcase" y paneles de Live Code para autogenerar JSX real.',
+      'Internacionalización (i18n): Soporte RTL nativo y font fallbacks reforzados.',
+    ],
+    changes: [
+      { type: 'added', component: 'theme.css', description: 'Declaración de tokens de motion, utilidades A11y (.khor-skip-link, prefers-reduced-motion) y variables semánticas (action, surface, border).' },
+      { type: 'changed', component: 'ComponentDoc', description: 'Nueva arquitectura con pestañas dinámicas de "Live Code", "Resumen de Accesibilidad" y "Estados Exhaustivos".' },
+      { type: 'added', component: 'AtomsPage', description: 'Los 5 átomos principales ahora cuentan con su propio Live Code interactivo para testing sin Storybook.' },
+      { type: 'added', component: 'AccessibilityPage', description: 'Documentación consolidada sobre principios A11y y las directrices WCAG soportadas.' },
+      { type: 'breaking', description: 'Dependencia de evaluadores externos removida; la propia documentación garantiza la fidelidad de estado.' },
+    ],
+    stats: { added: 30, changed: 20, fixed: 5 },
+  },
+  {
     version: '2.7.0',
     date: '26 Mar 2026',
     codename: 'Modularity',

@@ -260,6 +260,60 @@ export function AccessibilityPage() {
         </p>
       </div>
 
+      {/* A11y Principles */}
+      <div style={{
+        backgroundColor: t.colors.neutral[50], borderRadius: t.radius.lg, padding: 24,
+        boxShadow: t.shadows.sm, border: `1px solid ${t.colors.neutral[200]}`, marginBottom: 24,
+      }}>
+        <h3 style={{ margin: '0 0 16px', fontSize: 18, fontWeight: 700, color: t.colors.brand.navy }}>
+          Principios A11y de Khor
+        </h3>
+        <p style={{ fontSize: 14, color: t.colors.neutral[500], margin: '0 0 16px', lineHeight: 1.6 }}>
+          Khor es un sistema <strong>"Accessible by Default"</strong>. Todos los componentes basados en Radix UI heredan comportamiento accesible, y la capa de Khor lo extiende con estándares globales.
+        </p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 12 }}>
+          {[
+            { icon: <Shield size={18} />, title: 'WCAG 2.1 AA', desc: 'Objetivo de conformidad para todos los componentes. Contraste mínimo 4.5:1 para texto normal, 3:1 para texto grande.' },
+            { icon: <Keyboard size={18} />, title: 'Focus Ring Global', desc: 'Anillo de foco consistente (2px solid primary, 2px offset) definido con tokens semánticos en :focus-visible.' },
+            { icon: <Monitor size={18} />, title: 'Reduced Motion', desc: 'Respeta prefers-reduced-motion automáticamente. Todas las animaciones se desactivan para usuarios que lo requieran.' },
+            { icon: <Eye size={18} />, title: 'Skip-to-Content', desc: 'Link invisible disponible vía Tab para saltar directamente al contenido principal. Clase: .khor-skip-link.' },
+          ].map(p => (
+            <div key={p.title} style={{
+              padding: 16, borderRadius: t.radius.md,
+              border: `1px solid ${t.colors.neutral[200]}`, backgroundColor: t.colors.neutral[100],
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8, color: t.colors.brand.navy }}>
+                {p.icon}
+                <span style={{ fontSize: 14, fontWeight: 600 }}>{p.title}</span>
+              </div>
+              <p style={{ fontSize: 13, color: t.colors.neutral[500], margin: 0, lineHeight: 1.5 }}>{p.desc}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* ARIA Checklist for new components */}
+        <div style={{ marginTop: 16, padding: 16, borderRadius: t.radius.md, backgroundColor: `${t.colors.brand.primary}06`, border: `1px solid ${t.colors.brand.primary}15` }}>
+          <h4 style={{ fontSize: 14, fontWeight: 600, color: t.colors.brand.navy, margin: '0 0 8px' }}>Checklist ARIA para Nuevos Componentes</h4>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 4, fontSize: 13, color: t.colors.neutral[500] }}>
+            {[
+              'Navegable con Tab / Shift+Tab',
+              'Activable con Enter y/o Space',
+              'Escape para cerrar (dialogs/menus)',
+              'role semántico apropiado',
+              'aria-label o aria-labelledby',
+              'aria-expanded / aria-selected',
+              'aria-disabled en estado disabled',
+              'Contraste ≥ 4.5:1 (AA)',
+            ].map(item => (
+              <div key={item} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <CheckCircle size={12} style={{ color: t.colors.brand.primary, flexShrink: 0 }} />
+                <span>{item}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
       {/* Score Overview */}
       <div style={{
         display: 'grid',

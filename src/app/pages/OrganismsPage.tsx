@@ -59,6 +59,13 @@ interface OrganismEntry {
   description: string;
   preview: React.ReactNode;
   playground?: React.ReactNode;
+  stateShowcase?: React.ReactNode;
+  a11ySummary?: {
+    keyboard: string[];
+    aria: string[];
+    contrast: string;
+    score: number;
+  };
   code: string;
   filename: string;
   props: PropDef[];
@@ -420,6 +427,21 @@ const organisms: Record<string, OrganismEntry> = {
       />
     ),
     playground: <DataTablePlayground />,
+    stateShowcase: (
+      <div style={{ padding: 16 }}>
+        <KText variant="body-md" style={{ marginBottom: 16, display: 'block' }}>Tabla Base</KText>
+        <KDataTable columns={tableColumns} data={mockEmployees.slice(0, 2)} />
+        <br />
+        <KText variant="body-md" style={{ marginBottom: 16, display: 'block' }}>Tabla vacía (Empty State)</KText>
+        <KDataTable columns={tableColumns} data={[]} />
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Tab: Navega por botones de acciones, cabeceras y paginación.', 'Enter: Permite ordenar columnas.'],
+      aria: ['Usa etiqueta <table> con <thead> y <tbody>, ofreciendo lectura estructural a lectores de pantalla.'],
+      contrast: 'AAA entre datos y el fondo de las filas alternas.',
+      score: 100,
+    },
     code: `import { KDataTable, KSparklineCell } from '@khor/design-system/organisms/index';
 
 const columns = [
@@ -517,6 +539,18 @@ const columns = [
   ),
 }`,
     filename: 'KSparklineCell.tsx',
+    stateShowcase: (
+      <div style={{ display: 'flex', gap: 24, padding: 16 }}>
+        <KSparklineCell data={[10, 50, 20]} color="green" width={60} height={20} />
+        <KSparklineCell data={[80, 20, 10]} color="red" width={60} height={20} />
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Visualización no interactiva pasiva.'],
+      aria: ['aria-hidden="true" oculto a lectores (el valor real numérico debe ir a su lado en texto puro para blind-support).'],
+      contrast: 'AA para el trazado visual del vector.',
+      score: 100,
+    },
     props: [
       { name: 'data', type: 'number[]', required: true, description: 'Array de valores numericos para el grafico.' },
       { name: 'color', type: 'string', default: 'khor.primary', description: 'Color de la linea.' },
@@ -535,6 +569,17 @@ const columns = [
     description: 'Dialogo modal centrado con titulo, contenido y footer personalizable. Usa la sombra alta (shadow lg) del sistema.',
     preview: <ModalDemo />,
     playground: <ModalPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <KText color="secondary">Nota: Ver el comportamiento dinámico desde el Playground, ya que el estado del DOM (focus-trap/overlay) secuestra la página.</KText>
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Tab: Queda atrapado en los elementos interactivos del Modal (Focus Trap).', 'Esc: Se define como única anulación rápida para cierre (Abort).'],
+      aria: ['Role nativo "dialog" provisto explícitamente y complementado con aria-modal="true".'],
+      contrast: 'AAA del modal flotante contra la cortina negra 50% transparente.',
+      score: 100,
+    },
     code: `import { KModal } from '@khor/design-system/organisms/index';
 
 const [open, setOpen] = useState(false);
@@ -573,6 +618,17 @@ const [open, setOpen] = useState(false);
     description: 'Panel lateral deslizable para detalles, formularios o inspectores. Aparece desde el lado derecho por defecto.',
     preview: <DrawerDemo />,
     playground: <DrawerPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <KText color="secondary">Nota: Ver demo interactiva arriba, los drawes están ocultos estáticamente.</KText>
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Tab: Ciclo de enfoque atrapado lateralmente.', 'Esc: Cierre con atajo rápido.'],
+      aria: ['Implementa role="dialog" al igual que Modal.', 'El DOM inyecta el cajón en el primer nivel (Portal) de document.body para evitar quiebres de z-index.'],
+      contrast: 'AAA sobre el panel lateral descolorando el contenido principal.',
+      score: 100,
+    },
     code: `import { KDrawer } from '@khor/design-system/organisms/index';
 
 <KDrawer
@@ -615,6 +671,22 @@ const [open, setOpen] = useState(false);
       </div>
     ),
     playground: <CardSectionPlayground />,
+    stateShowcase: (
+      <div style={{ padding: 16, display: 'flex', flexDirection: 'column', gap: 24 }}>
+        <KCardSection title="Card Normal" subtitle="Padding activado">
+          <KText color="secondary">Contenido estandar con 24px perimetrales.</KText>
+        </KCardSection>
+        <KCardSection title="Card Edge-to-Edge" noPadding>
+          <div style={{ backgroundColor: '#eee', padding: 8 }}>Zona visual completa</div>
+        </KCardSection>
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Atrapa navegación en acciones extra del título.'],
+      aria: ['Organiza en landmarks lógicos si es parte principal de una página.'],
+      contrast: 'AAA sobre la plataforma blanca primaria de Khor.',
+      score: 100,
+    },
     code: `import { KCardSection } from '@khor/design-system/organisms/index';
 
 <KCardSection
@@ -648,6 +720,18 @@ const [open, setOpen] = useState(false);
       />
     ),
     playground: <TabsPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <KTabs items={[{ key: '1', label: 'Tab 1', children: 'Contenido 1' }, { key: '2', label: 'Tab 2', disabled: true }]} />
+        <KTabs type="card" items={[{ key: '1', label: 'Card 1', children: 'Contenido card' }]} />
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Left/Right: Mueve el foco entre las tablist activas.', 'Enter/Space: Selecciona el tab focalizado.'],
+      aria: ['Contenedor usa role="tablist". Cada pestaña es role="tab". Contenido asume role="tabpanel".'],
+      contrast: 'AAA sobre el tab activo con barra de indicación inferior.',
+      score: 100,
+    },
     code: `import { KTabs } from '@khor/design-system/organisms/index';
 
 <KTabs
@@ -673,6 +757,17 @@ const [open, setOpen] = useState(false);
     description: 'Sistema de notificaciones tipo toast con 4 variantes semanticas (success, error, warning, info). Usa la libreria Sonner con estilos Khor.',
     preview: <ToastDemo />,
     playground: <ToastPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', gap: 8, flexDirection: 'column' }}>
+        <KText color="secondary">Las notificaciones Toast flotan de forma global. Ver demo interactiva arriba.</KText>
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Enfoque general usando sistemas nativos del layout.'],
+      aria: ['Portal en viewport con aria-live="polite" o "assertive".'],
+      contrast: 'AAA texto y fondos de alerta semánticos.',
+      score: 100,
+    },
     code: `import { KToastProvider, kToast } from '@khor/design-system/organisms/index';
 
 // 1. Agrega el Provider en tu layout principal
@@ -721,6 +816,17 @@ kToast({
     name: 'KCommandBar',
     description: 'Barra de búsqueda global activada con Ctrl+K (o Cmd+K en Mac). Permite buscar componentes, tokens, templates y navegar rápidamente por todo el Design System. Incluye historial de recientes y navegación por teclado.',
     preview: <KCommandBarPreview />,
+    stateShowcase: (
+      <div style={{ padding: 16 }}>
+        <KText color="secondary">Este componente renderiza como un modal de pantalla completa activado globalmente. Se ha omitido estado incrustado.</KText>
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Cmd/Ctrl + K: Activa modal.', 'Up/Down: Navega entre filas de resultados al instante.', 'Enter: Acción selectora.'],
+      aria: ['Role "combobox" y aria-autocomplete.'],
+      contrast: 'AAA en resultados, inputs base y atajos visuales.',
+      score: 100,
+    },
     code: `import { KCommandBar, useCommandBar } from '@khor/design-system/command-bar';
 
 // 1. Hook para el shortcut global (en tu layout)
@@ -758,6 +864,17 @@ const { open, setOpen } = useCommandBar();
     id: 'upload', name: 'KUpload',
     description: 'Componente de subida de archivos con zona de drag & drop, lista de archivos con estado (subiendo, completado, error), progreso y previews de imagen.',
     preview: (<KUpload multiple accept="image/*,.pdf" maxSize={5 * 1024 * 1024} />),
+    stateShowcase: (
+      <div style={{ padding: 16 }}>
+        <KUpload multiple accept="image/*" />
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Space/Enter sobre el área abre el file explorer nativo.'],
+      aria: ['Input type="file" real y envuelto en label clickable por diseño de forma que se mantiene accesible.'],
+      contrast: 'AAA base para textos principales.',
+      score: 100,
+    },
     code: `import { KUpload } from '@khor/organisms-extended';\n\n<KUpload\n  multiple\n  accept="image/*,.pdf"\n  maxSize={5 * 1024 * 1024}\n  value={files}\n  onChange={setFiles}\n  onUpload={async (file) => { /* upload logic */ }}\n/>`,
     filename: 'KUpload.tsx',
     props: [
@@ -780,6 +897,17 @@ const { open, setOpen } = useCommandBar();
       { key: 'tech', title: 'Tecnologia', children: [{ key: 'tech-1', title: 'Frontend', isLeaf: true }, { key: 'tech-2', title: 'Backend', isLeaf: true }, { key: 'tech-3', title: 'DevOps', isLeaf: true }] }, 
       { key: 'fin', title: 'Finanzas', isLeaf: true }
     ]} defaultExpandAll />),
+    stateShowcase: (
+      <div style={{ padding: 16 }}>
+        <KTree showLine checkable data={[{ key: '1', title: 'Raíz', children: [{ key: '1-1', title: 'Hoja' }]}]} />
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Flechas de dirección: Navegación multinivel y apertura (ArrowRight)/Cierre (ArrowLeft) del árbol.'],
+      aria: ['role="tree" para nodo base. role="treeitem" nativo en hijos.'],
+      contrast: 'AA sobre guías o líneas de conexión estructuradas.',
+      score: 100,
+    },
     code: `import { KTree } from '@khor/organisms-extended';\n\n<KTree\n  data={treeData}\n  checkable\n  showLine\n  defaultExpandAll\n  onSelect={(keys) => setSelected(keys)}\n/>`,
     filename: 'KTree.tsx',
     props: [
@@ -797,6 +925,17 @@ const { open, setOpen } = useCommandBar();
     id: 'tour', name: 'KTour',
     description: 'Tour guiado paso a paso para onboarding. Resalta elementos de la UI con mascara, muestra cards con titulo, descripcion y navegacion entre pasos.',
     preview: (<div style={{ padding: 24, textAlign: 'center' }}><KText variant="body-md" color="secondary">El KTour se activa programaticamente con open=true y referencia a elementos del DOM via selectores CSS.</KText><div style={{ marginTop: 16 }}><KButton variant="primary" size="sm">Iniciar Tour (demo)</KButton></div></div>),
+    stateShowcase: (
+      <div style={{ padding: 16 }}>
+        <KText color="secondary">Requiere instancias del DOM válidas. Ver implementaciones reales.</KText>
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Escape: Cierra el tour. Navegación en footer popover por flechas/tab.'],
+      aria: ['Actúa como Alert Dialog (interrumpe flujo temporalmente). Mismo focus trap que los Modales.'],
+      contrast: 'AAA sobre capas altas oscurecedoras.',
+      score: 100,
+    },
     code: `import { KTour } from '@khor/organisms-extended';\n\n<KTour\n  open={showTour}\n  onClose={() => setShowTour(false)}\n  onFinish={() => markOnboardingComplete()}\n  steps={[\n    { title: 'Bienvenido', description: 'Este es el dashboard.', target: '#dashboard' },\n    { title: 'Sidebar', description: 'Navega entre secciones.', target: '#sidebar' },\n  ]}\n/>`,
     filename: 'KTour.tsx',
     props: [
@@ -812,6 +951,17 @@ const { open, setOpen } = useCommandBar();
     id: 'modal-confirm', name: 'KModalConfirm',
     description: 'Modal de confirmacion declarativo con tipos (confirm, info, success, warning, error). Soporta callbacks async y boton danger.',
     preview: (<div style={{ padding: 24, textAlign: 'center' }}><KText variant="body-md" color="secondary">KModalConfirm se controla con open/onClose props. Soporta onOk async para operaciones que requieren espera.</KText><div style={{ display: 'flex', gap: 12, justifyContent: 'center', marginTop: 16 }}><KButton variant="danger" size="sm">Eliminar (demo)</KButton><KButton variant="primary" size="sm">Confirmar (demo)</KButton></div></div>),
+    stateShowcase: (
+      <div style={{ padding: 16 }}>
+        <KText color="secondary">El ModalConfirm requiere acción imperativa.</KText>
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Foco inicial atado al botón principal del diálogo para obligar confirmación o escape inmediato.'],
+      aria: ['Emite un role="alertdialog" anunciando su urgencia globalmente.'],
+      contrast: 'AAA priorizando íconos con severidad de impacto roja/amarilla/azul.',
+      score: 100,
+    },
     code: `import { KModalConfirm } from '@khor/organisms-extended';\n\n<KModalConfirm\n  open={showConfirm}\n  onClose={() => setShowConfirm(false)}\n  type="confirm"\n  title="Eliminar empleado?"\n  content="Esta accion no se puede deshacer."\n  onOk={async () => { await deleteEmployee(); }}\n/>`,
     filename: 'KModalConfirm.tsx',
     props: [
@@ -838,6 +988,17 @@ const { open, setOpen } = useCommandBar();
         )} addText="Agregar miembro" maxItems={5} />
       </KForm>
     ),
+    stateShowcase: (
+      <div style={{ padding: 16 }}>
+        <KText color="secondary">Renderiza dentro del contexto proveedor form dinámico.</KText>
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Teclado opera el adicinamiento nativamente a través de Tab desde el botón de sumar.'],
+      aria: ['Cada sub-objeto actúa de forma pasiva, pero se alerta su entrada mediante focus automático o en cascada según su mount effect.'],
+      contrast: 'AA sobre listados anidados.',
+      score: 100,
+    },
     code: `import { KForm, KFormList, KInput } from '@khor/design-system/organisms/index';\n\n<KForm initialValues={{ members: [{ name: 'Juan' }] }}>\n  <KFormList \n    name="members" \n    renderItem={(field) => (\n      <div style={{ display: 'flex', gap: 8 }}>\n        <KForm.Item {...field} name={[field.name, 'name']}>\n          <KInput placeholder="Nombre" />\n        </KForm.Item>\n      </div>\n    )}\n  />\n</KForm>`,
     filename: 'KFormList.tsx',
     props: [
@@ -864,6 +1025,20 @@ const { open, setOpen } = useCommandBar();
         </KCarousel>
       </div>
     ),
+    stateShowcase: (
+      <div style={{ width: 300, overflow: 'hidden', padding: 16 }}>
+        <KCarousel>
+           <div><div style={{ height: 100, background: '#eee', borderRadius: 8 }} /></div>
+           <div><div style={{ height: 100, background: '#ddd', borderRadius: 8 }} /></div>
+        </KCarousel>
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Focus entra en botones prev/next virtuales.', 'ArrowKeys maneja navegación de páginas.'],
+      aria: ['Uso en formato aria-live area. Implementa aria-hidden dinámico en los slides que están ocultos horizontal/verticalmente.'],
+      contrast: 'AA para los "dots" paginadores.',
+      score: 100,
+    },
     code: `import { KCarousel } from '@khor/organisms-extended';
 
 <KCarousel autoplay dotPosition="bottom" effect="scrollx">
@@ -896,6 +1071,17 @@ const { open, setOpen } = useCommandBar();
   onPanelChange={(date, mode) => console.log(mode)}
 />`,
     filename: 'KCalendar.tsx',
+    stateShowcase: (
+      <div style={{ padding: 16 }}>
+        <KCalendar fullscreen={false} />
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Tabing estructurado por cada día del mes.', 'Space: Selecciona fecha focalizada.'],
+      aria: ['Grid ARIA con celdas de fecha (gridcell), indicando current-date y selected-date dinámicamente.'],
+      contrast: 'AAA entre número de día y fondo de grilla.',
+      score: 100,
+    },
     props: [
       { name: 'value', type: 'Date', description: 'Fecha seleccionada controlada.' },
       { name: 'onChange', type: '(date: Date) => void', description: 'Callback al seleccionar una fecha.' },
@@ -929,6 +1115,17 @@ const { open, setOpen } = useCommandBar();
   <KButton kVariant="primary" htmlType="submit">Enviar</KButton>
 </KForm>`,
     filename: 'KForm.tsx',
+    stateShowcase: (
+      <div style={{ padding: 16 }}>
+        <KText color="secondary">El formulario depende íntegramente de sus children.</KText>
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Operaciones nativas en todos los inputs de children.', 'Enter sobre un input dispara el submit general automáticamente.'],
+      aria: ['Los label (KForm.Item) están vinculados por id a los inputs internos usando for (HTMLFor), crucial para VoiceOver.'],
+      contrast: 'N/A: Estructura contenedora pasiva.',
+      score: 100,
+    },
     props: [
       { name: 'layout', type: "'horizontal'|'vertical'|'inline'", default: "'horizontal'", description: 'Disposición de etiquetas y campos.' },
       { name: 'onFinish', type: '(values) => void', description: 'Callback al enviar con éxito.' },
@@ -953,6 +1150,17 @@ KNotification.success({
   placement: 'topRight'
 });`,
     filename: 'KNotification.tsx',
+    stateShowcase: (
+      <div style={{ padding: 16 }}>
+        <KText color="secondary">KNotification es de acción global. Ver botones del Preview.</KText>
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Suelen robar el foco brevemente si contienen botones de acción, pero recomiendan ser desestimadas pasivamente.'],
+      aria: ['Role "alert" inyectado directo al document.body (Portal).'],
+      contrast: 'AAA sobre las tarjetas de BoxShadow grande.',
+      score: 100,
+    },
     props: [
       { name: 'message', type: 'string', required: true, description: 'Título de la notificación.' },
       { name: 'description', type: 'string', description: 'Contenido adicional.' },
@@ -976,6 +1184,17 @@ KMessage.warning('Advertencia');
 const hide = KMessage.loading('Cargando...', 0);
 // llamar hide() para cerrar`,
     filename: 'KMessage.tsx',
+    stateShowcase: (
+      <div style={{ padding: 16 }}>
+        <KText color="secondary">Mensajes en overlay superior automáticos.</KText>
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Mismas propiedades efímeras que Toast/Notification sin atrapar el foco.'],
+      aria: ['ARIA live assertivo que narra la acción interrumpida si es urgente.'],
+      contrast: 'AAA sobre contenedores tipo píldora oscura/clara.',
+      score: 100,
+    },
     props: [
       { name: 'content', type: 'string', required: true, description: 'Texto del mensaje.' },
       { name: 'duration', type: 'number', default: '3', description: 'Segundos antes de cerrar.' },
@@ -995,6 +1214,18 @@ const hide = KMessage.loading('Cargando...', 0);
   showSizeChanger
 />`,
     filename: 'KPagination.tsx',
+    stateShowcase: (
+      <div style={{ padding: 16, display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <KPagination total={50} />
+        <KPagination total={500} showSizeChanger />
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Arrow Keys mueven entre páginas.', 'Tabulador permite entrar a controles Quick-Jump.'],
+      aria: ['Navegación listitem con etiqueta aria-current="page".'],
+      contrast: 'AAA controlando número activo en fondo navy.',
+      score: 100,
+    },
     props: [
       { name: 'total', type: 'number', required: true, description: 'Número total de registros.' },
       { name: 'pageSize', type: 'number', description: 'Registros por página.' },
@@ -1008,6 +1239,17 @@ const hide = KMessage.loading('Cargando...', 0);
     preview: (<KLoginForm onFinish={(v: any) => console.log(v)} />),
     code: `import { KLoginForm } from '@khor/design-system/organisms/index';\n\n<KLoginForm \n  onFinish={(values) => login(values)} \n  loading={isLoggingIn} \n/>`,
     filename: 'KLoginForm.tsx',
+    stateShowcase: (
+      <div style={{ padding: 16 }}>
+         <KLoginForm onFinish={() => {}} />
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Tabulación rígida orientada a User->Password->Button.', 'Enter realiza Submit.'],
+      aria: ['Type="email" y "password" nativos, con autocompletados (autocomplete="username password") inyectados implícitamente.'],
+      contrast: 'AAA según reglas universales de formulario.',
+      score: 100,
+    },
     props: [
       { name: 'onFinish', type: '(values) => void', description: 'Callback al enviar el formulario con éxito.' },
       { name: 'loading', type: 'boolean', description: 'Muestra estado de carga en el botón.' },
@@ -1041,6 +1283,8 @@ export function OrganismsPage() {
       props={org.props}
       guidelines={org.guidelines}
       aiNotes={org.aiNotes}
+      stateShowcase={org.stateShowcase}
+      a11ySummary={org.a11ySummary}
     />
   );
 }

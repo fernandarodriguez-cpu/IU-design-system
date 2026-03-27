@@ -60,12 +60,17 @@ async function handleDownloadZip() {
   const ds = zip.folder('khor-design-system')!;
 
   // README
-  ds.file('README.md', `# Khor Design System v2.7.0
+  ds.file('README.md', `# Khor Design System v3.1.0
 
 > Fuente única de verdad para construir aplicaciones SaaS Khor.
 
 **Stack:** React + Radix UI + Tailwind CSS v4 + Lucide + Recharts + Sonner
 **Generado:** ${new Date().toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' })}
+
+## Novedades (v3.1.0 - Density Update)
+- **Density Tokens**: Soporte para escalas \`.khor-compact\` y \`.khor-comfortable\` que ajustan el padding, fuentes y altura de los botones e inputs automáticamente.
+- **Playground Pro V2**: Los componentes ahora incluyen el panel de validación interactiva *State Showcase* (Grilla visual de estados) y el *A11y Summary* para WCAG.
+- **Tokens Semánticos**: Uso de \`var(--khor-surface-page)\`, \`var(--khor-action-primary)\` entre otros, para consistencia perfecta en Dark Mode.
 
 ## Instalación
 
@@ -286,7 +291,7 @@ export const categories = ['Todos', ...new Set(patterns.map((p) => p.category))]
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'khor-design-system-v2.7.0.zip';
+  a.download = 'khor-design-system-v3.1.0.zip';
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
@@ -330,7 +335,7 @@ export function HomePage() {
         }} />
         <div style={{ position: 'relative', zIndex: 1 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-            <KBadge khorStatus="info" label="v2.7.0 Stable" />
+            <KBadge khorStatus="info" label="v3.1.0 Stable" />
             <KBadge khorStatus="success" label="Ant Design 5 Sync" />
             <KBadge khorStatus="warning" label="IA Ready" />
           </div>

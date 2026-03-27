@@ -17,7 +17,7 @@ import { patterns } from '../patterns/index';
 const t = khorTokens;
 
 /* ─── Version (must match ChangelogPage & AppShell) ─── */
-const KHOR_VERSION = '2.7.0';
+const KHOR_VERSION = '3.1.0';
 
 /* ─── Sections config ───────────────────────── */
 interface SectionConfig {

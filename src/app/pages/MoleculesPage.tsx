@@ -22,7 +22,7 @@ import {
   Users, DollarSign, TrendingUp, Calendar, Home,
   Settings, FileText, Inbox, Search, BarChart3,
   Edit, Trash2, Copy, Share2, MoreHorizontal, Info,
-  CheckCircle, Clock, AlertTriangle, GitCommit, Tag,
+  CheckCircle, Clock, AlertTriangle, GitCommit, Tag, Bell,
 } from 'lucide-react';
 import { khorTokens } from '../theme/khor-theme';
 
@@ -37,6 +37,13 @@ interface MoleculeEntry {
   props: PropDef[];
   guidelines?: string[];
   aiNotes?: string;
+  stateShowcase?: React.ReactNode;
+  a11ySummary?: {
+    keyboard: string[];
+    aria: string[];
+    contrast: string;
+    score: number;
+  };
 }
 
 function StatCardPlayground() {
@@ -929,6 +936,19 @@ const molecules: Record<string, MoleculeEntry> = {
       </div>
     ),
     playground: <FormFieldPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
+        <div style={{ flex: 1, minWidth: 200 }}><KFormField label="Default" hint="Ayuda"><KInput placeholder="Texto..." /></KFormField></div>
+        <div style={{ flex: 1, minWidth: 200 }}><KFormField label="Requerido" required><KInput placeholder="Obligatorio" /></KFormField></div>
+        <div style={{ flex: 1, minWidth: 200 }}><KFormField label="Error Visual" error="Valor inválido"><KInput defaultValue="123" /></KFormField></div>
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['El campo de entrada envuelto hereda su teclado natural.'],
+      aria: ['Enlaza dinámicamente el "id" del input con su "label for".', 'Inyecta aria-invalid y asocia el error con aria-describedby.'],
+      contrast: 'AAA sobre etiquetas y textos de error.',
+      score: 100,
+    },
     code: `import { KFormField } from '@khor/design-system/molecules/index';
 import { KInput } from '@khor/design-system/atoms/index';
 
@@ -977,6 +997,19 @@ import { KInput } from '@khor/design-system/atoms/index';
       </div>
     ),
     playground: <SearchInputPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}><span style={{ width: 80, fontSize: 11, color: khorTokens.colors.neutral[500] }}>Default</span><KSearchInput placeholder="Buscar..." /></div>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}><span style={{ width: 80, fontSize: 11, color: khorTokens.colors.neutral[500] }}>Small</span><KSearchInput placeholder="En tabla..." size="sm" /></div>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}><span style={{ width: 80, fontSize: 11, color: khorTokens.colors.neutral[500] }}>Large</span><KSearchInput placeholder="Búsqueda global..." size="lg" /></div>
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Enter: Ejecuta la búsqueda o presiona el enterButton.', 'Esc: Limpia el contenido si allowClear está activo.'],
+      aria: ['Incluye nativamente aria-label en el icono de limpiar.', 'role="searchbox" dictado implícitamente.'],
+      contrast: 'AAA entre placeholder gris y padding interno.',
+      score: 95,
+    },
     code: `import { KSearchInput } from '@khor/design-system/molecules/index';
 
 <KSearchInput
@@ -1006,6 +1039,19 @@ import { KInput } from '@khor/design-system/atoms/index';
       </div>
     ),
     playground: <StatCardPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
+        <KStatCard title="Positivo" value="1,247" change={12.5} changeLabel="vs ayer" />
+        <KStatCard title="Negativo" value="$2.4M" change={-3.2} changeLabel="vs ayer" />
+        <KStatCard title="Neutro (0%)" value="94.5%" change={0} />
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Completamente estático por defecto (no interactivo).'],
+      aria: ['El gráfico sparkline interno usa aria-hidden="true" para no estorbar al lector, los datos numéricos explican todo.'],
+      contrast: 'AAA en valor numérico. AA en el texto de tendencia.',
+      score: 100,
+    },
     code: `import { KStatCard } from '@khor/design-system/molecules/index';
 
 <KStatCard
@@ -1046,6 +1092,19 @@ import { KInput } from '@khor/design-system/atoms/index';
       </div>
     ),
     playground: <NavItemPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', backgroundColor: khorTokens.colors.brand.navy, padding: 16, borderRadius: khorTokens.radius.md }}>
+        <div style={{ minWidth: 150 }}><KNavItem icon={<Home size={18} />} label="Default" /></div>
+        <div style={{ minWidth: 150 }}><KNavItem icon={<Users size={18} />} label="Active" active /></div>
+        <div style={{ minWidth: 150 }}><KNavItem icon={<Bell size={18} />} label="Con Badge" badge={5} /></div>
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Tab: Entra al item.', 'Enter/Space: Ejecuta onClick simulado como Link.'],
+      aria: ['role="menuitem" o enlace. Atributo aria-current="page" recomendado si active=true.'],
+      contrast: 'AAA sobre el fondo Navy institucional.',
+      score: 100,
+    },
     code: `import { KNavItem } from '@khor/design-system/molecules/index';
 
 <KNavItem
@@ -1097,6 +1156,19 @@ import { KInput } from '@khor/design-system/atoms/index';
       </div>
     ),
     playground: <SelectFieldPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+        <div style={{ width: 180 }}><KSelectField label="Normal" placeholder="Opciones..." options={[{label:'A', value:1}]} /></div>
+        <div style={{ width: 180 }}><KSelectField label="Disabled" disabled placeholder="Sin acceso" options={[]} /></div>
+        <div style={{ width: 180 }}><KSelectField label="Con Error" error="Inválido" options={[{label:'A', value:1}]} /></div>
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Up/Down: Navega entre opciones.', 'Enter: Confirma selección.', 'Esc: Cierra dropdown.'],
+      aria: ['role="combobox", aria-expanded y aria-controls vinculados al listbox.'],
+      contrast: 'AAA. El borde de foco es del color Primary Khor.',
+      score: 100,
+    },
     code: `import { KSelectField } from '@khor/design-system/molecules/index';
 
 <KSelectField
@@ -1140,6 +1212,19 @@ import { KInput } from '@khor/design-system/atoms/index';
       </div>
     ),
     playground: <UserCellPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <KUserCell name="Maria Garcia" role="Admin" />
+        <KUserCell name="Juan Perez" avatar="https://i.pravatar.cc/150?u=juan" status="online" />
+        <KUserCell name="Pedro Soto" role="Deshabilitado" status="offline" />
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Tab: Atrapa el foco si tiene onClick (convirtiéndose en botón).'],
+      aria: ['Avatar con alt="" si es decorativo o iniciales.', 'Si es clickeable, asume role="button".'],
+      contrast: 'AAA entre el nombre principal y fondo.',
+      score: 100,
+    },
     code: `import { KUserCell } from '@khor/design-system/molecules/index';
 
 <KUserCell
@@ -1174,6 +1259,17 @@ import { KInput } from '@khor/design-system/atoms/index';
       />
     ),
     playground: <EmptyStatePlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <KEmptyState icon={<Inbox size={32} />} title="Sin Datos" description="Aún no hay registros." />
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['El botón de acción es 100% interactivo y atrapa el foco por defecto.'],
+      aria: ['El icono usa aria-hidden="true" ya que el título explica el estado.'],
+      contrast: 'AAA en títulos. AA en descripciones corporativas.',
+      score: 100,
+    },
     code: `import { KEmptyState } from '@khor/design-system/molecules/index';
 
 <KEmptyState
@@ -1201,6 +1297,17 @@ import { KInput } from '@khor/design-system/atoms/index';
     description: 'Sistema de navegacion jerarquica para indicar la posicion actual en la aplicacion.',
     preview: <KBreadcrumb items={[{ title: 'Inicio' }, { title: 'Empleados' }, { title: 'Maria Garcia' }]} />,
     playground: <BreadcrumbPlayground />,
+    stateShowcase: (
+      <div style={{ padding: 16, backgroundColor: khorTokens.colors.neutral[50], borderRadius: khorTokens.radius.md }}>
+        <KBreadcrumb items={[{ title: 'Inicio', href: '/' }, { title: 'Configuración', href: '/settings' }, { title: 'Perfil' }]} />
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Tab: Navega por cada enlace del breadcrumb.'],
+      aria: ['role="navigation" y aria-label="breadcrumb" inyectados nativamente.', 'aria-current="page" en el último elemento (no clickeable).'],
+      contrast: 'AA sobre fondo blanco/gris.',
+      score: 100,
+    },
     code: `import { KBreadcrumb } from '@khor/design-system/molecules/index';
 
 <KBreadcrumb
@@ -1236,6 +1343,17 @@ import { KInput } from '@khor/design-system/atoms/index';
       </div>
     ),
     playground: <StepsPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 24, padding: '16px 0', overflowX: 'auto' }}>
+        <KSteps current={1} items={[{ title: 'Paso 1' }, { title: 'Paso 2', description: 'Activo' }, { title: 'Paso 3' }]} />
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Tab: Foco en pasos individuales si onChange está definido (interactivos).'],
+      aria: ['aria-current="step" en el paso activo.', 'aria-label indicando progreso (ej. Paso 2 de 3).'],
+      contrast: 'AAA sobre anillos azules/primarios de progreso.',
+      score: 100,
+    },
     code: `import { KSteps } from '@khor/design-system/molecules/index';
 
 <KSteps
@@ -1279,6 +1397,19 @@ import { KInput } from '@khor/design-system/atoms/index';
       </div>
     ),
     playground: <DropdownPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', gap: 16 }}>
+        <KDropdownMenu menu={{ items: [{ key: '1', label: 'Opción 1' }, { key: '2', label: 'Eliminar', danger: true }] }}>
+          <KButton variant="outline">Ver Menú</KButton>
+        </KDropdownMenu>
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Space/Enter: Abre el menú.', 'Up/Down: Navega entre items.', 'Esc: Cierra el menú.'],
+      aria: ['role="menu" y role="menuitem" manejados estrictamente por Radix UI.', 'aria-haspopup="menu" y aria-expanded en el trigger.'],
+      contrast: 'AAA sobre fondo blanco. AAA en texto danger.',
+      score: 100,
+    },
     code: `import { KDropdownMenu } from '@khor/design-system/molecules/index';
 
 <KDropdownMenu 
@@ -1323,6 +1454,18 @@ import { KInput } from '@khor/design-system/atoms/index';
       </div>
     ),
     playground: <PopoverPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', gap: 16 }}>
+        <KPopover content={<div>Contenido</div>} placement="top" trigger="hover"><KButton variant="outline">Top Hover</KButton></KPopover>
+        <KPopover content={<div>Acción Requerida</div>} placement="bottom" trigger="click"><KButton variant="primary">Bottom Click</KButton></KPopover>
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Space/Enter: Si el trigger es click, lo expone.', 'Esc: Cierra el popover abierto y retorna foco.'],
+      aria: ['El trigger usa aria-expanded y aria-controls.', 'El panel usa role="dialog" o "tooltip".'],
+      contrast: 'AAA sobre fondos con elevación (shadow overlay).',
+      score: 100,
+    },
     code: `import { KPopover } from '@khor/design-system/molecules/index';
 
 <KPopover
@@ -1360,6 +1503,24 @@ import { KInput } from '@khor/design-system/atoms/index';
       </div>
     ),
     playground: <AccordionPlayground />,
+    stateShowcase: (
+      <div style={{ width: '100%' }}>
+        <KAccordion
+          items={[
+            { key: '1', label: 'Cerrado por defecto', children: <p>Info 1</p> },
+            { key: '2', label: 'Abierto por defecto', children: <p>Info 2</p> },
+            { key: '3', label: 'Deshabilitado', collapsible: 'disabled', children: <p>Info 3</p> }
+          ]}
+          defaultActiveKey={['2']}
+        />
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Tab: Navega por los headers.', 'Space/Enter: Expande o colapsa.'],
+      aria: ['Headers nativos con aria-expanded.', 'aria-controls id vincula al panel con role="region".'],
+      contrast: 'AAA entre texto del header y fondo neutral.',
+      score: 100,
+    },
     code: `import { KAccordion } from '@khor/design-system/molecules/index';
 
 <KAccordion
@@ -1387,6 +1548,19 @@ import { KInput } from '@khor/design-system/atoms/index';
     code: `import { KInputNumber } from '@khor/molecules-extended';\n\n<KInputNumber value={qty} onChange={setQty} min={0} max={100} />`,
     filename: 'KInputNumber.tsx',
     playground: <InputNumberPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', gap: 16, alignItems: 'center', flexWrap: 'wrap' }}>
+        <div style={{ width: 140 }}><KInputNumber defaultValue={42} /></div>
+        <div style={{ width: 140 }}><KInputNumber disabled defaultValue={10} /></div>
+        <div style={{ width: 140 }}><KInputNumber status="error" defaultValue={0} /></div>
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Up/Down: Incrementa o decrementa según paso (step).'],
+      aria: ['role="spinbutton", aria-valuenow, aria-valuemin, aria-valuemax vinculados.'],
+      contrast: 'AAA con bordes claros y texto input.',
+      score: 100,
+    },
     props: [
       { name: 'value', type: 'number', description: 'Valor controlado.' },
       { name: 'onChange', type: '(v: number) => void', description: 'Callback al cambiar.' },
@@ -1407,6 +1581,18 @@ import { KInput } from '@khor/design-system/atoms/index';
     code: `import { KSegmented } from '@khor/molecules-extended';\n\n<KSegmented options={['Diario','Semanal','Mensual']} value={period} onChange={setPeriod} />`,
     filename: 'KSegmented.tsx',
     playground: <SegmentedPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 300 }}>
+        <KSegmented options={[{ label: 'A', value: 'A' }, { label: 'B', value: 'B' }]} value="A" />
+        <KSegmented disabled options={[{ label: 'X', value: 'X' }, { label: 'Y', value: 'Y' }]} value="X" />
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Left/Right: Mueve el foco y selección entre segmentos instantáneamente.'],
+      aria: ['Actúa como role="radiogroup" y items con role="radio" más aria-checked.'],
+      contrast: 'AAA fondo de pastilla sobre overlay gris ligero.',
+      score: 100,
+    },
     props: [
       { name: 'options', type: '(string | KSegmentedOption)[]', required: true, description: 'Opciones a mostrar.' },
       { name: 'value', type: 'string', description: 'Valor seleccionado.' },
@@ -1431,6 +1617,18 @@ import { KInput } from '@khor/design-system/atoms/index';
 />`,
     filename: 'KAutocomplete.tsx',
     playground: <AutocompletePlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', gap: 16, flexDirection: 'column', maxWidth: 350 }}>
+        <KAutocomplete placeholder="Normal..." options={[{ value: 'abc', label: 'Opción ABC', description: 'desc' }]} />
+        <KAutocomplete loading placeholder="Cargando sugerencias..." options={[]} />
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Up/Down: Navega sugerencias.', 'Enter: Confirma input.', 'Esc: Cierra listbox.'],
+      aria: ['role="combobox", aria-autocomplete="list".'],
+      contrast: 'AAA',
+      score: 100,
+    },
     props: [
       { name: 'options', type: 'KAutocompleteOption[]', required: true, description: 'Opciones con value, label y description.' },
       { name: 'onSelect', type: '(opt: KAutocompleteOption) => void', description: 'Callback al seleccionar.' },
@@ -1454,6 +1652,19 @@ import { KInput } from '@khor/design-system/atoms/index';
 />`,
     filename: 'KDatePicker.tsx',
     playground: <DatePickerPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+        <KDatePicker />
+        <KDatePicker picker="month" />
+        <KDatePicker disabled />
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Tab: Entra al input.', 'Enter: Abre el calendario.', 'Flechas: Permite navegar días en el panel abierto.'],
+      aria: ['El input tiene role="combobox" de forma implícita.', 'El panel del calendario anuncia los días y meses navegados.'],
+      contrast: 'AAA sobre días hábiles. AA sobre días fuera de mes.',
+      score: 100,
+    },
     props: [
       { name: 'value', type: 'Date', description: 'Fecha seleccionada.' },
       { name: 'onChange', type: '(d: Date) => void', description: 'Callback.' },
@@ -1477,6 +1688,18 @@ import { KInput } from '@khor/design-system/atoms/index';
 />`,
     filename: 'KDateRangePicker.tsx',
     playground: <DatePickerPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', gap: 16, flexDirection: 'column' }}>
+        <KDateRangePicker />
+        <KDateRangePicker disabled />
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Tab: Navega entre input de inicio y fin.', 'Flechas: Permiten seleccionar los rangos.'],
+      aria: ['Ambos inputs están emparejados bajo aria-labels descriptivos de rango.'],
+      contrast: 'AAA entre inputs. AAA panel.',
+      score: 100,
+    },
     props: [
       { name: 'value', type: 'KDateRange', description: 'Rango { from, to }.' },
       { name: 'onChange', type: '(r: KDateRange) => void', description: 'Callback.' },
@@ -1499,6 +1722,18 @@ import { KInput } from '@khor/design-system/atoms/index';
 />`,
     filename: 'KSelectAdvanced.tsx',
     playground: <SelectAdvancedPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', gap: 16, flexDirection: 'column' }}>
+        <KSelectAdvanced mode="multiple" options={[{ label: 'A', value: '1' }, { label: 'B', value: '2' }]} value={['1', '2']} />
+        <KSelectAdvanced mode="tags" disabled options={[]} />
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Backspace: Elimina el último tag seleccionado si el input está vacío.', 'Enter: Añade el tag escrito en mode="tags".'],
+      aria: ['Cada chip (tag) seleccionado actúa como un elemento individual aria-label.'],
+      contrast: 'AAA en los tags. AAA en input libre.',
+      score: 100,
+    },
     props: [
       { name: 'options', type: 'KSelectAdvancedOption[]', required: true, description: 'Opciones a mostrar.' },
       { name: 'mode', type: "'single' | 'multiple' | 'tags'", default: "'single'", description: 'Modo de selección.' },
@@ -1523,6 +1758,18 @@ import { KInput } from '@khor/design-system/atoms/index';
 />`,
     filename: 'KDescriptions.tsx',
     playground: <DescriptionsPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 24, width: '100%' }}>
+        <KDescriptions title="Default" items={[{ label: 'Usuario', children: 'Dani' }]} />
+        <KDescriptions bordered title="Bordered" items={[{ label: 'ID', children: '001' }]} />
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Contenido puramente estático/de lectura.'],
+      aria: ['Se convierte a estructura semántica de tabla (table/tr/th/td) garantizando lectura tabular perfecta en screen readers.'],
+      contrast: 'AAA en los labels (color navy text).',
+      score: 100,
+    },
     props: [
       { name: 'items', type: 'KDescriptionItem[]', required: true, description: 'Lista de elementos (label, children, span).' },
       { name: 'title', type: 'ReactNode', description: 'Título de la sección.' },
@@ -1546,6 +1793,18 @@ import { KInput } from '@khor/design-system/atoms/index';
 </KPopconfirm>`,
     filename: 'KPopconfirm.tsx',
     playground: <PopconfirmPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', gap: 16 }}>
+        <KPopconfirm title="¿Confirmar acción?"><KButton>Base</KButton></KPopconfirm>
+        <KPopconfirm title="¿Eliminar definitivamente?" okText="Borrar" cancelText="Atrás"><KButton>Danger</KButton></KPopconfirm>
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Space/Enter: Abre el dialog.', 'Tab: Atrapa el foco de inmediato en los botones de Ok/Cancel.'],
+      aria: ['Abre una estructura role="dialog" o role="alertdialog" que exige acción.'],
+      contrast: 'AAA para la pregunta prioritaria.',
+      score: 100,
+    },
     props: [
       { name: 'title', type: 'ReactNode', required: true, description: 'Título de la confirmación.' },
       { name: 'description', type: 'ReactNode', description: 'Información adicional sobre la acción.' },
@@ -1570,6 +1829,19 @@ import { KInput } from '@khor/design-system/atoms/index';
 />`,
     filename: 'KResult.tsx',
     playground: <ResultPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', gap: 24, overflowX: 'auto', padding: 8 }}>
+        <div style={{ minWidth: 200 }}><KResult status="success" title="Success" /></div>
+        <div style={{ minWidth: 200 }}><KResult status="error" title="Error" /></div>
+        <div style={{ minWidth: 200 }}><KResult status="404" title="404 NotFound" /></div>
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Solo elementos interactivos (extra buttons) reciben foco.'],
+      aria: ['Icono puramente decorativo aria-hidden="true". El título es un role="heading".'],
+      contrast: 'AAA. El ícono asume colores semánticos AA (Verde, Rojo, Amarillo, Azul).',
+      score: 100,
+    },
     props: [
       { name: 'status', type: "'success' | 'error' | 'info' | 'warning' | '404' | '403' | '500'", required: true, description: 'Estado del resultado.' },
       { name: 'title', type: 'ReactNode', required: true, description: 'Título principal.' },
@@ -1591,6 +1863,17 @@ import { KInput } from '@khor/design-system/atoms/index';
 />`,
     filename: 'KTimeline.tsx',
     playground: <TimelinePlayground />,
+    stateShowcase: (
+      <div style={{ padding: 16 }}>
+        <KTimeline mode="alternate" items={[{ children: 'Paso Rojo', color: 'red' }, { children: 'Paso Verde', color: 'green' }]} />
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Estático (no interactivo), a menos que el contenido inyectado tenga enlaces.'],
+      aria: ['Es renderizado como una lista nativa (ul/li). Excelente para lectura secuencial.'],
+      contrast: 'AAA. Los círculos de estado actúan de apoyo visual.',
+      score: 100,
+    },
     props: [
       { name: 'items', type: 'TimelineItemProps[]', required: true, description: 'Lista de eventos con children, label, color.' },
       { name: 'mode', type: "'left' | 'right' | 'alternate'", default: "'left'", description: 'Alineación de los elementos.' },
@@ -1613,6 +1896,18 @@ import { KInput } from '@khor/design-system/atoms/index';
 />`,
     filename: 'KCascader.tsx',
     playground: <CascaderPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 300 }}>
+        <KCascader options={[{ value: '1', label: 'España', children: [{ value: '1-1', label: 'Madrid' }] }]} placeholder="Base" />
+        <KCascader disabled options={[]} placeholder="Discapacitado" />
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Up/Down: Recorre opciones verticales.', 'Left/Right: Expande/Contrae el nivel jerárquico.'],
+      aria: ['Sigue el patrón de combobox con sub-menús expandibles (aria-expanded).'],
+      contrast: 'AAA sobre paneles desplegables.',
+      score: 100,
+    },
     props: [
       { name: 'options', type: 'KCascaderOption[]', required: true, description: 'Estructura jerárquica de opciones.' },
       { name: 'value', type: 'string[]', description: 'Valores seleccionados en orden.' },
@@ -1637,6 +1932,19 @@ import { KInput } from '@khor/design-system/atoms/index';
 />`,
     filename: 'KStatistic.tsx',
     playground: <StatisticPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
+        <KStatistic title="Base" value={100} />
+        <KStatistic title="Up" value={25.4} trend="up" trendValue="+5%" precision={1} prefix="$" />
+        <KStatistic title="Down" value={10} trend="down" trendValue="-2%" />
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Lectura pasiva.'],
+      aria: ['Los iconos ArrowUp/ArrowDown son decorativos, el string de texto expone la tendencia a screen readers.'],
+      contrast: 'AAA para el valor principal en tamaño grande.',
+      score: 100,
+    },
     props: [
       { name: 'title', type: 'ReactNode', description: 'Etiqueta del dato.' },
       { name: 'value', type: 'string | number', required: true, description: 'Valor a mostrar.' },
@@ -1662,6 +1970,18 @@ import dayjs from 'dayjs';
 />`,
     filename: 'KTimePicker.tsx',
     playground: <TimePickerPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', gap: 16 }}>
+        <KTimePicker placeholder="Default" />
+        <KTimePicker disabled placeholder="Disabled" />
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Up/Down: Recorre horas/minutos.', 'Enter: Confirma la selección.'],
+      aria: ['Popup interactivo recibe role="dialog", columns rol="listbox".'],
+      contrast: 'AAA entre texto del campo y fondo neutro.',
+      score: 100,
+    },
     props: [
       { name: 'value', type: 'string | Dayjs', description: 'Valor seleccionado.' },
       { name: 'onChange', type: '(timeString) => void', description: 'Callback al cambiar la hora.' },
@@ -1687,6 +2007,18 @@ import dayjs from 'dayjs';
 </KTooltip>`,
     filename: 'KTooltip.tsx',
     playground: <TooltipPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', gap: 16, padding: '32px 16px' }}>
+        <KTooltip title="Top tooltip" placement="top" open><KButton>Top</KButton></KTooltip>
+        <KTooltip title="Color tooltip" color="blue" open><KButton>Color</KButton></KTooltip>
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Focus: El tooltip aparece al recibir :focus-visible en el botón/hijo.'],
+      aria: ['Usa aria-describedby apuntando al ID dinámico del popup.', 'role="tooltip" asignado al popup.'],
+      contrast: 'AAA sobre paneles oscuros predeterminados.',
+      score: 100,
+    },
     props: [
       { name: 'title', type: 'ReactNode', required: true, description: 'Contenido del tooltip.' },
       { name: 'placement', type: "'top' | 'bottom' | 'left' | 'right' ...", default: "'top'", description: 'Posición relativa al elemento.' },
@@ -1707,6 +2039,18 @@ import dayjs from 'dayjs';
 />`,
     filename: 'KMentions.tsx',
     playground: <MentionsPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 350 }}>
+        <KMentions placeholder="Escribe @ para usuarios..." options={[{ value: 'admin', label: 'Admin' }]} />
+        <KMentions placeholder="Deshabilitado" disabled options={[]} />
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Pulsar el trigger (@), activa el panel. Up/Down recorren opciones.', 'Enter/Espacio inserta la mención.'],
+      aria: ['Anuncia combinaciones de búsqueda con aria-live.'],
+      contrast: 'AAA en las opciones listadas.',
+      score: 100,
+    },
     props: [
       { name: 'options', type: 'KMentionOption[]', required: true, description: 'Lista de posibles menciones.' },
       { name: 'trigger', type: 'string', default: "'@'", description: 'Carácter que dispara el menú.' },
@@ -1728,6 +2072,19 @@ import dayjs from 'dayjs';
 />`,
     filename: 'KColorPicker.tsx',
     playground: <ColorPickerPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', gap: 16 }}>
+        <KColorPicker value="#1677ff" />
+        <KColorPicker showText value="#E04D36" />
+        <KColorPicker disabled value="#ccc" />
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Tab: Accede al swatch principal.', 'Espacio: Lanza el panel de selección.'],
+      aria: ['El panel asume role="dialog" o "application" para capturar atajos de espectro.'],
+      contrast: 'Decorativo en el panel de espectro. AAA en el texto HEX/RGB.',
+      score: 100,
+    },
     props: [
       { name: 'value', type: 'string | Color', description: 'Color seleccionado.' },
       { name: 'onChange', type: '(color) => void', description: 'Callback al cambiar el color.' },
@@ -1750,6 +2107,17 @@ import dayjs from 'dayjs';
 />`,
     filename: 'KAnchor.tsx',
     playground: <AnchorPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', padding: 16 }}>
+        <KAnchor affix={false} items={[{ key: '1', href: '#section1', title: 'Sección 1' }, { key: '2', href: '#section2', title: 'Sección 2' }]} />
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Tab: Navega por los enlaces naturales del anchor (etiquetas `<a>` reales).', 'Enter: Scrollea suavemente.'],
+      aria: ['Se convierte en un bloque semántico bajo role="navigation".'],
+      contrast: 'AAA. El link activo se resalta en primary Khor.',
+      score: 100,
+    },
     props: [
       { name: 'items', type: 'AnchorLink[]', required: true, description: 'Lista de enlaces de navegación.' },
       { name: 'offsetTop', type: 'number', default: '0', description: 'Distancia al borde superior antes de activar.' },
@@ -1772,6 +2140,17 @@ import dayjs from 'dayjs';
 />`,
     filename: 'KList.tsx',
     playground: <ListPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <KList bordered items={[{ key: '1', title: 'Item 1' }, { key: '2', title: 'Item 2' }]} />
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Lectura pasiva iterada sobre elementos internos.'],
+      aria: ['Genera structure_role="list" y los ítems con role="listitem".', 'Si los ítems cambian, soporte en aria-live.'],
+      contrast: 'AAA sobre líneas divisorias grises.',
+      score: 100,
+    },
     props: [
       { name: 'items', type: 'KListItem[]', required: true, description: 'Colección de elementos a listar.' },
       { name: 'bordered', type: 'boolean', default: 'false', description: 'Muestra bordes exteriores.' },
@@ -1784,6 +2163,18 @@ import dayjs from 'dayjs';
   'divider-ext': { id: 'divider-ext', name: 'KDividerExtended', description: 'Divisor con soporte para texto central y estilo dashed.',
     preview: (<div><KDividerExtended /><KDividerExtended>O continúa con</KDividerExtended><KDividerExtended dashed /></div>),
     code: `<KDividerExtended>O continúa con</KDividerExtended>`, filename: 'KDividerExtended.tsx',
+    stateShowcase: (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <KDividerExtended />
+        <KDividerExtended dashed>Dashed Central</KDividerExtended>
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Separador visual pasivo (no atrapa foco).'],
+      aria: ['Role nativo "separator". El texto inyectado respeta el DOM normal.'],
+      contrast: 'Línea visual AA.',
+      score: 100,
+    },
     props: [{ name: 'children', type: 'ReactNode', description: 'Texto central.' }, { name: 'dashed', type: 'boolean', description: 'Estilo dashed.' }],
     guidelines: ['Usa con texto para separar secciones semánticas.'] },
   'tree-select': {
@@ -1799,6 +2190,18 @@ import dayjs from 'dayjs';
 />`,
     filename: 'KTreeSelect.tsx',
     playground: <TreeSelectPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', gap: 16, flexDirection: 'column', maxWidth: 300 }}>
+        <KTreeSelect treeData={[{ title: 'Rama 1', value: '1', children: [{ title: 'Hoja A', value: 'A' }] }]} placeholder="Base" />
+        <KTreeSelect treeData={[]} placeholder="Discapacitado" disabled />
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Flechas Arriba/Abajo: Navega items.', 'Flecha Derecha: Expande nodo padre.', 'Flecha Izquierda: Contrae nodo.'],
+      aria: ['Se convierte en role="tree" y emite estados usando aria-expanded, aria-selected.'],
+      contrast: 'AAA sobre paneles desplegables.',
+      score: 100,
+    },
     props: [
       { name: 'treeData', type: 'DataNode[]', required: true, description: 'Estructura jerárquica de datos.' },
       { name: 'value', type: 'string', description: 'Valor seleccionado.' },
@@ -1821,6 +2224,17 @@ import dayjs from 'dayjs';
 />`,
     filename: 'KTransfer.tsx',
     playground: <TransferPlayground />,
+    stateShowcase: (
+      <div style={{ width: '100%', overflowX: 'auto', padding: 16 }}>
+        <KTransfer dataSource={[{ key: '1', title: 'Item Base' }]} targetKeys={[]} showSearch />
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Tab: Entra al panel.', 'Arrows: Selecciona items internos.', 'Space: Toggle elemento.', 'Tab hacia los botones de flecha o enter para transferir.'],
+      aria: ['Aria-live configurado para la caja de estado y notificar transferencias dinámicamente.'],
+      contrast: 'AAA sobre botones primarios in-between matrices.',
+      score: 100,
+    },
     props: [
       { name: 'dataSource', type: 'KTransferItem[]', required: true, description: 'Elementos disponibles y seleccionados.' },
       { name: 'targetKeys', type: 'string[]', required: true, description: 'Keys de los elementos en la columna derecha.' },
@@ -1856,6 +2270,8 @@ export function MoleculesPage() {
       props={mol.props}
       guidelines={mol.guidelines}
       aiNotes={mol.aiNotes}
+      stateShowcase={mol.stateShowcase}
+      a11ySummary={mol.a11ySummary}
     />
   );
 }

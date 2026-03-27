@@ -80,6 +80,48 @@ export const khorTokens = {
     lg: 24,
     strokeWidth: 2,
   },
+  semantic: {
+    action: {
+      primary: { default: 'var(--khor-action-primary-default)', hover: 'var(--khor-action-primary-hover)', active: 'var(--khor-action-primary-active)' },
+      secondary: { default: 'var(--khor-action-secondary-default)', hover: 'var(--khor-action-secondary-hover)', active: 'var(--khor-action-secondary-active)' },
+      danger: { default: 'var(--khor-action-danger-default)', hover: 'var(--khor-action-danger-hover)', active: 'var(--khor-action-danger-active)' },
+    },
+    surface: {
+      page: 'var(--khor-surface-page)',
+      card: 'var(--khor-surface-card)',
+      raised: 'var(--khor-surface-raised)',
+      overlay: 'var(--khor-surface-overlay)',
+    },
+    text: {
+      primary: 'var(--khor-text-primary)',
+      secondary: 'var(--khor-text-secondary)',
+      muted: 'var(--khor-text-muted)',
+      disabled: 'var(--khor-text-disabled)',
+      onAction: 'var(--khor-text-on-action)',
+      link: 'var(--khor-text-link)',
+    },
+    border: {
+      default: 'var(--khor-border-default)',
+      hover: 'var(--khor-border-hover)',
+      focus: 'var(--khor-border-focus)',
+      error: 'var(--khor-border-error)',
+    },
+    focus: {
+      ring: 'var(--khor-focus-ring)',
+      ringWidth: 'var(--khor-focus-ring-width)',
+      ringOffset: 'var(--khor-focus-ring-offset)',
+    },
+  },
+  motion: {
+    duration: { fast: 100, normal: 200, slow: 400, slower: 600 },
+    easing: {
+      standard: 'cubic-bezier(0.4, 0, 0.2, 1)',
+      enter: 'cubic-bezier(0, 0, 0.2, 1)',
+      exit: 'cubic-bezier(0.4, 0, 1, 1)',
+      spring: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+    },
+    spring: { stiffness: 300, damping: 30 },
+  },
 } as const;
 
 /**

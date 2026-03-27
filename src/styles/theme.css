@@ -53,6 +53,63 @@
   --khor-radius-lg: 10px;
   --khor-radius-xl: 14px;
 
+  /* ── Semantic Action Tokens (2nd Layer) ── */
+  --khor-action-primary-default: var(--khor-primary);
+  --khor-action-primary-hover: var(--khor-primary-hover);
+  --khor-action-primary-active: var(--khor-primary-active);
+  --khor-action-secondary-default: var(--khor-navy);
+  --khor-action-secondary-hover: var(--khor-navy-hover);
+  --khor-action-secondary-active: var(--khor-navy-active);
+  --khor-action-danger-default: var(--khor-error);
+  --khor-action-danger-hover: #E53935;
+  --khor-action-danger-active: #C62828;
+
+  /* ── Semantic Surface Tokens ── */
+  --khor-surface-page: var(--khor-neutral-100);
+  --khor-surface-card: var(--khor-neutral-50);
+  --khor-surface-raised: var(--khor-neutral-50);
+  --khor-surface-overlay: rgba(0, 0, 0, 0.5);
+
+  /* ── Semantic Text Tokens ── */
+  --khor-text-primary: var(--khor-neutral-900);
+  --khor-text-secondary: var(--khor-neutral-500);
+  --khor-text-muted: var(--khor-neutral-400);
+  --khor-text-disabled: var(--khor-neutral-300);
+  --khor-text-on-action: #FFFFFF;
+  --khor-text-link: var(--khor-primary);
+
+  /* ── Semantic Border Tokens ── */
+  --khor-border-default: var(--khor-neutral-200);
+  --khor-border-hover: var(--khor-neutral-300);
+  --khor-border-focus: var(--khor-primary);
+  --khor-border-error: var(--khor-error);
+
+  /* ── Semantic Focus Tokens ── */
+  --khor-focus-ring: var(--khor-primary);
+  --khor-focus-ring-width: 2px;
+  --khor-focus-ring-offset: 2px;
+
+  /* ── Motion Tokens ── */
+  --khor-duration-fast: 100ms;
+  --khor-duration-normal: 200ms;
+  --khor-duration-slow: 400ms;
+  --khor-duration-slower: 600ms;
+  --khor-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --khor-easing-enter: cubic-bezier(0, 0, 0.2, 1);
+  --khor-easing-exit: cubic-bezier(0.4, 0, 1, 1);
+  --khor-easing-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+  /* ── Density Tokens (Default / Comfortable) ── */
+  --khor-density-spacing-xs: 4px;
+  --khor-density-spacing-sm: 8px;
+  --khor-density-spacing-md: 16px;
+  --khor-density-spacing-lg: 24px;
+  --khor-density-height-input: 36px;
+  --khor-density-height-row: 44px;
+  --khor-density-font-body: 14px;
+  --khor-density-font-label: 12px;
+  --khor-density-radius: var(--khor-radius-md); /* 8px */
+
   /* ── Mapped Tokens (Tailwind / Base) ── */
   --background: var(--khor-neutral-100);
   --foreground: var(--khor-neutral-900);
@@ -128,6 +185,12 @@
   --khor-shadow-sm: 0 2px 4px rgba(0,0,0,0.3);
   --khor-shadow-md: 0 4px 12px rgba(0,0,0,0.4);
   --khor-shadow-lg: 0 12px 32px rgba(0,0,0,0.5);
+
+  /* ── Semantic Tokens (Dark overrides) ── */
+  --khor-action-danger-hover: #EF5350;
+  --khor-action-danger-active: #E53935;
+  --khor-surface-overlay: rgba(0, 0, 0, 0.7);
+  --khor-text-on-action: #FFFFFF;
 
   /* ── Mapped Tokens (Dark) ── */
   --background: var(--khor-neutral-100);
@@ -311,4 +374,81 @@ aside ::-webkit-scrollbar-thumb:hover {
 }
 aside * {
   scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+
+/* ── Khor Accessibility (A11y) ── */
+
+/* Global Focus Ring: consistent, visible focus for all interactive elements */
+:focus-visible {
+  outline: var(--khor-focus-ring-width) solid var(--khor-focus-ring);
+  outline-offset: var(--khor-focus-ring-offset);
+}
+
+/* Reduced Motion: respect user preference to minimize animations */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Skip-to-content link: visible only on focus for keyboard-first navigation */
+.khor-skip-link {
+  position: absolute;
+  top: -100%;
+  left: 16px;
+  z-index: 9999;
+  padding: 8px 16px;
+  background: var(--khor-primary);
+  color: #fff;
+  border-radius: var(--khor-radius-md);
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  font-family: var(--font-primary);
+  transition: top 0.15s ease;
+}
+.khor-skip-link:focus {
+  top: 16px;
+}
+
+/* ── RTL Support ── */
+[dir="rtl"] {
+  direction: rtl;
+}
+
+/* ── Font Fallbacks for Non-Latin Scripts ── */
+:root {
+  --font-fallback-arabic: 'Noto Sans Arabic', 'Segoe UI', sans-serif;
+  --font-fallback-cjk: 'Noto Sans SC', 'Hiragino Sans', sans-serif;
+  --font-fallback-hebrew: 'Noto Sans Hebrew', 'Segoe UI', sans-serif;
+}
+
+/* ── Density Containers ── */
+.khor-compact {
+  --khor-density-spacing-xs: 2px;
+  --khor-density-spacing-sm: 4px;
+  --khor-density-spacing-md: 8px;
+  --khor-density-spacing-lg: 12px;
+  --khor-density-height-input: 28px;
+  --khor-density-height-row: 32px;
+  --khor-density-font-body: 12px;
+  --khor-density-font-label: 11px;
+  --khor-density-radius: var(--khor-radius-sm); /* 6px */
+}
+
+.khor-comfortable {
+  --khor-density-spacing-xs: 6px;
+  --khor-density-spacing-sm: 12px;
+  --khor-density-spacing-md: 24px;
+  --khor-density-spacing-lg: 40px;
+  --khor-density-height-input: 48px;
+  --khor-density-height-row: 60px;
+  --khor-density-font-body: 16px;
+  --khor-density-font-label: 14px;
+  --khor-density-radius: var(--khor-radius-lg); /* 10px */
 }

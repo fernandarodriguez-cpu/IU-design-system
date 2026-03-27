@@ -246,8 +246,210 @@ khorTokens.shadows.sm  // '0 2px 4px rgba(0,0,0,0.05)'
 
 // Acceso a tipografia
 khorTokens.typography.fontPrimary  // 'Raleway'
-khorTokens.typography.h1.size      // 38`}
+khorTokens.typography.h1.size      // 38
+
+// Acceso a tokens semánticos (2ª capa)
+khorTokens.semantic.action.primary.default  // acción principal
+khorTokens.semantic.text.secondary          // texto secundario
+khorTokens.semantic.surface.card            // fondo de tarjeta
+
+// Acceso a motion tokens
+khorTokens.motion.duration.normal  // 200ms
+khorTokens.motion.easing.standard  // cubic-bezier(...)`}
         />
+      </Section>
+
+      {/* Semantic Tokens */}
+      <Section title="9. Tokens Semánticos (2ª Capa)" id="semanticos">
+        <p style={{ fontSize: 14, color: khorTokens.colors.neutral[400], marginTop: 0, marginBottom: 16, lineHeight: 1.6 }}>
+          Capa de abstracción que mapea <strong>función → token primitivo</strong>. Si mañana la marca cambia de rojo a azul, solo se actualiza este mapeo y todo el sistema se actualiza sin tocar componentes.
+        </p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+          {/* Action Tokens */}
+          <div>
+            <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 8, marginTop: 0 }}>Acciones</h4>
+            <div style={{ overflowX: 'auto', borderRadius: khorTokens.radius.md, border: `1px solid ${khorTokens.colors.neutral[200]}` }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+                <thead>
+                  <tr style={{ backgroundColor: khorTokens.colors.neutral[100] }}>
+                    <th style={{ padding: '8px 12px', textAlign: 'left', fontWeight: 600, borderBottom: `1px solid ${khorTokens.colors.neutral[200]}` }}>Token Semántico</th>
+                    <th style={{ padding: '8px 12px', textAlign: 'left', fontWeight: 600, borderBottom: `1px solid ${khorTokens.colors.neutral[200]}` }}>Mapea a</th>
+                    <th style={{ padding: '8px 12px', textAlign: 'left', fontWeight: 600, borderBottom: `1px solid ${khorTokens.colors.neutral[200]}` }}>Propósito</th>
+                    <th style={{ padding: '8px 12px', textAlign: 'center', fontWeight: 600, borderBottom: `1px solid ${khorTokens.colors.neutral[200]}` }}>Muestra</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    { token: 'action.primary.default', maps: '--khor-primary', purpose: 'Botones y acciones principales', color: '#E04D36' },
+                    { token: 'action.primary.hover', maps: '--khor-primary-hover', purpose: 'Hover de acción principal', color: '#e8644f' },
+                    { token: 'action.primary.active', maps: '--khor-primary-active', purpose: 'Active/pressed de acción', color: '#c9442f' },
+                    { token: 'action.secondary.default', maps: '--khor-navy', purpose: 'Acciones secundarias', color: '#051758' },
+                    { token: 'action.danger.default', maps: '--khor-error', purpose: 'Acciones destructivas', color: '#D32F2F' },
+                  ].map((row, i) => (
+                    <tr key={row.token} style={{ backgroundColor: i % 2 !== 0 ? khorTokens.colors.neutral[100] : undefined }}>
+                      <td style={{ padding: '8px 12px', borderBottom: `1px solid ${khorTokens.colors.neutral[200]}` }}><code style={{ fontSize: 11, fontWeight: 600, color: khorTokens.colors.brand.navy }}>{row.token}</code></td>
+                      <td style={{ padding: '8px 12px', borderBottom: `1px solid ${khorTokens.colors.neutral[200]}`, color: khorTokens.colors.neutral[400] }}><code style={{ fontSize: 11 }}>{row.maps}</code></td>
+                      <td style={{ padding: '8px 12px', borderBottom: `1px solid ${khorTokens.colors.neutral[200]}`, color: khorTokens.colors.neutral[500] }}>{row.purpose}</td>
+                      <td style={{ padding: '8px 12px', borderBottom: `1px solid ${khorTokens.colors.neutral[200]}`, textAlign: 'center' }}>
+                        <span style={{ display: 'inline-block', width: 32, height: 20, borderRadius: 4, backgroundColor: row.color }} />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Surface / Text / Border */}
+          <div>
+            <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 8, marginTop: 0 }}>Superficies, Texto y Bordes</h4>
+            <div style={{ overflowX: 'auto', borderRadius: khorTokens.radius.md, border: `1px solid ${khorTokens.colors.neutral[200]}` }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+                <thead>
+                  <tr style={{ backgroundColor: khorTokens.colors.neutral[100] }}>
+                    <th style={{ padding: '8px 12px', textAlign: 'left', fontWeight: 600, borderBottom: `1px solid ${khorTokens.colors.neutral[200]}` }}>Token Semántico</th>
+                    <th style={{ padding: '8px 12px', textAlign: 'left', fontWeight: 600, borderBottom: `1px solid ${khorTokens.colors.neutral[200]}` }}>Mapea a</th>
+                    <th style={{ padding: '8px 12px', textAlign: 'left', fontWeight: 600, borderBottom: `1px solid ${khorTokens.colors.neutral[200]}` }}>Uso</th>
+                    <th style={{ padding: '8px 12px', textAlign: 'center', fontWeight: 600, borderBottom: `1px solid ${khorTokens.colors.neutral[200]}` }}>Muestra</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    { token: 'surface.page', maps: '--khor-neutral-100', use: 'Fondo de página', color: '#EDF0F1' },
+                    { token: 'surface.card', maps: '--khor-neutral-50', use: 'Fondo de tarjetas', color: '#FFFFFF' },
+                    { token: 'text.primary', maps: '--khor-neutral-900', use: 'Texto principal', color: '#000000' },
+                    { token: 'text.secondary', maps: '--khor-neutral-500', use: 'Texto de cuerpo', color: '#4A5568' },
+                    { token: 'text.muted', maps: '--khor-neutral-400', use: 'Texto secundario', color: '#718096' },
+                    { token: 'text.disabled', maps: '--khor-neutral-300', use: 'Texto desactivado', color: '#A0AEC0' },
+                    { token: 'text.link', maps: '--khor-primary', use: 'Links y anclas', color: '#E04D36' },
+                    { token: 'border.default', maps: '--khor-neutral-200', use: 'Bordes estándar', color: '#D5DBE0' },
+                    { token: 'border.focus', maps: '--khor-primary', use: 'Focus ring', color: '#E04D36' },
+                    { token: 'border.error', maps: '--khor-error', use: 'Borde de error', color: '#D32F2F' },
+                  ].map((row, i) => (
+                    <tr key={row.token} style={{ backgroundColor: i % 2 !== 0 ? khorTokens.colors.neutral[100] : undefined }}>
+                      <td style={{ padding: '8px 12px', borderBottom: `1px solid ${khorTokens.colors.neutral[200]}` }}><code style={{ fontSize: 11, fontWeight: 600, color: khorTokens.colors.brand.navy }}>{row.token}</code></td>
+                      <td style={{ padding: '8px 12px', borderBottom: `1px solid ${khorTokens.colors.neutral[200]}`, color: khorTokens.colors.neutral[400] }}><code style={{ fontSize: 11 }}>{row.maps}</code></td>
+                      <td style={{ padding: '8px 12px', borderBottom: `1px solid ${khorTokens.colors.neutral[200]}`, color: khorTokens.colors.neutral[500] }}>{row.use}</td>
+                      <td style={{ padding: '8px 12px', borderBottom: `1px solid ${khorTokens.colors.neutral[200]}`, textAlign: 'center' }}>
+                        <span style={{ display: 'inline-block', width: 32, height: 20, borderRadius: 4, backgroundColor: row.color, border: ['#FFFFFF', '#EDF0F1', '#D5DBE0'].includes(row.color) ? `1px solid ${khorTokens.colors.neutral[200]}` : 'none' }} />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </Section>
+
+      {/* Motion Tokens */}
+      <Section title="10. Motion & Animaciones" id="motion">
+        <p style={{ fontSize: 14, color: khorTokens.colors.neutral[400], marginTop: 0, marginBottom: 16, lineHeight: 1.6 }}>
+          Tokens de duración y curvas de easing para animaciones coordinadas. Respetan <code>prefers-reduced-motion</code> automáticamente.
+        </p>
+
+        {/* Duration */}
+        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Duraciones</h4>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 24 }}>
+          {[
+            { token: 'duration-fast', value: '100ms', desc: 'Tooltips, fades sutiles' },
+            { token: 'duration-normal', value: '200ms', desc: 'Transiciones estándar (hover, focus)' },
+            { token: 'duration-slow', value: '400ms', desc: 'Modales, drawers, expansiones' },
+            { token: 'duration-slower', value: '600ms', desc: 'Animaciones de entrada complejas' },
+          ].map(d => (
+            <div key={d.token} style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+              <code style={{ width: 140, fontSize: 12, fontWeight: 600, color: khorTokens.colors.brand.navy, flexShrink: 0 }}>{d.token}</code>
+              <div style={{ width: 200, height: 8, backgroundColor: khorTokens.colors.neutral[200], borderRadius: 4, overflow: 'hidden', flexShrink: 0 }}>
+                <div style={{ width: `${(parseInt(d.value) / 600) * 100}%`, height: '100%', backgroundColor: khorTokens.colors.brand.primary, borderRadius: 4 }} />
+              </div>
+              <span style={{ fontSize: 13, color: khorTokens.colors.brand.primary, fontWeight: 600, width: 50, flexShrink: 0 }}>{d.value}</span>
+              <span style={{ fontSize: 12, color: khorTokens.colors.neutral[400] }}>{d.desc}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Easing */}
+        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Curvas de Easing</h4>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16 }}>
+          {[
+            { token: 'easing-standard', value: 'cubic-bezier(0.4, 0, 0.2, 1)', desc: 'Transiciones generales', emoji: '━━━━━╮' },
+            { token: 'easing-enter', value: 'cubic-bezier(0, 0, 0.2, 1)', desc: 'Elementos que aparecen', emoji: '─────╮' },
+            { token: 'easing-exit', value: 'cubic-bezier(0.4, 0, 1, 1)', desc: 'Elementos que salen', emoji: '╭─────' },
+            { token: 'easing-spring', value: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)', desc: 'Rebote sutil (modals, tooltips)', emoji: '─╮╭──' },
+          ].map(e => (
+            <div key={e.token} style={{
+              padding: 16, backgroundColor: khorTokens.colors.neutral[50], borderRadius: khorTokens.radius.md,
+              border: `1px solid ${khorTokens.colors.neutral[200]}`,
+            }}>
+              <code style={{ fontSize: 12, fontWeight: 600, color: khorTokens.colors.brand.navy, display: 'block', marginBottom: 6 }}>{e.token}</code>
+              <div style={{
+                width: '100%', height: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: 4,
+                display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 8,
+                position: 'relative', overflow: 'hidden',
+              }}>
+                <div style={{
+                  width: 16, height: 16, borderRadius: '50%', backgroundColor: khorTokens.colors.brand.primary,
+                  animation: `slide-demo 2s ${e.value} infinite alternate`,
+                  position: 'absolute', left: 8,
+                }} />
+              </div>
+              <p style={{ fontSize: 11, color: khorTokens.colors.neutral[400], margin: '0 0 4px', lineHeight: 1.4 }}>{e.desc}</p>
+              <code style={{ fontSize: 10, color: khorTokens.colors.neutral[300], wordBreak: 'break-all' }}>{e.value}</code>
+            </div>
+          ))}
+        </div>
+        <style>{`
+          @keyframes slide-demo {
+            from { left: 8px; }
+            to { left: calc(100% - 24px); }
+          }
+        `}</style>
+      </Section>
+
+      {/* Internationalization */}
+      <Section title="11. Internacionalización (i18n) y RTL" id="i18n">
+        <p style={{ fontSize: 14, color: khorTokens.colors.neutral[400], marginTop: 0, marginBottom: 16, lineHeight: 1.6 }}>
+          Soporte para lenguajes de derecha a izquierda (RTL) y fuentes alternativas para scripts no latinos.
+        </p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+          {/* Font Fallbacks */}
+          <div>
+            <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 8, marginTop: 0 }}>Tipografías Alternativas (Fallbacks)</h4>
+            <div style={{ padding: 16, border: `1px solid ${khorTokens.colors.neutral[200]}`, borderRadius: khorTokens.radius.md, backgroundColor: khorTokens.colors.neutral[50] }}>
+               <code style={{ fontSize: 12, color: khorTokens.colors.neutral[500], display: 'block', wordBreak: 'break-all' }}>
+                 font-family: var(--khor-font-primary), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+               </code>
+               <p style={{ margin: '8px 0 0', fontSize: 13, color: khorTokens.colors.neutral[500] }}>
+                 Garantiza la correcta visualización de caracteres cirílicos, árabes, hebreos y asiáticos.
+               </p>
+            </div>
+          </div>
+          {/* RTL */}
+          <div>
+            <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 8, marginTop: 0 }}>Soporte RTL (Right-to-Left)</h4>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 16 }}>
+               {/* LTR */}
+               <div style={{ padding: 16, border: `1px solid ${khorTokens.colors.neutral[200]}`, borderRadius: khorTokens.radius.md, backgroundColor: khorTokens.colors.neutral[100] }}>
+                 <p style={{ margin: '0 0 8px', fontSize: 12, fontWeight: 600, color: khorTokens.colors.brand.navy }}>LTR (Left-to-Right)</p>
+                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: 12, backgroundColor: '#fff', borderRadius: 4, boxShadow: khorTokens.shadows.sm }}>
+                    <div style={{ width: 16, height: 16, borderRadius: '50%', backgroundColor: khorTokens.colors.brand.primary }} />
+                    <span style={{ fontSize: 14, color: khorTokens.colors.neutral[900] }}>Content aligned left</span>
+                 </div>
+               </div>
+               {/* RTL */}
+               <div style={{ padding: 16, border: `1px solid ${khorTokens.colors.neutral[200]}`, borderRadius: khorTokens.radius.md, backgroundColor: khorTokens.colors.neutral[100] }} dir="rtl">
+                 <p style={{ margin: '0 0 8px', fontSize: 12, fontWeight: 600, color: khorTokens.colors.brand.navy }}>RTL (Right-to-Left)</p>
+                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: 12, backgroundColor: '#fff', borderRadius: 4, boxShadow: khorTokens.shadows.sm }}>
+                    <div style={{ width: 16, height: 16, borderRadius: '50%', backgroundColor: khorTokens.colors.brand.primary }} />
+                    <span style={{ fontSize: 14, color: khorTokens.colors.neutral[900] }}>محتوى محاذاة لليمين</span>
+                 </div>
+               </div>
+            </div>
+            <p style={{ margin: '8px 0 0', fontSize: 13, color: khorTokens.colors.neutral[500] }}>
+              Los componentes usan propiedades lógicas CSS (<code>margin-inline-start</code>, <code>padding-inline-end</code>) para adaptarse automáticamente.
+            </p>
+          </div>
+        </div>
       </Section>
     </div>
   );

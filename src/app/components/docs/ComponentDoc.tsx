@@ -5,7 +5,7 @@
  * código descargable y documentación de props.
  */
 import React, { useState } from 'react';
-import { Eye, Code, Settings, BookOpen, Copy, Check } from 'lucide-react';
+import { Eye, Code, Settings, BookOpen, Copy, Check, Shield, Keyboard, Monitor } from 'lucide-react';
 import { CodeBlock } from './CodeBlock';
 import { khorTokens } from '../../theme/khor-theme';
 
@@ -31,12 +31,19 @@ export interface ComponentDocProps {
   props: PropDef[];
   guidelines?: string[];
   aiNotes?: string;
+  stateShowcase?: React.ReactNode;
+  a11ySummary?: {
+    keyboard: string[];
+    aria: string[];
+    contrast: string;
+    score: number;
+  };
 }
 
 type TabKey = 'preview' | 'playground' | 'code' | 'docs';
 
 export function ComponentDoc({
-  name, category, description, preview, playground, code, filename, props, guidelines, aiNotes,
+  name, category, description, preview, playground, code, filename, props, guidelines, aiNotes, stateShowcase, a11ySummary
 }: ComponentDocProps) {
   const tabs: { key: TabKey; label: string; icon: React.ReactNode }[] = [
     { key: 'preview', label: 'Vista Previa', icon: <Eye size={16} /> },
@@ -109,8 +116,21 @@ export function ComponentDoc({
 
       {/* Tab Content */}
       {active === 'preview' && (
-        <div style={{ padding: 32, backgroundColor: t.colors.neutral[100], borderRadius: t.radius.lg, border: `1px solid ${t.colors.neutral[200]}` }}>
-          {preview}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+          {stateShowcase && (
+            <div>
+              <h4 style={{ fontSize: 14, fontWeight: 600, color: t.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Estados Exhaustivos</h4>
+              <div style={{ padding: 24, backgroundColor: t.colors.neutral[50], borderRadius: t.radius.lg, border: `1px solid ${t.colors.neutral[200]}` }}>
+                {stateShowcase}
+              </div>
+            </div>
+          )}
+          <div>
+            <h4 style={{ fontSize: 14, fontWeight: 600, color: t.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Ejemplos de Uso</h4>
+            <div style={{ padding: 32, backgroundColor: t.colors.neutral[100], borderRadius: t.radius.lg, border: `1px solid ${t.colors.neutral[200]}` }}>
+              {preview}
+            </div>
+          </div>
         </div>
       )}
 
@@ -125,7 +145,44 @@ export function ComponentDoc({
       )}
 
       {active === 'docs' && (
-        <div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+          {/* A11y Panel */}
+          {a11ySummary && (
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+                <Shield size={18} style={{ color: t.colors.feedback.success }} />
+                <h4 style={{ fontSize: 16, fontWeight: 600, color: 'var(--foreground)', margin: 0 }}>Resumen de Accesibilidad (Score: {a11ySummary.score}/100)</h4>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 16 }}>
+                <div style={{ padding: 16, backgroundColor: t.colors.neutral[50], borderRadius: t.radius.md, border: `1px solid ${t.colors.neutral[200]}` }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8, color: t.colors.brand.navy }}>
+                    <Keyboard size={14} />
+                    <span style={{ fontSize: 13, fontWeight: 600 }}>Teclado</span>
+                  </div>
+                  <ul style={{ margin: 0, paddingLeft: 16, fontSize: 13, color: t.colors.neutral[500], lineHeight: 1.5 }}>
+                    {a11ySummary.keyboard.map((item, i) => <li key={i}>{item}</li>)}
+                  </ul>
+                </div>
+                <div style={{ padding: 16, backgroundColor: t.colors.neutral[50], borderRadius: t.radius.md, border: `1px solid ${t.colors.neutral[200]}` }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8, color: t.colors.brand.navy }}>
+                    <Monitor size={14} />
+                    <span style={{ fontSize: 13, fontWeight: 600 }}>Lector de Pantalla (ARIA)</span>
+                  </div>
+                  <ul style={{ margin: 0, paddingLeft: 16, fontSize: 13, color: t.colors.neutral[500], lineHeight: 1.5 }}>
+                    {a11ySummary.aria.map((item, i) => <li key={i}>{item}</li>)}
+                  </ul>
+                </div>
+                <div style={{ padding: 16, backgroundColor: t.colors.neutral[50], borderRadius: t.radius.md, border: `1px solid ${t.colors.neutral[200]}` }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8, color: t.colors.brand.navy }}>
+                    <Eye size={14} />
+                    <span style={{ fontSize: 13, fontWeight: 600 }}>Contraste Visual</span>
+                  </div>
+                  <p style={{ margin: 0, fontSize: 13, color: t.colors.neutral[500], lineHeight: 1.5 }}>{a11ySummary.contrast}</p>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Props Table */}
           <h4 style={{ fontSize: 16, fontWeight: 600, color: 'var(--foreground)', marginBottom: 12, marginTop: 0 }}>Propiedades</h4>
           <div style={{ overflowX: 'auto', borderRadius: t.radius.md, border: `1px solid ${t.colors.neutral[200]}` }}>

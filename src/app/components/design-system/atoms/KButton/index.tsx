@@ -45,7 +45,16 @@ export const KButton = React.forwardRef<HTMLButtonElement, KButtonProps>(functio
       size={sizeToAntd(size)}
       shape={shape}
       htmlType={htmlType}
-      style={{ fontFamily: font, borderRadius: shape === 'default' ? t.radius.md : undefined, ...navyStyle, ...style }}
+      style={{ 
+        fontFamily: font, 
+        borderRadius: shape === 'default' ? 'var(--khor-density-radius)' : undefined, 
+        height: 'var(--khor-density-height-input)', 
+        fontSize: 'var(--khor-density-font-body)',
+        paddingLeft: 'var(--khor-density-spacing-md)',
+        paddingRight: 'var(--khor-density-spacing-md)',
+        ...navyStyle, 
+        ...style 
+      }}
       {...rest}
     >
       {children}

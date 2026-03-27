@@ -691,6 +691,13 @@ interface AtomEntry {
   description: string;
   preview: React.ReactNode;
   playground?: React.ReactNode;
+  stateShowcase?: React.ReactNode;
+  a11ySummary?: {
+    keyboard: string[];
+    aria: string[];
+    contrast: string;
+    score: number;
+  };
   code: string;
   filename: string;
   props: PropDef[];
@@ -735,6 +742,22 @@ const atoms: Record<string, AtomEntry> = {
       </div>
     ),
     playground: <ButtonPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>Default</span><KButton>Botón</KButton></div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>Hover (CSS)</span><KButton style={{ filter: 'brightness(1.1)' }}>Botón</KButton></div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>Active (CSS)</span><KButton style={{ filter: 'brightness(0.9)', transform: 'scale(0.98)' }}>Botón</KButton></div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>Focus</span><div style={{ outline: `2px solid ${khorTokens.colors.brand.primary}`, outlineOffset: '2px', borderRadius: khorTokens.radius.md }}><KButton>Botón</KButton></div></div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>Disabled</span><KButton disabled>Botón</KButton></div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>Loading</span><KButton loading>Botón</KButton></div>
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Tab: Navega al componente y lanza focus ring.', 'Enter/Space: Dispara evento onClick.'],
+      aria: ['role="button"', 'aria-disabled="true" y tabIndex={-1} cuando desactivado.', 'aria-busy="true" global durante loading.'],
+      contrast: 'AAA sobre blanco',
+      score: 100,
+    },
     code: `import { KButton } from '@khor/design-system/atoms/index';
 
 // Variantes disponibles: primary | secondary | outline | ghost | danger | navy
@@ -795,6 +818,21 @@ const atoms: Record<string, AtomEntry> = {
       </div>
     ),
     playground: <InputPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', gap: 16, overflowX: 'auto', paddingBottom: 8 }}>
+        <div style={{ minWidth: 150 }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500], display: 'block', marginBottom: 8 }}>Default</span><KInput placeholder="Escribe..." /></div>
+        <div style={{ minWidth: 150 }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500], display: 'block', marginBottom: 8 }}>Hover (CSS)</span><div style={{ filter: 'brightness(0.98)' }}><KInput placeholder="Escribe..." /></div></div>
+        <div style={{ minWidth: 150 }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500], display: 'block', marginBottom: 8 }}>Focus</span><div style={{ outline: `2px solid ${khorTokens.colors.brand.primary}`, outlineOffset: 0, borderRadius: khorTokens.radius.md }}><KInput placeholder="Escribe..." /></div></div>
+        <div style={{ minWidth: 150 }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500], display: 'block', marginBottom: 8 }}>Disabled</span><KInput placeholder="No disponible" disabled /></div>
+        <div style={{ minWidth: 150 }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500], display: 'block', marginBottom: 8 }}>Error</span><KInput value="Inválido" error="Requerido" /></div>
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Tab: Foco nativo al input.', 'Esc: Cierra menú si aplica, o limpia si allowClear=true.'],
+      aria: ['aria-invalid="true" cuando entra en error.', 'React/Radix enlaza aria-describedby al mensaje de error automáticamente.'],
+      contrast: 'AA Mínimo para el texto ingresado (>4.5:1)',
+      score: 95,
+    },
     code: `import { KInput, KTextArea } from '@khor/design-system/atoms/index';
 
 <KInput
@@ -861,6 +899,21 @@ const atoms: Record<string, AtomEntry> = {
       </div>
     ),
     playground: <BadgePlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+        <KBadge label="Default" />
+        <KBadge khorStatus="success" label="Success" />
+        <KBadge khorStatus="warning" label="Warning" />
+        <KBadge khorStatus="error" label="Error" />
+        <KBadge khorStatus="info" label="Info" />
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['No aplica nativamente.'],
+      aria: ['role="status" aplicable al contenedor padre.'],
+      contrast: 'AAA sobre elemento indicador, AA sobre texto adjunto.',
+      score: 100,
+    },
     code: `import { KBadge } from '@khor/design-system/atoms/index';
 
 <KBadge status="success" label="Activo" />
@@ -897,6 +950,21 @@ const atoms: Record<string, AtomEntry> = {
       </div>
     ),
     playground: <TagPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+        <KTag color="magenta">Magenta</KTag>
+        <KTag color="volcano">Volcano</KTag>
+        <KTag color="green">Green</KTag>
+        <KTag color="blue">Blue</KTag>
+        <KTag closable>Closable</KTag>
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Space/Enter: Cierra el tag si es "closable" y tiene foco.'],
+      aria: ['icon cierra utiliza aria-label y role="button".'],
+      contrast: 'AA sobre fondo tintado ligero',
+      score: 100,
+    },
     code: `import { KTag } from '@khor/design-system/atoms/index';
 
 <KTag color="primary">Departamento RH</KTag>
@@ -931,6 +999,20 @@ const atoms: Record<string, AtomEntry> = {
       </div>
     ),
     playground: <AvatarPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', gap: 16, alignItems: 'flex-end', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>Small</span><KAvatar size="small" name="AB" /></div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>Base</span><KAvatar name="AB" /></div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>Large</span><KAvatar size="large" name="AB" /></div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>Square</span><KAvatar shape="square" name="CD" /></div>
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['No aplica (usualmente envuelto en KButton o Link).'],
+      aria: ['alt se pasa orgánicamente cuando renderiza <img>.', 'Requiere aria-label si contiene icono descriptivo genérico.'],
+      contrast: 'AAA entre color de la letra y color dinámico del fondo.',
+      score: 100,
+    },
     code: `import { KAvatar } from '@khor/design-system/atoms/index';
 
 <KAvatar name="Maria Garcia" size="md" status="online" />
@@ -965,6 +1047,22 @@ const atoms: Record<string, AtomEntry> = {
       </div>
     ),
     playground: <SwitchPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>Off</span><KSwitch /></div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>On</span><KSwitch checked /></div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>Focus</span><div style={{ outline: `2px solid ${khorTokens.colors.brand.primary}`, outlineOffset: '2px', borderRadius: 999 }}><KSwitch checked /></div></div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>Disabled Off</span><KSwitch disabled /></div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>Disabled On</span><KSwitch checked disabled /></div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>Loading</span><KSwitch loading /></div>
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Tab: Navega.', 'Barra Espaciadora: Alterna (toggle).'],
+      aria: ['role="switch" (nativamente mapeado por Radix).', 'aria-checked se sincroniza.'],
+      contrast: 'AAA en el punto blanco sobre track activo',
+      score: 100,
+    },
     code: `import { KSwitch } from '@khor/design-system/atoms/index';
 
 <KSwitch
@@ -995,6 +1093,22 @@ const atoms: Record<string, AtomEntry> = {
       </div>
     ),
     playground: <CheckboxPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>Off</span><KCheckbox /></div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>On</span><KCheckbox checked /></div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>Indeterminate</span><KCheckbox indeterminate /></div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>Focus</span><div style={{ outline: `2px solid ${khorTokens.colors.brand.primary}`, outlineOffset: '2px', borderRadius: 4 }}><KCheckbox checked /></div></div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>Disabled Off</span><KCheckbox disabled /></div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>Disabled On</span><KCheckbox checked disabled /></div>
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Tab: Recibe foco.', 'Barra Espaciadora: Cambia estado y elimina modo indeterminado.'],
+      aria: ['role="checkbox"', 'aria-checked soporta "true", "false" o "mixed".'],
+      contrast: 'AA >3.0:1 bordes vacíos, AAA icono activo',
+      score: 100,
+    },
     code: `import { KCheckbox } from '@khor/design-system/atoms/index';
 
 <KCheckbox
@@ -1033,6 +1147,18 @@ const atoms: Record<string, AtomEntry> = {
       </div>
     ),
     playground: <RadioPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <KRadio options={[{ label: 'Unchecked', value: '1' }, { label: 'Checked', value: '2' }]} defaultValue="2" direction="vertical" />
+        <KRadio options={[{ label: 'Disabled Off', value: '3', disabled: true }, { label: 'Disabled On', value: '4', disabled: true }]} defaultValue="4" direction="vertical" />
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Up/Down/Left/Right: Mueve el foco al siguiente/previo item y lo selecciona.', 'Tab: Entra y sale del contenedor principal.'],
+      aria: ['role="radiogroup" asignado al contenedor', 'role="radio" y aria-checked asignados a cada elemento.'],
+      contrast: 'AAA en anillo indicador',
+      score: 100,
+    },
     code: `import { KRadio } from '@khor/design-system/atoms/index';
 
 <KRadio
@@ -1087,6 +1213,22 @@ const atoms: Record<string, AtomEntry> = {
       { name: 'children', type: 'ReactNode', required: true, description: 'Elemento que activa el tooltip.' },
     ],
     playground: <TooltipPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', gap: 16, padding: '16px 0', alignItems: 'center', overflowX: 'auto' }}>
+        <div style={{ padding: 12 }}>
+          <KTooltip title="Posición Arriba" placement="top" open><KButton variant="outline">Arriba (Forzado)</KButton></KTooltip>
+        </div>
+        <div style={{ padding: 12 }}>
+          <KTooltip title="Posición Abajo" placement="bottom" open><KButton variant="outline">Abajo (Forzado)</KButton></KTooltip>
+        </div>
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Tab: Al recibir el foco por teclado, Tooltip se expande auto.'],
+      aria: ['role="tooltip" asignado.', 'Se enlaza dinámicamente con aria-describedby al elemento desencadenador.'],
+      contrast: 'AAA sobre UI oscura',
+      score: 100,
+    },
     guidelines: ['Maximo 60 caracteres por tooltip.', 'No uses para informacion critica — esa debe ser visible siempre.'],
   },
   progress: {
@@ -1104,6 +1246,20 @@ const atoms: Record<string, AtomEntry> = {
       </div>
     ),
     playground: <ProgressPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <KProgress percent={30} />
+        <KProgress percent={50} status="active" />
+        <KProgress percent={100} status="success" />
+        <KProgress percent={70} status="exception" />
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['No interactivo. Funciona como indicador pasivo.'],
+      aria: ['role="progressbar"', 'aria-valuenow, aria-valuemin, aria-valuemax manejados dinámicamente.'],
+      contrast: 'AAA entre color de la barra (ej: #2E7D32) y track neutro.',
+      score: 100,
+    },
     code: `import { KProgress } from '@khor/design-system/atoms/index';
 
 <KProgress percent={75} />
@@ -1144,6 +1300,21 @@ const atoms: Record<string, AtomEntry> = {
       </div>
     ),
     playground: <TypographyPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <KText variant="h1">Display Principal (H1)</KText>
+        <KText variant="h3" color="navy">Título de Sección (H3)</KText>
+        <KText variant="body-lg" color="secondary">Texto de párrafo largo con legibilidad mejorada (Body Lg).</KText>
+        <KText variant="body-md">Texto estándar en interfaz (Body Md).</KText>
+        <KText variant="small" color="muted">Caption para metadatos o fechas.</KText>
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['No interactivo.'],
+      aria: ['Permite modificar tag con prop "as" (ej: as="h1" o as="p") para estructura semántica de documento perfecta.'],
+      contrast: 'AAA nativo en color "default", "navy" y "secondary". AA en "muted".',
+      score: 100,
+    },
     code: `import { KText } from '@khor/design-system/atoms/index';
 
 <KText variant="h1">Titulo Principal</KText>
@@ -1181,6 +1352,20 @@ const atoms: Record<string, AtomEntry> = {
       </div>
     ),
     playground: <AlertPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <KAlert type="success" title="Completado" description="Datos actualizados exitosamente." />
+        <KAlert type="error" title="Error crítico" description="Fallo de conexión." closable />
+        <KAlert type="warning" title="Atención" description="Su sesión expirará pronto." />
+        <KAlert type="info" title="Aviso" description="Nuevo módulo disponible." />
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Space/Enter: Descarta alerta si closable tiene foco.'],
+      aria: ['role="alert" implementado para live regions (lector la anunciará inmediatamente).', 'aria-label en el icono de cierre.'],
+      contrast: 'AAA sobre combinaciones fondo tintado / texto oscuro nativo de alerta.',
+      score: 100,
+    },
     code: `import { KAlert } from '@khor/design-system/atoms/index';
 
 <KAlert type="success" title="Guardado exitoso" description="Los cambios fueron aplicados." closable />
@@ -1227,6 +1412,19 @@ const atoms: Record<string, AtomEntry> = {
       </div>
     ),
     playground: <SkeletonPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+        <KSkeleton circle height={48} />
+        <div style={{ width: '100%', maxWidth: 300 }}><KSkeleton lines={4} /></div>
+        <KSkeleton width={150} height={32} />
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['No aplicable.'],
+      aria: ['role="status" o aria-busy="true" recomendado para el contenedor padre mientras la carga ocurre.'],
+      contrast: 'Animación pulsante cumple con directrices de destello sutil (sin parpadeos rápidos).',
+      score: 100,
+    },
     code: `import { KSkeleton } from '@khor/design-system/atoms/index';
 
 <KSkeleton lines={3} />
@@ -1253,6 +1451,18 @@ const atoms: Record<string, AtomEntry> = {
       </div>
     ),
     playground: <SliderPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 24, padding: '16px 8px', maxWidth: 400 }}>
+        <div><KText variant="small" color="muted">Default</KText><KSlider defaultValue={30} /></div>
+        <div><KText variant="small" color="muted">Disabled</KText><KSlider defaultValue={60} disabled /></div>
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Up/Right: Sube valor.', 'Down/Left: Baja valor.', 'Home/End: Valores extremos.'],
+      aria: ['role="slider"', 'aria-valuenow, aria-valuemin, aria-valuemax inyectados.', 'aria-disabled cuando aplica.'],
+      contrast: 'AAA sobre punto visual, AA track sobre fondo de tarjeta.',
+      score: 95,
+    },
     code: `import { KSlider } from '@khor/design-system/atoms/index';
 
 <KSlider value={volume} onChange={setVolume} min={0} max={100} step={1} />
@@ -1282,6 +1492,18 @@ const atoms: Record<string, AtomEntry> = {
       </div>
     ),
     playground: <RatePlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <div><KText variant="small" color="muted">Standard</KText><KRate defaultValue={3} /></div>
+        <div><KText variant="small" color="muted">Half Stars / Disabled</KText><KRate defaultValue={2.5} disabled allowHalf /></div>
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Left/Right: Mueve foco individual entre estrellas.', 'Enter/Space: Confirma calificación.'],
+      aria: ['Construido internamente como radiogroup o slider bidireccional.', 'aria-label global del contenedor recomendado.'],
+      contrast: 'AAA en estado seleccionado (Accent: Naranja Khor).',
+      score: 90,
+    },
     code: `import { KRate } from '@khor/design-system/atoms/index';
 
 <KRate value={rating} onChange={setRating} />
@@ -1311,6 +1533,19 @@ const atoms: Record<string, AtomEntry> = {
       </div>
     ),
     playground: <SpinPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', gap: 32, alignItems: 'center' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}><KText variant="small" color="muted">Small</KText><KSpin size="sm" /></div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}><KText variant="small" color="muted">Base</KText><KSpin size="md" /></div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}><KText variant="small" color="muted">With Tip</KText><KSpin size="md" tip="Buscando" /></div>
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['No aplicable.'],
+      aria: ['role="status" aplicable al contenedor padre.'],
+      contrast: 'AAA asegurada en texto tip.',
+      score: 100,
+    },
     code: `import { KSpin } from '@khor/design-system/atoms/index';
 
 <KSpin size="md" tip="Cargando..." />
@@ -1349,6 +1584,19 @@ const atoms: Record<string, AtomEntry> = {
       { name: 'className', type: 'string', description: 'Clase CSS adicional.' },
     ],
     playground: <DividerPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <KDivider />
+        <KDivider dashed />
+        <KDivider orientation="left">Sección 1</KDivider>
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['No interactivo.'],
+      aria: ['role="separator" detectado nativamente por lectores de pantalla.'],
+      contrast: 'Decorative (Contraste visual AA).',
+      score: 100,
+    },
     guidelines: ['Usa para separar secciones dentro de cards o formularios.', 'No abuses de dividers — el espaciado y agrupacion son mas efectivos.'],
   },
   textarea: {
@@ -1363,6 +1611,20 @@ const atoms: Record<string, AtomEntry> = {
       </div>
     ),
     playground: <TextAreaPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', gap: 16, overflowX: 'auto', paddingBottom: 8 }}>
+        <div style={{ minWidth: 150 }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500], display: 'block', marginBottom: 8 }}>Default</span><KTextArea placeholder="Texto..." rows={2} /></div>
+        <div style={{ minWidth: 150 }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500], display: 'block', marginBottom: 8 }}>Focus</span><div style={{ outline: `2px solid ${khorTokens.colors.brand.primary}`, outlineOffset: 0, borderRadius: khorTokens.radius.md }}><KTextArea placeholder="Texto..." rows={2} /></div></div>
+        <div style={{ minWidth: 150 }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500], display: 'block', marginBottom: 8 }}>Disabled</span><KTextArea placeholder="No disponible" disabled rows={2} /></div>
+        <div style={{ minWidth: 150 }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500], display: 'block', marginBottom: 8 }}>Error</span><KTextArea value="Pellentesque" error="Excede máximo" rows={2} /></div>
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Tab: Navega adentro/fuera.', 'Enter: Salto de línea.'],
+      aria: ['aria-invalid se enciende automáticamente.', 'aria-describedby apunta al texto de error.'],
+      contrast: 'AA textos grises, AAA texto negro',
+      score: 95,
+    },
     code: `import { KTextArea } from '@khor/design-system/atoms/index';
 
 <KTextArea
@@ -1399,21 +1661,69 @@ const atoms: Record<string, AtomEntry> = {
     preview: (<div style={{ maxWidth: 300 }}><KInputPassword placeholder="Ingresa tu contraseña" /></div>),
     code: `<KInputPassword value={pass} onChange={setPass} />`, filename: 'KInputPassword.tsx',
     props: [{ name: 'value', type: 'string', description: 'Valor.' }, { name: 'onChange', type: '(v) => void', description: 'Callback.' }, { name: 'error', type: 'string', description: 'Error.' }],
+    stateShowcase: (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <KInputPassword placeholder="Password..." />
+        <KInputPassword placeholder="Obligatorio" error="Mínimo 8 caracteres" />
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Space/Enter: Alterna visibilidad en el botón del ojo.'],
+      aria: ['aria-pressed o title refleja visualmente el estado de revelación.'],
+      contrast: 'AAA',
+      score: 100,
+    },
     guidelines: ['Siempre incluye el toggle de visibilidad.'] },
   'input-search': { id: 'input-search', name: 'KInputSearch', description: 'Input de búsqueda con botón "Buscar" integrado y soporte para Enter.',
     preview: (<div style={{ maxWidth: 400 }}><KInputSearch placeholder="Buscar empleado..." allowClear /></div>),
     code: `<KInputSearch onSearch={handleSearch} enterButton allowClear />`, filename: 'KInputSearch.tsx',
     props: [{ name: 'onSearch', type: '(v) => void', description: 'Al buscar.' }, { name: 'enterButton', type: 'boolean | string', description: 'Botón de búsqueda.' }, { name: 'allowClear', type: 'boolean', description: 'Botón limpiar.' }],
+    stateShowcase: (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <KInputSearch placeholder="Buscar empleado..." />
+        <KInputSearch placeholder="Cargando..." loading />
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Enter: Dispara búsqueda.', 'Esc: Limpia el campo si tiene allowClear.'],
+      aria: ['role="searchbox" dictado implícitamente.'],
+      contrast: 'AAA',
+      score: 100,
+    },
     guidelines: ['Usa enterButton para búsquedas con acción explícita.'] },
   'float-button': { id: 'float-button', name: 'KFloatButton', description: 'Botón flotante (FAB) fijo en la esquina de la pantalla. Ideal para acciones principales.',
     preview: (<div style={{ position: 'relative', height: 80, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}><KText variant="small" color="muted" className="p-4">El botón flotante aparece fijo en la esquina inferior derecha.</KText></div>),
     code: `<KFloatButton icon={<Plus />} onClick={handleAdd} tooltip="Nuevo empleado" />`, filename: 'KFloatButton.tsx',
-    props: [{ name: 'icon', type: 'ReactNode', description: 'Ícono del botón.' }, { name: 'onClick', type: '() => void', description: 'Callback.' }, { name: 'type', type: "'primary'|'default'", description: 'Estilo.' }],
+    props: [{ name: 'icon', type: 'ReactNode', description: 'Ícono.' }, { name: 'onClick', type: '() => void', description: 'Callback.' }, { name: 'type', type: "'primary'|'default'", description: 'Estilo.' }],
+    stateShowcase: (
+      <div style={{ position: 'relative', height: 100, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
+        <div style={{ position: 'absolute', bottom: 16, right: 16 }}><KFloatButton icon={<Plus />} tooltip="Añadir" /></div>
+        <div style={{ position: 'absolute', bottom: 16, right: 80 }}><KFloatButton type="default" icon={<Search />} tooltip="Buscar" /></div>
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Tab: Es alcanzable por orden del DOM.'],
+      aria: ['Se provee el aria-label desde tooltip internamente.'],
+      contrast: 'AAA sobre UI general',
+      score: 100,
+    },
     guidelines: ['Solo un FAB por pantalla. Usa para la acción más importante.'] },
   'image': { id: 'image', name: 'KImage', description: 'Imagen con preview lightbox al hacer clic, fallback para errores de carga y bordes redondeados.',
     preview: (<KImage src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=200&h=150&fit=crop" width={200} height={150} alt="Equipo" />),
     code: `<KImage src="/photo.jpg" width={200} height={150} preview />`, filename: 'KImage.tsx',
-    props: [{ name: 'src', type: 'string', required: true, description: 'URL de la imagen.' }, { name: 'preview', type: 'boolean', default: 'true', description: 'Habilitar lightbox.' }, { name: 'fallback', type: 'string', description: 'URL de imagen de fallback.' }],
+    props: [{ name: 'src', type: 'string', required: true, description: 'URL.' }, { name: 'preview', type: 'boolean', default: 'true', description: 'Lightbox.' }, { name: 'fallback', type: 'string', description: 'Fallback.' }],
+    stateShowcase: (
+      <div style={{ display: 'flex', gap: 16, alignItems: 'flex-end' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>Normal</span><KImage src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=100&h=100&fit=crop" width={100} height={100} /></div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>Error Fallback</span><KImage src="error.jpg" fallback="https://placehold.co/100x100?text=Error" width={100} height={100} /></div>
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Space/Enter: Si preview=true activa el lightbox.'],
+      aria: ['Requiere prop alt explícito nativamente.'],
+      contrast: 'Decorative',
+      score: 100,
+    },
     guidelines: ['Usa preview para imágenes que necesitan verse en grande.'] },
   'affix': { id: 'affix', name: 'KAffix', description: 'Envuelve contenido para fijarlo al viewport al hacer scroll. Útil para toolbars o filtros.',
     preview: (<div style={{ padding: 16, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}><KText variant="body-md" color="secondary">KAffix fija su contenido al hacer scroll. Usa offsetTop para definir la distancia desde arriba.</KText></div>),
@@ -1524,6 +1834,8 @@ export function AtomsPage() {
       props={atom.props}
       guidelines={atom.guidelines}
       aiNotes={atom.aiNotes}
+      stateShowcase={atom.stateShowcase}
+      a11ySummary={atom.a11ySummary}
     />
   );
 }
