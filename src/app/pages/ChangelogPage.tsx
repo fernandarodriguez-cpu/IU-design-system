@@ -42,22 +42,40 @@ const changeTypeConfig: Record<ChangeType, { color: string; bg: string; icon: Re
 };
 
 const changelog: VersionEntry[] = [
+
+  {
+    version: '3.1.1',
+    date: '30 Mar 2026',
+    codename: 'Refinement',
+    summary: 'Optimización institucional orientada a la perfección del DOM y la accesibilidad. Eliminación masiva de fugas de abstracción (prop-drifting) y completado de la capa de motion y semántica de segunda capa.',
+    highlights: [
+      'Destructuring Masivo: Limpieza total de atributos no-estándar en el DOM para todos los átomos.',
+      'Accessibility Core: Soporte nativo para prefers-reduced-motion y easings asimétricos de entrada/salida.',
+      'Semantic Expansion: Cobertura total de tokens de Bordes y variantes de Acción (Ghost, Disabled).',
+    ],
+    changes: [
+      { type: 'fixed', description: 'Prevención de warnings de React mediante destructuring selectivo en componentes raíz.' },
+      { type: 'added', component: 'theme.css', description: 'Nuevos tokens de motion (instant), easings asimétricos y optimización de feedback-light en Dark Mode.' },
+      { type: 'added', component: 'CHANGELOG.md', description: 'Creación de archivo físico de registro de cambios en la raíz del repositorio.' },
+    ],
+    stats: { added: 5, changed: 45, fixed: 12 },
+  },
   {
     version: '3.1.0',
     date: '27 Mar 2026',
-    codename: 'Density',
-    summary: 'Implementación del sistema global de Density Tokens y adición escalada de grillas de validación (State Showcase) a lo largo del sistema de componentes.',
+    codename: 'Density & AI',
+    summary: 'Implementación del sistema global de Density Tokens y adición escalada de grillas de validación (State Showcase) a lo largo del sistema de componentes. Además, refactorización masiva del Exportador de IA para ser 100% dinámico y sincronizarse en tiempo real con las guías de Accesibilidad ARIA.',
     highlights: [
       'Density Tokens: Nuevo sistema unificado para controlar compacidad (.khor-compact) y comodidad (.khor-comfortable).',
-      'Tokens en KButton y KInput: Reemplazo de props estáticas de tamaño por custom properties dependientes de la densidad global en uso.',
-      'Auditoría Exhaustiva V2: Incorporación por Olas de reportes sintéticos de accesibilidad a cada componente documentado.',
+      'Auditoría Exhaustiva V2: Incorporación por Olas de reportes sintéticos de accesibilidad a los 73 componentes del sistema.',
+      'Exportador IA Dinámico: AIExportPage ahora procesa el Markdown on-the-fly, mapeando Props, Notas de IA, Keyboard handlers y ARIA de los diccionarios reales.',
     ],
     changes: [
-      { type: 'added', component: 'theme.css', description: 'Declaración de variables semánticas de densidad (radius, espaciados, fonts, etc) y modificadores (.khor-compact).' },
+      { type: 'added', component: 'theme.css', description: 'Declaración de variables semánticas de densidad (radius, espaciados, fonts, etc), modificadores (.khor-compact) y completado de la escala neutral oscura (600, 700, 800).' },
+      { type: 'changed', component: 'AIExportPage', componentPath: '/ai-export', description: 'Reescritura del generador MD (-1,000 líneas codificadas). Ahora construye el manual leyendo directamente los exports de los componentes (AtomsPage, MoleculesPage, OrganismsPage) e inyecta reglas sistémicas.' },
       { type: 'changed', component: 'KButton', componentPath: '/atoms/button', description: 'Atado el box-model base a variables del ecosistema Density (height-input, padding, radius_sm/md/lg).' },
-      { type: 'changed', component: 'KInput', componentPath: '/atoms/input', description: 'Refactorización para consumir el density-system y asegurar un tamaño consistente al agrupar con botones.' },
     ],
-    stats: { added: 12, changed: 5, fixed: 0 },
+    stats: { added: 15, changed: 78, fixed: 2 },
   },
   {
     version: '3.0.0',
@@ -155,7 +173,7 @@ const changelog: VersionEntry[] = [
       { type: 'changed', component: 'AIExportPage', componentPath: '/ai-export', description: 'Guía IA actualizada: 27 átomos (antes 18), 33 moléculas (antes 12), 13 organismos (antes 8). Incluye todos los componentes extendidos: KInputSearch, KAffix, KSpace, KImage, KWatermark, KQRCode, KInputNumber, KSegmented, KAutocomplete, KDateRangePicker, KSelectAdvanced, KDescriptions, KPopconfirm, KResult, KTimeline, KCascader, KStatistic, KTimePicker, KMentions, KAnchor, KList, KDividerExtended, KTreeSelect, KNotificationContainer.' },
       { type: 'fixed', component: 'AIExportPage', componentPath: '/ai-export', description: 'Botón "Copiar al portapapeles" corregido: implementado fallback con document.execCommand("copy") vía textarea oculto cuando navigator.clipboard falla en entornos sandboxed (iframes). Si ambos fallan, muestra toast de warning y auto-abre la vista previa expandida.' },
       { type: 'added', component: 'AIExportPage', componentPath: '/ai-export', description: 'Nuevo botón "Seleccionar todo (Ctrl+C)" en la barra inferior de la vista previa. Usa window.getSelection() para seleccionar todo el texto del <pre> y muestra toast informativo.' },
-      { type: 'changed', component: 'AIExportPage', componentPath: '/ai-export', description: 'Versión del documento ahora es dinámica (constante KHOR_VERSION) en vez de hardcoded "1.0.0". Sección de Imports en Patrones actualizada con rutas de todos los módulos extendidos.' },
+      { type: 'changed', component: 'AIExportPage', componentPath: '/ai-export', description: 'Versión del documento ahora es dinámica (const KHOR_VERSION = "3.1.1") en vez de hardcoded "1.0.0". Sección de Imports en Patrones actualizada con rutas de todos los módulos extendidos.' },
       { type: 'changed', component: 'AppShell', componentPath: '/', description: 'Badge de versión actualizado a v2.4.0 en header.' },
     ],
     stats: { added: 1, changed: 3, fixed: 1 },

@@ -27,7 +27,10 @@ const tagColorMap: Record<KTagColor, string> = {
   default: t.colors.neutral[500],
 };
 
-export function KTag({ color = 'default', style, children, icon, bordered = true, ...rest }: KTagProps) {
+export function KTag({ 
+  color = 'default', style, children, icon, bordered = true, 
+  variant, size, ...rest 
+}: KTagProps & { variant?: any, size?: any }) {
   const resolvedColor = tagColorMap[color as KTagColor] ?? color;
   return (
     <Tag

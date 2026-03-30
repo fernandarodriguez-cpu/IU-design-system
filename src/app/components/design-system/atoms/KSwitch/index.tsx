@@ -10,7 +10,9 @@ export interface KSwitchProps extends SwitchProps {
   label?: string;
 }
 
-export function KSwitch({ label, style, ...rest }: KSwitchProps) {
+export function KSwitch({ 
+  label, style, variant, size, fullWidth, ...rest 
+}: KSwitchProps & { variant?: any, size?: any, fullWidth?: any }) {
   const switchElement = (
     <Switch
       style={{
@@ -24,9 +26,18 @@ export function KSwitch({ label, style, ...rest }: KSwitchProps) {
   if (!label) return switchElement;
 
   return (
-    <label style={{ display: 'inline-flex', alignItems: 'center', gap: 8, cursor: rest.disabled ? 'not-allowed' : 'pointer' }}>
+    <label style={{ 
+      display: 'inline-flex', 
+      alignItems: 'center', 
+      gap: 8, 
+      cursor: rest.disabled ? 'not-allowed' : 'pointer' 
+    }}>
       {switchElement}
-      <span style={{ fontSize: 14, color: rest.disabled ? t.colors.neutral[300] : t.colors.neutral[900], fontFamily: font }}>
+      <span style={{ 
+        fontSize: 14, 
+        color: rest.disabled ? t.colors.neutral[300] : t.colors.neutral[900], 
+        fontFamily: font 
+      }}>
         {label}
       </span>
     </label>

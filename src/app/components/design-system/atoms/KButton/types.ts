@@ -16,4 +16,6 @@ export interface KButtonProps extends Omit<ButtonProps, 'size' | 'type' | 'varia
   htmlType?: KButtonHtmlType;
   /** @deprecated usa icon de AntD directamente */
   iconPosition?: 'start' | 'end';
+  /** Destructured to avoid DOM leakage */
+  fullWidth?: boolean;
 }

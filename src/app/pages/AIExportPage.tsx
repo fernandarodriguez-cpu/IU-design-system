@@ -13,11 +13,14 @@ import { KCardSection, KTabs } from '../components/design-system/organisms/index
 import { kToast } from '../components/design-system/organisms/index';
 import { khorTokens } from '../theme/khor-theme';
 import { patterns } from '../patterns/index';
+import { atoms } from './AtomsPage';
+import { molecules } from './MoleculesPage';
+import { organisms } from './OrganismsPage';
 
 const t = khorTokens;
 
 /* ─── Version (must match ChangelogPage & AppShell) ─── */
-const KHOR_VERSION = '3.1.0';
+const KHOR_VERSION = '3.1.1';
 
 /* ─── Sections config ───────────────────────── */
 interface SectionConfig {
@@ -47,31 +50,12 @@ function generateMarkdown(sections: SectionConfig[]): string {
   const today = new Date().toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' });
 
   if (enabled.has('header')) {
-    parts.push(`# Khor Design System — Guia para IA
+    parts.push(`
+# Sistema de Diseño Khor v${KHOR_VERSION}
+Generado el: ${today}
 
-> Este documento es la fuente unica de verdad del sistema de diseno **Khor**.
-> Usalo como contexto/prompt en cualquier IA generativa (ChatGPT, Claude, Figma Make, Cursor, v0, etc.)
-> para que genere interfaces consistentes con nuestra marca.
-
-**Version:** ${KHOR_VERSION}
-**Generado:** ${today}
-**Stack:** React 19 + TypeScript + Tailwind CSS v4 + Radix UI + Lucide React + Recharts + Sonner
-**Fuentes:** Raleway (titulos/UI) + Plus Jakarta Sans (cuerpo secundario)
-**Arquitectura:** Atomic Design (Atomos > Moleculas > Organismos > Templates > Paginas)
-
-## Instrucciones para la IA
-
-Cuando generes interfaces para Khor:
-1. **Usa SIEMPRE** los componentes prefijados con \`K\` (KButton, KInput, etc.) — nunca elementos HTML crudos para UI.
-2. **Respeta los tokens** de color, tipografia y espaciado definidos abajo.
-3. **Importa** componentes desde las rutas del sistema: \`atoms\`, \`molecules\`, \`organisms\`.
-4. **No uses** Ant Design (antd), Material UI ni otros kits de UI — el sistema es autosuficiente.
-5. **Prefiere** inline styles con \`khorTokens\` o CSS variables \`var(--khor-*)\` para coherencia.
-6. **Iconos:** Usa solo \`lucide-react\` con \`size={16|20|24}\` y \`strokeWidth={2}\`.
-7. **Graficos:** Usa \`recharts\` (LineChart, BarChart, AreaChart, PieChart) con los colores \`chart-1\` a \`chart-5\`.
-8. **Notificaciones:** Usa \`kToast({ type, title, description })\` del organismo KToastManager (powered by Sonner).
-
----`);
+Este documento contiene la especificación técnica, tokens y APIs de componentes del sistema de diseño Khor. Úsalo como contexto para que la IA genere código consistente, accesible y alineado con la marca.
+`);
   }
 
   if (enabled.has('tokens')) {
@@ -172,18 +156,56 @@ style={{ boxShadow: khorTokens.shadows.sm }}
 style={{ fontFamily: khorTokens.typography.fontPrimary }}
 \`\`\`
 
-### CSS Variables (Tailwind v4)
+### Tokens Semánticos (Action, Surface, Text)
 
-Las CSS variables mapeadas permiten usar Tailwind directamente:
+Khor v3.1 introduce tokens semánticos (independientes del modo claro/oscuro) para garantizar escalabilidad:
+\`\`\`css
+/* Capa Semantic - Surface */
+var(--khor-surface-page)       /* Fondo general, ant-layout */
+var(--khor-surface-card)       /* Fondos blancos/panels modales */
+var(--khor-surface-overlay)    /* Backdrop de drawers/modals */
+
+/* Capa Semantic - Text */
+var(--khor-text-primary)       /* Titulos */
+var(--khor-text-secondary)     /* Descripciones */
+var(--khor-text-disabled)      /* Texto bloqueado */
+
+/* Capa Semantic - Action */
+var(--khor-action-primary-default) /* Botones primary, links fuertes */
+var(--khor-action-primary-hover)
 \`\`\`
-bg-background   → fondo del canvas (#EDF0F1 light / #22243A dark)
-bg-card          → fondo de tarjetas (#FFFFFF light / #1A1B2E dark)
-text-foreground  → texto principal
-text-muted-foreground → texto secundario
-border-border    → bordes
-bg-primary / text-primary-foreground → boton principal
-bg-destructive   → acciones destructivas
+*(IMPORTANTE para la IA: Preferir SIEMPRE la capa Semántica sobre primitivos crudos).*
+
+### Tokens de Densidad (.khor-compact / .khor-comfortable)
+
+Soportado a través de inyecciones automáticas o agregando \`className="khor-compact"\` en contenedores padre:
+\`\`\`css
+/* .khor-compact reduce drásticamente vacíos para Data-dashboards */
+--khor-density-spacing-md: 8px;      /* Default: 16px */
+--khor-density-height-input: 28px;   /* Default: 36px */
+--khor-density-font-body: 12px;      /* Default: 14px */
 \`\`\`
+
+### Motion y Easing
+
+Usa variables para animar componentes consistentes:
+\`\`\`css
+transition: all var(--khor-duration-normal) var(--khor-easing-standard);
+
+/* Durations */
+--khor-duration-fast: 100ms;
+--khor-duration-normal: 200ms;
+--khor-duration-slow: 400ms;
+
+/* Easings */
+--khor-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
+--khor-easing-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);  /* Efectos modales o drawer bounce */
+\`\`\`
+
+### Accesibilidad WCAG y RTL
+
+- **WCAG ARIA:** Todos los componentes nativos manejan ARIA implícito, Focus-traps y anunciadores (\`aria-live="polite"\`). Como IA, debes construir usando estas primitives de Khor. Si construyes custom HTML sin primitives, DEBES inyectar role y states a11y.
+- **RTL (Right-to-Left):** Soporte actualmente no contemplado/requerido en el framework Khor.
 
 ---`);
   }
@@ -241,1076 +263,62 @@ style={{ backgroundColor: 'var(--card)', color: 'var(--foreground)' }}
 ---`);
   }
 
+  const renderDict = (title: string, desc: string, importPath: string, dict: Record<string, any>) => {
+    const keys = Object.keys(dict);
+    let md = `## ${title} (${keys.length} componentes)\n\n${desc}\nImportar desde: \`${importPath}\`\n\n`;
+    
+    keys.forEach(key => {
+      const comp = dict[key];
+      md += `### ${comp.name}\n${comp.description}\n\n`;
+      
+      if (comp.aiNotes) {
+        md += `> **Directrices IA**: ${comp.aiNotes}\n\n`;
+      }
+
+      if (comp.a11ySummary) {
+        md += `**Accesibilidad (ARIA & Keyboard - Score: ${comp.a11ySummary.score}/100)**\n`;
+        md += `- **Keyboard:** ${comp.a11ySummary.keyboard.join(' ')}\n`;
+        md += `- **ARIA:** ${comp.a11ySummary.aria.join(' ')}\n`;
+        md += `- **Contraste:** ${comp.a11ySummary.contrast}\n\n`;
+      }
+
+      if (comp.props && comp.props.length > 0) {
+        md += `**Props Principales:**\n`;
+        md += `| Prop | Tipo | Requerido | Default | Descripcion |\n`;
+        md += `|------|------|-----------|---------|-------------|\n`;
+        comp.props.forEach((p: any) => {
+          md += `| \`${p.name}\` | \`${p.type}\` | ${p.required ? 'Si' : 'No'} | ${p.default ? `\`${p.default}\`` : '-'} | ${p.description} |\n`;
+        });
+        md += `\n`;
+      }
+
+      if (comp.code) {
+        md += `**Ejemplo de Uso:**\n\`\`\`tsx\n${comp.code}\n\`\`\`\n\n`;
+      }
+
+      if (comp.guidelines && comp.guidelines.length > 0) {
+        md += `**Guidelines UX:**\n`;
+        comp.guidelines.forEach((g: string) => {
+          md += `- ${g}\n`;
+        });
+        md += `\n`;
+      }
+
+      md += `---\n\n`;
+    });
+    return md;
+  };
+
   if (enabled.has('atoms')) {
-    parts.push(`
-## Atomos (27 componentes)
-
-Los atomos son la unidad mas pequena e indivisible de la interfaz.
-Importar: \`import { KButton, KInput, ... } from './components/design-system/atoms/index'\`
-
-### KButton
-Boton principal del sistema con 6 variantes y 3 tamanos.
-\`\`\`tsx
-interface KButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'navy';
-  size?: 'sm' | 'md' | 'lg';
-  icon?: ReactNode;          // Icono de Lucide
-  iconPosition?: 'start' | 'end';
-  loading?: boolean;         // Muestra spinner y deshabilita
-  block?: boolean;           // Ancho 100%
-}
-
-// Ejemplos:
-<KButton variant="primary" size="md">Guardar</KButton>
-<KButton variant="outline" icon={<Download size={16} />}>Exportar</KButton>
-<KButton variant="danger" loading>Eliminando...</KButton>
-<KButton variant="navy" block>Accion completa</KButton>
-<KButton variant="ghost" size="sm">Cancelar</KButton>
-\`\`\`
-
-### KInput
-Campo de texto con soporte para iconos, password toggle, errores y estados.
-\`\`\`tsx
-interface KInputProps {
-  placeholder?: string;
-  type?: string;             // 'text' | 'password' | 'email' | 'number' | etc.
-  disabled?: boolean;
-  error?: string;            // Muestra borde rojo + mensaje
-  prefix?: ReactNode;        // Icono izquierdo
-  suffix?: ReactNode;        // Icono derecho
-  value?: string;
-  onChange?: (e) => void;
-  size?: 'sm' | 'md' | 'lg';
-  showPasswordToggle?: boolean;  // Solo para type="password"
-  className?: string;
-}
-
-<KInput placeholder="Email" prefix={<Mail size={16} />} />
-<KInput type="password" showPasswordToggle />
-<KInput error="Campo requerido" />
-\`\`\`
-
-### KTextArea
-Area de texto multilinea con contador de caracteres.
-\`\`\`tsx
-interface KTextAreaProps {
-  placeholder?: string;
-  rows?: number;             // Default: 4
-  disabled?: boolean;
-  value?: string;
-  onChange?: (e) => void;
-  error?: string;
-  maxLength?: number;
-  showCount?: boolean;       // Muestra "X/maxLength"
-  className?: string;
-}
-\`\`\`
-
-### KBadge
-Indicador de estado con punto de color y texto.
-\`\`\`tsx
-interface KBadgeProps {
-  status?: 'success' | 'error' | 'warning' | 'info' | 'default';
-  label: string;
-  dot?: boolean;             // Default: true, muestra circulo de color
-  className?: string;
-}
-
-<KBadge status="success" label="Activo" />
-<KBadge status="error" label="Error" />
-<KBadge status="warning" label="Pendiente" dot={false} />
-\`\`\`
-
-### KTag
-Etiqueta/chip con color y opcion de cierre.
-\`\`\`tsx
-interface KTagProps {
-  color?: 'primary' | 'navy' | 'accent' | 'success' | 'error' | 'warning' | 'default';
-  closable?: boolean;
-  onClose?: () => void;
-  children: ReactNode;
-  className?: string;
-}
-
-<KTag color="primary">React</KTag>
-<KTag color="navy" closable onClose={handleRemove}>Filtro</KTag>
-\`\`\`
-
-### KAvatar
-Avatar circular con imagen, iniciales, tamanos y estado de conexion.
-\`\`\`tsx
-interface KAvatarProps {
-  src?: string;              // URL de imagen
-  name?: string;             // Genera iniciales si no hay src
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  status?: 'online' | 'offline' | 'busy' | 'away';
-  className?: string;
-}
-
-<KAvatar name="Ana Garcia" status="online" />
-<KAvatar src="/photo.jpg" size="lg" />
-\`\`\`
-
-### KSwitch
-Toggle on/off basado en Radix Switch.
-\`\`\`tsx
-interface KSwitchProps {
-  checked?: boolean;
-  onChange?: (checked: boolean) => void;
-  disabled?: boolean;
-  label?: string;
-  size?: 'small' | 'default';
-  className?: string;
-}
-\`\`\`
-
-### KCheckbox
-Casilla de verificacion con estado indeterminate (Radix Checkbox).
-\`\`\`tsx
-interface KCheckboxProps {
-  checked?: boolean;
-  onChange?: (checked: boolean) => void;
-  disabled?: boolean;
-  indeterminate?: boolean;
-  label?: string;
-  className?: string;
-}
-\`\`\`
-
-### KRadio
-Grupo de opciones radio con layout vertical/horizontal (Radix RadioGroup).
-\`\`\`tsx
-interface KRadioProps {
-  options: { label: string; value: string; disabled?: boolean }[];
-  value?: string;
-  onChange?: (value: string) => void;
-  disabled?: boolean;
-  direction?: 'horizontal' | 'vertical';
-  variant?: 'default' | 'card';  // 'card' muestra cada opcion como tarjeta
-  className?: string;
-}
-\`\`\`
-
-### KTooltip
-Tooltip accesible basado en Radix Tooltip.
-\`\`\`tsx
-interface KTooltipProps {
-  title: string;
-  placement?: 'top' | 'right' | 'bottom' | 'left';
-  children: ReactNode;       // Trigger element
-  className?: string;
-}
-
-<KTooltip title="Guardar cambios" placement="top">
-  <KButton variant="primary">Guardar</KButton>
-</KTooltip>
-\`\`\`
-
-### KProgress
-Barra de progreso basada en Radix Progress.
-\`\`\`tsx
-interface KProgressProps {
-  percent: number;           // 0-100
-  status?: 'active' | 'success' | 'error';
-  size?: 'small' | 'default';
-  showInfo?: boolean;        // Muestra porcentaje, default: true
-  strokeColor?: string;      // Color custom de la barra
-  className?: string;
-}
-\`\`\`
-
-### KText
-Componente tipografico semantico.
-\`\`\`tsx
-interface KTextProps {
-  variant?: 'h1' | 'h2' | 'h3' | 'body-lg' | 'body-md' | 'small' | 'label' | 'overline';
-  color?: 'default' | 'muted' | 'primary' | 'navy' | 'success' | 'error' | 'accent' | 'white';
-  children: ReactNode;
-  className?: string;
-  as?: keyof JSX.IntrinsicElements;  // Overridear el tag HTML
-}
-
-<KText variant="h1">Titulo Principal</KText>
-<KText variant="body-md" color="muted">Texto secundario</KText>
-<KText variant="overline" color="primary">SECCION</KText>
-\`\`\`
-
-### KDivider
-Linea separadora horizontal.
-\`\`\`tsx
-<KDivider className="my-4" />
-\`\`\`
-
-### KAlert
-Alerta con icono, titulo, descripcion y cierre opcional.
-\`\`\`tsx
-interface KAlertProps {
-  type?: 'success' | 'error' | 'warning' | 'info';
-  title: string;
-  description?: string;
-  closable?: boolean;
-  onClose?: () => void;
-  showIcon?: boolean;        // Default: true
-  className?: string;
-}
-
-<KAlert type="success" title="Guardado" description="Los cambios fueron guardados." closable />
-<KAlert type="error" title="Error" description="No se pudo conectar." />
-\`\`\`
-
-### KSkeleton
-Placeholder de carga animado.
-\`\`\`tsx
-interface KSkeletonProps {
-  width?: string | number;   // Default: '100%'
-  height?: string | number;  // Default: 16
-  circle?: boolean;          // Renderiza circulo
-  lines?: number;            // Multiples lineas
-  className?: string;
-}
-
-<KSkeleton lines={3} />
-<KSkeleton circle width={48} height={48} />
-\`\`\`
-
-### KSlider
-Deslizador de rango basado en Radix Slider.
-\`\`\`tsx
-interface KSliderProps {
-  value?: number;
-  defaultValue?: number;
-  min?: number;
-  max?: number;
-  step?: number;
-  onChange?: (value: number) => void;
-  disabled?: boolean;
-  showValue?: boolean;       // Muestra valor numerico
-  className?: string;
-}
-\`\`\`
-
-### KRate
-Calificacion con estrellas.
-\`\`\`tsx
-interface KRateProps {
-  value?: number;
-  defaultValue?: number;
-  count?: number;            // Numero de estrellas, default: 5
-  onChange?: (value: number) => void;
-  disabled?: boolean;
-  size?: number;             // Tamano en px, default: 20
-  className?: string;
-}
-\`\`\`
-
-### KSpin
-Spinner de carga con texto opcional.
-\`\`\`tsx
-interface KSpinProps {
-  size?: 'sm' | 'md' | 'lg';
-  color?: string;
-  tip?: string;              // Texto debajo del spinner
-  className?: string;
-}
-
-<KSpin size="lg" tip="Cargando datos..." />
-\`\`\`
-
-### KButtonGroup
-Grupo de botones con diseño uniforme.
-\`\`\`tsx
-interface KButtonGroupProps {
-  children: ReactNode;
-  size?: 'sm' | 'md' | 'lg';
-  className?: string;
-}
-
-<KButtonGroup size="md">
-  <KButton variant="primary">Opcion 1</KButton>
-  <KButton variant="secondary">Opcion 2</KButton>
-  <KButton variant="outline">Opcion 3</KButton>
-</KButtonGroup>
-\`\`\`
-
-### KInputPassword
-Input de password con visibilidad toggle.
-\`\`\`tsx
-interface KInputPasswordProps {
-  placeholder?: string;
-  value?: string;
-  onChange?: (e) => void;
-  size?: 'sm' | 'md' | 'lg';
-  className?: string;
-}
-
-<KInputPassword placeholder="Password" />
-\`\`\`
-
-### KFloatButton
-Boton flotante para acciones rapidas.
-\`\`\`tsx
-interface KFloatButtonProps {
-  icon: ReactNode;
-  onClick?: () => void;
-  size?: 'sm' | 'md' | 'lg';
-  className?: string;
-}
-
-<KFloatButton icon={<Plus size={20} />} onClick={handleAdd} size="md" />
-\`\`\`
-
-### KInputSearch
-Input de busqueda con boton de buscar, loading y clear.
-\`\`\`tsx
-interface KInputSearchProps {
-  value?: string;
-  onChange?: (value: string) => void;
-  onSearch?: (value: string) => void;
-  placeholder?: string;
-  enterButton?: boolean;
-  loading?: boolean;
-  allowClear?: boolean;
-  className?: string;
-}
-\`\`\`
-
-### KAffix
-Wrapper que fija un elemento al hacer scroll (sticky).
-\`\`\`tsx
-interface KAffixProps {
-  offsetTop?: number;
-  offsetBottom?: number;
-  children: ReactNode;
-  className?: string;
-}
-\`\`\`
-
-### KSpace
-Contenedor de espaciado automatico entre elementos.
-\`\`\`tsx
-interface KSpaceProps {
-  direction?: 'horizontal' | 'vertical';
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-  wrap?: boolean;
-  align?: 'start' | 'center' | 'end';
-  children: ReactNode;
-  className?: string;
-}
-\`\`\`
-
-### KImage
-Imagen con fallback, preview lightbox y estados de error.
-\`\`\`tsx
-interface KImageProps {
-  src: string;
-  alt?: string;
-  width?: number | string;
-  height?: number | string;
-  fallback?: string;
-  preview?: boolean;         // Lightbox al hacer clic
-  className?: string;
-}
-\`\`\`
-
-### KWatermark
-Marca de agua superpuesta sobre contenido.
-\`\`\`tsx
-interface KWatermarkProps {
-  text: string;
-  fontSize?: number;
-  color?: string;
-  rotate?: number;
-  gap?: number;
-  children: ReactNode;
-  className?: string;
-}
-\`\`\`
-
-### KQRCode
-Generador de codigos QR visual.
-\`\`\`tsx
-interface KQRCodeProps {
-  value: string;
-  size?: number;             // Default: 128
-  color?: string;
-  bgColor?: string;
-  className?: string;
-}
-\`\`\`
-
----`);
+    parts.push(renderDict('Átomos', 'Unidades indivisibles y fundamentales.', "import { KButton } from '@khor/design-system/atoms/index'", atoms));
   }
 
   if (enabled.has('molecules')) {
-    parts.push(`
-## Moleculas (33 componentes)
-
-Combinaciones de atomos que forman unidades funcionales reutilizables.
-Importar: \`import { KFormField, KSearchInput, ... } from './components/design-system/molecules/index'\`
-
-### KFormField
-Wrapper de formulario con label, error y hint.
-\`\`\`tsx
-interface KFormFieldProps {
-  label: string;
-  required?: boolean;        // Muestra asterisco rojo
-  error?: string;            // Mensaje de error
-  hint?: string;             // Texto de ayuda
-  children: ReactNode;       // El input/select/textarea
-  className?: string;
-}
-
-<KFormField label="Email" required error={errors.email}>
-  <KInput placeholder="usuario@empresa.com" />
-</KFormField>
-\`\`\`
-
-### KSearchInput
-Input de busqueda con icono de lupa, boton de limpiar y debounce.
-\`\`\`tsx
-interface KSearchInputProps {
-  value?: string;
-  onChange?: (value: string) => void;
-  placeholder?: string;
-  className?: string;
-}
-\`\`\`
-
-### KStatCard
-Tarjeta de metrica/KPI con valor, icono, tendencia y sparkline.
-\`\`\`tsx
-interface KStatCardProps {
-  title: string;
-  value: number | string;
-  icon?: ReactNode;
-  change?: number;           // Porcentaje de cambio
-  changeLabel?: string;
-  sparkData?: number[];      // Datos para mini-grafico
-  className?: string;
-}
-
-<KStatCard title="Usuarios" value={1234} change={12.5} changeLabel="vs mes anterior"
-  icon={<Users size={20} />} sparkData={[10, 25, 30, 45, 60, 80]} />
-\`\`\`
-
-### KNavItem
-Item de navegacion para sidebar.
-\`\`\`tsx
-interface KNavItemProps {
-  label: string;
-  active?: boolean;
-  onClick?: () => void;
-  collapsed?: boolean;       // Solo muestra icono
-}
-\`\`\`
-
-### KSelectField
-Select/dropdown customizado.
-\`\`\`tsx
-interface KSelectFieldProps {
-  options: { label: string; value: string }[];
-  value?: string;
-  onChange?: (value: string) => void;
-  placeholder?: string;
-  disabled?: boolean;
-  size?: 'sm' | 'md' | 'lg';
-  className?: string;
-}
-\`\`\`
-
-### KUserCell
-Celda de usuario con avatar, nombre y metadata.
-\`\`\`tsx
-interface KUserCellProps {
-  name: string;
-  subtitle?: string;
-  avatar?: string;           // URL de imagen
-  status?: 'online' | 'offline' | 'busy' | 'away';
-}
-\`\`\`
-
-### KEmptyState
-Estado vacio con icono, titulo y accion.
-\`\`\`tsx
-interface KEmptyStateProps {
-  icon?: ReactNode;
-  title: string;
-  description?: string;
-  action?: ReactNode;        // Boton o CTA
-}
-\`\`\`
-
-### KBreadcrumb
-Migas de pan para navegacion.
-\`\`\`tsx
-interface KBreadcrumbProps {
-  items: { label: string; href?: string; onClick?: () => void }[];
-}
-
-<KBreadcrumb items={[
-  { label: 'Inicio', onClick: () => navigate('/') },
-  { label: 'Usuarios', onClick: () => navigate('/users') },
-  { label: 'Detalle' },
-]} />
-\`\`\`
-
-### KSteps
-Stepper/wizard para procesos multi-paso.
-\`\`\`tsx
-interface KStepsProps {
-  current: number;           // Paso actual (0-based)
-  items: { title: string; description?: string }[];
-  direction?: 'horizontal' | 'vertical';
-}
-\`\`\`
-
-### KDropdownMenu
-Menu contextual con opciones (usa div role="button" como trigger, no button anidado).
-\`\`\`tsx
-interface KDropdownMenuProps {
-  trigger: ReactNode;
-  items: { label: string; icon?: ReactNode; onClick?: () => void; danger?: boolean; disabled?: boolean }[];
-}
-\`\`\`
-
-### KPopover
-Panel flotante basado en Radix Popover.
-\`\`\`tsx
-interface KPopoverProps {
-  trigger: ReactNode;
-  children: ReactNode;       // Contenido del popover
-  side?: 'top' | 'right' | 'bottom' | 'left';
-  align?: 'start' | 'center' | 'end';
-}
-\`\`\`
-
-### KAccordion
-Acordeon colapsable basado en Radix Accordion.
-\`\`\`tsx
-interface KAccordionProps {
-  items: { value: string; title: string; content: ReactNode }[];
-  type?: 'single' | 'multiple';
-  defaultValue?: string | string[];
-}
-\`\`\`
-
-### KDatePicker
-Selector de fecha con calendario.
-\`\`\`tsx
-interface KDatePickerProps {
-  value?: Date;
-  onChange?: (date: Date) => void;
-  placeholder?: string;
-  disabled?: boolean;
-  size?: 'sm' | 'md' | 'lg';
-  className?: string;
-}
-
-<KDatePicker placeholder="Selecciona una fecha" />
-\`\`\`
-
-### KColorPicker
-Selector de color con paleta.
-\`\`\`tsx
-interface KColorPickerProps {
-  value?: string;            // Hex color
-  onChange?: (color: string) => void;
-  disabled?: boolean;
-  size?: 'sm' | 'md' | 'lg';
-  className?: string;
-}
-
-<KColorPicker value="#FF9500" />
-\`\`\`
-
-### KTransfer
-Componente de transferencia de elementos entre listas.
-\`\`\`tsx
-interface KTransferProps {
-  dataSource: { key: string; title: string }[];
-  targetKeys?: string[];
-  onChange?: (targetKeys: string[]) => void;
-  size?: 'sm' | 'md' | 'lg';
-  className?: string;
-}
-
-<KTransfer
-  dataSource={[
-    { key: '1', title: 'Item 1' },
-    { key: '2', title: 'Item 2' },
-    { key: '3', title: 'Item 3' },
-  ]}
-  targetKeys={['2']}
-  onChange={handleTransferChange}
-/>
-\`\`\`
-
-### KInputNumber
-Input numerico con controles +/- y precision.
-\`\`\`tsx
-interface KInputNumberProps {
-  value?: number;
-  onChange?: (value: number | undefined) => void;
-  min?: number; max?: number; step?: number;
-  precision?: number;
-  disabled?: boolean;
-  controls?: boolean;        // Botones +/-, default: true
-  size?: 'sm' | 'md' | 'lg';
-  className?: string;
-}
-\`\`\`
-
-### KSegmented
-Control segmentado tipo toggle group.
-\`\`\`tsx
-interface KSegmentedProps {
-  options: { label: string; value: string; icon?: ReactNode; disabled?: boolean }[];
-  value?: string;
-  onChange?: (value: string) => void;
-  block?: boolean;
-  size?: 'sm' | 'md' | 'lg';
-  className?: string;
-}
-\`\`\`
-
-### KAutocomplete
-Input con sugerencias de autocompletado.
-\`\`\`tsx
-interface KAutocompleteProps {
-  options: { label: string; value: string }[];
-  value?: string;
-  onChange?: (value: string) => void;
-  placeholder?: string;
-  onSearch?: (query: string) => void;
-  className?: string;
-}
-\`\`\`
-
-### KDateRangePicker
-Selector de rango de fechas con presets y hover preview.
-\`\`\`tsx
-interface KDateRangePickerProps {
-  value?: [Date, Date];
-  onChange?: (range: [Date, Date]) => void;
-  placeholder?: string;
-  presets?: { label: string; range: [Date, Date] }[];
-  disabled?: boolean;
-  className?: string;
-}
-\`\`\`
-
-### KSelectAdvanced
-Select avanzado con busqueda, multi-seleccion, tags y grupos.
-\`\`\`tsx
-interface KSelectAdvancedProps {
-  options: { label: string; value: string; group?: string }[];
-  value?: string | string[];
-  onChange?: (value: string | string[]) => void;
-  multiple?: boolean;
-  searchable?: boolean;
-  placeholder?: string;
-  className?: string;
-}
-\`\`\`
-
-### KDescriptions
-Lista de descripciones clave-valor tipo ficha tecnica.
-\`\`\`tsx
-interface KDescriptionsProps {
-  title?: string;
-  extra?: ReactNode;
-  bordered?: boolean;
-  column?: number;           // Default: 3
-  layout?: 'horizontal' | 'vertical';
-  items: { label: string; children: ReactNode; span?: number }[];
-  className?: string;
-}
-\`\`\`
-
-### KPopconfirm
-Confirmacion inline antes de ejecutar acciones.
-\`\`\`tsx
-interface KPopconfirmProps {
-  title: string;
-  description?: string;
-  onConfirm?: () => void;
-  onCancel?: () => void;
-  okText?: string;
-  cancelText?: string;
-  children: ReactNode;       // Trigger element
-  className?: string;
-}
-\`\`\`
-
-### KResult
-Pagina de resultado (exito, error, 403, 404, 500).
-\`\`\`tsx
-interface KResultProps {
-  status: 'success' | 'error' | 'info' | 'warning' | '403' | '404' | '500';
-  title: string;
-  subTitle?: string;
-  extra?: ReactNode;         // Botones de accion
-  className?: string;
-}
-\`\`\`
-
-### KTimeline
-Linea de tiempo vertical con items y estados.
-\`\`\`tsx
-interface KTimelineProps {
-  items: { children: ReactNode; color?: string; dot?: ReactNode; label?: string }[];
-  mode?: 'left' | 'right' | 'alternate';
-  pending?: ReactNode;
-  reverse?: boolean;
-  className?: string;
-}
-\`\`\`
-
-### KCascader
-Selector en cascada multinivel.
-\`\`\`tsx
-interface KCascaderProps {
-  options: { label: string; value: string; children?: CascaderOption[] }[];
-  value?: string[];
-  onChange?: (value: string[]) => void;
-  placeholder?: string;
-  disabled?: boolean;
-  className?: string;
-}
-\`\`\`
-
-### KStatistic
-Estadistica con titulo, valor, prefijo/sufijo y tendencia.
-\`\`\`tsx
-interface KStatisticProps {
-  title: string;
-  value: number | string;
-  precision?: number;
-  prefix?: ReactNode;
-  suffix?: ReactNode;
-  trend?: 'up' | 'down';
-  trendValue?: string;
-  loading?: boolean;
-  className?: string;
-}
-\`\`\`
-
-### KTimePicker
-Selector de hora con formato 12h/24h.
-\`\`\`tsx
-interface KTimePickerProps {
-  value?: string;
-  onChange?: (time: string) => void;
-  placeholder?: string;
-  disabled?: boolean;
-  format?: '12h' | '24h';
-  className?: string;
-}
-\`\`\`
-
-### KMentions
-Input con @menciones y sugerencias contextuales.
-\`\`\`tsx
-interface KMentionsProps {
-  value?: string;
-  onChange?: (value: string) => void;
-  options: { label: string; value: string }[];
-  placeholder?: string;
-  trigger?: string;          // Default: '@'
-  className?: string;
-}
-\`\`\`
-
-### KAnchor
-Navegacion lateral con scroll spy automatico.
-\`\`\`tsx
-interface KAnchorProps {
-  items: { key: string; href: string; title: string; children?: AnchorItem[] }[];
-  offsetTop?: number;
-  className?: string;
-}
-\`\`\`
-
-### KList
-Lista de items con bordes, headers y loading.
-\`\`\`tsx
-interface KListProps {
-  items: { title?: string; description?: string; avatar?: ReactNode; extra?: ReactNode }[];
-  bordered?: boolean;
-  size?: 'sm' | 'md' | 'lg';
-  header?: ReactNode;
-  footer?: ReactNode;
-  loading?: boolean;
-  className?: string;
-}
-\`\`\`
-
-### KDividerExtended
-Divisor con texto, orientacion y estilo dashed.
-\`\`\`tsx
-interface KDividerExtendedProps {
-  children?: ReactNode;      // Texto dentro del divisor
-  orientation?: 'horizontal' | 'vertical';
-  dashed?: boolean;
-  className?: string;
-}
-\`\`\`
-
-### KTreeSelect
-Select con estructura de arbol desplegable.
-\`\`\`tsx
-interface KTreeSelectProps {
-  data: { key: string; title: string; children?: TreeNode[] }[];
-  value?: string;
-  onChange?: (value: string) => void;
-  placeholder?: string;
-  disabled?: boolean;
-  className?: string;
-}
-\`\`\`
-
-### KNotificationContainer
-Sistema de notificaciones persistentes (no toast).
-\`\`\`tsx
-// Uso programatico:
-import { kNotify } from './molecules-wave3';
-
-kNotify({ title: 'Nueva tarea', description: 'Te asignaron...', type: 'info' });
-kNotify({ title: 'Completado', description: 'Proceso terminado', type: 'success' });
-\`\`\`
-
----`);
+    parts.push(renderDict('Moléculas', 'Combinaciones de átomos con lógica de forma reutilizable.', "import { KFormField } from '@khor/design-system/molecules/index'", molecules));
   }
 
   if (enabled.has('organisms')) {
-    parts.push(`
-## Organismos (13 componentes)
-
-Componentes complejos que conforman secciones completas de UI.
-Importar: \`import { KDataTable, KModal, ... } from './components/design-system/organisms/index'\`
-
-### KDataTable
-Tabla de datos con sorting, paginacion, busqueda y acciones.
-\`\`\`tsx
-interface KDataTableColumn<T> {
-  key: string;
-  title: string;
-  dataIndex: string;
-  render?: (value: any, record: T, index: number) => ReactNode;
-  sortable?: boolean;
-  width?: number | string;
-}
-
-interface KDataTableProps<T> {
-  columns: KDataTableColumn<T>[];
-  data: T[];
-  loading?: boolean;
-  searchable?: boolean;
-  searchPlaceholder?: string;
-  actions?: ReactNode;       // Botones en el header de la tabla
-  pageSize?: number;
-}
-
-<KDataTable
-  columns={[
-    { key: 'name', title: 'Nombre', dataIndex: 'name', sortable: true },
-    { key: 'status', title: 'Estado', dataIndex: 'status',
-      render: (val) => <KBadge status={val} label={val} /> },
-  ]}
-  data={users}
-  searchable
-  actions={<KButton variant="primary" icon={<Plus size={16} />}>Nuevo</KButton>}
-/>
-\`\`\`
-
-### KModal
-Dialogo modal basado en Radix Dialog.
-\`\`\`tsx
-interface KModalProps {
-  open: boolean;
-  onClose: () => void;
-  title: string;
-  children: ReactNode;
-  footer?: ReactNode;        // Botones de accion
-  size?: 'sm' | 'md' | 'lg';
-}
-\`\`\`
-
-### KDrawer
-Panel lateral deslizante (desde la derecha).
-\`\`\`tsx
-interface KDrawerProps {
-  open: boolean;
-  onClose: () => void;
-  title: string;
-  children: ReactNode;
-  width?: number;            // Default: 400
-}
-\`\`\`
-
-### KCardSection
-Tarjeta contenedora con titulo, subtitulo y acciones.
-\`\`\`tsx
-interface KCardSectionProps {
-  title: string;
-  subtitle?: string;
-  extra?: ReactNode;         // Acciones en la esquina superior
-  children: ReactNode;
-  className?: string;
-}
-
-<KCardSection title="Usuarios Recientes" extra={<KButton variant="ghost">Ver todos</KButton>}>
-  {/* Contenido */}
-</KCardSection>
-\`\`\`
-
-### KTabs
-Pestanas de navegacion basadas en Radix Tabs.
-\`\`\`tsx
-interface KTabsProps {
-  items: { key: string; label: string; children: ReactNode }[];
-  defaultActiveKey?: string;
-}
-\`\`\`
-
-### KToastManager / kToast
-Sistema de notificaciones toast (Sonner).
-\`\`\`tsx
-// Disparar un toast desde cualquier lugar:
-import { kToast } from './organisms';
-
-kToast({ type: 'success', title: 'Guardado', description: 'Cambios aplicados.' });
-kToast({ type: 'error', title: 'Error', description: 'Fallo la operacion.' });
-kToast({ type: 'warning', title: 'Atencion', description: 'Revisa los campos.' });
-kToast({ type: 'info', title: 'Info', description: 'Proceso en curso.' });
-
-// El KToastProvider debe estar en el root:
-<KToastProvider />
-\`\`\`
-
-### KSparklineCell
-Mini-grafico de linea para usar dentro de tablas o cards.
-\`\`\`tsx
-interface KSparklineCellProps {
-  data: number[];
-  color?: string;
-  width?: number;
-  height?: number;
-}
-\`\`\`
-
-### KCommandBar
-Barra de comandos global activada con Ctrl+K / Cmd+K.
-\`\`\`tsx
-// Integrado en AppShell, no requiere configuracion manual.
-// Busca componentes, tokens y paginas con fuzzy search.
-// Soporta navegacion por teclado (flechas + Enter).
-// Historial persiste en localStorage.
-\`\`\`
-
-### KUpload
-Componente de subida de archivos.
-\`\`\`tsx
-interface KUploadProps {
-  onUpload?: (files: File[]) => void;
-  multiple?: boolean;
-  accept?: string;           // MIME types
-  size?: 'sm' | 'md' | 'lg';
-  className?: string;
-}
-
-<KUpload onUpload={handleUpload} multiple accept="image/*" size="md" />
-\`\`\`
-
-### KTree
-Arbol de navegacion o seleccion.
-\`\`\`tsx
-interface KTreeProps {
-  data: { key: string; title: string; children?: KTreeProps['data'] }[];
-  selectedKeys?: string[];
-  onSelect?: (keys: string[]) => void;
-  size?: 'sm' | 'md' | 'lg';
-  className?: string;
-}
-
-<KTree
-  data={[
-    { key: '1', title: 'Item 1' },
-    { key: '2', title: 'Item 2', children: [
-      { key: '2-1', title: 'Subitem 1' },
-      { key: '2-2', title: 'Subitem 2' },
-    ] },
-  ]}
-  selectedKeys={['2-1']}
-  onSelect={handleSelect}
-/>
-\`\`\`
-
-### KTour
-Guia de usuario para introducir nuevas funcionalidades.
-\`\`\`tsx
-interface KTourProps {
-  steps: { key: string; title: string; content: ReactNode; target: string }[];
-  current?: number;
-  onStepChange?: (index: number) => void;
-  size?: 'sm' | 'md' | 'lg';
-  className?: string;
-}
-
-<KTour
-  steps={[
-    { key: 'step1', title: 'Paso 1', content: <KText>Descripción del paso 1</KText>, target: '#element1' },
-    { key: 'step2', title: 'Paso 2', content: <KText>Descripción del paso 2</KText>, target: '#element2' },
-  ]}
-  current={0}
-  onStepChange={handleStepChange}
-/>
-\`\`\`
-
-### KModalConfirm
-Modal de confirmacion para acciones criticas.
-\`\`\`tsx
-interface KModalConfirmProps {
-  open: boolean;
-  onClose: () => void;
-  title: string;
-  description: string;
-  onConfirm: () => void;
-  size?: 'sm' | 'md' | 'lg';
-  className?: string;
-}
-
-<KModalConfirm
-  open={confirmOpen}
-  onClose={() => setConfirmOpen(false)}
-  title="Confirmar eliminación"
-  description="¿Estás seguro de que quieres eliminar este elemento?"
-  onConfirm={handleDelete}
-/>
-\`\`\`
-
-### KFormList
-Lista de formularios dinámicos para entradas múltiples.
-\`\`\`tsx
-interface KFormListProps {
-  fields: { key: string; name: string }[];
-  onAdd?: () => void;
-  onRemove?: (key: string) => void;
-  size?: 'sm' | 'md' | 'lg';
-  className?: string;
-}
-
-<KFormList
-  fields={[
-    { key: '1', name: 'Campo 1' },
-    { key: '2', name: 'Campo 2' },
-  ]}
-  onAdd={handleAddField}
-  onRemove={handleRemoveField}
-/>
-\`\`\`
-
----`);
+    parts.push(renderDict('Organismos', 'Componentes complejos o Layouts masivos con lógicas de portal, focus-traps y alto consumo de hooks.', "import { KDataTable } from '@khor/design-system/organisms/index'", organisms));
   }
 
   if (enabled.has('templates')) {

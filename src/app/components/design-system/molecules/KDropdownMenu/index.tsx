@@ -10,10 +10,20 @@ export interface KDropdownMenuProps extends DropdownProps {
   children: React.ReactElement;
 }
 
-export function KDropdownMenu({ children, overlayStyle, ...rest }: KDropdownMenuProps) {
+/**
+ * KDropdownMenu: Menú desplegable para acciones secundarias.
+ * Refinado para evitar fugas de props al DOM (variant, size, fullWidth).
+ */
+export function KDropdownMenu({ 
+  children, overlayStyle, 
+  variant, size, fullWidth, ...rest 
+}: KDropdownMenuProps & { variant?: any, size?: any, fullWidth?: any }) {
   return (
     <Dropdown
-      overlayStyle={{ fontFamily: font, ...overlayStyle }}
+      overlayStyle={{ 
+        fontFamily: font, 
+        ...overlayStyle 
+      }}
       {...rest}
     >
       {children}

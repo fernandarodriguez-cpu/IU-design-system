@@ -11,12 +11,23 @@ export interface KSpinProps extends Omit<SpinProps, 'size'> {
   color?: string;
 }
 
-export function KSpin({ size = 'md', color, style, ...rest }: KSpinProps) {
+/**
+ * KSpin: Indicador de carga (spinner).
+ * Refinado para evitar fugas de props al DOM (variant, fullWidth).
+ */
+export function KSpin({ 
+  size = 'md', color, style, 
+  variant, fullWidth, ...rest 
+}: KSpinProps & { variant?: any, fullWidth?: any }) {
   const antSize: SpinProps['size'] = size === 'sm' ? 'small' : size === 'lg' ? 'large' : 'default';
   return (
     <Spin
       size={antSize}
-      style={{ color: color ?? t.colors.brand.primary, fontFamily: font, ...style }}
+      style={{ 
+        color: color ?? t.colors.brand.primary, 
+        fontFamily: font, 
+        ...style 
+      }}
       {...rest}
     />
   );

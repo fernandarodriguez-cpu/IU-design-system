@@ -13,11 +13,28 @@ export interface KTimePickerProps extends Omit<TimePickerProps, 'onChange'> {
   onChange?: (timeString: string) => void;
 }
 
-export function KTimePicker({ onChange, style, ...rest }: KTimePickerProps) {
+/**
+ * KTimePicker: Selector de hora estilizado.
+ * Refinado para evitar fugas de props al DOM (variant, size, fullWidth).
+ */
+export function KTimePicker({ 
+  onChange, 
+  style, 
+  variant, 
+  size, 
+  fullWidth, 
+  ...rest 
+}: KTimePickerProps & { variant?: any, size?: any, fullWidth?: any }) {
   return (
     <TimePicker
       onChange={(_, timeString) => onChange?.(timeString as string)}
-      style={{ width: '100%', height: 40, fontFamily: font, ...style }}
+      style={{ 
+        width: '100%', 
+        height: 40, 
+        fontFamily: font, 
+        ...style 
+      }}
+      size={size as any}
       {...rest}
     />
   );

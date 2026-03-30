@@ -26,15 +26,21 @@ const sizeToAntd = (size?: 'sm' | 'md' | 'lg') => {
 };
 
 /** Radio.Group con opciones configurables mediante array */
-export function KRadio({ direction, variant = 'default', size = 'md', buttonStyle = 'solid', style, ...rest }: KRadioProps) {
+export function KRadio({ 
+  direction, variant = 'default', size = 'md', buttonStyle = 'solid', style,
+  fullWidth, ...rest 
+}: KRadioProps & { fullWidth?: any }) {
   return (
     <Radio.Group
       optionType={variant === 'button' ? 'button' : 'default'}
       buttonStyle={buttonStyle}
       size={sizeToAntd(size)}
       style={{
-        display: 'flex', flexDirection: direction === 'vertical' ? 'column' : 'row', gap: 8,
-        fontFamily: font, ...style,
+        display: 'flex', 
+        flexDirection: direction === 'vertical' ? 'column' : 'row', 
+        gap: 8,
+        fontFamily: font, 
+        ...style,
       }}
       {...rest}
     />
@@ -42,7 +48,10 @@ export function KRadio({ direction, variant = 'default', size = 'md', buttonStyl
 }
 
 /** Radio individual para uso standalone o en formularios personalizados */
-export function KRadioItem({ label, style, children, ...rest }: KRadioItemProps) {
+export function KRadioItem({ 
+  label, style, children, 
+  variant, size, fullWidth, ...rest 
+}: KRadioItemProps & { variant?: any, size?: any, fullWidth?: any }) {
   return (
     <Radio style={{ fontFamily: font, ...style }} {...rest}>
       {label || children}

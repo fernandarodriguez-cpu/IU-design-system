@@ -13,11 +13,25 @@ export interface KAnchorProps extends AnchorProps {
   className?: string;
 }
 
-export function KAnchor({ className, style, ...rest }: KAnchorProps) {
+/**
+ * KAnchor: Sistema de navegación mediante enlaces internos.
+ * Refinado para evitar fugas de props al DOM (variant, size, fullWidth).
+ */
+export function KAnchor({ 
+  className, 
+  style, 
+  variant, 
+  size, 
+  fullWidth, 
+  ...rest 
+}: KAnchorProps & { variant?: any, size?: any, fullWidth?: any }) {
   return (
     <Anchor
       className={className}
-      style={{ fontFamily: font, ...style }}
+      style={{ 
+        fontFamily: font, 
+        ...style 
+      }}
       {...rest}
     />
   );

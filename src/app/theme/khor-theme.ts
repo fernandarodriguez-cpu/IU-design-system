@@ -29,6 +29,9 @@ export const khorTokens = {
       300: 'var(--khor-neutral-300)',
       400: 'var(--khor-neutral-400)',
       500: 'var(--khor-neutral-500)',
+      600: 'var(--khor-neutral-600)',
+      700: 'var(--khor-neutral-700)',
+      800: 'var(--khor-neutral-800)',
       900: 'var(--khor-neutral-900)',
     },
     feedback: {
@@ -85,6 +88,8 @@ export const khorTokens = {
       primary: { default: 'var(--khor-action-primary-default)', hover: 'var(--khor-action-primary-hover)', active: 'var(--khor-action-primary-active)' },
       secondary: { default: 'var(--khor-action-secondary-default)', hover: 'var(--khor-action-secondary-hover)', active: 'var(--khor-action-secondary-active)' },
       danger: { default: 'var(--khor-action-danger-default)', hover: 'var(--khor-action-danger-hover)', active: 'var(--khor-action-danger-active)' },
+      ghost: { hover: 'var(--khor-action-ghost-hover)' },
+      disabled: { bg: 'var(--khor-action-disabled-bg)', text: 'var(--khor-action-disabled-text)' },
     },
     surface: {
       page: 'var(--khor-surface-page)',
@@ -105,6 +110,8 @@ export const khorTokens = {
       hover: 'var(--khor-border-hover)',
       focus: 'var(--khor-border-focus)',
       error: 'var(--khor-border-error)',
+      disabled: 'var(--khor-border-disabled)',
+      strong: 'var(--khor-border-strong)',
     },
     focus: {
       ring: 'var(--khor-focus-ring)',
@@ -113,7 +120,7 @@ export const khorTokens = {
     },
   },
   motion: {
-    duration: { fast: 100, normal: 200, slow: 400, slower: 600 },
+    duration: { instant: 80, fast: 100, normal: 200, slow: 400, slower: 600 },
     easing: {
       standard: 'cubic-bezier(0.4, 0, 0.2, 1)',
       enter: 'cubic-bezier(0, 0, 0.2, 1)',

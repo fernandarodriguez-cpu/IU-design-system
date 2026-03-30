@@ -1,52 +1,38 @@
-# Contribuir al Khor Design System
+# Contribuyendo a Khor Design System
 
-## Convención de Versiones (SemVer)
+¡Gracias por ayudar a construir el sistema de diseño de Khor! Este documento detalla el proceso para proponer cambios y mantener la calidad de clase mundial.
 
-| Tipo | Cuándo | Ejemplo |
-|------|--------|---------|
-| **Major** (X.0.0) | Breaking changes en API de componentes | Renombrar prop `variant` → `type` |
-| **Minor** (2.X.0) | Nuevos componentes, features, tokens | Agregar `KDatePicker` |
-| **Patch** (2.7.X) | Fixes de bugs, ajustes de CSS | Corregir contraste en `KBadge` |
+## Principios de Diseño
+1. **Tokens Primero**: Nunca uses valores hardcoded. Usa \`khorTokens\` en JS o \`var(--khor-*)\` en CSS.
+2. **Accesibilidad (A11y)**: Todo componente debe ser operable vía teclado y cumplir con contrastes WCAG AA.
+3. **Composición sobre Configuración**: Prefiere componentes pequeños y combinables antes que props monolíticas.
 
-## Checklist para Nuevos Componentes
+## Proceso de Desarrollo
+1. **Ramas**: Crea una rama descriptiva como \`feat/nuevo-boton\` o \`fix/padding-input\`.
+2. **Versionado**: Seguimos [SemVer](https://semver.org/).
+   - Fixes: \`x.x.PATCH\`
+   - Features: \`x.MINOR.x\`
+   - Breaking: \`MAJOR.x.x\`
+3. **Documentación**: Si creas un componente, DEBES añadir su respectivo playground en la página correspondiente (Atoms, Molecules u Organisms).
 
-### Accesibilidad (obligatorio)
-- [ ] Navegable con Tab / Shift+Tab
-- [ ] Activable con Enter y/o Space
-- [ ] Escape para cerrar (si aplica: dialogs, menus, dropdowns)
-- [ ] `role` semántico apropiado
-- [ ] `aria-label` o `aria-labelledby` presente
-- [ ] `aria-expanded` / `aria-selected` / `aria-checked` según corresponda
-- [ ] `aria-disabled` en estado disabled
-- [ ] Contraste de colores ≥ 4.5:1 (AA)
-- [ ] Focus ring visible vía `:focus-visible`
+## Destructuring & DOM Hygiene
+Es CRÍTICO que las props personalizadas del sistema (como \`variant\`, \`size\`, \`fullWidth\`, etc.) **NO** se filtren al elemento HTML nativo.
 
-### Estados Requeridos
-Cada componente debe documentar visualmente:
-- Default
-- Hover
-- Active / Pressed
-- Focus (ring visible)
-- Disabled (opacity 50%, grayscale)
-- Loading (si aplica)
-- Error (si aplica)
+**Mal:**
+\`\`\`tsx
+export const KComponent = (props) => <div {...props} />;
+// Esto inyecta variant="primary" al <div>, causando warnings de React.
+\`\`\`
 
-### Tokens
-- Usar tokens semánticos (`--khor-action-primary-default`) en lugar de primitivos (`--khor-primary`) cuando aplique
-- Motion: usar `--khor-duration-normal` y `--khor-easing-standard` para transiciones
+**Bien:**
+\`\`\`tsx
+export const KComponent = ({ variant, size, ...props }) => <div {...props} />;
+// Ahora props solo contiene atributos estándar (className, style, id, etc.)
+\`\`\`
 
-### Documentación
-- Añadir al registro de átomos/moléculas/organismos
-- Crear playground interactivo con controles
-- Añadir props a la tabla de ComponentDoc
-- Incluir guidelines de uso y AI notes
-
-## Roadmap Futuro
-
-### Testing Automatizado
-- Vitest + Playwright ya instalados
-- Pendiente: tests unitarios por componente
-- Pendiente: Visual Regression Testing (snapshot-based)
-
-### Storybook (Descartado)
-Se intentó y se descartó. Los playgrounds nativos cumplen la función equivalente.
+## Roadmap de Clase Mundial
+Estamos trabajando para llegar al 100/100 en la auditoría. Los pilares actuales son:
+- Higiene total del DOM (Destructuring masivo).
+- Soporte RTL.
+- Motion tokens sistematizados.
+- Documentación dinámica para IA.

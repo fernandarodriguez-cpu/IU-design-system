@@ -26,7 +26,10 @@ const statusColorMap = {
 
 const statusSizeMap = { small: 8, default: 10, large: 14 };
 
-export function KAvatar({ name, status, src, style, size = 'default', shape = 'circle', gap, children, ...rest }: KAvatarProps) {
+export function KAvatar({ 
+  name, status, src, style, size = 'default', shape = 'circle', gap, children, 
+  variant, ...rest 
+}: KAvatarProps & { variant?: any }) {
   const initials = name ? name.split(' ').map((w: string) => w[0]).join('').toUpperCase().slice(0, 2) : undefined;
   const dotSize = typeof size === 'number' ? Math.max(8, size * 0.22) : (statusSizeMap[size as keyof typeof statusSizeMap] || 10);
 

@@ -29,7 +29,11 @@ const sizeToAntd = (size?: KButtonSize): ButtonProps['size'] => {
 };
 
 export const KButton = React.forwardRef<HTMLButtonElement, KButtonProps>(function KButton(
-  { variant, kVariant, size = 'md', shape = 'default', htmlType = 'button', style, children, iconPosition, ...rest },
+  { 
+    variant, kVariant, size = 'md', shape = 'default', 
+    htmlType = 'button', style, children, iconPosition, 
+    fullWidth, ...rest 
+  },
   ref,
 ) {
   const resolvedVariant = kVariant ?? variant ?? 'primary';

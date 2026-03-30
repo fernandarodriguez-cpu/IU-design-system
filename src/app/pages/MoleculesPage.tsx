@@ -26,7 +26,7 @@ import {
 } from 'lucide-react';
 import { khorTokens } from '../theme/khor-theme';
 
-interface MoleculeEntry {
+export interface MoleculeEntry {
   id: string;
   name: string;
   description: string;
@@ -917,7 +917,7 @@ function TreeSelectPlayground() {
   );
 }
 
-const molecules: Record<string, MoleculeEntry> = {
+export const molecules: Record<string, MoleculeEntry> = {
   'form-field': {
     id: 'form-field',
     name: 'KFormField',

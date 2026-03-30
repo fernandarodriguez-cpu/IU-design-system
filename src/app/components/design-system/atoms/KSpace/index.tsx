@@ -6,10 +6,17 @@ export interface KSpaceProps extends SpaceProps { }
 
 /**
  * KSpace: Componente de layout para distribuir elementos con espaciado uniforme.
- * Alineado con Ant Design para soportar funcionalidades avanzadas (split, wrap, custom size).
+ * Refinado para evitar fugas de props al DOM (variant, fullWidth).
  */
-export function KSpace({ size = 'middle', ...props }: KSpaceProps) {
-  return <Space size={size} {...props} />;
+export function KSpace({ 
+  size = 'middle', variant, fullWidth, ...rest 
+}: KSpaceProps & { variant?: any, fullWidth?: any }) {
+  return (
+    <Space
+      size={size}
+      {...rest}
+    />
+  );
 }
 
 export default KSpace;

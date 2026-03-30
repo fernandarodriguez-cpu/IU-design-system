@@ -8,7 +8,13 @@ const font = t.typography.fontPrimary;
 
 export interface KAccordionProps extends CollapseProps { }
 
-export function KAccordion({ style, ...rest }: KAccordionProps) {
+/**
+ * KAccordion: Sistema de colapso para organizar contenidos en paneles.
+ * Refinado para evitar fugas de props al DOM (variant, size, fullWidth).
+ */
+export function KAccordion({ 
+  style, variant, size, fullWidth, ...rest 
+}: KAccordionProps & { variant?: any, size?: any, fullWidth?: any }) {
   return (
     <Collapse
       ghost

@@ -23,6 +23,9 @@
   --khor-neutral-300: #A0AEC0;
   --khor-neutral-400: #718096;
   --khor-neutral-500: #4A5568;
+  --khor-neutral-600: #2D3748;
+  --khor-neutral-700: #1A202C;
+  --khor-neutral-800: #11141C;
   --khor-neutral-900: #000000;
 
   /* ── Feedback ── */
@@ -63,6 +66,9 @@
   --khor-action-danger-default: var(--khor-error);
   --khor-action-danger-hover: #E53935;
   --khor-action-danger-active: #C62828;
+  --khor-action-ghost-hover: rgba(5, 23, 88, 0.06);
+  --khor-action-disabled-bg: var(--khor-neutral-200);
+  --khor-action-disabled-text: var(--khor-neutral-400);
 
   /* ── Semantic Surface Tokens ── */
   --khor-surface-page: var(--khor-neutral-100);
@@ -83,6 +89,8 @@
   --khor-border-hover: var(--khor-neutral-300);
   --khor-border-focus: var(--khor-primary);
   --khor-border-error: var(--khor-error);
+  --khor-border-disabled: var(--khor-neutral-200);
+  --khor-border-strong: var(--khor-neutral-400);
 
   /* ── Semantic Focus Tokens ── */
   --khor-focus-ring: var(--khor-primary);
@@ -90,6 +98,7 @@
   --khor-focus-ring-offset: 2px;
 
   /* ── Motion Tokens ── */
+  --khor-duration-instant: 80ms;
   --khor-duration-fast: 100ms;
   --khor-duration-normal: 200ms;
   --khor-duration-slow: 400ms;
@@ -169,17 +178,20 @@
   --khor-neutral-300: #4A4E6A;
   --khor-neutral-400: #8B90A8;
   --khor-neutral-500: #B0B4C8;
+  --khor-neutral-600: #C1C6D8;
+  --khor-neutral-700: #D0D4E3;
+  --khor-neutral-800: #E2E4EE;
   --khor-neutral-900: #E8EAF0;
 
   /* ── Feedback (Dark) ── */
   --khor-success: #4CAF50;
-  --khor-success-light: #1B2E1C;
+  --khor-success-light: #1B3A1C;
   --khor-error: #EF5350;
-  --khor-error-light: #2E1B1B;
+  --khor-error-light: #3B1212;
   --khor-warning: #FFB340;
-  --khor-warning-light: #2E271B;
+  --khor-warning-light: #3B2500;
   --khor-info: #64B5F6;
-  --khor-info-light: #1B242E;
+  --khor-info-light: #0D1F3C;
 
   /* ── Shadows (Dark) ── */
   --khor-shadow-sm: 0 2px 4px rgba(0,0,0,0.3);

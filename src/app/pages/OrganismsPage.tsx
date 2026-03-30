@@ -53,7 +53,7 @@ const tableColumns = [
 ];
 
 /* ─── Organism Registry ─────────────────────── */
-interface OrganismEntry {
+export interface OrganismEntry {
   id: string;
   name: string;
   description: string;
@@ -407,7 +407,7 @@ function CardSectionPlayground() {
   );
 }
 
-const organisms: Record<string, OrganismEntry> = {
+export const organisms: Record<string, OrganismEntry> = {
   'data-table': {
     id: 'data-table',
     name: 'KDataTable',

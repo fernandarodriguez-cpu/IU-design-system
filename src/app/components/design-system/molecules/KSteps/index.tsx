@@ -8,13 +8,20 @@ const font = t.typography.fontPrimary;
 
 export interface KStepsProps extends StepsProps { }
 
-export function KSteps({ style, ...rest }: KStepsProps) {
+/**
+ * KSteps: Indicador de progreso de proceso multi-paso.
+ * Refinado para evitar fugas de props al DOM (variant, size, fullWidth).
+ */
+export function KSteps({ 
+  style, variant, size, fullWidth, ...rest 
+}: KStepsProps & { variant?: any, size?: any, fullWidth?: any }) {
   return (
     <Steps
       style={{
         fontFamily: font,
         ...style
       }}
+      size={size as any}
       {...rest}
     />
   );

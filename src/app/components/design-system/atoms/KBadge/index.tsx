@@ -28,7 +28,7 @@ const tagColorMap: Record<KBadgeStatus, string> = {
   default: t.colors.neutral[500],
 };
 
-export function KBadge({ label, khorStatus, children, status, style, ...rest }: KBadgeProps) {
+export function KBadge({ label, khorStatus, children, status, style, variant, size, ...rest }: KBadgeProps & { variant?: any, size?: any }) {
   // Modo "Status Badge" (chip de estado lateral)
   // Se activa si hay label y NO hay children (AntD Badge con text)
   if (label && !children) {

@@ -9,7 +9,14 @@ export interface KSliderProps extends Omit<any, 'size'> {
   showValue?: boolean;
 }
 
-export function KSlider({ showValue, style, value, defaultValue, ...rest }: KSliderProps) {
+/**
+ * KSlider: Selector de rango deslizable.
+ * Refinado para evitar fugas de props al DOM (variant, size, fullWidth).
+ */
+export function KSlider({ 
+  showValue, style, value, defaultValue, 
+  variant, size, fullWidth, ...rest 
+}: KSliderProps & { variant?: any, size?: any, fullWidth?: any }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
       <Slider
@@ -20,7 +27,14 @@ export function KSlider({ showValue, style, value, defaultValue, ...rest }: KSli
         {...(rest as any)}
       />
       {showValue && (
-        <span style={{ fontSize: 13, color: t.colors.neutral[500], minWidth: 32, textAlign: 'right', fontFamily: font, fontWeight: 500 }}>
+        <span style={{ 
+          fontSize: 13, 
+          color: t.colors.neutral[500], 
+          minWidth: 32, 
+          textAlign: 'right', 
+          fontFamily: font, 
+          fontWeight: 500 
+        }}>
           {Array.isArray(value) ? value.join('-') : value}
         </span>
       )}

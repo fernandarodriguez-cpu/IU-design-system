@@ -2,11 +2,10 @@ import React from 'react';
 import { Select } from 'antd';
 import type { SelectProps } from 'antd';
 import { khorTokens } from '../../../../theme/khor-theme';
+import { KFormField } from '../KFormField';
 
 const t = khorTokens;
 const font = t.typography.fontPrimary;
-
-import { KFormField } from '../KFormField';
 
 export interface KSelectFieldProps extends SelectProps {
   label?: string;
@@ -15,6 +14,10 @@ export interface KSelectFieldProps extends SelectProps {
   hint?: string;
 }
 
+/**
+ * KSelectField: Selector desplegable con soporte de etiqueta y errores.
+ * Refinado para evitar fugas de props al DOM (variant, size, fullWidth).
+ */
 export function KSelectField({ 
   label, 
   required, 
@@ -22,12 +25,16 @@ export function KSelectField({
   hint, 
   style, 
   status,
+  variant,
+  size,
+  fullWidth,
   ...rest 
-}: KSelectFieldProps) {
+}: KSelectFieldProps & { variant?: any, size?: any, fullWidth?: any }) {
   const selectElement = (
     <Select
       style={{ width: '100%', fontFamily: font, ...style }}
       status={error ? 'error' : status}
+      size={size as any}
       {...rest}
     />
   );

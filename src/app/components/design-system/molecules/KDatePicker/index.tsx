@@ -33,11 +33,16 @@ export interface KDatePickerProps {
   [key: string]: any;
 }
 
+/**
+ * KDatePicker: Selector de fecha estilizado.
+ * Refinado para evitar fugas de props al DOM (variant, fullWidth).
+ */
 export function KDatePicker({
   value, onChange, placeholder = 'Selecciona fecha', disabled, minDate, maxDate,
   picker, showTime, format: fmt, disabledDate, status, renderExtraFooter,
-  allowClear, size = 'md', className, style, ...rest
-}: KDatePickerProps) {
+  allowClear, size = 'md', className, style, 
+  variant, fullWidth, ...rest 
+}: KDatePickerProps & { variant?: any, fullWidth?: any }) {
   const heights = { sm: 32, md: 40, lg: 48 };
   return (
     <div className={className} style={{ display: 'inline-block', width: '100%' }}>

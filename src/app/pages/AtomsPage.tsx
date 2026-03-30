@@ -685,7 +685,7 @@ function DividerPlayground() {
 }
 
 /* ─── Component Registry ────────────────────── */
-interface AtomEntry {
+export interface AtomEntry {
   id: string;
   name: string;
   description: string;
@@ -705,7 +705,7 @@ interface AtomEntry {
   aiNotes?: string;
 }
 
-const atoms: Record<string, AtomEntry> = {
+export const atoms: Record<string, AtomEntry> = {
   button: {
     id: 'button',
     name: 'KButton',

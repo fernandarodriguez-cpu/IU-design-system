@@ -8,10 +8,20 @@ const font = t.typography.fontPrimary;
 
 export interface KBreadcrumbProps extends BreadcrumbProps { }
 
-export function KBreadcrumb({ style, ...rest }: KBreadcrumbProps) {
+/**
+ * KBreadcrumb: Sistema de navegación por jerarquía.
+ * Refinado para evitar fugas de props al DOM (variant, size, fullWidth).
+ */
+export function KBreadcrumb({ 
+  style, variant, size, fullWidth, ...rest 
+}: KBreadcrumbProps & { variant?: any, size?: any, fullWidth?: any }) {
   return (
     <Breadcrumb
-      style={{ fontFamily: font, fontSize: 13, ...style }}
+      style={{ 
+        fontFamily: font, 
+        fontSize: 13, 
+        ...style 
+      }}
       {...rest}
     />
   );

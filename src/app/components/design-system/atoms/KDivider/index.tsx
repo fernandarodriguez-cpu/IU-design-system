@@ -4,8 +4,22 @@ import { khorTokens } from '../../../../theme/khor-theme';
 
 const t = khorTokens;
 
-export function KDivider(props: React.ComponentProps<typeof Divider>) {
-  return <Divider style={{ borderColor: t.colors.neutral[200], ...props.style }} {...props} />;
+/**
+ * KDivider: Línea divisora horizontal o vertical.
+ * Refinado para evitar fugas de props al DOM (variant, size, fullWidth).
+ */
+export function KDivider({ 
+  style, variant, size, fullWidth, ...rest 
+}: React.ComponentProps<typeof Divider> & { variant?: any, size?: any, fullWidth?: any }) {
+  return (
+    <Divider 
+      style={{ 
+        borderColor: t.colors.neutral[200], 
+        ...style 
+      }} 
+      {...rest} 
+    />
+  );
 }
 
 export default KDivider;

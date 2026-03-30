@@ -10,11 +10,18 @@ export interface KAlertProps extends AlertProps {
   title?: string;
 }
 
-export function KAlert({ title, message, style, ...rest }: KAlertProps) {
+export function KAlert({ 
+  title, message, style, 
+  variant, size, ...rest 
+}: KAlertProps & { variant?: any, size?: any }) {
   return (
     <Alert
       message={title || message}
-      style={{ fontFamily: font, borderRadius: t.radius.md, ...style }}
+      style={{ 
+        fontFamily: font, 
+        borderRadius: t.radius.md, 
+        ...style 
+      }}
       showIcon
       {...rest}
     />

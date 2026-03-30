@@ -14,12 +14,31 @@ export interface KPopconfirmProps extends PopconfirmProps {
   onConfirm?: () => void | Promise<void>;
 }
 
-export function KPopconfirm({ overlayStyle, ...rest }: KPopconfirmProps) {
+/**
+ * KPopconfirm: Cuadro de confirmación flotante.
+ * Refinado para evitar fugas de props al DOM (variant, size, fullWidth).
+ */
+export function KPopconfirm({ 
+  overlayStyle, 
+  variant, 
+  size, 
+  fullWidth, 
+  ...rest 
+}: KPopconfirmProps & { variant?: any, size?: any, fullWidth?: any }) {
   return (
     <Popconfirm
-      overlayStyle={{ fontFamily: font, ...overlayStyle }}
-      okButtonProps={{ style: { fontFamily: font }, ...rest.okButtonProps }}
-      cancelButtonProps={{ style: { fontFamily: font }, ...rest.cancelButtonProps }}
+      overlayStyle={{ 
+        fontFamily: font, 
+        ...overlayStyle 
+      }}
+      okButtonProps={{ 
+        style: { fontFamily: font }, 
+        ...rest.okButtonProps 
+      }}
+      cancelButtonProps={{ 
+        style: { fontFamily: font }, 
+        ...rest.cancelButtonProps 
+      }}
       {...rest}
     />
   );

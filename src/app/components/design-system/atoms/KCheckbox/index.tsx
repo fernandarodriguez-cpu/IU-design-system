@@ -10,7 +10,10 @@ export interface KCheckboxProps extends CheckboxProps {
   label?: string;
 }
 
-export function KCheckbox({ label, style, children, ...rest }: KCheckboxProps) {
+export function KCheckbox({ 
+  label, style, children, 
+  variant, size, fullWidth, ...rest 
+}: KCheckboxProps & { variant?: any, size?: any, fullWidth?: any }) {
   return (
     <Checkbox style={{ fontFamily: font, ...style }} {...rest}>
       {label || children}

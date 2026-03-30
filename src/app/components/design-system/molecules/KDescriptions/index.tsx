@@ -21,7 +21,13 @@ export interface KDescriptionsProps extends Omit<DescriptionsProps, 'items'> {
   items: KDescriptionItem[];
 }
 
-export function KDescriptions({ items, style, ...rest }: KDescriptionsProps) {
+/**
+ * KDescriptions: Componente para mostrar listas de información clave-valor.
+ * Refinado para evitar fugas de props al DOM (variant, size, fullWidth).
+ */
+export function KDescriptions({ 
+  items, style, variant, size, fullWidth, ...rest 
+}: KDescriptionsProps & { variant?: any, size?: any, fullWidth?: any }) {
   const antdItems = items.map((item, i) => ({
     key: i,
     label: item.label,
@@ -34,7 +40,11 @@ export function KDescriptions({ items, style, ...rest }: KDescriptionsProps) {
   return (
     <Descriptions
       items={antdItems}
-      style={{ fontFamily: font, ...style }}
+      size={size as any}
+      style={{ 
+        fontFamily: font, 
+        ...style 
+      }}
       {...rest}
     />
   );

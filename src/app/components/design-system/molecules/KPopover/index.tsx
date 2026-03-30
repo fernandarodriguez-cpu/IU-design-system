@@ -13,6 +13,10 @@ export interface KPopoverProps extends Omit<PopoverProps, 'align'> {
   align?: 'start' | 'center' | 'end';
 }
 
+/**
+ * KPopover: Contenedor flotante para información o acciones adicionales.
+ * Refinado para evitar fugas de props al DOM (variant, size, fullWidth).
+ */
 export function KPopover({ 
   children, 
   content, 
@@ -20,8 +24,11 @@ export function KPopover({
   align = 'center', 
   placement,
   overlayStyle,
+  variant,
+  size,
+  fullWidth,
   ...rest 
-}: KPopoverProps) {
+}: KPopoverProps & { variant?: any, size?: any, fullWidth?: any }) {
   // Mapping Radix-like side/align to AntD placement if placement is not provided
   const getPlacement = () => {
     if (placement) return placement;
@@ -49,7 +56,10 @@ export function KPopover({
     <Popover
       content={content}
       placement={getPlacement()}
-      overlayStyle={{ fontFamily: font, ...overlayStyle }}
+      overlayStyle={{ 
+        fontFamily: font, 
+        ...overlayStyle 
+      }}
       {...rest}
     >
       {children}

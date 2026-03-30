@@ -12,7 +12,14 @@ export interface KSkeletonProps extends SkeletonProps {
   height?: number | string;
 }
 
-export function KSkeleton({ lines, circle, width, height, paragraph, avatar, loading = true, ...rest }: KSkeletonProps) {
+/**
+ * KSkeleton: Marcador de posición animado mientras se carga contenido.
+ * Refinado para evitar fugas de props al DOM (variant, size, fullWidth).
+ */
+export function KSkeleton({ 
+  lines, circle, width, height, paragraph, avatar, loading = true, 
+  variant, size, fullWidth, ...rest 
+}: KSkeletonProps & { variant?: any, size?: any, fullWidth?: any }) {
   if ((width || height || circle) && !rest.children) {
     const h = height ?? 16;
     return (

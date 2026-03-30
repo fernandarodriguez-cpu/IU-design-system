@@ -14,11 +14,26 @@ export interface KColorPickerProps extends ColorPickerProps {
   style?: React.CSSProperties;
 }
 
-export function KColorPicker({ className, style, ...rest }: KColorPickerProps) {
+/**
+ * KColorPicker: Selector de color estilizado.
+ * Refinado para evitar fugas de props al DOM (variant, size, fullWidth).
+ */
+export function KColorPicker({ 
+  className, 
+  style, 
+  variant, 
+  size, 
+  fullWidth, 
+  ...rest 
+}: KColorPickerProps & { variant?: any, size?: any, fullWidth?: any }) {
   return (
     <ColorPicker
       className={className}
-      style={{ fontFamily: font, ...style }}
+      style={{ 
+        fontFamily: font, 
+        ...style 
+      }}
+      size={size as any}
       showText
       {...rest}
     />

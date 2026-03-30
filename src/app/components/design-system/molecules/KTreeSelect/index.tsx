@@ -13,12 +13,32 @@ export interface KTreeSelectProps extends TreeSelectProps {
   className?: string;
 }
 
-export function KTreeSelect({ className, style, dropdownStyle, ...rest }: KTreeSelectProps) {
+/**
+ * KTreeSelect: Selector jerárquico tipo árbol.
+ * Refinado para evitar fugas de props al DOM (variant, size, fullWidth).
+ */
+export function KTreeSelect({ 
+  className, 
+  style, 
+  dropdownStyle, 
+  variant,
+  size,
+  fullWidth,
+  ...rest 
+}: KTreeSelectProps & { variant?: any, size?: any, fullWidth?: any }) {
   return (
     <TreeSelect
       className={className}
-      style={{ width: '100%', fontFamily: font, ...style }}
-      dropdownStyle={{ fontFamily: font, ...dropdownStyle }}
+      style={{ 
+        width: '100%', 
+        fontFamily: font, 
+        ...style 
+      }}
+      dropdownStyle={{ 
+        fontFamily: font, 
+        ...dropdownStyle 
+      }}
+      size={size as any}
       {...rest}
     />
   );

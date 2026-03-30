@@ -9,7 +9,13 @@ export interface KRateProps extends RateProps {
   size?: number;
 }
 
-export function KRate({ size, style, ...rest }: KRateProps) {
+/**
+ * KRate: Sistema de puntuación por estrellas.
+ * Refinado para evitar fugas de props al DOM (variant, fullWidth).
+ */
+export function KRate({ 
+  size, style, variant, fullWidth, ...rest 
+}: KRateProps & { variant?: any, fullWidth?: any }) {
   return (
     <Rate
       style={{

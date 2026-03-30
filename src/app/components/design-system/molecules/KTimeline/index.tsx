@@ -11,9 +11,22 @@ const font = t.typography.fontPrimary;
    ═══════════════════════════════════════════════ */
 export interface KTimelineProps extends TimelineProps { }
 
-export function KTimeline({ style, ...rest }: KTimelineProps) {
+/**
+ * KTimeline: Componente para mostrar eventos en orden cronológico.
+ * Refinado para evitar fugas de props al DOM (variant, size, fullWidth).
+ */
+export function KTimeline({ 
+  style, 
+  variant, 
+  size, 
+  fullWidth, 
+  ...rest 
+}: KTimelineProps & { variant?: any, size?: any, fullWidth?: any }) {
   return (
-    <div style={{ fontFamily: font, ...style }}>
+    <div style={{ 
+      fontFamily: font, 
+      ...style 
+    }}>
       <Timeline {...rest} />
     </div>
   );

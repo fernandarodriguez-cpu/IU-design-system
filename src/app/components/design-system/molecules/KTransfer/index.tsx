@@ -20,7 +20,21 @@ export interface KTransferProps extends Omit<TransferProps<KTransferItem>, 'data
   dataSource: KTransferItem[];
 }
 
-export function KTransfer({ dataSource, targetKeys, onChange, className, style, ...rest }: KTransferProps) {
+/**
+ * KTransfer: Componente para transferir elementos entre dos listas.
+ * Refinado para evitar fugas de props al DOM (variant, size, fullWidth).
+ */
+export function KTransfer({ 
+  dataSource, 
+  targetKeys, 
+  onChange, 
+  className, 
+  style, 
+  variant,
+  size,
+  fullWidth,
+  ...rest 
+}: KTransferProps & { variant?: any, size?: any, fullWidth?: any }) {
   return (
     <Transfer
       dataSource={dataSource}
@@ -28,7 +42,10 @@ export function KTransfer({ dataSource, targetKeys, onChange, className, style, 
       onChange={onChange}
       render={(item) => item.title}
       className={className}
-      style={{ fontFamily: font, ...style }}
+      style={{ 
+        fontFamily: font, 
+        ...style 
+      }}
       {...rest}
     />
   );

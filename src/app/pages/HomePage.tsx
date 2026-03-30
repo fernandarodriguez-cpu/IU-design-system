@@ -59,20 +59,8 @@ async function handleDownloadZip() {
   const zip = new JSZip();
   const ds = zip.folder('khor-design-system')!;
 
-  // README
-  ds.file('README.md', `# Khor Design System v3.1.0
-
-> Fuente única de verdad para construir aplicaciones SaaS Khor.
-
-**Stack:** React + Radix UI + Tailwind CSS v4 + Lucide + Recharts + Sonner
-**Generado:** ${new Date().toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' })}
-
-## Novedades (v3.1.0 - Density Update)
-- **Density Tokens**: Soporte para escalas \`.khor-compact\` y \`.khor-comfortable\` que ajustan el padding, fuentes y altura de los botones e inputs automáticamente.
-- **Playground Pro V2**: Los componentes ahora incluyen el panel de validación interactiva *State Showcase* (Grilla visual de estados) y el *A11y Summary* para WCAG.
-- **Tokens Semánticos**: Uso de \`var(--khor-surface-page)\`, \`var(--khor-action-primary)\` entre otros, para consistencia perfecta en Dark Mode.
-
-## Instalación
+  ds.file('README.md', `
+# Khor Design System
 
 \`\`\`bash
 pnpm add react react-dom
