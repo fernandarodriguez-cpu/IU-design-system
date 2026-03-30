@@ -31,7 +31,7 @@ const sizeToAntd = (size?: KButtonSize): ButtonProps['size'] => {
 export const KButton = React.forwardRef<HTMLButtonElement, KButtonProps>(function KButton(
   { 
     variant, kVariant, size = 'md', shape = 'default', 
-    htmlType = 'button', style, children, iconPosition, 
+    htmlType = 'button', style, children, className,
     fullWidth, ...rest 
   },
   ref,
@@ -42,6 +42,9 @@ export const KButton = React.forwardRef<HTMLButtonElement, KButtonProps>(functio
     ? { backgroundColor: t.colors.brand.navy, borderColor: t.colors.brand.navy }
     : {};
 
+  // Inyectar w-full si fullWidth es verdadero (Tailwind v4)
+  const combinedClassName = `${fullWidth ? 'w-full' : ''} ${className || ''}`.trim();
+
   return (
     <Button
       ref={ref}
@@ -49,6 +52,7 @@ export const KButton = React.forwardRef<HTMLButtonElement, KButtonProps>(functio
       size={sizeToAntd(size)}
       shape={shape}
       htmlType={htmlType}
+      className={combinedClassName}
       style={{ 
         fontFamily: font, 
         borderRadius: shape === 'default' ? 'var(--khor-density-radius)' : undefined, 

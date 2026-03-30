@@ -388,8 +388,6 @@ aside * {
   scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
 }
 
-/* ── Khor Accessibility (A11y) ── */
-
 /* Global Focus Ring: consistent, visible focus for all interactive elements */
 :focus-visible {
   outline: var(--khor-focus-ring-width) solid var(--khor-focus-ring);
@@ -424,9 +422,11 @@ aside * {
   font-family: var(--font-primary);
   transition: top 0.15s ease;
 }
+
 .khor-skip-link:focus {
   top: 16px;
 }
+
 
 /* ── RTL Support ── */
 [dir="rtl"] {

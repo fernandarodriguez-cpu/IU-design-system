@@ -20,7 +20,7 @@ import { organisms } from './OrganismsPage';
 const t = khorTokens;
 
 /* ─── Version (must match ChangelogPage & AppShell) ─── */
-const KHOR_VERSION = '3.1.1';
+const KHOR_VERSION = '3.1.4';
 
 /* ─── Sections config ───────────────────────── */
 interface SectionConfig {
@@ -54,7 +54,23 @@ function generateMarkdown(sections: SectionConfig[]): string {
 # Sistema de Diseño Khor v${KHOR_VERSION}
 Generado el: ${today}
 
-Este documento contiene la especificación técnica, tokens y APIs de componentes del sistema de diseño Khor. Úsalo como contexto para que la IA genere código consistente, accesible y alineado con la marca.
+Este documento es la única fuente de verdad para el desarrollo en el ecosistema Khor. Úsalo como contexto para que la IA genere código consistente, accesible y alineado con la marca.
+
+## 🤖 Instrucciones Críticas para la IA (System Prompt)
+
+Como IA, DEBES seguir estas reglas estrictamente al generar código:
+1. **Identidad Visual:** NUNCA importes ni uses componentes directamente desde \`antd\`, \`@ant-design/*\`, Material UI o similares. Usa exclusivamente los componentes del sistema (prefijo \`K\`). Los componentes K* son la única abstracción oficial; aunque internamente usen AntD o Radix, tú solo debes interactuar con la capa Khor.
+2. **Componentes Khor:** Ejemplo: \`KButton\`, \`KInput\`, \`KCardSection\`.
+3. **Estilos:** Usa Tailwind CSS SOLO para el layout (grid, flex, spacing) y clases de utilidad de Khor. NUNCA hardcodees colores hexadecimales; usa siempre los Design Tokens (\`khorTokens\`) o CSS Variables (\`var(--khor-*)\`).
+4. **React Router:** Usa \`react-router\` (v6/v7), NO \`react-router-dom\`.
+5. **Iconografía:** Usa únicamente la librería \`lucide-react\`.
+6. **Higiene del DOM:** Asegúrate de que las props personalizadas de Khor (ej. \`variant\`, \`fullWidth\`) no lleguen al elemento HTML nativo.
+
+### ♿ Reglas Estrictas de Accesibilidad (A11y)
+1. **Roles interactivos:** NUNCA uses \`onClick\` en elementos no interactivos (\`div\`, \`span\`). Usa siempre \`<KButton>\` o elementos semánticos.
+2. **Atributos ARIA:** Todo elemento sin texto visible (ej. botones de solo ícono) DEBE tener un \`aria-label\` descriptivo.
+3. **Imágenes:** Toda etiqueta \`<img>\` o componente de imagen debe incluir el atributo \`alt\`.
+4. **Formularios:** Todos los inputs deben estar asociados a un label (usando el componente \`KFormField\`).
 `);
   }
 
@@ -98,6 +114,8 @@ Este documento contiene la especificación técnica, tokens y APIs de componente
 | warning-light | \`#FFF3E0\` | Fondo de advertencias |
 | info | \`#051758\` | Informativo (coincide con navy) |
 | info-light | \`#E3F2FD\` | Fondo de alertas informativas |
+
+**Nota para la IA:** En Tailwind v4, estos colores se consumen como \`bg-khor-primary\`, \`text-khor-navy\`, \`border-khor-accent\`, etc.
 
 ### Tipografia
 
@@ -202,10 +220,25 @@ transition: all var(--khor-duration-normal) var(--khor-easing-standard);
 --khor-easing-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);  /* Efectos modales o drawer bounce */
 \`\`\`
 
-### Accesibilidad WCAG y RTL
+### Accesibilidad WCAG (Los 8 Gaps de Clase Mundial)
 
-- **WCAG ARIA:** Todos los componentes nativos manejan ARIA implícito, Focus-traps y anunciadores (\`aria-live="polite"\`). Como IA, debes construir usando estas primitives de Khor. Si construyes custom HTML sin primitives, DEBES inyectar role y states a11y.
-- **RTL (Right-to-Left):** Soporte actualmente no contemplado/requerido en el framework Khor.
+Khor v3.1.2 soluciona los gaps críticos detectados en auditorías previas:
+1. **Reducción de Movimiento:** Soporta \`prefers-reduced-motion\` para usuarios con sensibilidad vestibular.
+2. **Foco Visible:** Anillos de enfoque de alto contraste (\`focus-visible\`) en todos los elementos interactivos.
+3. **Jerarquía Semántica:** Estructura de encabezados (H1-H6) estrictamente secuencial.
+4. **Contraste AA:** Todos los tokens de texto cumplen con el ratio 4.5:1 sobre sus fondos respectivos.
+5. **Navegación por Teclado:** Soporte nativo para Tab, Enter, Escape y Flechas en todos los componentes.
+6. **Anunciadores ARIA:** Uso de \`aria-live\` y roles semánticos para lectores de pantalla.
+7. **Touch Targets:** Tamaño mínimo de click de 44x44px en elementos interactivos.
+8. **Feedback de Error:** Mensajes de error claros vinculados mediante \`aria-describedby\`.
+
+### Registro de Cambios (Changelog)
+
+| Versión | Fecha | Cambios |
+|---------|-------|---------|
+| **v3.1.4** | 30 Mar 2026 | **Refinamiento:** Lógica \`fullWidth\` en KButton. Optimización del orden del System Prompt para IA. Inyección de reglas estrictas A11y. |
+| **v3.1.3** | 30 Mar 2026 | **Gobernanza:** Implementación de Linter de Accesibilidad (jsx-a11y) y configuración externa. |
+| **v3.1.2** | 30 Mar 2026 | **Gobernanza:** Restauración de instrucciones para IA. Solución de los 8 Gaps de Accesibilidad. |
 
 ---`);
   }

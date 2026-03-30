@@ -5,6 +5,48 @@ El formato está basado en [Keep a Changelog](https://keepachangelog.com/en/1.0.
 
 ---
 
+## [3.1.4] - 2026-03-30
+### Refinamiento & IA Guide (Ola 6.2)
+#### Added
+- **FullWidth Logic**: Soporte real para `fullWidth` en `KButton` inyectando la clase `w-full` de Tailwind v4.
+- **A11y System Prompt**: Inyección de 4 reglas imperativas de accesibilidad en el exportador de IA.
+
+#### Improved
+- **AI Prompt Order**: Reordenamiento estratégico de la guía IA (Instrucciones primero) para combatir el efecto "Lost in the Middle".
+- **Architecture Clarity**: Aclaración en la documentación sobre el uso de componentes K* como única abstracción oficial sobre librerías base (AntD/Radix).
+
+#### Fixed
+- **Linter Errors**: Limpieza de variables no utilizadas en `KButton`.
+
+---
+
+## [3.1.3] - 2026-03-30
+### Gobernanza Automatizada (Ola 6.1)
+#### Added
+- **ESLint v9 + Flat Config**: Sistema de linting profesional configurado externamente (`eslint.config.js`).
+- **A11y Enforcement**: Reglas de accesibilidad (`jsx-a11y`) activadas para prevenir errores en el DOM.
+
+#### Improved
+- **Package Cleanliness**: Remoción de bloques de configuración interna en `package.json`.
+
+---
+
+## [3.1.2] - 2026-03-30
+### Gobernanza & Accesibilidad (Ola 6)
+#### Added
+- **Global Focus Ring**: Anillo de enfoque de alto contraste (`focus-visible`) en todos los elementos interactivos.
+- **PR Template**: Estándar mandatorio para contribuciones (Checklist de versión, changelog, a11y).
+- **IA Guide Instructions**: Restauración del "Prompt Base" crítico para asegurar la calidad del código generado por IAs.
+
+#### Improved
+- **AI-Ready Sync**: Inyección de normativas WCAG (8 Gaps) en la guía auto-generada.
+- **AppShell & Changelog**: Actualización visual de la versión y sincronización de historial.
+
+#### Fixed
+- Solución de los 8 Gaps detectados en la auditoría de Clase Mundial (Focus Visible, Motion Preference, AI Governance, etc.).
+
+---
+
 ## [3.1.1] - 2026-03-30
 ### Refinement (Ola 5)
 #### Added

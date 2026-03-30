@@ -14,7 +14,6 @@ import {
 } from 'lucide-react';
 import { KNavItem } from '../design-system/molecules/index';
 import { patterns } from '../../patterns/index';
-import { KText } from '../design-system/atoms/index';
 import { khorTokens } from '../../theme/khor-theme';
 import { KCommandBar, useCommandBar } from '../design-system/command-bar';
 import { useTheme } from '../../theme/theme-context';
@@ -440,7 +439,7 @@ export function AppShell() {
               backgroundColor: 'var(--khor-success-light)',
               color: 'var(--khor-success)',
             }}>
-              v3.1.1
+              v3.1.4
             </span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>

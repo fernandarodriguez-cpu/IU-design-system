@@ -42,7 +42,41 @@ const changeTypeConfig: Record<ChangeType, { color: string; bg: string; icon: Re
 };
 
 const changelog: VersionEntry[] = [
+  {
+    version: '3.1.4',
+    date: '30 de marzo de 2026',
+    codename: 'Refinamiento & IA Guide',
+    summary: 'Implementación de lógica fullWidth en botones, limpieza de linter y optimización del exportador de IA para maximizar la efectividad de los prompts.',
+    changes: [
+      { type: 'added', description: 'Implementación funcional de prop fullWidth en KButton usando Tailwind w-full.' },
+      { type: 'fixed', description: 'Corrección de variables no utilizadas (iconPosition) detectadas por el linter en KButton.' },
+      { type: 'changed', component: 'AIExportPage', description: 'Reordenamiento de prompts (Instrucciones primero) para evitar "Lost in the Middle".' },
+      { type: 'added', component: 'AIExportPage', description: 'Nueva sección de "Reglas Estrictas de Accesibilidad (A11y)" en la guía auto-generada.' },
+    ]
+  },
+  {
+    version: '3.1.3',
+    date: '30 de marzo de 2026',
+    codename: 'Gobernanza Automatizada',
+    summary: 'Implementación de Linter de Accesibilidad (jsx-a11y) y configuración externa para asegurar la calidad del DOM.',
+    changes: [
+      { type: 'added', description: 'Instalación de ESLint v9 con soporte Flat Config (eslint.config.js).' },
+      { type: 'added', description: 'Plugin de accesibilidad jsx-a11y configurado con reglas recomendadas.' },
+      { type: 'changed', description: 'Remoción de configuración de linter en package.json para mayor limpieza.' },
+    ]
+  },
 
+  {
+    version: '3.1.2',
+    date: '30 de marzo de 2026',
+    codename: 'Gobernanza & Accesibilidad',
+    summary: 'Restauración de instrucciones críticas para IA, remediación de Gaps de accesibilidad WCAG y mejora de la infraestructura de movimiento.',
+    changes: [
+      { type: 'added', description: 'Implementación de prefers-reduced-motion y focus-visible global.' },
+      { type: 'changed', component: 'AIExportPage', description: 'Restauración del bloque "Instrucciones IA" y actualización de la IA Guide con normativas de accesibilidad.' },
+      { type: 'fixed', description: 'Solución de los 8 gaps detectados en la auditoría de clase mundial.' },
+    ]
+  },
   {
     version: '3.1.1',
     date: '30 Mar 2026',
@@ -173,8 +207,8 @@ const changelog: VersionEntry[] = [
       { type: 'changed', component: 'AIExportPage', componentPath: '/ai-export', description: 'Guía IA actualizada: 27 átomos (antes 18), 33 moléculas (antes 12), 13 organismos (antes 8). Incluye todos los componentes extendidos: KInputSearch, KAffix, KSpace, KImage, KWatermark, KQRCode, KInputNumber, KSegmented, KAutocomplete, KDateRangePicker, KSelectAdvanced, KDescriptions, KPopconfirm, KResult, KTimeline, KCascader, KStatistic, KTimePicker, KMentions, KAnchor, KList, KDividerExtended, KTreeSelect, KNotificationContainer.' },
       { type: 'fixed', component: 'AIExportPage', componentPath: '/ai-export', description: 'Botón "Copiar al portapapeles" corregido: implementado fallback con document.execCommand("copy") vía textarea oculto cuando navigator.clipboard falla en entornos sandboxed (iframes). Si ambos fallan, muestra toast de warning y auto-abre la vista previa expandida.' },
       { type: 'added', component: 'AIExportPage', componentPath: '/ai-export', description: 'Nuevo botón "Seleccionar todo (Ctrl+C)" en la barra inferior de la vista previa. Usa window.getSelection() para seleccionar todo el texto del <pre> y muestra toast informativo.' },
-      { type: 'changed', component: 'AIExportPage', componentPath: '/ai-export', description: 'Versión del documento ahora es dinámica (const KHOR_VERSION = "3.1.1") en vez de hardcoded "1.0.0". Sección de Imports en Patrones actualizada con rutas de todos los módulos extendidos.' },
-      { type: 'changed', component: 'AppShell', componentPath: '/', description: 'Badge de versión actualizado a v2.4.0 en header.' },
+      { type: 'changed', component: 'AIExportPage', componentPath: '/ai-export', description: 'Versión del documento ahora es dinámica (const KHOR_VERSION = "3.1.3") en vez de hardcoded "1.0.0". Sección de Imports en Patrones actualizada con rutas de todos los módulos extendidos.' },
+      { type: 'changed', component: 'AppShell', componentPath: '/', description: 'Badge de versión actualizado a v3.1.3 en header.' },
     ],
     stats: { added: 1, changed: 3, fixed: 1 },
   },
