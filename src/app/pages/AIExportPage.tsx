@@ -20,7 +20,7 @@ import { organisms } from './OrganismsPage';
 const t = khorTokens;
 
 /* ─── Version (must match ChangelogPage & AppShell) ─── */
-const KHOR_VERSION = '3.1.4';
+const KHOR_VERSION = '3.2.1';
 
 /* ─── Sections config ───────────────────────── */
 interface SectionConfig {

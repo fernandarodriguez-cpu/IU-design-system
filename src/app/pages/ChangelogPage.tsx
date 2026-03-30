@@ -43,6 +43,81 @@ const changeTypeConfig: Record<ChangeType, { color: string; bg: string; icon: Re
 
 const changelog: VersionEntry[] = [
   {
+    version: '3.2.1',
+    date: '30 de marzo de 2026',
+    codename: '100% Token Coverage',
+    summary: 'Expansión del exportador DTCG (Design Tokens) para abarcar la totalidad del sistema de diseño, resolviendo variables referenciadas y añadiendo la colección Semantic.',
+    changes: [
+      { type: 'added', component: 'FigmaExportPage', description: 'Incorporación de la raíz "Semantic" con Action, Surface, Text, Border y Focus.' },
+      { type: 'added', component: 'FigmaExportPage', description: 'Inclusión de métricas faltantes: Layout, Iconos y tamaños secundarios de tipografía (H3, Body, Small).' },
+      { type: 'fixed', component: 'FigmaExportPage', description: 'Creación de un parser para limpiar variables CSS de radio (ej. extraer "6" de "var(--radius, 6px)").' },
+    ]
+  },
+  {
+    version: '3.2.0',
+    date: '30 de marzo de 2026',
+    codename: 'Pro Styles & Components',
+    summary: 'Refactorización del exportador Figma Styles al esquema de arquitectura compleja (paintStyles, textStyles, effectStyles) para sombras, colores con opacidad y tipografía con unidades absolutas. Aclaración de la barrera JSON/Markdown para componentes.',
+    changes: [
+      { type: 'changed', component: 'FigmaExportPage', description: 'Implementación de paintStyles (Solid) con propiedades hex y opacity.' },
+      { type: 'added', component: 'FigmaExportPage', description: 'Implementación de textStyles con unidades de medida rígidas (PIXELS) para Figma.' },
+      { type: 'added', component: 'FigmaExportPage', description: 'Implementación de effectStyles (DROP_SHADOW) para sincronización de sombras automáticas.' },
+    ]
+  },
+  {
+    version: '3.1.9',
+    date: '30 de marzo de 2026',
+    codename: 'DTCG Standard Final',
+    summary: 'Implementación definitiva del estándar Design Token Community Group ($value, $type) con estructura jerárquica Primitive/Token para compatibilidad total con Figma.',
+    changes: [
+      { type: 'changed', component: 'FigmaExportPage', description: 'Estructuración del JSON en carpetas raíz "Primitive" y "Token".' },
+      { type: 'changed', component: 'FigmaExportPage', description: 'Uso obligatorio de $value y $type en todas las definiciones de variables.' },
+      { type: 'changed', component: 'FigmaExportPage', description: 'Unificación de exportadores Variables y Style Dictionary bajo la misma base DTCG.' },
+    ]
+  },
+  {
+    version: '3.1.8',
+    date: '30 de marzo de 2026',
+    codename: 'Universal Exporters Refactor',
+    summary: 'Refactorización total de los motores de exportación para cumplir con los estándares de la industria: Official Figma Format y W3C Design Tokens (DTCG).',
+    changes: [
+      { type: 'changed', component: 'FigmaExportPage', description: 'Nueva estructura "Official Figma" con valuesByMode para Variables.' },
+      { type: 'changed', component: 'FigmaExportPage', description: 'Adopción del estándar W3C DTCG ($value, $type) para Style Dictionary.' },
+      { type: 'changed', component: 'FigmaExportPage', description: 'Simplificación a Mapa Plano para Figma Styles legacy.' },
+    ]
+  },
+  {
+    version: '3.1.7',
+    date: '30 de marzo de 2026',
+    codename: 'Figma Final Polish',
+    summary: 'Aplanamiento total del JSON a array raíz, implementación de jerarquía de carpetas con "/" y conversión de line-height a píxeles absolutos para compatibilidad total con el motor de Figma.',
+    changes: [
+      { type: 'changed', component: 'FigmaExportPage', description: 'Exportación directa como array raíz (sin objetos contenedores).' },
+      { type: 'changed', component: 'FigmaExportPage', description: 'Jerarquía "/" en nombres de variables (ej. Primary/Hover, H1/Size).' },
+      { type: 'added', component: 'FigmaExportPage', description: 'Cálculo automático de Line Height en píxeles (size * multiplier) para variables FLOAT.' },
+    ]
+  },
+  {
+    version: '3.1.6',
+    date: '30 de marzo de 2026',
+    codename: 'Figma Structure Refinement',
+    summary: 'Aplanamiento de la estructura JSON para Figma Variables y optimización de nomenclatura de tipografía para compatibilidad total con plugins.',
+    changes: [
+      { type: 'changed', component: 'FigmaExportPage', description: 'Remoción de la envoltura figmaVariables y metadatos extras; collections ahora en la raíz.' },
+      { type: 'changed', component: 'FigmaExportPage', description: 'Renombrado de variables de fuente de font-* a typo-family-* para evitar colisiones.' },
+    ]
+  },
+  {
+    version: '3.1.5',
+    date: '30 de marzo de 2026',
+    codename: 'Figma Exporter Hotfix',
+    summary: 'Corrección crítica en el exportador de Figma Variables. Se implementó un motor de resolución de tokens para transformar variables CSS en valores hexadecimales reales compatibles con Figma.',
+    changes: [
+      { type: 'fixed', component: 'FigmaExportPage', description: 'Solución al bug de canales RGB nulos en el JSON de exportación mediante resolveHex.' },
+      { type: 'changed', component: 'FigmaExportPage', description: 'Soporte mejorado para exportación de Figma Styles y Variables con valores estáticos.' },
+    ]
+  },
+  {
     version: '3.1.4',
     date: '30 de marzo de 2026',
     codename: 'Refinamiento & IA Guide',

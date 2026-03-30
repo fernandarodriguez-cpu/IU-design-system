@@ -14,182 +14,395 @@ import { kToast } from '../components/design-system/organisms/index';
 
 const t = khorTokens;
 
-/* ─── Figma Variables JSON Generator ────────── */
+/* ─── Figma Variables JSON Generator (W3C DTCG Standard) ─────── */
 function generateFigmaVariablesJSON() {
-  const collections = [
+  return {
+    Primitive: {
+      Color: {
+        Brand: {
+          Primary: {
+            Base: { $value: resolveHex(t.colors.brand.primary), $type: 'color' },
+            Hover: { $value: resolveHex(t.colors.brand.primaryHover), $type: 'color' },
+            Active: { $value: resolveHex(t.colors.brand.primaryActive), $type: 'color' },
+          },
+          Navy: {
+            Base: { $value: resolveHex(t.colors.brand.navy), $type: 'color' },
+            Hover: { $value: resolveHex(t.colors.brand.navyHover), $type: 'color' },
+            Active: { $value: resolveHex(t.colors.brand.navyActive), $type: 'color' },
+          },
+          Accent: {
+            Base: { $value: resolveHex(t.colors.brand.accent), $type: 'color' },
+            Hover: { $value: resolveHex(t.colors.brand.accentHover), $type: 'color' },
+            Active: { $value: resolveHex(t.colors.brand.accentActive), $type: 'color' },
+          }
+        },
+        Neutral: Object.fromEntries(Object.entries(t.colors.neutral).map(([k, v]) => [
+          k, 
+          { $value: resolveHex(v), $type: 'color' }
+        ])),
+        Feedback: {
+          Success: {
+            Base: { $value: resolveHex(t.colors.feedback.success), $type: 'color' },
+            Light: { $value: resolveHex(t.colors.feedback.successLight), $type: 'color' },
+          },
+          Error: {
+            Base: { $value: resolveHex(t.colors.feedback.error), $type: 'color' },
+            Light: { $value: resolveHex(t.colors.feedback.errorLight), $type: 'color' },
+          },
+          Warning: {
+            Base: { $value: resolveHex(t.colors.feedback.warning), $type: 'color' },
+            Light: { $value: resolveHex(t.colors.feedback.warningLight), $type: 'color' },
+          },
+          Info: {
+            Base: { $value: resolveHex(t.colors.feedback.info), $type: 'color' },
+            Light: { $value: resolveHex(t.colors.feedback.infoLight), $type: 'color' },
+          },
+        }
+      }
+    },
+    Semantic: {
+      Action: {
+        Primary: {
+          Default: { $value: resolveHex(t.semantic.action.primary.default), $type: 'color' },
+          Hover: { $value: resolveHex(t.semantic.action.primary.hover), $type: 'color' },
+          Active: { $value: resolveHex(t.semantic.action.primary.active), $type: 'color' },
+        },
+        Secondary: {
+          Default: { $value: resolveHex(t.semantic.action.secondary.default), $type: 'color' },
+          Hover: { $value: resolveHex(t.semantic.action.secondary.hover), $type: 'color' },
+          Active: { $value: resolveHex(t.semantic.action.secondary.active), $type: 'color' },
+        },
+        Danger: {
+          Default: { $value: resolveHex(t.semantic.action.danger.default), $type: 'color' },
+          Hover: { $value: resolveHex(t.semantic.action.danger.hover), $type: 'color' },
+          Active: { $value: resolveHex(t.semantic.action.danger.active), $type: 'color' },
+        },
+        Ghost: {
+          Hover: { $value: resolveHex(t.semantic.action.ghost.hover), $type: 'color' },
+        },
+        Disabled: {
+          Bg: { $value: resolveHex(t.semantic.action.disabled.bg), $type: 'color' },
+          Text: { $value: resolveHex(t.semantic.action.disabled.text), $type: 'color' },
+        }
+      },
+      Surface: {
+        Page: { $value: resolveHex(t.semantic.surface.page), $type: 'color' },
+        Card: { $value: resolveHex(t.semantic.surface.card), $type: 'color' },
+        Raised: { $value: resolveHex(t.semantic.surface.raised), $type: 'color' },
+        Overlay: { $value: resolveHex(t.semantic.surface.overlay), $type: 'color' },
+      },
+      Text: {
+        Primary: { $value: resolveHex(t.semantic.text.primary), $type: 'color' },
+        Secondary: { $value: resolveHex(t.semantic.text.secondary), $type: 'color' },
+        Muted: { $value: resolveHex(t.semantic.text.muted), $type: 'color' },
+        Disabled: { $value: resolveHex(t.semantic.text.disabled), $type: 'color' },
+        OnAction: { $value: resolveHex(t.semantic.text.onAction), $type: 'color' },
+        Link: { $value: resolveHex(t.semantic.text.link), $type: 'color' },
+      },
+      Border: {
+        Default: { $value: resolveHex(t.semantic.border.default), $type: 'color' },
+        Hover: { $value: resolveHex(t.semantic.border.hover), $type: 'color' },
+        Focus: { $value: resolveHex(t.semantic.border.focus), $type: 'color' },
+        Error: { $value: resolveHex(t.semantic.border.error), $type: 'color' },
+        Disabled: { $value: resolveHex(t.semantic.border.disabled), $type: 'color' },
+        Strong: { $value: resolveHex(t.semantic.border.strong), $type: 'color' },
+      },
+      Focus: {
+        Ring: { $value: resolveHex(t.semantic.focus.ring), $type: 'color' }
+      }
+    },
+    Token: {
+      Size: {
+        Spacing: Object.fromEntries(Object.entries(t.spacing).map(([k, v]) => [
+          k.toUpperCase(), 
+          { $value: `${resolveDimension(v)}px`, $type: 'dimension' }
+        ])),
+        Radius: Object.fromEntries(Object.entries(t.radius).map(([k, v]) => [
+          k.toUpperCase(), 
+          { $value: `${resolveDimension(v, 6)}px`, $type: 'dimension' }
+        ])),
+        BorderWidth: {
+          Ring: { $value: `${resolveDimension(t.semantic.focus.ringWidth, 2)}px`, $type: 'dimension' },
+          RingOffset: { $value: `${resolveDimension(t.semantic.focus.ringOffset, 2)}px`, $type: 'dimension' }
+        }
+      },
+      Typography: {
+        Family: {
+          Primary: { $value: 'Raleway', $type: 'string' },
+          Secondary: { $value: 'Plus Jakarta Sans', $type: 'string' },
+        },
+        H1: {
+          Size: { $value: `${t.typography.h1.size}px`, $type: 'dimension' },
+          Weight: { $value: t.typography.h1.weight, $type: 'fontWeight' },
+          LineHeight: { $value: Math.round(t.typography.h1.size * t.typography.h1.lineHeight * 10) / 10, $type: 'number' },
+        },
+        H2: {
+          Size: { $value: `${t.typography.h2.size}px`, $type: 'dimension' },
+          Weight: { $value: t.typography.h2.weight, $type: 'fontWeight' },
+          LineHeight: { $value: Math.round(t.typography.h2.size * t.typography.h2.lineHeight * 10) / 10, $type: 'number' },
+        },
+        H3: {
+          Size: { $value: `${t.typography.h3.size}px`, $type: 'dimension' },
+          Weight: { $value: t.typography.h3.weight, $type: 'fontWeight' },
+          LineHeight: { $value: Math.round(t.typography.h3.size * t.typography.h3.lineHeight * 10) / 10, $type: 'number' },
+        },
+        BodyLg: {
+          Size: { $value: `${t.typography.bodyLg.size}px`, $type: 'dimension' },
+          Weight: { $value: t.typography.bodyLg.weight, $type: 'fontWeight' },
+          LineHeight: { $value: Math.round(t.typography.bodyLg.size * t.typography.bodyLg.lineHeight * 10) / 10, $type: 'number' },
+        },
+        BodyMd: {
+          Size: { $value: `${t.typography.bodyMd.size}px`, $type: 'dimension' },
+          Weight: { $value: t.typography.bodyMd.weight, $type: 'fontWeight' },
+          LineHeight: { $value: Math.round(t.typography.bodyMd.size * t.typography.bodyMd.lineHeight * 10) / 10, $type: 'number' },
+        },
+        Small: {
+          Size: { $value: `${t.typography.small.size}px`, $type: 'dimension' },
+          Weight: { $value: t.typography.small.weight, $type: 'fontWeight' },
+          LineHeight: { $value: Math.round(t.typography.small.size * t.typography.small.lineHeight * 10) / 10, $type: 'number' },
+        }
+      },
+      Layout: {
+        SidebarWidth: { $value: `${t.layout.sidebarWidth}px`, $type: 'dimension' },
+        HeaderHeight: { $value: `${t.layout.headerHeight}px`, $type: 'dimension' },
+      },
+      Icon: {
+        SM: { $value: `${t.icon.sm}px`, $type: 'dimension' },
+        MD: { $value: `${t.icon.md}px`, $type: 'dimension' },
+        LG: { $value: `${t.icon.lg}px`, $type: 'dimension' },
+        StrokeWidth: { $value: `${t.icon.strokeWidth}px`, $type: 'dimension' },
+      }
+    }
+  };
+}
+
+/* ─── Figma Styles JSON Generator (Pro Scheme: Paint/Text/Effect) ── */
+function generateFigmaStylesJSON() {
+  const paintStyles: any[] = [];
+
+  const addPaint = (name: string, hexCode: string) => {
+    paintStyles.push({
+      name,
+      paints: [{ type: "solid", hex: resolveHex(hexCode), opacity: 1 }]
+    });
+  };
+
+  addPaint('Color/Brand/Primary', t.colors.brand.primary);
+  addPaint('Color/Brand/Primary Hover', t.colors.brand.primaryHover);
+  addPaint('Color/Brand/Primary Active', t.colors.brand.primaryActive);
+  addPaint('Color/Brand/Navy', t.colors.brand.navy);
+  addPaint('Color/Brand/Navy Hover', t.colors.brand.navyHover);
+  addPaint('Color/Brand/Navy Active', t.colors.brand.navyActive);
+  addPaint('Color/Brand/Accent', t.colors.brand.accent);
+  addPaint('Color/Brand/Accent Hover', t.colors.brand.accentHover);
+  addPaint('Color/Brand/Accent Active', t.colors.brand.accentActive);
+
+  Object.entries(t.colors.neutral).forEach(([k, v]) => {
+    addPaint(`Color/Neutral/${k.charAt(0).toUpperCase() + k.slice(1)}`, v);
+  });
+
+  addPaint('Color/Feedback/Success', t.colors.feedback.success);
+  addPaint('Color/Feedback/Success Light', t.colors.feedback.successLight);
+  addPaint('Color/Feedback/Error', t.colors.feedback.error);
+  addPaint('Color/Feedback/Error Light', t.colors.feedback.errorLight);
+  addPaint('Color/Feedback/Warning', t.colors.feedback.warning);
+  addPaint('Color/Feedback/Warning Light', t.colors.feedback.warningLight);
+  addPaint('Color/Feedback/Info', t.colors.feedback.info);
+  addPaint('Color/Feedback/Info Light', t.colors.feedback.infoLight);
+
+  const textStyles = [
     {
-      name: 'Khor/Brand Colors',
-      modes: [{ name: 'Default', variables: [
-        { name: 'primary', type: 'COLOR', value: hexToRgba(t.colors.brand.primary) },
-        { name: 'primary-hover', type: 'COLOR', value: hexToRgba(t.colors.brand.primaryHover) },
-        { name: 'primary-active', type: 'COLOR', value: hexToRgba(t.colors.brand.primaryActive) },
-        { name: 'navy', type: 'COLOR', value: hexToRgba(t.colors.brand.navy) },
-        { name: 'navy-hover', type: 'COLOR', value: hexToRgba(t.colors.brand.navyHover) },
-        { name: 'navy-active', type: 'COLOR', value: hexToRgba(t.colors.brand.navyActive) },
-        { name: 'accent', type: 'COLOR', value: hexToRgba(t.colors.brand.accent) },
-        { name: 'accent-hover', type: 'COLOR', value: hexToRgba(t.colors.brand.accentHover) },
-        { name: 'accent-active', type: 'COLOR', value: hexToRgba(t.colors.brand.accentActive) },
-      ]}],
+      name: "Typography/Heading/H1",
+      font: { family: "Raleway", style: "Bold" },
+      fontSize: t.typography.h1.size,
+      lineHeight: { unit: "PIXELS", value: Math.round(t.typography.h1.size * t.typography.h1.lineHeight * 10) / 10 },
+      letterSpacing: { unit: "PERCENT", value: 0 },
+      paragraphSpacing: 0, textCase: "ORIGINAL", textDecoration: "NONE"
     },
     {
-      name: 'Khor/Neutral',
-      modes: [{ name: 'Default', variables: Object.entries(t.colors.neutral).map(([key, hex]) => ({
-        name: `neutral-${key}`,
-        type: 'COLOR' as const,
-        value: hexToRgba(hex),
-      }))}],
+      name: "Typography/Heading/H2",
+      font: { family: "Raleway", style: "Bold" },
+      fontSize: t.typography.h2.size,
+      lineHeight: { unit: "PIXELS", value: Math.round(t.typography.h2.size * t.typography.h2.lineHeight * 10) / 10 },
+      letterSpacing: { unit: "PERCENT", value: 0 },
+      paragraphSpacing: 0, textCase: "ORIGINAL", textDecoration: "NONE"
     },
     {
-      name: 'Khor/Feedback',
-      modes: [{ name: 'Default', variables: [
-        { name: 'success', type: 'COLOR', value: hexToRgba(t.colors.feedback.success) },
-        { name: 'success-light', type: 'COLOR', value: hexToRgba(t.colors.feedback.successLight) },
-        { name: 'error', type: 'COLOR', value: hexToRgba(t.colors.feedback.error) },
-        { name: 'error-light', type: 'COLOR', value: hexToRgba(t.colors.feedback.errorLight) },
-        { name: 'warning', type: 'COLOR', value: hexToRgba(t.colors.feedback.warning) },
-        { name: 'warning-light', type: 'COLOR', value: hexToRgba(t.colors.feedback.warningLight) },
-        { name: 'info', type: 'COLOR', value: hexToRgba(t.colors.feedback.info) },
-        { name: 'info-light', type: 'COLOR', value: hexToRgba(t.colors.feedback.infoLight) },
-      ]}],
+      name: "Typography/Heading/H3",
+      font: { family: "Raleway", style: "SemiBold" },
+      fontSize: t.typography.h3.size,
+      lineHeight: { unit: "PIXELS", value: Math.round(t.typography.h3.size * t.typography.h3.lineHeight * 10) / 10 },
+      letterSpacing: { unit: "PERCENT", value: 0 },
+      paragraphSpacing: 0, textCase: "ORIGINAL", textDecoration: "NONE"
     },
     {
-      name: 'Khor/Spacing',
-      modes: [{ name: 'Default', variables: Object.entries(t.spacing).map(([key, val]) => ({
-        name: `spacing-${key}`,
-        type: 'FLOAT' as const,
-        value: val,
-      }))}],
+      name: "Typography/Body/Large",
+      font: { family: "Plus Jakarta Sans", style: "Regular" },
+      fontSize: t.typography.bodyLg.size,
+      lineHeight: { unit: "PIXELS", value: Math.round(t.typography.bodyLg.size * t.typography.bodyLg.lineHeight * 10) / 10 },
+      letterSpacing: { unit: "PERCENT", value: 0 },
+      paragraphSpacing: 0, textCase: "ORIGINAL", textDecoration: "NONE"
     },
     {
-      name: 'Khor/Radius',
-      modes: [{ name: 'Default', variables: Object.entries(t.radius).map(([key, val]) => ({
-        name: `radius-${key}`,
-        type: 'FLOAT' as const,
-        value: val,
-      }))}],
+      name: "Typography/Body/Medium",
+      font: { family: "Plus Jakarta Sans", style: "Regular" },
+      fontSize: t.typography.bodyMd.size,
+      lineHeight: { unit: "PIXELS", value: Math.round(t.typography.bodyMd.size * t.typography.bodyMd.lineHeight * 10) / 10 },
+      letterSpacing: { unit: "PERCENT", value: 0 },
+      paragraphSpacing: 0, textCase: "ORIGINAL", textDecoration: "NONE"
     },
     {
-      name: 'Khor/Typography',
-      modes: [{ name: 'Default', variables: [
-        { name: 'font-primary', type: 'STRING', value: 'Raleway' },
-        { name: 'font-secondary', type: 'STRING', value: 'Plus Jakarta Sans' },
-        { name: 'h1-size', type: 'FLOAT', value: t.typography.h1.size },
-        { name: 'h1-weight', type: 'FLOAT', value: t.typography.h1.weight },
-        { name: 'h1-line-height', type: 'FLOAT', value: t.typography.h1.lineHeight },
-        { name: 'h2-size', type: 'FLOAT', value: t.typography.h2.size },
-        { name: 'h2-weight', type: 'FLOAT', value: t.typography.h2.weight },
-        { name: 'h3-size', type: 'FLOAT', value: t.typography.h3.size },
-        { name: 'h3-weight', type: 'FLOAT', value: t.typography.h3.weight },
-        { name: 'body-lg-size', type: 'FLOAT', value: t.typography.bodyLg.size },
-        { name: 'body-md-size', type: 'FLOAT', value: t.typography.bodyMd.size },
-        { name: 'small-size', type: 'FLOAT', value: t.typography.small.size },
-      ]}],
-    },
+      name: "Typography/Body/Small",
+      font: { family: "Plus Jakarta Sans", style: "Medium" },
+      fontSize: t.typography.small.size,
+      lineHeight: { unit: "PIXELS", value: Math.round(t.typography.small.size * t.typography.small.lineHeight * 10) / 10 },
+      letterSpacing: { unit: "PERCENT", value: 0 },
+      paragraphSpacing: 0, textCase: "ORIGINAL", textDecoration: "NONE"
+    }
   ];
 
-  return {
-    version: '1.0.0',
-    generatedAt: new Date().toISOString(),
-    generator: 'Khor Design System',
-    figmaVariables: {
-      collections,
+  const effectStyles = [
+    {
+      name: "Effects/Shadow/SM",
+      effects: [{ type: "DROP_SHADOW", color: { hex: "#000000", opacity: 0.05 }, offset: { x: 0, y: 1 }, radius: 2, spread: 0, visible: true, blendMode: "NORMAL" }]
     },
-  };
+    {
+      name: "Effects/Shadow/MD",
+      effects: [{ type: "DROP_SHADOW", color: { hex: "#000000", opacity: 0.1 }, offset: { x: 0, y: 4 }, radius: 6, spread: -1, visible: true, blendMode: "NORMAL" }]
+    },
+    {
+      name: "Effects/Shadow/LG",
+      effects: [{ type: "DROP_SHADOW", color: { hex: "#000000", opacity: 0.1 }, offset: { x: 0, y: 10 }, radius: 15, spread: -3, visible: true, blendMode: "NORMAL" }]
+    }
+  ];
+
+  return { paintStyles, textStyles, effectStyles };
 }
 
-/* ─── Figma Styles JSON Generator ───────────── */
-function generateFigmaStylesJSON() {
-  return {
-    version: '1.0.0',
-    generatedAt: new Date().toISOString(),
-    generator: 'Khor Design System',
-    styles: {
-      colors: {
-        'Brand/Primary': t.colors.brand.primary,
-        'Brand/Primary Hover': t.colors.brand.primaryHover,
-        'Brand/Primary Active': t.colors.brand.primaryActive,
-        'Brand/Navy': t.colors.brand.navy,
-        'Brand/Navy Hover': t.colors.brand.navyHover,
-        'Brand/Navy Active': t.colors.brand.navyActive,
-        'Brand/Accent': t.colors.brand.accent,
-        'Brand/Accent Hover': t.colors.brand.accentHover,
-        'Brand/Accent Active': t.colors.brand.accentActive,
-        ...Object.fromEntries(Object.entries(t.colors.neutral).map(([k, v]) => [`Neutral/${k}`, v])),
-        'Feedback/Success': t.colors.feedback.success,
-        'Feedback/Success Light': t.colors.feedback.successLight,
-        'Feedback/Error': t.colors.feedback.error,
-        'Feedback/Error Light': t.colors.feedback.errorLight,
-        'Feedback/Warning': t.colors.feedback.warning,
-        'Feedback/Warning Light': t.colors.feedback.warningLight,
-        'Feedback/Info': t.colors.feedback.info,
-        'Feedback/Info Light': t.colors.feedback.infoLight,
-      },
-      typography: {
-        'Heading/H1': { fontFamily: 'Raleway', fontSize: t.typography.h1.size, fontWeight: t.typography.h1.weight, lineHeight: t.typography.h1.lineHeight },
-        'Heading/H2': { fontFamily: 'Raleway', fontSize: t.typography.h2.size, fontWeight: t.typography.h2.weight, lineHeight: t.typography.h2.lineHeight },
-        'Heading/H3': { fontFamily: 'Raleway', fontSize: t.typography.h3.size, fontWeight: t.typography.h3.weight, lineHeight: t.typography.h3.lineHeight },
-        'Body/Large': { fontFamily: 'Plus Jakarta Sans', fontSize: t.typography.bodyLg.size, fontWeight: t.typography.bodyLg.weight, lineHeight: t.typography.bodyLg.lineHeight },
-        'Body/Medium': { fontFamily: 'Plus Jakarta Sans', fontSize: t.typography.bodyMd.size, fontWeight: t.typography.bodyMd.weight, lineHeight: t.typography.bodyMd.lineHeight },
-        'Body/Small': { fontFamily: 'Plus Jakarta Sans', fontSize: t.typography.small.size, fontWeight: t.typography.small.weight, lineHeight: t.typography.small.lineHeight },
-      },
-      effects: {
-        'Shadow/SM': t.shadows.sm,
-        'Shadow/MD': t.shadows.md,
-        'Shadow/LG': t.shadows.lg,
-      },
-    },
-  };
-}
-
-/* ─── Design Tokens JSON (Style Dictionary) ─── */
+/* ─── Style Dictionary Generator (DTCG Alias) ───────────────── */
 function generateStyleDictionaryJSON() {
-  return {
-    $schema: 'https://design-tokens.github.io/community-group/format/',
-    version: '1.0.0',
-    generatedAt: new Date().toISOString(),
-    generator: 'Khor Design System',
-    color: {
-      brand: {
-        primary: { $value: t.colors.brand.primary, $type: 'color', $description: 'CTA principal, botones primarios' },
-        'primary-hover': { $value: t.colors.brand.primaryHover, $type: 'color' },
-        'primary-active': { $value: t.colors.brand.primaryActive, $type: 'color' },
-        navy: { $value: t.colors.brand.navy, $type: 'color', $description: 'Sidebar, títulos, navegación' },
-        accent: { $value: t.colors.brand.accent, $type: 'color', $description: 'Warning, destacados' },
-      },
-      neutral: Object.fromEntries(
-        Object.entries(t.colors.neutral).map(([k, v]) => [k, { $value: v, $type: 'color' }])
-      ),
-      feedback: {
-        success: { $value: t.colors.feedback.success, $type: 'color' },
-        'success-light': { $value: t.colors.feedback.successLight, $type: 'color' },
-        error: { $value: t.colors.feedback.error, $type: 'color' },
-        'error-light': { $value: t.colors.feedback.errorLight, $type: 'color' },
-        warning: { $value: t.colors.feedback.warning, $type: 'color' },
-        'warning-light': { $value: t.colors.feedback.warningLight, $type: 'color' },
-        info: { $value: t.colors.feedback.info, $type: 'color' },
-        'info-light': { $value: t.colors.feedback.infoLight, $type: 'color' },
-      },
-    },
-    spacing: Object.fromEntries(
-      Object.entries(t.spacing).map(([k, v]) => [k, { $value: `${v}px`, $type: 'dimension' }])
-    ),
-    borderRadius: Object.fromEntries(
-      Object.entries(t.radius).map(([k, v]) => [k, { $value: `${v}px`, $type: 'dimension' }])
-    ),
-    shadow: {
-      sm: { $value: t.shadows.sm, $type: 'shadow' },
-      md: { $value: t.shadows.md, $type: 'shadow' },
-      lg: { $value: t.shadows.lg, $type: 'shadow' },
-    },
-  };
+  // En v3.1.9 unificamos Variables y Style Dictionary bajo DTCG
+  return generateFigmaVariablesJSON();
 }
 
 /* ─── Helpers ───────────────────────────────── */
-function hexToRgba(hex: string) {
-  const r = parseInt(hex.slice(1, 3), 16) / 255;
-  const g = parseInt(hex.slice(3, 5), 16) / 255;
-  const b = parseInt(hex.slice(5, 7), 16) / 255;
-  return { r: Math.round(r * 1000) / 1000, g: Math.round(g * 1000) / 1000, b: Math.round(b * 1000) / 1000, a: 1 };
+
+/**
+ * Mapping estático necesario porque los tokens consumen variables CSS 
+ * que no pueden ser resueltas directamente por el JS del cliente 
+ * al momento de generar el JSON (Figma requiere valores reales).
+ */
+const TOKEN_RESOLVER: Record<string, string> = {
+  // Brand
+  'var(--khor-primary)': '#E04D36',
+  'var(--khor-primary-hover)': '#e8644f',
+  'var(--khor-primary-active)': '#c9442f',
+  'var(--khor-navy)': '#051758',
+  'var(--khor-navy-hover)': '#0a2270',
+  'var(--khor-navy-active)': '#030f40',
+  'var(--khor-accent)': '#FF9500',
+  'var(--khor-accent-hover)': '#ffaa33',
+  'var(--khor-accent-active)': '#e68600',
+  
+  // Neutral
+  'var(--khor-neutral-50)': '#FFFFFF',
+  'var(--khor-neutral-100)': '#EDF0F1',
+  'var(--khor-neutral-200)': '#D5DBE0',
+  'var(--khor-neutral-300)': '#A0AEC0',
+  'var(--khor-neutral-400)': '#718096',
+  'var(--khor-neutral-500)': '#4A5568',
+  'var(--khor-neutral-600)': '#2D3748',
+  'var(--khor-neutral-700)': '#1A202C',
+  'var(--khor-neutral-800)': '#11141C',
+  'var(--khor-neutral-900)': '#000000',
+
+  // Feedback
+  'var(--khor-success)': '#2E7D32',
+  'var(--khor-success-light)': '#E8F5E9',
+  'var(--khor-error)': '#D32F2F',
+  'var(--khor-error-light)': '#FFEBEE',
+  'var(--khor-warning)': '#FF9500',
+  'var(--khor-warning-light)': '#FFF3E0',
+  'var(--khor-info)': '#051758',
+  'var(--khor-info-light)': '#E3F2FD',
+
+  // Semantic
+  'var(--khor-action-primary-default)': '#E04D36',
+  'var(--khor-action-primary-hover)': '#e8644f',
+  'var(--khor-action-primary-active)': '#c9442f',
+  'var(--khor-action-secondary-default)': '#EDF0F1',
+  'var(--khor-action-secondary-hover)': '#D5DBE0',
+  'var(--khor-action-secondary-active)': '#A0AEC0',
+  'var(--khor-action-danger-default)': '#D32F2F',
+  'var(--khor-action-danger-hover)': '#c62828',
+  'var(--khor-action-danger-active)': '#b71c1c',
+  'var(--khor-action-ghost-hover)': '#EDF0F1',
+  'var(--khor-action-disabled-bg)': '#D5DBE0',
+  'var(--khor-action-disabled-text)': '#718096',
+
+  'var(--khor-surface-page)': '#EDF0F1',
+  'var(--khor-surface-card)': '#FFFFFF',
+  'var(--khor-surface-raised)': '#FFFFFF',
+  'var(--khor-surface-overlay)': '#000000',
+
+  'var(--khor-text-primary)': '#1A202C',
+  'var(--khor-text-secondary)': '#4A5568',
+  'var(--khor-text-muted)': '#718096',
+  'var(--khor-text-disabled)': '#A0AEC0',
+  'var(--khor-text-on-action)': '#FFFFFF',
+  'var(--khor-text-link)': '#E04D36',
+
+  'var(--khor-border-default)': '#D5DBE0',
+  'var(--khor-border-hover)': '#A0AEC0',
+  'var(--khor-border-focus)': '#E04D36',
+  'var(--khor-border-error)': '#D32F2F',
+  'var(--khor-border-disabled)': '#D5DBE0',
+  'var(--khor-border-strong)': '#4A5568',
+
+  'var(--khor-focus-ring)': '#ffaa33',
+};
+
+function resolveDimension(value: any, fallback = 0): number {
+  if (typeof value === 'number') return value;
+  if (typeof value === 'string') {
+    // try to match 'var(... , Xpx)' or 'var(..., X)'
+    const match = value.match(/,\s*(\d+(?:\.\d+)?)(px|rem)?\s*\)/);
+    if (match) return parseFloat(match[1]);
+    const num = parseFloat(value);
+    if (!isNaN(num)) return num;
+  }
+  return fallback;
+}
+
+function resolveHex(value: any): string {
+  if (typeof value !== 'string') return '#000000';
+  if (value.startsWith('#')) return value;
+  if (value.startsWith('var(')) {
+    // Intentar resolver desde el mapeador
+    return TOKEN_RESOLVER[value] || '#000000';
+  }
+  return '#000000';
+}
+
+function hexToRgba(value: any) {
+  const hex = resolveHex(value);
+  
+  // Limpiar el hex si viene con alpha o formato corto
+  const cleanHex = hex.replace('#', '');
+  const rHex = cleanHex.length === 3 ? cleanHex[0] + cleanHex[0] : cleanHex.slice(0, 2);
+  const gHex = cleanHex.length === 3 ? cleanHex[1] + cleanHex[1] : cleanHex.slice(2, 4);
+  const bHex = cleanHex.length === 3 ? cleanHex[2] + cleanHex[2] : cleanHex.slice(4, 6);
+
+  const r = (parseInt(rHex, 16) || 0) / 255;
+  const g = (parseInt(gHex, 16) || 0) / 255;
+  const b = (parseInt(bHex, 16) || 0) / 255;
+  
+  return { 
+    r: Math.round(r * 1000) / 1000, 
+    g: Math.round(g * 1000) / 1000, 
+    b: Math.round(b * 1000) / 1000, 
+    a: 1 
+  };
 }
 
 function downloadJSON(data: any, filename: string) {
