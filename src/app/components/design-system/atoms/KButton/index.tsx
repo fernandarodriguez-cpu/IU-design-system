@@ -1,72 +1,83 @@
 import React from 'react';
-import { Button } from 'antd';
-import type { ButtonProps } from 'antd';
-import { khorTokens } from '../../../../theme/khor-theme';
-import type { KButtonProps, KButtonVariant, KButtonSize } from './types';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '../../../../../imports/utils';
+import type { KButtonProps } from './types';
+import { Loader2 } from 'lucide-react';
 
-const t = khorTokens;
-const font = t.typography.fontPrimary;
-
-const variantToAntd = (variant: KButtonVariant): { type?: ButtonProps['type']; danger?: boolean; ghost?: boolean } => {
-  switch (variant) {
-    case 'primary': return { type: 'primary' };
-    case 'secondary': return { type: 'default' };
-    case 'outline': return { type: 'default', ghost: true };
-    case 'ghost': return { type: 'text' };
-    case 'danger': return { type: 'primary', danger: true };
-    case 'navy': return { type: 'primary' };
-    case 'dashed': return { type: 'dashed' };
-    case 'link': return { type: 'link' };
-    case 'text': return { type: 'text' };
-    default: return { type: 'default' };
+const buttonVariants = cva(
+  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 select-none cursor-pointer',
+  {
+    variants: {
+      variant: {
+        primary: 'bg-[var(--khor-primary)] text-white hover:bg-[var(--khor-primary-hover)] active:bg-[var(--khor-primary-active)]',
+        secondary: 'bg-[var(--khor-neutral-200)] text-[var(--khor-neutral-900)] hover:bg-[var(--khor-neutral-300)] active:bg-[var(--khor-neutral-400)]',
+        outline: 'border border-[var(--khor-neutral-300)] bg-transparent text-[var(--khor-neutral-700)] hover:bg-[var(--khor-neutral-100)] active:bg-[var(--khor-neutral-200)]',
+        ghost: 'bg-transparent text-[var(--khor-neutral-700)] hover:bg-[var(--khor-neutral-100)] active:bg-[var(--khor-neutral-200)]',
+        danger: 'bg-[var(--khor-error)] text-white hover:bg-[var(--khor-action-danger-hover)] active:bg-[var(--khor-action-danger-active)]',
+        navy: 'bg-[var(--khor-navy)] text-white hover:bg-[var(--khor-navy-hover)] active:bg-[var(--khor-navy-active)]',
+        dashed: 'border border-dashed border-[var(--khor-neutral-300)] bg-transparent text-[var(--khor-neutral-700)] hover:bg-[var(--khor-neutral-100)] active:bg-[var(--khor-neutral-200)]',
+        link: 'bg-transparent text-[var(--khor-primary)] underline-offset-4 hover:underline !p-0 !min-h-0 !h-auto',
+        text: 'bg-transparent text-[var(--khor-neutral-700)] hover:bg-[var(--khor-neutral-100)] active:bg-[var(--khor-neutral-200)]',
+      },
+      size: {
+        sm: 'h-8 px-3 text-xs',
+        md: 'h-[var(--khor-density-height-input)] px-[var(--khor-density-spacing-md)] text-[var(--khor-density-font-body)]',
+        lg: 'h-11 px-8',
+        icon: 'h-9 w-9 p-0',
+      },
+      shape: {
+        default: 'rounded-[var(--khor-density-radius)]',
+        circle: 'rounded-full aspect-square p-0 flex-shrink-0',
+        round: 'rounded-full',
+      },
+      fullWidth: {
+        true: 'w-full',
+      }
+    },
+    defaultVariants: {
+      variant: 'primary',
+      size: 'md',
+      shape: 'default',
+    },
   }
-};
-
-const sizeToAntd = (size?: KButtonSize): ButtonProps['size'] => {
-  if (size === 'sm') return 'small';
-  if (size === 'lg') return 'large';
-  return 'middle';
-};
+);
 
 export const KButton = React.forwardRef<HTMLButtonElement, KButtonProps>(function KButton(
   { 
     variant, kVariant, size = 'md', shape = 'default', 
-    htmlType = 'button', style, children, className,
-    fullWidth, ...rest 
+    htmlType = 'button', type, className,
+    fullWidth, block, loading, icon, iconPosition = 'start', children, disabled,
+    ...rest 
   },
   ref,
 ) {
   const resolvedVariant = kVariant ?? variant ?? 'primary';
-  const antdProps = variantToAntd(resolvedVariant);
-  const navyStyle = resolvedVariant === 'navy'
-    ? { backgroundColor: t.colors.brand.navy, borderColor: t.colors.brand.navy }
-    : {};
+  const isFullWidth = fullWidth || block;
+  const isDisabled = disabled || loading;
 
-  // Inyectar w-full si fullWidth es verdadero (Tailwind v4)
-  const combinedClassName = `${fullWidth ? 'w-full' : ''} ${className || ''}`.trim();
+  // Manejo especial para size icon en shape circle puro
+  let computedSize = size;
+  if (shape === 'circle' && !children && icon) {
+     computedSize = size === 'sm' ? 'sm' : (size === 'lg' ? 'lg' : 'icon');
+  }
+
+  const computedType = type ?? htmlType;
 
   return (
-    <Button
+    <button
       ref={ref}
-      {...antdProps}
-      size={sizeToAntd(size)}
-      shape={shape}
-      htmlType={htmlType}
-      className={combinedClassName}
-      style={{ 
-        fontFamily: font, 
-        borderRadius: shape === 'default' ? 'var(--khor-density-radius)' : undefined, 
-        height: 'var(--khor-density-height-input)', 
-        fontSize: 'var(--khor-density-font-body)',
-        paddingLeft: 'var(--khor-density-spacing-md)',
-        paddingRight: 'var(--khor-density-spacing-md)',
-        ...navyStyle, 
-        ...style 
-      }}
+      type={computedType}
+      disabled={isDisabled}
+      className={cn(buttonVariants({ variant: resolvedVariant, size: computedSize, shape, fullWidth: isFullWidth, className }))}
+      data-loading={loading}
+      style={{ fontFamily: 'var(--font-primary)' }}
       {...rest}
     >
-      {children}
-    </Button>
+      {loading && <Loader2 className="h-[1.2em] w-[1.2em] animate-spin" />}
+      {!loading && icon && iconPosition === 'start' && <span className="flex items-center justify-center pointer-events-none">{icon}</span>}
+      {children && <span className="truncate">{children}</span>}
+      {!loading && icon && iconPosition === 'end' && <span className="flex items-center justify-center pointer-events-none">{icon}</span>}
+    </button>
   );
 });
 

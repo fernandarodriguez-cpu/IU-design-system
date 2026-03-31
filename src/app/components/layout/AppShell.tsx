@@ -439,7 +439,7 @@ export function AppShell() {
               backgroundColor: 'var(--khor-success-light)',
               color: 'var(--khor-success)',
             }}>
-              v3.2.1
+              v4.0.0
             </span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>

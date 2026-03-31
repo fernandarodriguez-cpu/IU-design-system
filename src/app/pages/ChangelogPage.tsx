@@ -43,6 +43,25 @@ const changeTypeConfig: Record<ChangeType, { color: string; bg: string; icon: Re
 
 const changelog: VersionEntry[] = [
   {
+    version: '4.0.0',
+    date: '31 de marzo de 2026',
+    codename: 'Transformation',
+    summary: 'Lanzamiento oficial de Khor v4.0.0: La gran transformación Headless. Eliminación total de Ant Design y DayJS. El sistema ahora es 100% autónomo, basado en Radix UI y Tailwind CSS v4, logrando un control total sobre el DOM, el rendimiento y la accesibilidad.',
+    highlights: [
+      'Zero External UI Dependencies: Ant Design ha sido completamente reemplazado por componentes de arquitectura pura.',
+      'Agnostic Date Engine: Migración total de DayJS a date-fns + objetos Date nativos.',
+      'Tailwind CSS v4 Native: Aprovechamiento de las nuevas capacidades de la engine de Tailwind para un sistema de tokens ultra-mínimo.',
+      'Stable Molecules & Organisms: Estabilización de componentes complejos (TreeSelect, DatePicker, DataTable) en entornos 100% controlados.',
+    ],
+    changes: [
+      { type: 'breaking', description: 'Eliminación definitiva de ConfigProvider y cualquier rastro de la librería antd en el bundle.' },
+      { type: 'removed', description: 'Dependencias obsoletas removidas: antd, dayjs y plugins asociados.' },
+      { type: 'changed', component: 'AIExportPage', description: 'Guía IA actualizada para generar código libre de referencias legacy.' },
+      { type: 'changed', component: 'HomePage', description: 'Exportador ZIP alineado a la nueva arquitectura v4.0.0.' },
+    ],
+    stats: { added: 5, changed: 20, fixed: 15 },
+  },
+  {
     version: '3.2.1',
     date: '30 de marzo de 2026',
     codename: '100% Token Coverage',

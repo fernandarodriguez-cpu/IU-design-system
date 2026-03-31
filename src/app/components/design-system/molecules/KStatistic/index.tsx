@@ -1,14 +1,8 @@
 import React from 'react';
-import { Statistic } from 'antd';
 import { TrendingUp, TrendingDown } from 'lucide-react';
-import { khorTokens } from '../../../../theme/khor-theme';
+import { cn } from '../../../../../imports/utils';
+import { KSkeleton } from '../../atoms/KSkeleton';
 
-const t = khorTokens;
-const font = t.typography.fontPrimary;
-
-/* ═══════════════════════════════════════════════
-   KStatistic — Estadísticas con tendencia (Wave 3)
-   ═══════════════════════════════════════════════ */
 export interface KStatisticProps {
   title?: React.ReactNode;
   value: number | string;
@@ -22,26 +16,69 @@ export interface KStatisticProps {
   style?: React.CSSProperties;
 }
 
-export function KStatistic({ title, value, precision, prefix, suffix, trend, trendValue, loading, className, style }: KStatisticProps) {
-  const trendEl = trend && trendValue && (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 4, fontSize: 13 }}>
-      {trend === 'up' ? <TrendingUp size={14} color={t.colors.feedback.success} /> : <TrendingDown size={14} color={t.colors.feedback.error} />}
-      <span style={{ color: trend === 'up' ? t.colors.feedback.success : t.colors.feedback.error, fontWeight: 500 }}>{trendValue}</span>
-    </div>
-  );
+/**
+ * KStatistic — Display estadístico con tendencias (Headless v4)
+ * Reemplaza AntD Statistic con una estructura de alta fidelidad basada en Tailwind.
+ */
+export function KStatistic({ 
+  title, 
+  value, 
+  precision, 
+  prefix, 
+  suffix, 
+  trend, 
+  trendValue, 
+  loading, 
+  className, 
+  style 
+}: KStatisticProps) {
+  
+  if (loading) {
+    return (
+      <div className={cn("space-y-2 p-1", className)} style={style}>
+        <KSkeleton width="40%" height={14} />
+        <KSkeleton width="80%" height={32} />
+        <KSkeleton width="30%" height={12} />
+      </div>
+    );
+  }
+
+  const formattedValue = typeof value === 'number' && precision !== undefined 
+    ? value.toFixed(precision) 
+    : value;
 
   return (
-    <div className={className} style={{ fontFamily: font, ...style }}>
-      <Statistic
-        title={title}
-        value={value}
-        precision={precision}
-        prefix={prefix}
-        suffix={suffix}
-        loading={loading}
-        valueStyle={{ fontSize: 30, fontWeight: 700, color: t.colors.neutral[900], fontFamily: font }}
-      />
-      {trendEl}
+    <div 
+      className={cn("flex flex-col font-primary transition-all", className)} 
+      style={style}
+    >
+      {title && (
+        <div className="text-sm font-medium text-[var(--khor-neutral-500)] mb-1">
+          {title}
+        </div>
+      )}
+      
+      <div className="flex items-baseline gap-1">
+        {prefix && <span className="text-xl font-semibold text-[var(--khor-neutral-900)] opacity-70">{prefix}</span>}
+        <span className="text-3xl font-extrabold text-[var(--khor-neutral-900)] tracking-tight">
+          {formattedValue}
+        </span>
+        {suffix && <span className="text-sm font-semibold text-[var(--khor-neutral-500)] ml-1">{suffix}</span>}
+      </div>
+
+      {trend && trendValue && (
+        <div className={cn(
+          "flex items-center gap-1.5 mt-2 text-xs font-bold",
+          trend === 'up' ? "text-emerald-600" : "text-red-600"
+        )}>
+          {trend === 'up' ? (
+            <TrendingUp className="w-3.5 h-3.5" />
+          ) : (
+            <TrendingDown className="w-3.5 h-3.5" />
+          )}
+          <span>{trendValue}</span>
+        </div>
+      )}
     </div>
   );
 }

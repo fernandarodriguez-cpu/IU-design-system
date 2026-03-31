@@ -133,7 +133,7 @@ export const khorTokens = {
 
 /**
  * Static token values for contexts that can't use CSS variables 
- * (like Ant Design's ConfigProvider which needs raw strings/numbers to calculate derivatives).
+ * (like Canvas, calculations, or third-party libraries requiring raw values).
  */
 export const khorStaticTokens = {
   colors: {

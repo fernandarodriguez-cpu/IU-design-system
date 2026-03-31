@@ -1,74 +1,115 @@
 import React from 'react';
-import { Avatar } from 'antd';
-import type { AvatarProps } from 'antd';
-import { khorTokens } from '../../../../theme/khor-theme';
+import * as AvatarPrimitive from '@radix-ui/react-avatar';
+import { cn } from '../../../../../imports/utils';
 
-const t = khorTokens;
-const font = t.typography.fontPrimary;
-
-export interface KAvatarProps extends AvatarProps {
+export interface KAvatarProps {
+  /** URL de imagen */
+  src?: string;
   /** Nombre completo para generar iniciales automáticamente */
   name?: string;
-  /** Estado de presencia: online | offline | busy | away */
-  status?: 'online' | 'offline' | 'busy' | 'away';
+  /** Icono personalizado si no hay imagen */
+  icon?: React.ReactNode;
+  /** Tamaño del avatar */
+  size?: 'sm' | 'md' | 'lg' | 'xl' | number;
   /** Forma del avatar. Default: 'circle' */
   shape?: 'circle' | 'square';
-  /** Distancia entre los bordes del avatar y el texto de las iniciales (px) */
-  gap?: number;
+  /** Estado de presencia: online | offline | busy | away */
+  status?: 'online' | 'offline' | 'busy' | 'away';
+  /** Clase CSS adicional */
+  className?: string;
+  /** Estilos adicionales */
+  style?: React.CSSProperties;
+  /** Contenido personalizado */
+  children?: React.ReactNode;
 }
 
-const statusColorMap = {
-  online: t.colors.feedback.success,
-  offline: t.colors.neutral[300],
-  busy: t.colors.feedback.error,
-  away: t.colors.feedback.warning,
+const statusColors = {
+  online: "bg-emerald-500",
+  offline: "bg-neutral-400",
+  busy: "bg-red-500",
+  away: "bg-amber-500",
 };
 
-const statusSizeMap = { small: 8, default: 10, large: 14 };
+const sizeClasses = {
+  sm: "h-8 w-8 text-xs",
+  md: "h-10 w-10 text-sm",
+  lg: "h-14 w-14 text-lg",
+  xl: "h-20 w-20 text-2xl",
+};
 
-export function KAvatar({ 
-  name, status, src, style, size = 'default', shape = 'circle', gap, children, 
-  variant, ...rest 
-}: KAvatarProps & { variant?: any }) {
-  const initials = name ? name.split(' ').map((w: string) => w[0]).join('').toUpperCase().slice(0, 2) : undefined;
-  const dotSize = typeof size === 'number' ? Math.max(8, size * 0.22) : (statusSizeMap[size as keyof typeof statusSizeMap] || 10);
+/**
+ * KAvatar — Avatar circular o cuadrado con soporte de imagen, iniciales y estado.
+ * Basado en Radix UI Avatar.
+ */
+export const KAvatar = React.forwardRef<
+  React.ElementRef<typeof AvatarPrimitive.Root>,
+  KAvatarProps
+>(({ 
+  src, 
+  name, 
+  icon, 
+  size = 'md', 
+  shape = 'circle', 
+  status, 
+  className, 
+  style, 
+  children 
+}, ref) => {
+  const initials = name 
+    ? name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) 
+    : '';
 
-  const avatarElement = (
-    <Avatar
-      src={src}
-      size={size}
-      shape={shape}
-      gap={gap}
-      style={{
-        backgroundColor: !src && !rest.icon ? t.colors.brand.navy : undefined,
-        fontFamily: font,
-        ...style,
-      }}
-      {...rest}
-    >
-      {!src && !children && !rest.icon ? initials : children}
-    </Avatar>
-  );
-
-  if (!status) return avatarElement;
+  const isCustomSize = typeof size === 'number';
 
   return (
-    <div style={{ position: 'relative', display: 'inline-flex' }}>
-      {avatarElement}
-      <span style={{
-        position: 'absolute', bottom: 0, right: 0,
-        width: dotSize, height: dotSize,
-        borderRadius: '50%',
-        backgroundColor: statusColorMap[status],
-        border: '2px solid white',
-        zIndex: 1,
-      }} />
+    <div className="relative inline-flex shrink-0">
+      <AvatarPrimitive.Root
+        ref={ref}
+        className={cn(
+          "relative flex shrink-0 overflow-hidden bg-[var(--khor-brand-navy)] text-white font-primary font-semibold select-none",
+          shape === 'circle' ? "rounded-full" : "rounded-lg",
+          !isCustomSize && sizeClasses[size as keyof typeof sizeClasses],
+          className
+        )}
+        style={{
+          width: isCustomSize ? size : undefined,
+          height: isCustomSize ? size : undefined,
+          ...style
+        }}
+      >
+        <AvatarPrimitive.Image
+          src={src}
+          className="aspect-square h-full w-full object-cover animate-in fade-in duration-300"
+        />
+        <AvatarPrimitive.Fallback
+          className="flex h-full w-full items-center justify-center bg-[var(--khor-brand-navy)]"
+        >
+          {children || icon || initials}
+        </AvatarPrimitive.Fallback>
+      </AvatarPrimitive.Root>
+
+      {status && (
+        <span 
+          className={cn(
+            "absolute bottom-0 right-0 block rounded-full ring-2 ring-[var(--khor-surface-page)]",
+            statusColors[status],
+            isCustomSize ? "h-[25%] w-[25%]" : size === 'sm' ? "h-2.5 w-2.5" : size === 'md' ? "h-3 w-3" : "h-4 w-4"
+          )} 
+        />
+      )}
     </div>
   );
-}
+});
 
-export function KAvatarGroup(props: React.ComponentProps<typeof Avatar.Group>) {
-  return <Avatar.Group {...props} />;
-}
+KAvatar.displayName = "KAvatar";
+
+/**
+ * KAvatarGroup — Contenedor para múltiples avatares solapados.
+ */
+export const KAvatarGroup = ({ children, className }: { children: React.ReactNode, className?: string }) => (
+  <div className={cn("flex -space-x-2 overflow-hidden", className)}>
+    {children}
+  </div>
+);
 
 export default KAvatar;

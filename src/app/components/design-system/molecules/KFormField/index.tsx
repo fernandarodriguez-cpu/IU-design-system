@@ -1,11 +1,12 @@
 import React from 'react';
 import { khorTokens } from '../../../../theme/khor-theme';
+import { cn } from '../../../../../imports/utils';
 
 const t = khorTokens;
 const font = t.typography.fontPrimary;
 
 export interface KFormFieldProps {
-  label: string;
+  label?: string;
   required?: boolean;
   error?: string;
   hint?: string;
@@ -15,14 +16,16 @@ export interface KFormFieldProps {
 
 export function KFormField({ label, required, error, hint, children, className }: KFormFieldProps) {
   return (
-    <div className={className} style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-      <label style={{ fontSize: 14, fontWeight: 500, color: t.colors.neutral[900], fontFamily: font }}>
-        {label}
-        {required && <span style={{ color: t.colors.feedback.error, marginLeft: 2 }}>*</span>}
-      </label>
+    <div className={cn("flex flex-col gap-1", className)}>
+      {label && (
+        <label className="text-sm font-medium text-[var(--khor-neutral-900)] font-primary">
+          {label}
+          {required && <span className="text-[var(--khor-feedback-error)] ml-0.5">*</span>}
+        </label>
+      )}
       {children}
-      {error && <span style={{ fontSize: 12, color: t.colors.feedback.error, fontFamily: font }}>{error}</span>}
-      {!error && hint && <span style={{ fontSize: 12, color: t.colors.neutral[300], fontFamily: font }}>{hint}</span>}
+      {error && <span className="text-xs text-[var(--khor-feedback-error)] font-primary">{error}</span>}
+      {!error && hint && <span className="text-xs text-[var(--khor-neutral-500)] font-primary">{hint}</span>}
     </div>
   );
 }

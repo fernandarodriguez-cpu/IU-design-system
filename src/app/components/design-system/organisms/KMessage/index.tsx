@@ -1,35 +1,41 @@
-import { message } from 'antd';
 import React from 'react';
-import { khorTokens } from '../../../../theme/khor-theme';
+import { toast } from 'sonner';
 
-const t = khorTokens;
-const font = t.typography.fontPrimary;
-
-/* ═══════════════════════════════════════════════
-   KMessage — Mensajes tipo toast (Organismo)
-   ═══════════════════════════════════════════════ */
 export type KMessageType = 'success' | 'error' | 'warning' | 'info' | 'loading';
 
 export interface KMessageOptions {
   type?: KMessageType;
   content: React.ReactNode;
   duration?: number;
-  key?: string;
   icon?: React.ReactNode;
   onClose?: () => void;
 }
 
-/** Función imperativa */
+/** 
+ * KMessage utilizando Sonner por debajo.
+ */
 export function kMessage(opts: KMessageOptions | string) {
   const isStr = typeof opts === 'string';
   const type = isStr ? 'info' : (opts.type || 'info');
   const content = isStr ? opts : opts.content;
-  const duration = isStr ? 3 : (opts.duration || 3);
-  const key = isStr ? undefined : opts.key;
+  const duration = (isStr ? 3 : (opts.duration || 3)) * 1000;
   const icon = isStr ? undefined : opts.icon;
   const onClose = isStr ? undefined : opts.onClose;
 
-  return message[type]({ content, duration, key, icon, onClose, style: { fontFamily: font } });
+  const options = { duration, icon, onDismiss: onClose };
+
+  switch (type) {
+    case 'success':
+      return toast.success(content, options);
+    case 'error':
+      return toast.error(content, options);
+    case 'warning':
+      return toast.warning(content, options);
+    case 'loading':
+      return toast.loading(content, options);
+    default:
+      return toast.info(content, options);
+  }
 }
 
 // Static methods for compatibility

@@ -74,6 +74,13 @@ pnpm add lucide-react recharts sonner
 pnpm add tailwindcss @tailwindcss/vite
 \`\`\`
 
+## Arquitectura V4 (Headless)
+Khor v4 ha migrado a una arquitectura 100% agnóstica para eliminar la dependencia de Ant Design y DayJS.
+- **UI Core:** Radix UI Primitives
+- **Styling:** Tailwind CSS v4
+- **Date Engine:** date-fns
+
+
 ## Fuentes
 
 \`\`\`css
@@ -279,7 +286,7 @@ export const categories = ['Todos', ...new Set(patterns.map((p) => p.category))]
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'khor-design-system-v3.1.0.zip';
+  a.download = 'khor-design-system-v4.0.0.zip';
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
@@ -323,9 +330,9 @@ export function HomePage() {
         }} />
         <div style={{ position: 'relative', zIndex: 1 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-            <KBadge khorStatus="info" label="v3.1.0 Stable" />
-            <KBadge khorStatus="success" label="Ant Design 5 Sync" />
-            <KBadge khorStatus="warning" label="IA Ready" />
+            <KBadge status="info" label="v4.0.0 Stable" />
+            <KBadge status="success" label="100% Headless Transformation" />
+            <KBadge status="warning" label="IA Ready" />
           </div>
           <h1 style={{ margin: '0 0 12px', fontSize: 38, fontWeight: 700, color: '#fff' }}>
             Khor Design System

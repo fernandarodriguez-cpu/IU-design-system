@@ -1,42 +1,137 @@
-import React from 'react';
-import { ColorPicker } from 'antd';
-import type { ColorPickerProps } from 'antd';
-import { khorTokens } from '../../../../theme/khor-theme';
+import React, { useState, useEffect } from 'react';
+import { KPopover, KPopoverTrigger, KPopoverContent } from '../KPopover';
+import { khorStaticTokens } from '../../../../theme/khor-theme';
+import { cn } from '../../../../../imports/utils';
 
-const t = khorTokens;
-const font = t.typography.fontPrimary;
-
-/* ═══════════════════════════════════════════════
-   KColorPicker — Selector de color (Wave 3)
-   ═══════════════════════════════════════════════ */
-export interface KColorPickerProps extends ColorPickerProps {
+export interface KColorPickerProps {
+  value?: string;
+  defaultValue?: string;
+  onChange?: (color: string) => void;
+  showText?: boolean;
+  disabled?: boolean;
+  size?: 'sm' | 'md' | 'lg';
   className?: string;
   style?: React.CSSProperties;
 }
 
+const presets = [
+  khorStaticTokens.colors.primary,
+  khorStaticTokens.colors.navy,
+  khorStaticTokens.colors.accent,
+  khorStaticTokens.colors.success,
+  khorStaticTokens.colors.error,
+  khorStaticTokens.colors.warning,
+  khorStaticTokens.colors.info,
+  '#000000',
+  '#666666',
+  '#999999',
+  '#CCCCCC',
+  '#FFFFFF',
+];
+
+const sizeClasses = {
+  sm: "h-8 px-2 text-xs",
+  md: "h-10 px-3 text-sm",
+  lg: "h-12 px-4 text-base",
+};
+
 /**
- * KColorPicker: Selector de color estilizado.
- * Refinado para evitar fugas de props al DOM (variant, size, fullWidth).
+ * KColorPicker — Selector de color minimalista (Headless v4)
+ * Reemplaza AntD ColorPicker con un Popover nativo, presets de Khor e input HEX.
  */
-export function KColorPicker({ 
-  className, 
-  style, 
-  variant, 
-  size, 
-  fullWidth, 
-  ...rest 
-}: KColorPickerProps & { variant?: any, size?: any, fullWidth?: any }) {
+export function KColorPicker({
+  value,
+  defaultValue,
+  onChange,
+  showText = true,
+  disabled,
+  size = 'md',
+  className,
+  style,
+}: KColorPickerProps) {
+  const [internalColor, setInternalColor] = useState(value || defaultValue || khorStaticTokens.colors.primary);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (value !== undefined) {
+      setInternalColor(value);
+    }
+  }, [value]);
+
+  const handleColorChange = (newColor: string) => {
+    if (disabled) return;
+    setInternalColor(newColor);
+    onChange?.(newColor);
+  };
+
+  const activeColor = value !== undefined ? value : internalColor;
+
   return (
-    <ColorPicker
-      className={className}
-      style={{ 
-        fontFamily: font, 
-        ...style 
-      }}
-      size={size as any}
-      showText
-      {...rest}
-    />
+    <KPopover open={open} onOpenChange={disabled ? undefined : setOpen}>
+      <KPopoverTrigger asChild>
+        <button
+          type="button"
+          disabled={disabled}
+          className={cn(
+            "flex items-center gap-2 border border-[var(--khor-neutral-200)] rounded-md bg-[var(--khor-surface-page)] transition-all hover:border-[var(--khor-primary)] font-primary select-none",
+            disabled && "opacity-50 cursor-not-allowed",
+            sizeClasses[size],
+            className
+          )}
+          style={style}
+        >
+          <div 
+            className="w-5 h-5 rounded shadow-inner border border-black/5 shrink-0" 
+            style={{ backgroundColor: activeColor }}
+          />
+          {showText && (
+            <span className="font-semibold text-[var(--khor-neutral-700)] uppercase">
+              {activeColor}
+            </span>
+          )}
+        </button>
+      </KPopoverTrigger>
+      
+      <KPopoverContent align="start" className="w-56 p-3 z-[100] bg-[var(--khor-surface-page)] border rounded-xl shadow-xl">
+        <div className="flex flex-col gap-4">
+          {/* Grid de Presets */}
+          <div className="grid grid-cols-6 gap-2">
+            {presets.map((color) => (
+              <button
+                key={color}
+                onClick={() => handleColorChange(color)}
+                className={cn(
+                  "w-6 h-6 rounded-md border border-black/5 transition-transform hover:scale-110 active:scale-95 shadow-sm",
+                  activeColor === color && "ring-2 ring-[var(--khor-primary)] ring-offset-1"
+                )}
+                style={{ backgroundColor: color }}
+              />
+            ))}
+          </div>
+
+          {/* Input HEX Manual */}
+          <div className="flex flex-col gap-1.5">
+            <span className="text-[10px] font-bold text-[var(--khor-neutral-400)] uppercase tracking-wider">
+              Color Personalizado (Hex)
+            </span>
+            <div className="flex gap-2">
+              <input 
+                type="color"
+                value={activeColor}
+                onChange={(e) => handleColorChange(e.target.value)}
+                className="w-8 h-8 rounded border-0 p-0 bg-transparent cursor-pointer"
+              />
+              <input
+                type="text"
+                value={activeColor}
+                onChange={(e) => handleColorChange(e.target.value)}
+                className="flex-1 px-2 py-1 text-xs font-mono border rounded border-[var(--khor-neutral-200)] outline-none focus:border-[var(--khor-primary)] uppercase"
+              />
+            </div>
+          </div>
+        </div>
+      </KPopoverContent>
+    </KPopover>
   );
 }
 

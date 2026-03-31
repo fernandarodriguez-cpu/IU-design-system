@@ -1,57 +1,76 @@
 import React from 'react';
-import { Skeleton } from 'antd';
-import type { SkeletonProps } from 'antd';
-import { khorTokens } from '../../../../theme/khor-theme';
+import { cn } from '../../../../../imports/utils';
 
-const t = khorTokens;
-
-export interface KSkeletonProps extends SkeletonProps {
+export interface KSkeletonProps {
   lines?: number;
   circle?: boolean;
   width?: number | string;
   height?: number | string;
+  variant?: 'text' | 'circular' | 'rectangular';
+  loading?: boolean;
+  className?: string;
+  style?: React.CSSProperties;
+  children?: React.ReactNode;
 }
 
 /**
- * KSkeleton: Marcador de posición animado mientras se carga contenido.
- * Refinado para evitar fugas de props al DOM (variant, size, fullWidth).
+ * KSkeleton — Marcador de posición animado (Total Headless)
+ * Reemplaza AntD Skeleton por Tailwind animate-pulse.
  */
 export function KSkeleton({ 
-  lines, circle, width, height, paragraph, avatar, loading = true, 
-  variant, size, fullWidth, ...rest 
-}: KSkeletonProps & { variant?: any, size?: any, fullWidth?: any }) {
-  if ((width || height || circle) && !rest.children) {
-    const h = height ?? 16;
+  lines = 1, 
+  circle, 
+  width, 
+  height, 
+  variant = 'text',
+  loading = true, 
+  className,
+  style,
+  children
+}: KSkeletonProps) {
+  
+  if (!loading && children) {
+    return <>{children}</>;
+  }
+
+  // Si se pasan múltiples líneas para texto
+  if (lines > 1) {
     return (
-      <div
-        className="ant-skeleton-element"
-        style={{
-          display: 'inline-block',
-          width: circle ? h : (width ?? '100%'),
-          height: h,
-          borderRadius: circle ? '50%' : t.radius.sm,
-          backgroundColor: t.colors.neutral[200],
-          animation: 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        }}
-      />
+      <div className={cn("flex flex-col gap-2 w-full", className)} style={style}>
+        {Array.from({ length: lines }).map((_, i) => (
+          <div 
+            key={i}
+            className={cn(
+              "h-4 bg-[var(--khor-neutral-200)] animate-pulse rounded-md",
+              i === lines - 1 && lines > 2 ? "w-[60%]" : "w-full"
+            )}
+          />
+        ))}
+      </div>
     );
   }
 
+  // Skeleton individual (circular o rectangular)
   return (
-    <Skeleton
-      active
-      loading={loading}
-      paragraph={lines ? { rows: lines } : paragraph}
-      avatar={circle ? true : avatar}
-      {...rest}
+    <div
+      className={cn(
+        "bg-[var(--khor-neutral-200)] animate-pulse",
+        circle || variant === 'circular' ? "rounded-full" : "rounded-md",
+        className
+      )}
+      style={{
+        width: circle ? (height ?? width ?? 40) : (width ?? '100%'),
+        height: height ?? (circle ? (width ?? 40) : 16),
+        ...style
+      }}
     />
   );
 }
 
-KSkeleton.Button = Skeleton.Button;
-KSkeleton.Input = Skeleton.Input;
-KSkeleton.Image = Skeleton.Image;
-KSkeleton.Avatar = Skeleton.Avatar;
-KSkeleton.Node = Skeleton.Node;
+// Subcomponentes para compatibilidad
+KSkeleton.Button = ({ className, ...props }: any) => <KSkeleton variant="rectangular" height={40} width={120} className={className} {...props} />;
+KSkeleton.Input = ({ className, ...props }: any) => <KSkeleton variant="rectangular" height={40} className={className} {...props} />;
+KSkeleton.Avatar = ({ className, ...props }: any) => <KSkeleton circle height={40} width={40} className={className} {...props} />;
+KSkeleton.Image = ({ className, ...props }: any) => <KSkeleton variant="rectangular" height={160} className={className} {...props} />;
 
 export default KSkeleton;

@@ -10,14 +10,14 @@ import {
   KSelectField, KUserCell, KEmptyState,
   KBreadcrumb, KSteps, KDropdownMenu, KPopover, KAccordion,
   KInputNumber, KSegmented, KAutocomplete, KDatePicker,
-  KDateRangePicker, KSelectAdvanced, KDescriptions,
+  KDateRangePicker, KDateRange, KSelectAdvanced, KDescriptions,
   KPopconfirm, KResult, KTimeline, KTooltip,
   KCascader, KStatistic, KTimePicker, KMentions,
   KColorPicker, KAnchor, KList, KDividerExtended,
   KTreeSelect, KTransfer,
 } from '../components/design-system/molecules/index';
 import { KButton, KInput, KText } from '../components/design-system/atoms/index';
-import dayjs from 'dayjs';
+import { format as formatDate, parse } from 'date-fns';
 import {
   Users, DollarSign, TrendingUp, Calendar, Home,
   Settings, FileText, Inbox, Search, BarChart3,
@@ -243,7 +243,7 @@ function StepsPlayground() {
             <input type="range" min={0} max={3} value={current} onChange={(e) => setCurrent(Number(e.target.value))} style={{ width: '100%' }} />
           </div>
           <div><label style={ctrl}>Direccion</label><select value={direction} onChange={(e) => setDirection(e.target.value)} style={sel}>{['horizontal','vertical'].map(d=><option key={d}>{d}</option>)}</select></div>
-          <div><label style={ctrl}>Tamano</label><select value={size} onChange={(e) => setSize(e.target.value)} style={sel}>{['default','small'].map(s=><option key={s}>{s}</option>)}</select></div>
+          <div><label style={ctrl}>Tamano</label><select value={size} onChange={(e) => setSize(e.target.value)} style={sel}>{['md','sm'].map(s=><option key={s} value={s}>{s === 'md' ? 'default' : s}</option>)}</select></div>
         </div>
       </div>
       <div style={{ flex: 2, minWidth: 400, padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
@@ -251,7 +251,7 @@ function StepsPlayground() {
           current={current} 
           onChange={setCurrent} 
           direction={direction}
-          size={size}
+          size={size === 'default' ? 'md' : size}
           items={steps} 
         />
       </div>
@@ -574,8 +574,8 @@ function AutocompletePlayground() {
 }
 
 function DatePickerPlayground() {
-  const [date, setDate] = useState<any>(null);
-  const [range, setRange] = useState<any>(null);
+  const [date, setDate] = useState<Date | undefined>(undefined);
+  const [range, setRange] = useState<KDateRange | undefined>(undefined);
   const [picker, setPicker] = useState<any>('date');
   const [size, setSize] = useState<any>('md');
   const [showTime, setShowTime] = useState(false);
@@ -765,7 +765,12 @@ function CascaderPlayground() {
   return (
     <div style={{ padding: 48, display: 'flex', justifyContent: 'center', backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
       <div style={{ width: '100%', maxWidth: 400 }}>
-        <KCascader options={options} value={val} onChange={setVal} placeholder="Selecciona ubicación..." />
+        <KCascader 
+          options={options} 
+          value={val} 
+          onChange={(v) => setVal(v as string[])} 
+          placeholder="Selecciona ubicación..." 
+        />
         <div style={{ marginTop: 12 }}>
           <KText variant="small" color="secondary">Selección: {val.join(' / ') || '(ninguna)'}</KText>
         </div>
@@ -784,9 +789,9 @@ function StatisticPlayground() {
 }
 
 function TimePickerPlayground() {
-  const [time, setTime] = useState<string | null>(null);
+  const [time, setTime] = useState<string>('12:00');
   const [use12Hours, setUse12Hours] = useState(false);
-  const [format, setFormat] = useState('HH:mm:ss');
+  const [format, setFormat] = useState('HH:mm');
 
   const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
   const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
@@ -803,7 +808,7 @@ function TimePickerPlayground() {
       <div style={{ flex: 2, minWidth: 300, padding: 48, display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'center', backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
         <div style={{ width: 200 }}>
           <KTimePicker 
-            value={time ? dayjs(time, format) : undefined} 
+            value={time} 
             onChange={setTime} 
             use12Hours={use12Hours}
             format={format}
@@ -910,7 +915,7 @@ function TreeSelectPlayground() {
   return (
     <div style={{ padding: 48, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
       <div style={{ width: 300 }}>
-        <KTreeSelect treeData={data} value={val} onChange={setVal} placeholder="Selecciona departamento..." treeDefaultExpandAll />
+        <KTreeSelect treeData={data} value={val} onChange={(v: string | number) => setVal(v?.toString())} placeholder="Selecciona departamento..." treeDefaultExpandAll />
       </div>
       <KText variant="small" color="secondary">Selección: {val || '(ninguna)'}</KText>
     </div>
@@ -1158,9 +1163,9 @@ import { KInput } from '@khor/design-system/atoms/index';
     playground: <SelectFieldPlayground />,
     stateShowcase: (
       <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-        <div style={{ width: 180 }}><KSelectField label="Normal" placeholder="Opciones..." options={[{label:'A', value:1}]} /></div>
+        <div style={{ width: 180 }}><KSelectField label="Normal" placeholder="Opciones..." options={[{label:'A', value:'1'}]} /></div>
         <div style={{ width: 180 }}><KSelectField label="Disabled" disabled placeholder="Sin acceso" options={[]} /></div>
-        <div style={{ width: 180 }}><KSelectField label="Con Error" error="Inválido" options={[{label:'A', value:1}]} /></div>
+        <div style={{ width: 180 }}><KSelectField label="Con Error" error="Inválido" options={[{label:'A', value:'1'}]} /></div>
       </div>
     ),
     a11ySummary: {
@@ -1509,7 +1514,7 @@ import { KInput } from '@khor/design-system/atoms/index';
           items={[
             { key: '1', label: 'Cerrado por defecto', children: <p>Info 1</p> },
             { key: '2', label: 'Abierto por defecto', children: <p>Info 2</p> },
-            { key: '3', label: 'Deshabilitado', collapsible: 'disabled', children: <p>Info 3</p> }
+            { key: '3', label: 'Deshabilitado', children: <p>Info 3</p> }
           ]}
           defaultActiveKey={['2']}
         />
@@ -1747,7 +1752,7 @@ import { KInput } from '@khor/design-system/atoms/index';
   'descriptions': {
     id: 'descriptions', name: 'KDescriptions',
     description: 'Lista de información en formato clave-valor, ideal para mostrar detalles de perfiles o registros técnicos.',
-    preview: (<div style={{ width: '100%' }}><KDescriptions items={[{ label: 'Nombre', children: 'Juan Perez' }, { label: 'Edad', children: '30' }]} column={1} size="small" /></div>),
+    preview: (<div style={{ width: '100%' }}><KDescriptions items={[{ label: 'Nombre', children: 'Juan Perez' }, { label: 'Edad', children: '30' }]} column={1} size="sm" /></div>),
     code: `import { KDescriptions } from '@khor/design-system/molecules/index';
 
 <KDescriptions 
@@ -1961,7 +1966,6 @@ import { KInput } from '@khor/design-system/atoms/index';
     description: 'Selector de hora con formato personalizable (12h/24h) y selección de intervalos.',
     preview: (<div><KTimePicker placeholder="Seleccionar..." /></div>),
     code: `import { KTimePicker } from '@khor/design-system/molecules/index';
-import dayjs from 'dayjs';
 
 <KTimePicker 
   format="HH:mm" 

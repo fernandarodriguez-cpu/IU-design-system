@@ -20,7 +20,7 @@ import { organisms } from './OrganismsPage';
 const t = khorTokens;
 
 /* ─── Version (must match ChangelogPage & AppShell) ─── */
-const KHOR_VERSION = '3.2.1';
+const KHOR_VERSION = '4.0.0';
 
 /* ─── Sections config ───────────────────────── */
 interface SectionConfig {
@@ -59,7 +59,7 @@ Este documento es la única fuente de verdad para el desarrollo en el ecosistema
 ## 🤖 Instrucciones Críticas para la IA (System Prompt)
 
 Como IA, DEBES seguir estas reglas estrictamente al generar código:
-1. **Identidad Visual:** NUNCA importes ni uses componentes directamente desde \`antd\`, \`@ant-design/*\`, Material UI o similares. Usa exclusivamente los componentes del sistema (prefijo \`K\`). Los componentes K* son la única abstracción oficial; aunque internamente usen AntD o Radix, tú solo debes interactuar con la capa Khor.
+1. **Identidad Visual:** NUNCA importes ni uses componentes directamente desde \`antd\`, \`@ant-design/*\`, Material UI o similares. Usa exclusivamente los componentes del sistema (prefijo \`K\`). Los componentes K* son la única abstracción oficial basada en Radix UI y Tailwind CSS v4; tú solo debes interactuar con la capa Khor.
 2. **Componentes Khor:** Ejemplo: \`KButton\`, \`KInput\`, \`KCardSection\`.
 3. **Estilos:** Usa Tailwind CSS SOLO para el layout (grid, flex, spacing) y clases de utilidad de Khor. NUNCA hardcodees colores hexadecimales; usa siempre los Design Tokens (\`khorTokens\`) o CSS Variables (\`var(--khor-*)\`).
 4. **React Router:** Usa \`react-router\` (v6/v7), NO \`react-router-dom\`.
@@ -979,7 +979,7 @@ export function AIExportPage() {
               <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--foreground)' }}>
                 khor-design-system-ai-guide.md
               </span>
-              <KBadge khorStatus="info" label={`${words.toLocaleString()} palabras`} dot={false} />
+              <KBadge status="info" label={`${words.toLocaleString()} palabras`} dot={false} />
             </div>
             <button
               onClick={() => setExpandedPreview(!expandedPreview)}

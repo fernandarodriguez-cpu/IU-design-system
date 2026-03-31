@@ -1,18 +1,32 @@
-import React from 'react';
-import { DatePicker } from 'antd';
-import dayjs from 'dayjs';
-import 'dayjs/locale/es';
-import { subDays, startOfMonth, endOfMonth } from 'date-fns';
+import React, { useState } from 'react';
+import { format, isValid } from 'date-fns';
+import { es } from 'date-fns/locale';
+import { DayPicker, DateRange } from 'react-day-picker';
+import { CalendarIcon, X } from 'lucide-react';
 import { khorTokens } from '../../../../theme/khor-theme';
-
-dayjs.locale('es');
+import { cn } from '../../../../../imports/utils';
+import { KPopoverRoot, KPopoverTrigger, KPopoverContent } from '../KPopover';
 
 const t = khorTokens;
-const font = t.typography.fontPrimary;
 
 /* ═══════════════════════════════════════════════
-   KDatePicker — Selector de fecha
+   KDatePicker — Selector de fecha (Headless v4)
    ═══════════════════════════════════════════════ */
+export interface KDateRange {
+  from?: Date;
+  to?: Date;
+}
+
+export interface KDateRangePickerProps {
+  value?: KDateRange;
+  onChange?: (range: KDateRange | undefined) => void;
+  placeholder?: [string, string];
+  disabled?: boolean;
+  className?: string;
+  size?: 'sm' | 'md' | 'lg' | 'small' | 'middle' | 'large';
+  allowClear?: boolean;
+}
+
 export interface KDatePickerProps {
   value?: Date;
   onChange?: (date: Date | undefined) => void;
@@ -20,110 +34,212 @@ export interface KDatePickerProps {
   disabled?: boolean;
   minDate?: Date;
   maxDate?: Date;
-  picker?: 'date' | 'week' | 'month' | 'quarter' | 'year';
-  showTime?: boolean | object;
-  format?: string | string[];
-  disabledDate?: (current: any) => boolean;
   status?: 'error' | 'warning';
-  renderExtraFooter?: () => React.ReactNode;
-  allowClear?: boolean;
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg' | 'small' | 'middle' | 'large';
   className?: string;
   style?: React.CSSProperties;
-  [key: string]: any;
+  // Props de paridad AntD
+  picker?: 'date' | 'week' | 'month' | 'quarter' | 'year';
+  allowClear?: boolean;
+  showTime?: boolean | object;
 }
 
-/**
- * KDatePicker: Selector de fecha estilizado.
- * Refinado para evitar fugas de props al DOM (variant, fullWidth).
- */
 export function KDatePicker({
-  value, onChange, placeholder = 'Selecciona fecha', disabled, minDate, maxDate,
-  picker, showTime, format: fmt, disabledDate, status, renderExtraFooter,
-  allowClear, size = 'md', className, style, 
-  variant, fullWidth, ...rest 
-}: KDatePickerProps & { variant?: any, fullWidth?: any }) {
-  const heights = { sm: 32, md: 40, lg: 48 };
+  value,
+  onChange,
+  placeholder = 'Selecciona una fecha',
+  disabled,
+  minDate,
+  maxDate,
+  status,
+  size = 'md',
+  className,
+  style,
+  allowClear = true,
+  picker = 'date',
+}: KDatePickerProps) {
+  const [open, setOpen] = useState(false);
+
+  const resolvedSize = size === 'small' ? 'sm' : size === 'large' ? 'lg' : size === 'middle' ? 'md' : (size as any);
+  const heights = { sm: 'h-8 text-xs', md: 'h-10 text-sm', lg: 'h-12 text-base' };
+
+  const statusClasses = status === 'error'
+    ? 'border-[var(--khor-feedback-error)] focus:ring-[var(--khor-feedback-error)]'
+    : status === 'warning'
+      ? 'border-[var(--khor-feedback-warning)] focus:ring-[var(--khor-feedback-warning)]'
+      : 'border-[var(--khor-neutral-200)] focus:ring-[var(--khor-primary-light)] focus:border-[var(--khor-primary)] hover:border-[var(--khor-primary-light)]';
+
+  const disabledClasses = disabled 
+    ? 'bg-[var(--khor-neutral-100)] cursor-not-allowed text-[var(--khor-neutral-400)]' 
+    : 'bg-[var(--khor-surface-page)] text-[var(--khor-neutral-900)] cursor-pointer';
+
   return (
-    <div className={className} style={{ display: 'inline-block', width: '100%' }}>
-      <DatePicker
-        value={value ? dayjs(value) : undefined}
-        onChange={(d) => onChange?.(d ? d.toDate() : undefined)}
-        placeholder={placeholder}
-        disabled={disabled}
-        minDate={minDate ? dayjs(minDate) : undefined}
-        maxDate={maxDate ? dayjs(maxDate) : undefined}
-        picker={picker}
-        showTime={showTime}
-        format={fmt}
-        disabledDate={disabledDate}
-        status={status}
-        renderExtraFooter={renderExtraFooter}
-        allowClear={allowClear}
-        style={{
-          width: '100%', height: heights[size], fontFamily: font,
-          borderRadius: t.radius.md,
-          ...style,
-        }}
-        {...rest}
-      />
+    <div className={cn("relative w-full", className)} style={style}>
+      <KPopoverRoot open={open} onOpenChange={disabled ? undefined : setOpen}>
+        <KPopoverTrigger asChild>
+          <button
+            type="button"
+            disabled={disabled}
+            className={cn(
+              "flex w-full items-center justify-between px-3 border rounded-md shadow-sm transition-all outline-none focus:ring-2 font-primary",
+              heights[resolvedSize as keyof typeof heights] || heights.md,
+              statusClasses,
+              disabledClasses
+            )}
+          >
+            <div className="flex items-center gap-2 overflow-hidden flex-1">
+              <CalendarIcon className="w-4 h-4 text-[var(--khor-neutral-400)] shrink-0 opacity-70" />
+              <span className={cn("truncate", !value && 'text-[var(--khor-neutral-400)]')}>
+                {value && isValid(value) ? format(value, 'dd/MM/yyyy', { locale: es }) : placeholder}
+              </span>
+            </div>
+            {allowClear && value && !disabled && (
+              <span 
+                role="button"
+                tabIndex={0}
+                className="ml-2 hover:text-[var(--khor-feedback-error)] transition-colors p-1"
+                onClick={(e) => { e.stopPropagation(); onChange?.(undefined); }}
+              >
+                <X className="w-3.5 h-3.5" />
+              </span>
+            )}
+          </button>
+        </KPopoverTrigger>
+        <KPopoverContent align="start" className="p-0 border rounded-lg shadow-lg w-auto bg-[var(--khor-surface-page)] z-[100] mt-1">
+          <DayPicker
+            mode="single"
+            selected={value}
+            onSelect={(date) => {
+              onChange?.(date);
+              setOpen(false);
+            }}
+            locale={es}
+            disabled={[
+              minDate ? { before: minDate } : false,
+              maxDate ? { after: maxDate } : false,
+            ].filter(Boolean) as any}
+            classNames={{
+              months: "p-3",
+              caption: "flex justify-center pt-1 relative items-center mb-4",
+              caption_label: "text-sm font-medium",
+              nav: "space-x-1 flex items-center",
+              nav_button: "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100 hover:bg-[var(--khor-neutral-100)] rounded-md transition-all",
+              nav_button_previous: "absolute left-1",
+              nav_button_next: "absolute right-1",
+              table: "w-full border-collapse",
+              head_row: "flex",
+              head_cell: "text-[var(--khor-neutral-500)] rounded-md w-9 font-normal text-[0.8rem] capitalize",
+              row: "flex w-full mt-2",
+              cell: "h-9 w-9 text-center text-sm p-0 relative rounded-md transition-colors",
+              day: "h-9 w-9 p-0 font-normal hover:bg-[var(--khor-neutral-100)] rounded-md transition-all",
+              day_selected: "bg-[var(--khor-primary)] text-white hover:bg-[var(--khor-primary)] hover:text-white rounded-md font-semibold",
+              day_today: "font-semibold bg-[var(--khor-neutral-50)] text-[var(--khor-primary)]",
+              day_outside: "text-[var(--khor-neutral-300)] opacity-50",
+              day_disabled: "text-[var(--khor-neutral-300)] opacity-50 bg-transparent cursor-not-allowed",
+              day_hidden: "invisible",
+            }}
+          />
+        </KPopoverContent>
+      </KPopoverRoot>
     </div>
   );
 }
 
 /* ═══════════════════════════════════════════════
-   KDateRangePicker — Rango de fechas
+   KDateRangePicker — Selector de Rango (Headless v4)
    ═══════════════════════════════════════════════ */
-export interface KDateRange { from?: Date; to?: Date; }
-export interface KDateRangePreset { label: string; range: KDateRange; }
+export interface KDateRange {
+  from?: Date;
+  to?: Date;
+}
 
 export interface KDateRangePickerProps {
   value?: KDateRange;
   onChange?: (range: KDateRange | undefined) => void;
   placeholder?: [string, string];
-  presets?: KDateRangePreset[];
-  disabled?: boolean | [boolean, boolean];
+  disabled?: boolean;
   className?: string;
+  size?: 'sm' | 'md' | 'lg' | 'small' | 'middle' | 'large';
+  allowClear?: boolean;
 }
 
-const defaultPresets: KDateRangePreset[] = [
-  { label: 'Hoy', range: { from: new Date(), to: new Date() } },
-  { label: 'Últimos 7 días', range: { from: subDays(new Date(), 6), to: new Date() } },
-  { label: 'Últimos 30 días', range: { from: subDays(new Date(), 29), to: new Date() } },
-  { label: 'Este mes', range: { from: startOfMonth(new Date()), to: endOfMonth(new Date()) } },
-];
+export function KDateRangePicker({
+  value,
+  onChange,
+  placeholder = ['Inicio', 'Fin'],
+  disabled,
+  className,
+  size = 'md',
+  allowClear = true,
+}: KDateRangePickerProps) {
+  const [open, setOpen] = useState(false);
+  const resolvedSize = size === 'small' ? 'sm' : size === 'large' ? 'lg' : size === 'middle' ? 'md' : (size as any);
+  const heights = { sm: 'h-8 text-xs', md: 'h-10 text-sm', lg: 'h-12 text-base' };
 
-export function KDateRangePicker({ value, onChange, placeholder = ['Inicio', 'Fin'], presets = defaultPresets, disabled, className }: KDateRangePickerProps) {
-  const antdValue = value?.from && value?.to ? [dayjs(value.from), dayjs(value.to)] as any : undefined;
-
-  const formattedPresets = presets?.map((p) => ({
-    label: p.label,
-    value: [dayjs(p.range.from), dayjs(p.range.to)] as any
-  }));
-
-  const handleChange = (dates: any) => {
-    if (dates && dates[0] && dates[1]) {
-      onChange?.({ from: dates[0].toDate(), to: dates[1].toDate() });
-    } else {
+  const handleSelect = (range: DateRange | undefined) => {
+    if (!range) {
       onChange?.(undefined);
+      return;
     }
+    onChange?.({ from: range.from, to: range.to });
   };
 
+  const formattedValue = value?.from
+    ? value.to
+      ? `${format(value.from, 'dd/MM/yyyy', { locale: es })} - ${format(value.to, 'dd/MM/yyyy', { locale: es })}`
+      : `${format(value.from, 'dd/MM/yyyy', { locale: es })} - ${placeholder[1]}`
+    : `${placeholder[0]} - ${placeholder[1]}`;
+
   return (
-    <div className={className} style={{ display: 'inline-block', width: '100%' }}>
-      <DatePicker.RangePicker
-        value={antdValue}
-        onChange={handleChange}
-        placeholder={placeholder}
-        disabled={disabled as any}
-        presets={formattedPresets}
-        style={{
-          width: '100%', height: 40, fontFamily: font,
-          borderRadius: t.radius.md, borderColor: t.colors.neutral[200],
-          backgroundColor: disabled ? t.colors.neutral[100] : t.colors.neutral[50],
-        }}
-        className="khor-ant-daterangepicker"
-      />
+    <div className={cn("relative w-full", className)}>
+      <KPopoverRoot open={open} onOpenChange={disabled ? undefined : setOpen}>
+        <KPopoverTrigger asChild>
+          <button
+            type="button"
+            disabled={disabled}
+            className={cn(
+              "flex w-full items-center justify-between px-3 border border-[var(--khor-neutral-200)] rounded-md shadow-sm transition-all outline-none focus:ring-2 focus:ring-[var(--khor-primary-light)] font-primary",
+              heights[resolvedSize as keyof typeof heights] || heights.md,
+              disabled ? 'bg-[var(--khor-neutral-100)] cursor-not-allowed text-[var(--khor-neutral-400)]' : 'bg-[var(--khor-surface-page)] text-[var(--khor-neutral-900)] cursor-pointer hover:border-[var(--khor-primary-light)]'
+            )}
+          >
+            <div className="flex items-center gap-2 overflow-hidden flex-1">
+              <CalendarIcon className="w-4 h-4 text-[var(--khor-neutral-400)] shrink-0 opacity-70" />
+              <span className={cn("truncate", !value?.from && 'text-[var(--khor-neutral-400)]')}>
+                {formattedValue}
+              </span>
+            </div>
+            {allowClear && (value?.from || value?.to) && !disabled && (
+              <span 
+                role="button"
+                tabIndex={0}
+                className="ml-2 hover:text-[var(--khor-feedback-error)] transition-colors p-1"
+                onClick={(e) => { e.stopPropagation(); onChange?.(undefined); }}
+              >
+                <X className="w-3.5 h-3.5" />
+              </span>
+            )}
+          </button>
+        </KPopoverTrigger>
+        <KPopoverContent align="start" className="p-0 border rounded-lg shadow-lg w-auto bg-[var(--khor-surface-page)] z-[100] mt-1">
+          <DayPicker
+            mode="range"
+            selected={value ? { from: value.from, to: value.to } : undefined}
+            onSelect={handleSelect}
+            locale={es}
+            numberOfMonths={2}
+            classNames={{
+              months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0 p-3",
+              table: "w-full border-collapse",
+              day: "h-9 w-9 p-0 font-normal hover:bg-[var(--khor-neutral-100)] rounded-md transition-all",
+              day_range_start: "bg-[var(--khor-primary)] text-white rounded-md",
+              day_range_end: "bg-[var(--khor-primary)] text-white rounded-md",
+              day_selected: "bg-[var(--khor-primary-light)] text-[var(--khor-primary)]",
+              day_today: "font-semibold bg-[var(--khor-neutral-50)] text-[var(--khor-primary)]",
+            }}
+          />
+        </KPopoverContent>
+      </KPopoverRoot>
     </div>
   );
 }
