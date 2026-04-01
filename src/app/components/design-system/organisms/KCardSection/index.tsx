@@ -1,5 +1,5 @@
 import React from 'react';
-import { KText } from '../../atoms';
+import { KText } from '../../atoms/KText/index';
 import { khorTokens } from '../../../../theme/khor-theme';
 
 const t = khorTokens;

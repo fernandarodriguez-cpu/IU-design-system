@@ -2,7 +2,7 @@ import React, { useState, useRef, useCallback } from 'react';
 import { Upload as UploadIcon, File as FileIcon, Image as ImageIcon, X, Paperclip, Trash2 } from 'lucide-react';
 import { cn } from '../../../../../imports/utils';
 import { KProgress } from '../../atoms/KProgress';
-import { KText } from '../../atoms';
+import { KText } from '../../atoms/KText/index';
 
 export interface KUploadFile {
   uid: string;
@@ -178,7 +178,7 @@ export function KUpload({
 
                 {file.status === 'uploading' && (
                   <div className="mt-2">
-                    <KProgress percent={file.percent || 0} size="sm" showInfo={false} />
+                    <KProgress value={file.percent || 0} size="sm" showInfo={false} />
                   </div>
                 )}
               </div>

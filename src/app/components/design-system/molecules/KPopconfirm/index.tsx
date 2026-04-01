@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { AlertCircle } from 'lucide-react';
-import { KPopover, KPopoverTrigger, KPopoverContent } from '../KPopover';
+import { KPopoverRoot, KPopoverTrigger, KPopoverContent } from '../KPopover/index';
 import { KButton } from '../../atoms/KButton';
 import { cn } from '../../../../../imports/utils';
 
@@ -58,7 +58,7 @@ export function KPopconfirm({
   if (disabled) return children;
 
   return (
-    <KPopover open={open} onOpenChange={setOpen}>
+    <KPopoverRoot open={open} onOpenChange={setOpen}>
       <KPopoverTrigger asChild>
         {children}
       </KPopoverTrigger>
@@ -83,7 +83,7 @@ export function KPopconfirm({
             <div className="flex justify-end gap-2 mt-2">
               <KButton 
                 size="sm" 
-                variant="neutral" 
+                variant="secondary" 
                 onClick={handleCancel}
                 disabled={loading}
               >
@@ -101,7 +101,7 @@ export function KPopconfirm({
           </div>
         </div>
       </KPopoverContent>
-    </KPopover>
+    </KPopoverRoot>
   );
 }
 

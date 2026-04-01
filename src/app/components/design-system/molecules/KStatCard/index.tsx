@@ -1,7 +1,7 @@
 import React from 'react';
 import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
 import { LineChart, Line, ResponsiveContainer } from 'recharts';
-import { KText } from '../../atoms';
+import { KText } from '../../atoms/KText/index';
 import { khorTokens } from '../../../../theme/khor-theme';
 
 const t = khorTokens;

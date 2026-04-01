@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Plus, Edit, Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
-import { KButton, KBadge } from '../components/design-system/atoms/index';
-import { KSearchInput } from '../components/design-system/molecules/index';
+import { KButton } from '../components/design-system/atoms/KButton/index';
+import { KBadge } from '../components/design-system/atoms/KBadge/index';
+import { KSearchInput } from '../components/design-system/molecules/KSearchInput/index';
 import { khorTokens } from '../theme/khor-theme';
 import { Pattern } from './types';
 
@@ -51,7 +52,7 @@ function PaginatedTableComponent() {
                 <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)', color: 'var(--foreground)' }}>{r.cliente}</td>
                 <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)', fontWeight: 600, color: 'var(--foreground)' }}>{r.monto}</td>
                 <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)' }}>
-                  <KBadge khorStatus={statusColor(r.estado) as any} label={r.estado} />
+                  <KBadge status={statusColor(r.estado) as any} label={r.estado} />
                 </td>
                 <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)', color: 'var(--muted-foreground)' }}>{r.fecha}</td>
                 <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)' }}>

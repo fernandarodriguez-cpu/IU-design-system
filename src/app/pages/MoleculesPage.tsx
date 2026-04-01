@@ -5,18 +5,42 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router';
 import { ComponentDoc } from '../components/docs/ComponentDoc';
 import type { PropDef } from '../components/docs/ComponentDoc';
-import {
-  KFormField, KSearchInput, KStatCard, KNavItem,
-  KSelectField, KUserCell, KEmptyState,
-  KBreadcrumb, KSteps, KDropdownMenu, KPopover, KAccordion,
-  KInputNumber, KSegmented, KAutocomplete, KDatePicker,
-  KDateRangePicker, KDateRange, KSelectAdvanced, KDescriptions,
-  KPopconfirm, KResult, KTimeline, KTooltip,
-  KCascader, KStatistic, KTimePicker, KMentions,
-  KColorPicker, KAnchor, KList, KDividerExtended,
-  KTreeSelect, KTransfer,
-} from '../components/design-system/molecules/index';
-import { KButton, KInput, KText } from '../components/design-system/atoms/index';
+import { KFormField } from '../components/design-system/molecules/KFormField';
+import { KSearchInput } from '../components/design-system/molecules/KSearchInput';
+import { KStatCard } from '../components/design-system/molecules/KStatCard';
+import { KNavItem } from '../components/design-system/molecules/KNavItem';
+import { KSelectField } from '../components/design-system/molecules/KSelectField';
+import { KUserCell } from '../components/design-system/molecules/KUserCell';
+import { KEmptyState } from '../components/design-system/molecules/KEmptyState';
+import { KBreadcrumb } from '../components/design-system/molecules/KBreadcrumb';
+import { KSteps } from '../components/design-system/molecules/KSteps';
+import { KDropdownMenu } from '../components/design-system/molecules/KDropdownMenu';
+import { KPopover } from '../components/design-system/molecules/KPopover';
+import { KAccordion } from '../components/design-system/molecules/KAccordion';
+import { KInputNumber } from '../components/design-system/molecules/KInputNumber';
+import { KSegmented } from '../components/design-system/molecules/KSegmented';
+import { KAutocomplete } from '../components/design-system/molecules/KAutocomplete';
+import { KDatePicker, KDateRangePicker } from '../components/design-system/molecules/KDatePicker';
+import type { KDateRange } from '../components/design-system/molecules/KDatePicker';
+import { KSelectAdvanced } from '../components/design-system/molecules/KSelectAdvanced';
+import { KDescriptions } from '../components/design-system/molecules/KDescriptions';
+import { KPopconfirm } from '../components/design-system/molecules/KPopconfirm';
+import { KResult } from '../components/design-system/molecules/KResult';
+import { KTimeline } from '../components/design-system/molecules/KTimeline';
+import { KTooltip } from '../components/design-system/molecules/KTooltip';
+import { KCascader } from '../components/design-system/molecules/KCascader';
+import { KStatistic } from '../components/design-system/molecules/KStatistic';
+import { KTimePicker } from '../components/design-system/molecules/KTimePicker';
+import { KMentions } from '../components/design-system/molecules/KMentions';
+import { KColorPicker } from '../components/design-system/molecules/KColorPicker';
+import { KAnchor } from '../components/design-system/molecules/KAnchor';
+import { KList } from '../components/design-system/molecules/KList';
+import { KDividerExtended } from '../components/design-system/molecules/KDividerExtended';
+import { KTreeSelect } from '../components/design-system/molecules/KTreeSelect';
+import { KTransfer } from '../components/design-system/molecules/KTransfer';
+import { KButton } from '../components/design-system/atoms/KButton';
+import { KInput } from '../components/design-system/atoms/KInput';
+import { KText } from '../components/design-system/atoms/KText';
 import { format as formatDate, parse } from 'date-fns';
 import {
   Users, DollarSign, TrendingUp, Calendar, Home,
@@ -112,7 +136,7 @@ function SearchInputPlayground() {
         <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <div><label style={ctrl}>Placeholder</label><input value={placeholder} onChange={(e) => setPlaceholder(e.target.value)} style={sel} /></div>
-          <div><label style={ctrl}>Tamano</label><select value={size} onChange={(e) => setSize(e.target.value)} style={sel}>{['sm','md','lg'].map(s=><option key={s}>{s}</option>)}</select></div>
+          <div><label style={ctrl}>Tamano</label><select value={size} onChange={(e) => setSize(e.target.value as any)} style={sel}>{['sm','md','lg'].map(s=><option key={s}>{s}</option>)}</select></div>
           <p style={{ fontSize: 12, color: khorTokens.colors.neutral[400], margin: 0 }}>Valor actual: "{val}"</p>
         </div>
       </div>
@@ -132,7 +156,7 @@ function SelectFieldPlayground() {
   const [loading, setLoading] = useState(false);
   const [showSearch, setShowSearch] = useState(true);
   const [allowClear, setAllowClear] = useState(true);
-  const [size, setSize] = useState<any>('middle');
+  const [size, setSize] = useState<'small' | 'middle' | 'large'>('middle');
   const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
   const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
   return (
@@ -140,7 +164,7 @@ function SelectFieldPlayground() {
       <div style={{ flex: 1, minWidth: 260 }}>
         <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <div><label style={ctrl}>Tamano</label><select value={size} onChange={(e) => setSize(e.target.value)} style={sel}>{['small','middle','large'].map(s=><option key={s}>{s}</option>)}</select></div>
+          <div><label style={ctrl}>Tamano</label><select value={size} onChange={(e) => setSize(e.target.value as any)} style={sel}>{['small','middle','large'].map(s=><option key={s}>{s}</option>)}</select></div>
           <div><label style={ctrl}>Error</label><input value={error} onChange={(e) => setError(e.target.value)} placeholder="Dejar vacio" style={sel} /></div>
           <div><label style={ctrl}>Hint</label><input value={hint} onChange={(e) => setHint(e.target.value)} style={sel} /></div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 4 }}>
@@ -154,26 +178,26 @@ function SelectFieldPlayground() {
         </div>
       </div>
       <div style={{ flex: 1, minWidth: 320, padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-        <KSelectField
-          label="Departamento"
-          placeholder="Seleccionar..."
-          options={[
-            { label: 'Recursos Humanos', value: 'rh' },
-            { label: 'Tecnologia', value: 'tech' },
-            { label: 'Finanzas', value: 'fin' },
-            { label: 'Operaciones', value: 'ops' }
-          ]}
-          value={value}
-          onChange={setValue}
-          disabled={disabled}
-          loading={loading}
-          showSearch={showSearch}
-          allowClear={allowClear}
-          size={size}
-          required={required}
-          error={error || undefined}
-          hint={hint || undefined}
-        />
+          <div style={{ padding: 24, background: khorTokens.colors.neutral[50], borderRadius: 12, border: `1px dashed ${khorTokens.colors.neutral[200]}` }}>
+            <KSelectField
+              label="Departamento"
+              placeholder="Seleccionar..."
+              options={[
+                { label: 'Recursos Humanos', value: 'rh' },
+                { label: 'Tecnología', value: 'tech' },
+                { label: 'Finanzas', value: 'fin' },
+                { label: 'Operaciones', value: 'ops' }
+              ]}
+              value={value}
+              onChange={setValue}
+              disabled={disabled}
+              loading={loading}
+              size={size}
+              required={required}
+              error={error || undefined}
+              hint={hint || undefined}
+            />
+          </div>
       </div>
     </div>
   );
@@ -392,17 +416,18 @@ function DropdownPlayground() {
         </div>
       </div>
       <div style={{ flex: 1, minWidth: 240, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-        <KDropdownMenu
-          menu={{
-            items: items as any,
-            onClick: (info) => setLastSelected(info.key)
-          }}
-          placement={placement}
-          arrow={arrow}
-          trigger={['click']}
-        >
-          <KButton variant="secondary" icon={<MoreHorizontal size={16} />}>Acciones</KButton>
-        </KDropdownMenu>
+          <div style={{ padding: 40, background: khorTokens.colors.neutral[50], borderRadius: 12, display: 'flex', justifyContent: 'center' }}>
+            <KDropdownMenu
+              menu={{
+                items: items as any,
+                onClick: (info) => setLastSelected(info.key)
+              }}
+              placement={placement}
+              arrow={arrow}
+            >
+              <KButton variant="secondary" icon={<MoreHorizontal size={16} />}>Acciones</KButton>
+            </KDropdownMenu>
+          </div>
       </div>
     </div>
   );
@@ -448,23 +473,22 @@ function PopoverPlayground() {
           <div><label style={ctrl}>Disparador</label><select value={trigger} onChange={(e) => setTrigger(e.target.value)} style={sel}>{['click','hover','focus'].map(t=><option key={t}>{t}</option>)}</select></div>
         </div>
       </div>
-      <div style={{ flex: 2, minWidth: 400, padding: 48, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-        <KPopover
-          placement={placement}
-          trigger={trigger}
-          title={<KText strong>Configuración</KText>}
-          content={
-            <div style={{ width: 240 }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 8 }}>
-                <KSelectField label="Departamento" placeholder="Seleccionar..." />
-                <KButton variant="primary" block size="sm">Aplicar Cambios</KButton>
-              </div>
-            </div>
-          }
-        >
-          <KButton variant="secondary" icon={<Settings size={16} />}>Configurar</KButton>
-        </KPopover>
-      </div>
+          <div style={{ padding: 48, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
+            <KPopover
+              placement={placement}
+              title={<KText strong>Configuración</KText>}
+              content={
+                <div style={{ width: 240 }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 8 }}>
+                    <KSelectField label="Departamento" placeholder="Seleccionar..." />
+                    <KButton variant="primary" block size="sm">Aplicar Cambios</KButton>
+                  </div>
+                </div>
+              }
+            >
+              <KButton variant="secondary" icon={<Settings size={16} />}>Configurar</KButton>
+            </KPopover>
+          </div>
     </div>
   );
 }

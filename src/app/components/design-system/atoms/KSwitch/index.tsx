@@ -5,14 +5,14 @@ import { cn } from '../../../../../imports/utils';
 
 export interface KSwitchProps extends React.ComponentPropsWithoutRef<typeof SwitchPrimitive.Root> {
   label?: React.ReactNode;
-  size?: 'default' | 'small';
+  size?: 'sm' | 'md';
   loading?: boolean;
 }
 
 export const KSwitch = React.forwardRef<React.ElementRef<typeof SwitchPrimitive.Root>, KSwitchProps>(function KSwitch(
-  { className, label, children, size = 'default', loading, disabled, ...rest }, ref
+  { className, label, children, size = 'md', loading, disabled, ...rest }, ref
 ) {
-  const isSmall = size === 'small';
+  const isSmall = size === 'sm';
   const content = label || children;
   
   const switchElement = (

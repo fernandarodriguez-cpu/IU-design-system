@@ -12,7 +12,7 @@ import {
   ChevronDown, ChevronRight, Sparkles, Menu, X, Search,
   Shield, Clock, Figma, Moon, Sun, Bot, Brush, BookOpen,
 } from 'lucide-react';
-import { KNavItem } from '../design-system/molecules/index';
+import { KNavItem } from '../design-system/molecules/KNavItem';
 import { patterns } from '../../patterns/index';
 import { khorTokens } from '../../theme/khor-theme';
 import { KCommandBar, useCommandBar } from '../design-system/command-bar';

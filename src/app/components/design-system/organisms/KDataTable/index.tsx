@@ -13,16 +13,16 @@ import {
 } from '@tanstack/react-table';
 import { Download, Columns3, ChevronUp, ChevronDown, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
 import { khorTokens } from '../../../../theme/khor-theme';
-import { KCheckbox } from '../../atoms';
+import { KCheckbox } from '../../atoms/KCheckbox/index';
+import { KSearchInput } from '../../molecules/KSearchInput/index';
 import { 
-  KSearchInput, 
-  KDropdownMenu, 
+  KDropdownMenuRoot,
   KDropdownMenuTrigger, 
   KDropdownMenuContent, 
   KDropdownMenuLabel, 
   KDropdownMenuSeparator, 
   KDropdownMenuCheckboxItem 
-} from '../../molecules';
+} from '../../molecules/KDropdownMenu/index';
 
 /* ─── Types ──────────────────────────────────────── */
 export interface KDataTableProps<TData> {
@@ -193,7 +193,7 @@ export function KDataTable<TData>({
             )}
 
             {enableColumnToggle && (
-              <KDropdownMenu>
+              <KDropdownMenuRoot>
                 <KDropdownMenuTrigger asChild>
                   <button className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 text-sm font-medium border rounded-md shadow-sm transition-colors text-[var(--khor-neutral-600)] hover:bg-[var(--khor-neutral-100)] bg-[var(--khor-surface-page)] active:scale-95">
                     <Columns3 className="w-4 h-4" /> Columnas
@@ -216,7 +216,7 @@ export function KDataTable<TData>({
                     )
                   })}
                 </KDropdownMenuContent>
-              </KDropdownMenu>
+              </KDropdownMenuRoot>
             )}
             
             {actions}

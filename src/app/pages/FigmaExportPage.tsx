@@ -7,10 +7,13 @@ import {
   Download, Copy, Check, Eye, FileJson, Palette,
   Type, Maximize, Square, ArrowRight, Info, ExternalLink,
 } from 'lucide-react';
-import { KButton, KText, KBadge } from '../components/design-system/atoms/index';
-import { KCardSection, KTabs } from '../components/design-system/organisms/index';
+import { KButton } from '../components/design-system/atoms/KButton/index';
+import { KText } from '../components/design-system/atoms/KText/index';
+import { KBadge } from '../components/design-system/atoms/KBadge/index';
+import { KCardSection } from '../components/design-system/organisms/KCardSection/index';
+import { KTabs, KTabsList, KTabsTrigger, KTabsContent } from '../components/design-system/organisms/KTabs/index';
 import { khorTokens } from '../theme/khor-theme';
-import { kToast } from '../components/design-system/organisms/index';
+import { kToast } from '../components/design-system/organisms/KToast/index';
 
 const t = khorTokens;
 
@@ -614,7 +617,23 @@ export function FigmaExportPage() {
       </div>
 
       {/* Tabs with content */}
-      <KTabs items={exportFormats} />
+      <KTabs defaultValue={exportFormats[0]?.key}>
+        <KTabsList>
+          {exportFormats.map(f => (
+            <KTabsTrigger key={f.key} value={f.key}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                {f.icon}
+                {f.label}
+              </div>
+            </KTabsTrigger>
+          ))}
+        </KTabsList>
+        {exportFormats.map(f => (
+          <KTabsContent key={f.key} value={f.key}>
+            {f.children}
+          </KTabsContent>
+        ))}
+      </KTabs>
 
       {/* Workflow guide */}
       <div style={{

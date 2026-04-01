@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Home, Layers, Settings, ChevronDown, ChevronRight, Menu, X } from 'lucide-react';
-import { KBadge } from '../components/design-system/atoms/index';
-import { KNavItem } from '../components/design-system/molecules/index';
+import { KBadge } from '../components/design-system/atoms/KBadge/index';
+import { KNavItem } from '../components/design-system/molecules/KNavItem/index';
 import { khorTokens } from '../theme/khor-theme';
 import { Pattern } from './types';
 
@@ -124,7 +124,7 @@ function SidebarPatternComponent() {
         <h4 style={{ margin: 0, fontSize: 20, fontWeight: 600, color: 'var(--foreground)' }}>Área de Trabajo Principal</h4>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <span style={{ fontSize: 14, color: 'var(--muted-foreground)' }}>Ruta Activa:</span>
-          <KBadge khorStatus="info" label={activePath} />
+          <KBadge status="info" label={activePath} />
         </div>
         <div style={{ padding: 16, backgroundColor: 'var(--card)', border: '1px solid var(--border)', borderRadius: t.radius.lg }}>
           <p style={{ margin: 0, fontSize: 14, color: 'var(--foreground)', lineHeight: 1.6 }}>

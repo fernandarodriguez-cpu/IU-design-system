@@ -23,7 +23,7 @@ export const router = createBrowserRouter([
       { path: 'tokens', Component: TokensPage },
       { path: 'atoms/:id', Component: AtomsPage },
       { path: 'molecules/:id', Component: MoleculesPage },
-      { path: 'organisms/:id', Component: OrganismsPage },
+      { path: 'organisms/:id?', Component: OrganismsPage },
       { path: 'templates/:id', Component: TemplatesPage },
       { path: 'accessibility', Component: AccessibilityPage },
       { path: 'wcag-checker', Component: WCAGCheckerPage },

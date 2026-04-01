@@ -9,7 +9,10 @@ import {
   MousePointer, Monitor, Ear, Search, Filter,
   ArrowRight, Shield, Info,
 } from 'lucide-react';
-import { KButton, KText, KBadge, KInput } from '../components/design-system/atoms/index';
+import { KButton } from '../components/design-system/atoms/KButton/index';
+import { KText } from '../components/design-system/atoms/KText/index';
+import { KBadge } from '../components/design-system/atoms/KBadge/index';
+import { KInput } from '../components/design-system/atoms/KInput/index';
 import { khorTokens } from '../theme/khor-theme';
 
 const t = khorTokens;

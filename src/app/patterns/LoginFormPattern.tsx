@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
-import { KInput, KButton, KCheckbox } from '../components/design-system/atoms/index';
-import { KFormField } from '../components/design-system/molecules/index';
+import { KInput } from '../components/design-system/atoms/KInput/index';
+import { KButton } from '../components/design-system/atoms/KButton/index';
+import { KCheckbox } from '../components/design-system/atoms/KCheckbox/index';
+import { KFormField } from '../components/design-system/molecules/KFormField/index';
 import { khorTokens } from '../theme/khor-theme';
 import { Pattern } from './types';
 

@@ -8,14 +8,20 @@ import {
   Bot, Sparkles, Info, Zap, Settings2,
   ChevronDown, ChevronRight, MousePointerClick,
 } from 'lucide-react';
-import { KButton, KText, KBadge, KAlert, KSwitch } from '../components/design-system/atoms/index';
-import { KCardSection, KTabs } from '../components/design-system/organisms/index';
-import { kToast } from '../components/design-system/organisms/index';
+import { KButton } from '../components/design-system/atoms/KButton/index';
+import { KText } from '../components/design-system/atoms/KText/index';
+import { KBadge } from '../components/design-system/atoms/KBadge/index';
+import { KAlert } from '../components/design-system/atoms/KAlert/index';
+import { KSwitch } from '../components/design-system/atoms/KSwitch/index';
+import { KCardSection } from '../components/design-system/organisms/KCardSection/index';
+import { KTabs } from '../components/design-system/organisms/KTabs/index';
+import { kToast } from '../components/design-system/organisms/KToast/index';
 import { khorTokens } from '../theme/khor-theme';
 import { patterns } from '../patterns/index';
 import { atoms } from './AtomsPage';
 import { molecules } from './MoleculesPage';
-import { organisms } from './OrganismsPage';
+// import { organisms } from './OrganismsPage';
+const organisms = {}; // Temporary dummy for isolation testing
 
 const t = khorTokens;
 

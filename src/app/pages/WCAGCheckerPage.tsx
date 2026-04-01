@@ -7,7 +7,8 @@ import {
   CheckCircle, XCircle, AlertTriangle, Eye, Palette, ArrowRight,
   Info, RefreshCw, Copy, Check,
 } from 'lucide-react';
-import { KButton, KBadge } from '../components/design-system/atoms/index';
+import { KButton } from '../components/design-system/atoms/KButton/index';
+import { KBadge } from '../components/design-system/atoms/KBadge/index';
 import { khorTokens } from '../theme/khor-theme';
 
 const t = khorTokens;

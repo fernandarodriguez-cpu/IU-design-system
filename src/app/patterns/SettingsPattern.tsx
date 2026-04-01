@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { Users, Mail, Bell, Settings, Moon, Sun, Save } from 'lucide-react';
-import { KInput, KButton, KSwitch } from '../components/design-system/atoms/index';
-import { KFormField, KSelectField } from '../components/design-system/molecules/index';
+import { KInput } from '../components/design-system/atoms/KInput/index';
+import { KButton } from '../components/design-system/atoms/KButton/index';
+import { KSwitch } from '../components/design-system/atoms/KSwitch/index';
+import { KFormField } from '../components/design-system/molecules/KFormField/index';
+import { KSelectField } from '../components/design-system/molecules/KSelectField/index';
 import { khorTokens } from '../theme/khor-theme';
 import { Pattern } from './types';
 
@@ -40,14 +43,14 @@ function SettingsPatternComponent() {
                 <div style={{ fontSize: 14, fontWeight: 500, color: 'var(--foreground)' }}>Notificaciones push</div>
                 <div style={{ fontSize: 12, color: 'var(--muted-foreground)' }}>Recibe alertas en tiempo real</div>
               </div>
-              <KSwitch checked={notifications} onChange={setNotifications} />
+              <KSwitch checked={notifications} onCheckedChange={setNotifications} />
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div>
                 <div style={{ fontSize: 14, fontWeight: 500, color: 'var(--foreground)' }}>Emails de marketing</div>
                 <div style={{ fontSize: 12, color: 'var(--muted-foreground)' }}>Promociones y novedades</div>
               </div>
-              <KSwitch checked={marketing} onChange={setMarketing} />
+              <KSwitch checked={marketing} onCheckedChange={setMarketing} />
             </div>
           </div>
         </div>
@@ -64,7 +67,7 @@ function SettingsPatternComponent() {
                 {darkMode ? <Moon size={16} color="var(--foreground)" /> : <Sun size={16} color="var(--foreground)" />}
                 <span style={{ fontSize: 14, fontWeight: 500, color: 'var(--foreground)' }}>Modo oscuro</span>
               </div>
-              <KSwitch checked={darkMode} onChange={setDarkMode} />
+              <KSwitch checked={darkMode} onCheckedChange={setDarkMode} />
             </div>
             <KFormField label="Idioma">
               <KSelectField

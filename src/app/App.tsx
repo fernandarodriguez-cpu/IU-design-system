@@ -1,6 +1,6 @@
 import { RouterProvider } from 'react-router';
 import { router } from './routes';
-import { KToastProvider } from './components/design-system/organisms/index';
+import { KToastProvider } from './components/design-system/organisms/KToast';
 import { ThemeProvider, useTheme } from './theme/theme-context';
 import { khorTokens, khorStaticTokens } from './theme/khor-theme';
 
