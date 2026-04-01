@@ -6,7 +6,7 @@ import { useParams } from 'react-router';
 import { ComponentDoc } from '../components/docs/ComponentDoc';
 import type { PropDef } from '../components/docs/ComponentDoc';
 import { KFormField } from '../components/design-system/molecules/KFormField';
-import { KSearchInput } from '../components/design-system/molecules/KSearchInput';
+import { KSearchInput } from '../components/design-system/atoms/KSearchInput';
 import { KStatCard } from '../components/design-system/molecules/KStatCard';
 import { KNavItem } from '../components/design-system/molecules/KNavItem';
 import { KSelectField } from '../components/design-system/molecules/KSelectField';
@@ -124,28 +124,6 @@ function FormFieldPlayground() {
   );
 }
 
-function SearchInputPlayground() {
-  const [val, setVal] = useState('');
-  const [size, setSize] = useState<any>('md');
-  const [placeholder, setPlaceholder] = useState('Buscar empleados...');
-  const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
-  const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
-  return (
-    <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
-      <div style={{ flex: 1, minWidth: 240 }}>
-        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <div><label style={ctrl}>Placeholder</label><input value={placeholder} onChange={(e) => setPlaceholder(e.target.value)} style={sel} /></div>
-          <div><label style={ctrl}>Tamano</label><select value={size} onChange={(e) => setSize(e.target.value as any)} style={sel}>{['sm','md','lg'].map(s=><option key={s}>{s}</option>)}</select></div>
-          <p style={{ fontSize: 12, color: khorTokens.colors.neutral[400], margin: 0 }}>Valor actual: "{val}"</p>
-        </div>
-      </div>
-      <div style={{ flex: 1, minWidth: 300, display: 'flex', alignItems: 'center', padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-        <div style={{ width: '100%' }}><KSearchInput placeholder={placeholder} size={size} value={val} onChange={setVal} /></div>
-      </div>
-    </div>
-  );
-}
 
 function SelectFieldPlayground() {
   const [value, setValue] = useState<string>('');
@@ -1013,48 +991,6 @@ import { KInput } from '@khor/design-system/atoms/index';
       'El hint se oculta cuando hay un error activo.',
     ],
     aiNotes: 'Al generar formularios, cada campo debe estar envuelto en KFormField. Los campos required deben validarse antes de enviar.',
-  },
-  'search-input': {
-    id: 'search-input',
-    name: 'KSearchInput',
-    description: 'Input especializado para busqueda con icono de lupa integrado, boton de limpiar automatico y callback de busqueda.',
-    preview: (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 12, maxWidth: 400 }}>
-        <KSearchInput placeholder="Buscar empleados..." />
-        <KSearchInput placeholder="Buscar en tabla..." size="sm" />
-        <KSearchInput placeholder="Busqueda global..." size="lg" />
-      </div>
-    ),
-    playground: <SearchInputPlayground />,
-    stateShowcase: (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}><span style={{ width: 80, fontSize: 11, color: khorTokens.colors.neutral[500] }}>Default</span><KSearchInput placeholder="Buscar..." /></div>
-        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}><span style={{ width: 80, fontSize: 11, color: khorTokens.colors.neutral[500] }}>Small</span><KSearchInput placeholder="En tabla..." size="sm" /></div>
-        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}><span style={{ width: 80, fontSize: 11, color: khorTokens.colors.neutral[500] }}>Large</span><KSearchInput placeholder="Búsqueda global..." size="lg" /></div>
-      </div>
-    ),
-    a11ySummary: {
-      keyboard: ['Enter: Ejecuta la búsqueda o presiona el enterButton.', 'Esc: Limpia el contenido si allowClear está activo.'],
-      aria: ['Incluye nativamente aria-label en el icono de limpiar.', 'role="searchbox" dictado implícitamente.'],
-      contrast: 'AAA entre placeholder gris y padding interno.',
-      score: 95,
-    },
-    code: `import { KSearchInput } from '@khor/design-system/molecules/index';
-
-<KSearchInput
-  placeholder="Buscar empleados..."
-  onChange={(value) => setSearchTerm(value)}
-  onSearch={(value) => handleSearch(value)}
-/>`,
-    filename: 'KSearchInput.tsx',
-    props: [
-      { name: 'placeholder', type: 'string', default: "'Buscar...'", description: 'Texto placeholder.' },
-      { name: 'value', type: 'string', description: 'Valor controlado.' },
-      { name: 'onChange', type: '(value: string) => void', description: 'Callback al escribir.' },
-      { name: 'onSearch', type: '(value: string) => void', description: 'Callback al presionar Enter.' },
-      { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Tamano del input.' },
-    ],
-    guidelines: ['Usa size="sm" dentro de tablas y toolbars.', 'Incluye debounce en onChange para busquedas con API.'],
   },
   'stat-card': {
     id: 'stat-card',

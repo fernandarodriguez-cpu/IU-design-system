@@ -43,6 +43,32 @@ const changeTypeConfig: Record<ChangeType, { color: string; bg: string; icon: Re
 
 const changelog: VersionEntry[] = [
   {
+    version: '4.0.2',
+    date: '1 de abril de 2026',
+    codename: 'Recipes',
+    summary: 'Migración completa de templates legacy (TPL:) al nuevo sistema modular de SaaS Recipes de alta fidelidad. Resolución del error crítico de KDataTable. Exportación Markdown AI-ready en Theming en Vivo. Unificación del sidebar y eliminación de deuda técnica.',
+    highlights: [
+      '3 nuevas SaaS Recipes de producción: Login Profesional, Gestión CRUD y Onboarding Multi-Paso.',
+      'Fix crítico: "Columns require an id" — columnas KDataTable ahora usan id + accessorKey (TanStack standard).',
+      'Exportación .md para AI/LLMs en Theming en Vivo con especificación completa de tokens, variables CSS y guías.',
+      'Eliminación total de templates legacy (TPL:) del sidebar, rutas y código fuente.',
+      'Fix de colapso de paneles en Theming en Vivo (flexShrink).',
+      'Registry unificado con 11 patrones SaaS de alta fidelidad.',
+    ],
+    changes: [
+      { type: 'added', component: 'SaaSLoginPattern', componentPath: '/patterns/saas-login', description: 'Nuevo recipe de login profesional SaaS con KLoginForm, branding de marca y diseño premium con gradientes sutiles.' },
+      { type: 'added', component: 'SaaSCRUDTablePattern', componentPath: '/patterns/saas-crud', description: 'Nuevo recipe CRUD con KDataTable, KUserCell, KSparklineCell, KBreadcrumb y panel de estadísticas. Todas las columnas con id explícito (fix TanStack).' },
+      { type: 'added', component: 'SaaSWizardPattern', componentPath: '/patterns/saas-wizard', description: 'Nuevo recipe de onboarding multi-paso con KSteps, validación de formularios, selección de planes y pantalla de confirmación.' },
+      { type: 'fixed', component: 'KDataTable', componentPath: '/organisms/data-table', description: 'Resolución del error "Columns require an id when using a non-string header" — todas las columnas ahora incluyen id explícito según estándar TanStack Table.' },
+      { type: 'changed', component: 'ThemingPage', componentPath: '/theming', description: 'Nueva exportación Markdown AI-ready con especificación completa: colores, tipografía, sombras, radii, espaciado, guía para LLMs y ejemplo CSS.' },
+      { type: 'fixed', component: 'ThemingPage', componentPath: '/theming', description: 'Corrección del colapso de paneles laterales al expandir secciones (flexShrink: 0 en SectionCard).' },
+      { type: 'changed', component: 'AppShell', componentPath: '/', description: 'Eliminación de 4 entradas hardcoded TPL: del sidebar. Navegación ahora 100% dinámica desde el registry de patrones.' },
+      { type: 'removed', description: 'TemplatesPage.tsx eliminado y ruta /templates/:id removida de routes.ts.' },
+      { type: 'changed', component: 'patterns/index', componentPath: '/patterns', description: 'Registry unificado con 11 patrones: 2 Dashboard, 5 SaaS, 4 Datos/Feedback. Categorías actualizadas.' },
+    ],
+    stats: { added: 3, changed: 4, fixed: 2 },
+  },
+  {
     version: '4.0.0',
     date: '31 de marzo de 2026',
     codename: 'Transformation',

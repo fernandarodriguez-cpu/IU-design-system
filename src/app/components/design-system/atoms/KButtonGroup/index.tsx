@@ -1,26 +1,32 @@
 import React from 'react';
-import { khorTokens } from '../../../../theme/khor-theme';
-
-const t = khorTokens;
+import { KSpace, KSpaceSize } from '../KSpace';
+import { cn } from '../../../../../imports/utils';
 
 export interface KButtonGroupProps {
   children: React.ReactNode;
-  size?: 'sm' | 'md' | 'lg';
+  size?: KSpaceSize;
   className?: string;
+  direction?: 'horizontal' | 'vertical';
 }
 
-export function KButtonGroup({ children, className }: KButtonGroupProps) {
+/**
+ * KButtonGroup — Grupo de botones con espaciado consistente.
+ * Utiliza KSpace internamente para gestionar el gap.
+ */
+export function KButtonGroup({ 
+  children, 
+  className, 
+  size = 'sm',
+  direction = 'horizontal' 
+}: KButtonGroupProps) {
   return (
-    <div className={className} style={{
-      display: 'inline-flex', borderRadius: t.radius.md, overflow: 'hidden',
-      border: `1px solid ${t.colors.neutral[200]}`,
-    }}>
-      {React.Children.map(children, (child, i) => (
-        <div key={i} style={{ borderLeft: i > 0 ? `1px solid ${t.colors.neutral[200]}` : 'none' }}>
-          {child}
-        </div>
-      ))}
-    </div>
+    <KSpace 
+      direction={direction} 
+      size={size} 
+      className={cn("inline-flex", className)}
+    >
+      {children}
+    </KSpace>
   );
 }
 

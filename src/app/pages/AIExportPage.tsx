@@ -26,7 +26,7 @@ const organisms = {}; // Temporary dummy for isolation testing
 const t = khorTokens;
 
 /* ─── Version (must match ChangelogPage & AppShell) ─── */
-const KHOR_VERSION = '4.0.0';
+const KHOR_VERSION = '4.0.2';
 
 /* ─── Sections config ───────────────────────── */
 interface SectionConfig {

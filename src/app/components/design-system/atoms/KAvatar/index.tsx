@@ -1,6 +1,7 @@
 import React from 'react';
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
 import { cn } from '../../../../../imports/utils';
+import { User } from 'lucide-react';
 
 export interface KAvatarProps {
   /** URL de imagen */
@@ -24,10 +25,10 @@ export interface KAvatarProps {
 }
 
 const statusColors = {
-  online: "bg-emerald-500",
-  offline: "bg-neutral-400",
-  busy: "bg-red-500",
-  away: "bg-amber-500",
+  online: "bg-[var(--khor-success)]",
+  offline: "bg-[var(--khor-neutral-400)]",
+  busy: "bg-[var(--khor-error)]",
+  away: "bg-[var(--khor-warning)]",
 };
 
 const sizeClasses = {
@@ -82,18 +83,26 @@ export const KAvatar = React.forwardRef<
           className="aspect-square h-full w-full object-cover animate-in fade-in duration-300"
         />
         <AvatarPrimitive.Fallback
-          className="flex h-full w-full items-center justify-center bg-[var(--khor-brand-navy)]"
+          className="flex h-full w-full items-center justify-center bg-[var(--khor-brand-navy)] leading-none text-white overflow-hidden"
         >
-          {children || icon || initials}
+          {children || icon || initials || <User size="60%" strokeWidth={2} />}
         </AvatarPrimitive.Fallback>
       </AvatarPrimitive.Root>
 
       {status && (
         <span 
           className={cn(
-            "absolute bottom-0 right-0 block rounded-full ring-2 ring-[var(--khor-surface-page)]",
+            "absolute block rounded-full ring-2 ring-[var(--khor-surface-card)]",
             statusColors[status],
-            isCustomSize ? "h-[25%] w-[25%]" : size === 'sm' ? "h-2.5 w-2.5" : size === 'md' ? "h-3 w-3" : "h-4 w-4"
+            // Tamaño dinámico del punto de estado
+            isCustomSize ? "h-[25%] w-[25%]" : 
+              size === 'sm' ? "h-2.5 w-2.5" : 
+              size === 'md' ? "h-3 w-3" : 
+              size === 'lg' ? "h-4 w-4" : "h-5 w-5",
+            // Posicionamiento según la forma (shape)
+            shape === 'circle' 
+              ? "bottom-[2%] right-[2%]" 
+              : "bottom-0 right-0 translate-x-1/4 translate-y-1/4"
           )} 
         />
       )}

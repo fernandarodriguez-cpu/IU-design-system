@@ -22,7 +22,7 @@ export const KSelectTrigger = React.forwardRef<
       "flex h-10 w-full items-center justify-between rounded-md border bg-[var(--khor-surface-page)] px-3 py-2 text-sm ring-offset-[var(--khor-surface-page)] placeholder:text-[var(--khor-neutral-500)] focus:outline-none focus:ring-2 disabled:cursor-not-allowed disabled:opacity-50 font-primary transition-all",
       error 
         ? "border-[var(--khor-feedback-error)] focus:ring-[var(--khor-feedback-error)] focus:ring-opacity-50 text-[var(--khor-feedback-error)]"
-        : "border-[var(--khor-neutral-200)] focus:ring-[var(--khor-primary-light)] focus:border-[var(--khor-primary)] text-[var(--khor-neutral-900)] hover:border-[var(--khor-primary-light)]",
+        : "border-[var(--khor-neutral-200)] focus:ring-[var(--khor-primary-light)] focus:border-[var(--khor-primary)] text-foreground hover:border-[var(--khor-primary-light)]",
       className
     )}
     {...props}
@@ -43,7 +43,7 @@ export const KSelectContent = React.forwardRef<
     <SelectPrimitive.Content
       ref={ref}
       className={cn(
-        "relative z-50 min-w-[8rem] overflow-hidden rounded-md border border-[var(--khor-neutral-200)] bg-[var(--khor-surface-page)] text-[var(--khor-neutral-900)] shadow-md animate-in fade-in-80 zoom-in-95 font-primary",
+        "relative z-50 min-w-[8rem] overflow-hidden rounded-md border border-[var(--khor-neutral-200)] bg-[var(--khor-surface-page)] text-foreground shadow-md animate-in fade-in-80 zoom-in-95 font-primary",
         position === "popper" && "translate-y-1",
         className
       )}
@@ -77,7 +77,7 @@ export const KSelectItem = React.forwardRef<
   <SelectPrimitive.Item
     ref={ref}
     className={cn(
-      "relative flex w-full cursor-pointer select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none transition-colors focus:bg-[var(--khor-neutral-100)] focus:text-[var(--khor-neutral-900)] data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      "relative flex w-full cursor-pointer select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none transition-colors focus:bg-[var(--khor-neutral-100)] focus:text-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       className
     )}
     {...props}

@@ -286,7 +286,7 @@ export const categories = ['Todos', ...new Set(patterns.map((p) => p.category))]
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'khor-design-system-v4.0.0.zip';
+  a.download = 'khor-design-system-v4.0.2.zip';
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
@@ -330,7 +330,7 @@ export function HomePage() {
         }} />
         <div style={{ position: 'relative', zIndex: 1 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-            <KBadge status="info" label="v4.0.0 Stable" />
+            <KBadge status="info" label="v4.0.2 Stable" />
             <KBadge status="success" label="100% Headless Transformation" />
             <KBadge status="warning" label="IA Ready" />
           </div>

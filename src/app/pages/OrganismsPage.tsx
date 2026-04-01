@@ -2,6 +2,7 @@
  * OrganismsPage — Documentacion de organismos del sistema Khor
  */
 import React, { useState } from 'react';
+import { toast } from 'sonner';
 import { useParams } from 'react-router';
 import { ComponentDoc } from '../components/docs/ComponentDoc';
 import type { PropDef } from '../components/docs/ComponentDoc';
@@ -1363,7 +1364,10 @@ kNotification.success({
     preview: (
       <div style={{ display: 'flex', gap: 12 }}>
         <KButton onClick={() => kMessage.success('Enlace copiado')}>Success</KButton>
-        <KButton onClick={() => kMessage.loading('Actualizando registro...')}>Loading</KButton>
+        <KButton onClick={() => {
+          const id = kMessage.loading('Actualizando registro...');
+          setTimeout(() => toast.dismiss(id), 2000);
+        }}>Loading</KButton>
       </div>
     ),
     code: `import { kMessage } from '@khor/design-system/organisms/index';

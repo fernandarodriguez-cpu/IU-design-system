@@ -14,7 +14,7 @@ import {
 import { Download, Columns3, ChevronUp, ChevronDown, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
 import { khorTokens } from '../../../../theme/khor-theme';
 import { KCheckbox } from '../../atoms/KCheckbox/index';
-import { KSearchInput } from '../../molecules/KSearchInput/index';
+import { KSearchInput } from '../../atoms/KSearchInput/index';
 import { 
   KDropdownMenuRoot,
   KDropdownMenuTrigger, 

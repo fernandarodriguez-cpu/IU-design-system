@@ -9,15 +9,15 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary: 'bg-[var(--khor-primary)] text-white hover:bg-[var(--khor-primary-hover)] active:bg-[var(--khor-primary-active)]',
-        secondary: 'bg-[var(--khor-neutral-200)] text-[var(--khor-neutral-900)] hover:bg-[var(--khor-neutral-300)] active:bg-[var(--khor-neutral-400)]',
-        outline: 'border border-[var(--khor-neutral-300)] bg-transparent text-[var(--khor-neutral-700)] hover:bg-[var(--khor-neutral-100)] active:bg-[var(--khor-neutral-200)]',
-        ghost: 'bg-transparent text-[var(--khor-neutral-700)] hover:bg-[var(--khor-neutral-100)] active:bg-[var(--khor-neutral-200)]',
-        danger: 'bg-[var(--khor-error)] text-white hover:bg-[var(--khor-action-danger-hover)] active:bg-[var(--khor-action-danger-active)]',
-        navy: 'bg-[var(--khor-navy)] text-white hover:bg-[var(--khor-navy-hover)] active:bg-[var(--khor-navy-active)]',
-        dashed: 'border border-dashed border-[var(--khor-neutral-300)] bg-transparent text-[var(--khor-neutral-700)] hover:bg-[var(--khor-neutral-100)] active:bg-[var(--khor-neutral-200)]',
+        primary: 'bg-[var(--khor-primary)] text-white! hover:bg-[var(--khor-primary-hover)] active:bg-[var(--khor-primary-active)] hover:shadow-md active:scale-95 transition-all',
+        secondary: 'bg-[var(--khor-neutral-200)] text-[var(--khor-neutral-900)] hover:bg-[var(--khor-neutral-300)] active:bg-[var(--khor-neutral-400)] active:scale-95 transition-all',
+        outline: 'border border-[var(--khor-neutral-300)] bg-transparent text-[var(--khor-neutral-700)] hover:bg-[var(--khor-neutral-100)] active:bg-[var(--khor-neutral-200)] active:scale-95 transition-all',
+        ghost: 'bg-transparent text-[var(--khor-neutral-700)] hover:bg-[var(--khor-neutral-100)] active:bg-[var(--khor-neutral-200)] active:scale-95 transition-all',
+        danger: 'bg-[var(--khor-error)] text-white! hover:bg-[var(--khor-action-danger-hover)] active:bg-[var(--khor-action-danger-active)] hover:shadow-md active:scale-95 transition-all',
+        navy: 'bg-[var(--khor-navy)] text-white! hover:bg-[var(--khor-navy-hover)] active:bg-[var(--khor-navy-active)] hover:shadow-md active:scale-95 transition-all',
+        dashed: 'border border-dashed border-[var(--khor-neutral-300)] bg-transparent text-[var(--khor-neutral-700)] hover:bg-[var(--khor-neutral-100)] active:bg-[var(--khor-neutral-200)] active:scale-95 transition-all',
         link: 'bg-transparent text-[var(--khor-primary)] underline-offset-4 hover:underline !p-0 !min-h-0 !h-auto',
-        text: 'bg-transparent text-[var(--khor-neutral-700)] hover:bg-[var(--khor-neutral-100)] active:bg-[var(--khor-neutral-200)]',
+        text: 'bg-transparent text-[var(--khor-neutral-700)] hover:bg-[var(--khor-neutral-100)] active:bg-[var(--khor-neutral-200)] transition-all',
       },
       size: {
         sm: 'h-8 px-3 text-xs',

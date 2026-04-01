@@ -23,9 +23,9 @@ import { KSlider } from '../components/design-system/atoms/KSlider/index';
 import { KRate } from '../components/design-system/atoms/KRate/index';
 import { KSpin } from '../components/design-system/atoms/KSpin/index';
 import { KButtonGroup } from '../components/design-system/atoms/KButtonGroup/index';
-// KInputPassword y KInputSearch ahora son variantes de KInput
-const KInputPassword = KInput as any;
-const KInputSearch = KInput as any;
+import { KSearchInput } from '../components/design-system/atoms/KSearchInput/index';
+import { KLabel } from '../components/design-system/atoms/KLabel/index';
+import { KInputPassword } from '../components/design-system/atoms/KInput/index';
 import { KFloatButton } from '../components/design-system/atoms/KFloatButton/index';
 import { KImage } from '../components/design-system/atoms/KImage/index';
 import { KSpace } from '../components/design-system/atoms/KSpace/index';
@@ -112,6 +112,7 @@ function ButtonPlayground() {
   );
 }
 
+
 function InputPlayground() {
   const [val, setVal] = useState('');
   const [error, setError] = useState('');
@@ -193,6 +194,29 @@ function BadgePlayground() {
       </div>
       <div style={{ flex: 1, minWidth: 240, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
         <KBadge status={status} label={label} dot={dot} />
+      </div>
+    </div>
+  );
+}
+
+function SearchInputPlayground() {
+  const [val, setVal] = useState('');
+  const [size, setSize] = useState<any>('md');
+  const [placeholder, setPlaceholder] = useState('Buscar empleados...');
+  const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
+  const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
+  return (
+    <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
+      <div style={{ flex: 1, minWidth: 240 }}>
+        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div><label style={ctrl}>Placeholder</label><input value={placeholder} onChange={(e) => setPlaceholder(e.target.value)} style={sel} /></div>
+          <div><label style={ctrl}>Tamaño</label><select value={size} onChange={(e) => setSize(e.target.value as any)} style={sel}>{['sm','md','lg'].map(s=><option key={s}>{s}</option>)}</select></div>
+          <p style={{ fontSize: 12, color: khorTokens.colors.neutral[400], margin: 0 }}>Valor actual: "{val}"</p>
+        </div>
+      </div>
+      <div style={{ flex: 1, minWidth: 300, display: 'flex', alignItems: 'center', padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
+        <div style={{ width: '100%' }}><KSearchInput placeholder={placeholder} size={size} value={val} onChange={setVal} /></div>
       </div>
     </div>
   );
@@ -306,12 +330,36 @@ function AvatarPlayground() {
           <div><label style={ctrl}>Tamaño</label><select value={size} onChange={(e) => setSize(e.target.value)} style={sel}>{['sm','md','lg'].map(s=><option key={s}>{s}</option>)}</select></div>
           <div><label style={ctrl}>Forma (shape)</label><select value={shape} onChange={(e) => setShape(e.target.value)} style={sel}>{['circle','square'].map(s=><option key={s}>{s}</option>)}</select></div>
           <div><label style={ctrl}>Estado de Presencia</label><select value={status} onChange={(e) => setStatus(e.target.value)} style={sel}>{['online','offline','busy','away','none'].map(s=><option key={s}>{s}</option>)}</select></div>
-          <div><label style={ctrl}>Gap texto: {gap}px</label><input type="range" min={0} max={16} value={gap} onChange={(e) => setGap(Number(e.target.value))} style={{ width: '100%' }} /></div>
         </div>
       </div>
       <div style={{ flex: 1, minWidth: 240, display: 'flex', gap: 16, alignItems: 'center', justifyContent: 'center', padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
         <KAvatar name={name} size={size} shape={shape} status={status === 'none' ? undefined : status} />
         <KAvatar name="JD" size={size} shape={shape} />
+      </div>
+    </div>
+  );
+}
+
+function ButtonGroupPlayground() {
+  const [size, setSize] = useState<any>('sm');
+  const [direction, setDirection] = useState<any>('horizontal');
+  const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
+  const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
+  return (
+    <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
+      <div style={{ flex: 1, minWidth: 240 }}>
+        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div><label style={ctrl}>Tamaño (Gap)</label><select value={size} onChange={(e) => setSize(e.target.value)} style={sel}>{['sm','md','lg'].map(s=><option key={s}>{s}</option>)}</select></div>
+          <div><label style={ctrl}>Dirección</label><select value={direction} onChange={(e) => setDirection(e.target.value)} style={sel}>{['horizontal','vertical'].map(d=><option key={d}>{d}</option>)}</select></div>
+        </div>
+      </div>
+      <div style={{ flex: 1, minWidth: 240, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
+        <KButtonGroup size={size} direction={direction}>
+          <KButton variant="secondary" size="sm">Anterior</KButton>
+          <KButton variant="primary" size="sm">Aplicar</KButton>
+          <KButton variant="secondary" size="sm">Siguiente</KButton>
+        </KButtonGroup>
       </div>
     </div>
   );
@@ -657,7 +705,7 @@ function DividerPlayground() {
       <div style={{ flex: 1, minWidth: 240 }}>
         <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Notas</h4>
         <p style={{ fontSize: 13, color: khorTokens.colors.neutral[400], lineHeight: 1.6, margin: 0 }}>
-          KDivider es un componente puramente visual sin props configurables mas alla de className. Se usa para separar secciones de contenido en cards, formularios y listas.
+          KDivider es un componente puramente visual para separar secciones de contenido.
         </p>
       </div>
       <div style={{ flex: 1, minWidth: 240, display: 'flex', flexDirection: 'column', gap: 12, padding: 24, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
@@ -666,6 +714,117 @@ function DividerPlayground() {
         <KText variant="body-md">Seccion B</KText>
         <KDivider />
         <KText variant="small" color="muted">Seccion C</KText>
+      </div>
+    </div>
+  );
+}
+
+function LabelPlayground() {
+  const [required, setRequired] = useState(true);
+  const [info, setInfo] = useState('Este es un tooltip de información');
+  const [size, setSize] = useState<any>('md');
+  const [text, setText] = useState('Nombre de Usuario');
+
+  const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
+  const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
+
+  return (
+    <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
+      <div style={{ flex: 1, minWidth: 240 }}>
+        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div><label style={ctrl}>Texto del Label</label><input value={text} onChange={(e) => setText(e.target.value)} style={sel}/></div>
+          <div><label style={ctrl}>Tamaño</label><select value={size} onChange={(e) => setSize(e.target.value)} style={sel}>{['sm','md','lg'].map(s=><option key={s}>{s}</option>)}</select></div>
+          <div><label style={ctrl}>Info Tooltip</label><input value={info} onChange={(e) => setInfo(e.target.value)} style={sel}/></div>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}>
+            <input type="checkbox" checked={required} onChange={(e) => setRequired(e.target.checked)} /> Requerido (*)
+          </label>
+        </div>
+      </div>
+      <div style={{ flex: 1, minWidth: 240, display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center', justifyContent: 'center', padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
+        <div style={{ width: '100%', maxWidth: 200 }}>
+          <KLabel required={required} info={info} size={size}>{text}</KLabel>
+          <KInput placeholder="Ejemplo..." size={size} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function FlexPlayground() {
+  const [vertical, setVertical] = useState(false);
+  const [justify, setJustify] = useState<any>('start');
+  const [align, setAlign] = useState<any>('center');
+  const [gap, setGap] = useState<any>('middle');
+  const [wrap, setWrap] = useState<any>('nowrap');
+
+  const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
+  const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
+
+  return (
+    <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
+      <div style={{ flex: 1, minWidth: 240 }}>
+        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div><label style={ctrl}>Justificación</label><select value={justify} onChange={(e) => setJustify(e.target.value)} style={sel}>{['start','center','end','space-between','space-around'].map(v=><option key={v}>{v}</option>)}</select></div>
+          <div><label style={ctrl}>Alineación</label><select value={align} onChange={(e) => setAlign(e.target.value)} style={sel}>{['start','center','end','stretch'].map(v=><option key={v}>{v}</option>)}</select></div>
+          <div><label style={ctrl}>Gap</label><select value={gap} onChange={(e) => setGap(e.target.value)} style={sel}>{['small','middle','large'].map(v=><option key={v}>{v}</option>)}</select></div>
+          <div style={{ display: 'flex', gap: 12 }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={vertical} onChange={(e) => setVertical(e.target.checked)} /> Vertical</label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={wrap === 'wrap'} onChange={(e) => setWrap(e.target.checked ? 'wrap' : 'nowrap')} /> Wrap</label>
+          </div>
+        </div>
+      </div>
+      <div style={{ flex: 1, minWidth: 280, padding: 24, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
+        <KFlex vertical={vertical} justify={justify} align={align} gap={gap} wrap={wrap} style={{ minHeight: 150 }}>
+          <div style={{ width: 60, height: 60, backgroundColor: khorTokens.colors.brand.primary, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 8 }}>1</div>
+          <div style={{ width: 80, height: 80, backgroundColor: khorTokens.colors.brand.navy, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 8 }}>2</div>
+          <div style={{ width: 70, height: 70, backgroundColor: khorTokens.colors.brand.accent, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 8 }}>3</div>
+        </KFlex>
+      </div>
+    </div>
+  );
+}
+
+function PasswordPlayground() {
+  const [disabled, setDisabled] = useState(false);
+  const [size, setSize] = useState<any>('md');
+  const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
+  const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
+
+  return (
+    <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
+      <div style={{ flex: 1, minWidth: 240 }}>
+        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div><label style={ctrl}>Tamaño</label><select value={size} onChange={(e) => setSize(e.target.value)} style={sel}>{['sm','md','lg'].map(s=><option key={s}>{s}</option>)}</select></div>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={disabled} onChange={(e) => setDisabled(e.target.checked)} /> Disabled</label>
+        </div>
+      </div>
+      <div style={{ flex: 1, minWidth: 280, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
+        <KInputPassword placeholder="Ingresa tu contraseña" size={size} disabled={disabled} prefix={<Lock size={16} />} block />
+      </div>
+    </div>
+  );
+}
+
+function SearchPlayground() {
+  const [size, setSize] = useState<any>('md');
+  const [placeholder, setPlaceholder] = useState('Buscar en Khor...');
+  const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
+  const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
+
+  return (
+    <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
+      <div style={{ flex: 1, minWidth: 240 }}>
+        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div><label style={ctrl}>Placeholder</label><input value={placeholder} onChange={(e) => setPlaceholder(e.target.value)} style={sel}/></div>
+          <div><label style={ctrl}>Tamaño</label><select value={size} onChange={(e) => setSize(e.target.value)} style={sel}>{['sm','md','lg'].map(s=><option key={s}>{s}</option>)}</select></div>
+        </div>
+      </div>
+      <div style={{ flex: 1, minWidth: 280, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
+        <KSearchInput placeholder={placeholder} size={size} onSearch={(v) => alert('Buscando: ' + v)} />
       </div>
     </div>
   );
@@ -960,12 +1119,11 @@ export const atoms: Record<string, AtomEntry> = {
     name: 'KAvatar',
     description: 'Avatar de usuario con soporte para imagen, iniciales automaticas y indicador de estado (online/offline/busy/away).',
     preview: (
-      <div style={{ display: 'flex', gap: 16, alignItems: 'center', flexWrap: 'wrap' }}>
+      <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
         <KAvatar name="Juan Perez" size="sm" status="online" />
-        <KAvatar name="Maria Garcia" size="md" status="busy" />
-        <KAvatar name="Ana Lopez" size="lg" status="away" />
-        <KAvatar name="Carlos Ruiz" size="md" status="offline" />
-        <KAvatar name="Diana Diaz" size="lg" />
+        <KAvatar name="Maria Garcia" size="md" status="away" />
+        <KAvatar name="Carlos Ruiz" size="lg" status="busy" />
+        <KAvatar src="https://github.com/shadcn.png" size="lg" status="online" />
       </div>
     ),
     playground: <AvatarPlayground />,
@@ -1617,14 +1775,30 @@ export const atoms: Record<string, AtomEntry> = {
     guidelines: ['Usa showCount con maxLength para campos con limite de caracteres.', 'rows=3-4 para campos cortos, 6+ para descripciones largas.'],
   },
   /* ═══ ÁTOMOS EXTENDIDOS (Wave 3) ═══ */
-  'button-group': { id: 'button-group', name: 'KButtonGroup', description: 'Agrupa botones relacionados en una fila unificada con bordes compartidos.',
+  'button-group': { id: 'button-group', name: 'KButtonGroup', description: 'Agrupa botones relacionados en una fila unificada con bordes compartidos o espaciado controlado.',
     preview: (<KButtonGroup><KButton variant="secondary" size="sm">Anterior</KButton><KButton variant="secondary" size="sm">Siguiente</KButton></KButtonGroup>),
+    playground: <ButtonGroupPlayground />,
     code: `<KButtonGroup>\n  <KButton variant="secondary">Anterior</KButton>\n  <KButton variant="secondary">Siguiente</KButton>\n</KButtonGroup>`, filename: 'KButtonGroup.tsx',
-    props: [{ name: 'children', type: 'ReactNode', required: true, description: 'Botones a agrupar.' }],
-    guidelines: ['Usa para acciones relacionadas como paginación o vistas.']
+    props: [{ name: 'size', type: "'sm' | 'md' | 'lg'", description: 'Espaciado entre botones.' }, { name: 'direction', type: "'horizontal' | 'vertical'", description: 'Flujo.' }],
+    guidelines: ['Usa para acciones relacionadas como paginacion o vistas.']
+  },
+  'search-input': { id: 'search-input', name: 'KSearchInput', description: 'Input de búsqueda unificado con icono y botón de limpieza.',
+    preview: (<div style={{ maxWidth: 300 }}><KSearchInput placeholder="Buscar..." /></div>),
+    playground: <SearchInputPlayground />,
+    code: `<KSearchInput onSearch={(v) => console.log(v)} />`, filename: 'KSearchInput.tsx',
+    props: [{ name: 'placeholder', type: 'string', description: 'Placeholder.' }, { name: 'size', type: "'sm' | 'md' | 'lg'", description: 'Tamaño.' }, { name: 'onSearch', type: '(v: string) => void', description: 'Callback de búsqueda.' }],
+    guidelines: ['Centralizado en Atoms para uso global.', 'Usa para búsquedas primarias en el sistema.']
+  },
+  'label': { id: 'label', name: 'KLabel', description: 'Etiqueta para campos de formulario con indicador de campo obligatorio y tooltip de informacion.',
+    preview: (<KLabel required info="Ayuda">Campo</KLabel>),
+    playground: <LabelPlayground />,
+    code: `<KLabel required info="Ingresa un correo institucional">Email</KLabel>`, filename: 'KLabel.tsx',
+    props: [{ name: 'children', type: 'ReactNode', required: true, description: 'Texto.' }, { name: 'required', type: 'boolean', description: 'Muestra asterisco.' }, { name: 'info', type: 'string', description: 'Texto del icono de informacion.' }],
+    guidelines: ['Usa siempre para mejorar la accesibilidad de los inputs.']
   },
   'input-password': { id: 'input-password', name: 'KInputPassword', description: 'Input de contraseña con toggle de visibilidad (ojo abierto/cerrado).',
     preview: (<div style={{ maxWidth: 300 }}><KInputPassword placeholder="Ingresa tu contraseña" /></div>),
+    playground: <PasswordPlayground />,
     code: `<KInputPassword value={pass} onChange={setPass} />`, filename: 'KInputPassword.tsx',
     props: [{ name: 'value', type: 'string', description: 'Valor.' }, { name: 'onChange', type: '(v) => void', description: 'Callback.' }, { name: 'error', type: 'string', description: 'Error.' }],
     stateShowcase: (
@@ -1640,24 +1814,6 @@ export const atoms: Record<string, AtomEntry> = {
       score: 100,
     },
     guidelines: ['Siempre incluye el toggle de visibilidad.']
-  },
-  'input-search': { id: 'input-search', name: 'KInputSearch', description: 'Input de búsqueda con botón "Buscar" integrado y soporte para Enter.',
-    preview: (<div style={{ maxWidth: 400 }}><KInputSearch placeholder="Buscar empleado..." /></div>),
-    code: `<KInputSearch onSearch={handleSearch} enterButton allowClear />`, filename: 'KInputSearch.tsx',
-    props: [{ name: 'onSearch', type: '(v) => void', description: 'Al buscar.' }, { name: 'loading', type: 'boolean', description: 'Estado de carga.' }],
-    stateShowcase: (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-        <KInputSearch placeholder="Buscar empleado..." />
-        <KInputSearch placeholder="Cargando..." loading />
-      </div>
-    ),
-    a11ySummary: {
-      keyboard: ['Enter: Dispara búsqueda.', 'Esc: Limpia el campo si tiene allowClear.'],
-      aria: ['role="searchbox" dictado implícitamente.'],
-      contrast: 'AAA',
-      score: 100,
-    },
-    guidelines: ['Usa enterButton para búsquedas con acción explícita.']
   },
   'float-button': { id: 'float-button', name: 'KFloatButton', description: 'Botón flotante (FAB) fijo en la esquina de la pantalla. Ideal para acciones principales.',
     preview: (<div style={{ position: 'relative', height: 80, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}><KText variant="small" color="muted" className="p-4">El botón flotante aparece fijo en la esquina inferior derecha.</KText></div>),

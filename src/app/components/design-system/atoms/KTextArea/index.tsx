@@ -7,9 +7,9 @@ const textareaVariants = cva(
   {
     variants: {
       variant: {
-        outlined: 'border-[var(--khor-neutral-200)] bg-[var(--khor-neutral-50)] text-[var(--khor-neutral-900)]',
-        borderless: 'border-transparent bg-transparent text-[var(--khor-neutral-900)] shadow-none focus-visible:ring-0',
-        filled: 'border-transparent bg-[var(--khor-neutral-100)] text-[var(--khor-neutral-900)] focus-visible:bg-[var(--khor-neutral-50)]',
+        outlined: 'border-[var(--khor-neutral-200)] bg-[var(--khor-neutral-50)] text-foreground',
+        borderless: 'border-transparent bg-transparent text-foreground shadow-none focus-visible:ring-0',
+        filled: 'border-transparent bg-[var(--khor-neutral-100)] text-foreground focus-within:bg-[var(--khor-neutral-50)]',
       },
       status: {
         default: '',

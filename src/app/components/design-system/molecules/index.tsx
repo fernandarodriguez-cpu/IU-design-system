@@ -1,5 +1,4 @@
 export { default as KFormField } from './KFormField';
-export { default as KSearchInput } from './KSearchInput';
 export { default as KStatCard } from './KStatCard';
 export { default as KNavItem } from './KNavItem';
 export { default as KSelectField } from './KSelectField';

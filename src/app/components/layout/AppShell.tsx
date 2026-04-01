@@ -73,7 +73,7 @@ const navigation: NavSection[] = [
       { label: 'KImage', path: '/atoms/image' },
       { label: 'KInput', path: '/atoms/input' },
       { label: 'KInputPassword', path: '/atoms/input-password' },
-      { label: 'KInputSearch', path: '/atoms/input-search' },
+      { label: 'KSearchInput', path: '/atoms/search-input' },
       { label: 'KProgress', path: '/atoms/progress' },
       { label: 'KQRCode', path: '/atoms/qrcode' },
       { label: 'KRadio', path: '/atoms/radio' },
@@ -114,7 +114,6 @@ const navigation: NavSection[] = [
       { label: 'KPopconfirm', path: '/molecules/popconfirm' },
       { label: 'KPopover', path: '/molecules/popover' },
       { label: 'KResult', path: '/molecules/result' },
-      { label: 'KSearchInput', path: '/molecules/search-input' },
       { label: 'KSegmented', path: '/molecules/segmented' },
       { label: 'KSelectAdvanced', path: '/molecules/select-advanced' },
       { label: 'KSelectField', path: '/molecules/select-field' },
@@ -160,10 +159,6 @@ const navigation: NavSection[] = [
     items: [
       { label: 'Todos los Patrones', path: '/patterns' },
       ...patterns.map(p => ({ label: p.title, path: `/patterns/${p.id}` })),
-      { label: 'TPL: Login', path: '/templates/login' },
-      { label: 'TPL: Dashboard', path: '/templates/dashboard' },
-      { label: 'TPL: CRUD Table', path: '/templates/crud' },
-      { label: 'TPL: Multi-Step', path: '/templates/form' },
     ],
   },
   {
@@ -171,8 +166,7 @@ const navigation: NavSection[] = [
     icon: <Sparkles size={18} strokeWidth={2} />,
     items: [
       { label: 'Theming en Vivo', path: '/theming' },
-      { label: 'Contraste WCAG', path: '/wcag-checker' },
-      { label: 'Accesibilidad WCAG', path: '/accessibility' },
+      { label: 'Khor Guardian (A11y)', path: '/guardian' },
       { label: 'Exportar a Figma', path: '/figma-export' },
       { label: 'Guía para IA', path: '/ai-export' },
       { label: 'Changelog', path: '/changelog' },
@@ -439,7 +433,7 @@ export function AppShell() {
               backgroundColor: 'var(--khor-success-light)',
               color: 'var(--khor-success)',
             }}>
-              v4.0.0
+              v4.0.2
             </span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>

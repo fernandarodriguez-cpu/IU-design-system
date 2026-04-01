@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Plus, Edit, Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { KButton } from '../components/design-system/atoms/KButton/index';
 import { KBadge } from '../components/design-system/atoms/KBadge/index';
-import { KSearchInput } from '../components/design-system/molecules/KSearchInput/index';
+import { KSearchInput } from '../components/design-system/atoms/KSearchInput/index';
 import { khorTokens } from '../theme/khor-theme';
 import { Pattern } from './types';
 

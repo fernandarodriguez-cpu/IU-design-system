@@ -35,10 +35,18 @@ export function showKNotification({
     warning: <AlertTriangle className="w-5 h-5 text-amber-500" />,
   };
 
+  const bgColors = {
+    success: "bg-[var(--khor-success-light)] border-[var(--khor-success)]/20",
+    error: "bg-[var(--khor-error-light)] border-[var(--khor-error)]/20",
+    info: "bg-[var(--khor-info-light)] border-[var(--khor-info)]/20",
+    warning: "bg-[var(--khor-warning-light)] border-[var(--khor-warning)]/20",
+  };
+
   toast.custom((t) => (
     <div 
       className={cn(
-        "flex flex-col gap-1 p-5 min-w-[360px] max-w-[480px] bg-white border border-[var(--khor-neutral-200)] rounded-2xl shadow-[0_30px_70px_rgba(0,0,0,0.2)] animate-in slide-in-from-right-10 duration-300 font-primary relative overflow-hidden",
+        "flex flex-col gap-1 p-5 min-w-[360px] max-w-[480px] border rounded-2xl shadow-[0_15px_45px_rgba(0,0,0,0.1)] animate-in slide-in-from-right-10 duration-300 font-primary relative overflow-hidden",
+        bgColors[type],
         className
       )}
       style={style}
@@ -49,7 +57,7 @@ export function showKNotification({
         </div>
         
         <div className="flex-1 flex flex-col gap-1">
-          <h4 className="text-sm font-extrabold text-[var(--khor-neutral-900)] leading-tight tracking-tight uppercase">
+          <h4 className="text-sm font-black text-[var(--khor-neutral-900)] leading-tight tracking-tight uppercase">
             {message}
           </h4>
           {description && (

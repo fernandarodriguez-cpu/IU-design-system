@@ -7,10 +7,10 @@ import React, { useState, useCallback, useMemo } from 'react';
 import {
   Palette, RotateCcw, Download, Copy, Check, Sun, Moon,
   Type, Maximize, Square, Eye, Layers, Zap, Droplets,
-  ChevronDown, ChevronRight, Sparkles,
+  ChevronDown, ChevronRight, Sparkles, FileText,
 } from 'lucide-react';
-import { KButton, KInput, KBadge, KSwitch, KProgress, KAlert, KAvatar, KTag, KCheckbox } from '../components/design-system/atoms/index';
-import { KStatCard, KFormField, KSearchInput } from '../components/design-system/molecules/index';
+import { KButton, KInput, KBadge, KSwitch, KProgress, KAlert, KAvatar, KTag, KCheckbox, KSearchInput } from '../components/design-system/atoms/index';
+import { KStatCard, KFormField } from '../components/design-system/molecules/index';
 import { khorTokens } from '../theme/khor-theme';
 
 const t = khorTokens;
@@ -229,16 +229,41 @@ function SelectInput({ label, value, onChange, options }: { label: string; value
 function SectionCard({ icon, title, children, defaultOpen = true }: { icon: React.ReactNode; title: string; children: React.ReactNode; defaultOpen?: boolean }) {
   const [open, setOpen] = useState(defaultOpen);
   return (
-    <div style={{ borderRadius: 10, backgroundColor: 'var(--card)', border: `1px solid var(--border)`, overflow: 'hidden' }}>
-      <button onClick={() => setOpen(!open)} style={{
-        display: 'flex', alignItems: 'center', gap: 8, width: '100%', padding: '14px 16px',
-        border: 'none', background: 'none', cursor: 'pointer', fontFamily: font, color: 'var(--foreground)',
-      }}>
-        <span style={{ color: 'var(--muted-foreground)' }}>{icon}</span>
+    <div style={{ 
+      borderRadius: 10, 
+      backgroundColor: 'var(--card)', 
+      border: `1px solid var(--border)`, 
+      display: 'flex',
+      flexDirection: 'column',
+      flexShrink: 0
+    }}>
+      <button 
+        onClick={() => setOpen(!open)} 
+        aria-expanded={open}
+        style={{
+          display: 'flex', alignItems: 'center', gap: 8, width: '100%', padding: '14px 16px',
+          border: 'none', background: 'none', cursor: 'pointer', fontFamily: font, color: 'var(--foreground)',
+          transition: 'background-color 0.2s ease',
+          borderRadius: open ? '10px 10px 0 0' : 10,
+        }}
+        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'var(--muted)')}
+        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
+      >
+        <span style={{ color: t.colors.brand.primary, display: 'flex', alignItems: 'center' }}>{icon}</span>
         <span style={{ flex: 1, textAlign: 'left', fontSize: 13, fontWeight: 600 }}>{title}</span>
         {open ? <ChevronDown size={14} color="var(--muted-foreground)" /> : <ChevronRight size={14} color="var(--muted-foreground)" />}
       </button>
-      {open && <div style={{ padding: '0 16px 16px', display: 'flex', flexDirection: 'column', gap: 10 }}>{children}</div>}
+      {open && (
+        <div style={{ 
+          padding: '4px 16px 16px', 
+          display: 'flex', 
+          flexDirection: 'column', 
+          gap: 12,
+          borderTop: `1px solid var(--border)` 
+        }}>
+          {children}
+        </div>
+      )}
     </div>
   );
 }
@@ -432,6 +457,105 @@ $khor-space-xl: ${theme.spaceXl}px;`, [theme]);
       xl: { $value: `${theme.spaceXl}px`, $type: 'dimension' },
     },
   }, null, 2), [theme]);
+ 
+  const generateMarkdown = useCallback(() => `# 🎨 Khor Design System — Especificación Completa de Tema Personalizado
+
+> Generado: ${new Date().toISOString()}
+> Formato: AI-Ready / LLM-Optimized
+
+---
+
+## 1. Paleta de Colores
+
+| Token | Variable CSS | Valor Hex | Uso |
+| :--- | :--- | :--- | :--- |
+| Primario | \`--khor-primary\` | \`${theme.primary}\` | CTAs, links, focus rings, acciones principales |
+| Primario Hover | \`--khor-primary-hover\` | \`${adjustBrightness(theme.primary, 15)}\` | Estado hover de elementos primarios |
+| Primario Active | \`--khor-primary-active\` | \`${adjustBrightness(theme.primary, -15)}\` | Estado pressed/active |
+| Secundario (Navy) | \`--khor-navy\` | \`${theme.secondary}\` | Sidebar, headings, nav, fondos oscuros |
+| Acento | \`--khor-accent\` | \`${theme.accent}\` | Highlights, badges, indicadores |
+| Éxito | \`--khor-success\` | \`${theme.success}\` | Validaciones, estados activos, confirmaciones |
+| Error | \`--khor-error\` | \`${theme.error}\` | Errores, eliminaciones, alertas críticas |
+| Warning | \`--khor-warning\` | \`${theme.warning}\` | Advertencias, estados pendientes |
+| Info | \`--khor-info\` | \`${theme.info}\` | Información contextual, tooltips |
+
+## 2. Tipografía
+
+| Token | Variable CSS | Valor |
+| :--- | :--- | :--- |
+| Fuente de Títulos | \`--font-primary\` | \`'${theme.fontHeading}', sans-serif\` |
+| Fuente de Cuerpo | \`--font-secondary\` | \`'${theme.fontBody}', sans-serif\` |
+| Fuente Monoespaciada | \`--font-mono\` | \`'${theme.fontMono}', monospace\` |
+
+### Escala Tipográfica
+
+| Nivel | Variable CSS | Tamaño | Peso | Uso |
+| :--- | :--- | :--- | :--- | :--- |
+| H1 | \`--khor-h1-size\` | ${theme.h1Size}px | 700-800 | Títulos de página |
+| H2 | \`--khor-h2-size\` | ${theme.h2Size}px | 700 | Títulos de sección |
+| H3 | \`--khor-h3-size\` | ${theme.h3Size}px | 600 | Subsecciones |
+| Body | \`--khor-body-size\` | ${theme.bodySize}px | 400 | Texto principal |
+| Small | \`--khor-small-size\` | ${theme.smallSize}px | 500 | Labels, captions, metadata |
+| Line Height | \`--khor-line-height\` | ${theme.baseLineHeight} | — | Interlineado base |
+
+## 3. Sombras (Elevación)
+
+| Nivel | Variable CSS | Definición |
+| :--- | :--- | :--- |
+| SM | \`--khor-shadow-sm\` | \`${theme.shadowSm} ${theme.shadowColor}\` |
+| MD | \`--khor-shadow-md\` | \`${theme.shadowMd} ${theme.shadowColor}\` |
+| LG | \`--khor-shadow-lg\` | \`${theme.shadowLg} ${theme.shadowColor}\` |
+
+## 4. Border Radius
+
+| Nivel | Variable CSS | Valor |
+| :--- | :--- | :--- |
+| SM | \`--khor-radius-sm\` | ${theme.radiusSm}px |
+| MD | \`--khor-radius-md\` | ${theme.radiusMd}px |
+| LG | \`--khor-radius-lg\` | ${theme.radiusLg}px |
+| XL | \`--khor-radius-xl\` | ${theme.radiusXl}px |
+
+## 5. Espaciado
+
+| Nivel | Variable CSS | Valor |
+| :--- | :--- | :--- |
+| XS | \`--khor-space-xs\` | ${theme.spaceXs}px |
+| SM | \`--khor-space-sm\` | ${theme.spaceSm}px |
+| MD | \`--khor-space-md\` | ${theme.spaceMd}px |
+| LG | \`--khor-space-lg\` | ${theme.spaceLg}px |
+| XL | \`--khor-space-xl\` | ${theme.spaceXl}px |
+
+---
+
+## 6. Guía para AI / LLMs
+
+### Reglas de Implementación
+1. **Siempre** usa variables CSS \`--khor-*\` en lugar de valores literales.
+2. El color **primario** (\`${theme.primary}\`) se usa para todas las acciones principales (botones, links, focus).
+3. El color **secundario** (\`${theme.secondary}\`) se usa para la navegación y headings de alto contraste.
+4. Usa la escala de **sombras** (SM → MD → LG) para indicar niveles de elevación en cards, modals y dropdowns.
+5. Aplica **border-radius** \`--khor-radius-lg\` como valor por defecto para cards y contenedores.
+6. Para formularios, usa \`--khor-radius-md\` en inputs y \`--khor-radius-sm\` en badges pequeños.
+
+### Jerarquía de Componentes
+- **Átomos**: KButton, KInput, KBadge, KAvatar, KTag, KSwitch, KCheckbox
+- **Moléculas**: KFormField, KStatCard, KUserCell, KSearchInput, KBreadcrumb
+- **Organismos**: KDataTable, KLoginForm, KCardSection, KSteps, KCommandBar
+
+### Ejemplo de CSS Custom Properties
+\`\`\`css
+:root {
+  --khor-primary: ${theme.primary};
+  --khor-navy: ${theme.secondary};
+  --khor-accent: ${theme.accent};
+  --font-primary: '${theme.fontHeading}', sans-serif;
+  --font-secondary: '${theme.fontBody}', sans-serif;
+  --khor-radius-lg: ${theme.radiusLg}px;
+  --khor-shadow-md: ${theme.shadowMd} ${theme.shadowColor};
+}
+\`\`\`
+`, [theme]);
+
 
   const handleCopy = async (content: string, label: string) => {
     await navigator.clipboard.writeText(content);
@@ -485,9 +609,19 @@ $khor-space-xl: ${theme.spaceXl}px;`, [theme]);
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '340px 1fr', gap: 24, alignItems: 'start' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(340px, 340px) 1fr', gap: 24, alignItems: 'start' }}>
         {/* ═══ Controls Panel ═══ */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, position: 'sticky', top: 24, maxHeight: 'calc(100vh - 120px)', overflow: 'auto' }}>
+        <div style={{ 
+          display: 'flex', 
+          flexDirection: 'column', 
+          gap: 12, 
+          position: 'sticky', 
+          top: 24, 
+          maxHeight: 'calc(100vh - 48px)', 
+          overflowY: 'auto',
+          paddingRight: 4, // Space for scrollbar
+          flexShrink: 0,
+        }}>
 
           {/* Colors */}
           <SectionCard icon={<Palette size={15} />} title="Colores">
@@ -555,6 +689,7 @@ $khor-space-xl: ${theme.spaceXl}px;`, [theme]);
             <SliderInput label="MD" value={theme.radiusMd} onChange={(v) => update('radiusMd', v)} min={0} max={24} unit="px" />
             <SliderInput label="LG" value={theme.radiusLg} onChange={(v) => update('radiusLg', v)} min={0} max={32} unit="px" />
             <SliderInput label="XL" value={theme.radiusXl} onChange={(v) => update('radiusXl', v)} min={0} max={40} unit="px" />
+
             {/* Radius Preview */}
             <div style={{ display: 'flex', gap: 8, marginTop: 4 }}>
               {[
@@ -612,6 +747,10 @@ $khor-space-xl: ${theme.spaceXl}px;`, [theme]);
             <button onClick={() => handleDownload(generateJSON(), 'khor-tokens.json')} style={exportBtnStyle}>
               <Download size={14} /> JSON (W3C DTCG)
             </button>
+            <div style={{ height: 1, backgroundColor: 'var(--border)', margin: '4px 0' }} />
+            <button onClick={() => handleDownload(generateMarkdown(), 'khor-theme-spec.md')} style={{ ...exportBtnStyle, color: t.colors.brand.primary, fontWeight: 600 }}>
+              <FileText size={14} /> Especificación .md para AI / LLMs
+            </button>
           </SectionCard>
         </div>
 
@@ -653,11 +792,11 @@ $khor-space-xl: ${theme.spaceXl}px;`, [theme]);
               {/* Badges & Tags */}
               <PreviewSection title="Badges y Tags">
                 <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
-                  <KBadge khorStatus="info" label="Primario" />
-                  <KBadge khorStatus="success" label="Éxito" />
-                  <KBadge khorStatus="warning" label="Warning" />
-                  <KBadge khorStatus="error" label="Error" />
-                  <KBadge khorStatus="default" label="Default" />
+                  <KBadge status="info" label="Primario" />
+                  <KBadge status="success" label="Éxito" />
+                  <KBadge status="warning" label="Warning" />
+                  <KBadge status="error" label="Error" />
+                  <KBadge status="default" label="Default" />
                   <KTag>React</KTag>
                   <KTag closable>TypeScript</KTag>
                 </div>
@@ -666,10 +805,10 @@ $khor-space-xl: ${theme.spaceXl}px;`, [theme]);
               {/* Alerts */}
               <PreviewSection title="Alertas">
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                  <KAlert type="success" message="Operación exitosa" description="Tus cambios han sido guardados." showIcon />
-                  <KAlert type="error" message="Error al procesar" showIcon />
-                  <KAlert type="warning" message="Revisa los datos antes de continuar" showIcon />
-                  <KAlert type="info" message="Nueva versión disponible" showIcon />
+                  <KAlert type="success" title="Operación exitosa" description="Tus cambios han sido guardados." showIcon />
+                  <KAlert type="error" title="Error al procesar" showIcon />
+                  <KAlert type="warning" title="Revisa los datos antes de continuar" showIcon />
+                  <KAlert type="info" title="Nueva versión disponible" showIcon />
                 </div>
               </PreviewSection>
 
@@ -680,7 +819,7 @@ $khor-space-xl: ${theme.spaceXl}px;`, [theme]);
                     <KInput placeholder="Escribe tu nombre..." />
                   </KFormField>
                   <KFormField label="Email" error="Este campo es obligatorio">
-                    <KInput placeholder="tu@empresa.com" error />
+                    <KInput placeholder="tu@empresa.com" error="Email inválido" />
                   </KFormField>
                   <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
                     <KCheckbox label="Aceptar términos" />

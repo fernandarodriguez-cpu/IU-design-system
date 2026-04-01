@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../../../../imports/utils';
-import { Eye, EyeOff, Search } from 'lucide-react';
+import { Eye, EyeOff } from 'lucide-react';
 
 const inputVariants = cva(
-  'flex w-full items-center justify-between rounded-md border text-sm transition-colors focus-within:ring-2 focus-within:ring-[var(--khor-primary)] focus-within:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 overflow-hidden font-primary',
+  'flex w-full items-center justify-between rounded-md border text-sm transition-all focus-within:ring-2 focus-within:ring-[var(--khor-primary)] focus-within:ring-offset-2 overflow-hidden font-primary',
   {
     variants: {
       variant: {
@@ -13,20 +13,25 @@ const inputVariants = cva(
         filled: 'border-transparent bg-[var(--khor-neutral-100)] text-[var(--khor-neutral-900)] focus-within:bg-[var(--khor-neutral-50)]',
       },
       size: {
-        sm: 'h-8 px-3 text-xs',
-        md: 'h-[var(--khor-density-height-input)] px-[var(--khor-density-spacing-md)] text-[var(--khor-density-font-body)]',
-        lg: 'h-11 px-6 text-base',
+        sm: 'h-8 px-2 text-xs',
+        md: 'h-[var(--khor-density-height-input)] px-3 text-[var(--khor-density-font-body)]',
+        lg: 'h-12 px-4 text-base',
       },
       status: {
         default: '',
         error: 'border-[var(--khor-error)] focus-within:ring-[var(--khor-error)]',
         warning: 'border-[var(--khor-warning)] focus-within:ring-[var(--khor-warning)]',
+      },
+      disabled: {
+        true: 'bg-[var(--khor-neutral-100)] border-[var(--khor-neutral-200)] opacity-60 cursor-not-allowed select-none pointer-events-none grayscale-[0.5]',
+        false: '',
       }
     },
     defaultVariants: {
       variant: 'outlined',
       size: 'md',
       status: 'default',
+      disabled: false,
     },
   }
 );
@@ -41,6 +46,9 @@ export interface KInputProps extends Omit<React.InputHTMLAttributes<HTMLInputEle
   suffix?: React.ReactNode;
 }
 
+/**
+ * KInput — Componente de entrada de texto base.
+ */
 export const KInput = React.forwardRef<HTMLInputElement, KInputProps>(function KInput(
   { size = 'md', error, warning, block, variant = 'outlined', prefix, suffix, className, style, disabled, ...rest },
   ref,
@@ -51,12 +59,12 @@ export const KInput = React.forwardRef<HTMLInputElement, KInputProps>(function K
 
   return (
     <div style={{ width: block ? '100%' : undefined, ...style }} className={cn("flex flex-col gap-1", block ? "w-full" : "", className)}>
-      <div className={cn(inputVariants({ variant, size, status }))}>
+      <div className={cn(inputVariants({ variant, size, status, disabled }))}>
         {prefix && <div className="mr-2 flex items-center text-[var(--khor-neutral-500)] shrink-0">{prefix}</div>}
         <input
           ref={ref}
           disabled={disabled}
-          className="w-full bg-transparent outline-none placeholder:text-[var(--khor-neutral-400)] h-full"
+          className="w-full bg-transparent outline-none placeholder:text-[var(--khor-neutral-400)] h-full disabled:cursor-not-allowed"
           {...rest}
         />
         {suffix && <div className="ml-2 flex items-center text-[var(--khor-neutral-500)] shrink-0">{suffix}</div>}
@@ -72,6 +80,9 @@ export const KInput = React.forwardRef<HTMLInputElement, KInputProps>(function K
 
 export interface KInputPasswordProps extends KInputProps {}
 
+/**
+ * KInputPassword — Variante de input para contraseñas con toggle de visibilidad.
+ */
 export const KInputPassword = React.forwardRef<HTMLInputElement, KInputPasswordProps>(function KInputPassword(
   { size = 'md', error, warning, block, variant = 'outlined', prefix, className, style, disabled, ...rest },
   ref,
@@ -83,74 +94,26 @@ export const KInputPassword = React.forwardRef<HTMLInputElement, KInputPasswordP
 
   return (
     <div style={{ width: block ? '100%' : undefined, ...style }} className={cn("flex flex-col gap-1", block ? "w-full" : "", className)}>
-      <div className={cn(inputVariants({ variant, size, status }))}>
+      <div className={cn(inputVariants({ variant, size, status, disabled }))}>
         {prefix && <div className="mr-2 flex items-center text-[var(--khor-neutral-500)] shrink-0">{prefix}</div>}
         <input
           ref={ref}
           type={showPassword ? 'text' : 'password'}
           disabled={disabled}
-          className="w-full bg-transparent outline-none placeholder:text-[var(--khor-neutral-400)] h-full"
+          className="w-full bg-transparent outline-none placeholder:text-[var(--khor-neutral-400)] h-full disabled:cursor-not-allowed"
           {...rest}
         />
         <button
           type="button"
           onClick={() => setShowPassword(!showPassword)}
-          className="ml-2 flex items-center text-[var(--khor-neutral-400)] hover:text-[var(--khor-neutral-600)] outline-none shrink-0"
-          disabled={disabled}
+          className={cn(
+            "ml-2 flex items-center justify-center text-[var(--khor-neutral-400)] hover:text-[var(--khor-neutral-600)] outline-none shrink-0 transition-all hover:scale-110 active:scale-90",
+            disabled && "hidden"
+          )}
+          style={{ width: 32, height: 32 }}
+          title={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
         >
-          {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-        </button>
-      </div>
-      {feedbackMsg && (
-        <p style={{ color: feedbackColor }} className="text-xs m-0 font-primary">
-          {feedbackMsg}
-        </p>
-      )}
-    </div>
-  );
-});
-
-export interface KInputSearchProps extends Omit<KInputProps, 'onSearch'> {
-  onSearch?: (value: string) => void;
-  loading?: boolean;
-}
-
-export const KInputSearch = React.forwardRef<HTMLInputElement, KInputSearchProps>(function KInputSearch(
-  { size = 'md', error, warning, block, variant = 'outlined', prefix, suffix, className, style, disabled, onSearch, loading, ...rest },
-  ref,
-) {
-  const status = error ? 'error' : warning ? 'warning' : 'default';
-  const feedbackMsg = error || warning;
-  const feedbackColor = error ? 'var(--khor-error)' : 'var(--khor-warning)';
-
-  return (
-    <div style={{ width: block ? '100%' : undefined, ...style }} className={cn("flex flex-col gap-1", block ? "w-full" : "", className)}>
-      <div className={cn(inputVariants({ variant, size, status }))}>
-        {prefix && <div className="mr-2 flex items-center text-[var(--khor-neutral-500)] shrink-0">{prefix}</div>}
-        <input
-          ref={ref}
-          type="search"
-          disabled={disabled || loading}
-          className="w-full bg-transparent outline-none placeholder:text-[var(--khor-neutral-400)] h-full"
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' && onSearch) {
-              onSearch(e.currentTarget.value);
-            }
-          }}
-          {...rest}
-        />
-        <button
-          type="button"
-          onClick={(e) => {
-            const inputElement = e.currentTarget.previousElementSibling as HTMLInputElement;
-            if (onSearch && inputElement) {
-              onSearch(inputElement.value);
-            }
-          }}
-          className="ml-2 flex items-center text-[var(--khor-neutral-400)] hover:text-[var(--khor-primary)] outline-none shrink-0"
-          disabled={disabled || loading}
-        >
-          {suffix || <Search size={16} />}
+          {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
         </button>
       </div>
       {feedbackMsg && (
