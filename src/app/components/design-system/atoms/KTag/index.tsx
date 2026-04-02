@@ -138,7 +138,7 @@ export interface KCheckableTagProps extends Omit<React.HTMLAttributes<HTMLSpanEl
   onChange?: (checked: boolean) => void;
 }
 
-const KCheckableTag = React.forwardRef<HTMLSpanElement, KCheckableTagProps>(function KCheckableTag(
+export const KCheckableTag = React.forwardRef<HTMLSpanElement, KCheckableTagProps>(function KCheckableTag(
   { className, checked = false, onChange, children, style, ...rest }, ref
 ) {
   return (
