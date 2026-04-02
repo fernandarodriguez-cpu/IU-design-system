@@ -37,14 +37,14 @@ export const KLabel = React.forwardRef<HTMLLabelElement, KLabelProps>(function K
       <span>{children}</span>
       
       {required && (
-        <span className="ml-1 text-[var(--khor-error)]" title="Requerido">
+        <span className="ml-1 text-khor-error" title="Requerido">
           *
         </span>
       )}
       
       {info && (
         <KTooltip title={info}>
-          <Info size={14} className="ml-1.5 text-[var(--khor-neutral-400)] cursor-help hover:text-[var(--khor-primary)] transition-colors" />
+          <Info size={14} className="ml-1.5 text-khor-neutral-400 cursor-help hover:text-khor-primary transition-colors" />
         </KTooltip>
       )}
     </label>

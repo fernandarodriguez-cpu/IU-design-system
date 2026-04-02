@@ -37,14 +37,14 @@ export const KNavItem = React.forwardRef<HTMLButtonElement, KNavItemProps>(funct
 
       {!collapsed && badge !== undefined && badge > 0 && (
         <span 
-          className="min-w-[18px] rounded-full bg-[var(--khor-primary)] px-1.5 py-[1px] text-center text-[10px] font-semibold text-white"
+          className="min-w-[18px] rounded-full bg-khor-primary px-1.5 py-[1px] text-center text-[10px] font-semibold text-white"
         >
           {badge}
         </span>
       )}
 
       {active && (
-        <div className="absolute bottom-0 right-0 top-0 w-1 rounded-l-sm bg-[var(--khor-primary)]" />
+        <div className="absolute bottom-0 right-0 top-0 w-1 rounded-l-sm bg-khor-primary" />
       )}
     </button>
   );

@@ -41,7 +41,7 @@ export function KSkeleton({
           <div 
             key={i}
             className={cn(
-              "h-4 bg-[var(--khor-neutral-200)] animate-pulse rounded-md",
+              "h-4 bg-khor-neutral-200 animate-pulse rounded-md",
               i === lines - 1 && lines > 2 ? "w-[60%]" : "w-full"
             )}
           />
@@ -54,7 +54,7 @@ export function KSkeleton({
   return (
     <div
       className={cn(
-        "bg-[var(--khor-neutral-200)] animate-pulse",
+        "bg-khor-neutral-200 animate-pulse",
         circle || variant === 'circular' ? "rounded-full" : "rounded-md",
         className
       )}

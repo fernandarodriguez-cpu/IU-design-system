@@ -73,18 +73,18 @@ export function KModalConfirm({
           style={{ width: `${width}px` }}
         >
           <div className="flex gap-6 items-start">
-            <div className="shrink-0 p-3 bg-[var(--khor-neutral-50)] rounded-2xl">
+            <div className="shrink-0 p-3 bg-khor-neutral-50 rounded-2xl">
               {iconMap[type]}
             </div>
             
             <div className="flex-1 flex flex-col gap-2">
               {title && (
-                <DialogPrimitive.Title className="text-xl font-extrabold text-[var(--khor-neutral-900)] leading-tight tracking-tight">
+                <DialogPrimitive.Title className="text-xl font-extrabold text-khor-neutral-900 leading-tight tracking-tight">
                   {title}
                 </DialogPrimitive.Title>
               )}
               {content && (
-                <DialogPrimitive.Description className="text-sm font-medium text-[var(--khor-neutral-500)] leading-relaxed">
+                <DialogPrimitive.Description className="text-sm font-medium text-khor-neutral-500 leading-relaxed">
                   {content}
                 </DialogPrimitive.Description>
               )}
@@ -108,7 +108,7 @@ export function KModalConfirm({
           </div>
 
           <DialogPrimitive.Close asChild>
-            <button className="absolute top-5 right-5 text-[var(--khor-neutral-300)] hover:text-[var(--khor-neutral-900)] transition-colors p-1">
+            <button className="absolute top-5 right-5 text-khor-neutral-300 hover:text-khor-neutral-900 transition-colors p-1">
               <X className="w-5 h-5" />
             </button>
           </DialogPrimitive.Close>

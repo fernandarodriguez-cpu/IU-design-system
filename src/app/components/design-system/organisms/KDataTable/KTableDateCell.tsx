@@ -18,7 +18,7 @@ export function KTableDateCell({
   dateFormat = "dd/MM/yyyy",
   fallbackText = "-"
 }: KTableDateCellProps) {
-  if (!value) return <span className="text-[var(--khor-neutral-400)] text-sm">{fallbackText}</span>;
+  if (!value) return <span className="text-khor-neutral-400 text-sm">{fallbackText}</span>;
 
   let parsedDate: Date;
   
@@ -33,7 +33,7 @@ export function KTableDateCell({
   }
 
   return (
-    <span className="text-sm font-medium text-[var(--khor-neutral-700)]">
+    <span className="text-sm font-medium text-khor-neutral-700">
       {format(parsedDate, dateFormat, { locale: es })}
     </span>
   );

@@ -118,21 +118,21 @@ export function KUpload({
         onDragOver={onDragOver}
         onDragLeave={onDragLeave}
         className={cn(
-          "relative flex flex-col items-center justify-center p-8 border-2 border-dashed rounded-xl transition-all cursor-pointer bg-[var(--khor-surface-page)]",
-          isDragging ? "border-[var(--khor-primary)] bg-[var(--khor-primary-light)]/5 scale-[1.01]" : "border-[var(--khor-neutral-200)] hover:border-[var(--khor-primary)]",
-          disabled && "opacity-50 cursor-not-allowed bg-[var(--khor-neutral-100)] border-[var(--khor-neutral-300)]"
+          "relative flex flex-col items-center justify-center p-8 border-2 border-dashed rounded-xl transition-all cursor-pointer bg-khor-surface-page",
+          isDragging ? "border-khor-primary bg-khor-primary-light/5 scale-[1.01]" : "border-khor-neutral-200 hover:border-khor-primary",
+          disabled && "opacity-50 cursor-not-allowed bg-khor-neutral-100 border-khor-neutral-300"
         )}
       >
         {children ? children : (
           <div className="flex flex-col items-center gap-3 text-center">
-            <div className="p-3 bg-[var(--khor-neutral-50)] rounded-full text-[var(--khor-neutral-400)] group-hover:text-[var(--khor-primary)] transition-colors">
+            <div className="p-3 bg-khor-neutral-50 rounded-full text-khor-neutral-400 group-hover:text-khor-primary transition-colors">
               <UploadIcon className="w-8 h-8" />
             </div>
             <div className="space-y-1">
-              <p className="text-sm font-bold text-[var(--khor-neutral-900)]">
+              <p className="text-sm font-bold text-khor-neutral-900">
                 Haz click o arrastra archivos para subir
               </p>
-              <p className="text-xs text-[var(--khor-neutral-500)]">
+              <p className="text-xs text-khor-neutral-500">
                 {accept ? `Soporta: ${accept}` : 'Cualquier tipo de archivo permitido'}
                 {maxSize && ` • Máx. ${(maxSize / 1024 / 1024).toFixed(1)} MB`}
               </p>
@@ -147,7 +147,7 @@ export function KUpload({
           {value.map((file) => (
             <div 
               key={file.uid}
-              className="flex items-center gap-3 p-3 bg-[var(--khor-neutral-50)]/50 border border-[var(--khor-neutral-100)] rounded-lg group animate-in slide-in-from-left-2 duration-300"
+              className="flex items-center gap-3 p-3 bg-khor-neutral-50/50 border border-khor-neutral-100 rounded-lg group animate-in slide-in-from-left-2 duration-300"
             >
               <div className="shrink-0 p-2 bg-white rounded-md shadow-sm">
                 {file.type?.startsWith('image/') ? (
@@ -159,19 +159,19 @@ export function KUpload({
               
               <div className="flex-1 min-w-0">
                 <div className="flex justify-between items-center gap-2">
-                  <span className="text-sm font-semibold text-[var(--khor-neutral-900)] truncate">
+                  <span className="text-sm font-semibold text-khor-neutral-900 truncate">
                     {file.name}
                   </span>
                   <button 
                     onClick={(e) => { e.stopPropagation(); removeFile(file.uid); }}
-                    className="p-1 text-[var(--khor-neutral-400)] hover:text-red-500 transition-colors"
+                    className="p-1 text-khor-neutral-400 hover:text-red-500 transition-colors"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
                 </div>
                 
                 {file.size && (
-                  <span className="text-[10px] text-[var(--khor-neutral-400)] font-medium">
+                  <span className="text-[10px] text-khor-neutral-400 font-medium">
                     {(file.size / 1024).toFixed(1)} KB
                   </span>
                 )}

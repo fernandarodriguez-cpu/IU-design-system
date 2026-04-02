@@ -129,22 +129,22 @@ function KFormItemWrapper({
     <FormItemContext.Provider value={{ id }}>
       <div className={`flex flex-col gap-1.5 ${className || ''}`} {...props}>
         {label && (
-          <label htmlFor={id} className={`text-sm font-medium text-[var(--khor-neutral-900)] font-primary ${error ? 'text-[var(--khor-feedback-error)]' : ''}`}>
+          <label htmlFor={id} className={`text-sm font-medium text-khor-neutral-900 font-primary ${error ? 'text-khor-feedback-error' : ''}`}>
             {label}
-            {required && <span className="text-[var(--khor-feedback-error)] ml-0.5">*</span>}
+            {required && <span className="text-khor-feedback-error ml-0.5">*</span>}
           </label>
         )}
         
         {children}
         
         {error && (
-          <p className="text-xs font-medium text-[var(--khor-feedback-error)] font-primary animate-in fade-in-0">
+          <p className="text-xs font-medium text-khor-feedback-error font-primary animate-in fade-in-0">
             {error}
           </p>
         )}
         
         {!error && help && (
-          <p className="text-xs text-[var(--khor-neutral-500)] font-primary">
+          <p className="text-xs text-khor-neutral-500 font-primary">
             {help}
           </p>
         )}

@@ -32,15 +32,15 @@ export function KAppLayout({
   const headerHeight = 64; // Standard Khor header height
 
   return (
-    <div className="min-h-screen flex flex-col bg-[var(--khor-neutral-50)]" style={{ fontFamily: font }}>
+    <div className="min-h-screen flex flex-col bg-khor-neutral-50" style={{ fontFamily: font }}>
       {/* Sidebar (Sider alternativo) */}
       {sidebar && (
         <aside
           className={`
             fixed left-0 top-0 bottom-0 z-50 
             transition-all duration-300 ease-in-out
-            border-r border-[var(--khor-neutral-200)] 
-            bg-[var(--khor-brand-navy)]
+            border-r border-khor-neutral-200 
+            bg-khor-brand-navy
             overflow-y-auto overflow-x-hidden
           `}
           style={{ 
@@ -67,8 +67,8 @@ export function KAppLayout({
           <header 
             className={`
               flex items-center px-6 z-40 
-              bg-[var(--khor-surface-page)] 
-              border-b border-[var(--khor-neutral-200)]
+              bg-khor-surface-page 
+              border-b border-khor-neutral-200
               transition-all duration-300 ease-in-out
             `}
             style={{ 
@@ -102,7 +102,7 @@ export function KAppLayout({
         {/* FooterArea */}
         {footer && (
           <footer 
-            className="h-16 flex items-center justify-center border-t border-[var(--khor-neutral-200)] bg-[var(--khor-surface-page)] text-sm text-[var(--khor-neutral-500)]"
+            className="h-16 flex items-center justify-center border-t border-khor-neutral-200 bg-khor-surface-page text-sm text-khor-neutral-500"
           >
             {footer}
           </footer>

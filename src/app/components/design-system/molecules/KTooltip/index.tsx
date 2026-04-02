@@ -13,14 +13,19 @@ export const KTooltipTrigger = TooltipPrimitive.Trigger;
 export const KTooltipContent = React.forwardRef<
   React.ElementRef<typeof TooltipPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content>
->(({ className, sideOffset = 4, ...props }, ref) => (
+>(({ className, sideOffset = 4, style, ...props }, ref) => (
   <TooltipPrimitive.Content
     ref={ref}
     sideOffset={sideOffset}
     className={cn(
-      "z-50 overflow-hidden rounded-md bg-[var(--khor-brand-navy)] px-3 py-1.5 text-xs text-white animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 font-primary shadow-md",
+      "z-50 overflow-hidden rounded-md px-3 py-1.5 text-xs animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 font-primary shadow-md",
       className
     )}
+    style={{
+      backgroundColor: 'var(--khor-tooltip-bg)',
+      color: 'var(--khor-tooltip-fg)',
+      ...style,
+    }}
     {...props}
   />
 ));
@@ -62,7 +67,7 @@ export const KTooltip = ({
           style={color ? { backgroundColor: color } : undefined}
         >
           {displayContent}
-          <TooltipPrimitive.Arrow className="fill-[var(--khor-brand-navy)]" style={color ? { fill: color } : undefined} />
+          <TooltipPrimitive.Arrow style={{ fill: color || 'var(--khor-tooltip-bg)' }} />
         </KTooltipContent>
       </KTooltipRoot>
     </KTooltipProvider>

@@ -45,7 +45,7 @@ export const KProgress = React.forwardRef<
         <div className="relative h-10 w-10">
           <svg className="h-full w-full -rotate-90">
             <circle
-              className="text-[var(--khor-neutral-200)]"
+              className="text-khor-neutral-200"
               strokeWidth="8"
               stroke="currentColor"
               fill="transparent"
@@ -56,7 +56,7 @@ export const KProgress = React.forwardRef<
             <circle
               className={cn(
                 "transition-all duration-500 ease-in-out",
-                hasError ? "text-red-500" : isComplete ? "text-emerald-500" : "text-[var(--khor-primary)]"
+                hasError ? "text-red-500" : isComplete ? "text-emerald-500" : "text-khor-primary"
               )}
               strokeWidth="8"
               strokeDasharray={circumference}
@@ -79,13 +79,13 @@ export const KProgress = React.forwardRef<
     <div className={cn("flex items-center gap-3 w-full", className)} style={style}>
       <ProgressPrimitive.Root
         ref={ref}
-        className="relative h-2 w-full overflow-hidden rounded-full bg-[var(--khor-neutral-200)]"
+        className="relative h-2 w-full overflow-hidden rounded-full bg-khor-neutral-200"
         value={percent}
       >
         <ProgressPrimitive.Indicator
           className={cn(
             "h-full w-full flex-1 transition-all duration-500 ease-in-out",
-            hasError ? "bg-red-500" : isComplete ? "bg-emerald-500" : "bg-[var(--khor-primary)]"
+            hasError ? "bg-red-500" : isComplete ? "bg-emerald-500" : "bg-khor-primary"
           )}
           style={{ 
             transform: `translateX(-${100 - (percent / max) * 100}%)`,

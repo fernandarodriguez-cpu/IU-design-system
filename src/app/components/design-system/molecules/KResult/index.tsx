@@ -20,9 +20,9 @@ const statusIcons = {
   error: <XCircle className="w-16 h-16 text-red-500" />,
   info: <Info className="w-16 h-16 text-sky-500" />,
   warning: <AlertTriangle className="w-16 h-16 text-amber-500" />,
-  '404': <Search className="w-16 h-16 text-[var(--khor-neutral-300)]" />,
-  '403': <ShieldAlert className="w-16 h-16 text-[var(--khor-neutral-300)]" />,
-  '500': <FileWarning className="w-16 h-16 text-[var(--khor-neutral-300)]" />,
+  '404': <Search className="w-16 h-16 text-khor-neutral-300" />,
+  '403': <ShieldAlert className="w-16 h-16 text-khor-neutral-300" />,
+  '500': <FileWarning className="w-16 h-16 text-khor-neutral-300" />,
 };
 
 /**
@@ -52,12 +52,12 @@ export function KResult({
         {icon || statusIcons[status]}
       </div>
       
-      <h2 className="text-2xl font-extrabold text-[var(--khor-neutral-900)] mb-2 tracking-tight">
+      <h2 className="text-2xl font-extrabold text-khor-neutral-900 mb-2 tracking-tight">
         {title}
       </h2>
       
       {subTitle && (
-        <p className="text-sm text-[var(--khor-neutral-500)] max-w-md mx-auto mb-8 font-medium leading-relaxed">
+        <p className="text-sm text-khor-neutral-500 max-w-md mx-auto mb-8 font-medium leading-relaxed">
           {subTitle}
         </p>
       )}

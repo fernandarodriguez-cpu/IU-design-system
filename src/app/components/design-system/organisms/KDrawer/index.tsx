@@ -37,7 +37,7 @@ export const KDrawerContent = React.forwardRef<
     <Drawer.Content
       ref={ref}
       className={cn(
-        "fixed z-50 flex flex-col border bg-[var(--khor-surface-page)] outline-none shadow-xl",
+        "fixed z-50 flex flex-col border bg-khor-surface-page outline-none shadow-xl",
         "bottom-0 right-0 h-full w-[400px] max-w-full sm:w-[450px]", // Default: layout derecho
         // Para usarlo desde abajo con vaul, habría que sobreescribir w y h, ej: "bottom-0 inset-x-0 mt-24 h-auto rounded-t-[10px]"
         className
@@ -45,7 +45,7 @@ export const KDrawerContent = React.forwardRef<
       {...props}
     >
       {!hideCloseButton && (
-        <Drawer.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary text-[var(--khor-neutral-500)]">
+        <Drawer.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary text-khor-neutral-500">
           <X className="h-4 w-4" />
           <span className="sr-only">Close</span>
         </Drawer.Close>
@@ -74,7 +74,7 @@ export const KDrawerFooter = ({
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
-    className={cn("flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2 pt-4 border-t border-[var(--khor-neutral-200)] mt-auto", className)}
+    className={cn("flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2 pt-4 border-t border-khor-neutral-200 mt-auto", className)}
     {...props}
   />
 );
@@ -86,7 +86,7 @@ export const KDrawerTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <Drawer.Title
     ref={ref}
-    className={cn("text-lg font-semibold leading-none tracking-tight font-primary text-[var(--khor-neutral-900)]", className)}
+    className={cn("text-lg font-semibold leading-none tracking-tight font-primary text-khor-neutral-900", className)}
     {...props}
   />
 ));
@@ -98,7 +98,7 @@ export const KDrawerDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <Drawer.Description
     ref={ref}
-    className={cn("text-sm text-[var(--khor-neutral-500)] font-primary", className)}
+    className={cn("text-sm text-khor-neutral-500 font-primary", className)}
     {...props}
   />
 ));

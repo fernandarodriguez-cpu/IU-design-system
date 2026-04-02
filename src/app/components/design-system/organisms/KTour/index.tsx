@@ -99,7 +99,7 @@ export function KTour({
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: -10, scale: 0.95 }}
           className={cn(
-            "absolute pointer-events-auto w-80 bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.2)] border border-[var(--khor-neutral-200)] p-5 overflow-hidden",
+            "absolute pointer-events-auto w-80 bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.2)] border border-khor-neutral-200 p-5 overflow-hidden",
             !coords && "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
             className
           )}
@@ -107,19 +107,19 @@ export function KTour({
         >
           {/* Header */}
           <div className="flex justify-between items-start mb-3">
-            <span className="text-[10px] font-bold text-[var(--khor-primary)] uppercase tracking-widest bg-[var(--khor-primary-light)]/10 px-2 py-0.5 rounded-full">
+            <span className="text-[10px] font-bold text-khor-primary uppercase tracking-widest bg-khor-primary-light/10 px-2 py-0.5 rounded-full">
               Paso {currentStep + 1} de {steps.length}
             </span>
-            <button onClick={onClose} className="p-1 text-[var(--khor-neutral-400)] hover:text-[var(--khor-neutral-800)] transition-colors">
+            <button onClick={onClose} className="p-1 text-khor-neutral-400 hover:text-khor-neutral-800 transition-colors">
               <X className="w-4 h-4" />
             </button>
           </div>
 
           {/* Content */}
-          <h4 className="text-base font-extrabold text-[var(--khor-neutral-900)] mb-1.5 leading-tight">
+          <h4 className="text-base font-extrabold text-khor-neutral-900 mb-1.5 leading-tight">
             {step?.title}
           </h4>
-          <p className="text-sm text-[var(--khor-neutral-600)] leading-relaxed mb-6 font-medium">
+          <p className="text-sm text-khor-neutral-600 leading-relaxed mb-6 font-medium">
             {step?.description}
           </p>
 
@@ -131,7 +131,7 @@ export function KTour({
                   key={i} 
                   className={cn(
                     "w-1.5 h-1.5 rounded-full transition-all",
-                    i === currentStep ? "w-4 bg-[var(--khor-primary)]" : "bg-[var(--khor-neutral-200)]"
+                    i === currentStep ? "w-4 bg-khor-primary" : "bg-khor-neutral-200"
                   )} 
                 />
               ))}
@@ -161,7 +161,7 @@ export function KTour({
 
           {/* Connector Arrow (si hay coords) */}
           {coords && (
-            <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-white border-t border-l border-[var(--khor-neutral-200)] rotate-45 shadow-[-2px_-2px_5px_rgba(0,0,0,0.02)]" />
+            <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-white border-t border-l border-khor-neutral-200 rotate-45 shadow-[-2px_-2px_5px_rgba(0,0,0,0.02)]" />
           )}
         </motion.div>
       </AnimatePresence>

@@ -82,7 +82,7 @@ export function KTree({
         <div 
           className={cn(
             "flex items-center gap-1.5 py-1 px-2 rounded-md transition-all cursor-pointer group select-none",
-            isSelected ? "bg-[var(--khor-primary-light)]/10 text-[var(--khor-primary)] font-bold shadow-sm" : "hover:bg-[var(--khor-neutral-50)] text-[var(--khor-neutral-700)]",
+            isSelected ? "bg-khor-primary-light/10 text-khor-primary font-bold shadow-sm" : "hover:bg-khor-neutral-50 text-khor-neutral-700",
             node.disabled && "opacity-40 cursor-not-allowed"
           )}
           style={{ paddingLeft: `${level * 16 + 8}px` }}
@@ -93,14 +93,14 @@ export function KTree({
             {hasChildren ? (
               <button 
                 onClick={(e) => { e.stopPropagation(); handleExpand(node.key); }}
-                className="p-0.5 hover:bg-[var(--khor-neutral-200)] rounded transition-colors"
+                className="p-0.5 hover:bg-khor-neutral-200 rounded transition-colors"
               >
                 <ChevronRight 
-                  className={cn("w-3.5 h-3.5 text-[var(--khor-neutral-400)] transition-transform duration-200", isExpanded && "rotate-90")} 
+                  className={cn("w-3.5 h-3.5 text-khor-neutral-400 transition-transform duration-200", isExpanded && "rotate-90")} 
                 />
               </button>
             ) : showLine && level > 0 && (
-              <div className="w-[1px] h-full bg-[var(--khor-neutral-200)] absolute left-[14px]" />
+              <div className="w-[1px] h-full bg-khor-neutral-200 absolute left-[14px]" />
             )}
           </div>
 
@@ -110,7 +110,7 @@ export function KTree({
               onClick={(e) => { e.stopPropagation(); handleCheck(node); }}
               className={cn(
                 "w-4 h-4 rounded border flex items-center justify-center transition-all",
-                isChecked ? "bg-[var(--khor-primary)] border-[var(--khor-primary)]" : "border-[var(--khor-neutral-300)] bg-white group-hover:border-[var(--khor-primary)]"
+                isChecked ? "bg-khor-primary border-khor-primary" : "border-khor-neutral-300 bg-white group-hover:border-khor-primary"
               )}
             >
               {isChecked && <Check className="w-3 h-3 text-white stroke-[3]" />}
@@ -119,7 +119,7 @@ export function KTree({
 
           {/* Icono */}
           {showIcon && (
-            <div className="shrink-0 text-[var(--khor-neutral-400)]">
+            <div className="shrink-0 text-khor-neutral-400">
               {node.icon ? node.icon : hasChildren ? (
                 isExpanded ? <FolderOpen className="w-4 h-4" /> : <Folder className="w-4 h-4" />
               ) : (
@@ -139,7 +139,7 @@ export function KTree({
           <div className="flex flex-col relative">
             {showLine && (
               <div 
-                className="absolute left-[17px] top-0 bottom-3 w-[1px] bg-[var(--khor-neutral-100)]" 
+                className="absolute left-[17px] top-0 bottom-3 w-[1px] bg-khor-neutral-100" 
                 style={{ left: `${level * 16 + 17}px` }}
               />
             )}

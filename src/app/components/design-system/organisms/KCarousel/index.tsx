@@ -55,7 +55,7 @@ export function KCarousel({
 
   return (
     <div 
-      className={cn("relative group overflow-hidden rounded-xl bg-[var(--khor-neutral-50)]", className)} 
+      className={cn("relative group overflow-hidden rounded-xl bg-khor-neutral-50", className)} 
       style={style}
     >
       {/* Contenedor del Carrusel */}
@@ -74,13 +74,13 @@ export function KCarousel({
         <>
           <button
             onClick={scrollPrev}
-            className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center bg-white/80 backdrop-blur-sm border border-[var(--khor-neutral-200)] rounded-full shadow-lg text-[var(--khor-neutral-800)] hover:bg-white hover:text-[var(--khor-primary)] transition-all opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0"
+            className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center bg-white/80 backdrop-blur-sm border border-khor-neutral-200 rounded-full shadow-lg text-khor-neutral-800 hover:bg-white hover:text-khor-primary transition-all opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
           <button
             onClick={scrollNext}
-            className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center bg-white/80 backdrop-blur-sm border border-[var(--khor-neutral-200)] rounded-full shadow-lg text-[var(--khor-neutral-800)] hover:bg-white hover:text-[var(--khor-primary)] transition-all opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0"
+            className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center bg-white/80 backdrop-blur-sm border border-khor-neutral-200 rounded-full shadow-lg text-khor-neutral-800 hover:bg-white hover:text-khor-primary transition-all opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0"
           >
             <ChevronRight className="w-5 h-5" />
           </button>
@@ -97,8 +97,8 @@ export function KCarousel({
               className={cn(
                 "w-2 h-2 rounded-full transition-all duration-300",
                 index === selectedIndex 
-                  ? "w-6 bg-[var(--khor-primary)] shadow-[0_0_8px_rgba(var(--khor-primary-rgb),0.5)]" 
-                  : "bg-[var(--khor-neutral-300)] hover:bg-[var(--khor-neutral-400)]"
+                  ? "w-6 bg-khor-primary shadow-[0_0_8px_rgba(var(--khor-primary-rgb),0.5)]" 
+                  : "bg-khor-neutral-300 hover:bg-khor-neutral-400"
               )}
             />
           ))}

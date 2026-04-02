@@ -59,16 +59,16 @@ export function KTimePicker({
         <button
           disabled={disabled}
           className={cn(
-            "flex items-center gap-3 w-full px-4 h-10 bg-white border border-[var(--khor-neutral-200)] rounded-xl text-sm font-primary hover:border-[var(--khor-primary)] transition-all focus:ring-2 focus:ring-[var(--khor-primary-light)]/20 outline-none group",
+            "flex items-center gap-3 w-full px-4 h-10 bg-white border border-khor-neutral-200 rounded-xl text-sm font-primary hover:border-khor-primary transition-all focus:ring-2 focus:ring-khor-primary-light/20 outline-none group",
             disabled && "opacity-50 cursor-not-allowed",
             className
           )}
           style={style}
         >
-          <Clock className="w-4 h-4 text-[var(--khor-neutral-400)] group-hover:text-[var(--khor-primary)] transition-colors" />
+          <Clock className="w-4 h-4 text-khor-neutral-400 group-hover:text-khor-primary transition-colors" />
           <span className={cn(
             "flex-1 text-left font-bold tracking-tight",
-            internalValue ? "text-[var(--khor-neutral-900)]" : "text-[var(--khor-neutral-400)]"
+            internalValue ? "text-khor-neutral-900" : "text-khor-neutral-400"
           )}>
             {internalValue}
           </span>
@@ -77,21 +77,21 @@ export function KTimePicker({
 
       <Popover.Portal>
         <Popover.Content
-          className="z-[1000] p-4 bg-white border border-[var(--khor-neutral-200)] rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] animate-in zoom-in-95 duration-200 font-primary"
+          className="z-[1000] p-4 bg-white border border-khor-neutral-200 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] animate-in zoom-in-95 duration-200 font-primary"
           sideOffset={8}
           align="start"
         >
           <div className="flex gap-1 h-64">
             {/* Horas */}
             <div className="flex flex-col overflow-y-auto pr-1 scrollbar-hide w-16">
-              <span className="text-[10px] font-bold text-[var(--khor-neutral-400)] uppercase tracking-widest text-center mb-2">HH</span>
+              <span className="text-[10px] font-bold text-khor-neutral-400 uppercase tracking-widest text-center mb-2">HH</span>
               {hours.map(h => (
                 <button
                   key={h}
                   onClick={() => handleTimeChange(h, currentmm)}
                   className={cn(
                     "py-2 rounded-lg text-sm transition-all focus:outline-none",
-                    h === currentHH ? "bg-[var(--khor-primary)] text-white font-bold" : "hover:bg-[var(--khor-neutral-50)] text-[var(--khor-neutral-700)]"
+                    h === currentHH ? "bg-khor-primary text-white font-bold" : "hover:bg-khor-neutral-50 text-khor-neutral-700"
                   )}
                 >
                   {h}
@@ -100,18 +100,18 @@ export function KTimePicker({
             </div>
 
             {/* Separador */}
-            <div className="w-[1px] bg-[var(--khor-neutral-100)] mx-2" />
+            <div className="w-[1px] bg-khor-neutral-100 mx-2" />
 
             {/* Minutos */}
             <div className="flex flex-col overflow-y-auto pr-1 scrollbar-hide w-16">
-              <span className="text-[10px] font-bold text-[var(--khor-neutral-400)] uppercase tracking-widest text-center mb-2">mm</span>
+              <span className="text-[10px] font-bold text-khor-neutral-400 uppercase tracking-widest text-center mb-2">mm</span>
               {minutes.map(m => (
                 <button
                   key={m}
                   onClick={() => handleTimeChange(currentHH, m)}
                   className={cn(
                     "py-2 rounded-lg text-sm transition-all focus:outline-none",
-                    m === currentmm ? "bg-[var(--khor-primary)] text-white font-bold" : "hover:bg-[var(--khor-neutral-50)] text-[var(--khor-neutral-700)]"
+                    m === currentmm ? "bg-khor-primary text-white font-bold" : "hover:bg-khor-neutral-50 text-khor-neutral-700"
                   )}
                 >
                   {m}
@@ -120,7 +120,7 @@ export function KTimePicker({
             </div>
           </div>
 
-          <div className="mt-4 pt-4 border-t border-[var(--khor-neutral-100)] flex justify-end">
+          <div className="mt-4 pt-4 border-t border-khor-neutral-100 flex justify-end">
             <KButton size="sm" onClick={() => setOpen(false)}>
               Listo
             </KButton>

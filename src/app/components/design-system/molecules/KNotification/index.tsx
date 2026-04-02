@@ -36,10 +36,10 @@ export function showKNotification({
   };
 
   const bgColors = {
-    success: "bg-[var(--khor-success-light)] border-[var(--khor-success)]/20",
-    error: "bg-[var(--khor-error-light)] border-[var(--khor-error)]/20",
-    info: "bg-[var(--khor-info-light)] border-[var(--khor-info)]/20",
-    warning: "bg-[var(--khor-warning-light)] border-[var(--khor-warning)]/20",
+    success: "bg-khor-success-light border-khor-success/20",
+    error: "bg-khor-error-light border-khor-error/20",
+    info: "bg-khor-info-light border-khor-info/20",
+    warning: "bg-khor-warning-light border-khor-warning/20",
   };
 
   toast.custom((t) => (
@@ -57,11 +57,11 @@ export function showKNotification({
         </div>
         
         <div className="flex-1 flex flex-col gap-1">
-          <h4 className="text-sm font-black text-[var(--khor-neutral-900)] leading-tight tracking-tight uppercase">
+          <h4 className="text-sm font-black text-khor-neutral-900 leading-tight tracking-tight uppercase">
             {message}
           </h4>
           {description && (
-            <p className="text-xs text-[var(--khor-neutral-500)] leading-relaxed font-medium">
+            <p className="text-xs text-khor-neutral-500 leading-relaxed font-medium">
               {description}
             </p>
           )}
@@ -70,7 +70,7 @@ export function showKNotification({
 
       <button 
         onClick={() => toast.dismiss(t)} 
-        className="absolute top-4 right-4 p-1 text-[var(--khor-neutral-300)] hover:text-[var(--khor-neutral-900)] transition-colors rounded-lg hover:bg-[var(--khor-neutral-50)]"
+        className="absolute top-4 right-4 p-1 text-khor-neutral-300 hover:text-khor-neutral-900 transition-colors rounded-lg hover:bg-khor-neutral-50"
       >
         <X className="w-4 h-4" />
       </button>

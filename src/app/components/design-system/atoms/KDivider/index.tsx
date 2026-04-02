@@ -44,7 +44,7 @@ export const KDivider = React.forwardRef<HTMLDivElement | HTMLHRElement, KDivide
   return (
     <div 
       ref={ref as React.Ref<HTMLDivElement>}
-      className={cn("flex items-center w-full my-4 font-primary text-[var(--khor-neutral-900)] whitespace-nowrap", className)}
+      className={cn("flex items-center w-full my-4 font-primary text-khor-neutral-900 whitespace-nowrap", className)}
       style={style}
       {...rest}
     >

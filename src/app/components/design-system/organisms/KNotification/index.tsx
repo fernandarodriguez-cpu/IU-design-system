@@ -54,11 +54,11 @@ export function KToaster(props: React.ComponentProps<typeof SonnerToaster>) {
       className="font-primary"
       toastOptions={{
         classNames: {
-          toast: 'bg-[var(--khor-surface-page)] border-[var(--khor-neutral-200)] shadow-lg rounded-md',
-          title: 'text-[var(--khor-neutral-900)] font-semibold text-sm font-primary',
-          description: 'text-[var(--khor-neutral-500)] text-sm font-primary',
-          actionButton: 'bg-[var(--khor-primary)] text-white font-primary',
-          cancelButton: 'bg-[var(--khor-neutral-100)] text-[var(--khor-neutral-900)] font-primary',
+          toast: 'bg-khor-surface-page border-khor-neutral-200 shadow-lg rounded-md',
+          title: 'text-khor-neutral-900 font-semibold text-sm font-primary',
+          description: 'text-khor-neutral-500 text-sm font-primary',
+          actionButton: 'bg-khor-primary text-white font-primary',
+          cancelButton: 'bg-khor-neutral-100 text-khor-neutral-900 font-primary',
           success: 'border-green-500 text-green-700',
           error: 'border-red-500 text-red-700',
           warning: 'border-yellow-500 text-yellow-700',

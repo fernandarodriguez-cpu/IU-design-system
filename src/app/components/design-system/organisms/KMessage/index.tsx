@@ -40,11 +40,11 @@ export function kMessage(opts: KMessageOptions | string) {
   };
 
   const bgColors = {
-    success: "bg-[var(--khor-success-light)] border-[var(--khor-success)]/10 text-emerald-900",
-    error: "bg-[var(--khor-error-light)] border-[var(--khor-error)]/10 text-rose-900",
-    info: "bg-[var(--khor-info-light)] border-[var(--khor-info)]/10 text-sky-900",
-    warning: "bg-[var(--khor-warning-light)] border-[var(--khor-warning)]/10 text-amber-900",
-    loading: "bg-white border-[var(--khor-neutral-200)] text-[var(--khor-neutral-900)]",
+    success: "bg-khor-success-light border-khor-success/10 text-emerald-900",
+    error: "bg-khor-error-light border-khor-error/10 text-rose-900",
+    info: "bg-khor-info-light border-khor-info/10 text-sky-900",
+    warning: "bg-khor-warning-light border-khor-warning/10 text-amber-900",
+    loading: "bg-white border-khor-neutral-200 text-khor-neutral-900",
   };
 
   return toast.custom((t) => (

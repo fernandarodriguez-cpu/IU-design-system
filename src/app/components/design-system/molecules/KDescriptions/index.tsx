@@ -40,7 +40,7 @@ export function KDescriptions({
   return (
     <div className={cn("w-full font-primary", className)} style={style}>
       {title && (
-        <h4 className="text-lg font-extrabold text-[var(--khor-neutral-900)] mb-4 tracking-tight border-l-4 border-[var(--khor-primary)] pl-3">
+        <h4 className="text-lg font-extrabold text-khor-neutral-900 mb-4 tracking-tight border-l-4 border-khor-primary pl-3">
           {title}
         </h4>
       )}
@@ -48,7 +48,7 @@ export function KDescriptions({
       <div 
         className={cn(
           "grid gap-y-0 text-sm overflow-hidden",
-          bordered ? "border border-[var(--khor-neutral-200)] rounded-xl" : "bg-transparent"
+          bordered ? "border border-khor-neutral-200 rounded-xl" : "bg-transparent"
         )}
         style={{
           gridTemplateColumns: `repeat(${column}, minmax(0, 1fr))`,
@@ -63,19 +63,19 @@ export function KDescriptions({
               key={index} 
               className={cn(
                 "flex flex-col",
-                bordered && "border-b border-r border-[var(--khor-neutral-200)]",
+                bordered && "border-b border-r border-khor-neutral-200",
                 bordered && index % column === column - 1 && "border-r-0"
               )}
               style={{ gridColumn: `span ${span}` }}
             >
               <div className={cn(
-                "bg-[var(--khor-neutral-50)] text-[var(--khor-neutral-400)] font-bold text-[10px] uppercase tracking-widest border-b border-[var(--khor-neutral-100)]",
+                "bg-khor-neutral-50 text-khor-neutral-400 font-bold text-[10px] uppercase tracking-widest border-b border-khor-neutral-100",
                 paddingMap[size]
               )}>
                 {item.label}
               </div>
               <div className={cn(
-                "bg-white text-[var(--khor-neutral-800)] font-medium min-h-[40px] break-words",
+                "bg-white text-khor-neutral-800 font-medium min-h-[40px] break-words",
                 paddingMap[size]
               )}>
                 {item.children}

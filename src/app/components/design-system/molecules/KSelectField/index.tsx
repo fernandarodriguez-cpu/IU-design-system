@@ -19,10 +19,10 @@ export const KSelectTrigger = React.forwardRef<
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn(
-      "flex h-10 w-full items-center justify-between rounded-md border bg-[var(--khor-surface-page)] px-3 py-2 text-sm ring-offset-[var(--khor-surface-page)] placeholder:text-[var(--khor-neutral-500)] focus:outline-none focus:ring-2 disabled:cursor-not-allowed disabled:opacity-50 font-primary transition-all",
+      "flex h-10 w-full items-center justify-between rounded-md border bg-khor-surface-page px-3 py-2 text-sm ring-offset-khor-surface-page placeholder:text-khor-neutral-500 focus:outline-none focus:ring-2 disabled:cursor-not-allowed disabled:opacity-50 font-primary transition-all",
       error 
-        ? "border-[var(--khor-feedback-error)] focus:ring-[var(--khor-feedback-error)] focus:ring-opacity-50 text-[var(--khor-feedback-error)]"
-        : "border-[var(--khor-neutral-200)] focus:ring-[var(--khor-primary-light)] focus:border-[var(--khor-primary)] text-foreground hover:border-[var(--khor-primary-light)]",
+        ? "border-khor-feedback-error focus:ring-khor-feedback-error focus:ring-opacity-50 text-khor-feedback-error"
+        : "border-khor-neutral-200 focus:ring-khor-primary-light focus:border-khor-primary text-foreground hover:border-khor-primary-light",
       className
     )}
     {...props}
@@ -43,14 +43,14 @@ export const KSelectContent = React.forwardRef<
     <SelectPrimitive.Content
       ref={ref}
       className={cn(
-        "relative z-50 min-w-[8rem] overflow-hidden rounded-md border border-[var(--khor-neutral-200)] bg-[var(--khor-surface-page)] text-foreground shadow-md animate-in fade-in-80 zoom-in-95 font-primary",
+        "relative z-50 min-w-[8rem] overflow-hidden rounded-md border border-khor-neutral-200 bg-khor-surface-page text-foreground shadow-md animate-in fade-in-80 zoom-in-95 font-primary",
         position === "popper" && "translate-y-1",
         className
       )}
       position={position}
       {...props}
     >
-      <SelectPrimitive.ScrollUpButton className="flex cursor-default items-center justify-center py-1 bg-[var(--khor-neutral-50)]">
+      <SelectPrimitive.ScrollUpButton className="flex cursor-default items-center justify-center py-1 bg-khor-neutral-50">
         <ChevronUp className="h-4 w-4" />
       </SelectPrimitive.ScrollUpButton>
       <SelectPrimitive.Viewport
@@ -62,7 +62,7 @@ export const KSelectContent = React.forwardRef<
       >
         {children}
       </SelectPrimitive.Viewport>
-      <SelectPrimitive.ScrollDownButton className="flex cursor-default items-center justify-center py-1 bg-[var(--khor-neutral-50)]">
+      <SelectPrimitive.ScrollDownButton className="flex cursor-default items-center justify-center py-1 bg-khor-neutral-50">
         <ChevronDown className="h-4 w-4" />
       </SelectPrimitive.ScrollDownButton>
     </SelectPrimitive.Content>
@@ -77,14 +77,14 @@ export const KSelectItem = React.forwardRef<
   <SelectPrimitive.Item
     ref={ref}
     className={cn(
-      "relative flex w-full cursor-pointer select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none transition-colors focus:bg-[var(--khor-neutral-100)] focus:text-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      "relative flex w-full cursor-pointer select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none transition-colors focus:bg-khor-neutral-100 focus:text-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       className
     )}
     {...props}
   >
     <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
       <SelectPrimitive.ItemIndicator>
-        <Check className="h-4 w-4 text-[var(--khor-primary)]" />
+        <Check className="h-4 w-4 text-khor-primary" />
       </SelectPrimitive.ItemIndicator>
     </span>
     <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>

@@ -19,8 +19,8 @@ export interface KTimelineProps {
 }
 
 const colorMap = {
-  primary: "bg-[var(--khor-primary)]",
-  navy: "bg-[var(--khor-navy)]",
+  primary: "bg-khor-primary",
+  navy: "bg-khor-navy",
   success: "bg-emerald-500",
   error: "bg-red-500",
   warning: "bg-amber-500",
@@ -28,8 +28,8 @@ const colorMap = {
 };
 
 const borderMap = {
-  primary: "border-[var(--khor-primary)]",
-  navy: "border-[var(--khor-navy)]",
+  primary: "border-khor-primary",
+  navy: "border-khor-navy",
   success: "border-emerald-500",
   error: "border-red-500",
   warning: "border-amber-500",
@@ -65,7 +65,7 @@ export function KTimeline({
           <div key={item.key || index} className="relative flex gap-4 min-h-[48px] group">
             {/* Etiquetas laterales (opcional) */}
             {item.label && (
-              <div className="w-24 shrink-0 text-right text-xs pt-1 text-[var(--khor-neutral-400)] font-medium">
+              <div className="w-24 shrink-0 text-right text-xs pt-1 text-khor-neutral-400 font-medium">
                 {item.label}
               </div>
             )}
@@ -84,14 +84,14 @@ export function KTimeline({
               
               {!isLast && (
                 <div 
-                  className="absolute top-4 w-[2px] h-[calc(100%-8px)] bg-[var(--khor-neutral-200)] group-last:hidden" 
+                  className="absolute top-4 w-[2px] h-[calc(100%-8px)] bg-khor-neutral-200 group-last:hidden" 
                 />
               )}
             </div>
 
             {/* Contenido */}
             <div className="flex-1 pb-6 pt-0.5">
-              <div className="text-sm text-[var(--khor-neutral-800)] leading-tight">
+              <div className="text-sm text-khor-neutral-800 leading-tight">
                 {item.children}
               </div>
             </div>
@@ -103,9 +103,9 @@ export function KTimeline({
         <div className="relative flex gap-4 min-h-[48px]">
           <div className="w-24 shrink-0" />
           <div className="relative flex flex-col items-center">
-            <div className="z-10 w-3 h-3 rounded-full border-2 border-dashed border-[var(--khor-neutral-300)] bg-transparent mt-1.5 animate-spin duration-1000" />
+            <div className="z-10 w-3 h-3 rounded-full border-2 border-dashed border-khor-neutral-300 bg-transparent mt-1.5 animate-spin duration-1000" />
           </div>
-          <div className="flex-1 pb-6 pt-0.5 italic text-xs text-[var(--khor-neutral-400)]">
+          <div className="flex-1 pb-6 pt-0.5 italic text-xs text-khor-neutral-400">
             {pending}
           </div>
         </div>

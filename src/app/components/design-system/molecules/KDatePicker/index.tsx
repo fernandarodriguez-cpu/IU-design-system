@@ -64,14 +64,14 @@ export function KDatePicker({
   const heights = { sm: 'h-8 text-xs', md: 'h-10 text-sm', lg: 'h-12 text-base' };
 
   const statusClasses = status === 'error'
-    ? 'border-[var(--khor-feedback-error)] focus:ring-[var(--khor-feedback-error)]'
+    ? 'border-khor-feedback-error focus:ring-khor-feedback-error'
     : status === 'warning'
-      ? 'border-[var(--khor-feedback-warning)] focus:ring-[var(--khor-feedback-warning)]'
-      : 'border-[var(--khor-neutral-200)] focus:ring-[var(--khor-primary-light)] focus:border-[var(--khor-primary)] hover:border-[var(--khor-primary-light)]';
+      ? 'border-khor-feedback-warning focus:ring-khor-feedback-warning'
+      : 'border-khor-neutral-200 focus:ring-khor-primary-light focus:border-khor-primary hover:border-khor-primary-light';
 
   const disabledClasses = disabled 
-    ? 'bg-[var(--khor-neutral-100)] cursor-not-allowed text-[var(--khor-neutral-400)]' 
-    : 'bg-[var(--khor-surface-page)] text-[var(--khor-neutral-900)] cursor-pointer';
+    ? 'bg-khor-neutral-100 cursor-not-allowed text-khor-neutral-400' 
+    : 'bg-khor-surface-page text-khor-neutral-900 cursor-pointer';
 
   return (
     <div className={cn("relative w-full", className)} style={style}>
@@ -88,8 +88,8 @@ export function KDatePicker({
             )}
           >
             <div className="flex items-center gap-2 overflow-hidden flex-1">
-              <CalendarIcon className="w-4 h-4 text-[var(--khor-neutral-400)] shrink-0 opacity-70" />
-              <span className={cn("truncate", !value && 'text-[var(--khor-neutral-400)]')}>
+              <CalendarIcon className="w-4 h-4 text-khor-neutral-400 shrink-0 opacity-70" />
+              <span className={cn("truncate", !value && 'text-khor-neutral-400')}>
                 {value && isValid(value) ? format(value, 'dd/MM/yyyy', { locale: es }) : placeholder}
               </span>
             </div>
@@ -97,7 +97,7 @@ export function KDatePicker({
               <span 
                 role="button"
                 tabIndex={0}
-                className="ml-2 hover:text-[var(--khor-feedback-error)] transition-colors p-1"
+                className="ml-2 hover:text-khor-feedback-error transition-colors p-1"
                 onClick={(e) => { e.stopPropagation(); onChange?.(undefined); }}
               >
                 <X className="w-3.5 h-3.5" />
@@ -105,7 +105,7 @@ export function KDatePicker({
             )}
           </button>
         </KPopoverTrigger>
-        <KPopoverContent align="start" className="p-0 border rounded-lg shadow-lg w-auto bg-[var(--khor-surface-page)] z-[100] mt-1">
+        <KPopoverContent align="start" className="p-0 border rounded-lg shadow-lg w-auto bg-khor-surface-page z-[100] mt-1">
           <DayPicker
             mode="single"
             selected={value}
@@ -123,19 +123,19 @@ export function KDatePicker({
               caption: "flex justify-center pt-1 relative items-center mb-4",
               caption_label: "text-sm font-medium",
               nav: "space-x-1 flex items-center",
-              nav_button: "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100 hover:bg-[var(--khor-neutral-100)] rounded-md transition-all",
+              nav_button: "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100 hover:bg-khor-neutral-100 rounded-md transition-all",
               nav_button_previous: "absolute left-1",
               nav_button_next: "absolute right-1",
               table: "w-full border-collapse",
               head_row: "flex",
-              head_cell: "text-[var(--khor-neutral-500)] rounded-md w-9 font-normal text-[0.8rem] capitalize",
+              head_cell: "text-khor-neutral-500 rounded-md w-9 font-normal text-[0.8rem] capitalize",
               row: "flex w-full mt-2",
               cell: "h-9 w-9 text-center text-sm p-0 relative rounded-md transition-colors",
-              day: "h-9 w-9 p-0 font-normal hover:bg-[var(--khor-neutral-100)] rounded-md transition-all",
-              day_selected: "bg-[var(--khor-primary)] text-white hover:bg-[var(--khor-primary)] hover:text-white rounded-md font-semibold",
-              day_today: "font-semibold bg-[var(--khor-neutral-50)] text-[var(--khor-primary)]",
-              day_outside: "text-[var(--khor-neutral-300)] opacity-50",
-              day_disabled: "text-[var(--khor-neutral-300)] opacity-50 bg-transparent cursor-not-allowed",
+              day: "h-9 w-9 p-0 font-normal hover:bg-khor-neutral-100 rounded-md transition-all",
+              day_selected: "bg-khor-primary text-white hover:bg-khor-primary hover:text-white rounded-md font-semibold",
+              day_today: "font-semibold bg-khor-neutral-50 text-khor-primary",
+              day_outside: "text-khor-neutral-300 opacity-50",
+              day_disabled: "text-khor-neutral-300 opacity-50 bg-transparent cursor-not-allowed",
               day_hidden: "invisible",
             }}
           />
@@ -198,14 +198,14 @@ export function KDateRangePicker({
             type="button"
             disabled={disabled}
             className={cn(
-              "flex w-full items-center justify-between px-3 border border-[var(--khor-neutral-200)] rounded-md shadow-sm transition-all outline-none focus:ring-2 focus:ring-[var(--khor-primary-light)] font-primary",
+              "flex w-full items-center justify-between px-3 border border-khor-neutral-200 rounded-md shadow-sm transition-all outline-none focus:ring-2 focus:ring-khor-primary-light font-primary",
               heights[resolvedSize as keyof typeof heights] || heights.md,
-              disabled ? 'bg-[var(--khor-neutral-100)] cursor-not-allowed text-[var(--khor-neutral-400)]' : 'bg-[var(--khor-surface-page)] text-[var(--khor-neutral-900)] cursor-pointer hover:border-[var(--khor-primary-light)]'
+              disabled ? 'bg-khor-neutral-100 cursor-not-allowed text-khor-neutral-400' : 'bg-khor-surface-page text-khor-neutral-900 cursor-pointer hover:border-khor-primary-light'
             )}
           >
             <div className="flex items-center gap-2 overflow-hidden flex-1">
-              <CalendarIcon className="w-4 h-4 text-[var(--khor-neutral-400)] shrink-0 opacity-70" />
-              <span className={cn("truncate", !value?.from && 'text-[var(--khor-neutral-400)]')}>
+              <CalendarIcon className="w-4 h-4 text-khor-neutral-400 shrink-0 opacity-70" />
+              <span className={cn("truncate", !value?.from && 'text-khor-neutral-400')}>
                 {formattedValue}
               </span>
             </div>
@@ -213,7 +213,7 @@ export function KDateRangePicker({
               <span 
                 role="button"
                 tabIndex={0}
-                className="ml-2 hover:text-[var(--khor-feedback-error)] transition-colors p-1"
+                className="ml-2 hover:text-khor-feedback-error transition-colors p-1"
                 onClick={(e) => { e.stopPropagation(); onChange?.(undefined); }}
               >
                 <X className="w-3.5 h-3.5" />
@@ -221,7 +221,7 @@ export function KDateRangePicker({
             )}
           </button>
         </KPopoverTrigger>
-        <KPopoverContent align="start" className="p-0 border rounded-lg shadow-lg w-auto bg-[var(--khor-surface-page)] z-[100] mt-1">
+        <KPopoverContent align="start" className="p-0 border rounded-lg shadow-lg w-auto bg-khor-surface-page z-[100] mt-1">
           <DayPicker
             mode="range"
             selected={value ? { from: value.from, to: value.to } : undefined}
@@ -231,11 +231,11 @@ export function KDateRangePicker({
             classNames={{
               months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0 p-3",
               table: "w-full border-collapse",
-              day: "h-9 w-9 p-0 font-normal hover:bg-[var(--khor-neutral-100)] rounded-md transition-all",
-              day_range_start: "bg-[var(--khor-primary)] text-white rounded-md",
-              day_range_end: "bg-[var(--khor-primary)] text-white rounded-md",
-              day_selected: "bg-[var(--khor-primary-light)] text-[var(--khor-primary)]",
-              day_today: "font-semibold bg-[var(--khor-neutral-50)] text-[var(--khor-primary)]",
+              day: "h-9 w-9 p-0 font-normal hover:bg-khor-neutral-100 rounded-md transition-all",
+              day_range_start: "bg-khor-primary text-white rounded-md",
+              day_range_end: "bg-khor-primary text-white rounded-md",
+              day_selected: "bg-khor-primary-light text-khor-primary",
+              day_today: "font-semibold bg-khor-neutral-50 text-khor-primary",
             }}
           />
         </KPopoverContent>

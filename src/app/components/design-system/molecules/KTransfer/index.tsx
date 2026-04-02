@@ -82,16 +82,16 @@ export function KTransfer({
     search: string, 
     setSearch: (v: string) => void
   ) => (
-    <div className="flex flex-col flex-1 border border-[var(--khor-neutral-200)] rounded-lg bg-[var(--khor-surface-page)] overflow-hidden shadow-sm">
-      <div className="bg-[var(--khor-neutral-50)] px-4 py-2 border-b border-[var(--khor-neutral-200)] flex justify-between items-center">
-        <span className="text-xs font-bold text-[var(--khor-neutral-600)] uppercase tracking-wider">
+    <div className="flex flex-col flex-1 border border-khor-neutral-200 rounded-lg bg-khor-surface-page overflow-hidden shadow-sm">
+      <div className="bg-khor-neutral-50 px-4 py-2 border-b border-khor-neutral-200 flex justify-between items-center">
+        <span className="text-xs font-bold text-khor-neutral-600 uppercase tracking-wider">
           {title} ({items.length})
         </span>
       </div>
       
       {showSearch && (
-        <div className="p-2 border-b border-[var(--khor-neutral-100)] active-within:border-[var(--khor-primary)] transition-colors relative">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[var(--khor-neutral-400)]" />
+        <div className="p-2 border-b border-khor-neutral-100 active-within:border-khor-primary transition-colors relative">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-khor-neutral-400" />
           <input
             type="text"
             value={search}
@@ -104,18 +104,18 @@ export function KTransfer({
 
       <div className="flex-1 overflow-y-auto max-h-72 min-h-64">
         {items.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full text-[var(--khor-neutral-400)] text-xs italic p-8">
+          <div className="flex flex-col items-center justify-center h-full text-khor-neutral-400 text-xs italic p-8">
             No hay elementos
           </div>
         ) : (
-          <div className="divide-y divide-[var(--khor-neutral-100)]">
+          <div className="divide-y divide-khor-neutral-100">
             {items.map(item => (
               <div 
                 key={item.key}
                 onClick={() => !disabled && !item.disabled && toggleSelect(item.key)}
                 className={cn(
-                  "flex items-center gap-3 px-4 py-2.5 cursor-pointer transition-colors hover:bg-[var(--khor-neutral-50)]",
-                  selectedKeys.includes(item.key) && "bg-[var(--khor-primary-light)]/10 text-[var(--khor-primary)]",
+                  "flex items-center gap-3 px-4 py-2.5 cursor-pointer transition-colors hover:bg-khor-neutral-50",
+                  selectedKeys.includes(item.key) && "bg-khor-primary-light/10 text-khor-primary",
                   (disabled || item.disabled) && "opacity-40 cursor-not-allowed"
                 )}
               >

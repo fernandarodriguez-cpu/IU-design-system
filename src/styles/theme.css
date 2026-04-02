@@ -12,6 +12,7 @@
   --khor-navy: #051758;
   --khor-navy-hover: #0a2270;
   --khor-navy-active: #030f40;
+  --khor-primary-light: #FDECEA;
   --khor-accent: #FF9500;
   --khor-accent-hover: #ffaa33;
   --khor-accent-active: #e68600;
@@ -26,7 +27,7 @@
   --khor-neutral-600: #2D3748;
   --khor-neutral-700: #1A202C;
   --khor-neutral-800: #11141C;
-  --khor-neutral-900: #000000;
+  --khor-neutral-900: #051758;
 
   /* ── Feedback ── */
   --khor-success: #2E7D32;
@@ -37,6 +38,13 @@
   --khor-warning-light: #FFF3E0;
   --khor-info: #051758;
   --khor-info-light: #E3F2FD;
+
+  /* ── Feedback Aliases (used by form components) ── */
+  --khor-feedback-error: var(--khor-error);
+  --khor-feedback-warning: var(--khor-warning);
+
+  /* ── Brand Alias ── */
+  --khor-brand-navy: var(--khor-navy);
 
   /* ── Shadows ── */
   --khor-shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
@@ -77,7 +85,7 @@
   --khor-surface-overlay: rgba(0, 0, 0, 0.5);
 
   /* ── Semantic Text Tokens ── */
-  --khor-text-primary: var(--khor-neutral-900);
+  --khor-text-primary: var(--khor-navy);
   --khor-text-secondary: var(--khor-neutral-500);
   --khor-text-muted: var(--khor-neutral-400);
   --khor-text-disabled: var(--khor-neutral-300);
@@ -119,17 +127,25 @@
   --khor-density-font-label: 12px;
   --khor-density-radius: var(--khor-radius-md); /* 8px */
 
+  /* ── Tooltip Tokens ── */
+  --khor-tooltip-bg: var(--khor-navy);
+  --khor-tooltip-fg: #FFFFFF;
+
+  /* ── Avatar Tokens ── */
+  --khor-avatar-bg: #051758;
+  --khor-avatar-fg: #FFFFFF;
+
   /* ── Mapped Tokens (Tailwind / Base) ── */
   --background: var(--khor-neutral-100);
-  --foreground: var(--khor-neutral-900);
+  --foreground: var(--khor-navy);
   --card: var(--khor-neutral-50);
-  --card-foreground: var(--khor-neutral-900);
+  --card-foreground: var(--khor-navy);
   --popover: var(--khor-neutral-50);
-  --popover-foreground: var(--khor-neutral-900);
+  --popover-foreground: var(--khor-navy);
   --primary: var(--khor-primary);
   --primary-foreground: #FFFFFF;
   --secondary: var(--khor-neutral-100);
-  --secondary-foreground: var(--khor-neutral-900);
+  --secondary-foreground: var(--khor-navy);
   --muted: var(--khor-neutral-100);
   --muted-foreground: var(--khor-neutral-400);
   --accent: var(--khor-accent);
@@ -170,6 +186,7 @@
   --khor-accent: #FFB340;
   --khor-accent-hover: #FFC266;
   --khor-accent-active: #E6A030;
+  --khor-primary-light: #3D1A14;
 
   /* ── Neutrals (Dark) ── */
   --khor-neutral-50: #1A1B2E;
@@ -182,6 +199,14 @@
   --khor-neutral-700: #D0D4E3;
   --khor-neutral-800: #E2E4EE;
   --khor-neutral-900: #E8EAF0;
+
+  /* ── Tooltip Tokens (Dark) ── */
+  --khor-tooltip-bg: var(--khor-neutral-200);
+  --khor-tooltip-fg: var(--khor-navy);
+
+  /* ── Avatar Tokens (Dark) ── */
+  --khor-avatar-bg: #0A2270;
+  --khor-avatar-fg: #FFFFFF;
 
   /* ── Feedback (Dark) ── */
   --khor-success: #4CAF50;
@@ -211,6 +236,7 @@
   --card-foreground: var(--khor-neutral-900);
   --popover: var(--khor-neutral-50);
   --popover-foreground: var(--khor-neutral-900);
+  --secondary-foreground: var(--khor-neutral-900);
   --primary: var(--khor-primary);
   --primary-foreground: #FFFFFF;
   --secondary: var(--khor-neutral-200);
@@ -280,6 +306,105 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  /* ══════════════════════════════════════════════════════
+     Khor Design System Tokens
+     Registering all --khor-* variables as native Tailwind
+     tokens so we can use bg-khor-navy instead of
+     bg-[var(--khor-navy)] (which is broken in TW v4).
+     ══════════════════════════════════════════════════════ */
+
+  /* ── Brand Colors ── */
+  --color-khor-navy: var(--khor-navy);
+  --color-khor-navy-hover: var(--khor-navy-hover);
+  --color-khor-navy-active: var(--khor-navy-active);
+
+  /* ── Primary ── */
+  --color-khor-primary: var(--khor-primary);
+  --color-khor-primary-hover: var(--khor-primary-hover);
+  --color-khor-primary-active: var(--khor-primary-active);
+  --color-khor-primary-light: var(--khor-primary-light);
+
+  /* ── Accent ── */
+  --color-khor-accent: var(--khor-accent);
+  --color-khor-accent-hover: var(--khor-accent-hover);
+  --color-khor-accent-active: var(--khor-accent-active);
+
+  /* ── Neutrals ── */
+  --color-khor-neutral-50: var(--khor-neutral-50);
+  --color-khor-neutral-100: var(--khor-neutral-100);
+  --color-khor-neutral-200: var(--khor-neutral-200);
+  --color-khor-neutral-300: var(--khor-neutral-300);
+  --color-khor-neutral-400: var(--khor-neutral-400);
+  --color-khor-neutral-500: var(--khor-neutral-500);
+  --color-khor-neutral-600: var(--khor-neutral-600);
+  --color-khor-neutral-700: var(--khor-neutral-700);
+  --color-khor-neutral-800: var(--khor-neutral-800);
+  --color-khor-neutral-900: var(--khor-neutral-900);
+
+  /* ── Surfaces ── */
+  --color-khor-surface-page: var(--khor-surface-page);
+  --color-khor-surface-card: var(--khor-surface-card);
+  --color-khor-surface-raised: var(--khor-surface-raised);
+  --color-khor-surface-overlay: var(--khor-surface-overlay);
+
+  /* ── Feedback ── */
+  --color-khor-success: var(--khor-success);
+  --color-khor-success-light: var(--khor-success-light);
+  --color-khor-error: var(--khor-error);
+  --color-khor-error-light: var(--khor-error-light);
+  --color-khor-warning: var(--khor-warning);
+  --color-khor-warning-light: var(--khor-warning-light);
+  --color-khor-info: var(--khor-info);
+  --color-khor-info-light: var(--khor-info-light);
+
+  /* ── Text ── */
+  --color-khor-text-primary: var(--khor-text-primary);
+  --color-khor-text-secondary: var(--khor-text-secondary);
+  --color-khor-text-muted: var(--khor-text-muted);
+  --color-khor-text-disabled: var(--khor-text-disabled);
+  --color-khor-text-link: var(--khor-text-link);
+  --color-khor-text-on-action: var(--khor-text-on-action);
+
+  /* ── Actions ── */
+  --color-khor-action-primary-default: var(--khor-action-primary-default);
+  --color-khor-action-primary-hover: var(--khor-action-primary-hover);
+  --color-khor-action-primary-active: var(--khor-action-primary-active);
+  --color-khor-action-secondary-default: var(--khor-action-secondary-default);
+  --color-khor-action-secondary-hover: var(--khor-action-secondary-hover);
+  --color-khor-action-secondary-active: var(--khor-action-secondary-active);
+  --color-khor-action-danger-default: var(--khor-action-danger-default);
+  --color-khor-action-danger-hover: var(--khor-action-danger-hover);
+  --color-khor-action-danger-active: var(--khor-action-danger-active);
+  --color-khor-action-disabled-bg: var(--khor-action-disabled-bg);
+  --color-khor-action-disabled-text: var(--khor-action-disabled-text);
+  --color-khor-action-ghost-hover: var(--khor-action-ghost-hover);
+
+  /* ── Borders ── */
+  --color-khor-border-default: var(--khor-border-default);
+  --color-khor-border-hover: var(--khor-border-hover);
+  --color-khor-border-focus: var(--khor-border-focus);
+  --color-khor-border-error: var(--khor-border-error);
+  --color-khor-border-disabled: var(--khor-border-disabled);
+  --color-khor-border-strong: var(--khor-border-strong);
+
+  /* ── Tooltip ── */
+  --color-khor-tooltip-bg: var(--khor-tooltip-bg);
+  --color-khor-tooltip-fg: var(--khor-tooltip-fg);
+
+  /* ── Avatar ── */
+  --color-khor-avatar-bg: var(--khor-avatar-bg);
+  --color-khor-avatar-fg: var(--khor-avatar-fg);
+
+  /* ── Focus ── */
+  --color-khor-focus-ring: var(--khor-focus-ring);
+
+  /* ── Feedback Aliases ── */
+  --color-khor-feedback-error: var(--khor-feedback-error);
+  --color-khor-feedback-warning: var(--khor-feedback-warning);
+
+  /* ── Brand Navy (alias for legacy --khor-brand-navy refs) ── */
+  --color-khor-brand-navy: var(--khor-navy);
 }
 
 @layer base {

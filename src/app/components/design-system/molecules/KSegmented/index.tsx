@@ -60,7 +60,7 @@ export function KSegmented({
   return (
     <div 
       className={cn(
-        "inline-flex bg-[var(--khor-neutral-100)] rounded-lg font-primary p-1 border border-[var(--khor-neutral-200)] relative",
+        "inline-flex bg-khor-neutral-100 rounded-lg font-primary p-1 border border-khor-neutral-200 relative",
         block ? "w-full flex" : "w-max",
         disabled && "opacity-50 cursor-not-allowed",
         sizeStyles[size],
@@ -77,14 +77,14 @@ export function KSegmented({
             onClick={() => handleChange(opt.value)}
             className={cn(
               "relative flex-1 flex items-center justify-center px-4 rounded-md transition-colors z-10 font-semibold",
-              isActive ? "text-[var(--khor-neutral-900)]" : "text-[var(--khor-neutral-500)] hover:text-[var(--khor-neutral-700)]",
+              isActive ? "text-khor-neutral-900" : "text-khor-neutral-500 hover:text-khor-neutral-700",
               (disabled || opt.disabled) ? "cursor-not-allowed" : "cursor-pointer"
             )}
           >
             {isActive && (
               <motion.div
                 layoutId="segmented-active"
-                className="absolute inset-0 bg-white rounded-md shadow-sm z-[-1] border border-[var(--khor-neutral-200)/50]"
+                className="absolute inset-0 bg-white rounded-md shadow-sm z-[-1] border border-khor-neutral-200/50"
                 transition={{ type: "spring", bounce: 0.15, duration: 0.5 }}
               />
             )}

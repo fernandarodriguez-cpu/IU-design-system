@@ -119,14 +119,14 @@ export function KMentions({
         rows={4}
         className={cn(
           "w-full p-3 border rounded-md outline-none transition-all resize-none text-sm",
-          "bg-[var(--khor-surface-page)] border-[var(--khor-neutral-200)] text-[var(--khor-neutral-900)]",
-          "focus:border-[var(--khor-primary)] focus:ring-2 focus:ring-[var(--khor-primary-light)]",
-          disabled && "opacity-50 cursor-not-allowed bg-[var(--khor-neutral-100)]"
+          "bg-khor-surface-page border-khor-neutral-200 text-khor-neutral-900",
+          "focus:border-khor-primary focus:ring-2 focus:ring-khor-primary-light",
+          disabled && "opacity-50 cursor-not-allowed bg-khor-neutral-100"
         )}
       />
 
       {showOptions && (
-        <div className="absolute z-50 bottom-full left-0 mb-1 w-64 bg-[var(--khor-surface-page)] border border-[var(--khor-neutral-200)] rounded-lg shadow-xl overflow-hidden animate-in fade-in slide-in-from-bottom-2 duration-200">
+        <div className="absolute z-50 bottom-full left-0 mb-1 w-64 bg-khor-surface-page border border-khor-neutral-200 rounded-lg shadow-xl overflow-hidden animate-in fade-in slide-in-from-bottom-2 duration-200">
           <div className="max-h-60 overflow-y-auto py-1">
             {filteredOptions.map((opt, i) => (
               <div
@@ -135,7 +135,7 @@ export function KMentions({
                 onMouseEnter={() => setActiveIndex(i)}
                 className={cn(
                   "flex items-center gap-3 px-3 py-2 cursor-pointer transition-colors",
-                  i === activeIndex ? "bg-[var(--khor-primary-light)]/10 text-[var(--khor-primary)]" : "text-[var(--khor-neutral-700)] italic"
+                  i === activeIndex ? "bg-khor-primary-light/10 text-khor-primary" : "text-khor-neutral-700 italic"
                 )}
               >
                 <KAvatar name={opt.label} src={opt.avatar} size="sm" />

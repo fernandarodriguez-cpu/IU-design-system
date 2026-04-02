@@ -42,13 +42,13 @@ export function KSpin({
         className={cn(
           "animate-spin transition-all",
           sizeMap[size] || sizeMap.md,
-          !color && "text-[var(--khor-primary)]",
+          !color && "text-khor-primary",
           className
         )}
         style={{ color, ...style }}
       />
       {label && (
-        <span className="text-sm font-bold text-[var(--khor-neutral-500)] animate-pulse uppercase tracking-widest font-primary">
+        <span className="text-sm font-bold text-khor-neutral-500 animate-pulse uppercase tracking-widest font-primary">
           {label}
         </span>
       )}

@@ -37,10 +37,10 @@ export function KBreadcrumb({
         const isLast = index === items.length - 1;
         const ItemContent = (
           <div className="flex items-center gap-1.5 group">
-            {item.icon && <span className="text-[var(--khor-neutral-400)] group-hover:text-[var(--khor-primary)] transition-colors">{item.icon}</span>}
+            {item.icon && <span className="text-khor-neutral-400 group-hover:text-khor-primary transition-colors">{item.icon}</span>}
             <span className={cn(
               "transition-colors",
-              isLast ? "font-extrabold text-[var(--khor-neutral-900)] cursor-default" : "text-[var(--khor-neutral-500)] hover:text-[var(--khor-primary)] font-medium"
+              isLast ? "font-extrabold text-khor-neutral-900 cursor-default" : "text-khor-neutral-500 hover:text-khor-primary font-medium"
             )}>
               {item.title}
             </span>
@@ -52,7 +52,7 @@ export function KBreadcrumb({
             {item.href && !isLast ? (
               <a 
                 href={item.href} 
-                className="cursor-pointer focus:outline-none focus:ring-2 focus:ring-[var(--khor-primary-light)] rounded-md"
+                className="cursor-pointer focus:outline-none focus:ring-2 focus:ring-khor-primary-light rounded-md"
                 onClick={(e) => {
                   if (item.onClick) {
                     e.preventDefault();
@@ -66,7 +66,7 @@ export function KBreadcrumb({
               <button 
                 type="button" 
                 onClick={item.onClick}
-                className="cursor-pointer focus:outline-none focus:ring-2 focus:ring-[var(--khor-primary-light)] rounded-md"
+                className="cursor-pointer focus:outline-none focus:ring-2 focus:ring-khor-primary-light rounded-md"
               >
                 {ItemContent}
               </button>
@@ -75,7 +75,7 @@ export function KBreadcrumb({
             )}
             
             {!isLast && (
-              <span className="text-[var(--khor-neutral-300)] shrink-0 select-none mx-0.5">
+              <span className="text-khor-neutral-300 shrink-0 select-none mx-0.5">
                 {separator}
               </span>
             )}

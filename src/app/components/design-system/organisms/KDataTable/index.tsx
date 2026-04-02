@@ -166,11 +166,11 @@ export function KDataTable<TData>({
 
   /* ─── Renderizado ───────────────────────── */
   return (
-    <div className={`flex flex-col rounded-xl overflow-hidden border bg-[var(--khor-surface-page)] shadow-sm font-primary ${className || ''}`}>
+    <div className={`flex flex-col rounded-xl overflow-hidden border bg-khor-surface-page shadow-sm font-primary ${className || ''}`}>
       
       {/* ─── Toolbar ─── */}
       {(searchable || actions || enableColumnToggle || enableExport) && (
-        <div className="flex flex-wrap items-center justify-between gap-3 p-4 border-b bg-[var(--khor-neutral-50)]">
+        <div className="flex flex-wrap items-center justify-between gap-3 p-4 border-b bg-khor-neutral-50">
           <div className="flex-1 min-w-[200px]">
             {searchable && (
               <KSearchInput 
@@ -186,7 +186,7 @@ export function KDataTable<TData>({
             {enableExport && (
               <button 
                 onClick={handleExportCSV} 
-                className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 text-sm font-medium border rounded-md shadow-sm transition-colors text-[var(--khor-neutral-600)] hover:bg-[var(--khor-neutral-100)] bg-[var(--khor-surface-page)] active:scale-95"
+                className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 text-sm font-medium border rounded-md shadow-sm transition-colors text-khor-neutral-600 hover:bg-khor-neutral-100 bg-khor-surface-page active:scale-95"
               >
                 <Download className="w-4 h-4" /> CSV
               </button>
@@ -195,7 +195,7 @@ export function KDataTable<TData>({
             {enableColumnToggle && (
               <KDropdownMenuRoot>
                 <KDropdownMenuTrigger asChild>
-                  <button className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 text-sm font-medium border rounded-md shadow-sm transition-colors text-[var(--khor-neutral-600)] hover:bg-[var(--khor-neutral-100)] bg-[var(--khor-surface-page)] active:scale-95">
+                  <button className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 text-sm font-medium border rounded-md shadow-sm transition-colors text-khor-neutral-600 hover:bg-khor-neutral-100 bg-khor-surface-page active:scale-95">
                     <Columns3 className="w-4 h-4" /> Columnas
                   </button>
                 </KDropdownMenuTrigger>
@@ -230,14 +230,14 @@ export function KDataTable<TData>({
         style={{ maxHeight: maxHeight ? maxHeight : undefined }}
       >
         <table className="w-full text-sm text-left border-collapse min-w-[600px]">
-          <thead className={`text-xs font-semibold text-[var(--khor-neutral-500)] bg-[var(--khor-neutral-50)] ${stickyHeader ? 'sticky top-0 z-10 shadow-sm' : ''}`}>
+          <thead className={`text-xs font-semibold text-khor-neutral-500 bg-khor-neutral-50 ${stickyHeader ? 'sticky top-0 z-10 shadow-sm' : ''}`}>
             {table.getHeaderGroups().map(headerGroup => (
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map(header => {
                   return (
                     <th 
                       key={header.id} 
-                      className={`px-4 py-3 border-b select-none ${header.column.getCanSort() ? 'cursor-pointer hover:bg-[var(--khor-neutral-100)] transition-colors' : ''}`}
+                      className={`px-4 py-3 border-b select-none ${header.column.getCanSort() ? 'cursor-pointer hover:bg-khor-neutral-100 transition-colors' : ''}`}
                       onClick={header.column.getToggleSortingHandler()}
                       style={{ width: header.getSize() !== 150 ? header.getSize() : undefined }}
                     >
@@ -245,8 +245,8 @@ export function KDataTable<TData>({
                         <div className="flex items-center gap-1">
                           {flexRender(header.column.columnDef.header, header.getContext())}
                           {{
-                            asc: <ChevronUp className="w-3.5 h-3.5 text-[var(--khor-primary)]" />,
-                            desc: <ChevronDown className="w-3.5 h-3.5 text-[var(--khor-primary)]" />
+                            asc: <ChevronUp className="w-3.5 h-3.5 text-khor-primary" />,
+                            desc: <ChevronDown className="w-3.5 h-3.5 text-khor-primary" />
                           }[header.column.getIsSorted() as string] ?? null}
                         </div>
                       )}
@@ -257,20 +257,20 @@ export function KDataTable<TData>({
             ))}
           </thead>
           
-          <tbody className="divide-y text-[var(--khor-neutral-700)] bg-[var(--khor-surface-page)]">
+          <tbody className="divide-y text-khor-neutral-700 bg-khor-surface-page">
             {loading ? (
               // Esqueleto Loading
               <tr>
                 <td colSpan={tableColumns.length} className="px-4 py-16 text-center">
-                  <div className="inline-flex items-center justify-center w-8 h-8 rounded-full border-2 border-[var(--khor-primary)] border-r-transparent animate-spin" />
-                  <p className="mt-2 text-sm text-[var(--khor-neutral-500)]">Cargando datos...</p>
+                  <div className="inline-flex items-center justify-center w-8 h-8 rounded-full border-2 border-khor-primary border-r-transparent animate-spin" />
+                  <p className="mt-2 text-sm text-khor-neutral-500">Cargando datos...</p>
                 </td>
               </tr>
             ) : table.getRowModel().rows.length === 0 ? (
               // Empty State
               <tr>
                 <td colSpan={tableColumns.length} className="px-4 py-16 text-center">
-                  <p className="text-sm font-medium text-[var(--khor-neutral-500)]">No se encontraron resultados</p>
+                  <p className="text-sm font-medium text-khor-neutral-500">No se encontraron resultados</p>
                 </td>
               </tr>
             ) : (
@@ -278,7 +278,7 @@ export function KDataTable<TData>({
               table.getRowModel().rows.map(row => (
                 <tr 
                   key={row.id} 
-                  className={`group transition-colors ${onRowClick ? 'cursor-pointer hover:bg-[var(--khor-primary-light)]' : 'hover:bg-[var(--khor-neutral-50)]'} ${row.getIsSelected() ? 'bg-[var(--khor-primary-light)]' : ''}`}
+                  className={`group transition-colors ${onRowClick ? 'cursor-pointer hover:bg-khor-primary-light' : 'hover:bg-khor-neutral-50'} ${row.getIsSelected() ? 'bg-khor-primary-light' : ''}`}
                   onClick={() => onRowClick && onRowClick(row.original)}
                 >
                   {row.getVisibleCells().map(cell => (
@@ -294,11 +294,11 @@ export function KDataTable<TData>({
       </div>
 
       {/* ─── Paginación ─── */}
-      <div className="flex items-center justify-between px-4 py-3 border-t bg-[var(--khor-surface-page)]">
-        <div className="flex-1 text-sm text-[var(--khor-neutral-500)]">
+      <div className="flex items-center justify-between px-4 py-3 border-t bg-khor-surface-page">
+        <div className="flex-1 text-sm text-khor-neutral-500">
           {enableRowSelection ? (
             <span>
-              <strong className="text-[var(--khor-primary)]">{table.getFilteredSelectedRowModel().rows.length}</strong> de{" "}
+              <strong className="text-khor-primary">{table.getFilteredSelectedRowModel().rows.length}</strong> de{" "}
               {table.getFilteredRowModel().rows.length} fila(s) seleccionada(s).
             </span>
           ) : (
@@ -310,13 +310,13 @@ export function KDataTable<TData>({
         
         <div className="flex items-center gap-4 lg:gap-6">
           <div className="flex items-center gap-2">
-            <span className="text-sm text-[var(--khor-neutral-500)] hidden sm:block">Filas por página:</span>
+            <span className="text-sm text-khor-neutral-500 hidden sm:block">Filas por página:</span>
             <select
               value={table.getState().pagination.pageSize}
               onChange={e => {
                 table.setPageSize(Number(e.target.value))
               }}
-              className="px-2 py-1 text-sm border rounded-md outline-none focus:ring-2 focus:ring-[var(--khor-primary-light)] bg-[var(--khor-surface-page)] text-[var(--khor-neutral-700)] cursor-pointer"
+              className="px-2 py-1 text-sm border rounded-md outline-none focus:ring-2 focus:ring-khor-primary-light bg-khor-surface-page text-khor-neutral-700 cursor-pointer"
             >
               {[10, 20, 30, 40, 50, ...pageSizes].filter((v, i, a) => a.indexOf(v) === i).sort((a,b)=>a-b).map(pageSize => (
                 <option key={pageSize} value={pageSize}>
@@ -330,7 +330,7 @@ export function KDataTable<TData>({
             <button
               onClick={() => table.setPageIndex(0)}
               disabled={!table.getCanPreviousPage()}
-              className="p-1 rounded-md border bg-[var(--khor-surface-page)] disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[var(--khor-neutral-100)] transition-colors text-[var(--khor-neutral-600)]"
+              className="p-1 rounded-md border bg-khor-surface-page disabled:opacity-50 disabled:cursor-not-allowed hover:bg-khor-neutral-100 transition-colors text-khor-neutral-600"
               aria-label="Ir a la primer página"
             >
               <ChevronsLeft className="w-5 h-5" />
@@ -338,7 +338,7 @@ export function KDataTable<TData>({
             <button
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
-              className="p-1 rounded-md border bg-[var(--khor-surface-page)] disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[var(--khor-neutral-100)] transition-colors text-[var(--khor-neutral-600)]"
+              className="p-1 rounded-md border bg-khor-surface-page disabled:opacity-50 disabled:cursor-not-allowed hover:bg-khor-neutral-100 transition-colors text-khor-neutral-600"
               aria-label="Ir a la página anterior"
             >
               <ChevronLeft className="w-5 h-5" />
@@ -346,7 +346,7 @@ export function KDataTable<TData>({
             <button
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
-              className="p-1 rounded-md border bg-[var(--khor-surface-page)] disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[var(--khor-neutral-100)] transition-colors text-[var(--khor-neutral-600)]"
+              className="p-1 rounded-md border bg-khor-surface-page disabled:opacity-50 disabled:cursor-not-allowed hover:bg-khor-neutral-100 transition-colors text-khor-neutral-600"
               aria-label="Ir a la página siguiente"
             >
               <ChevronRight className="w-5 h-5" />
@@ -354,7 +354,7 @@ export function KDataTable<TData>({
             <button
               onClick={() => table.setPageIndex(table.getPageCount() - 1)}
               disabled={!table.getCanNextPage()}
-              className="p-1 rounded-md border bg-[var(--khor-surface-page)] disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[var(--khor-neutral-100)] transition-colors text-[var(--khor-neutral-600)]"
+              className="p-1 rounded-md border bg-khor-surface-page disabled:opacity-50 disabled:cursor-not-allowed hover:bg-khor-neutral-100 transition-colors text-khor-neutral-600"
               aria-label="Ir a la última página"
             >
               <ChevronsRight className="w-5 h-5" />

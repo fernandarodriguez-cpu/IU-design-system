@@ -58,7 +58,7 @@ export function KPagination({
     return pages.map((page, index) => {
       if (typeof page === 'string') {
         return (
-          <span key={page + index} className="w-8 h-8 flex items-center justify-center text-[var(--khor-neutral-400)]">
+          <span key={page + index} className="w-8 h-8 flex items-center justify-center text-khor-neutral-400">
             <MoreHorizontal className="w-4 h-4" />
           </span>
         );
@@ -73,8 +73,8 @@ export function KPagination({
           className={cn(
             "w-8 h-8 flex items-center justify-center rounded-md text-sm font-bold transition-all",
             isActive 
-              ? "bg-[var(--khor-primary)] text-white shadow-md shadow-[var(--khor-primary-light)]/50" 
-              : "text-[var(--khor-neutral-600)] hover:bg-[var(--khor-neutral-100)] hover:text-[var(--khor-primary)]",
+              ? "bg-khor-primary text-white shadow-md shadow-khor-primary-light/50" 
+              : "text-khor-neutral-600 hover:bg-khor-neutral-100 hover:text-khor-primary",
             disabled && "cursor-not-allowed opacity-50 grayscale"
           )}
         >
@@ -96,8 +96,8 @@ export function KPagination({
         disabled={disabled || current === 1}
         onClick={() => handlePageChange(current - 1)}
         className={cn(
-          "w-8 h-8 flex items-center justify-center rounded-md border border-[var(--khor-neutral-200)] transition-colors",
-          current === 1 ? "text-[var(--khor-neutral-300)] bg-[var(--khor-neutral-50)]" : "text-[var(--khor-neutral-600)] hover:border-[var(--khor-primary)] hover:text-[var(--khor-primary)] active:bg-[var(--khor-neutral-100)]"
+          "w-8 h-8 flex items-center justify-center rounded-md border border-khor-neutral-200 transition-colors",
+          current === 1 ? "text-khor-neutral-300 bg-khor-neutral-50" : "text-khor-neutral-600 hover:border-khor-primary hover:text-khor-primary active:bg-khor-neutral-100"
         )}
       >
         <ChevronLeft className="w-4 h-4" />
@@ -112,8 +112,8 @@ export function KPagination({
         disabled={disabled || current === totalPages}
         onClick={() => handlePageChange(current + 1)}
         className={cn(
-          "w-8 h-8 flex items-center justify-center rounded-md border border-[var(--khor-neutral-200)] transition-colors",
-          current === totalPages ? "text-[var(--khor-neutral-300)] bg-[var(--khor-neutral-50)]" : "text-[var(--khor-neutral-600)] hover:border-[var(--khor-primary)] hover:text-[var(--khor-primary)] active:bg-[var(--khor-neutral-100)]"
+          "w-8 h-8 flex items-center justify-center rounded-md border border-khor-neutral-200 transition-colors",
+          current === totalPages ? "text-khor-neutral-300 bg-khor-neutral-50" : "text-khor-neutral-600 hover:border-khor-primary hover:text-khor-primary active:bg-khor-neutral-100"
         )}
       >
         <ChevronRight className="w-4 h-4" />

@@ -73,7 +73,7 @@ export function KColorPicker({
           type="button"
           disabled={disabled}
           className={cn(
-            "flex items-center gap-2 border border-[var(--khor-neutral-200)] rounded-md bg-[var(--khor-surface-page)] transition-all hover:border-[var(--khor-primary)] font-primary select-none",
+            "flex items-center gap-2 border border-khor-neutral-200 rounded-md bg-khor-surface-page transition-all hover:border-khor-primary font-primary select-none",
             disabled && "opacity-50 cursor-not-allowed",
             sizeClasses[size],
             className
@@ -85,14 +85,14 @@ export function KColorPicker({
             style={{ backgroundColor: activeColor }}
           />
           {showText && (
-            <span className="font-semibold text-[var(--khor-neutral-700)] uppercase">
+            <span className="font-semibold text-khor-neutral-700 uppercase">
               {activeColor}
             </span>
           )}
         </button>
       </KPopoverTrigger>
       
-      <KPopoverContent align="start" className="w-56 p-3 z-[100] bg-[var(--khor-surface-page)] border rounded-xl shadow-xl">
+      <KPopoverContent align="start" className="w-56 p-3 z-[100] bg-khor-surface-page border rounded-xl shadow-xl">
         <div className="flex flex-col gap-4">
           {/* Grid de Presets */}
           <div className="grid grid-cols-6 gap-2">
@@ -102,7 +102,7 @@ export function KColorPicker({
                 onClick={() => handleColorChange(color)}
                 className={cn(
                   "w-6 h-6 rounded-md border border-black/5 transition-transform hover:scale-110 active:scale-95 shadow-sm",
-                  activeColor === color && "ring-2 ring-[var(--khor-primary)] ring-offset-1"
+                  activeColor === color && "ring-2 ring-khor-primary ring-offset-1"
                 )}
                 style={{ backgroundColor: color }}
               />
@@ -111,7 +111,7 @@ export function KColorPicker({
 
           {/* Input HEX Manual */}
           <div className="flex flex-col gap-1.5">
-            <span className="text-[10px] font-bold text-[var(--khor-neutral-400)] uppercase tracking-wider">
+            <span className="text-[10px] font-bold text-khor-neutral-400 uppercase tracking-wider">
               Color Personalizado (Hex)
             </span>
             <div className="flex gap-2">
@@ -125,7 +125,7 @@ export function KColorPicker({
                 type="text"
                 value={activeColor}
                 onChange={(e) => handleColorChange(e.target.value)}
-                className="flex-1 px-2 py-1 text-xs font-mono border rounded border-[var(--khor-neutral-200)] outline-none focus:border-[var(--khor-primary)] uppercase"
+                className="flex-1 px-2 py-1 text-xs font-mono border rounded border-khor-neutral-200 outline-none focus:border-khor-primary uppercase"
               />
             </div>
           </div>

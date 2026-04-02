@@ -61,8 +61,8 @@ export const KRadioItem = React.forwardRef<React.ElementRef<typeof RadioGroupPri
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
           "disabled:pointer-events-none disabled:opacity-50",
           buttonStyle === 'solid' 
-            ? "border-transparent bg-[var(--khor-neutral-100)] text-[var(--khor-neutral-900)] hover:bg-[var(--khor-neutral-200)] data-[state=checked]:bg-[var(--khor-primary)] data-[state=checked]:text-white"
-            : "border-[var(--khor-neutral-200)] bg-transparent text-[var(--khor-neutral-900)] hover:bg-[var(--khor-neutral-50)] data-[state=checked]:border-[var(--khor-primary)] data-[state=checked]:text-[var(--khor-primary)] data-[state=checked]:bg-[color-mix(in_srgb,var(--khor-primary)_10%,transparent)]",
+            ? "border-transparent bg-khor-neutral-100 text-khor-neutral-900 hover:bg-khor-neutral-200 data-[state=checked]:bg-khor-primary data-[state=checked]:text-white"
+            : "border-khor-neutral-200 bg-transparent text-khor-neutral-900 hover:bg-khor-neutral-50 data-[state=checked]:border-khor-primary data-[state=checked]:text-khor-primary data-[state=checked]:bg-[color-mix(in_srgb,var(--khor-primary)_10%,transparent)]",
           className
         )}
         {...rest}
@@ -81,8 +81,8 @@ export const KRadioItem = React.forwardRef<React.ElementRef<typeof RadioGroupPri
       <RadioGroupPrimitive.Item
         ref={ref}
         className={cn(
-          "aspect-square h-4 w-4 rounded-full border border-[var(--khor-primary)] text-[var(--khor-primary)]",
-          "ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--khor-primary)] focus-visible:ring-offset-2",
+          "aspect-square h-4 w-4 rounded-full border border-khor-primary text-khor-primary",
+          "ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-khor-primary focus-visible:ring-offset-2",
           "disabled:cursor-not-allowed disabled:opacity-50",
           className
         )}
@@ -93,7 +93,7 @@ export const KRadioItem = React.forwardRef<React.ElementRef<typeof RadioGroupPri
         </RadioGroupPrimitive.Indicator>
       </RadioGroupPrimitive.Item>
       {content && (
-        <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-[var(--khor-neutral-900)]">
+        <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-khor-neutral-900">
           {content}
         </span>
       )}

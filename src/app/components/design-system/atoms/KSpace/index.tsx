@@ -55,7 +55,7 @@ export function KSpace({
         <React.Fragment key={index}>
           {child}
           {split && index < items.length - 1 && (
-            <span className="shrink-0 opacity-20 border-l border-[var(--khor-neutral-300)] self-stretch mx-1" />
+            <span className="shrink-0 opacity-20 border-l border-khor-neutral-300 self-stretch mx-1" />
           )}
         </React.Fragment>
       ))}

@@ -63,13 +63,13 @@ export function KCalendar({
   };
 
   const renderHeader = () => (
-    <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--khor-neutral-200)] bg-white rounded-t-xl">
+    <div className="flex items-center justify-between px-6 py-4 border-b border-khor-neutral-200 bg-white rounded-t-xl">
       <div className="flex items-center gap-3">
-        <div className="p-2 bg-[var(--khor-primary-light)]/10 rounded-lg text-[var(--khor-primary)]">
+        <div className="p-2 bg-khor-primary-light/10 rounded-lg text-khor-primary">
           <CalendarIcon className="w-5 h-5" />
         </div>
         <div>
-          <h3 className="text-lg font-extrabold text-[var(--khor-neutral-900)] capitalize tracking-tight">
+          <h3 className="text-lg font-extrabold text-khor-neutral-900 capitalize tracking-tight">
             {format(currentMonth, 'MMMM yyyy', { locale: es })}
           </h3>
         </div>
@@ -78,12 +78,12 @@ export function KCalendar({
         <KButton variant="neutral" size="sm" onClick={() => setCurrentMonth(new Date())}>
           Hoy
         </KButton>
-        <div className="flex border border-[var(--khor-neutral-200)] rounded-lg overflow-hidden bg-white">
-          <button onClick={prevMonth} className="p-2 hover:bg-[var(--khor-neutral-50)] transition-colors border-r border-[var(--khor-neutral-200)]">
-            <ChevronLeft className="w-4 h-4 text-[var(--khor-neutral-600)]" />
+        <div className="flex border border-khor-neutral-200 rounded-lg overflow-hidden bg-white">
+          <button onClick={prevMonth} className="p-2 hover:bg-khor-neutral-50 transition-colors border-r border-khor-neutral-200">
+            <ChevronLeft className="w-4 h-4 text-khor-neutral-600" />
           </button>
-          <button onClick={nextMonth} className="p-2 hover:bg-[var(--khor-neutral-50)] transition-colors">
-            <ChevronRight className="w-4 h-4 text-[var(--khor-neutral-600)]" />
+          <button onClick={nextMonth} className="p-2 hover:bg-khor-neutral-50 transition-colors">
+            <ChevronRight className="w-4 h-4 text-khor-neutral-600" />
           </button>
         </div>
       </div>
@@ -93,9 +93,9 @@ export function KCalendar({
   const renderDays = () => {
     const days = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
     return (
-      <div className="grid grid-cols-7 bg-[var(--khor-neutral-50)] border-b border-[var(--khor-neutral-200)]">
+      <div className="grid grid-cols-7 bg-khor-neutral-50 border-b border-khor-neutral-200">
         {days.map((day, i) => (
-          <div key={i} className="py-3 text-center text-[10px] font-bold text-[var(--khor-neutral-400)] uppercase tracking-widest">
+          <div key={i} className="py-3 text-center text-[10px] font-bold text-khor-neutral-400 uppercase tracking-widest">
             {day}
           </div>
         ))}
@@ -125,17 +125,17 @@ export function KCalendar({
           <div
             key={day.toString()}
             className={cn(
-              "relative min-h-[120px] p-2 border-r border-b border-[var(--khor-neutral-100)] transition-all bg-white hover:bg-[var(--khor-neutral-50)]/50 cursor-pointer group",
-              !isCurrentMonth && "bg-[var(--khor-neutral-50)]/30 text-[var(--khor-neutral-300)]"
+              "relative min-h-[120px] p-2 border-r border-b border-khor-neutral-100 transition-all bg-white hover:bg-khor-neutral-50/50 cursor-pointer group",
+              !isCurrentMonth && "bg-khor-neutral-50/30 text-khor-neutral-300"
             )}
             onClick={() => onDateClick(cloneDay)}
           >
             <div className="flex justify-between items-start mb-2">
               <span className={cn(
                 "text-xs font-bold w-7 h-7 flex items-center justify-center rounded-full transition-colors",
-                isSelected && "bg-[var(--khor-primary)] text-white shadow-md",
-                isToday && !isSelected && "text-[var(--khor-primary)] ring-1 ring-[var(--khor-primary)]",
-                !isSelected && !isToday && isCurrentMonth && "text-[var(--khor-neutral-700)] group-hover:text-[var(--khor-primary)]"
+                isSelected && "bg-khor-primary text-white shadow-md",
+                isToday && !isSelected && "text-khor-primary ring-1 ring-khor-primary",
+                !isSelected && !isToday && isCurrentMonth && "text-khor-neutral-700 group-hover:text-khor-primary"
               )}>
                 {format(day, dateFormat)}
               </span>
@@ -161,7 +161,7 @@ export function KCalendar({
 
   return (
     <div 
-      className={cn("w-full border border-[var(--khor-neutral-200)] rounded-xl shadow-sm overflow-hidden font-primary", className)} 
+      className={cn("w-full border border-khor-neutral-200 rounded-xl shadow-sm overflow-hidden font-primary", className)} 
       style={style}
     >
       {renderHeader()}

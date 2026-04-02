@@ -69,14 +69,14 @@ export function KPopconfirm({
       >
         <div className="flex gap-3">
           <div className="shrink-0 pt-0.5">
-            {icon || <AlertCircle className="w-5 h-5 text-[var(--khor-warning)]" />}
+            {icon || <AlertCircle className="w-5 h-5 text-khor-warning" />}
           </div>
           <div className="flex flex-col gap-1.5">
-            <h5 className="text-sm font-semibold text-[var(--khor-neutral-900)] leading-tight">
+            <h5 className="text-sm font-semibold text-khor-neutral-900 leading-tight">
               {title}
             </h5>
             {description && (
-              <p className="text-xs text-[var(--khor-neutral-500)] leading-normal">
+              <p className="text-xs text-khor-neutral-500 leading-normal">
                 {description}
               </p>
             )}

@@ -65,26 +65,26 @@ export function KAccordion({
           disabled={item.disabled}
           className={cn(
             "overflow-hidden transition-all duration-300",
-            variant === 'bordered' && "border border-[var(--khor-neutral-200)] rounded-lg px-2",
-            variant === 'ghost' && "border-b border-[var(--khor-neutral-100)]"
+            variant === 'bordered' && "border border-khor-neutral-200 rounded-lg px-2",
+            variant === 'ghost' && "border-b border-khor-neutral-100"
           )}
         >
           <AccordionPrimitive.Header className="flex">
             <AccordionPrimitive.Trigger
               className={cn(
-                "flex flex-1 items-center justify-between py-4 text-sm font-semibold transition-all hover:text-[var(--khor-primary)] [&[data-state=open]>svg]:rotate-180",
+                "flex flex-1 items-center justify-between py-4 text-sm font-semibold transition-all hover:text-khor-primary [&[data-state=open]>svg]:rotate-180",
                 item.disabled && "opacity-50 cursor-not-allowed hover:text-current"
               )}
             >
               {item.label}
-              <ChevronDown className="h-4 w-4 shrink-0 text-[var(--khor-neutral-400)] transition-transform duration-300" />
+              <ChevronDown className="h-4 w-4 shrink-0 text-khor-neutral-400 transition-transform duration-300" />
             </AccordionPrimitive.Trigger>
           </AccordionPrimitive.Header>
           
           <AccordionPrimitive.Content
             className="overflow-hidden text-sm data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down"
           >
-            <div className="pb-4 pt-0 text-[var(--khor-neutral-600)] leading-relaxed">
+            <div className="pb-4 pt-0 text-khor-neutral-600 leading-relaxed">
               {item.children}
             </div>
           </AccordionPrimitive.Content>

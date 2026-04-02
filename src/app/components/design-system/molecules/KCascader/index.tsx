@@ -111,28 +111,28 @@ export function KCascader({
           type="button"
           disabled={disabled}
           className={cn(
-            "flex min-h-[40px] w-full items-center justify-between px-3 py-2 border rounded-md shadow-sm transition-all outline-none focus:ring-2 focus:ring-[var(--khor-primary-light)] font-primary bg-[var(--khor-surface-page)] text-left",
-            disabled ? "opacity-50 cursor-not-allowed bg-[var(--khor-neutral-100)]" : "cursor-pointer hover:border-[var(--khor-primary)]",
+            "flex min-h-[40px] w-full items-center justify-between px-3 py-2 border rounded-md shadow-sm transition-all outline-none focus:ring-2 focus:ring-khor-primary-light font-primary bg-khor-surface-page text-left",
+            disabled ? "opacity-50 cursor-not-allowed bg-khor-neutral-100" : "cursor-pointer hover:border-khor-primary",
             className
           )}
           style={style}
         >
-          <span className={cn("truncate text-sm flex-1", activePath.length === 0 ? "text-[var(--khor-neutral-400)]" : "text-[var(--khor-neutral-900)]")}>
+          <span className={cn("truncate text-sm flex-1", activePath.length === 0 ? "text-khor-neutral-400" : "text-khor-neutral-900")}>
             {getLabel()}
           </span>
           <div className="flex items-center gap-1 shrink-0 ml-2">
             {!disabled && activePath.length > 0 && (
               <X 
-                className="w-3.5 h-3.5 text-[var(--khor-neutral-400)] hover:text-[var(--khor-neutral-600)] transition-colors" 
+                className="w-3.5 h-3.5 text-khor-neutral-400 hover:text-khor-neutral-600 transition-colors" 
                 onClick={clearSelection} 
               />
             )}
-            <ChevronRight className={cn("w-4 h-4 text-[var(--khor-neutral-400)] transition-transform duration-300", open && "rotate-90")} />
+            <ChevronRight className={cn("w-4 h-4 text-khor-neutral-400 transition-transform duration-300", open && "rotate-90")} />
           </div>
         </button>
       </KPopoverTrigger>
 
-      <KPopoverContent align="start" className="p-0 flex border rounded-lg shadow-xl bg-[var(--khor-surface-page)] z-[100] max-h-80 overflow-hidden font-primary">
+      <KPopoverContent align="start" className="p-0 flex border rounded-lg shadow-xl bg-khor-surface-page z-[100] max-h-80 overflow-hidden font-primary">
         {[0, 1, 2, 3].map(level => {
           const levelOptions = getOptionsAtLevel(level);
           if (levelOptions.length === 0) return null;
@@ -142,7 +142,7 @@ export function KCascader({
               key={level} 
               className={cn(
                 "w-48 overflow-y-auto py-1 max-h-80",
-                level > 0 && "border-l border-[var(--khor-neutral-100)] bg-[var(--khor-neutral-50)/30]"
+                level > 0 && "border-l border-khor-neutral-100 bg-khor-neutral-50/30"
               )}
             >
               {levelOptions.map(opt => {
@@ -156,7 +156,7 @@ export function KCascader({
                     onClick={() => handleSelect(opt, level)}
                     className={cn(
                       "flex items-center justify-between px-3 py-2 text-sm cursor-pointer transition-colors group",
-                      isActive ? "bg-[var(--khor-primary-light)]/10 text-[var(--khor-primary)]" : "text-[var(--khor-neutral-700)] hover:bg-[var(--khor-neutral-50)]",
+                      isActive ? "bg-khor-primary-light/10 text-khor-primary" : "text-khor-neutral-700 hover:bg-khor-neutral-50",
                       opt.disabled && "opacity-40 cursor-not-allowed grayscale"
                     )}
                   >
@@ -164,7 +164,7 @@ export function KCascader({
                       {opt.label}
                     </span>
                     <div className="flex items-center shrink-0">
-                      {isSelected && isFinal && <Check className="w-3.5 h-3.5 text-[var(--khor-primary)]" />}
+                      {isSelected && isFinal && <Check className="w-3.5 h-3.5 text-khor-primary" />}
                       {!isFinal && <ChevronRight className="w-3.5 h-3.5 opacity-40 group-hover:opacity-100" />}
                     </div>
                   </div>

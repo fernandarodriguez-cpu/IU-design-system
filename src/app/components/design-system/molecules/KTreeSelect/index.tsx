@@ -103,7 +103,7 @@ export function KTreeSelect({
           onClick={() => handleSelect(node)}
           className={cn(
             "flex items-center gap-1 px-2 py-1.5 cursor-pointer rounded-md transition-colors group text-sm",
-            isSelected ? "bg-[var(--khor-primary-light)]/20 text-[var(--khor-primary)] font-bold" : "text-[var(--khor-neutral-700)] hover:bg-[var(--khor-neutral-50)]",
+            isSelected ? "bg-khor-primary-light/20 text-khor-primary font-bold" : "text-khor-neutral-700 hover:bg-khor-neutral-50",
             node.disabled && "opacity-40 cursor-not-allowed grayscale"
           )}
           style={{ paddingLeft: `${level * 16 + 8}px` }}
@@ -112,18 +112,18 @@ export function KTreeSelect({
             {hasChildren && (
               <button 
                 onClick={(e) => toggleExpand(e, node.value)}
-                className="p-0.5 hover:bg-[var(--khor-neutral-200)] rounded-sm transition-colors"
+                className="p-0.5 hover:bg-khor-neutral-200 rounded-sm transition-colors"
               >
                 {isExpanded ? (
-                  <ChevronDown className="w-3.5 h-3.5 text-[var(--khor-neutral-400)]" />
+                  <ChevronDown className="w-3.5 h-3.5 text-khor-neutral-400" />
                 ) : (
-                  <ChevronRight className="w-3.5 h-3.5 text-[var(--khor-neutral-400)]" />
+                  <ChevronRight className="w-3.5 h-3.5 text-khor-neutral-400" />
                 )}
               </button>
             )}
           </div>
           <span className="truncate flex-1">{node.label || node.title}</span>
-          {isSelected && <Check className="w-3.5 h-3.5 text-[var(--khor-primary)] shrink-0" />}
+          {isSelected && <Check className="w-3.5 h-3.5 text-khor-primary shrink-0" />}
         </div>
         
         {hasChildren && (isExpanded || searchQuery) && (
@@ -142,38 +142,38 @@ export function KTreeSelect({
           type="button"
           disabled={disabled}
           className={cn(
-            "flex min-h-[40px] w-full items-center justify-between px-3 py-2 border rounded-md shadow-sm transition-all outline-none focus:ring-2 focus:ring-[var(--khor-primary-light)] font-primary bg-[var(--khor-surface-page)] text-left",
-            disabled ? "opacity-50 cursor-not-allowed bg-[var(--khor-neutral-100)]" : "cursor-pointer hover:border-[var(--khor-primary)]",
+            "flex min-h-[40px] w-full items-center justify-between px-3 py-2 border rounded-md shadow-sm transition-all outline-none focus:ring-2 focus:ring-khor-primary-light font-primary bg-khor-surface-page text-left",
+            disabled ? "opacity-50 cursor-not-allowed bg-khor-neutral-100" : "cursor-pointer hover:border-khor-primary",
             className
           )}
           style={style}
         >
-          <span className={cn("truncate text-sm flex-1 font-semibold", !value ? "text-[var(--khor-neutral-400)]" : "text-[var(--khor-neutral-900)]")}>
+          <span className={cn("truncate text-sm flex-1 font-semibold", !value ? "text-khor-neutral-400" : "text-khor-neutral-900")}>
             {selectedLabel || placeholder}
           </span>
           <div className="flex items-center gap-1 shrink-0 ml-2">
             {!disabled && value && (
               <X 
-                className="w-3.5 h-3.5 text-[var(--khor-neutral-400)] hover:text-[var(--khor-neutral-600)] transition-colors" 
+                className="w-3.5 h-3.5 text-khor-neutral-400 hover:text-khor-neutral-600 transition-colors" 
                 onClick={(e) => { e.stopPropagation(); onChange?.('', ''); }} 
               />
             )}
-            <ChevronDown className={cn("w-4 h-4 text-[var(--khor-neutral-400)] transition-transform duration-300", open && "rotate-180")} />
+            <ChevronDown className={cn("w-4 h-4 text-khor-neutral-400 transition-transform duration-300", open && "rotate-180")} />
           </div>
         </button>
       </KPopoverTrigger>
 
-      <KPopoverContent align="start" className="w-full min-w-[240px] p-2 border rounded-lg shadow-xl bg-[var(--khor-surface-page)] z-[100] max-h-80 overflow-hidden font-primary flex flex-col">
+      <KPopoverContent align="start" className="w-full min-w-[240px] p-2 border rounded-lg shadow-xl bg-khor-surface-page z-[100] max-h-80 overflow-hidden font-primary flex flex-col">
         {showSearch && (
           <div className="relative mb-2 shrink-0">
-            <Search className="absolute left-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[var(--khor-neutral-400)]" />
+            <Search className="absolute left-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-khor-neutral-400" />
             <input
               type="text"
               autoFocus
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Filtrar árbol..."
-              className="w-full pl-8 pr-3 py-1.5 text-xs bg-[var(--khor-neutral-50)] border-none rounded-md outline-none focus:ring-1 focus:ring-[var(--khor-primary)]"
+              className="w-full pl-8 pr-3 py-1.5 text-xs bg-khor-neutral-50 border-none rounded-md outline-none focus:ring-1 focus:ring-khor-primary"
             />
           </div>
         )}

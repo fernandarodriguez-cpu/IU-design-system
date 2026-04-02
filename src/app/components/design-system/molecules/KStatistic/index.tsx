@@ -53,17 +53,17 @@ export function KStatistic({
       style={style}
     >
       {title && (
-        <div className="text-sm font-medium text-[var(--khor-neutral-500)] mb-1">
+        <div className="text-sm font-medium text-khor-neutral-500 mb-1">
           {title}
         </div>
       )}
       
       <div className="flex items-baseline gap-1">
-        {prefix && <span className="text-xl font-semibold text-[var(--khor-neutral-900)] opacity-70">{prefix}</span>}
-        <span className="text-3xl font-extrabold text-[var(--khor-neutral-900)] tracking-tight">
+        {prefix && <span className="text-xl font-semibold text-khor-neutral-900 opacity-70">{prefix}</span>}
+        <span className="text-3xl font-extrabold text-khor-neutral-900 tracking-tight">
           {formattedValue}
         </span>
-        {suffix && <span className="text-sm font-semibold text-[var(--khor-neutral-500)] ml-1">{suffix}</span>}
+        {suffix && <span className="text-sm font-semibold text-khor-neutral-500 ml-1">{suffix}</span>}
       </div>
 
       {trend && trendValue && (

@@ -51,18 +51,18 @@ export function KList({
       <KSkeleton lines={3} />
     </div>
   ) : items.length === 0 ? (
-    <div className="py-8 p-4 text-center text-[var(--khor-neutral-400)] text-sm italic">
+    <div className="py-8 p-4 text-center text-khor-neutral-400 text-sm italic">
       {emptyText}
     </div>
   ) : (
-    <ul className="divide-y divide-[var(--khor-neutral-100)]">
+    <ul className="divide-y divide-khor-neutral-100">
       {items.map((item) => (
         <li 
           key={item.key} 
           onClick={item.onClick}
           className={cn(
             "flex items-start gap-4 transition-colors group",
-            item.onClick && "cursor-pointer hover:bg-[var(--khor-neutral-50)]",
+            item.onClick && "cursor-pointer hover:bg-khor-neutral-50",
             sizeClasses[size]
           )}
         >
@@ -73,7 +73,7 @@ export function KList({
           )}
           <div className="flex-1 min-w-0">
             <div className="flex justify-between items-start gap-2">
-              <div className="font-semibold text-sm text-[var(--khor-neutral-900)] truncate">
+              <div className="font-semibold text-sm text-khor-neutral-900 truncate">
                 {item.title}
               </div>
               {item.extra && (
@@ -83,7 +83,7 @@ export function KList({
               )}
             </div>
             {item.description && (
-              <div className="mt-1 text-xs text-[var(--khor-neutral-500)] leading-relaxed">
+              <div className="mt-1 text-xs text-khor-neutral-500 leading-relaxed">
                 {item.description}
               </div>
             )}
@@ -96,14 +96,14 @@ export function KList({
   return (
     <div 
       className={cn(
-        "bg-[var(--khor-surface-page)] overflow-hidden font-primary",
-        bordered && "border border-[var(--khor-neutral-200)] rounded-lg shadow-sm",
+        "bg-khor-surface-page overflow-hidden font-primary",
+        bordered && "border border-khor-neutral-200 rounded-lg shadow-sm",
         className
       )}
       style={style}
     >
       {header && (
-        <div className={cn("border-b border-[var(--khor-neutral-100)] font-semibold text-[var(--khor-neutral-800)]", sizeClasses[size])}>
+        <div className={cn("border-b border-khor-neutral-100 font-semibold text-khor-neutral-800", sizeClasses[size])}>
           {header}
         </div>
       )}
@@ -111,7 +111,7 @@ export function KList({
       {content}
 
       {footer && (
-        <div className={cn("border-t border-[var(--khor-neutral-100)] bg-[var(--khor-neutral-50)] text-[var(--khor-neutral-600)] text-sm", sizeClasses[size])}>
+        <div className={cn("border-t border-khor-neutral-100 bg-khor-neutral-50 text-khor-neutral-600 text-sm", sizeClasses[size])}>
           {footer}
         </div>
       )}

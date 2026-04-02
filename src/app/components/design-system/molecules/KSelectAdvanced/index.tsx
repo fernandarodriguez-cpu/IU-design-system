@@ -71,10 +71,10 @@ export function KSelectAdvanced({
   };
 
   const statusClasses = status === 'error'
-    ? 'border-[var(--khor-feedback-error)] focus:ring-[var(--khor-feedback-error)]'
+    ? 'border-khor-feedback-error focus:ring-khor-feedback-error'
     : status === 'warning'
-      ? 'border-[var(--khor-feedback-warning)] focus:ring-[var(--khor-feedback-warning)]'
-      : 'border-[var(--khor-neutral-200)] focus:ring-[var(--khor-primary-light)] focus:border-[var(--khor-primary)] hover:border-[var(--khor-primary-light)]';
+      ? 'border-khor-feedback-warning focus:ring-khor-feedback-warning'
+      : 'border-khor-neutral-200 focus:ring-khor-primary-light focus:border-khor-primary hover:border-khor-primary-light';
 
   return (
     <KPopoverRoot open={open} onOpenChange={disabled ? undefined : setOpen}>
@@ -82,21 +82,21 @@ export function KSelectAdvanced({
         <button
           type="button"
           disabled={disabled}
-          className={`relative min-h-[40px] flex w-full items-center justify-between px-3 py-1.5 border rounded-md shadow-sm transition-colors outline-none focus:ring-2 font-primary bg-[var(--khor-surface-page)] text-[var(--khor-neutral-900)] ${statusClasses} ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'} ${className || ''}`}
+          className={`relative min-h-[40px] flex w-full items-center justify-between px-3 py-1.5 border rounded-md shadow-sm transition-colors outline-none focus:ring-2 font-primary bg-khor-surface-page text-khor-neutral-900 ${statusClasses} ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'} ${className || ''}`}
         >
           <div className="flex flex-wrap gap-1 w-full truncate text-sm">
             {selectedValues.length === 0 && (
-              <span className="text-[var(--khor-neutral-400)] pt-0.5">{placeholder}</span>
+              <span className="text-khor-neutral-400 pt-0.5">{placeholder}</span>
             )}
             {selectedValues.map(val => {
               const opt = options.find(o => o.value === val);
               if (!opt) return null;
               return isMultiple ? (
-                <span key={val} className="flex items-center gap-1 bg-[var(--khor-neutral-100)] border border-[var(--khor-neutral-200)] text-[var(--khor-neutral-700)] px-2 py-0.5 rounded-sm text-xs font-medium">
+                <span key={val} className="flex items-center gap-1 bg-khor-neutral-100 border border-khor-neutral-200 text-khor-neutral-700 px-2 py-0.5 rounded-sm text-xs font-medium">
                   {opt.label}
                   <div 
                     onClick={(e) => handleRemove(val, e)} 
-                    className="cursor-pointer hover:bg-[var(--khor-neutral-200)] rounded-full p-0.5 transition-colors"
+                    className="cursor-pointer hover:bg-khor-neutral-200 rounded-full p-0.5 transition-colors"
                   >
                     <X className="h-3 w-3" />
                   </div>
@@ -106,19 +106,19 @@ export function KSelectAdvanced({
               );
             })}
           </div>
-          <ChevronsUpDown className="w-4 h-4 text-[var(--khor-neutral-400)] shrink-0 opacity-50 ml-2" />
+          <ChevronsUpDown className="w-4 h-4 text-khor-neutral-400 shrink-0 opacity-50 ml-2" />
         </button>
       </KPopoverTrigger>
-      <KPopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 z-[100] border rounded-lg shadow-lg bg-[var(--khor-surface-page)] font-primary">
+      <KPopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 z-[100] border rounded-lg shadow-lg bg-khor-surface-page font-primary">
         <Command>
           <Command.Input 
             placeholder="Buscar..." 
             value={search}
             onValueChange={setSearch}
-            className="flex h-10 w-full rounded-md bg-transparent px-3 py-3 text-sm outline-none border-b disabled:cursor-not-allowed disabled:opacity-50 text-[var(--khor-neutral-900)] placeholder:text-[var(--khor-neutral-400)]"
+            className="flex h-10 w-full rounded-md bg-transparent px-3 py-3 text-sm outline-none border-b disabled:cursor-not-allowed disabled:opacity-50 text-khor-neutral-900 placeholder:text-khor-neutral-400"
           />
           <Command.List className="max-h-60 overflow-y-auto p-1">
-            <Command.Empty className="py-6 text-center text-sm text-[var(--khor-neutral-500)]">
+            <Command.Empty className="py-6 text-center text-sm text-khor-neutral-500">
               No se encontraron resultados.
             </Command.Empty>
             <Command.Group>
@@ -130,10 +130,10 @@ export function KSelectAdvanced({
                     value={option.label}
                     disabled={option.disabled}
                     onSelect={() => handleSelect(option.value)}
-                    className={`relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors aria-selected:bg-[var(--khor-neutral-100)] aria-selected:text-[var(--khor-neutral-900)] text-[var(--khor-neutral-700)] ${option.disabled ? 'opacity-50 pointer-events-none' : ''}`}
+                    className={`relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors aria-selected:bg-khor-neutral-100 aria-selected:text-khor-neutral-900 text-khor-neutral-700 ${option.disabled ? 'opacity-50 pointer-events-none' : ''}`}
                   >
                     <Check
-                      className={`mr-2 h-4 w-4 text-[var(--khor-primary)] transition-opacity ${
+                      className={`mr-2 h-4 w-4 text-khor-primary transition-opacity ${
                         isSelected ? "opacity-100" : "opacity-0"
                       }`}
                     />

@@ -18,14 +18,14 @@ export function KFormField({ label, required, error, hint, children, className }
   return (
     <div className={cn("flex flex-col gap-1", className)}>
       {label && (
-        <label className="text-sm font-medium text-[var(--khor-neutral-900)] font-primary">
+        <label className="text-sm font-medium text-khor-neutral-900 font-primary">
           {label}
-          {required && <span className="text-[var(--khor-feedback-error)] ml-0.5">*</span>}
+          {required && <span className="text-khor-feedback-error ml-0.5">*</span>}
         </label>
       )}
       {children}
-      {error && <span className="text-xs text-[var(--khor-feedback-error)] font-primary">{error}</span>}
-      {!error && hint && <span className="text-xs text-[var(--khor-neutral-500)] font-primary">{hint}</span>}
+      {error && <span className="text-xs text-khor-feedback-error font-primary">{error}</span>}
+      {!error && hint && <span className="text-xs text-khor-neutral-500 font-primary">{hint}</span>}
     </div>
   );
 }

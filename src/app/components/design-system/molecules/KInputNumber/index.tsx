@@ -100,28 +100,28 @@ export function KInputNumber({
         step={step}
         placeholder={placeholder}
         className={cn(
-          "w-full bg-[var(--khor-surface-page)] border border-[var(--khor-neutral-200)] rounded-md outline-none transition-all pr-12 focus:border-[var(--khor-primary)] focus:ring-2 focus:ring-[var(--khor-primary-light)] font-semibold",
-          disabled && "bg-[var(--khor-neutral-100)] cursor-not-allowed opacity-60",
+          "w-full bg-khor-surface-page border border-khor-neutral-200 rounded-md outline-none transition-all pr-12 focus:border-khor-primary focus:ring-2 focus:ring-khor-primary-light font-semibold",
+          disabled && "bg-khor-neutral-100 cursor-not-allowed opacity-60",
           sizeClasses[size]
         )}
       />
       
       {/* Controles laterales */}
       {!readOnly && !disabled && (
-        <div className="absolute right-[1px] h-[calc(100%-2px)] flex flex-col border-l border-[var(--khor-neutral-200)] rounded-r-md overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="absolute right-[1px] h-[calc(100%-2px)] flex flex-col border-l border-khor-neutral-200 rounded-r-md overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity">
           <button
             type="button"
             onClick={onIncrement}
-            className="flex-1 px-2 bg-[var(--khor-neutral-50)] hover:bg-[var(--khor-neutral-100)] border-b border-[var(--khor-neutral-200)] transition-colors active:bg-[var(--khor-neutral-200)]"
+            className="flex-1 px-2 bg-khor-neutral-50 hover:bg-khor-neutral-100 border-b border-khor-neutral-200 transition-colors active:bg-khor-neutral-200"
           >
-            <Plus className="w-3 h-3 text-[var(--khor-neutral-500)]" />
+            <Plus className="w-3 h-3 text-khor-neutral-500" />
           </button>
           <button
             type="button"
             onClick={onDecrement}
-            className="flex-1 px-2 bg-[var(--khor-neutral-50)] hover:bg-[var(--khor-neutral-100)] transition-colors active:bg-[var(--khor-neutral-200)]"
+            className="flex-1 px-2 bg-khor-neutral-50 hover:bg-khor-neutral-100 transition-colors active:bg-khor-neutral-200"
           >
-            <Minus className="w-3 h-3 text-[var(--khor-neutral-500)]" />
+            <Minus className="w-3 h-3 text-khor-neutral-500" />
           </button>
         </div>
       )}

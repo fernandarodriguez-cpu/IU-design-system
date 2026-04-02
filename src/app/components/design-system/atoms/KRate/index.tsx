@@ -63,7 +63,7 @@ export function KRate({
             className={cn(
               "p-0.5 transition-all focus:outline-none",
               !disabled && "hover:scale-110 active:scale-95",
-              isActive ? "text-[var(--khor-accent)] animate-in zoom-in-50 duration-200" : "text-[var(--khor-neutral-200)]"
+              isActive ? "text-khor-accent animate-in zoom-in-50 duration-200" : "text-khor-neutral-200"
             )}
           >
             {character ? character : (

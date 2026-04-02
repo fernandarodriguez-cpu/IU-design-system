@@ -1,12 +1,26 @@
 import React from 'react';
 import { cn } from '../../../../../imports/utils';
 
-export type KBadgeStatus = 'success' | 'error' | 'warning' | 'info' | 'default';
+export type KBadgeStatus = 'success' | 'error' | 'warning' | 'info' | 'default' | 'primary' | 'processing';
+
+export interface KBadgeStyles {
+  root?: React.CSSProperties;
+  indicator?: React.CSSProperties;
+  text?: React.CSSProperties;
+}
+
+export interface KBadgeClassNames {
+  root?: string;
+  indicator?: string;
+  text?: string;
+}
 
 export interface KBadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
-  /** Texto opcional para mostrar junto al badge */
+  /** Texto opcional para mostrar junto al badge. Alias de 'text' */
   label?: string;
-  /** Estado del badge (v4 compatible) */
+  /** Texto opcional para mostrar junto al badge (estándar AntD) */
+  text?: React.ReactNode;
+  /** Estado del badge */
   status?: KBadgeStatus;
   /** Valor numérico o nodo a mostrar */
   count?: React.ReactNode;
@@ -15,84 +29,188 @@ export interface KBadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   /** Si debe mostrarse solo como un punto. Default: false */
   dot?: boolean;
   /** Desplazamiento del badge [x, y] */
-  offset?: [number, number];
+  offset?: [number | string, number | string];
   /** Color de fondo personalizado */
   color?: string;
+  /** Número máximo a mostrar antes de usar el símbolo '+' */
+  overflowCount?: number;
+  /** Tamaño del badge */
+  size?: 'default' | 'small';
   /** Contenido sobre el cual flota el badge */
   children?: React.ReactNode;
+  /** Estilos semánticos */
+  styles?: KBadgeStyles;
+  /** Clases semánticas */
+  classNames?: KBadgeClassNames;
 }
 
 const statusColorMap: Record<KBadgeStatus, string> = {
-  success: 'bg-[var(--khor-success)]',
-  error: 'bg-[var(--khor-error)]',
-  warning: 'bg-[var(--khor-warning)]',
-  info: 'bg-[var(--khor-info)]',
-  default: 'bg-[var(--khor-neutral-400)]',
+  success: 'bg-khor-success',
+  error: 'bg-khor-error',
+  warning: 'bg-khor-warning',
+  info: 'bg-khor-info',
+  default: 'bg-khor-neutral-400',
+  primary: 'bg-khor-primary',
+  processing: 'bg-khor-primary animate-pulse',
 };
 
 /**
- * KBadge — Notificador de estados o contadores (Total Headless)
+ * Ribbon Sub-component
  */
+export interface KBadgeRibbonProps {
+  className?: string;
+  style?: React.CSSProperties;
+  /** Texto a mostrar en la cinta */
+  text?: React.ReactNode;
+  /** Color de la cinta */
+  color?: string;
+  /** Posición de la cinta */
+  placement?: 'start' | 'end';
+  children?: React.ReactNode;
+}
+
+const KBadgeRibbon: React.FC<KBadgeRibbonProps> = ({
+  className,
+  style,
+  text,
+  color,
+  placement = 'end',
+  children,
+}) => {
+  return (
+    <div className="relative inline-block w-full">
+      {children}
+      <div 
+        className={cn(
+          "absolute top-2 z-10 px-2 py-0.5 text-xs font-bold text-white shadow-sm whitespace-nowrap",
+          placement === 'end' ? "-right-2 rounded-l-sm" : "-left-2 rounded-r-sm",
+          color ? "" : "bg-khor-primary",
+          className
+        )}
+        style={{ 
+          backgroundColor: color,
+          ...style 
+        }}
+      >
+        {text}
+        {/* Ribbon Fold Effect */}
+        <div 
+          className={cn(
+            "absolute bottom-[-8px] border-[4px] border-transparent",
+            placement === 'end' 
+              ? "right-0 border-t-khor-primary/70 border-l-khor-primary/70" 
+              : "left-0 border-t-khor-primary/70 border-r-khor-primary/70"
+          )}
+          style={color ? { 
+            borderTopColor: 'rgba(0,0,0,0.3)', 
+            borderLeftColor: placement === 'end' ? 'rgba(0,0,0,0.3)' : 'transparent',
+            borderRightColor: placement === 'start' ? 'rgba(0,0,0,0.3)' : 'transparent',
+          } : {}}
+        />
+      </div>
+    </div>
+  );
+};
+
+/**
+ * KBadge — Notificador de estados o contadores.
+ */
+interface KBadgeComponent extends React.ForwardRefExoticComponent<KBadgeProps & React.RefAttributes<HTMLSpanElement>> {
+  Ribbon: typeof KBadgeRibbon;
+}
+
 export const KBadge = React.forwardRef<HTMLSpanElement, KBadgeProps>(
-  ({ className, style, label, status = 'error', count, showZero = false, dot, offset, color, children, ...rest }, ref) => {
+  ({ 
+    className, style, label, text, status, 
+    count, showZero = false, dot, offset, color, 
+    overflowCount = 99, size = 'default',
+    children, styles, classNames, title, ...rest 
+  }, ref) => {
     
-    // Si tiene label pero no children, se comporta como un Status Chip Inline
-    if (label && !children) {
+    const displayLabel = text || label;
+    const badgeColorClass = status ? (statusColorMap[status] || statusColorMap.error) : 'bg-khor-error';
+
+    // Standalone Status Mode (Dot + Text)
+    if (status && !children) {
       return (
         <span 
           ref={ref}
-          className={cn(
-            "inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-semibold font-primary border",
-            status === 'success' && "bg-emerald-50 text-emerald-700 border-emerald-200",
-            status === 'error' && "bg-red-50 text-red-700 border-red-200",
-            status === 'warning' && "bg-amber-50 text-amber-700 border-amber-200",
-            status === 'info' && "bg-sky-50 text-sky-700 border-sky-200",
-            status === 'default' && "bg-neutral-50 text-neutral-700 border-neutral-200",
-            className
-          )}
-          style={style}
+          title={title}
+          className={cn("inline-flex items-center gap-2 align-middle", classNames?.root, className)}
+          style={{ ...styles?.root, ...style }}
           {...rest}
         >
-          <span className={cn("w-2 h-2 rounded-full", statusColorMap[status])} />
-          {label}
+          <span 
+            className={cn(
+              "w-2 h-2 rounded-full shrink-0", 
+              badgeColorClass,
+              classNames?.indicator
+            )} 
+            style={{ backgroundColor: color, ...styles?.indicator }}
+          />
+          {displayLabel && (
+            <span 
+              className={cn("text-xs font-medium text-khor-neutral-700", classNames?.text)}
+              style={styles?.text}
+            >
+              {displayLabel}
+            </span>
+          )}
         </span>
       );
     }
 
-    const hasCount = count !== undefined && count !== null && (showZero || count !== 0);
+    const numericCount = typeof count === 'number' ? count : NaN;
+    const displayCount = !isNaN(numericCount) && numericCount > overflowCount 
+      ? `${overflowCount}+` 
+      : count;
+
+    const hasCount = count !== undefined && count !== null && (showZero || (numericCount !== 0 || isNaN(numericCount)));
     const isDot = dot && !hasCount;
     const isHidden = !hasCount && !isDot;
-    const badgeColorClass = statusColorMap[status] || statusColorMap.error; 
 
-    const customStyle: React.CSSProperties = { ...style };
+    const badgeStyle: React.CSSProperties = { ...styles?.indicator };
     if (offset) {
-      customStyle.transform = `translate(${50 + offset[0]}%, ${-50 + offset[1]}%)`;
+      badgeStyle.right = typeof offset[0] === 'number' ? -offset[0] : offset[0];
+      badgeStyle.top = typeof offset[1] === 'number' ? offset[1] : offset[1];
     }
     if (color) {
-      customStyle.backgroundColor = color;
+      badgeStyle.backgroundColor = color;
     }
 
     return (
-      <span ref={ref} className={cn("relative inline-flex align-middle", className)} {...rest}>
+      <span 
+        ref={ref} 
+        title={title}
+        className={cn("relative inline-flex align-middle", classNames?.root, className)} 
+        style={{ ...styles?.root, ...style }}
+        {...rest}
+      >
         {children}
         {!isHidden && (
           <sup
-            style={customStyle}
+            style={badgeStyle}
             className={cn(
-              "absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 flex items-center justify-center z-10 font-primary text-white",
+              "absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 flex items-center justify-center z-10 font-primary text-white shadow-sm ring-2 ring-khor-surface-page",
               isDot 
-                ? `w-2 h-2 rounded-full ${color ? '' : badgeColorClass}`
-                : `min-w-[18px] h-[18px] px-1 rounded-full text-[10px] font-bold ${color ? '' : badgeColorClass} shadow-[0_0_0_2px_var(--khor-surface-page)]`
+                ? `w-1.5 h-1.5 rounded-full ${color ? '' : badgeColorClass}`
+                : cn(
+                    "rounded-full font-bold select-none",
+                    size === 'small' ? "h-4 min-w-[16px] px-1 text-[9px]" : "h-5 min-w-[20px] px-1.5 text-[11px]",
+                    color ? '' : badgeColorClass
+                  ),
+              classNames?.indicator
             )}
           >
-            {isDot ? null : count}
+            {isDot ? null : displayCount}
           </sup>
         )}
       </span>
     );
   }
-);
+) as unknown as KBadgeComponent;
 
+KBadge.Ribbon = KBadgeRibbon;
 KBadge.displayName = 'KBadge';
 
 export default KBadge;

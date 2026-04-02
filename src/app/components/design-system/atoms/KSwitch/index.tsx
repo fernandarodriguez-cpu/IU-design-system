@@ -22,9 +22,9 @@ export const KSwitch = React.forwardRef<React.ElementRef<typeof SwitchPrimitive.
         disabled={disabled || loading}
         className={cn(
           "peer inline-flex shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent shadow-sm transition-colors",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--khor-primary)] focus-visible:ring-offset-2",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-khor-primary focus-visible:ring-offset-2",
           "disabled:cursor-not-allowed disabled:opacity-50",
-          "data-[state=checked]:bg-[var(--khor-primary)] data-[state=unchecked]:bg-[var(--khor-neutral-300)] hover:data-[state=unchecked]:bg-[var(--khor-neutral-400)]",
+          "data-[state=checked]:bg-khor-primary data-[state=unchecked]:bg-khor-neutral-300 hover:data-[state=unchecked]:bg-khor-neutral-400",
           isSmall ? "h-4 w-7" : "h-5 w-9",
           className
         )}
@@ -32,7 +32,7 @@ export const KSwitch = React.forwardRef<React.ElementRef<typeof SwitchPrimitive.
       >
         <SwitchPrimitive.Thumb
           className={cn(
-            "pointer-events-none block rounded-full bg-[var(--khor-surface-page)] shadow-lg ring-0 transition-transform",
+            "pointer-events-none block rounded-full bg-khor-surface-page shadow-lg ring-0 transition-transform",
             "data-[state=checked]:translate-x-full data-[state=unchecked]:translate-x-0 ml-[1px]",
             isSmall ? "h-3 w-3" : "h-4 w-4"
           )}
@@ -55,7 +55,7 @@ export const KSwitch = React.forwardRef<React.ElementRef<typeof SwitchPrimitive.
     )}>
       {switchElement}
       <span className={cn(
-        "font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-[var(--khor-neutral-900)]",
+        "font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-khor-neutral-900",
         isSmall ? "text-xs" : "text-sm"
       )}>
         {content}
