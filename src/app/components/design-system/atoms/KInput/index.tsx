@@ -67,6 +67,8 @@ export interface KInputProps extends Omit<React.InputHTMLAttributes<HTMLInputEle
   addonBefore?: React.ReactNode;
   /** Elemento pegado después del input */
   addonAfter?: React.ReactNode;
+  /** Callback llamado al presionar el botón de limpiar */
+  onClear?: () => void;
 }
 
 /**
@@ -78,6 +80,7 @@ const BaseInput = React.forwardRef<HTMLInputElement, KInputProps>(function KInpu
     block, variant = 'outlined', prefix, suffix, 
     allowClear, showCount, maxLength,
     addonBefore, addonAfter,
+    onClear,
     className, style, disabled, value, defaultValue, onChange, ...rest 
   },
   ref,
@@ -98,6 +101,7 @@ const BaseInput = React.forwardRef<HTMLInputElement, KInputProps>(function KInpu
       const event = { target: { value: '' } } as React.ChangeEvent<HTMLInputElement>;
       onChange(event);
     }
+    onClear?.();
     inputRef.current?.focus();
   };
 

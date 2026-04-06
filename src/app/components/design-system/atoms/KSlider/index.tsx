@@ -1,68 +1,196 @@
-import React from 'react';
+import React, { useState } from 'react';
 import * as SliderPrimitive from '@radix-ui/react-slider';
 import { cn } from '../../../../../imports/utils';
+import { KTooltip } from '../../molecules/KTooltip/index';
+
+export interface KSliderTooltipProps {
+  formatter?: (value: number) => React.ReactNode;
+  open?: boolean;
+  placement?: 'top' | 'bottom' | 'left' | 'right';
+  color?: string;
+  className?: string; // Add more configurations if necessary
+}
 
 export interface KSliderProps {
-  value?: number[];
-  defaultValue?: number[];
+  value?: number | number[];
+  defaultValue?: number | number[];
   min?: number;
   max?: number;
-  step?: number;
+  step?: number | null;
   disabled?: boolean;
-  onValueChange?: (value: number[]) => void;
+  onChange?: (value: number | number[]) => void;
+  onAfterChange?: (value: number | number[]) => void;
   showValue?: boolean;
   className?: string;
   style?: React.CSSProperties;
+  range?: boolean;
+  vertical?: boolean;
+  reverse?: boolean;
+  tooltip?: KSliderTooltipProps | boolean;
+  marks?: Record<number, React.ReactNode | { style?: React.CSSProperties; label: React.ReactNode }>;
 }
 
-/**
- * KSlider — Selector de rango (Headless v4)
- * Reemplaza AntD Slider con Radix UI primitives. Soporta rangos simples y dobles con una estética premium.
- */
-export function KSlider({
-  value,
-  defaultValue = [50],
-  min = 0,
-  max = 100,
-  step = 1,
-  disabled = false,
-  onValueChange,
-  showValue = false,
-  className,
-  style,
-}: KSliderProps) {
-  return (
-    <div className={cn("flex items-center gap-4 w-full font-primary", className)} style={style}>
-      <SliderPrimitive.Root
-        className="relative flex items-center select-none touch-none w-full h-5 group"
-        value={value}
-        defaultValue={defaultValue}
-        max={max}
-        min={min}
-        step={step}
-        disabled={disabled}
-        onValueChange={onValueChange}
-      >
-        <SliderPrimitive.Track className="bg-khor-neutral-200 relative grow rounded-full h-[6px] transition-colors group-hover:bg-khor-neutral-300">
-          <SliderPrimitive.Range className="absolute bg-khor-primary rounded-full h-full shadow-[0_0_8px_rgba(var(--khor-primary-rgb),0.3)] transition-all" />
-        </SliderPrimitive.Track>
-        
-        {(value || defaultValue).map((_, i) => (
-          <SliderPrimitive.Thumb
-            key={i}
-            className="block w-5 h-5 bg-white border-2 border-khor-primary shadow-[0_4px_10px_rgba(0,0,0,0.15)] rounded-full hover:scale-110 focus:outline-none focus:ring-4 focus:ring-khor-primary-light/20 transition-all cursor-grab active:cursor-grabbing"
-            aria-label="Value"
-          />
-        ))}
-      </SliderPrimitive.Root>
+export const KSlider = React.forwardRef<React.ElementRef<typeof SliderPrimitive.Root>, KSliderProps>(
+  function KSlider({
+    value,
+    defaultValue,
+    min = 0,
+    max = 100,
+    step = 1,
+    disabled = false,
+    onChange,
+    onAfterChange,
+    showValue = false,
+    className,
+    style,
+    range = false,
+    vertical = false,
+    reverse = false,
+    tooltip,
+    marks,
+    ...rest
+  }, ref) {
+    // Manejo de valores controlados y no controlados
+    const initialVal = defaultValue !== undefined ? defaultValue : (range ? [0, 0] : 0);
+    const [internalValue, setInternalValue] = useState<number | number[]>(value !== undefined ? value : initialVal);
 
-      {showValue && (
-        <span className="text-xs font-bold text-khor-neutral-500 min-w-[32px] text-right uppercase tracking-tighter">
-          {(value || defaultValue).join(' - ')}
-        </span>
-      )}
-    </div>
-  );
-}
+    React.useEffect(() => {
+      if (value !== undefined) {
+        setInternalValue(value);
+      }
+    }, [value]);
 
+    const isControlled = value !== undefined;
+    const arrayValue = Array.isArray(internalValue) ? internalValue : [internalValue];
+
+    const handleValueChange = (newVal: number[]) => {
+      const parsedVal = range ? newVal : newVal[0];
+      if (!isControlled) setInternalValue(parsedVal);
+      onChange?.(parsedVal);
+    };
+
+    const handleValueCommit = (newVal: number[]) => {
+      onAfterChange?.(range ? newVal : newVal[0]);
+    };
+
+    const tooltipConfig = typeof tooltip === 'object' ? tooltip : tooltip === false ? { formatter: () => null } : {};
+    const tooltipPlacement = tooltipConfig.placement || (vertical ? 'right' : 'top');
+
+    const renderMarks = () => {
+      if (!marks) return null;
+      const markKeys = Object.keys(marks).map(Number).sort((a, b) => a - b);
+      
+      return (
+        <div className={cn("absolute pointer-events-none", vertical ? "inset-y-0 right-0 w-full" : "inset-x-0 top-0 h-full")}>
+          {markKeys.map((markVal) => {
+            const markObj = marks[markVal];
+            const isObject = typeof markObj === 'object' && markObj !== null && 'label' in markObj && !React.isValidElement(markObj);
+            const content = isObject ? (markObj as any).label : markObj;
+            const customStyle = isObject ? (markObj as any).style : {};
+            
+            // Calculate percentage position
+            const percentage = ((markVal - min) / (max - min)) * 100;
+            const pos = reverse ? (100 - percentage) : percentage;
+            
+            // Si el valor actual es mayor o igual que esta marca, podría tener un estilo "activo".
+            const isActive = range ? (arrayValue[0] <= markVal && markVal <= arrayValue[arrayValue.length - 1]) : markVal <= arrayValue[0];
+
+            return (
+              <div 
+                key={markVal} 
+                className={cn(
+                  "absolute flex items-center justify-center pointer-events-auto",
+                  vertical ? "translate-y-[50%] right-full pr-2" : "translate-x-[-50%] top-full pt-1" // Ajustar para vertical
+                )}
+                style={{
+                  [vertical ? 'bottom' : 'left']: `${pos}%`,
+                  ...customStyle
+                }}
+              >
+                {/* Visual Tick */}
+                <span className={cn(
+                  "absolute block bg-khor-neutral-300",
+                  vertical ? "h-1 w-[6px] right-[-6px]" : "w-1 h-[6px] top-[-6px]",
+                  isActive ? "bg-khor-primary" : ""
+                )} />
+                {/* Content */}
+                <span className={cn("text-xs font-primary", isActive ? "text-khor-neutral-900 font-medium" : "text-khor-neutral-500")}
+                      style={customStyle}>
+                  {content}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      );
+    };
+
+    return (
+      <div className={cn("flex font-primary", vertical ? "flex-col items-center h-full w-fit gap-2" : "items-center w-full gap-4", className)} style={style}>
+        <SliderPrimitive.Root
+          ref={ref}
+          className={cn("relative flex items-center select-none touch-none", vertical ? "flex-col w-5 h-full" : "w-full h-5")}
+          value={arrayValue}
+          max={max}
+          min={min}
+          step={step || 1}
+          disabled={disabled}
+          orientation={vertical ? "vertical" : "horizontal"}
+          dir={reverse ? "rtl" : "ltr"} // Radical change for reverse on horizontal. Inverted might be needed for vertical
+          inverted={vertical ? reverse : false} // Support for vertical inversion
+          onValueChange={handleValueChange}
+          onValueCommit={handleValueCommit}
+          {...rest}
+        >
+          <SliderPrimitive.Track className={cn("bg-khor-neutral-200 relative rounded-full transition-colors", vertical ? "w-[6px] grow" : "grow h-[6px]")}>
+            <SliderPrimitive.Range className={cn("absolute bg-khor-primary rounded-full shadow-sm transition-all", vertical ? "w-full" : "h-full")} />
+          </SliderPrimitive.Track>
+          
+          {arrayValue.map((val, i) => {
+            const hasFormatter = tooltipConfig.formatter !== undefined;
+            const tooltipTitle = hasFormatter ? tooltipConfig.formatter!(val) : val;
+            
+            const Thumb = (
+              <SliderPrimitive.Thumb
+                key={i}
+                className={cn(
+                  "block w-4 h-4 bg-white border-2 border-khor-primary rounded-full transition-transform focus:outline-none focus:ring-4 focus:ring-khor-primary-light/50 cursor-grab active:cursor-grabbing",
+                  disabled && "opacity-50 cursor-not-allowed",
+                  !disabled && "hover:scale-110",
+                )}
+                aria-label="Volume"
+              />
+            );
+
+            // Hide tooltip if undefined formatter returns null, or if strictly false
+            if (tooltip === false || (hasFormatter && tooltipTitle === null)) {
+              return Thumb;
+            }
+
+            return (
+              <KTooltip 
+                key={i} 
+                title={tooltipTitle} 
+                placement={tooltipPlacement} 
+                open={tooltipConfig.open}
+                color={tooltipConfig.color}
+              >
+                {Thumb}
+              </KTooltip>
+            );
+          })}
+          {marks && renderMarks()}
+        </SliderPrimitive.Root>
+
+        {showValue && !marks && (
+          <span className="text-xs font-bold text-khor-neutral-500 min-w-[32px] uppercase tracking-tighter text-right">
+            {arrayValue.join(' - ')}
+          </span>
+        )}
+      </div>
+    );
+  }
+);
+
+KSlider.displayName = 'KSlider';
 export default KSlider;

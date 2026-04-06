@@ -9,6 +9,7 @@ export interface KProgressProps {
   type?: 'line' | 'circle';
   status?: 'active' | 'success' | 'exception';
   strokeColor?: string;
+  steps?: number;
   className?: string;
   style?: React.CSSProperties;
 }
@@ -27,6 +28,7 @@ export const KProgress = React.forwardRef<
   type = 'line',
   status,
   strokeColor,
+  steps,
   className,
   style 
 }, ref) => {
@@ -71,6 +73,37 @@ export const KProgress = React.forwardRef<
           </svg>
         </div>
         {showInfo && <span className="text-sm font-medium">{percent}%</span>}
+      </div>
+    );
+  }
+
+  // Rendering by Steps
+  if (steps && steps > 0 && type === 'line') {
+    const activeSteps = Math.floor((percent / max) * steps);
+    return (
+      <div className={cn("flex items-center gap-3 w-full", className)} style={style} ref={ref}>
+        <div className="flex w-full gap-1">
+          {Array.from({ length: steps }).map((_, i) => {
+            const isActive = i < activeSteps;
+            return (
+              <div
+                key={i}
+                className={cn(
+                  "h-2 w-full flex-1 rounded-full transition-all duration-300",
+                  isActive 
+                    ? (hasError ? "bg-red-500" : isComplete ? "bg-emerald-500" : "bg-khor-primary")
+                    : "bg-khor-neutral-200"
+                )}
+                style={isActive && strokeColor ? { backgroundColor: strokeColor } : {}}
+              />
+            );
+          })}
+        </div>
+        {showInfo && (
+          <span className="text-xs font-semibold min-w-[40px] text-right">
+            {percent}%
+          </span>
+        )}
       </div>
     );
   }

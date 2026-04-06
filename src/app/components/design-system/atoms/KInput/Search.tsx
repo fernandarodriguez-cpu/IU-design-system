@@ -57,6 +57,10 @@ export const KInputSearch = React.forwardRef<HTMLInputElement, KInputSearchProps
       ref={inputRef}
       size={size}
       onKeyDown={onKeyDown}
+      onClear={() => {
+        onSearch?.('');
+        rest.onClear?.();
+      }}
       suffix={
         <div className="flex items-center gap-2">
           {suffix}

@@ -9,6 +9,9 @@ export interface KAlertProps {
   closable?: boolean;
   onClose?: () => void;
   showIcon?: boolean;
+  banner?: boolean;
+  action?: React.ReactNode;
+  icon?: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
 }
@@ -41,6 +44,9 @@ export function KAlert({
   closable,
   onClose,
   showIcon = true,
+  banner,
+  action,
+  icon,
   className,
   style,
 }: KAlertProps) {
@@ -54,22 +60,25 @@ export function KAlert({
     onClose?.();
   };
 
+  const ResolvedIcon = icon || (Icon ? <Icon className="w-5 h-5" /> : null);
+
   return (
     <div
       role="alert"
       className={cn(
-        "relative flex w-full gap-3 p-4 border rounded-lg transition-all animate-in fade-in zoom-in-95 duration-300 font-primary",
+        "relative flex w-full gap-3 transition-all animate-in fade-in zoom-in-95 duration-300 font-primary",
+        banner ? "p-3 border-0 rounded-none items-center" : "p-4 border rounded-lg",
         styles[type],
         className
       )}
       style={style}
     >
-      {showIcon && Icon && (
-        <div className={cn("mt-0.5 shrink-0", iconStyles[type])}>
-          <Icon className="w-5 h-5" />
+      {showIcon && ResolvedIcon && (
+        <div className={cn("shrink-0", !banner && "mt-0.5", iconStyles[type])}>
+          {ResolvedIcon}
         </div>
       )}
-      <div className="flex flex-col gap-1 flex-1">
+      <div className={cn("flex flex-1", banner ? "flex-row items-center gap-2" : "flex-col gap-1")}>
         <h4 className="text-sm font-semibold leading-tight">
           {title}
         </h4>
@@ -79,13 +88,22 @@ export function KAlert({
           </p>
         )}
       </div>
-      {closable && (
-        <button
-          onClick={handleClose}
-          className="absolute top-4 right-4 focus:outline-none opacity-50 hover:opacity-100 transition-opacity"
-        >
-          <X className="w-4 h-4" />
-        </button>
+      {(action || closable) && (
+         <div className={cn("flex items-center gap-2 shrink-0")}>
+            {action && <div>{action}</div>}
+            {closable && (
+              <button
+                onClick={handleClose}
+                className={cn(
+                  "focus:outline-none opacity-50 hover:opacity-100 transition-opacity", 
+                  !banner && "absolute top-4 right-4",
+                  banner && "relative ml-2"
+                )}
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
+         </div>
       )}
     </div>
   );

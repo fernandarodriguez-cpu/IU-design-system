@@ -3,103 +3,177 @@ import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
 import { Circle } from 'lucide-react';
 import { cn } from '../../../../../imports/utils';
 
-export interface KRadioProps extends Omit<React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root>, 'dir'> {
-  options?: { label: React.ReactNode; value: string; disabled?: boolean }[];
+export interface KRadioGroupOptions {
+  label: React.ReactNode;
+  value: string;
+  disabled?: boolean;
+}
+
+export interface KRadioGroupProps extends Omit<React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root>, 'dir'> {
+  options?: Array<KRadioGroupOptions | string>;
   direction?: 'horizontal' | 'vertical';
-  variant?: 'default' | 'button';
-  size?: 'sm' | 'md' | 'lg';
-  buttonStyle?: 'solid' | 'outline';
+  optionType?: 'default' | 'button';
+  buttonStyle?: 'outline' | 'solid';
+  size?: 'sm' | 'md' | 'lg' | 'small' | 'middle' | 'large';
+  disabled?: boolean;
+  name?: string;
 }
 
-export const KRadio = React.forwardRef<React.ElementRef<typeof RadioGroupPrimitive.Root>, KRadioProps>(function KRadio(
-  { className, options, direction = 'horizontal', variant = 'default', size = 'md', buttonStyle = 'solid', children, ...rest }, ref
+export interface KRadioProps extends React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item> {
+  children?: React.ReactNode;
+  autoFocus?: boolean;
+}
+
+export interface KRadioButtonProps extends KRadioProps {}
+
+// Context to pass group props to children
+interface RadioGroupContextType {
+  optionType: 'default' | 'button';
+  buttonStyle: 'outline' | 'solid';
+  size: 'sm' | 'md' | 'lg' | 'small' | 'middle' | 'large';
+  disabled: boolean;
+  name?: string;
+}
+
+const RadioGroupContext = React.createContext<RadioGroupContextType | undefined>(undefined);
+
+const InternalRadioGroup = React.forwardRef<React.ElementRef<typeof RadioGroupPrimitive.Root>, KRadioGroupProps>(function Group(
+  { className, options, direction = 'horizontal', optionType = 'default', buttonStyle = 'outline', size = 'md', disabled = false, children, name, ...rest }, ref
 ) {
+  const isButton = optionType === 'button';
+  
+  let content = children;
+  if (options && options.length > 0) {
+    content = options.map(opt => {
+      if (typeof opt === 'string') {
+        return isButton ? 
+          <KRadioButton key={opt} value={opt} disabled={disabled}>{opt}</KRadioButton> : 
+          <InternalRadio key={opt} value={opt} disabled={disabled}>{opt}</InternalRadio>;
+      }
+      return isButton ? 
+        <KRadioButton key={opt.value} value={opt.value} disabled={opt.disabled || disabled}>{opt.label}</KRadioButton> : 
+        <InternalRadio key={opt.value} value={opt.value} disabled={opt.disabled || disabled}>{opt.label}</InternalRadio>;
+    });
+  }
+
   return (
-    <RadioGroupPrimitive.Root
-      ref={ref}
-      className={cn(
-        "flex font-primary",
-        direction === 'vertical' ? "flex-col gap-2" : "flex-row gap-4",
-        variant === 'button' ? (direction === 'horizontal' ? "gap-0" : "gap-0") : "", // adjustments for button group
-        className
-      )}
-      {...rest}
-    >
-      {options ? options.map((opt) => (
-        <KRadioItem 
-          key={opt.value} 
-          value={opt.value} 
-          disabled={opt.disabled} 
-          label={opt.label}
-          variant={variant}
-          buttonStyle={buttonStyle}
-        />
-      )) : children}
-    </RadioGroupPrimitive.Root>
-  );
-});
-KRadio.displayName = 'KRadio';
-
-export interface KRadioItemProps extends React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item> {
-  label?: React.ReactNode;
-  variant?: 'default' | 'button'; // For internal usage mapping from KRadio
-  buttonStyle?: 'solid' | 'outline';
-}
-
-export const KRadioItem = React.forwardRef<React.ElementRef<typeof RadioGroupPrimitive.Item>, KRadioItemProps>(function KRadioItem(
-  { className, label, children, variant = 'default', buttonStyle = 'solid', ...rest }, ref
-) {
-  const content = label || children;
-
-  if (variant === 'button') {
-    // Modo Botón: El RadioItem no muestra el circulo clásico, todo el contenedor es clickeable
-    return (
-      <RadioGroupPrimitive.Item
+    <RadioGroupContext.Provider value={{ optionType, buttonStyle, size, disabled, name }}>
+      <RadioGroupPrimitive.Root
         ref={ref}
+        name={name}
+        disabled={disabled}
         className={cn(
-          "inline-flex items-center justify-center px-4 py-2 text-sm font-medium transition-colors border",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-          "disabled:pointer-events-none disabled:opacity-50",
-          buttonStyle === 'solid' 
-            ? "border-transparent bg-khor-neutral-100 text-khor-neutral-900 hover:bg-khor-neutral-200 data-[state=checked]:bg-khor-primary data-[state=checked]:text-white"
-            : "border-khor-neutral-200 bg-transparent text-khor-neutral-900 hover:bg-khor-neutral-50 data-[state=checked]:border-khor-primary data-[state=checked]:text-khor-primary data-[state=checked]:bg-[color-mix(in_srgb,var(--khor-primary)_10%,transparent)]",
+          "flex font-primary",
+          direction === 'vertical' ? "flex-col gap-2" : "flex-row gap-4",
+          isButton ? (direction === 'vertical' ? "gap-0 -space-y-px" : "gap-0 -space-x-px") : "", // Overlap borders for buttons
           className
         )}
         {...rest}
       >
         {content}
-      </RadioGroupPrimitive.Item>
-    );
-  }
+      </RadioGroupPrimitive.Root>
+    </RadioGroupContext.Provider>
+  );
+});
 
-  // Modo Estándar
+const InternalRadio = React.forwardRef<React.ElementRef<typeof RadioGroupPrimitive.Item>, KRadioProps>(function Radio(
+  { className, children, autoFocus, disabled, ...rest }, ref
+) {
+  const group = React.useContext(RadioGroupContext);
+  const isDisabled = disabled || group?.disabled;
+
+  React.useEffect(() => {
+    if (autoFocus && ref && "current" in ref && ref.current) {
+      (ref.current as HTMLButtonElement).focus();
+    }
+  }, [autoFocus, ref]);
+
   return (
     <label className={cn(
-      "inline-flex items-center gap-2 cursor-pointer",
-      rest.disabled ? "cursor-not-allowed opacity-50" : ""
+      "inline-flex items-center gap-2 cursor-pointer font-primary",
+      isDisabled ? "cursor-not-allowed opacity-50" : ""
     )}>
       <RadioGroupPrimitive.Item
         ref={ref}
+        disabled={isDisabled}
         className={cn(
-          "aspect-square h-4 w-4 rounded-full border border-khor-primary text-khor-primary",
+          "aspect-square h-4 w-4 rounded-full border border-khor-neutral-300 bg-white",
           "ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-khor-primary focus-visible:ring-offset-2",
           "disabled:cursor-not-allowed disabled:opacity-50",
+          "data-[state=checked]:border-khor-primary data-[state=checked]:text-khor-primary",
+          "hover:border-khor-primary hover:bg-[color-mix(in_srgb,var(--khor-primary)_5%,white)] transition-colors",
           className
         )}
         {...rest}
       >
         <RadioGroupPrimitive.Indicator className="flex items-center justify-center">
-          <Circle className="h-2.5 w-2.5 fill-current text-current" />
+          <Circle className="h-2 w-2 fill-khor-primary text-khor-primary" />
         </RadioGroupPrimitive.Indicator>
       </RadioGroupPrimitive.Item>
-      {content && (
+      {children && (
         <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-khor-neutral-900">
-          {content}
+          {children}
         </span>
       )}
     </label>
   );
 });
-KRadioItem.displayName = 'KRadioItem';
+
+const KRadioButton = React.forwardRef<React.ElementRef<typeof RadioGroupPrimitive.Item>, KRadioButtonProps>(function RadioButton(
+  { className, children, disabled, autoFocus, ...rest }, ref
+) {
+  const group = React.useContext(RadioGroupContext) || { optionType: 'button', buttonStyle: 'outline', size: 'md', disabled: false };
+  const isDisabled = disabled || group.disabled;
+  const isSolid = group.buttonStyle === 'solid';
+
+  const sizeClasses = {
+    sm: "px-3 py-1 text-xs h-7",
+    small: "px-3 py-1 text-xs h-7",
+    md: "px-4 py-2 text-sm h-9",
+    middle: "px-4 py-2 text-sm h-9",
+    lg: "px-5 py-3 text-base h-11",
+    large: "px-5 py-3 text-base h-11",
+  }[group.size || 'md'];
+
+  React.useEffect(() => {
+    if (autoFocus && ref && "current" in ref && ref.current) {
+      (ref.current as HTMLButtonElement).focus();
+    }
+  }, [autoFocus, ref]);
+
+  return (
+    <RadioGroupPrimitive.Item
+      ref={ref}
+      disabled={isDisabled}
+      className={cn(
+        "inline-flex items-center justify-center font-primary transition-colors border outline-none",
+        "focus-visible:ring-2 focus-visible:ring-khor-primary focus-visible:ring-offset-1 focus-visible:z-20",
+        "disabled:pointer-events-none disabled:opacity-50 disabled:bg-khor-neutral-100 disabled:text-khor-neutral-400 disabled:border-khor-neutral-200",
+        "first:rounded-l-md last:rounded-r-md relative font-medium",
+        isSolid 
+          ? "border-khor-neutral-300 bg-khor-neutral-100 text-khor-neutral-600 hover:text-khor-primary data-[state=checked]:bg-khor-primary data-[state=checked]:border-khor-primary data-[state=checked]:text-white data-[state=checked]:z-10"
+          : "border-khor-neutral-300 bg-white text-khor-neutral-600 hover:text-khor-primary data-[state=checked]:border-khor-primary data-[state=checked]:text-khor-primary data-[state=checked]:z-10",
+        sizeClasses,
+        className
+      )}
+      {...rest}
+    >
+      {children}
+    </RadioGroupPrimitive.Item>
+  );
+});
+
+type KRadioComponent = typeof InternalRadio & {
+  Group: typeof InternalRadioGroup;
+  Button: typeof KRadioButton;
+};
+
+export const KRadio = InternalRadio as KRadioComponent;
+KRadio.Group = InternalRadioGroup;
+KRadio.Button = KRadioButton;
+
+KRadio.displayName = 'KRadio';
+InternalRadioGroup.displayName = 'KRadio.Group';
+KRadioButton.displayName = 'KRadio.Button';
 
 export default KRadio;

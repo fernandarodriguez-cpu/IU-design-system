@@ -82,7 +82,43 @@ Como IA, DEBES seguir estas reglas estrictamente al generar código:
 
   if (enabled.has('tokens')) {
     parts.push(`
-## Design Tokens
+## 🎨 Especificación Técnica de Tokens (Fuente de Verdad)
+
+Para que el código generado sea funcional, la IA DEBE conocer estos valores y DEBE incluirlos en su CSS global o mediante objeto de estilos si está en entorno aislado:
+
+\`\`\`css
+:root {
+  /* Colores de Marca y Estado */
+  --khor-brand-navy: #051758;
+  --khor-brand-primary: #E04D36;
+  --khor-brand-secondary: #051758;
+  --khor-brand-accent: #FF9500;
+  --khor-status-success: #2E7D32;
+  --khor-status-error: #D32F2F;
+  --khor-status-info: #051758;
+
+  /* Neutros y Superficies */
+  --khor-neutral-50: #FFFFFF;    /* Surface Page / Card */
+  --khor-neutral-100: #EDF0F1;   /* Canvas Background */
+  --khor-neutral-200: #D5DBE0;   /* Borders / Dividers */
+  --khor-neutral-300: #A0AEC0;   /* Placeholders */
+  --khor-neutral-400: #718096;   /* Muted Text */
+  --khor-neutral-500: #4A5568;   /* Body Text */
+  --khor-neutral-800: #11141C;   /* Dark Text */
+  --khor-neutral-900: #051758;   /* Heading Text */
+
+  /* Geometría y Elevación */
+  --khor-radius-sm: 6px;
+  --khor-radius-md: 8px;
+  --khor-radius-lg: 10px;
+  --khor-radius-xl: 14px;
+  --khor-shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+  --khor-shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+  --khor-shadow-lg: 0 12px 32px rgba(5,23,88,0.12);
+}
+\`\`\`
+
+### Detalle Analítico de Tokens (Tabla extendida)
 
 ### Colores de Marca
 

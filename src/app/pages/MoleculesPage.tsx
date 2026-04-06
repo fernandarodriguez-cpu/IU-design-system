@@ -135,6 +135,7 @@ function SelectFieldPlayground() {
   const [showSearch, setShowSearch] = useState(true);
   const [allowClear, setAllowClear] = useState(true);
   const [size, setSize] = useState<'small' | 'middle' | 'large'>('middle');
+  const [mode, setMode] = useState<any>('single');
   const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
   const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
   return (
@@ -143,6 +144,7 @@ function SelectFieldPlayground() {
         <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <div><label style={ctrl}>Tamano</label><select value={size} onChange={(e) => setSize(e.target.value as any)} style={sel}>{['small','middle','large'].map(s=><option key={s}>{s}</option>)}</select></div>
+          <div><label style={ctrl}>Modo</label><select value={mode} onChange={(e) => { setMode(e.target.value as any); setValue(e.target.value === 'single' ? '' : [] as any); }} style={sel}>{['single','multiple','tags'].map(s=><option key={s}>{s}</option>)}</select></div>
           <div><label style={ctrl}>Error</label><input value={error} onChange={(e) => setError(e.target.value)} placeholder="Dejar vacio" style={sel} /></div>
           <div><label style={ctrl}>Hint</label><input value={hint} onChange={(e) => setHint(e.target.value)} style={sel} /></div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 4 }}>
@@ -171,6 +173,9 @@ function SelectFieldPlayground() {
               disabled={disabled}
               loading={loading}
               size={size}
+              mode={mode}
+              allowClear={allowClear}
+              showSearch={showSearch}
               required={required}
               error={error || undefined}
               hint={hint || undefined}
@@ -2038,7 +2043,7 @@ import { KInput } from '@khor/design-system/atoms/index';
     playground: <ColorPickerPlayground />,
     stateShowcase: (
       <div style={{ display: 'flex', gap: 16 }}>
-        <KColorPicker value="#1677ff" />
+        <KColorPicker value="#E04D36" />
         <KColorPicker showText value="#E04D36" />
         <KColorPicker disabled value="#ccc" />
       </div>

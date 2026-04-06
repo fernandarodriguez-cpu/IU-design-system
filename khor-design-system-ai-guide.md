@@ -53,13 +53,73 @@ Secciones complejas de la interfaz (DataTable, Form, AppLayout).
 
 ---
 
-## 🎨 Design Tokens
+## 🎨 Especificación Técnica de Tokens (Fuente de Verdad)
 
-Todos los tokens están expuestos como variables CSS y a través del objeto `khorTokens`.
-*   **Primary**: `--khor-primary` (#E04D36)
-*   **Navy**: `--khor-brand-navy` (#051758)
-*   **Neutral 900**: `--khor-neutral-900`
-*   **Typography**: `font-primary` (definida en el archivo de Tailwind).
+Para garantizar que el código generado sea funcional, la IA DEBE mapear las variables a estos valores reales. Si el entorno de ejecución es aislado, la IA DEBE incluir este bloque CSS explícitamente:
+
+```css
+:root {
+  /* Colores de Marca y Estado */
+  --khor-brand-navy: #051758;
+  --khor-brand-primary: #E04D36;
+  --khor-brand-secondary: #051758; /* Mapped to Navy in Khor v4 */
+  --khor-brand-accent: #FF9500;
+  --khor-status-success: #2E7D32;
+  --khor-status-error: #D32F2F;
+  --khor-status-info: #051758;
+
+  /* Neutros y Superficies */
+  --khor-neutral-50: #FFFFFF;    /* Surface Page / Card */
+  --khor-neutral-100: #EDF0F1;   /* Canvas Background */
+  --khor-neutral-200: #D5DBE0;   /* Borders / Dividers */
+  --khor-neutral-300: #A0AEC0;   /* Placeholders */
+  --khor-neutral-400: #718096;   /* Muted Text */
+  --khor-neutral-500: #4A5568;   /* Body Text */
+  --khor-neutral-800: #11141C;   /* Dark Text */
+  --khor-neutral-900: #051758;   /* Heading Text */
+
+  /* Geometría y Elevación */
+  --khor-radius-sm: 6px;
+  --khor-radius-md: 8px;
+  --khor-radius-lg: 10px;
+  --khor-radius-xl: 14px;
+  --khor-shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+  --khor-shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+  --khor-shadow-lg: 0 12px 32px rgba(5,23,88,0.12);
+}
+```
+
+---
+
+## 🏗️ Definición de Propiedades de Componentes (Props)
+
+La IA debe usar estas propiedades para asegurar que el diseño sea dinámico y no estático.
+
+### KButton
+*   **variant**: `'primary' | 'secondary' | 'ghost' | 'danger'` (Default: `'primary'`)
+*   **size**: `'sm' | 'md' | 'lg'` (Default: `'md'`)
+*   **fullWidth**: `boolean`
+*   **icon**: `ReactNode` (Posición izquierda por defecto)
+
+### KTypography
+*   **level**: `1 | 2 | 3 | 4` (Mapea a h1-h4 con tamaños: 2rem, 1.5rem, 1.25rem, 1rem)
+*   **type**: `'primary' | 'secondary' | 'success' | 'danger'`
+*   **weight**: `'normal' | 'medium' | 'bold'` (400, 500, 700)
+
+### KCardSection
+*   **padding**: `'none' | 'sm' | 'md' | 'lg'` (Default: `'md'` = 24px)
+*   **bordered**: `boolean` (Default: `true`)
+*   **hoverable**: `boolean` (Añade sombra al pasar el mouse)
+
+---
+
+## 🛠️ Instrucciones de Implementación para IAs
+
+Al generar un componente, si el usuario pide "usar el sistema Khor", la IA debe:
+
+*   **Paso 1**: Verificar si el componente requiere un nuevo token. Si no existe, usar la escala de neutros definida.
+*   **Paso 2**: Aplicar siempre `box-sizing: border-box` y la fuente `Inter` o `system-ui`.
+*   **Paso 3**: Si se genera un archivo único (Single File), incluir el bloque `:root` con los tokens arriba definidos para garantizar que el render sea idéntico al diseño original.
 
 ---
 

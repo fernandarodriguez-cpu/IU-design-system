@@ -8,6 +8,7 @@ export interface KSkeletonProps {
   height?: number | string;
   variant?: 'text' | 'circular' | 'rectangular';
   loading?: boolean;
+  active?: boolean;
   className?: string;
   style?: React.CSSProperties;
   children?: React.ReactNode;
@@ -23,7 +24,8 @@ export function KSkeleton({
   width, 
   height, 
   variant = 'text',
-  loading = true, 
+  loading = true,
+  active = false,
   className,
   style,
   children
@@ -41,7 +43,8 @@ export function KSkeleton({
           <div 
             key={i}
             className={cn(
-              "h-4 bg-khor-neutral-200 animate-pulse rounded-md",
+              "h-4 bg-khor-neutral-200 rounded-md",
+              active && "animate-pulse",
               i === lines - 1 && lines > 2 ? "w-[60%]" : "w-full"
             )}
           />
@@ -54,7 +57,8 @@ export function KSkeleton({
   return (
     <div
       className={cn(
-        "bg-khor-neutral-200 animate-pulse",
+        "bg-khor-neutral-200",
+        active && "animate-pulse",
         circle || variant === 'circular' ? "rounded-full" : "rounded-md",
         className
       )}
