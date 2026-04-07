@@ -1,3 +1,4 @@
+import React from 'react';
 import { createBrowserRouter } from 'react-router';
 import { AppShell } from './components/layout/AppShell';
 import { HomePage } from './pages/HomePage';
@@ -11,11 +12,13 @@ import { FigmaExportPage } from './pages/FigmaExportPage';
 import { AIExportPage } from './pages/AIExportPage';
 import { PatternsPage } from './pages/PatternsPage';
 import { ThemingPage } from './pages/ThemingPage';
+import { ErrorPage } from './pages/ErrorPage';
 
 export const router = createBrowserRouter([
   {
     path: '/',
     Component: AppShell,
+    errorElement: <ErrorPage />,
     children: [
       { index: true, Component: HomePage },
       { path: 'tokens', Component: TokensPage },

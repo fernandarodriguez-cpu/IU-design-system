@@ -403,7 +403,19 @@ export const organisms: Record<string, OrganismEntry> = {
 
 export function OrganismsPage() {
   const { id } = useParams<{ id: string }>();
-  const org = id ? organisms[id] : organisms['data-table'];
+  const org = id && organisms[id] ? organisms[id] : undefined;
+
+  if (!org) {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', height: '100%', alignItems: 'center', justifyContent: 'center', paddingTop: 64 }}>
+        <div style={{ maxWidth: 400, textAlign: 'center' }}>
+          <h2 style={{ fontSize: 24, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 8 }}>404 - No documentado</h2>
+          <p style={{ color: khorTokens.colors.neutral[500], marginBottom: 24 }}>El organismo "{id}" forma parte de la librería pero aún no tiene un playground interactivo configurado en esta documentación.</p>
+          <KButton variant="outline" onClick={() => window.location.href = '#/'}>Ir al Inicio</KButton>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <ComponentDoc
