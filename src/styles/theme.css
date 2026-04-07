@@ -589,3 +589,43 @@ aside * {
   --khor-density-font-label: 14px;
   --khor-density-radius: var(--khor-radius-lg); /* 10px */
 }
+
+/* ── AAA High Contrast (Wave 14) ── */
+.high-contrast {
+  /* Increase Border visibility and contrast */
+  --khor-border-default: var(--khor-neutral-400);
+  --khor-border-hover: var(--khor-neutral-500);
+  --khor-border-strong: var(--khor-neutral-900);
+  
+  /* Focus Rings are much thicker and bolder */
+  --khor-focus-ring-width: 4px;
+  --khor-focus-ring-offset: 3px;
+
+  /* Force pure white / pure black text depending on surface */
+  --khor-text-secondary: var(--khor-neutral-900);
+  --khor-text-muted: var(--khor-neutral-700);
+  
+  /* Increase Feedback color saturation for legibility */
+  --khor-success: #1B5E20; /* Darker green */
+  --khor-error: #B71C1C; /* Darker red */
+  --khor-warning: #E65100; /* Darker orange */
+}
+
+.dark.high-contrast {
+  /* Absolute extremes for dark mode backgrounds */
+  --khor-neutral-50: #000000;
+  --khor-neutral-100: #0F0F1A;
+  --khor-neutral-800: #E2E4EE;
+  --khor-neutral-900: #FFFFFF;
+  
+  --khor-border-default: var(--khor-neutral-600);
+  --khor-border-strong: var(--khor-neutral-900);
+
+  /* High contrast light modes on dark */
+  --khor-text-secondary: var(--khor-neutral-900);
+  --khor-text-muted: var(--khor-neutral-800);
+  
+  --khor-success: #43A047; /* Brighter green */
+  --khor-error: #FF5252; /* Brighter red */
+  --khor-warning: #FFB300; /* Brighter orange */
+}

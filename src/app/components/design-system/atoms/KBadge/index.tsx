@@ -150,7 +150,7 @@ export const KBadge = React.forwardRef<HTMLSpanElement, KBadgeProps>(
           />
           {displayLabel && (
             <span 
-              className={cn("text-xs font-medium text-khor-neutral-700", classNames?.text)}
+              className={cn("text-xs font-medium text-foreground", classNames?.text)}
               style={styles?.text}
             >
               {displayLabel}

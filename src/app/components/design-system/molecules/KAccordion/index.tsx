@@ -8,6 +8,7 @@ export interface KAccordionItem {
   label: React.ReactNode;
   children: React.ReactNode;
   disabled?: boolean;
+  extra?: React.ReactNode;
 }
 
 export interface KAccordionProps {
@@ -24,6 +25,7 @@ export interface KAccordionProps {
   ghost?: boolean;
   defaultActiveKey?: string | string[];
   expandIconPosition?: 'start' | 'end';
+  showArrow?: boolean;
 }
 
 /**
@@ -43,6 +45,7 @@ export function KAccordion({
   ghost,
   defaultActiveKey,
   expandIconPosition = 'end',
+  showArrow = true,
 }: KAccordionProps) {
   // Paridad: Si accordion es true, forzar type="single"
   const resolvedType = accordion ? 'single' : type;
@@ -72,12 +75,25 @@ export function KAccordion({
           <AccordionPrimitive.Header className="flex">
             <AccordionPrimitive.Trigger
               className={cn(
-                "flex flex-1 items-center justify-between py-4 text-sm font-semibold transition-all hover:text-khor-primary [&[data-state=open]>svg]:rotate-180",
+                "flex flex-1 items-center gap-3 py-4 text-sm font-bold transition-all hover:text-khor-primary [&[data-state=open]>svg]:rotate-180",
+                isIconStart ? "flex-row" : "flex-row-reverse justify-end",
                 item.disabled && "opacity-50 cursor-not-allowed hover:text-current"
               )}
             >
-              {item.label}
-              <ChevronDown className="h-4 w-4 shrink-0 text-khor-neutral-400 transition-transform duration-300" />
+              {showArrow && (
+                <ChevronDown className="h-4 w-4 shrink-0 text-khor-neutral-400 transition-transform duration-300" />
+              )}
+              <div className="flex-1 text-left">
+                {item.label}
+              </div>
+              {item.extra && (
+                <div 
+                  className={cn("ml-auto flex items-center", isIconStart ? "" : "order-first")}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {item.extra}
+                </div>
+              )}
             </AccordionPrimitive.Trigger>
           </AccordionPrimitive.Header>
           

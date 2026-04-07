@@ -26,17 +26,17 @@ const organisms = {}; // Temporary dummy for isolation testing
 const t = khorTokens;
 
 /* ─── Version (must match ChangelogPage & AppShell) ─── */
-const KHOR_VERSION = '4.0.2';
+export const KHOR_VERSION = '4.0.3';
 
 /* ─── Sections config ───────────────────────── */
-interface SectionConfig {
+export interface SectionConfig {
   id: string;
   label: string;
   description: string;
   enabled: boolean;
 }
 
-const defaultSections: SectionConfig[] = [
+export const defaultSections: SectionConfig[] = [
   { id: 'header', label: 'Encabezado y contexto', description: 'Nombre, version, stack tecnologico y proposito del sistema.', enabled: true },
   { id: 'tokens', label: 'Design Tokens', description: 'Colores de marca, neutrales, feedback, tipografia, espaciado, radios y sombras.', enabled: true },
   { id: 'darkmode', label: 'Dark Mode', description: 'Tokens alternativos para modo oscuro y CSS variables.', enabled: true },
@@ -50,7 +50,7 @@ const defaultSections: SectionConfig[] = [
 ];
 
 /* ─── Markdown Generator ────────────────────── */
-function generateMarkdown(sections: SectionConfig[]): string {
+export function generateMarkdown(sections: SectionConfig[]): string {
   const enabled = new Set(sections.filter((s) => s.enabled).map((s) => s.id));
   const parts: string[] = [];
   const today = new Date().toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' });

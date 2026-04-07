@@ -13,6 +13,8 @@ export interface KDescriptionsProps {
   column?: number;
   bordered?: boolean;
   size?: 'sm' | 'md' | 'lg';
+  layout?: 'horizontal' | 'vertical';
+  colon?: boolean;
   className?: string;
   style?: React.CSSProperties;
 }
@@ -27,6 +29,8 @@ export function KDescriptions({
   column = 3,
   bordered = false,
   size = 'md',
+  layout = 'vertical',
+  colon = true,
   className,
   style,
 }: KDescriptionsProps) {
@@ -62,20 +66,24 @@ export function KDescriptions({
             <div 
               key={index} 
               className={cn(
-                "flex flex-col",
+                "flex",
+                layout === 'vertical' ? "flex-col" : "flex-row items-stretch",
                 bordered && "border-b border-r border-khor-neutral-200",
                 bordered && index % column === column - 1 && "border-r-0"
               )}
               style={{ gridColumn: `span ${span}` }}
             >
               <div className={cn(
-                "bg-khor-neutral-50 text-khor-neutral-400 font-bold text-[10px] uppercase tracking-widest border-b border-khor-neutral-100",
+                "bg-khor-neutral-50 text-khor-neutral-400 font-bold uppercase tracking-widest shrink-0",
+                layout === 'vertical' ? "text-[10px] border-b border-khor-neutral-100" : "text-xs flex items-center border-r border-khor-neutral-100",
+                layout === 'horizontal' && !bordered && "bg-transparent border-r-0 pr-2",
                 paddingMap[size]
               )}>
-                {item.label}
+                {item.label}{colon && layout === 'horizontal' ? ':' : ''}
               </div>
               <div className={cn(
-                "bg-white text-khor-neutral-800 font-medium min-h-[40px] break-words",
+                "bg-white text-khor-neutral-800 font-medium min-h-[40px] break-words flex-1",
+                layout === 'horizontal' && "flex items-center",
                 paddingMap[size]
               )}>
                 {item.children}

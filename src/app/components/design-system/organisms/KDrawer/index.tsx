@@ -1,107 +1,106 @@
 import React from 'react';
-import { Drawer } from 'vaul';
-import { cn } from '../../../../../imports/utils';
+import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { X } from 'lucide-react';
+import { cn } from '../../../../../imports/utils';
 
-export const KDrawer = ({ shouldScaleBackground = true, ...props }: React.ComponentProps<typeof Drawer.Root>) => (
-  <Drawer.Root shouldScaleBackground={shouldScaleBackground} {...props} />
+export const KDrawerRoot = DialogPrimitive.Root;
+export const KDrawerTrigger = DialogPrimitive.Trigger;
+export const KDrawerPortal = DialogPrimitive.Portal;
+export const KDrawerClose = DialogPrimitive.Close;
+export const KDrawer = DialogPrimitive.Root;
+
+// Aliases para paridad con la estructura anterior y AntD
+export const KDrawerHeader = ({ className, children, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+  <div className={cn("flex flex-col space-y-1.5 px-6 py-4 border-b", className)} {...props}>{children}</div>
 );
-KDrawer.displayName = "KDrawer";
+export const KDrawerTitle = ({ className, children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
+  <h3 className={cn("text-lg font-bold text-khor-neutral-900 leading-tight", className)} {...props}>{children}</h3>
+);
+export const KDrawerDescription = ({ className, children, ...props }: React.HTMLAttributes<HTMLParagraphElement>) => (
+  <p className={cn("text-sm text-khor-neutral-500", className)} {...props}>{children}</p>
+);
+export const KDrawerFooter = ({ className, children, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+  <div className={cn("flex items-center justify-end gap-2 px-6 py-4 border-t", className)} {...props}>{children}</div>
+);
 
-export const KDrawerTrigger = Drawer.Trigger;
-export const KDrawerPortal = Drawer.Portal;
-export const KDrawerClose = Drawer.Close;
+export interface KDrawerProps extends Omit<React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>, 'title'> {
+  placement?: 'top' | 'right' | 'bottom' | 'left';
+  width?: string | number;
+  height?: string | number;
+  title?: React.ReactNode;
+  extra?: React.ReactNode;
+  onClose?: () => void;
+}
+
+const placementVariants = {
+  right: "inset-y-0 right-0 h-full border-l data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-sm",
+  left: "inset-y-0 left-0 h-full border-r data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-sm",
+  top: "inset-x-0 top-0 w-full border-b data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top h-80",
+  bottom: "inset-x-0 bottom-0 w-full border-t data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom h-80",
+};
 
 export const KDrawerOverlay = React.forwardRef<
-  React.ElementRef<typeof Drawer.Overlay>,
-  React.ComponentPropsWithoutRef<typeof Drawer.Overlay>
+  React.ElementRef<typeof DialogPrimitive.Overlay>,
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
 >(({ className, ...props }, ref) => (
-  <Drawer.Overlay
+  <DialogPrimitive.Overlay
     ref={ref}
-    className={cn("fixed inset-0 z-50 bg-black/50 backdrop-blur-sm", className)}
+    className={cn(
+      "fixed inset-0 z-50 bg-black/40 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+      className
+    )}
     {...props}
   />
 ));
-KDrawerOverlay.displayName = Drawer.Overlay.displayName;
+KDrawerOverlay.displayName = "KDrawerOverlay";
 
-/**
- * Por defecto de lado derecho (direction="right") o desde abajo ("bottom") 
- * Dependiendo del Root, 'vaul' aplica estilos. Añadimos un fallback si no.
- */
 export const KDrawerContent = React.forwardRef<
-  React.ElementRef<typeof Drawer.Content>,
-  React.ComponentPropsWithoutRef<typeof Drawer.Content> & { hideCloseButton?: boolean }
->(({ className, children, hideCloseButton, ...props }, ref) => (
+  React.ElementRef<typeof DialogPrimitive.Content>,
+  KDrawerProps
+>(({ className, children, placement = 'right', title, extra, width, height, onClose, ...props }, ref) => (
   <KDrawerPortal>
     <KDrawerOverlay />
-    <Drawer.Content
+    <DialogPrimitive.Content
       ref={ref}
       className={cn(
-        "fixed z-50 flex flex-col border bg-khor-surface-page outline-none shadow-xl",
-        "bottom-0 right-0 h-full w-[400px] max-w-full sm:w-[450px]", // Default: layout derecho
-        // Para usarlo desde abajo con vaul, habría que sobreescribir w y h, ej: "bottom-0 inset-x-0 mt-24 h-auto rounded-t-[10px]"
+        "fixed z-50 bg-khor-surface-page shadow-2xl transition ease-in-out data-[state=open]:duration-500 data-[state=closed]:duration-300 font-primary flex flex-col",
+        placementVariants[placement],
         className
       )}
+      style={{ 
+        width: (placement === 'left' || placement === 'right') && width ? width : undefined,
+        height: (placement === 'top' || placement === 'bottom') && height ? height : undefined
+      }}
       {...props}
     >
-      {!hideCloseButton && (
-        <Drawer.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary text-khor-neutral-500">
-          <X className="h-4 w-4" />
-          <span className="sr-only">Close</span>
-        </Drawer.Close>
+      {/* Header logic para compatibilidad declarativa y manual */}
+      {(title || extra) && (
+        <div className="flex items-center justify-between px-6 py-4 border-b shrink-0">
+          <div className="flex flex-col gap-1">
+            {title && (
+              typeof title === 'string' ? (
+                <KDrawerTitle>{title}</KDrawerTitle>
+              ) : (
+                title
+              )
+            )}
+          </div>
+          <div className="flex items-center gap-4">
+             {extra}
+             <DialogPrimitive.Close onClick={onClose} className="p-1.5 rounded-full hover:bg-khor-neutral-100 text-khor-neutral-400 transition-colors">
+                <X className="h-5 w-5" />
+             </DialogPrimitive.Close>
+          </div>
+        </div>
       )}
-      <div className="flex-1 overflow-y-auto w-full p-6">
+
+      {/* Body */}
+      <div className="flex-1 overflow-y-auto p-6 h-full pb-20">
         {children}
       </div>
-    </Drawer.Content>
+    </DialogPrimitive.Content>
   </KDrawerPortal>
 ));
 KDrawerContent.displayName = "KDrawerContent";
 
-export const KDrawerHeader = ({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
-  <div
-    className={cn("flex flex-col space-y-1.5 pb-2 text-left", className)}
-    {...props}
-  />
-);
-KDrawerHeader.displayName = "KDrawerHeader";
-
-export const KDrawerFooter = ({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
-  <div
-    className={cn("flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2 pt-4 border-t border-khor-neutral-200 mt-auto", className)}
-    {...props}
-  />
-);
-KDrawerFooter.displayName = "KDrawerFooter";
-
-export const KDrawerTitle = React.forwardRef<
-  React.ElementRef<typeof Drawer.Title>,
-  React.ComponentPropsWithoutRef<typeof Drawer.Title>
->(({ className, ...props }, ref) => (
-  <Drawer.Title
-    ref={ref}
-    className={cn("text-lg font-semibold leading-none tracking-tight font-primary text-khor-neutral-900", className)}
-    {...props}
-  />
-));
-KDrawerTitle.displayName = Drawer.Title.displayName;
-
-export const KDrawerDescription = React.forwardRef<
-  React.ElementRef<typeof Drawer.Description>,
-  React.ComponentPropsWithoutRef<typeof Drawer.Description>
->(({ className, ...props }, ref) => (
-  <Drawer.Description
-    ref={ref}
-    className={cn("text-sm text-khor-neutral-500 font-primary", className)}
-    {...props}
-  />
-));
-KDrawerDescription.displayName = Drawer.Description.displayName;
-
-export default KDrawer;
+export default KDrawerContent;

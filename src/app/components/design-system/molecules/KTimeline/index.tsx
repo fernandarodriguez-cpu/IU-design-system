@@ -7,6 +7,7 @@ export interface KTimelineItem {
   children: React.ReactNode;
   dot?: React.ReactNode;
   color?: 'primary' | 'navy' | 'success' | 'error' | 'warning' | 'info' | string;
+  position?: 'left' | 'right';
 }
 
 export interface KTimelineProps {
@@ -27,18 +28,8 @@ const colorMap = {
   info: "bg-sky-500",
 };
 
-const borderMap = {
-  primary: "border-khor-primary",
-  navy: "border-khor-navy",
-  success: "border-emerald-500",
-  error: "border-red-500",
-  warning: "border-amber-500",
-  info: "border-sky-500",
-};
-
 /**
  * KTimeline — Visualizador de eventos cronológicos (Headless v4)
- * Reemplaza AntD Timeline por una estructura pura de flexbox y Tailwind.
  */
 export function KTimeline({ 
   items, 
@@ -61,53 +52,71 @@ export function KTimeline({
         const color = item.color || 'primary';
         const isCustomColor = color && !colorMap[color as keyof typeof colorMap];
 
-        return (
-          <div key={item.key || index} className="relative flex gap-4 min-h-[48px] group">
-            {/* Etiquetas laterales (opcional) */}
-            {item.label && (
-              <div className="w-24 shrink-0 text-right text-xs pt-1 text-khor-neutral-400 font-medium">
-                {item.label}
-              </div>
-            )}
+        // Determinar posición según el modo
+        let itemPosition = 'right';
+        if (mode === 'right') itemPosition = 'left';
+        if (mode === 'alternate') {
+          itemPosition = index % 2 === 0 ? 'right' : 'left';
+        }
 
-            {/* Linea y Punto */}
-            <div className="relative flex flex-col items-center">
+        return (
+          <div key={item.key || index} className="relative flex min-h-[48px] group">
+            {/* Contenedor Izquierdo */}
+            <div className={cn(
+               "flex-1 pb-8 px-4",
+               itemPosition === 'right' ? "text-right" : "order-last text-left"
+            )}>
+              {itemPosition === 'right' ? (
+                item.label && <div className="text-xs text-khor-neutral-400 font-bold uppercase tracking-wider mb-1">{item.label}</div>
+              ) : (
+                <div className="text-sm text-khor-neutral-800 leading-relaxed">{item.children}</div>
+              )}
+            </div>
+
+            {/* Línea Central y Punto */}
+            <div className="relative flex flex-col items-center w-8 shrink-0">
               <div 
                 className={cn(
-                  "z-10 w-3 h-3 rounded-full border-2 border-white shadow-sm ring-1 ring-black/5 mt-1.5",
-                  !isCustomColor ? colorMap[color as keyof typeof colorMap] : ""
+                  "z-10 mt-1.5 transition-all duration-300",
+                  !item.dot && "w-3 h-3 rounded-full border-2 border-white shadow-sm ring-1 ring-black/5",
+                  !item.dot && !isCustomColor && colorMap[color as keyof typeof colorMap]
                 )}
-                style={isCustomColor ? { backgroundColor: color } : {}}
+                style={!item.dot && isCustomColor ? { backgroundColor: color } : {}}
               >
                 {item.dot}
               </div>
               
               {!isLast && (
                 <div 
-                  className="absolute top-4 w-[2px] h-[calc(100%-8px)] bg-khor-neutral-200 group-last:hidden" 
+                  className="absolute top-4 w-[2px] h-[calc(100%-8px)] bg-khor-neutral-100" 
                 />
               )}
             </div>
 
-            {/* Contenido */}
-            <div className="flex-1 pb-6 pt-0.5">
-              <div className="text-sm text-khor-neutral-800 leading-tight">
-                {item.children}
-              </div>
+            {/* Contenedor Derecho */}
+            <div className={cn(
+              "flex-1 pb-8 px-4",
+              itemPosition === 'right' ? "text-left" : "order-first text-right"
+            )}>
+               {itemPosition === 'right' ? (
+                <div className="text-sm text-khor-neutral-800 leading-relaxed">{item.children}</div>
+              ) : (
+                item.label && <div className="text-xs text-khor-neutral-400 font-bold uppercase tracking-wider mb-1">{item.label}</div>
+              )}
             </div>
           </div>
         );
       })}
 
       {pending && (
-        <div className="relative flex gap-4 min-h-[48px]">
-          <div className="w-24 shrink-0" />
-          <div className="relative flex flex-col items-center">
-            <div className="z-10 w-3 h-3 rounded-full border-2 border-dashed border-khor-neutral-300 bg-transparent mt-1.5 animate-spin duration-1000" />
-          </div>
-          <div className="flex-1 pb-6 pt-0.5 italic text-xs text-khor-neutral-400">
-            {pending}
-          </div>
+        <div className="relative flex min-h-[48px]">
+           <div className="flex-1" />
+           <div className="relative flex flex-col items-center w-8 shrink-0">
+             <div className="z-10 w-3 h-3 rounded-full border-2 border-dashed border-khor-neutral-300 bg-transparent mt-1.5 animate-spin" style={{ animationDuration: '3s' }} />
+           </div>
+           <div className="flex-1 pb-6 px-4 italic text-xs text-khor-neutral-400 pt-1">
+             {pending}
+           </div>
         </div>
       )}
     </div>

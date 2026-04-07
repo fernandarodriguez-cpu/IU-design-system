@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useMemo } from 'react';
-import { ChevronRight, ChevronDown, Folder, FolderOpen, File, Check } from 'lucide-react';
+import { ChevronRight, ChevronDown, Folder, FolderOpen, File, Check, Minus } from 'lucide-react';
 import { cn } from '../../../../../imports/utils';
 
 export interface KTreeNode {
@@ -16,7 +16,7 @@ export interface KTreeProps {
   data: KTreeNode[];
   checkable?: boolean;
   checkedKeys?: (string | number)[];
-  onCheck?: (keys: (string | number)[]) => void;
+  onCheck?: (keys: (string | number)[], info: { checked: boolean; node: KTreeNode }) => void;
   selectedKeys?: (string | number)[];
   onSelect?: (keys: (string | number)[], info: { node: KTreeNode }) => void;
   expandedKeys?: (string | number)[];
@@ -29,7 +29,7 @@ export interface KTreeProps {
 
 /**
  * KTree — Visualizador jerárquico de datos (Headless v4)
- * Reemplaza AntD Tree con una implementación recursiva pura, animaciones suaves y soporte completo para estados.
+ * Soporte para estados jerárquicos (Checked, Indeterminate) y navegación fluida.
  */
 export function KTree({
   data,
@@ -46,101 +46,120 @@ export function KTree({
   style,
 }: KTreeProps) {
   const [internalExpandedKeys, setInternalExpandedKeys] = useState<(string | number)[]>([]);
-  
   const expandedKeys = controlledExpandedKeys || internalExpandedKeys;
 
-  const handleExpand = useCallback((key: string | number) => {
-    const newKeys = expandedKeys.includes(key)
-      ? expandedKeys.filter(k => k !== key)
-      : [...expandedKeys, key];
+  // ─── Helpers para estados jerárquicos ───
+  const getCheckStatus = useCallback((node: KTreeNode): 'checked' | 'indeterminate' | 'unchecked' => {
+    if (!checkable) return 'unchecked';
     
+    if (checkedKeys.includes(node.key)) return 'checked';
+    
+    if (node.children?.length) {
+      const statuses = node.children.map(child => getCheckStatus(child));
+      if (statuses.every(s => s === 'checked')) return 'checked';
+      if (statuses.some(s => s === 'checked' || s === 'indeterminate')) return 'indeterminate';
+    }
+    
+    return 'unchecked';
+  }, [checkedKeys, checkable]);
+
+  const getAllChildKeys = (node: KTreeNode): (string | number)[] => {
+    let keys = [node.key];
+    if (node.children) {
+      node.children.forEach(child => {
+        keys = [...keys, ...getAllChildKeys(child)];
+      });
+    }
+    return keys;
+  };
+
+  // ─── Handlers ───
+  const handleExpand = (key: string | number) => {
+    const newKeys = expandedKeys.includes(key) ? expandedKeys.filter(k => k !== key) : [...expandedKeys, key];
     if (!controlledExpandedKeys) setInternalExpandedKeys(newKeys);
     onExpand?.(newKeys);
-  }, [expandedKeys, controlledExpandedKeys, onExpand]);
+  };
 
-  const handleSelect = useCallback((node: KTreeNode) => {
-    if (node.disabled || node.selectable === false) return;
-    onSelect?.([node.key], { node });
-  }, [onSelect]);
-
-  const handleCheck = useCallback((node: KTreeNode) => {
+  const handleCheck = (node: KTreeNode) => {
     if (node.disabled || node.checkable === false) return;
-    const newChecked = checkedKeys.includes(node.key)
-      ? checkedKeys.filter(k => k !== node.key)
-      : [...checkedKeys, node.key];
-    onCheck?.(newChecked);
-  }, [checkedKeys, onCheck]);
+    
+    const status = getCheckStatus(node);
+    const isChecked = status === 'checked';
+    const childKeys = getAllChildKeys(node);
+    
+    let nextCheckedKeys: (string | number)[];
+    if (isChecked) {
+      // Uncheck this and all children
+      nextCheckedKeys = checkedKeys.filter(k => !childKeys.includes(k));
+    } else {
+      // Check this and all children
+      nextCheckedKeys = Array.from(new Set([...checkedKeys, ...childKeys]));
+    }
+    
+    onCheck?.(nextCheckedKeys, { checked: !isChecked, node });
+  };
 
   const renderNode = (node: KTreeNode, level: number = 0) => {
     const isExpanded = expandedKeys.includes(node.key);
     const isSelected = selectedKeys.includes(node.key);
-    const isChecked = checkedKeys.includes(node.key);
+    const checkStatus = getCheckStatus(node);
     const hasChildren = node.children && node.children.length > 0;
 
     return (
       <div key={node.key} className="flex flex-col">
         <div 
           className={cn(
-            "flex items-center gap-1.5 py-1 px-2 rounded-md transition-all cursor-pointer group select-none",
-            isSelected ? "bg-khor-primary-light/10 text-khor-primary font-bold shadow-sm" : "hover:bg-khor-neutral-50 text-khor-neutral-700",
+            "flex items-center gap-2 py-1.5 px-3 rounded-xl transition-all cursor-pointer group select-none",
+            isSelected ? "bg-khor-primary text-white font-bold shadow-md scale-[1.02]" : "hover:bg-khor-neutral-50 text-khor-neutral-700",
             node.disabled && "opacity-40 cursor-not-allowed"
           )}
-          style={{ paddingLeft: `${level * 16 + 8}px` }}
-          onClick={() => handleSelect(node)}
+          style={{ paddingLeft: `${level * 20 + 12}px` }}
+          onClick={() => onSelect?.([node.key], { node })}
         >
           {/* Switcher */}
           <div className="w-5 h-5 flex items-center justify-center shrink-0">
-            {hasChildren ? (
+            {hasChildren && (
               <button 
                 onClick={(e) => { e.stopPropagation(); handleExpand(node.key); }}
-                className="p-0.5 hover:bg-khor-neutral-200 rounded transition-colors"
+                className={cn("p-1 rounded-md transition-colors", isSelected ? "hover:bg-white/20" : "hover:bg-khor-neutral-200")}
               >
-                <ChevronRight 
-                  className={cn("w-3.5 h-3.5 text-khor-neutral-400 transition-transform duration-200", isExpanded && "rotate-90")} 
-                />
+                <ChevronRight className={cn("w-3.5 h-3.5 transition-transform duration-200", isExpanded && "rotate-90", isSelected ? "text-white" : "text-khor-neutral-400")} />
               </button>
-            ) : showLine && level > 0 && (
-              <div className="w-[1px] h-full bg-khor-neutral-200 absolute left-[14px]" />
             )}
           </div>
 
-          {/* Checkbox (si aplica) */}
+          {/* Checkbox */}
           {checkable && node.checkable !== false && (
-            <div 
-              onClick={(e) => { e.stopPropagation(); handleCheck(node); }}
-              className={cn(
-                "w-4 h-4 rounded border flex items-center justify-center transition-all",
-                isChecked ? "bg-khor-primary border-khor-primary" : "border-khor-neutral-300 bg-white group-hover:border-khor-primary"
-              )}
-            >
-              {isChecked && <Check className="w-3 h-3 text-white stroke-[3]" />}
-            </div>
+             <div 
+               onClick={(e) => { e.stopPropagation(); handleCheck(node); }}
+               className={cn(
+                 "w-4 h-4 rounded-md border flex items-center justify-center transition-all",
+                 checkStatus === 'checked' ? "bg-khor-primary border-khor-primary" : 
+                 checkStatus === 'indeterminate' ? "bg-khor-primary/20 border-khor-primary" : 
+                 isSelected ? "border-white/50" : "border-khor-neutral-300 group-hover:border-khor-primary"
+               )}
+             >
+               {checkStatus === 'checked' && <Check className="w-3 h-3 text-white stroke-[3px]" />}
+               {checkStatus === 'indeterminate' && <Minus className="w-3 h-3 text-khor-primary stroke-[3px]" />}
+             </div>
           )}
 
-          {/* Icono */}
+          {/* Icon */}
           {showIcon && (
-            <div className="shrink-0 text-khor-neutral-400">
-              {node.icon ? node.icon : hasChildren ? (
-                isExpanded ? <FolderOpen className="w-4 h-4" /> : <Folder className="w-4 h-4" />
-              ) : (
-                <File className="w-4 h-4" />
-              )}
+            <div className={cn("shrink-0", isSelected ? "text-white/80" : "text-khor-neutral-400")}>
+              {node.icon || (hasChildren ? (isExpanded ? <FolderOpen size={16} /> : <Folder size={16} />) : <File size={16} />)}
             </div>
           )}
 
-          {/* Título */}
-          <span className="text-sm truncate flex-1 min-w-0">
-            {node.title}
-          </span>
+          <span className="text-sm truncate flex-1">{node.title}</span>
         </div>
 
-        {/* Hijos (con animación simple o condicional) */}
         {hasChildren && isExpanded && (
           <div className="flex flex-col relative">
             {showLine && (
               <div 
-                className="absolute left-[17px] top-0 bottom-3 w-[1px] bg-khor-neutral-100" 
-                style={{ left: `${level * 16 + 17}px` }}
+                className="absolute left-[21px] top-0 bottom-4 w-[1px] bg-khor-neutral-100" 
+                style={{ left: `${level * 20 + 21}px` }}
               />
             )}
             {node.children!.map(child => renderNode(child, level + 1))}
@@ -151,10 +170,7 @@ export function KTree({
   };
 
   return (
-    <div 
-      className={cn("w-full font-primary py-2 space-y-0.5", className)} 
-      style={style}
-    >
+    <div className={cn("w-full font-primary py-2 space-y-1", className)} style={style}>
       {data.map(node => renderNode(node))}
     </div>
   );

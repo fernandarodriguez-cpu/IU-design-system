@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { TrendingUp, TrendingDown } from 'lucide-react';
 import { cn } from '../../../../../imports/utils';
 import { KSkeleton } from '../../atoms/KSkeleton';
@@ -14,11 +14,29 @@ export interface KStatisticProps {
   loading?: boolean;
   className?: string;
   style?: React.CSSProperties;
+  // Props de paridad AntD v5
+  decimalSeparator?: string;
+  groupSeparator?: string;
+  valueStyle?: React.CSSProperties;
+  formatter?: (value: number | string) => React.ReactNode;
 }
 
 /**
- * KStatistic — Display estadístico con tendencias (Headless v4)
- * Reemplaza AntD Statistic con una estructura de alta fidelidad basada en Tailwind.
+ * Función auxiliar para formatear números con separadores personalizados
+ */
+const formatNumber = (
+  num: number, 
+  precision?: number, 
+  groupSeparator: string = ',', 
+  decimalSeparator: string = '.'
+) => {
+  const parts = num.toFixed(precision ?? 0).split('.');
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, groupSeparator);
+  return parts.join(decimalSeparator);
+};
+
+/**
+ * KStatistic — Display estadístico con tendencias y conteo animado (Headless v4)
  */
 export function KStatistic({ 
   title, 
@@ -30,9 +48,51 @@ export function KStatistic({
   trendValue, 
   loading, 
   className, 
-  style 
+  style,
+  decimalSeparator = '.',
+  groupSeparator = ',',
+  valueStyle,
+  formatter
 }: KStatisticProps) {
-  
+  const [displayValue, setDisplayValue] = useState<number | string>(0);
+  const animationRef = useRef<number>();
+  const startTimeRef = useRef<number>();
+  const duration = 1000; // 1 segundo de animación
+
+  const targetValue = typeof value === 'number' ? value : parseFloat(value.toString().replace(/[^0-9.-]+/g, ""));
+
+  useEffect(() => {
+    if (loading || typeof targetValue !== 'number' || isNaN(targetValue)) {
+      setDisplayValue(value);
+      return;
+    }
+
+    const animate = (timestamp: number) => {
+      if (!startTimeRef.current) startTimeRef.current = timestamp;
+      const progress = timestamp - startTimeRef.current;
+      const percentage = Math.min(progress / duration, 1);
+      
+      // Easing function (easeOutExpo)
+      const easeValue = percentage === 1 ? 1 : 1 - Math.pow(2, -10 * percentage);
+      const current = easeValue * targetValue;
+      
+      setDisplayValue(current);
+
+      if (percentage < 1) {
+        animationRef.current = requestAnimationFrame(animate);
+      } else {
+        setDisplayValue(targetValue);
+      }
+    };
+
+    startTimeRef.current = undefined;
+    animationRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      if (animationRef.current) cancelAnimationFrame(animationRef.current);
+    };
+  }, [targetValue, loading]);
+
   if (loading) {
     return (
       <div className={cn("space-y-2 p-1", className)} style={style}>
@@ -43,9 +103,14 @@ export function KStatistic({
     );
   }
 
-  const formattedValue = typeof value === 'number' && precision !== undefined 
-    ? value.toFixed(precision) 
-    : value;
+  const renderValue = () => {
+    if (formatter) return formatter(value);
+    
+    if (typeof displayValue === 'number') {
+      return formatNumber(displayValue, precision, groupSeparator, decimalSeparator);
+    }
+    return displayValue;
+  };
 
   return (
     <div 
@@ -58,10 +123,14 @@ export function KStatistic({
         </div>
       )}
       
-      <div className="flex items-baseline gap-1">
+      <div className="flex items-baseline gap-1" style={valueStyle}>
         {prefix && <span className="text-xl font-semibold text-khor-neutral-900 opacity-70">{prefix}</span>}
-        <span className="text-3xl font-extrabold text-khor-neutral-900 tracking-tight">
-          {formattedValue}
+        <span className={cn(
+          "text-3xl font-extrabold text-khor-neutral-900 tracking-tight tabular-nums",
+          // Micro-animación sutil al aparecer
+          "animate-in fade-in slide-in-from-bottom-2 duration-500"
+        )}>
+          {renderValue()}
         </span>
         {suffix && <span className="text-sm font-semibold text-khor-neutral-500 ml-1">{suffix}</span>}
       </div>

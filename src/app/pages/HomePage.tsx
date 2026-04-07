@@ -14,6 +14,7 @@ import { KButton, KText, KBadge } from '../components/design-system/atoms/index'
 import { KStatCard } from '../components/design-system/molecules/index';
 import { kToast } from '../components/design-system/organisms/index';
 import { khorTokens } from '../theme/khor-theme';
+import { generateMarkdown, defaultSections } from './AIExportPage';
 
 const stats = [
   { title: 'Átomos', value: 32, icon: <Atom size={20} />, sparkData: [2, 5, 8, 12, 15, 18, 22, 32] },
@@ -281,12 +282,15 @@ export const categories = ['Todos', ...new Set(patterns.map((p) => p.category))]
   ds.folder('organisms')!.file('index.tsx', organismsCatalog);
   ds.folder('patterns')!.file('index.ts', patternsCatalog);
 
+  // Compile AI System Prompt
+  ds.file('ai_system_prompt.txt', generateMarkdown(defaultSections));
+
   // Generate ZIP and download
   const blob = await zip.generateAsync({ type: 'blob' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'khor-design-system-v4.0.2.zip';
+  a.download = 'khor-design-system-v4.0.3.zip';
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);

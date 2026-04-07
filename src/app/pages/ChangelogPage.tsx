@@ -43,6 +43,28 @@ const changeTypeConfig: Record<ChangeType, { color: string; bg: string; icon: Re
 
 const changelog: VersionEntry[] = [
   {
+    version: '4.0.3',
+    date: '7 de abril de 2026',
+    codename: 'Production & Governance',
+    summary: 'Culminación de las Olas 13, 14 y 15. Establecimiento de gobernanza AAA para contraste y layout responsivo, y despliegue del ecosistema local de exportación orientado a agentes de IA.',
+    highlights: [
+      'Motor de alto contraste (.high-contrast) inyectado nativamente con detección automática de prefers-color-scheme desde OS.',
+      'Accessibility Core AAA: Focus rings asimétricos globales que escalan su grosor en modos de contraste alto, logrando paridad con normativas gubernamentales.',
+      'Gobernanza Responsiva: Refactorizado el sistema de celdas (KRow/KCol/KFlex) eliminando configuraciones manuales.',
+      'Ecosistema AI Extendido: JSZip export engine ahora compila el archivo "ai_system_prompt.txt" listo para inyectarse a un LLM.',
+      'SaaS Patterns fluidos: SaaSWizardPattern reconstruido para mobile-first.'
+    ],
+    changes: [
+      { type: 'added', component: 'JSZip Exporter', componentPath: '/', description: 'Expansión del algoritmo de descarga para compilar paramétricamente "ai_system_prompt.txt" y encapsular todo el design system.' },
+      { type: 'changed', component: 'theme.css', componentPath: '/theming', description: 'Nueva capa de infraestructura CSS para alto contraste con mutación automática de variables (--khor-neutral-50 a #000000).' },
+      { type: 'changed', component: 'KButton', componentPath: '/atoms/button', description: 'Remoción de la dependencia a "ring" de Tailwind para adherirse al Outline global dinámico estipulado para estándares WCAG.' },
+      { type: 'changed', component: 'KBadge', componentPath: '/atoms/badge', description: 'Token text reemplazado de neutral-700 a dynamic foreground para lecturas impecables en contextos invertidos o polarizados.' },
+      { type: 'added', component: 'SaaSWizardPattern', componentPath: '/patterns/saas-wizard', description: 'Arquitectura responsiva estricta añadida usando las primitivas KRow y KCol auditadas.' },
+      { type: 'breaking', description: 'Tokens visuales de foco eliminados del DOM de forma aislada, gobernanza transferida a theme.css central.' }
+    ],
+    stats: { added: 2, changed: 3, fixed: 1 },
+  },
+  {
     version: '4.0.2',
     date: '1 de abril de 2026',
     codename: 'Recipes',

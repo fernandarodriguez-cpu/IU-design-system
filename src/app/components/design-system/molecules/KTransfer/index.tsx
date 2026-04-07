@@ -15,8 +15,10 @@ export interface KTransferProps {
   dataSource: KTransferItem[];
   targetKeys?: string[];
   onChange?: (targetKeys: string[], direction: 'left' | 'right', moveKeys: string[]) => void;
+  onSelectChange?: (sourceSelectedKeys: string[], targetSelectedKeys: string[]) => void;
   titles?: [React.ReactNode, React.ReactNode];
   showSearch?: boolean;
+  oneWay?: boolean;
   disabled?: boolean;
   className?: string;
   style?: React.CSSProperties;
@@ -30,8 +32,10 @@ export function KTransfer({
   dataSource,
   targetKeys = [],
   onChange,
+  onSelectChange,
   titles = ['Origen', 'Destino'],
   showSearch = true,
+  oneWay = false,
   disabled,
   className,
   style,
@@ -55,13 +59,28 @@ export function KTransfer({
   );
 
   const toggleSelect = (key: string) => {
-    setSelectedKeys(prev => 
-      prev.includes(key) ? prev.filter(k => k !== key) : [...prev, key]
-    );
+    const newSelected = selectedKeys.includes(key) 
+      ? selectedKeys.filter(k => k !== key) 
+      : [...selectedKeys, key];
+    
+    setSelectedKeys(newSelected);
+    
+    // Notificar cambio de selección
+    const sourceSelected = newSelected.filter(k => leftDataSource.some(i => i.key === k));
+    const targetSelected = newSelected.filter(k => rightDataSource.some(i => i.key === k));
+    onSelectChange?.(sourceSelected, targetSelected);
   };
 
   const moveRight = () => {
     const moveKeys = selectedKeys.filter(key => leftDataSource.some(item => item.key === key));
+    if (moveKeys.length === 0) return;
+    const newTargetKeys = [...targetKeys, ...moveKeys];
+    onChange?.(newTargetKeys, 'right', moveKeys);
+    setSelectedKeys(prev => prev.filter(k => !moveKeys.includes(k)));
+  };
+
+  const moveAllRight = () => {
+    const moveKeys = leftDataSource.filter(item => !item.disabled).map(item => item.key);
     if (moveKeys.length === 0) return;
     const newTargetKeys = [...targetKeys, ...moveKeys];
     onChange?.(newTargetKeys, 'right', moveKeys);
@@ -73,6 +92,14 @@ export function KTransfer({
     if (moveKeys.length === 0) return;
     const newTargetKeys = targetKeys.filter(key => !moveKeys.includes(key));
     onChange?.(newTargetKeys, 'left', moveKeys);
+    setSelectedKeys(prev => prev.filter(k => !moveKeys.includes(k)));
+  };
+
+  const moveAllLeft = () => {
+    const moveKeys = rightDataSource.filter(item => !item.disabled).map(item => item.key);
+    if (moveKeys.length === 0) return;
+    const newTargetKeys = []; // O filtrar los que existían originalmente si fuera necesario, pero AntD suele limpiar todo el destino
+    onChange?.([], 'left', moveKeys);
     setSelectedKeys(prev => prev.filter(k => !moveKeys.includes(k)));
   };
 
@@ -139,25 +166,54 @@ export function KTransfer({
     <div className={cn("flex items-center gap-4 w-full font-primary", className)} style={style}>
       {renderList(titles[0], filteredLeft, searchLeft, setSearchLeft)}
       
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 bg-khor-neutral-50 p-2 rounded-lg border border-khor-neutral-200 shadow-inner">
         <KButton
           size="sm"
-          variant="neutral"
+          variant="outline"
           disabled={disabled || !selectedKeys.some(k => leftDataSource.some(i => i.key === k))}
           onClick={moveRight}
-          className="px-2"
+          className="px-2 bg-khor-surface-page"
         >
           <ChevronRight className="w-4 h-4" />
         </KButton>
+        {!oneWay && (
+          <KButton
+            size="sm"
+            variant="outline"
+            disabled={disabled || !selectedKeys.some(k => rightDataSource.some(i => i.key === k))}
+            onClick={moveLeft}
+            className="px-2 bg-khor-surface-page"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </KButton>
+        )}
+        <div className="h-[1px] bg-khor-neutral-200 my-1" />
         <KButton
           size="sm"
-          variant="neutral"
-          disabled={disabled || !selectedKeys.some(k => rightDataSource.some(i => i.key === k))}
-          onClick={moveLeft}
-          className="px-2"
+          variant="ghost"
+          disabled={disabled || leftDataSource.length === 0}
+          onClick={moveAllRight}
+          className="px-2 text-[10px] uppercase font-bold"
         >
-          <ChevronLeft className="w-4 h-4" />
+          <div className="flex -space-x-2">
+            <ChevronRight className="w-3.5 h-3.5" />
+            <ChevronRight className="w-3.5 h-3.5" />
+          </div>
         </KButton>
+        {!oneWay && (
+          <KButton
+            size="sm"
+            variant="ghost"
+            disabled={disabled || rightDataSource.length === 0}
+            onClick={moveAllLeft}
+            className="px-2 text-[10px] uppercase font-bold"
+          >
+            <div className="flex -space-x-2">
+              <ChevronLeft className="w-3.5 h-3.5" />
+              <ChevronLeft className="w-3.5 h-3.5" />
+            </div>
+          </KButton>
+        )}
       </div>
 
       {renderList(titles[1], filteredRight, searchRight, setSearchRight)}

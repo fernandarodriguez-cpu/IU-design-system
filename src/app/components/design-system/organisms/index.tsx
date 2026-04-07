@@ -1,4 +1,5 @@
-export { default as KDataTable, KTableDateCell } from './KDataTable';
+export { default as KDataTable } from './KDataTable';
+export { KTableDateCell } from './KDataTable/KTableDateCell';
 export { default as KModal } from './KModal';
 export { default as KDrawer } from './KDrawer';
 export { default as KCardSection } from './KCardSection';

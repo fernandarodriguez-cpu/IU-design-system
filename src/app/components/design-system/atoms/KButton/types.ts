@@ -10,11 +10,11 @@ type CombinedAttributes = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'type' |
 
 export interface KButtonProps extends CombinedAttributes {
   /** Estilo funcional del botón (modern AntD 5.4+) */
-  variant?: KButtonVariant | 'primary' | 'secondary' | 'outline' | 'ghost' | 'navy';
+  variant?: KButtonVariant | 'primary' | 'secondary' | 'outline' | 'outlined' | 'ghost' | 'navy' | 'danger';
   /** Color semántico del botón (modern AntD 5.4+) */
   color?: KButtonColor;
   /** Alias para variant (retrocompatibilidad) */
-  kVariant?: KButtonVariant | 'primary' | 'secondary' | 'outline' | 'ghost' | 'navy';
+  kVariant?: KButtonVariant | 'primary' | 'secondary' | 'outline' | 'outlined' | 'ghost' | 'navy' | 'danger';
   /** Tamaño del botón */
   size?: KButtonSize;
   /** Forma del botón: default | circle | round */

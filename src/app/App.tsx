@@ -1,17 +1,15 @@
 import { RouterProvider } from 'react-router';
 import { router } from './routes';
 import { KToastProvider } from './components/design-system/organisms/KToast';
+import { KModalProvider } from './components/design-system/organisms/KModal';
 import { ThemeProvider, useTheme } from './theme/theme-context';
-import { khorTokens, khorStaticTokens } from './theme/khor-theme';
 
 function AppContent() {
-  const { isDark } = useTheme();
-
   return (
-    <>
+    <KModalProvider>
       <RouterProvider router={router} />
       <KToastProvider />
-    </>
+    </KModalProvider>
   );
 }
 

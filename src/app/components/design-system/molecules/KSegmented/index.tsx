@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { cn } from '../../../../../imports/utils';
 
 export interface KSegmentedOption {
-  label: React.ReactNode;
+  label?: React.ReactNode;
   value: string | number;
   disabled?: boolean;
   icon?: React.ReactNode;
@@ -21,9 +21,15 @@ export interface KSegmentedProps {
 }
 
 const sizeStyles = {
-  sm: "h-8 p-1 text-xs",
-  md: "h-10 p-1 text-sm",
-  lg: "h-12 p-1.5 text-base",
+  sm: "h-7 p-0.5 text-xs",
+  md: "h-9 p-1 text-sm",
+  lg: "h-11 p-1 text-base",
+};
+
+const buttonSizeStyles = {
+  sm: "px-2",
+  md: "px-3",
+  lg: "px-4",
 };
 
 /**
@@ -76,21 +82,22 @@ export function KSegmented({
             disabled={disabled || opt.disabled}
             onClick={() => handleChange(opt.value)}
             className={cn(
-              "relative flex-1 flex items-center justify-center px-4 rounded-md transition-colors z-10 font-semibold",
+              "relative flex-1 flex items-center justify-center rounded-md transition-all z-10 font-bold tracking-tight",
               isActive ? "text-khor-neutral-900" : "text-khor-neutral-500 hover:text-khor-neutral-700",
-              (disabled || opt.disabled) ? "cursor-not-allowed" : "cursor-pointer"
+              (disabled || opt.disabled) ? "cursor-not-allowed" : "cursor-pointer",
+              buttonSizeStyles[size]
             )}
           >
             {isActive && (
               <motion.div
                 layoutId="segmented-active"
-                className="absolute inset-0 bg-white rounded-md shadow-sm z-[-1] border border-khor-neutral-200/50"
-                transition={{ type: "spring", bounce: 0.15, duration: 0.5 }}
+                className="absolute inset-0 bg-white rounded-md shadow-[0_1px_3px_rgba(0,0,0,0.1),0_1px_2px_rgba(0,0,0,0.06)] z-[-1]"
+                transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
               />
             )}
             <div className="flex items-center gap-2">
-              {opt.icon && <span className="shrink-0">{opt.icon}</span>}
-              <span className="truncate">{opt.label}</span>
+              {opt.icon && <span className={cn("shrink-0", !opt.label && "p-0.5")}>{opt.icon}</span>}
+              {opt.label && <span className="truncate">{opt.label}</span>}
             </div>
           </button>
         );

@@ -6,18 +6,15 @@ import {
   ControllerProps, 
   FieldPath, 
   FieldValues, 
-  FormProviderProps,
   useForm,
-  useWatch
+  useWatch,
+  get
 } from 'react-hook-form';
-import { khorTokens } from '../../../../theme/khor-theme';
+import { cn } from '../../../../../imports/utils';
 
-const t = khorTokens;
-const font = t.typography.fontPrimary;
-
-/* ═══════════════════════════════════════════════
+/* ────────────────────────────────────────────────────────────────
    KForm — Sistema de Formulario basado en React Hook Form
-   ═══════════════════════════════════════════════ */
+   ──────────────────────────────────────────────────────────────── */
 
 export interface KFormProps<TFieldValues extends FieldValues> extends Omit<ComponentProps<'form'>, 'onSubmit'> {
   methods: ReturnType<typeof useForm<TFieldValues>>;
@@ -25,10 +22,6 @@ export interface KFormProps<TFieldValues extends FieldValues> extends Omit<Compo
   layout?: 'horizontal' | 'vertical' | 'inline';
 }
 
-/**
- * KForm encapsula el FormProvider de React Hook Form
- * y la etiqueta <form> HTML estándar, aplicando la fuente correcta.
- */
 export function KForm<TFieldValues extends FieldValues>({
   methods,
   onSubmit,
@@ -42,8 +35,12 @@ export function KForm<TFieldValues extends FieldValues>({
     <FormProvider {...methods}>
       <form
         onSubmit={onSubmit ? methods.handleSubmit(onSubmit) : undefined}
-        style={{ fontFamily: font, ...style }}
-        className={`flex ${layout === 'vertical' ? 'flex-col' : layout === 'horizontal' ? 'flex-wrap' : 'flex-row items-end gap-4'} gap-4 ${className || ''}`}
+        className={cn(
+          "flex gap-6 font-primary",
+          layout === 'vertical' ? "flex-col" : layout === 'horizontal' ? "flex-col" : "flex-row items-end flex-wrap",
+          className
+        )}
+        style={style}
         {...rest}
       >
         {children}
@@ -55,29 +52,7 @@ export function KForm<TFieldValues extends FieldValues>({
 // ────────────────────────────────────────────────────────────────
 // Form Contexts & Field Wrappers
 // ────────────────────────────────────────────────────────────────
-type FormItemContextValue = {
-  id: string;
-};
-
-const FormItemContext = React.createContext<FormItemContextValue | null>(null);
-
-export const useFormField = () => {
-  const fieldContext = useFormContext();
-  const itemContext = React.useContext(FormItemContext);
-  
-  // We need to fetch fieldState through somehow, but RHF Controller already injects fieldState.
-  // Instead of a global hook, we typically rely on Controller's render props.
-  // This hook is kept for future expansion if deeply nested components need to know their ID context.
-  
-  if (!itemContext) {
-    throw new Error('useFormField must be used within a KFormItem (or KForm.Field)');
-  }
-  return { id: itemContext.id, form: fieldContext };
-};
-
-// ────────────────────────────────────────────────────────────────
-// KFormField (Actúa como Wrapper de Controller)
-// ────────────────────────────────────────────────────────────────
+const FormItemContext = React.createContext<{ id: string; name?: string } | null>(null);
 
 export interface KFormFieldProps<
   TFieldValues extends FieldValues = FieldValues,
@@ -90,9 +65,6 @@ export interface KFormFieldProps<
   rules?: ControllerProps<TFieldValues, TName>['rules'];
 }
 
-/**
- * KForm.Field (KFormField) es un Wrapper seguro sobre Controller de RHF.
- */
 function KFormFieldController<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
@@ -101,60 +73,92 @@ function KFormFieldController<
 }
 
 // ────────────────────────────────────────────────────────────────
-// KFormItem (Wrapper Visual)
+// KFormItem (Wrapper Visual "Smart")
 // ────────────────────────────────────────────────────────────────
 export interface KFormItemProps extends React.HTMLAttributes<HTMLDivElement> {
   label?: React.ReactNode;
+  name?: string; // Nuevo: Para auto-descubrimiento de errores
   required?: boolean;
   help?: React.ReactNode;
-  error?: string; // Manually pass if not using internal hook magic
+  error?: string;
+  layout?: 'horizontal' | 'vertical' | 'inline';
+  labelCol?: { span: number };
+  wrapperCol?: { span: number };
 }
 
-/**
- * KForm.Item encapsula visualmente un Label, el componente Input, 
- * y un bloque de error o ayuda.
- */
 function KFormItemWrapper({
   className,
   label,
+  name,
   required,
   help,
-  error,
+  error: manualError,
+  layout: itemLayout,
+  labelCol,
+  wrapperCol,
   children,
   ...props
 }: KFormItemProps) {
   const id = React.useId();
+  const context = useFormContext();
   
+  // Auto-descubrimiento de errores vía context de RHF
+  const fieldError = context && name ? get(context.formState.errors, name) : null;
+  const errorMessage = manualError || (fieldError?.message as string);
+  const hasError = !!errorMessage;
+
   return (
-    <FormItemContext.Provider value={{ id }}>
-      <div className={`flex flex-col gap-1.5 ${className || ''}`} {...props}>
+    <FormItemContext.Provider value={{ id, name }}>
+      <div 
+        className={cn(
+          "flex flex-col gap-1.5 w-full transition-all",
+          itemLayout === 'horizontal' ? "flex-row items-start gap-4" : "",
+          className
+        )} 
+        {...props}
+      >
         {label && (
-          <label htmlFor={id} className={`text-sm font-medium text-khor-neutral-900 font-primary ${error ? 'text-khor-feedback-error' : ''}`}>
+          <label 
+            htmlFor={id} 
+            className={cn(
+               "text-sm font-bold text-khor-neutral-900",
+               itemLayout === 'horizontal' ? "w-1/4 pt-2 text-right" : "",
+               hasError ? "text-red-500" : ""
+            )}
+            style={labelCol?.span ? { width: `${(labelCol.span / 24) * 100}%` } : {}}
+          >
             {label}
-            {required && <span className="text-khor-feedback-error ml-0.5">*</span>}
+            {required && <span className="text-red-500 ml-1 select-none">*</span>}
           </label>
         )}
         
-        {children}
-        
-        {error && (
-          <p className="text-xs font-medium text-khor-feedback-error font-primary animate-in fade-in-0">
-            {error}
-          </p>
+        <div className={cn(
+           "flex-1 flex flex-col gap-1.5",
+           itemLayout === 'horizontal' ? "w-3/4" : ""
         )}
-        
-        {!error && help && (
-          <p className="text-xs text-khor-neutral-500 font-primary">
-            {help}
-          </p>
-        )}
+        style={wrapperCol?.span ? { width: `${(wrapperCol.span / 24) * 100}%` } : {}}
+        >
+          {children}
+          
+          {hasError && (
+            <p className="text-xs font-semibold text-red-500 animate-in fade-in slide-in-from-top-1 duration-200">
+              {errorMessage}
+            </p>
+          )}
+          
+          {!hasError && help && (
+            <p className="text-xs text-khor-neutral-400 font-medium">
+              {help}
+            </p>
+          )}
+        </div>
       </div>
     </FormItemContext.Provider>
   );
 }
 
 // ────────────────────────────────────────────────────────────────
-// Attachments
+// Attachments & Hooks
 // ────────────────────────────────────────────────────────────────
 KForm.Item = KFormItemWrapper;
 KForm.Field = KFormFieldController;

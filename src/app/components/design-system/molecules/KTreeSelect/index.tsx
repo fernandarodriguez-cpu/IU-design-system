@@ -12,10 +12,12 @@ export interface KTreeNode {
 }
 export interface KTreeSelectProps {
   treeData: KTreeNode[];
-  value?: string | number;
-  onChange?: (value: string | number, label: string) => void;
+  value?: string | number | (string | number)[];
+  onChange?: (value: any, label: any) => void;
   placeholder?: string;
   disabled?: boolean;
+  multiple?: boolean;
+  treeCheckable?: boolean;
   className?: string;
   style?: React.CSSProperties;
   showSearch?: boolean;
@@ -32,12 +34,15 @@ export function KTreeSelect({
   onChange,
   placeholder = 'Seleccionar...',
   disabled,
+  multiple = false,
+  treeCheckable = false,
   className,
   style,
   showSearch = true,
   treeDefaultExpandAll = false,
 }: KTreeSelectProps) {
   const [open, setOpen] = useState(false);
+  const isMultiple = multiple || treeCheckable;
   
   // Función recursiva para obtener todas las llaves del árbol
   const getAllKeys = (nodes: KTreeNode[]): (string | number)[] => {
@@ -65,8 +70,24 @@ export function KTreeSelect({
 
   const handleSelect = (node: KTreeNode) => {
     if (node.disabled) return;
-    onChange?.(node.value, (node.label || node.title?.toString()) ?? '');
-    setOpen(false);
+    
+    if (isMultiple) {
+      const currentValues = Array.isArray(value) ? value : (value ? [value] : []);
+      const isSelected = currentValues.includes(node.value);
+      let newValue: (string | number)[];
+      
+      if (isSelected) {
+        newValue = currentValues.filter(v => v !== node.value);
+      } else {
+        newValue = [...currentValues, node.value];
+      }
+      
+      // En modo múltiple no cerramos el popover
+      onChange?.(newValue, newValue.map(v => findLabel(treeData, v)).join(', '));
+    } else {
+      onChange?.(node.value, (node.label || node.title?.toString()) ?? '');
+      setOpen(false);
+    }
   };
 
   const findLabel = (data: KTreeNode[], val?: string | number): string => {
@@ -81,11 +102,18 @@ export function KTreeSelect({
     return '';
   };
 
-  const selectedLabel = useMemo(() => findLabel(treeData, value), [treeData, value]);
+  const selectedLabel = useMemo(() => {
+    if (isMultiple && Array.isArray(value)) {
+      return value.map(v => findLabel(treeData, v)).filter(Boolean).join(', ');
+    }
+    return findLabel(treeData, value as string | number);
+  }, [treeData, value, isMultiple]);
 
   const renderNode = (node: KTreeNode, level: number = 0) => {
     const isExpanded = expandedKeys.includes(node.value);
-    const isSelected = value === node.value;
+    const isSelected = Array.isArray(value) 
+      ? value.includes(node.value) 
+      : value === node.value;
     const hasChildren = node.children && node.children.length > 0;
     
     // Filtro básico de búsqueda
@@ -103,7 +131,7 @@ export function KTreeSelect({
           onClick={() => handleSelect(node)}
           className={cn(
             "flex items-center gap-1 px-2 py-1.5 cursor-pointer rounded-md transition-colors group text-sm",
-            isSelected ? "bg-khor-primary-light/20 text-khor-primary font-bold" : "text-khor-neutral-700 hover:bg-khor-neutral-50",
+            isSelected ? "bg-khor-primary-light/10 text-khor-primary" : "text-khor-neutral-700 hover:bg-khor-neutral-50",
             node.disabled && "opacity-40 cursor-not-allowed grayscale"
           )}
           style={{ paddingLeft: `${level * 16 + 8}px` }}
@@ -122,8 +150,18 @@ export function KTreeSelect({
               </button>
             )}
           </div>
-          <span className="truncate flex-1">{node.label || node.title}</span>
-          {isSelected && <Check className="w-3.5 h-3.5 text-khor-primary shrink-0" />}
+          
+          {treeCheckable && (
+            <div className={cn(
+              "w-4 h-4 rounded border flex items-center justify-center mr-1.5 shrink-0 transition-all",
+              isSelected ? "bg-khor-primary border-khor-primary" : "bg-white border-khor-neutral-300"
+            )}>
+              {isSelected && <Check className="w-3 h-3 text-white" />}
+            </div>
+          )}
+
+          <span className={cn("truncate flex-1", isSelected && "font-bold")}>{node.label || node.title}</span>
+          {isSelected && !treeCheckable && <Check className="w-3.5 h-3.5 text-khor-primary shrink-0" />}
         </div>
         
         {hasChildren && (isExpanded || searchQuery) && (
@@ -148,14 +186,16 @@ export function KTreeSelect({
           )}
           style={style}
         >
-          <span className={cn("truncate text-sm flex-1 font-semibold", !value ? "text-khor-neutral-400" : "text-khor-neutral-900")}>
-            {selectedLabel || placeholder}
+          <span className={cn("truncate text-sm flex-1 font-semibold", !value || (Array.isArray(value) && value.length === 0) ? "text-khor-neutral-400" : "text-khor-neutral-900")}>
+            {isMultiple && Array.isArray(value) && value.length > 0 
+              ? `${value.length} seleccionados` 
+              : selectedLabel || placeholder}
           </span>
           <div className="flex items-center gap-1 shrink-0 ml-2">
-            {!disabled && value && (
+            {!disabled && (value && (!Array.isArray(value) || value.length > 0)) && (
               <X 
                 className="w-3.5 h-3.5 text-khor-neutral-400 hover:text-khor-neutral-600 transition-colors" 
-                onClick={(e) => { e.stopPropagation(); onChange?.('', ''); }} 
+                onClick={(e) => { e.stopPropagation(); onChange?.(isMultiple ? [] : '', ''); }} 
               />
             )}
             <ChevronDown className={cn("w-4 h-4 text-khor-neutral-400 transition-transform duration-300", open && "rotate-180")} />

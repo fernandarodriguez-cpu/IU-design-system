@@ -7,12 +7,19 @@ export interface KProgressProps {
   max?: number;
   showInfo?: boolean;
   type?: 'line' | 'circle';
+  size?: 'sm' | 'md' | 'lg';
   status?: 'active' | 'success' | 'exception';
   strokeColor?: string;
   steps?: number;
   className?: string;
   style?: React.CSSProperties;
 }
+
+const sizeVariants = {
+  sm: "h-1",
+  md: "h-2",
+  lg: "h-4"
+};
 
 /**
  * KProgress — Barra de progreso (Headless v4)
@@ -26,6 +33,7 @@ export const KProgress = React.forwardRef<
   max = 100, 
   showInfo = true, 
   type = 'line',
+  size = 'md',
   status,
   strokeColor,
   steps,
@@ -37,15 +45,14 @@ export const KProgress = React.forwardRef<
   const hasError = status === 'exception';
 
   if (type === 'circle') {
-    // Implementación simplificada de círculo con SVG
     const radius = 45;
     const circumference = 2 * Math.PI * radius;
     const offset = circumference - (percent / max) * circumference;
 
     return (
-      <div className={cn("inline-flex items-center gap-3", className)} style={style}>
-        <div className="relative h-10 w-10">
-          <svg className="h-full w-full -rotate-90">
+      <div className={cn("inline-flex items-center gap-3 font-primary", className)} style={style}>
+        <div className={cn("relative", size === 'sm' ? "h-6 w-6" : size === 'lg' ? "h-16 w-16" : "h-10 w-10")}>
+          <svg className="h-full w-full -rotate-90" viewBox="0 0 100 100">
             <circle
               className="text-khor-neutral-200"
               strokeWidth="8"
@@ -62,7 +69,7 @@ export const KProgress = React.forwardRef<
               )}
               strokeWidth="8"
               strokeDasharray={circumference}
-              style={{ strokeDashoffset: offset }}
+              strokeDashoffset={offset}
               strokeLinecap="round"
               stroke="currentColor"
               fill="transparent"
@@ -72,16 +79,15 @@ export const KProgress = React.forwardRef<
             />
           </svg>
         </div>
-        {showInfo && <span className="text-sm font-medium">{percent}%</span>}
+        {showInfo && <span className={cn("font-bold text-khor-neutral-900", size === 'sm' ? "text-[10px]" : "text-sm")}>{percent}%</span>}
       </div>
     );
   }
 
-  // Rendering by Steps
   if (steps && steps > 0 && type === 'line') {
     const activeSteps = Math.floor((percent / max) * steps);
     return (
-      <div className={cn("flex items-center gap-3 w-full", className)} style={style} ref={ref}>
+      <div className={cn("flex items-center gap-3 w-full font-primary", className)} style={style} ref={ref}>
         <div className="flex w-full gap-1">
           {Array.from({ length: steps }).map((_, i) => {
             const isActive = i < activeSteps;
@@ -89,7 +95,8 @@ export const KProgress = React.forwardRef<
               <div
                 key={i}
                 className={cn(
-                  "h-2 w-full flex-1 rounded-full transition-all duration-300",
+                  sizeVariants[size],
+                  "w-full flex-1 rounded-full transition-all duration-300",
                   isActive 
                     ? (hasError ? "bg-red-500" : isComplete ? "bg-emerald-500" : "bg-khor-primary")
                     : "bg-khor-neutral-200"
@@ -100,7 +107,7 @@ export const KProgress = React.forwardRef<
           })}
         </div>
         {showInfo && (
-          <span className="text-xs font-semibold min-w-[40px] text-right">
+          <span className={cn("font-bold text-khor-neutral-700 min-w-[40px] text-right", size === 'sm' ? "text-[10px]" : "text-xs")}>
             {percent}%
           </span>
         )}
@@ -109,10 +116,10 @@ export const KProgress = React.forwardRef<
   }
 
   return (
-    <div className={cn("flex items-center gap-3 w-full", className)} style={style}>
+    <div className={cn("flex items-center gap-3 w-full font-primary", className)} style={style}>
       <ProgressPrimitive.Root
         ref={ref}
-        className="relative h-2 w-full overflow-hidden rounded-full bg-khor-neutral-200"
+        className={cn("relative w-full overflow-hidden rounded-full bg-khor-neutral-200", sizeVariants[size])}
         value={percent}
       >
         <ProgressPrimitive.Indicator
@@ -127,7 +134,7 @@ export const KProgress = React.forwardRef<
         />
       </ProgressPrimitive.Root>
       {showInfo && (
-        <span className="text-xs font-semibold min-w-[40px] text-right">
+        <span className={cn("font-bold text-khor-neutral-400 min-w-[40px] text-right", size === 'sm' ? "text-[10px]" : "text-xs")}>
           {percent}%
         </span>
       )}

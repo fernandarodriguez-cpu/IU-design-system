@@ -1,24 +1,30 @@
 /**
  * ╔═══════════════════════════════════════════╗
- * ║  KHOR THEME CONTEXT — Dark/Light Mode     ║
- * ║  Provides theme switching with persisted   ║
- * ║  preference in localStorage.               ║
+ * ║  KHOR THEME CONTEXT — AAA Accessibility   ║
+ * ║  Provides Dark/Light & High Contrast      ║
+ * ║  modes with system preference detection.   ║
  * ╚═══════════════════════════════════════════╝
  */
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 
-export type ThemeMode = 'light' | 'dark';
+export type ThemeMode = 'light' | 'dark' | 'high-contrast';
 
 interface ThemeContextValue {
   mode: ThemeMode;
-  toggle: () => void;
+  setMode: (mode: ThemeMode) => void;
+  toggleDark: () => void;
+  toggleHighContrast: () => void;
   isDark: boolean;
+  isHighContrast: boolean;
 }
 
 const ThemeContext = createContext<ThemeContextValue>({
   mode: 'light',
-  toggle: () => {},
+  setMode: () => {},
+  toggleDark: () => {},
+  toggleHighContrast: () => {},
   isDark: false,
+  isHighContrast: false,
 });
 
 export function useTheme() {
@@ -26,33 +32,64 @@ export function useTheme() {
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [mode, setMode] = useState<ThemeMode>(() => {
+  const [mode, setModeState] = useState<ThemeMode>(() => {
     try {
-      return (localStorage.getItem('khor-theme-mode') as ThemeMode) || 'light';
+      const stored = localStorage.getItem('khor-theme-mode') as ThemeMode;
+      if (stored === 'light' || stored === 'dark' || stored === 'high-contrast') {
+        return stored;
+      }
+      // System preference fallback
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        return 'dark';
+      }
+      return 'light';
     } catch {
       return 'light';
     }
   });
 
+  const setMode = useCallback((newMode: ThemeMode) => {
+    setModeState(newMode);
+  }, []);
+
   useEffect(() => {
     try {
       localStorage.setItem('khor-theme-mode', mode);
     } catch {}
-    // Toggle the .dark class on <html> so CSS variables respond
+    
+    const html = document.documentElement;
+    
+    // Cleanup previous classes
+    html.classList.remove('dark', 'high-contrast');
+    
+    // Apply new classes
     if (mode === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
+      html.classList.add('dark');
+    } else if (mode === 'high-contrast') {
+      html.classList.add('dark'); // High contrast builds upon dark topology in Khor
+      html.classList.add('high-contrast');
     }
-    document.documentElement.setAttribute('data-theme', mode);
+    
+    html.setAttribute('data-theme', mode);
   }, [mode]);
 
-  const toggle = useCallback(() => {
-    setMode((prev) => (prev === 'light' ? 'dark' : 'light'));
+  const toggleDark = useCallback(() => {
+    setModeState((prev) => (prev === 'light' ? 'dark' : 'light'));
+  }, []);
+
+  const toggleHighContrast = useCallback(() => {
+    setModeState((prev) => (prev === 'high-contrast' ? 'dark' : 'high-contrast'));
   }, []);
 
   return (
-    <ThemeContext.Provider value={{ mode, toggle, isDark: mode === 'dark' }}>
+    <ThemeContext.Provider value={{ 
+      mode, 
+      setMode, 
+      toggleDark, 
+      toggleHighContrast, 
+      isDark: mode === 'dark' || mode === 'high-contrast',
+      isHighContrast: mode === 'high-contrast'
+    }}>
       {children}
     </ThemeContext.Provider>
   );

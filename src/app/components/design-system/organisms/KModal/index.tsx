@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState, useCallback, useImperativeHandle, forwardRef, useRef } from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { X } from 'lucide-react';
 import { cn } from '../../../../../imports/utils';
+import { KModalConfirm, KModalConfirmProps } from '../KModalConfirm/index';
 
-export const KModal = DialogPrimitive.Root;
+/* ─── Base Components ─── */
+export const KModalRoot = DialogPrimitive.Root;
 export const KModalTrigger = DialogPrimitive.Trigger;
 export const KModalPortal = DialogPrimitive.Portal;
 export const KModalClose = DialogPrimitive.Close;
@@ -15,13 +17,13 @@ export const KModalOverlay = React.forwardRef<
   <DialogPrimitive.Overlay
     ref={ref}
     className={cn(
-      "fixed inset-0 z-50 bg-black/50 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+      "fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
       className
     )}
     {...props}
   />
 ));
-KModalOverlay.displayName = DialogPrimitive.Overlay.displayName;
+KModalOverlay.displayName = "KModalOverlay";
 
 export const KModalContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
@@ -32,45 +34,31 @@ export const KModalContent = React.forwardRef<
     <DialogPrimitive.Content
       ref={ref}
       className={cn(
-        "fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-khor-surface-page p-6 shadow-lg duration-200",
-        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-xl",
+        "fixed left-[50%] top-[50%] z-[101] grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-khor-surface-page p-6 shadow-2xl duration-200",
+        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-3xl",
         className
       )}
       {...props}
     >
       {children}
       {!hideCloseButton && (
-        <DialogPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground text-khor-neutral-500">
-          <X className="h-4 w-4" />
-          <span className="sr-only">Close</span>
+        <DialogPrimitive.Close className="absolute right-5 top-5 rounded-full p-1 opacity-70 transition-all hover:opacity-100 hover:bg-neutral-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-khor-neutral-500">
+          <X className="h-5 w-5" />
+          <span className="sr-only">Cerrar</span>
         </DialogPrimitive.Close>
       )}
     </DialogPrimitive.Content>
   </KModalPortal>
 ));
-KModalContent.displayName = DialogPrimitive.Content.displayName;
+KModalContent.displayName = "KModalContent";
 
-export const KModalHeader = ({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
-  <div
-    className={cn("flex flex-col space-y-1.5 text-center sm:text-left", className)}
-    {...props}
-  />
+export const KModalHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+  <div className={cn("flex flex-col space-y-1.5 text-left mb-2 uppercase tracking-tight", className)} {...props} />
 );
-KModalHeader.displayName = "KModalHeader";
 
-export const KModalFooter = ({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
-  <div
-    className={cn("flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2 pt-2", className)}
-    {...props}
-  />
+export const KModalFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+  <div className={cn("flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2 pt-4 border-t mt-4", className)} {...props} />
 );
-KModalFooter.displayName = "KModalFooter";
 
 export const KModalTitle = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Title>,
@@ -78,11 +66,10 @@ export const KModalTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Title
     ref={ref}
-    className={cn("text-lg font-semibold leading-none tracking-tight font-primary text-khor-neutral-900", className)}
+    className={cn("text-xl font-extrabold leading-tight tracking-tight font-primary text-khor-neutral-900", className)}
     {...props}
   />
 ));
-KModalTitle.displayName = DialogPrimitive.Title.displayName;
 
 export const KModalDescription = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Description>,
@@ -90,10 +77,70 @@ export const KModalDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Description
     ref={ref}
-    className={cn("text-sm text-khor-neutral-500 font-primary", className)}
+    className={cn("text-sm font-medium text-khor-neutral-500 font-primary leading-relaxed", className)}
     {...props}
   />
 ));
-KModalDescription.displayName = DialogPrimitive.Description.displayName;
+
+/* ─── Static Methods Logic ─── */
+let modalRef: any = null;
+
+export const KModal = (props: React.ComponentProps<typeof KModalRoot>) => <KModalRoot {...props} />;
+
+KModal.confirm = (props: Partial<KModalConfirmProps>) => {
+  modalRef?.add({ ...props, type: 'confirm' });
+};
+KModal.success = (props: Partial<KModalConfirmProps>) => {
+  modalRef?.add({ ...props, type: 'success' });
+};
+KModal.error = (props: Partial<KModalConfirmProps>) => {
+  modalRef?.add({ ...props, type: 'error' });
+};
+KModal.warning = (props: Partial<KModalConfirmProps>) => {
+  modalRef?.add({ ...props, type: 'warning' });
+};
+KModal.info = (props: Partial<KModalConfirmProps>) => {
+  modalRef?.add({ ...props, type: 'info' });
+};
+
+/* ─── Provider for Static Methods ─── */
+export const KModalProvider = ({ children }: { children: React.ReactNode }) => {
+  const [modals, setModals] = useState<any[]>([]);
+  const internalRef = useRef<any>(null);
+
+  const add = useCallback((props: any) => {
+    const id = Date.now();
+    setModals(prev => [...prev, { ...props, id, open: true }]);
+  }, []);
+
+  const remove = useCallback((id: number) => {
+    setModals(prev => prev.filter(m => m.id !== id));
+  }, []);
+
+  useImperativeHandle(internalRef, () => ({ add }), [add]);
+  
+  // Registrar ref global
+  React.useEffect(() => {
+    modalRef = { add };
+    return () => { modalRef = null; };
+  }, [add]);
+
+  return (
+    <>
+      {children}
+      {modals.map(m => (
+        <KModalConfirm 
+          key={m.id} 
+          {...m} 
+          open={m.open}
+          onClose={() => {
+            m.onClose?.();
+            remove(m.id);
+          }} 
+        />
+      ))}
+    </>
+  );
+};
 
 export default KModal;

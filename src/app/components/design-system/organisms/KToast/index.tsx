@@ -35,10 +35,10 @@ export function kToast({
     warning: <AlertTriangle className="w-5 h-5 text-amber-500" />,
   };
 
-  toast.custom((t) => (
+  return toast.custom((t) => (
     <div 
       className={cn(
-        "flex items-start gap-4 p-4 min-w-[320px] max-w-[420px] bg-white border border-khor-neutral-200 rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] animate-in slide-in-from-right-full duration-300 font-primary",
+        "flex items-start gap-4 p-4 min-w-[320px] max-w-[420px] bg-white border border-khor-neutral-200 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] animate-in slide-in-from-right-full duration-300 font-primary relative",
         className
       )}
       style={style}
@@ -70,9 +70,26 @@ export function kToast({
   ), { duration });
 }
 
+// ─── Metodos Estaticos (Wave 11) ───
+kToast.success = (props: KToastProps | string) => {
+  const p = typeof props === 'string' ? { title: props } : props;
+  return kToast({ ...p, type: 'success' });
+};
+kToast.error = (props: KToastProps | string) => {
+  const p = typeof props === 'string' ? { title: props } : props;
+  return kToast({ ...p, type: 'error' });
+};
+kToast.info = (props: KToastProps | string) => {
+  const p = typeof props === 'string' ? { title: props } : props;
+  return kToast({ ...p, type: 'info' });
+};
+kToast.warning = (props: KToastProps | string) => {
+  const p = typeof props === 'string' ? { title: props } : props;
+  return kToast({ ...p, type: 'warning' });
+};
+
 /**
  * KToastProvider — Contenedor de notificaciones globales.
- * Debe colocarse en la raíz de la aplicación (App.tsx).
  */
 export function KToastProvider() {
   return (

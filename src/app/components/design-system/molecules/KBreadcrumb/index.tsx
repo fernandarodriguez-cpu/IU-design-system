@@ -1,6 +1,8 @@
 import React from 'react';
 import { ChevronRight } from 'lucide-react';
 import { cn } from '../../../../../imports/utils';
+import { KDropdownMenu } from '../KDropdownMenu';
+import { KDropdownMenuProps } from '../KDropdownMenu';
 
 export interface KBreadcrumbItem {
   key?: string | number;
@@ -8,6 +10,7 @@ export interface KBreadcrumbItem {
   href?: string;
   icon?: React.ReactNode;
   onClick?: () => void;
+  menu?: KDropdownMenuProps['menu'];
 }
 
 export interface KBreadcrumbProps {
@@ -35,8 +38,11 @@ export function KBreadcrumb({
     >
       {items.map((item, index) => {
         const isLast = index === items.length - 1;
-        const ItemContent = (
-          <div className="flex items-center gap-1.5 group">
+        let ItemContent = (
+          <div className={cn(
+            "flex items-center gap-1.5 group px-1 rounded-md transition-all",
+            !isLast && "hover:bg-khor-neutral-100/50"
+          )}>
             {item.icon && <span className="text-khor-neutral-400 group-hover:text-khor-primary transition-colors">{item.icon}</span>}
             <span className={cn(
               "transition-colors",
@@ -44,8 +50,20 @@ export function KBreadcrumb({
             )}>
               {item.title}
             </span>
+            {item.menu && <ChevronRight className="w-3 h-3 rotate-90 text-khor-neutral-300" />}
           </div>
         );
+
+        // Si tiene menu, envolver en Dropdown
+        if (item.menu && !isLast) {
+          ItemContent = (
+            <KDropdownMenu menu={item.menu} placement="bottomLeft">
+              <button type="button" className="outline-none">
+                {ItemContent}
+              </button>
+            </KDropdownMenu>
+          );
+        }
 
         return (
           <React.Fragment key={item.key || index}>
