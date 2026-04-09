@@ -28,3 +28,37 @@
 [data-radix-popper-content-wrapper] {
   z-index: 9999 !important;
 }
+
+/* Khor Global Scrollbar Styling */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--khor-slate-300) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--khor-slate-300);
+  border-radius: 10px;
+  transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--khor-primary);
+}
+
+/* Specific styling for Dark areas (like Sidebar) */
+.bg-khor-brand-navy ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.bg-khor-brand-navy ::-webkit-scrollbar-thumb:hover {
+  background: var(--khor-primary);
+}

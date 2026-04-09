@@ -17,6 +17,7 @@ import { patterns } from '../../patterns/index';
 import { khorTokens } from '../../theme/khor-theme';
 import { KCommandBar, useCommandBar } from '../design-system/command-bar';
 import { useTheme } from '../../theme/theme-context';
+import khorCounts from '../../metadata/khor-counts.json';
 
 /* Dot estilizado para sub-items en sidebar expandido */
 const NavDot = () => (
@@ -180,7 +181,7 @@ export function AppShell() {
   const [collapsed, setCollapsed] = useState(false);
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({});
   const { open: cmdOpen, setOpen: setCmdOpen } = useCommandBar();
-  const { mode, toggle: toggleTheme, isDark } = useTheme();
+  const { mode, toggleDark, isDark } = useTheme();
 
   const toggleSection = (title: string) => {
     setOpenSections((prev) => ({ ...prev, [title]: !prev[title] }));
@@ -342,6 +343,27 @@ export function AppShell() {
                     >
                       {section.icon}
                       <span style={{ flex: 1, textAlign: 'left' }}>{section.title}</span>
+                      {!collapsed && (
+                        <span style={{ 
+                          fontSize: 10, 
+                          color: 'rgba(255,255,255,0.3)', 
+                          backgroundColor: 'rgba(255,255,255,0.05)', 
+                          padding: '1px 6px', 
+                          borderRadius: 4,
+                          marginRight: 6,
+                          fontWeight: 700
+                        }}>
+                          {section.title === 'Átomos' && khorCounts.atoms}
+                          {section.title === 'Moléculas' && khorCounts.molecules}
+                          {section.title === 'Organismos' && khorCounts.organisms}
+                          {section.title === 'Patrones / Recipes' && (
+                            <div style={{ display: 'flex', gap: 4 }}>
+                              <span title="Patrones">🧩 {khorCounts.patterns}</span>
+                              <span title="Templates">🖼️ {khorCounts.templates}</span>
+                            </div>
+                          )}
+                        </span>
+                      )}
                       {openSections[section.title] ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
                     </button>
                     {openSections[section.title] && section.items && (
@@ -433,13 +455,13 @@ export function AppShell() {
               backgroundColor: 'var(--khor-success-light)',
               color: 'var(--khor-success)',
             }}>
-              v4.0.2
+              v4.0.4
             </span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             {/* Dark mode toggle */}
             <button
-              onClick={toggleTheme}
+              onClick={toggleDark}
               title={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
               style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center',

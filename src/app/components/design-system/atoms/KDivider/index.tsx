@@ -20,7 +20,7 @@ export const KDivider = React.forwardRef<HTMLDivElement | HTMLHRElement, KDivide
       <div 
         ref={ref as React.Ref<HTMLDivElement>}
         className={cn("inline-block h-[0.9em] mx-2 align-middle border-l", className)}
-        style={{ borderLeftStyle: borderStyle, borderColor: 'var(--khor-neutral-200)', ...style }}
+        style={{ borderLeftStyle: borderStyle, borderColor: 'var(--khor-slate-200)', ...style }}
         {...rest}
       />
     );
@@ -32,7 +32,7 @@ export const KDivider = React.forwardRef<HTMLDivElement | HTMLHRElement, KDivide
       <hr 
         ref={ref as React.Ref<HTMLHRElement>}
         className={cn("w-full my-6 border-t", className)}
-        style={{ borderTopStyle: borderStyle, borderColor: 'var(--khor-neutral-200)', ...style }}
+        style={{ borderTopStyle: borderStyle, borderColor: 'var(--khor-slate-200)', ...style }}
         {...rest}
       />
     );
@@ -52,7 +52,7 @@ export const KDivider = React.forwardRef<HTMLDivElement | HTMLHRElement, KDivide
         className="border-b flex-grow" 
         style={{ 
           borderBottomStyle: borderStyle, 
-          borderColor: 'var(--khor-neutral-200)', 
+          borderColor: 'var(--khor-slate-200)', 
           width: orientation === 'left' ? '5%' : orientation === 'right' ? '95%' : '50%'
         }} 
       />
@@ -71,7 +71,7 @@ export const KDivider = React.forwardRef<HTMLDivElement | HTMLHRElement, KDivide
         className="border-b flex-grow" 
         style={{ 
           borderBottomStyle: borderStyle, 
-          borderColor: 'var(--khor-neutral-200)',
+          borderColor: 'var(--khor-slate-200)',
           width: orientation === 'left' ? '95%' : orientation === 'right' ? '5%' : '50%'
         }} 
       />

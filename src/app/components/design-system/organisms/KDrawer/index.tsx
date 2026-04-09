@@ -33,10 +33,10 @@ export interface KDrawerProps extends Omit<React.ComponentPropsWithoutRef<typeof
 }
 
 const placementVariants = {
-  right: "inset-y-0 right-0 h-full border-l data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-sm",
-  left: "inset-y-0 left-0 h-full border-r data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-sm",
-  top: "inset-x-0 top-0 w-full border-b data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top h-80",
-  bottom: "inset-x-0 bottom-0 w-full border-t data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom h-80",
+  right: "inset-y-0 right-0 h-full border-l border-khor-slate-200 rounded-l-2xl data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-md",
+  left: "inset-y-0 left-0 h-full border-r border-khor-slate-200 rounded-r-2xl data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-md",
+  top: "inset-x-0 top-0 w-full border-b border-khor-slate-200 rounded-b-2xl data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top h-80",
+  bottom: "inset-x-0 bottom-0 w-full border-t border-khor-slate-200 rounded-t-2xl data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom h-80",
 };
 
 export const KDrawerOverlay = React.forwardRef<
@@ -63,7 +63,7 @@ export const KDrawerContent = React.forwardRef<
     <DialogPrimitive.Content
       ref={ref}
       className={cn(
-        "fixed z-50 bg-khor-surface-page shadow-2xl transition ease-in-out data-[state=open]:duration-500 data-[state=closed]:duration-300 font-primary flex flex-col",
+        "fixed z-50 bg-white shadow-khor-xl transition ease-in-out data-[state=open]:duration-500 data-[state=closed]:duration-300 font-primary flex flex-col",
         placementVariants[placement],
         className
       )}
@@ -87,7 +87,7 @@ export const KDrawerContent = React.forwardRef<
           </div>
           <div className="flex items-center gap-4">
              {extra}
-             <DialogPrimitive.Close onClick={onClose} className="p-1.5 rounded-full hover:bg-khor-neutral-100 text-khor-neutral-400 transition-colors">
+             <DialogPrimitive.Close onClick={onClose} className="p-1.5 rounded-full hover:bg-khor-slate-100 text-khor-neutral-400 transition-colors">
                 <X className="h-5 w-5" />
              </DialogPrimitive.Close>
           </div>

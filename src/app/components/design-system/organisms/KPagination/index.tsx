@@ -73,8 +73,8 @@ export function KPagination({
           className={cn(
             "w-8 h-8 flex items-center justify-center rounded-md text-sm font-bold transition-all",
             isActive 
-              ? "bg-khor-primary text-white shadow-md shadow-khor-primary-light/50" 
-              : "text-khor-neutral-600 hover:bg-khor-neutral-100 hover:text-khor-primary",
+              ? "bg-khor-primary text-white shadow-lg shadow-khor-primary/20" 
+              : "text-khor-neutral-600 hover:bg-khor-slate-100 hover:text-khor-primary",
             disabled && "cursor-not-allowed opacity-50 grayscale"
           )}
         >
@@ -96,8 +96,8 @@ export function KPagination({
         disabled={disabled || current === 1}
         onClick={() => handlePageChange(current - 1)}
         className={cn(
-          "w-8 h-8 flex items-center justify-center rounded-md border border-khor-neutral-200 transition-colors",
-          current === 1 ? "text-khor-neutral-300 bg-khor-neutral-50" : "text-khor-neutral-600 hover:border-khor-primary hover:text-khor-primary active:bg-khor-neutral-100"
+          "w-8 h-8 flex items-center justify-center rounded-md border border-khor-slate-200 transition-colors bg-white shadow-khor-sm",
+          current === 1 ? "text-khor-neutral-300 bg-khor-slate-50 shadow-none border-khor-slate-100" : "text-khor-neutral-600 hover:border-khor-primary hover:text-khor-primary active:bg-khor-slate-100"
         )}
       >
         <ChevronLeft className="w-4 h-4" />
@@ -112,8 +112,8 @@ export function KPagination({
         disabled={disabled || current === totalPages}
         onClick={() => handlePageChange(current + 1)}
         className={cn(
-          "w-8 h-8 flex items-center justify-center rounded-md border border-khor-neutral-200 transition-colors",
-          current === totalPages ? "text-khor-neutral-300 bg-khor-neutral-50" : "text-khor-neutral-600 hover:border-khor-primary hover:text-khor-primary active:bg-khor-neutral-100"
+          "w-8 h-8 flex items-center justify-center rounded-md border border-khor-slate-200 transition-colors bg-white shadow-khor-sm",
+          current === totalPages ? "text-khor-neutral-300 bg-khor-slate-50 shadow-none border-khor-slate-100" : "text-khor-neutral-600 hover:border-khor-primary hover:text-khor-primary active:bg-khor-slate-100"
         )}
       >
         <ChevronRight className="w-4 h-4" />

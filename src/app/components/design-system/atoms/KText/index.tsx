@@ -161,11 +161,12 @@ export const KTitle = React.forwardRef<HTMLHeadingElement, BaseTypographyProps &
   ({ level = 1, children, className, ...props }, ref) => {
     const Component = `h${level}` as any;
     const levelClasses = {
-      1: 'text-[38px] font-bold leading-[1.2]',
-      2: 'text-[30px] font-bold leading-[1.2]',
-      3: 'text-[24px] font-semibold leading-[1.3]',
-      4: 'text-[20px] font-semibold leading-[1.4]',
-      5: 'text-[16px] font-semibold leading-[1.5]',
+      1: 'text-[var(--khor-font-size-h1)] font-bold leading-[var(--khor-line-height-heading)] tracking-tight',
+      2: 'text-[var(--khor-font-size-h2)] font-bold leading-[var(--khor-line-height-heading)] tracking-tight',
+      3: 'text-[var(--khor-font-size-h3)] font-semibold leading-[var(--khor-line-height-heading)]',
+      4: 'text-[var(--khor-font-size-h4)] font-semibold leading-[var(--khor-line-height-heading)]',
+      5: 'text-[var(--khor-font-size-h5)] font-semibold leading-[var(--khor-line-height-body)]',
+      6: 'text-[var(--khor-font-size-h6)] font-semibold leading-[var(--khor-line-height-body)]',
     }[level];
 
     return (
@@ -184,18 +185,24 @@ export const KTitle = React.forwardRef<HTMLHeadingElement, BaseTypographyProps &
 );
 
 export const KText = React.forwardRef<HTMLSpanElement, BaseTypographyProps & { 
-  variant?: 'body-lg' | 'body-md' | 'small' | 'caption' | 'h1' | 'h2' | 'h3';
+  variant?: 'display-1' | 'display-2' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'body-lg' | 'body-md' | 'small' | 'caption' | 'overline';
   color?: string;
 }>(
   ({ children, className, variant = 'body-md', color, ...props }, ref) => {
     const variantClasses = {
-      h1: 'text-[38px] font-bold leading-[1.2]',
-      h2: 'text-[30px] font-bold leading-[1.2]',
-      h3: 'text-[24px] font-semibold leading-[1.3]',
-      'body-lg': 'text-[16px] leading-normal',
-      'body-md': 'text-[14px] leading-normal',
-      small: 'text-[12px] leading-normal',
-      caption: 'text-[11px] leading-normal',
+      'display-1': 'text-[var(--khor-font-size-display-1)] font-extrabold leading-[var(--khor-line-height-display)] tracking-tighter',
+      'display-2': 'text-[var(--khor-font-size-display-2)] font-extrabold leading-[var(--khor-line-height-display)] tracking-tighter',
+      h1: 'text-[var(--khor-font-size-h1)] font-bold leading-[var(--khor-line-height-heading)] tracking-tight',
+      h2: 'text-[var(--khor-font-size-h2)] font-bold leading-[var(--khor-line-height-heading)] tracking-tight',
+      h3: 'text-[var(--khor-font-size-h3)] font-semibold leading-[var(--khor-line-height-heading)]',
+      h4: 'text-[var(--khor-font-size-h4)] font-semibold leading-[var(--khor-line-height-heading)]',
+      h5: 'text-[var(--khor-font-size-h5)] font-semibold leading-[var(--khor-line-height-body)]',
+      h6: 'text-[var(--khor-font-size-h6)] font-semibold leading-[var(--khor-line-height-body)]',
+      'body-lg': 'text-[var(--khor-font-size-body-lg)] leading-[var(--khor-line-height-body)]',
+      'body-md': 'text-[var(--khor-font-size-body-md)] leading-[var(--khor-line-height-body)]',
+      small: 'text-[var(--khor-font-size-body-sm)] leading-[var(--khor-line-height-body)] font-medium',
+      caption: 'text-[var(--khor-font-size-body-sm)] leading-[var(--khor-line-height-body)] opacity-80',
+      overline: 'text-[var(--khor-font-size-body-xs)] leading-[var(--khor-line-height-body)] uppercase tracking-widest font-bold',
     }[variant];
 
     const ellipsisStyles = typeof props.ellipsis === 'object' && props.ellipsis.rows ? {

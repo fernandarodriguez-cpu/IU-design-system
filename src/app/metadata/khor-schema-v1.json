@@ -1,0 +1,6199 @@
+{
+  "version": "4.0.4",
+  "generatedAt": "2026-04-08T17:14:22.594Z",
+  "components": [
+    {
+      "name": "KAffix",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KAffix/index.tsx",
+      "props": [
+        {
+          "name": "offsetTop",
+          "type": "number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "offsetBottom",
+          "type": "number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KAlert",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KAlert/index.tsx",
+      "props": [
+        {
+          "name": "type",
+          "type": "'success' | 'error' | 'warning' | 'info'",
+          "required": false,
+          "description": "",
+          "options": [
+            "success",
+            "error",
+            "warning",
+            "info"
+          ]
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "closable",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "onClose",
+          "type": "() => void",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "showIcon",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "banner",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "action",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "icon",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KAvatar",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KAvatar/index.tsx",
+      "props": [
+        {
+          "name": "src",
+          "type": "string",
+          "required": false,
+          "description": "URL de imagen"
+        },
+        {
+          "name": "alt",
+          "type": "string",
+          "required": false,
+          "description": "Texto alternativo para la imagen (accesibilidad)"
+        },
+        {
+          "name": "srcSet",
+          "type": "string",
+          "required": false,
+          "description": "Atributo srcSet para imágenes responsive"
+        },
+        {
+          "name": "crossOrigin",
+          "type": "'' | 'anonymous' | 'use-credentials'",
+          "required": false,
+          "description": "Política CORS para la imagen",
+          "options": [
+            "",
+            "anonymous",
+            "use-credentials"
+          ]
+        },
+        {
+          "name": "referrerPolicy",
+          "type": "React.HTMLAttributeReferrerPolicy",
+          "required": false,
+          "description": "Política de referer para la imagen"
+        },
+        {
+          "name": "draggable",
+          "type": "boolean",
+          "required": false,
+          "description": "Si la imagen es arrastrable",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "description": "Nombre completo para generar iniciales automáticamente"
+        },
+        {
+          "name": "icon",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": "Icono personalizado si no hay imagen"
+        },
+        {
+          "name": "size",
+          "type": "AvatarSize | { xs?: number; sm?: number; md?: number; lg?: number; xl?: number; xxl?: number }",
+          "required": false,
+          "description": "Tamaño del avatar. Preset, número en px o objeto responsivo"
+        },
+        {
+          "name": "shape",
+          "type": "'circle' | 'square'",
+          "required": false,
+          "description": "Forma del avatar",
+          "options": [
+            "circle",
+            "square"
+          ]
+        },
+        {
+          "name": "status",
+          "type": "'online' | 'offline' | 'busy' | 'away'",
+          "required": false,
+          "description": "Estado de presencia",
+          "options": [
+            "online",
+            "offline",
+            "busy",
+            "away"
+          ]
+        },
+        {
+          "name": "gap",
+          "type": "number",
+          "required": false,
+          "description": "Distancia en px entre el borde del avatar y el texto de iniciales.\nControla el auto-sizing del texto. Default: 4"
+        },
+        {
+          "name": "color",
+          "type": "string",
+          "required": false,
+          "description": "Color de fondo personalizado"
+        },
+        {
+          "name": "onError",
+          "type": "() => boolean | void",
+          "required": false,
+          "description": "Callback cuando la imagen falla al cargar. Retornar false previene el fallback"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": "Clase CSS adicional"
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties",
+          "required": false,
+          "description": "Estilos adicionales"
+        },
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": "Contenido personalizado (letra, icono, etc.)"
+        },
+        {
+          "name": "onClick",
+          "type": "(e: React.MouseEvent) => void",
+          "required": false,
+          "description": "onClick handler"
+        }
+      ]
+    },
+    {
+      "name": "KAvatarGroup",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KAvatar/index.tsx",
+      "props": [
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "max",
+          "type": "number | {\n    count: number;\n    style?: React.CSSProperties;\n    popover?: {\n      trigger?: 'hover' | 'click' | 'focus';\n      placement?: 'top' | 'bottom' | 'left' | 'right';\n    };\n  }",
+          "required": false,
+          "description": "Configuración de excedente. AntD 5 spec.\nPuede ser un número (total de avatares visibles) o un objeto con estilo y popover."
+        },
+        {
+          "name": "size",
+          "type": "KAvatarProps['size']",
+          "required": false,
+          "description": "Tamaño uniforme para todos los avatares del grupo"
+        },
+        {
+          "name": "shape",
+          "type": "'circle' | 'square'",
+          "required": false,
+          "description": "Forma uniforme para todos los avatares del grupo",
+          "options": [
+            "circle",
+            "square"
+          ]
+        },
+        {
+          "name": "maxStyle",
+          "type": "React.CSSProperties",
+          "required": false,
+          "description": "Legacy: Estilo del indicador \"+N\". Preferible usar max.style"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": "Clase CSS adicional"
+        }
+      ]
+    },
+    {
+      "name": "KBadge",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KBadge/index.tsx",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": false,
+          "description": "Texto opcional para mostrar junto al badge. Alias de 'text'"
+        },
+        {
+          "name": "text",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": "Texto opcional para mostrar junto al badge (estándar AntD)"
+        },
+        {
+          "name": "status",
+          "type": "KBadgeStatus",
+          "required": false,
+          "description": "Estado del badge"
+        },
+        {
+          "name": "count",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": "Valor numérico o nodo a mostrar"
+        },
+        {
+          "name": "showZero",
+          "type": "boolean",
+          "required": false,
+          "description": "Si debe mostrarse el número 0. Default: false",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "dot",
+          "type": "boolean",
+          "required": false,
+          "description": "Si debe mostrarse solo como un punto. Default: false",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "offset",
+          "type": "[number | string, number | string]",
+          "required": false,
+          "description": "Desplazamiento del badge [x, y]"
+        },
+        {
+          "name": "color",
+          "type": "string",
+          "required": false,
+          "description": "Color de fondo personalizado"
+        },
+        {
+          "name": "overflowCount",
+          "type": "number",
+          "required": false,
+          "description": "Número máximo a mostrar antes de usar el símbolo '+'"
+        },
+        {
+          "name": "size",
+          "type": "'default' | 'small'",
+          "required": false,
+          "description": "Tamaño del badge",
+          "options": [
+            "default",
+            "small"
+          ]
+        },
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": "Contenido sobre el cual flota el badge"
+        },
+        {
+          "name": "styles",
+          "type": "KBadgeStyles",
+          "required": false,
+          "description": "Estilos semánticos"
+        },
+        {
+          "name": "classNames",
+          "type": "KBadgeClassNames",
+          "required": false,
+          "description": "Clases semánticas"
+        }
+      ]
+    },
+    {
+      "name": "KBadgeRibbon",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KBadge/index.tsx",
+      "props": [
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "text",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": "Texto a mostrar en la cinta"
+        },
+        {
+          "name": "color",
+          "type": "string",
+          "required": false,
+          "description": "Color de la cinta"
+        },
+        {
+          "name": "placement",
+          "type": "'start' | 'end'",
+          "required": false,
+          "description": "Posición de la cinta",
+          "options": [
+            "start",
+            "end"
+          ]
+        },
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KButton",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KButton/types.ts",
+      "props": [
+        {
+          "name": "variant",
+          "type": "KButtonVariant | 'primary' | 'secondary' | 'outline' | 'outlined' | 'ghost' | 'danger' | 'navy'",
+          "required": false,
+          "description": "Estilo funcional del botón (modern AntD 5.4+)",
+          "options": [
+            "primary",
+            "secondary",
+            "outline",
+            "outlined",
+            "ghost",
+            "danger",
+            "navy"
+          ]
+        },
+        {
+          "name": "color",
+          "type": "KButtonColor",
+          "required": false,
+          "description": "Color semántico del botón (modern AntD 5.4+)"
+        },
+        {
+          "name": "kVariant",
+          "type": "KButtonVariant | 'primary' | 'secondary' | 'outline' | 'outlined' | 'ghost' | 'danger' | 'navy'",
+          "required": false,
+          "description": "Alias para variant (retrocompatibilidad)",
+          "options": [
+            "primary",
+            "secondary",
+            "outline",
+            "outlined",
+            "ghost",
+            "danger",
+            "navy"
+          ]
+        },
+        {
+          "name": "size",
+          "type": "KButtonSize",
+          "required": false,
+          "description": "Tamaño del botón"
+        },
+        {
+          "name": "shape",
+          "type": "KButtonShape",
+          "required": false,
+          "description": "Forma del botón: default | circle | round"
+        },
+        {
+          "name": "htmlType",
+          "type": "'button' | 'submit' | 'reset'",
+          "required": false,
+          "description": "Tipo HTML nativo del botón en formularios",
+          "options": [
+            "button",
+            "submit",
+            "reset"
+          ]
+        },
+        {
+          "name": "type",
+          "type": "'button' | 'submit' | 'reset'",
+          "required": false,
+          "description": "Native type property for DOM attributes",
+          "options": [
+            "button",
+            "submit",
+            "reset"
+          ]
+        },
+        {
+          "name": "icon",
+          "type": "ReactNode",
+          "required": false,
+          "description": "Optional icon to render inside the button"
+        },
+        {
+          "name": "iconPosition",
+          "type": "'start' | 'end'",
+          "required": false,
+          "description": "Position of the icon relative to the children",
+          "options": [
+            "start",
+            "end"
+          ]
+        },
+        {
+          "name": "fullWidth",
+          "type": "boolean",
+          "required": false,
+          "description": "Ocupar 100% de anchura",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "block",
+          "type": "boolean",
+          "required": false,
+          "description": "Alias para fullWidth (retrocompatibilidad AntD)",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "loading",
+          "type": "boolean | { delay?: number }",
+          "required": false,
+          "description": "Estado de carga. Puede ser boolean o objeto con delay",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "href",
+          "type": "string",
+          "required": false,
+          "description": "El botón se comporta como un enlace"
+        },
+        {
+          "name": "target",
+          "type": "string",
+          "required": false,
+          "description": "Target del enlace (si href está presente)"
+        },
+        {
+          "name": "danger",
+          "type": "boolean",
+          "required": false,
+          "description": "Estado de error/peligro (Legacy/Combined style)",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "ghost",
+          "type": "boolean",
+          "required": false,
+          "description": "Fondo transparente (Legacy/Combined style)",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "autoInsertSpace",
+          "type": "boolean",
+          "required": false,
+          "description": "Insertar espacio automático entre dos caracteres",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "classNames",
+          "type": "{\n    icon?: string;\n    content?: string;\n  }",
+          "required": false,
+          "description": "Clases CSS para sub-elementos internos"
+        },
+        {
+          "name": "styles",
+          "type": "{\n    icon?: CSSProperties;\n    content?: CSSProperties;\n  }",
+          "required": false,
+          "description": "Estilos en línea para sub-elementos internos"
+        },
+        {
+          "name": "onClick",
+          "type": "(e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => void",
+          "required": false,
+          "description": "Handlers"
+        }
+      ]
+    },
+    {
+      "name": "KButtonGroup",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KButtonGroup/index.tsx",
+      "props": [
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "size",
+          "type": "KSpaceSize",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "direction",
+          "type": "'horizontal' | 'vertical'",
+          "required": false,
+          "description": "",
+          "options": [
+            "horizontal",
+            "vertical"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "KCheckbox",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KCheckbox/index.tsx",
+      "props": [
+        {
+          "name": "label",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": "Etiqueta descriptiva"
+        },
+        {
+          "name": "status",
+          "type": "'error' | 'warning' | 'default'",
+          "required": false,
+          "description": "Estado de validación",
+          "options": [
+            "error",
+            "warning",
+            "default"
+          ]
+        },
+        {
+          "name": "styles",
+          "type": "{\n    root?: React.CSSProperties;\n    input?: React.CSSProperties;\n    label?: React.CSSProperties;\n  }",
+          "required": false,
+          "description": "Estilos semánticos"
+        },
+        {
+          "name": "classNames",
+          "type": "{\n    root?: string;\n    input?: string;\n    label?: string;\n  }",
+          "required": false,
+          "description": "Clases semánticas"
+        }
+      ]
+    },
+    {
+      "name": "KCheckboxGroup",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KCheckbox/index.tsx",
+      "props": [
+        {
+          "name": "value",
+          "type": "any[]",
+          "required": false,
+          "description": "Valores seleccionados"
+        },
+        {
+          "name": "defaultValue",
+          "type": "any[]",
+          "required": false,
+          "description": "Valores por defecto"
+        },
+        {
+          "name": "options",
+          "type": "(string | { label: React.ReactNode; value: any; disabled?: boolean })[]",
+          "required": false,
+          "description": "Opciones si no se pasan hijos"
+        },
+        {
+          "name": "onChange",
+          "type": "(checkedValues: any[]) => void",
+          "required": false,
+          "description": "Callback al cambiar"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "description": "Desactivar todos",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "description": "Nombre para forms"
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties",
+          "required": false,
+          "description": "Estilos"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KDivider",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KDivider/index.tsx",
+      "props": [
+        {
+          "name": "type",
+          "type": "'horizontal' | 'vertical'",
+          "required": false,
+          "description": "",
+          "options": [
+            "horizontal",
+            "vertical"
+          ]
+        },
+        {
+          "name": "dashed",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "orientation",
+          "type": "'left' | 'right' | 'center'",
+          "required": false,
+          "description": "",
+          "options": [
+            "left",
+            "right",
+            "center"
+          ]
+        },
+        {
+          "name": "orientationMargin",
+          "type": "string | number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "plain",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "KFlex",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KFlex/index.tsx",
+      "props": [
+        {
+          "name": "vertical",
+          "type": "boolean | Partial<Record<Breakpoint, boolean>>",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "wrap",
+          "type": "React.CSSProperties['flexWrap']",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "justify",
+          "type": "FlexJustify",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "align",
+          "type": "FlexAlign",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "flex",
+          "type": "React.CSSProperties['flex']",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "gap",
+          "type": "React.CSSProperties['gap'] | 'small' | 'middle' | 'large' | Partial<Record<Breakpoint, number | string | 'small' | 'middle' | 'large'>>",
+          "required": false,
+          "description": "",
+          "options": [
+            "small",
+            "middle",
+            "large"
+          ]
+        },
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KFloatButton",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KFloatButton/index.tsx",
+      "props": [
+        {
+          "name": "icon",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "onClick",
+          "type": "() => void",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "tooltip",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "type",
+          "type": "'primary' | 'default'",
+          "required": false,
+          "description": "",
+          "options": [
+            "primary",
+            "default"
+          ]
+        },
+        {
+          "name": "position",
+          "type": "{ bottom?: number; right?: number }",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KCol",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KGrid/KCol.tsx",
+      "props": [
+        {
+          "name": "span",
+          "type": "ColSpanType",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "offset",
+          "type": "ColSpanType",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "order",
+          "type": "ColSpanType",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "flex",
+          "type": "string | number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "xs",
+          "type": "ColSpanType | ColSize",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "sm",
+          "type": "ColSpanType | ColSize",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "md",
+          "type": "ColSpanType | ColSize",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "lg",
+          "type": "ColSpanType | ColSize",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "xl",
+          "type": "ColSpanType | ColSize",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "xxl",
+          "type": "ColSpanType | ColSize",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "_khorHorizontalGutter",
+          "type": "number",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KRow",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KGrid/KRow.tsx",
+      "props": [
+        {
+          "name": "gutter",
+          "type": "Gutter | [Gutter, Gutter]",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "align",
+          "type": "'top' | 'middle' | 'bottom' | 'stretch'",
+          "required": false,
+          "description": "",
+          "options": [
+            "top",
+            "middle",
+            "bottom",
+            "stretch"
+          ]
+        },
+        {
+          "name": "justify",
+          "type": "'start' | 'end' | 'center' | 'space-around' | 'space-between' | 'space-evenly'",
+          "required": false,
+          "description": "",
+          "options": [
+            "start",
+            "end",
+            "center",
+            "space-around",
+            "space-between",
+            "space-evenly"
+          ]
+        },
+        {
+          "name": "wrap",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "KImage",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KImage/index.tsx",
+      "props": [
+        {
+          "name": "src",
+          "type": "string",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "alt",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "width",
+          "type": "number | string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "height",
+          "type": "number | string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "fallback",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "preview",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KInputOTP",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KInput/OTP.tsx",
+      "props": [
+        {
+          "name": "length",
+          "type": "number",
+          "required": false,
+          "description": "Número de slots. Default: 6"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "description": "Valor del OTP"
+        },
+        {
+          "name": "defaultValue",
+          "type": "string",
+          "required": false,
+          "description": "Valor inicial"
+        },
+        {
+          "name": "onChange",
+          "type": "(value: string) => void",
+          "required": false,
+          "description": "Callback cuando cambia el valor"
+        },
+        {
+          "name": "onComplete",
+          "type": "(value: string) => void",
+          "required": false,
+          "description": "Callback cuando se completan todos los campos"
+        },
+        {
+          "name": "mask",
+          "type": "string | boolean",
+          "required": false,
+          "description": "Máscara para los caracteres",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "status",
+          "type": "'error' | 'warning' | 'default'",
+          "required": false,
+          "description": "Estado de error",
+          "options": [
+            "error",
+            "warning",
+            "default"
+          ]
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "description": "Deshabilitar el input",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": "Clase CSS adicional"
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties",
+          "required": false,
+          "description": "Estilos adicionales"
+        },
+        {
+          "name": "size",
+          "type": "'sm' | 'md' | 'lg'",
+          "required": false,
+          "description": "Tamaño de los slots",
+          "options": [
+            "sm",
+            "md",
+            "lg"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "KInputSearch",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KInput/Search.tsx",
+      "props": [
+        {
+          "name": "enterButton",
+          "type": "boolean | React.ReactNode",
+          "required": false,
+          "description": "Texto del botón de búsqueda o nodo personalizado",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "required": false,
+          "description": "Estado de carga de la búsqueda",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "onSearch",
+          "type": "(value: string, event?: React.MouseEvent | React.KeyboardEvent) => void",
+          "required": false,
+          "description": "Callback cuando se acciona la búsqueda"
+        }
+      ]
+    },
+    {
+      "name": "KTextArea",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KInput/TextArea.tsx",
+      "props": [
+        {
+          "name": "error",
+          "type": "string | boolean",
+          "required": false,
+          "description": "Error message or boolean",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "warning",
+          "type": "string | boolean",
+          "required": false,
+          "description": "Warning message or boolean",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "status",
+          "type": "'error' | 'warning' | 'default'",
+          "required": false,
+          "description": "Status visual",
+          "options": [
+            "error",
+            "warning",
+            "default"
+          ]
+        },
+        {
+          "name": "block",
+          "type": "boolean",
+          "required": false,
+          "description": "Ocupar 100% de la anchura",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "variant",
+          "type": "'outlined' | 'borderless' | 'filled'",
+          "required": false,
+          "description": "Estilo visual",
+          "options": [
+            "outlined",
+            "borderless",
+            "filled"
+          ]
+        },
+        {
+          "name": "autoSize",
+          "type": "boolean | { minRows?: number; maxRows?: number }",
+          "required": false,
+          "description": "Ajuste automático de altura. \nPuede ser boolean o objeto con minRows y maxRows.",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "showCount",
+          "type": "boolean | { formatter: (info: { value: string; count: number; maxLength?: number }) => React.ReactNode }",
+          "required": false,
+          "description": "Mostrar contador de caracteres",
+          "options": [
+            "true",
+            "false"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "KInput",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KInput/index.tsx",
+      "props": [
+        {
+          "name": "size",
+          "type": "'sm' | 'md' | 'lg'",
+          "required": false,
+          "description": "",
+          "options": [
+            "sm",
+            "md",
+            "lg"
+          ]
+        },
+        {
+          "name": "error",
+          "type": "string | boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "warning",
+          "type": "string | boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "helperText",
+          "type": "string",
+          "required": false,
+          "description": "Mensaje de feedback debajo del input"
+        },
+        {
+          "name": "status",
+          "type": "'error' | 'warning' | 'default'",
+          "required": false,
+          "description": "Estado visual del input",
+          "options": [
+            "error",
+            "warning",
+            "default"
+          ]
+        },
+        {
+          "name": "block",
+          "type": "boolean",
+          "required": false,
+          "description": "Ocupar 100% del ancho",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "variant",
+          "type": "'outlined' | 'borderless' | 'filled'",
+          "required": false,
+          "description": "Estilo visual",
+          "options": [
+            "outlined",
+            "borderless",
+            "filled"
+          ]
+        },
+        {
+          "name": "prefix",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": "Icono o elemento al inicio"
+        },
+        {
+          "name": "suffix",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": "Icono o elemento al final"
+        },
+        {
+          "name": "allowClear",
+          "type": "boolean | { clearIcon?: React.ReactNode }",
+          "required": false,
+          "description": "Botón para limpiar el contenido",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "showCount",
+          "type": "boolean | { formatter: (info: { value: string; count: number; maxLength?: number }) => React.ReactNode }",
+          "required": false,
+          "description": "Mostrar contador de caracteres",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "addonBefore",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": "Elemento pegado antes del input"
+        },
+        {
+          "name": "addonAfter",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": "Elemento pegado después del input"
+        },
+        {
+          "name": "onClear",
+          "type": "() => void",
+          "required": false,
+          "description": "Callback llamado al presionar el botón de limpiar"
+        }
+      ]
+    },
+    {
+      "name": "KInputPassword",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KInput/index.tsx",
+      "props": [
+        {
+          "name": "visibilityToggle",
+          "type": "boolean | { visible?: boolean; onVisibleChange?: (visible: boolean) => void }",
+          "required": false,
+          "description": "Configuración del toggle de visibilidad.\nboolean o objeto para controlar estado.",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "iconRender",
+          "type": "(visible: boolean) => React.ReactNode",
+          "required": false,
+          "description": "Renderizado personalizado del icono"
+        }
+      ]
+    },
+    {
+      "name": "KLabel",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KLabel/index.tsx",
+      "props": [
+        {
+          "name": "required",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "info",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "size",
+          "type": "'sm' | 'md' | 'lg'",
+          "required": false,
+          "description": "",
+          "options": [
+            "sm",
+            "md",
+            "lg"
+          ]
+        },
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "required": true,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KProgress",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KProgress/index.tsx",
+      "props": [
+        {
+          "name": "value",
+          "type": "number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "max",
+          "type": "number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "showInfo",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "type",
+          "type": "'line' | 'circle'",
+          "required": false,
+          "description": "",
+          "options": [
+            "line",
+            "circle"
+          ]
+        },
+        {
+          "name": "size",
+          "type": "'sm' | 'md' | 'lg'",
+          "required": false,
+          "description": "",
+          "options": [
+            "sm",
+            "md",
+            "lg"
+          ]
+        },
+        {
+          "name": "status",
+          "type": "'active' | 'success' | 'exception'",
+          "required": false,
+          "description": "",
+          "options": [
+            "active",
+            "success",
+            "exception"
+          ]
+        },
+        {
+          "name": "strokeColor",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "steps",
+          "type": "number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KQRCode",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KQRCode/index.tsx",
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "size",
+          "type": "number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "color",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "bgColor",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KRadioGroup",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KRadio/index.tsx",
+      "props": [
+        {
+          "name": "options",
+          "type": "Array<KRadioGroupOptions | string>",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "direction",
+          "type": "'horizontal' | 'vertical'",
+          "required": false,
+          "description": "",
+          "options": [
+            "horizontal",
+            "vertical"
+          ]
+        },
+        {
+          "name": "optionType",
+          "type": "'default' | 'button'",
+          "required": false,
+          "description": "",
+          "options": [
+            "default",
+            "button"
+          ]
+        },
+        {
+          "name": "buttonStyle",
+          "type": "'outline' | 'solid'",
+          "required": false,
+          "description": "",
+          "options": [
+            "outline",
+            "solid"
+          ]
+        },
+        {
+          "name": "size",
+          "type": "'sm' | 'md' | 'lg' | 'small' | 'middle' | 'large'",
+          "required": false,
+          "description": "",
+          "options": [
+            "sm",
+            "md",
+            "lg",
+            "small",
+            "middle",
+            "large"
+          ]
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KRadio",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KRadio/index.tsx",
+      "props": [
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "autoFocus",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "KRate",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KRate/index.tsx",
+      "props": [
+        {
+          "name": "count",
+          "type": "number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "value",
+          "type": "number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "defaultValue",
+          "type": "number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "onChange",
+          "type": "(value: number) => void",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "allowHalf",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "character",
+          "type": "React.ReactNode | ((props: { index: number }) => React.ReactNode)",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "tooltips",
+          "type": "string[]",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KSkeleton",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KSkeleton/index.tsx",
+      "props": [
+        {
+          "name": "lines",
+          "type": "number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "circle",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "width",
+          "type": "number | string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "height",
+          "type": "number | string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "variant",
+          "type": "'text' | 'circular' | 'rectangular'",
+          "required": false,
+          "description": "",
+          "options": [
+            "text",
+            "circular",
+            "rectangular"
+          ]
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "active",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KSliderTooltip",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KSlider/index.tsx",
+      "props": [
+        {
+          "name": "formatter",
+          "type": "(value: number) => React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "placement",
+          "type": "'top' | 'bottom' | 'left' | 'right'",
+          "required": false,
+          "description": "",
+          "options": [
+            "top",
+            "bottom",
+            "left",
+            "right"
+          ]
+        },
+        {
+          "name": "color",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KSlider",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KSlider/index.tsx",
+      "props": [
+        {
+          "name": "value",
+          "type": "number | number[]",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "defaultValue",
+          "type": "number | number[]",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "min",
+          "type": "number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "max",
+          "type": "number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "step",
+          "type": "number | null",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "onChange",
+          "type": "(value: number | number[]) => void",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "onAfterChange",
+          "type": "(value: number | number[]) => void",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "showValue",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "range",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "vertical",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "reverse",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "tooltip",
+          "type": "KSliderTooltipProps | boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "marks",
+          "type": "Record<number, React.ReactNode | { style?: React.CSSProperties; label: React.ReactNode }>",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KSpace",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KSpace/index.tsx",
+      "props": [
+        {
+          "name": "direction",
+          "type": "'horizontal' | 'vertical'",
+          "required": false,
+          "description": "",
+          "options": [
+            "horizontal",
+            "vertical"
+          ]
+        },
+        {
+          "name": "size",
+          "type": "KSpaceSize | [KSpaceSize, KSpaceSize]",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "align",
+          "type": "KSpaceAlign",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "wrap",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "split",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KSpin",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KSpin/index.tsx",
+      "props": [
+        {
+          "name": "size",
+          "type": "'sm' | 'md' | 'lg' | 'xl'",
+          "required": false,
+          "description": "",
+          "options": [
+            "sm",
+            "md",
+            "lg",
+            "xl"
+          ]
+        },
+        {
+          "name": "color",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "fullscreen",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "KSwitch",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KSwitch/index.tsx",
+      "props": [
+        {
+          "name": "label",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "size",
+          "type": "'sm' | 'md' | 'small' | 'default'",
+          "required": false,
+          "description": "",
+          "options": [
+            "sm",
+            "md",
+            "small",
+            "default"
+          ]
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "checkedChildren",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "unCheckedChildren",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KTag",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KTag/index.tsx",
+      "props": [
+        {
+          "name": "color",
+          "type": "KTagColor | string",
+          "required": false,
+          "description": "Color predefinido o CSS color",
+          "options": [
+            "primary",
+            "secondary",
+            "accent",
+            "success",
+            "error",
+            "warning",
+            "info",
+            "processing",
+            "default",
+            "navy"
+          ]
+        },
+        {
+          "name": "status",
+          "type": "'success' | 'processing' | 'error' | 'warning' | 'default'",
+          "required": false,
+          "description": "Estado semántico (v4)",
+          "options": [
+            "success",
+            "processing",
+            "error",
+            "warning",
+            "default"
+          ]
+        },
+        {
+          "name": "icon",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": "Icono al inicio"
+        },
+        {
+          "name": "bordered",
+          "type": "boolean",
+          "required": false,
+          "description": "Si tiene borde visible",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "closable",
+          "type": "boolean",
+          "required": false,
+          "description": "Si es eliminable",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "closeIcon",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": "Icono de cierre personalizado"
+        },
+        {
+          "name": "onClose",
+          "type": "(e: React.MouseEvent) => void",
+          "required": false,
+          "description": "Evento al cerrar"
+        },
+        {
+          "name": "styles",
+          "type": "{\n    root?: React.CSSProperties;\n    closeIcon?: React.CSSProperties;\n  }",
+          "required": false,
+          "description": "Estilos semánticos"
+        },
+        {
+          "name": "classNames",
+          "type": "{\n    root?: string;\n    closeIcon?: string;\n  }",
+          "required": false,
+          "description": "Clases semánticas"
+        }
+      ]
+    },
+    {
+      "name": "KCheckableTag",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KTag/index.tsx",
+      "props": [
+        {
+          "name": "checked",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "onChange",
+          "type": "(checked: boolean) => void",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "BaseTypography",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KText/index.tsx",
+      "props": [
+        {
+          "name": "type",
+          "type": "TypographyType",
+          "required": false,
+          "description": "Estado de validación/semántica"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "description": "Desactivar interacción",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "strong",
+          "type": "boolean",
+          "required": false,
+          "description": "Estilo negrita",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "italic",
+          "type": "boolean",
+          "required": false,
+          "description": "Estilo cursiva",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "underline",
+          "type": "boolean",
+          "required": false,
+          "description": "Estilo subrayado",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "delete",
+          "type": "boolean",
+          "required": false,
+          "description": "Estilo tachado",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "mark",
+          "type": "boolean",
+          "required": false,
+          "description": "Estilo resaltado",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "code",
+          "type": "boolean",
+          "required": false,
+          "description": "Estilo código",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "keyboard",
+          "type": "boolean",
+          "required": false,
+          "description": "Estilo tecla",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "ellipsis",
+          "type": "boolean | { rows?: number; expandable?: boolean; suffix?: string }",
+          "required": false,
+          "description": "Truncado con puntos suspensivos",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "copyable",
+          "type": "boolean | { text?: string; onCopy?: () => void }",
+          "required": false,
+          "description": "Copiar al portapapeles",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "editable",
+          "type": "boolean | { onChange?: (val: string) => void; onStart?: () => void; onEnd?: () => void }",
+          "required": false,
+          "description": "Edición en línea",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KWatermark",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KWatermark/index.tsx",
+      "props": [
+        {
+          "name": "text",
+          "type": "string",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "fontSize",
+          "type": "number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "color",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "rotate",
+          "type": "number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "gap",
+          "type": "number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KAccordion",
+      "category": "molecule",
+      "path": "/src/app/components/design-system/molecules/KAccordion/index.tsx",
+      "props": [
+        {
+          "name": "items",
+          "type": "KAccordionItem[]",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "type",
+          "type": "'single' | 'multiple'",
+          "required": false,
+          "description": "",
+          "options": [
+            "single",
+            "multiple"
+          ]
+        },
+        {
+          "name": "defaultValue",
+          "type": "string | string[]",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "value",
+          "type": "string | string[]",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "onValueChange",
+          "type": "(value: any) => void",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "collapsible",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "variant",
+          "type": "'ghost' | 'bordered'",
+          "required": false,
+          "description": "",
+          "options": [
+            "ghost",
+            "bordered"
+          ]
+        },
+        {
+          "name": "accordion",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "ghost",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "defaultActiveKey",
+          "type": "string | string[]",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "expandIconPosition",
+          "type": "'start' | 'end'",
+          "required": false,
+          "description": "",
+          "options": [
+            "start",
+            "end"
+          ]
+        },
+        {
+          "name": "showArrow",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "KAnchor",
+      "category": "molecule",
+      "path": "/src/app/components/design-system/molecules/KAnchor/index.tsx",
+      "props": [
+        {
+          "name": "items",
+          "type": "KAnchorLink[]",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "offsetTop",
+          "type": "number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "bounds",
+          "type": "number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "onClick",
+          "type": "(e: React.MouseEvent<HTMLElement>, link: KAnchorLink) => void",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "affix",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "KAutocomplete",
+      "category": "molecule",
+      "path": "/src/app/components/design-system/molecules/KAutocomplete/index.tsx",
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "onChange",
+          "type": "(value: string) => void",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "onSelect",
+          "type": "(option: KAutocompleteOption) => void",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "options",
+          "type": "KAutocompleteOption[]",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "allowClear",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KBreadcrumb",
+      "category": "molecule",
+      "path": "/src/app/components/design-system/molecules/KBreadcrumb/index.tsx",
+      "props": [
+        {
+          "name": "items",
+          "type": "KBreadcrumbItem[]",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "separator",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KCascader",
+      "category": "molecule",
+      "path": "/src/app/components/design-system/molecules/KCascader/index.tsx",
+      "props": [
+        {
+          "name": "options",
+          "type": "KCascaderOption[]",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "value",
+          "type": "(string | number)[]",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "onChange",
+          "type": "(value: (string | number)[], selectedOptions: KCascaderOption[]) => void",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "changeOnSelect",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "showSearch",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KColorPicker",
+      "category": "molecule",
+      "path": "/src/app/components/design-system/molecules/KColorPicker/index.tsx",
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "defaultValue",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "onChange",
+          "type": "(color: string) => void",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "showText",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "size",
+          "type": "'sm' | 'md' | 'lg'",
+          "required": false,
+          "description": "",
+          "options": [
+            "sm",
+            "md",
+            "lg"
+          ]
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KDatePicker",
+      "category": "molecule",
+      "path": "/src/app/components/design-system/molecules/KDatePicker/index.tsx",
+      "props": [
+        {
+          "name": "value",
+          "type": "Date",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "onChange",
+          "type": "(date: Date | undefined) => void",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "minDate",
+          "type": "Date",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "maxDate",
+          "type": "Date",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "status",
+          "type": "'error' | 'warning'",
+          "required": false,
+          "description": "",
+          "options": [
+            "error",
+            "warning"
+          ]
+        },
+        {
+          "name": "size",
+          "type": "'sm' | 'md' | 'lg' | 'small' | 'middle' | 'large'",
+          "required": false,
+          "description": "",
+          "options": [
+            "sm",
+            "md",
+            "lg",
+            "small",
+            "middle",
+            "large"
+          ]
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "picker",
+          "type": "'date' | 'week' | 'month' | 'quarter' | 'year'",
+          "required": false,
+          "description": "",
+          "options": [
+            "date",
+            "week",
+            "month",
+            "quarter",
+            "year"
+          ]
+        },
+        {
+          "name": "allowClear",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "showTime",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "KDateRangePicker",
+      "category": "molecule",
+      "path": "/src/app/components/design-system/molecules/KDatePicker/index.tsx",
+      "props": [
+        {
+          "name": "value",
+          "type": "KDateRange",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "onChange",
+          "type": "(range: KDateRange | undefined) => void",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "placeholder",
+          "type": "[string, string]",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "size",
+          "type": "'sm' | 'md' | 'lg' | 'small' | 'middle' | 'large'",
+          "required": false,
+          "description": "",
+          "options": [
+            "sm",
+            "md",
+            "lg",
+            "small",
+            "middle",
+            "large"
+          ]
+        },
+        {
+          "name": "allowClear",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "showTime",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "presets",
+          "type": "{ label: string; value: [Date, Date] }[]",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KDescriptions",
+      "category": "molecule",
+      "path": "/src/app/components/design-system/molecules/KDescriptions/index.tsx",
+      "props": [
+        {
+          "name": "title",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "items",
+          "type": "KDescriptionItem[]",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "column",
+          "type": "number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "bordered",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "size",
+          "type": "'sm' | 'md' | 'lg'",
+          "required": false,
+          "description": "",
+          "options": [
+            "sm",
+            "md",
+            "lg"
+          ]
+        },
+        {
+          "name": "layout",
+          "type": "'horizontal' | 'vertical'",
+          "required": false,
+          "description": "",
+          "options": [
+            "horizontal",
+            "vertical"
+          ]
+        },
+        {
+          "name": "colon",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KDividerExtended",
+      "category": "molecule",
+      "path": "/src/app/components/design-system/molecules/KDividerExtended/index.tsx",
+      "props": [
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "orientation",
+          "type": "'horizontal' | 'vertical'",
+          "required": false,
+          "description": "",
+          "options": [
+            "horizontal",
+            "vertical"
+          ]
+        },
+        {
+          "name": "dashed",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KDropdownMenu",
+      "category": "molecule",
+      "path": "/src/app/components/design-system/molecules/KDropdownMenu/index.tsx",
+      "props": [
+        {
+          "name": "children",
+          "type": "React.ReactElement",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "menu",
+          "type": "{\n    items: any[];\n    onClick?: (info: { key: string }) => void;\n  }",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "placement",
+          "type": "'bottomLeft' | 'bottomCenter' | 'bottomRight' | 'topLeft' | 'topCenter' | 'topRight'",
+          "required": false,
+          "description": "",
+          "options": [
+            "bottomLeft",
+            "bottomCenter",
+            "bottomRight",
+            "topLeft",
+            "topCenter",
+            "topRight"
+          ]
+        },
+        {
+          "name": "trigger",
+          "type": "('click' | 'hover' | 'contextMenu')[]",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "arrow",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "KEmptyState",
+      "category": "molecule",
+      "path": "/src/app/components/design-system/molecules/KEmptyState/index.tsx",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "icon",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "image",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "actionLabel",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "onAction",
+          "type": "() => void",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "actions",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "variant",
+          "type": "'default' | 'simple'",
+          "required": false,
+          "description": "",
+          "options": [
+            "default",
+            "simple"
+          ]
+        },
+        {
+          "name": "size",
+          "type": "'sm' | 'md' | 'lg'",
+          "required": false,
+          "description": "",
+          "options": [
+            "sm",
+            "md",
+            "lg"
+          ]
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KFormField",
+      "category": "molecule",
+      "path": "/src/app/components/design-system/molecules/KFormField/index.tsx",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "error",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "hint",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KInputNumber",
+      "category": "molecule",
+      "path": "/src/app/components/design-system/molecules/KInputNumber/index.tsx",
+      "props": [
+        {
+          "name": "value",
+          "type": "number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "defaultValue",
+          "type": "number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "onChange",
+          "type": "(value: number | undefined) => void",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "min",
+          "type": "number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "max",
+          "type": "number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "step",
+          "type": "number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "precision",
+          "type": "number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "readOnly",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "size",
+          "type": "'sm' | 'md' | 'lg'",
+          "required": false,
+          "description": "",
+          "options": [
+            "sm",
+            "md",
+            "lg"
+          ]
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "fullWidth",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "controls",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "status",
+          "type": "'error' | 'warning'",
+          "required": false,
+          "description": "",
+          "options": [
+            "error",
+            "warning"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "KList",
+      "category": "molecule",
+      "path": "/src/app/components/design-system/molecules/KList/index.tsx",
+      "props": [
+        {
+          "name": "items",
+          "type": "KListItem[]",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "size",
+          "type": "'sm' | 'md' | 'lg'",
+          "required": false,
+          "description": "",
+          "options": [
+            "sm",
+            "md",
+            "lg"
+          ]
+        },
+        {
+          "name": "bordered",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "header",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "footer",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "emptyText",
+          "type": "string",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KMentions",
+      "category": "molecule",
+      "path": "/src/app/components/design-system/molecules/KMentions/index.tsx",
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "onChange",
+          "type": "(value: string) => void",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "options",
+          "type": "KMentionOption[]",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "trigger",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KNavItem",
+      "category": "molecule",
+      "path": "/src/app/components/design-system/molecules/KNavItem/index.tsx",
+      "props": [
+        {
+          "name": "icon",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "active",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "badge",
+          "type": "number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "collapsed",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "KNotification",
+      "category": "molecule",
+      "path": "/src/app/components/design-system/molecules/KNotification/index.tsx",
+      "props": [
+        {
+          "name": "message",
+          "type": "React.ReactNode",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "description",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "type",
+          "type": "KNotificationType",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "duration",
+          "type": "number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "placement",
+          "type": "'top-right' | 'bottom-right' | 'top-left' | 'bottom-left'",
+          "required": false,
+          "description": "",
+          "options": [
+            "top-right",
+            "bottom-right",
+            "top-left",
+            "bottom-left"
+          ]
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KPopconfirm",
+      "category": "molecule",
+      "path": "/src/app/components/design-system/molecules/KPopconfirm/index.tsx",
+      "props": [
+        {
+          "name": "title",
+          "type": "React.ReactNode",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "description",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "onConfirm",
+          "type": "() => void | Promise<void>",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "onCancel",
+          "type": "() => void",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "okText",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "cancelText",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "icon",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "children",
+          "type": "React.ReactElement",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "okType",
+          "type": "'primary' | 'danger' | 'warning' | 'default'",
+          "required": false,
+          "description": "",
+          "options": [
+            "primary",
+            "danger",
+            "warning",
+            "default"
+          ]
+        },
+        {
+          "name": "showCancel",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "KPopover",
+      "category": "molecule",
+      "path": "/src/app/components/design-system/molecules/KPopover/index.tsx",
+      "props": [
+        {
+          "name": "children",
+          "type": "React.ReactElement",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "content",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "title",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "placement",
+          "type": "'top' | 'bottom' | 'left' | 'right' | 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight' | 'leftTop' | 'leftBottom' | 'rightTop' | 'rightBottom'",
+          "required": false,
+          "description": "",
+          "options": [
+            "top",
+            "bottom",
+            "left",
+            "right",
+            "topLeft",
+            "topRight",
+            "bottomLeft",
+            "bottomRight",
+            "leftTop",
+            "leftBottom",
+            "rightTop",
+            "rightBottom"
+          ]
+        },
+        {
+          "name": "trigger",
+          "type": "'hover' | 'focus' | 'click'",
+          "required": false,
+          "description": "",
+          "options": [
+            "hover",
+            "focus",
+            "click"
+          ]
+        },
+        {
+          "name": "arrow",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "KResult",
+      "category": "molecule",
+      "path": "/src/app/components/design-system/molecules/KResult/index.tsx",
+      "props": [
+        {
+          "name": "status",
+          "type": "KResultStatus",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "title",
+          "type": "React.ReactNode",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "subTitle",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "icon",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "extra",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KSegmented",
+      "category": "molecule",
+      "path": "/src/app/components/design-system/molecules/KSegmented/index.tsx",
+      "props": [
+        {
+          "name": "options",
+          "type": "(string | number | KSegmentedOption)[]",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "value",
+          "type": "string | number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "onChange",
+          "type": "(value: string | number) => void",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "block",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "size",
+          "type": "'sm' | 'md' | 'lg'",
+          "required": false,
+          "description": "",
+          "options": [
+            "sm",
+            "md",
+            "lg"
+          ]
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KSelectAdvanced",
+      "category": "molecule",
+      "path": "/src/app/components/design-system/molecules/KSelectAdvanced/index.tsx",
+      "props": [
+        {
+          "name": "options",
+          "type": "KSelectAdvancedOption[]",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "value",
+          "type": "string | string[]",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "onChange",
+          "type": "(value: any) => void",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "mode",
+          "type": "'single' | 'multiple' | 'tags'",
+          "required": false,
+          "description": "",
+          "options": [
+            "single",
+            "multiple",
+            "tags"
+          ]
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "status",
+          "type": "'error' | 'warning'",
+          "required": false,
+          "description": "",
+          "options": [
+            "error",
+            "warning"
+          ]
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "allowClear",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "KSelectField",
+      "category": "molecule",
+      "path": "/src/app/components/design-system/molecules/KSelectField/index.tsx",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "options",
+          "type": "{ label: string; value: string; disabled?: boolean }[]",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "value",
+          "type": "string | string[]",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "defaultValue",
+          "type": "string | string[]",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "onChange",
+          "type": "(value: any) => void",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "error",
+          "type": "string | boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "hint",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'middle' | 'large'",
+          "required": false,
+          "description": "",
+          "options": [
+            "small",
+            "middle",
+            "large"
+          ]
+        },
+        {
+          "name": "allowClear",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "showSearch",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "status",
+          "type": "'error' | 'warning'",
+          "required": false,
+          "description": "",
+          "options": [
+            "error",
+            "warning"
+          ]
+        },
+        {
+          "name": "mode",
+          "type": "'single' | 'multiple' | 'tags'",
+          "required": false,
+          "description": "",
+          "options": [
+            "single",
+            "multiple",
+            "tags"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "KStatCard",
+      "category": "molecule",
+      "path": "/src/app/components/design-system/molecules/KStatCard/index.tsx",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "value",
+          "type": "string | number",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "change",
+          "type": "number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "changeLabel",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "sparkData",
+          "type": "number[]",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "icon",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KStatistic",
+      "category": "molecule",
+      "path": "/src/app/components/design-system/molecules/KStatistic/index.tsx",
+      "props": [
+        {
+          "name": "title",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "value",
+          "type": "number | string",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "precision",
+          "type": "number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "prefix",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "suffix",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "trend",
+          "type": "'up' | 'down'",
+          "required": false,
+          "description": "",
+          "options": [
+            "up",
+            "down"
+          ]
+        },
+        {
+          "name": "trendValue",
+          "type": "number | string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "decimalSeparator",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "groupSeparator",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "valueStyle",
+          "type": "React.CSSProperties",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "formatter",
+          "type": "(value: number | string) => React.ReactNode",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KSteps",
+      "category": "molecule",
+      "path": "/src/app/components/design-system/molecules/KSteps/index.tsx",
+      "props": [
+        {
+          "name": "current",
+          "type": "number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "direction",
+          "type": "'horizontal' | 'vertical'",
+          "required": false,
+          "description": "",
+          "options": [
+            "horizontal",
+            "vertical"
+          ]
+        },
+        {
+          "name": "items",
+          "type": "KStepItem[]",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "onChange",
+          "type": "(current: number) => void",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "size",
+          "type": "'default' | 'small'",
+          "required": false,
+          "description": "",
+          "options": [
+            "default",
+            "small"
+          ]
+        },
+        {
+          "name": "progressDot",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "labelPlacement",
+          "type": "'horizontal' | 'vertical'",
+          "required": false,
+          "description": "",
+          "options": [
+            "horizontal",
+            "vertical"
+          ]
+        },
+        {
+          "name": "percent",
+          "type": "number",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KTimePicker",
+      "category": "molecule",
+      "path": "/src/app/components/design-system/molecules/KTimePicker/index.tsx",
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "defaultValue",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "onChange",
+          "type": "(time: string) => void",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "format",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "use12Hours",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "allowClear",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "KTimeline",
+      "category": "molecule",
+      "path": "/src/app/components/design-system/molecules/KTimeline/index.tsx",
+      "props": [
+        {
+          "name": "items",
+          "type": "KTimelineItem[]",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "reverse",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "pending",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "mode",
+          "type": "'left' | 'alternate' | 'right'",
+          "required": false,
+          "description": "",
+          "options": [
+            "left",
+            "alternate",
+            "right"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "KTooltip",
+      "category": "molecule",
+      "path": "/src/app/components/design-system/molecules/KTooltip/index.tsx",
+      "props": [
+        {
+          "name": "title",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "content",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "children",
+          "type": "React.ReactElement",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "placement",
+          "type": "'top' | 'bottom' | 'left' | 'right'",
+          "required": false,
+          "description": "",
+          "options": [
+            "top",
+            "bottom",
+            "left",
+            "right"
+          ]
+        },
+        {
+          "name": "trigger",
+          "type": "'hover' | 'focus' | 'click'",
+          "required": false,
+          "description": "",
+          "options": [
+            "hover",
+            "focus",
+            "click"
+          ]
+        },
+        {
+          "name": "color",
+          "type": "string",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KTransfer",
+      "category": "molecule",
+      "path": "/src/app/components/design-system/molecules/KTransfer/index.tsx",
+      "props": [
+        {
+          "name": "dataSource",
+          "type": "KTransferItem[]",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "targetKeys",
+          "type": "string[]",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "onChange",
+          "type": "(targetKeys: string[], direction: 'left' | 'right', moveKeys: string[]) => void",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "onSelectChange",
+          "type": "(sourceSelectedKeys: string[], targetSelectedKeys: string[]) => void",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "titles",
+          "type": "[React.ReactNode, React.ReactNode]",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "showSearch",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "oneWay",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KTreeSelect",
+      "category": "molecule",
+      "path": "/src/app/components/design-system/molecules/KTreeSelect/index.tsx",
+      "props": [
+        {
+          "name": "treeData",
+          "type": "KTreeNode[]",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "value",
+          "type": "string | number | (string | number)[]",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "onChange",
+          "type": "(value: any, label: any) => void",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "multiple",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "treeCheckable",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "showSearch",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "treeDefaultExpandAll",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "KUserCell",
+      "category": "molecule",
+      "path": "/src/app/components/design-system/molecules/KUserCell/index.tsx",
+      "props": [
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "avatar",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "role",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "size",
+          "type": "'sm' | 'md' | 'lg'",
+          "required": false,
+          "description": "",
+          "options": [
+            "sm",
+            "md",
+            "lg"
+          ]
+        },
+        {
+          "name": "status",
+          "type": "'online' | 'offline' | 'busy' | 'away'",
+          "required": false,
+          "description": "",
+          "options": [
+            "online",
+            "offline",
+            "busy",
+            "away"
+          ]
+        },
+        {
+          "name": "onClick",
+          "type": "() => void",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KAppLayout",
+      "category": "organism",
+      "path": "/src/app/components/design-system/organisms/KAppLayout/index.tsx",
+      "props": [
+        {
+          "name": "sidebar",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "header",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "footer",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "collapsed",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "fixedHeader",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "fixedSidebar",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "KCalendar",
+      "category": "organism",
+      "path": "/src/app/components/design-system/organisms/KCalendar/index.tsx",
+      "props": [
+        {
+          "name": "value",
+          "type": "Date",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "defaultValue",
+          "type": "Date",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "mode",
+          "type": "'month' | 'year'",
+          "required": false,
+          "description": "",
+          "options": [
+            "month",
+            "year"
+          ]
+        },
+        {
+          "name": "onChange",
+          "type": "(date: Date) => void",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "onPanelChange",
+          "type": "(date: Date, mode: 'month' | 'year') => void",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "dateCellRender",
+          "type": "(date: Date) => React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "monthCellRender",
+          "type": "(date: Date) => React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KCardSection",
+      "category": "organism",
+      "path": "/src/app/components/design-system/organisms/KCardSection/index.tsx",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "subtitle",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "extra",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "noPadding",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "KCarousel",
+      "category": "organism",
+      "path": "/src/app/components/design-system/organisms/KCarousel/index.tsx",
+      "props": [
+        {
+          "name": "children",
+          "type": "React.ReactNode[]",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "autoplay",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "autoplayDelay",
+          "type": "number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "dots",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "arrows",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "loop",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KTableDateCell",
+      "category": "organism",
+      "path": "/src/app/components/design-system/organisms/KDataTable/KTableDateCell.tsx",
+      "props": [
+        {
+          "name": "value",
+          "type": "Date | string | number | null | undefined",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "dateFormat",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "fallbackText",
+          "type": "string",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KDataTable",
+      "category": "organism",
+      "path": "/src/app/components/design-system/organisms/KDataTable/index.tsx",
+      "props": [
+        {
+          "name": "data",
+          "type": "TData[]",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "columns",
+          "type": "ColumnDef<TData, any>[]",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "searchable",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "searchPlaceholder",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "actions",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "rowKey",
+          "type": "string | ((row: TData) => string)",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "pageSizes",
+          "type": "number[]",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "pagination",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "onRowClick",
+          "type": "(record: TData) => void",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "enableRowSelection",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "enableColumnToggle",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "enableExport",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "stickyHeader",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "maxHeight",
+          "type": "string | number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "scroll",
+          "type": "{ x?: number | string; y?: number | string }",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "virtual",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "rowExpansion",
+          "type": "{\n    expandedRowRender: (record: TData) => React.ReactNode;\n    defaultExpandAllRows?: boolean;\n  }",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'middle' | 'large'",
+          "required": false,
+          "description": "",
+          "options": [
+            "small",
+            "middle",
+            "large"
+          ]
+        },
+        {
+          "name": "onSelectionChange",
+          "type": "(selectedRows: TData[]) => void",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KDrawer",
+      "category": "organism",
+      "path": "/src/app/components/design-system/organisms/KDrawer/index.tsx",
+      "props": [
+        {
+          "name": "placement",
+          "type": "'top' | 'right' | 'bottom' | 'left'",
+          "required": false,
+          "description": "",
+          "options": [
+            "top",
+            "right",
+            "bottom",
+            "left"
+          ]
+        },
+        {
+          "name": "width",
+          "type": "string | number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "height",
+          "type": "string | number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "title",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "extra",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "onClose",
+          "type": "() => void",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KForm",
+      "category": "organism",
+      "path": "/src/app/components/design-system/organisms/KForm/index.tsx",
+      "props": [
+        {
+          "name": "methods",
+          "type": "ReturnType<typeof useForm<TFieldValues>>",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "onSubmit",
+          "type": "(data: TFieldValues) => void",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "layout",
+          "type": "'horizontal' | 'vertical' | 'inline'",
+          "required": false,
+          "description": "",
+          "options": [
+            "horizontal",
+            "vertical",
+            "inline"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "KFormItem",
+      "category": "organism",
+      "path": "/src/app/components/design-system/organisms/KForm/index.tsx",
+      "props": [
+        {
+          "name": "label",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "help",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "error",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "layout",
+          "type": "'horizontal' | 'vertical' | 'inline'",
+          "required": false,
+          "description": "",
+          "options": [
+            "horizontal",
+            "vertical",
+            "inline"
+          ]
+        },
+        {
+          "name": "labelCol",
+          "type": "{ span: number }",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "wrapperCol",
+          "type": "{ span: number }",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KFormList",
+      "category": "organism",
+      "path": "/src/app/components/design-system/organisms/KFormList/index.tsx",
+      "props": [
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "addText",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "maxItems",
+          "type": "number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "minItems",
+          "type": "number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "renderItem",
+          "type": "(field: KFormListField, index: number, operations: { remove: (index: number) => void; move: (from: number, to: number) => void }) => React.ReactNode",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KLoginForm",
+      "category": "organism",
+      "path": "/src/app/components/design-system/organisms/KLoginForm/index.tsx",
+      "props": [
+        {
+          "name": "onFinish",
+          "type": "(values: any) => void",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "KModalConfirm",
+      "category": "organism",
+      "path": "/src/app/components/design-system/organisms/KModalConfirm/index.tsx",
+      "props": [
+        {
+          "name": "open",
+          "type": "boolean",
+          "required": true,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "onClose",
+          "type": "() => void",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "title",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "content",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "type",
+          "type": "KModalConfirmType",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "onOk",
+          "type": "() => void | Promise<void>",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "okText",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "cancelText",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "showCancel",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "width",
+          "type": "number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KPagination",
+      "category": "organism",
+      "path": "/src/app/components/design-system/organisms/KPagination/index.tsx",
+      "props": [
+        {
+          "name": "current",
+          "type": "number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "total",
+          "type": "number",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "onChange",
+          "type": "(page: number, pageSize: number) => void",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "showSizeChanger",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "KSparklineCell",
+      "category": "organism",
+      "path": "/src/app/components/design-system/organisms/KSparklineCell/index.tsx",
+      "props": [
+        {
+          "name": "data",
+          "type": "number[]",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "color",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "width",
+          "type": "number | string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "height",
+          "type": "number | string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KTabs",
+      "category": "organism",
+      "path": "/src/app/components/design-system/organisms/KTabs/index.tsx",
+      "props": [
+        {
+          "name": "items",
+          "type": "KTabItem[]",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "type",
+          "type": "'line' | 'card' | 'pill'",
+          "required": false,
+          "description": "",
+          "options": [
+            "line",
+            "card",
+            "pill"
+          ]
+        },
+        {
+          "name": "centered",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "size",
+          "type": "'sm' | 'md' | 'lg'",
+          "required": false,
+          "description": "",
+          "options": [
+            "sm",
+            "md",
+            "lg"
+          ]
+        },
+        {
+          "name": "tabBarExtraContent",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KToast",
+      "category": "organism",
+      "path": "/src/app/components/design-system/organisms/KToast/index.tsx",
+      "props": [
+        {
+          "name": "title",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "description",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "content",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "type",
+          "type": "KToastType",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "duration",
+          "type": "number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KTour",
+      "category": "organism",
+      "path": "/src/app/components/design-system/organisms/KTour/index.tsx",
+      "props": [
+        {
+          "name": "steps",
+          "type": "KTourStep[]",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "onClose",
+          "type": "() => void",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "onFinish",
+          "type": "() => void",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KTree",
+      "category": "organism",
+      "path": "/src/app/components/design-system/organisms/KTree/index.tsx",
+      "props": [
+        {
+          "name": "data",
+          "type": "KTreeNode[]",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "checkable",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "checkedKeys",
+          "type": "(string | number)[]",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "onCheck",
+          "type": "(keys: (string | number)[], info: { checked: boolean; node: KTreeNode }) => void",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "selectedKeys",
+          "type": "(string | number)[]",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "onSelect",
+          "type": "(keys: (string | number)[], info: { node: KTreeNode }) => void",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "expandedKeys",
+          "type": "(string | number)[]",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "onExpand",
+          "type": "(keys: (string | number)[]) => void",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "showLine",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "showIcon",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "KUpload",
+      "category": "organism",
+      "path": "/src/app/components/design-system/organisms/KUpload/index.tsx",
+      "props": [
+        {
+          "name": "value",
+          "type": "KUploadFile[]",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "onChange",
+          "type": "(files: KUploadFile[]) => void",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "listType",
+          "type": "'text' | 'picture' | 'picture-card'",
+          "required": false,
+          "description": "",
+          "options": [
+            "text",
+            "picture",
+            "picture-card"
+          ]
+        },
+        {
+          "name": "multiple",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "accept",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "maxSize",
+          "type": "number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "maxFiles",
+          "type": "number",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "onPreview",
+          "type": "(file: KUploadFile) => void",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "AdvancedFiltersPattern",
+      "category": "pattern",
+      "path": "/src/app/patterns/AdvancedFiltersPattern.tsx",
+      "props": []
+    },
+    {
+      "name": "BillingPattern",
+      "category": "pattern",
+      "path": "/src/app/patterns/BillingPattern.tsx",
+      "props": []
+    },
+    {
+      "name": "DashboardStatsPattern",
+      "category": "pattern",
+      "path": "/src/app/patterns/DashboardStatsPattern.tsx",
+      "props": []
+    },
+    {
+      "name": "EmptyStateGalleryPattern",
+      "category": "pattern",
+      "path": "/src/app/patterns/EmptyStateGalleryPattern.tsx",
+      "props": []
+    },
+    {
+      "name": "FilterableListPattern",
+      "category": "pattern",
+      "path": "/src/app/patterns/FilterableListPattern.tsx",
+      "props": []
+    },
+    {
+      "name": "FormValidationPattern",
+      "category": "pattern",
+      "path": "/src/app/patterns/FormValidationPattern.tsx",
+      "props": []
+    },
+    {
+      "name": "LoginFormPattern",
+      "category": "template",
+      "path": "/src/app/patterns/LoginFormPattern.tsx",
+      "props": []
+    },
+    {
+      "name": "OnboardingPattern",
+      "category": "pattern",
+      "path": "/src/app/patterns/OnboardingPattern.tsx",
+      "props": []
+    },
+    {
+      "name": "PaginatedTablePattern",
+      "category": "pattern",
+      "path": "/src/app/patterns/PaginatedTablePattern.tsx",
+      "props": []
+    },
+    {
+      "name": "SaaSCRUDTablePattern",
+      "category": "template",
+      "path": "/src/app/patterns/SaaSCRUDTablePattern.tsx",
+      "props": []
+    },
+    {
+      "name": "SaaSDashboardPattern",
+      "category": "template",
+      "path": "/src/app/patterns/SaaSDashboardPattern.tsx",
+      "props": []
+    },
+    {
+      "name": "SaaSLoginPattern",
+      "category": "template",
+      "path": "/src/app/patterns/SaaSLoginPattern.tsx",
+      "props": []
+    },
+    {
+      "name": "SaaSWizardPattern",
+      "category": "template",
+      "path": "/src/app/patterns/SaaSWizardPattern.tsx",
+      "props": []
+    },
+    {
+      "name": "SettingsPattern",
+      "category": "pattern",
+      "path": "/src/app/patterns/SettingsPattern.tsx",
+      "props": []
+    },
+    {
+      "name": "SidebarPattern",
+      "category": "pattern",
+      "path": "/src/app/patterns/SidebarPattern.tsx",
+      "props": []
+    },
+    {
+      "name": "WizardPattern",
+      "category": "template",
+      "path": "/src/app/patterns/WizardPattern.tsx",
+      "props": []
+    }
+  ]
+}

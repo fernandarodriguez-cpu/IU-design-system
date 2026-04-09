@@ -20,7 +20,7 @@ const font = t.typography.fontPrimary;
 interface ThemeConfig {
   // Colors
   primary: string;
-  secondary: string;    // internamente se mapea a --khor-navy
+  secondary: string;    // internamente se mapea a --khor-secondary
   accent: string;
   success: string;
   error: string;
@@ -62,7 +62,7 @@ const defaultTheme: ThemeConfig = {
   error: '#D32F2F',
   warning: '#E68600',
   info: '#1976D2',
-  fontHeading: 'Raleway',
+  fontHeading: 'Montserrat',
   fontBody: 'Plus Jakarta Sans',
   fontMono: 'JetBrains Mono',
   h1Size: 38,
@@ -162,9 +162,9 @@ const presets: ThemePreset[] = [
 
 /* ─── Font Options ─── */
 const fontOptions = [
-  'Raleway', 'Plus Jakarta Sans', 'Inter', 'Poppins', 'DM Sans',
+  'Montserrat', 'Plus Jakarta Sans', 'Inter', 'Poppins', 'DM Sans',
   'Space Grotesk', 'Nunito', 'Nunito Sans', 'IBM Plex Sans',
-  'Roboto', 'Open Sans', 'Lato', 'Montserrat', 'Source Sans Pro',
+  'Roboto', 'Open Sans', 'Lato', 'Source Sans Pro',
   'Work Sans', 'Manrope', 'Outfit', 'Figtree',
 ];
 
@@ -283,7 +283,7 @@ export function ThemingPage() {
     setTheme((prev) => ({ ...prev, [key]: val }));
     const root = document.documentElement;
     const cssMap: Partial<Record<keyof ThemeConfig, string>> = {
-      primary: '--khor-primary', secondary: '--khor-navy', accent: '--khor-accent',
+      primary: '--khor-primary', secondary: '--khor-secondary', accent: '--khor-accent',
       success: '--khor-success', error: '--khor-error', warning: '--khor-warning', info: '--khor-info',
       radiusSm: '--khor-radius-sm', radiusMd: '--khor-radius-md', radiusLg: '--khor-radius-lg', radiusXl: '--khor-radius-xl',
     };
@@ -316,9 +316,11 @@ export function ThemingPage() {
   --khor-primary: ${theme.primary};
   --khor-primary-hover: ${adjustBrightness(theme.primary, 15)};
   --khor-primary-active: ${adjustBrightness(theme.primary, -15)};
-  --khor-navy: ${theme.secondary};
-  --khor-navy-hover: ${adjustBrightness(theme.secondary, 20)};
-  --khor-navy-active: ${adjustBrightness(theme.secondary, -10)};
+  --khor-secondary: ${theme.secondary};
+  --khor-secondary-hover: ${adjustBrightness(theme.secondary, 20)};
+  --khor-secondary-active: ${adjustBrightness(theme.secondary, -10)};
+  /* Legacy alias */
+  --khor-navy: var(--khor-secondary);
   --khor-accent: ${theme.accent};
   --khor-accent-hover: ${adjustBrightness(theme.accent, 15)};
   --khor-accent-active: ${adjustBrightness(theme.accent, -15)};

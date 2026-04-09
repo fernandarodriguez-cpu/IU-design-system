@@ -97,11 +97,11 @@ const InternalRadio = React.forwardRef<React.ElementRef<typeof RadioGroupPrimiti
         ref={ref}
         disabled={isDisabled}
         className={cn(
-          "aspect-square h-4 w-4 rounded-full border border-khor-neutral-300 bg-white",
-          "ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-khor-primary focus-visible:ring-offset-2",
+          "aspect-square h-4 w-4 rounded-full border border-khor-slate-200 bg-white shadow-khor-sm transition-all duration-200",
+          "ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-khor-primary/20 focus-visible:ring-offset-1",
           "disabled:cursor-not-allowed disabled:opacity-50",
-          "data-[state=checked]:border-khor-primary data-[state=checked]:text-khor-primary",
-          "hover:border-khor-primary hover:bg-[color-mix(in_srgb,var(--khor-primary)_5%,white)] transition-colors",
+          "data-[state=checked]:border-khor-primary data-[state=checked]:text-khor-primary data-[state=checked]:shadow-none",
+          "hover:border-khor-primary hover:bg-khor-primary-light/5",
           className
         )}
         {...rest}
@@ -146,13 +146,13 @@ const KRadioButton = React.forwardRef<React.ElementRef<typeof RadioGroupPrimitiv
       ref={ref}
       disabled={isDisabled}
       className={cn(
-        "inline-flex items-center justify-center font-primary transition-colors border outline-none",
-        "focus-visible:ring-2 focus-visible:ring-khor-primary focus-visible:ring-offset-1 focus-visible:z-20",
-        "disabled:pointer-events-none disabled:opacity-50 disabled:bg-khor-neutral-100 disabled:text-khor-neutral-400 disabled:border-khor-neutral-200",
+        "inline-flex items-center justify-center font-primary transition-all duration-200 border outline-none",
+        "focus-visible:ring-2 focus-visible:ring-khor-primary/20 focus-visible:ring-offset-0 focus-visible:z-20",
+        "disabled:pointer-events-none disabled:opacity-50 disabled:bg-khor-slate-100 disabled:text-khor-neutral-400 disabled:border-khor-slate-200",
         "first:rounded-l-md last:rounded-r-md relative font-medium",
         isSolid 
-          ? "border-khor-neutral-300 bg-khor-neutral-100 text-khor-neutral-600 hover:text-khor-primary data-[state=checked]:bg-khor-primary data-[state=checked]:border-khor-primary data-[state=checked]:text-white data-[state=checked]:z-10"
-          : "border-khor-neutral-300 bg-white text-khor-neutral-600 hover:text-khor-primary data-[state=checked]:border-khor-primary data-[state=checked]:text-khor-primary data-[state=checked]:z-10",
+          ? "border-khor-slate-200 bg-khor-slate-100 text-khor-neutral-600 hover:text-khor-primary data-[state=checked]:bg-khor-primary data-[state=checked]:border-khor-primary data-[state=checked]:text-white data-[state=checked]:z-10"
+          : "border-khor-slate-200 bg-white text-khor-neutral-600 hover:text-khor-primary data-[state=checked]:border-khor-primary data-[state=checked]:text-khor-primary data-[state=checked]:z-10",
         sizeClasses,
         className
       )}

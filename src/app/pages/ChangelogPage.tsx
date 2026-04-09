@@ -43,6 +43,25 @@ const changeTypeConfig: Record<ChangeType, { color: string; bg: string; icon: Re
 
 const changelog: VersionEntry[] = [
   {
+    version: '4.0.4',
+    date: '7 de abril de 2026',
+    codename: 'Core Mastery & IA-Ready',
+    summary: 'Estabilización final de la base del sistema. Restauración total de organismos, optimización del exportador de IA y limpieza absoluta de Storybook para dar paso a la Phase 6 (ADV01).',
+    highlights: [
+      'Restauración 100%: Todos los organismos (KTabs, KCalendar, KDrawer, etc.) están plenamente operativos.',
+      'Zero Deuda Técnica: Remoción completa de Storybook del bundle y la estructura de archivos.',
+      'IA Guide Mastery: El exportador de IA ahora incluye contexto real de Organismos para mejores prompts.',
+      'Roadmap Activado: Inicio de la arquitectura para el plugin de Figma en src/app/components/figma.'
+    ],
+    changes: [
+      { type: 'fixed', component: 'Organisms', description: 'Restauración del registro maestro y solución de errores 404 en componentes complejos.' },
+      { type: 'removed', description: 'Eliminación masiva de archivos .stories.tsx y dependencias de Storybook.' },
+      { type: 'changed', component: 'AIExportPage', description: 'Versión v4.0.4 y restauración de la importación dinámica de organismos.' },
+      { type: 'changed', component: 'HomePage', description: 'Actualización visual del Dashboard con indicadores de éxito de la Ola 15.' }
+    ],
+    stats: { added: 0, changed: 2, fixed: 2 },
+  },
+  {
     version: '4.0.3',
     date: '7 de abril de 2026',
     codename: 'Production & Governance',

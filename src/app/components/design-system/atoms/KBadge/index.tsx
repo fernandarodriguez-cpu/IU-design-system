@@ -49,7 +49,7 @@ const statusColorMap: Record<KBadgeStatus, string> = {
   error: 'bg-khor-error',
   warning: 'bg-khor-warning',
   info: 'bg-khor-info',
-  default: 'bg-khor-neutral-400',
+  default: 'bg-khor-slate-400',
   primary: 'bg-khor-primary',
   processing: 'bg-khor-primary animate-pulse',
 };
@@ -150,7 +150,7 @@ export const KBadge = React.forwardRef<HTMLSpanElement, KBadgeProps>(
           />
           {displayLabel && (
             <span 
-              className={cn("text-xs font-medium text-foreground", classNames?.text)}
+              className={cn("text-xs font-semibold text-khor-neutral-700", classNames?.text)}
               style={styles?.text}
             >
               {displayLabel}
@@ -191,7 +191,7 @@ export const KBadge = React.forwardRef<HTMLSpanElement, KBadgeProps>(
           <sup
             style={badgeStyle}
             className={cn(
-              "absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 flex items-center justify-center z-10 font-primary text-white shadow-sm ring-2 ring-khor-surface-page",
+              "absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 flex items-center justify-center z-10 font-primary text-white shadow-khor-sm ring-2 ring-white transition-all",
               isDot 
                 ? `w-1.5 h-1.5 rounded-full ${color ? '' : badgeColorClass}`
                 : cn(

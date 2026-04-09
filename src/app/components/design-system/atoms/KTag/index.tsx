@@ -4,8 +4,10 @@ import { cn } from '../../../../../imports/utils';
 import { X } from 'lucide-react';
 
 export type KTagColor = 
-  | 'primary' | 'navy' | 'accent' | 'success' | 'error' | 'warning' | 'info' | 'default' | 'processing'
-  | 'magenta' | 'red' | 'volcano' | 'orange' | 'gold' | 'lime' | 'green' | 'cyan' | 'blue' | 'geekblue' | 'purple';
+  | 'primary' | 'secondary' | 'accent' | 'success' | 'error' | 'warning' | 'info' | 'default' | 'processing'
+  | 'magenta' | 'red' | 'volcano' | 'orange' | 'gold' | 'lime' | 'green' | 'cyan' | 'blue' | 'geekblue' | 'purple'
+  // Legacy
+  | 'navy';
 
 const tagVariants = cva(
   'inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 text-xs font-semibold font-primary border transition-all focus:outline-none focus:ring-2 focus:ring-khor-primary focus:ring-offset-2 select-none',
@@ -13,7 +15,8 @@ const tagVariants = cva(
     variants: {
       color: {
         primary: 'bg-khor-primary/10 text-khor-primary border-khor-primary/20',
-        navy: 'bg-khor-brand-navy/10 text-khor-brand-navy border-khor-brand-navy/20',
+        secondary: 'bg-khor-secondary/10 text-khor-secondary border-khor-secondary/20',
+        navy: 'bg-khor-secondary/10 text-khor-secondary border-khor-secondary/20',
         accent: 'bg-khor-accent/10 text-khor-accent border-khor-accent/20',
         success: 'bg-khor-success/10 text-khor-success border-khor-success/20',
         error: 'bg-khor-error/10 text-khor-error border-khor-error/20',
@@ -82,7 +85,7 @@ const KTagInternal = React.forwardRef<HTMLSpanElement, KTagProps>(function KTag(
   const [visible, setVisible] = useState(true);
   
   const finalColor = status || color || 'default';
-  const isCustomColor = color && !['primary', 'navy', 'accent', 'success', 'error', 'warning', 'info', 'default', 'processing', 'magenta', 'red', 'volcano', 'orange', 'gold', 'lime', 'green', 'cyan', 'blue', 'geekblue', 'purple'].includes(color) && !status;
+  const isCustomColor = color && !['primary', 'secondary', 'navy', 'accent', 'success', 'error', 'warning', 'info', 'default', 'processing', 'magenta', 'red', 'volcano', 'orange', 'gold', 'lime', 'green', 'cyan', 'blue', 'geekblue', 'purple'].includes(color) && !status;
   
   const customStyles = isCustomColor ? {
     backgroundColor: color, 

@@ -1,7 +1,7 @@
 import { AnchorHTMLAttributes, ButtonHTMLAttributes, CSSProperties, ReactNode } from 'react';
 
-export type KButtonVariant = 'solid' | 'outlined' | 'dashed' | 'filled' | 'text' | 'link';
-export type KButtonColor = 'default' | 'primary' | 'danger';
+export type KButtonVariant = 'solid' | 'outlined' | 'dashed' | 'filled' | 'text' | 'link' | 'ghost' | 'outline';
+export type KButtonColor = 'default' | 'primary' | 'secondary' | 'danger' | 'processing' | 'volcano' | 'gold' | 'lime' | 'purple';
 export type KButtonSize = 'sm' | 'md' | 'lg' | 'icon';
 export type KButtonShape = 'default' | 'circle' | 'round';
 
@@ -10,11 +10,11 @@ type CombinedAttributes = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'type' |
 
 export interface KButtonProps extends CombinedAttributes {
   /** Estilo funcional del botón (modern AntD 5.4+) */
-  variant?: KButtonVariant | 'primary' | 'secondary' | 'outline' | 'outlined' | 'ghost' | 'navy' | 'danger';
+  variant?: KButtonVariant | 'outlined' | 'navy';
   /** Color semántico del botón (modern AntD 5.4+) */
   color?: KButtonColor;
   /** Alias para variant (retrocompatibilidad) */
-  kVariant?: KButtonVariant | 'primary' | 'secondary' | 'outline' | 'outlined' | 'ghost' | 'navy' | 'danger';
+  kVariant?: KButtonVariant | 'outlined' | 'navy';
   /** Tamaño del botón */
   size?: KButtonSize;
   /** Forma del botón: default | circle | round */

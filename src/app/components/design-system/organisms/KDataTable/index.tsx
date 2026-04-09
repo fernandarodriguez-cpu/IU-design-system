@@ -24,6 +24,7 @@ import { cn } from '../../../../../imports/utils';
 import { KCheckbox } from '../../atoms/KCheckbox/index';
 import { KSearchInput } from '../../atoms/KSearchInput/index';
 import { KButton } from '../../atoms/KButton';
+import { KSkeleton } from '../../atoms/KSkeleton';
 import { 
   KDropdownMenuRoot,
   KDropdownMenuTrigger, 
@@ -32,6 +33,7 @@ import {
   KDropdownMenuSeparator, 
   KDropdownMenuCheckboxItem 
 } from '../../molecules/KDropdownMenu/index';
+import { KSelectAdvanced, KSelectAdvancedOption } from '../../molecules/KSelectAdvanced/index';
 import { KPopoverRoot, KPopoverTrigger, KPopoverContent } from '../../molecules/KPopover/index';
 
 /* ─── Types ──────────────────────────────────────── */
@@ -227,6 +229,20 @@ export function KDataTable<TData>({
   };
 
   /* ─── Components Locales ─── */
+  const TableSkeleton = () => (
+    <>
+      {Array.from({ length: pageSize || 5 }).map((_, i) => (
+        <tr key={i} className="border-b transition-colors">
+          {table.getVisibleLeafColumns().map((col, j) => (
+            <td key={j} className="px-4 py-4">
+              <KSkeleton active height={16} width={j === 0 ? "40%" : "80%"} />
+            </td>
+          ))}
+        </tr>
+      ))}
+    </>
+  );
+
   const FilterPopover = ({ column }: { column: any }) => {
     const isFiltered = column.getIsFiltered();
     return (
@@ -261,7 +277,7 @@ export function KDataTable<TData>({
 
   return (
     <div className={cn(
-      "flex flex-col rounded-xl overflow-hidden border bg-khor-surface-page shadow-sm font-primary",
+      "flex flex-col rounded-xl overflow-hidden border bg-white shadow-khor-md font-primary",
       size === 'small' ? "text-xs" : "text-sm",
       className
     )}>
@@ -308,7 +324,7 @@ export function KDataTable<TData>({
       >
         <table className={cn("w-full border-collapse", scroll?.x ? "min-w-fit" : "min-w-full")}>
           <thead className={cn(
-            "text-khor-neutral-500 font-bold bg-khor-neutral-50 shadow-sm z-20",
+            "text-khor-neutral-500 font-bold bg-khor-slate-50 shadow-sm z-20 border-b",
             (stickyHeader || scroll?.y || virtual) ? "sticky top-0" : ""
           )}>
             {table.getHeaderGroups().map(hg => (
@@ -342,7 +358,7 @@ export function KDataTable<TData>({
 
           <tbody style={{ height: (virtual || !!scroll?.y) ? `${totalHeight}px` : 'auto', position: 'relative' }}>
             {loading ? (
-              <tr><td colSpan={100} className="py-24 text-center"><div className="w-8 h-8 mx-auto border-4 border-khor-primary border-t-transparent animate-spin rounded-full" /></td></tr>
+              <TableSkeleton />
             ) : rows.length === 0 ? (
               <tr><td colSpan={100} className="py-20 text-center text-khor-neutral-400 font-medium">No se encontraron resultados</td></tr>
             ) : (virtual || !!scroll?.y) ? (
@@ -427,13 +443,12 @@ export function KDataTable<TData>({
           <div className="flex items-center gap-4">
              <div className="flex items-center gap-2">
                 <span className="text-xs text-khor-neutral-400">Filas:</span>
-                <select 
-                  className="text-xs border rounded p-1 bg-transparent"
-                  value={table.getState().pagination.pageSize}
-                  onChange={e => table.setPageSize(Number(e.target.value))}
-                >
-                  {pageSizes.map(ps => <option key={ps} value={ps}>{ps}</option>)}
-                </select>
+                <KSelectAdvanced 
+                  className="!min-h-[32px] w-20 text-xs"
+                  options={pageSizes.map(ps => ({ label: String(ps), value: String(ps) }))}
+                  value={String(table.getState().pagination.pageSize)}
+                  onChange={val => table.setPageSize(Number(val))}
+                />
              </div>
              <div className="flex items-center gap-1">
                 <KButton variant="outline" size="sm" shape="circle" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}><ChevronLeft size={16}/></KButton>

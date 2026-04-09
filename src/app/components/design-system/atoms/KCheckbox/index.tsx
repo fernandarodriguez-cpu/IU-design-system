@@ -86,16 +86,16 @@ const KCheckboxInternal = React.forwardRef<React.ElementRef<typeof CheckboxPrimi
         onCheckedChange={handleToggle}
         disabled={finalDisabled}
         className={cn(
-          "peer shrink-0 p-0 h-4 w-4 rounded-sm border transition-all select-none overflow-hidden flex items-center justify-center",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-khor-primary focus-visible:ring-offset-2",
+          "peer shrink-0 p-0 h-4 w-4 rounded-sm border transition-all duration-200 select-none overflow-hidden flex items-center justify-center shadow-khor-sm",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-khor-primary/20 focus-visible:ring-offset-1 focus-visible:border-khor-primary",
           "disabled:cursor-not-allowed",
           // States and Border Colors
-          status === 'default' && "border-khor-neutral-300 bg-khor-surface-page hover:border-khor-primary",
-          status === 'error' && "border-khor-error bg-khor-error/5",
-          status === 'warning' && "border-khor-warning bg-khor-warning/5",
+          status === 'default' && "border-khor-slate-200 bg-white hover:border-khor-primary",
+          status === 'error' && "border-khor-error bg-khor-error/5 shadow-none",
+          status === 'warning' && "border-khor-warning bg-khor-warning/5 shadow-none",
           // Checked logic
-          "data-[state=checked]:bg-khor-primary data-[state=checked]:border-khor-primary data-[state=checked]:text-white",
-          "data-[state=indeterminate]:bg-khor-primary data-[state=indeterminate]:border-khor-primary data-[state=indeterminate]:text-white",
+          "data-[state=checked]:bg-khor-primary data-[state=checked]:border-khor-primary data-[state=checked]:text-white data-[state=checked]:shadow-none",
+          "data-[state=indeterminate]:bg-khor-primary data-[state=indeterminate]:border-khor-primary data-[state=indeterminate]:text-white data-[state=indeterminate]:shadow-none",
           // Error/Warning Checked Override
           (status === 'error') && "data-[state=checked]:bg-khor-error data-[state=checked]:border-khor-error",
           (status === 'warning') && "data-[state=checked]:bg-khor-warning data-[state=checked]:border-khor-warning",

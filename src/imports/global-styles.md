@@ -4,7 +4,7 @@ Este documento define las reglas visuales atómicas que rigen todos los componen
 
 1. Tipografía (Typography)
 
-Fuente Principal: Raleway (SaaS / Moderno)
+Fuente Principal: Montserrat (SaaS / Moderno)
 
 Fuente Secundaria: Plus Jakarta Sans (Opcional para UI densa)
 

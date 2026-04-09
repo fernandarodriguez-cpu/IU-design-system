@@ -195,8 +195,8 @@ export const KAvatar = React.forwardRef<HTMLDivElement, KAvatarProps>(({
     >
       <AvatarPrimitive.Root
         className={cn(
-          "relative flex shrink-0 overflow-hidden font-primary font-semibold select-none items-center justify-center",
-          shape === 'circle' ? "rounded-full" : "rounded-lg",
+          "relative flex shrink-0 overflow-hidden font-primary font-semibold select-none items-center justify-center transition-all",
+          shape === 'circle' ? "rounded-full" : "rounded-[var(--khor-radius-md)]",
           !hasCustomColor && "bg-khor-avatar-bg text-khor-avatar-fg",
         )}
         style={{

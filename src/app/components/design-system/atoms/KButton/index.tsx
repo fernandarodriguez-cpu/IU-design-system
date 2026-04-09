@@ -6,59 +6,62 @@ export type { KButtonProps };
 import { Loader2 } from 'lucide-react';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-50 select-none cursor-pointer border border-transparent',
+  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all duration-200 disabled:pointer-events-none disabled:opacity-50 select-none cursor-pointer border border-transparent shadow-khor-sm relative overflow-hidden active:scale-[0.97]',
   {
     variants: {
       variant: {
-        primary: 'bg-khor-primary text-white! hover:bg-khor-primary-hover active:bg-khor-primary-active hover:shadow-md active:scale-95 transition-all',
-        secondary: 'bg-khor-neutral-200 text-khor-neutral-900 hover:bg-khor-neutral-300 active:bg-khor-neutral-400 active:scale-95 transition-all',
-        outline: 'border-khor-neutral-300 bg-transparent text-khor-neutral-700 hover:bg-khor-neutral-100 active:bg-khor-neutral-200 active:scale-95 transition-all',
-        outlined: 'border-khor-neutral-300 bg-transparent text-khor-neutral-700 hover:bg-khor-neutral-100 active:bg-khor-neutral-200 active:scale-95 transition-all',
-        ghost: 'bg-transparent text-khor-neutral-700 hover:bg-khor-neutral-100 active:bg-khor-neutral-200 active:scale-95 transition-all',
-        danger: 'bg-khor-error text-white! hover:bg-khor-action-danger-hover active:bg-khor-action-danger-active hover:shadow-md active:scale-95 transition-all',
-        navy: 'bg-khor-navy text-white! hover:bg-khor-navy-hover active:bg-khor-navy-active hover:shadow-md active:scale-95 transition-all',
-        dashed: 'border-dashed border-khor-neutral-300 bg-transparent text-khor-neutral-700 hover:bg-khor-neutral-100 active:bg-khor-neutral-200 active:scale-95 transition-all',
-        link: 'bg-transparent text-khor-primary underline-offset-4 hover:underline !p-0 !min-h-0 !h-auto border-none',
-        text: 'bg-transparent text-khor-neutral-700 hover:bg-khor-neutral-100 active:bg-khor-neutral-200 transition-all border-none',
-        solid: 'bg-khor-primary text-white! hover:bg-khor-primary-hover active:bg-khor-primary-active',
-        filled: 'bg-khor-neutral-100 text-khor-neutral-900 hover:bg-khor-neutral-200 border-none',
+        primary: 'bg-khor-primary text-white hover:bg-khor-primary-hover hover:shadow-khor-md after:absolute after:inset-x-0 after:top-0 after:h-px after:bg-white/20 after:pointer-events-none',
+        secondary: 'bg-khor-secondary text-white hover:bg-khor-secondary-hover hover:shadow-khor-md after:absolute after:inset-x-0 after:top-0 after:h-px after:bg-white/20 after:pointer-events-none',
+        outline: 'border-khor-neutral-200 bg-transparent text-khor-neutral-700 hover:bg-khor-neutral-50 hover:border-khor-neutral-300 shadow-none',
+        ghost: 'bg-transparent text-khor-neutral-700 hover:bg-khor-neutral-100 shadow-none',
+        danger: 'bg-khor-error text-white hover:bg-khor-error/90 hover:shadow-khor-md after:absolute after:inset-x-0 after:top-0 after:h-px after:bg-white/20',
+        link: 'bg-transparent text-khor-primary underline-offset-4 hover:underline !p-0 !min-h-0 !h-auto border-none shadow-none active:scale-100',
+        text: 'bg-transparent text-khor-neutral-700 hover:bg-khor-neutral-100 border-none shadow-none',
+        solid: 'bg-khor-primary text-white hover:bg-khor-primary-hover hover:shadow-khor-md after:absolute after:inset-x-0 after:top-0 after:h-px after:bg-white/20',
+        filled: 'bg-khor-neutral-100 text-khor-neutral-900 hover:bg-khor-neutral-200 border-none shadow-none',
       },
       size: {
-        sm: 'h-8 px-3 text-xs',
-        md: 'h-[var(--khor-density-height-input)] px-[var(--khor-density-spacing-md)] text-[length:var(--khor-density-font-body)]',
-        lg: 'h-11 px-8',
+        sm: 'h-[var(--khor-space-8)] px-[var(--khor-space-3)] text-xs',
+        md: 'h-[var(--khor-space-10)] px-[var(--khor-space-4)] text-[length:var(--khor-density-font-body)]',
+        lg: 'h-[var(--khor-space-12)] px-[var(--khor-space-8)]',
         icon: 'h-9 w-9 p-0',
       },
+      color: {
+        default: '',
+        primary: 'bg-khor-primary text-white hover:bg-khor-primary-hover',
+        secondary: 'bg-khor-secondary text-white hover:bg-khor-secondary-hover',
+        danger: 'bg-khor-error text-white hover:bg-khor-error/90',
+        processing: 'bg-khor-feedback-processing text-white hover:opacity-90',
+        volcano: 'bg-khor-feedback-volcano text-white hover:opacity-90',
+        gold: 'bg-khor-feedback-gold text-white hover:opacity-90',
+        lime: 'bg-khor-feedback-lime text-black hover:opacity-90',
+        purple: 'bg-khor-feedback-purple text-white hover:opacity-90',
+      },
       shape: {
-        default: 'rounded-[var(--khor-density-radius)]',
+        default: 'rounded-[var(--khor-radius-md)]',
         circle: 'rounded-full aspect-square p-0 flex-shrink-0',
-        round: 'rounded-full',
+        round: 'rounded-full px-6',
       },
       fullWidth: {
         true: 'w-full',
       },
-      danger: {
-        true: '',
-      },
       ghost: {
-        true: 'bg-transparent!',
+        true: 'bg-transparent shadow-none',
       }
     },
     compoundVariants: [
-      // Danger combinations
-      { variant: 'primary', danger: true, className: 'bg-khor-error hover:bg-khor-action-danger-hover active:bg-khor-action-danger-active' },
-      { variant: 'solid', danger: true, className: 'bg-khor-error hover:bg-khor-action-danger-hover active:bg-khor-action-danger-active' },
-      { variant: 'secondary', danger: true, className: 'text-khor-error bg-khor-error-light/10 hover:bg-khor-error-light/20 active:bg-khor-error-light/30' },
-      { variant: 'outline', danger: true, className: 'text-khor-error border-khor-error hover:bg-khor-error-light/10' },
-      { variant: 'outlined', danger: true, className: 'text-khor-error border-khor-error hover:bg-khor-error-light/10' },
-      { variant: 'dashed', danger: true, className: 'text-khor-error border-khor-error hover:bg-khor-error-light/10' },
-      { variant: 'text', danger: true, className: 'text-khor-error hover:bg-khor-error-light/10' },
-      { variant: 'link', danger: true, className: 'text-khor-error' },
+      // Semantic Colors + Outline
+      { variant: 'outline', color: 'primary', className: 'text-khor-primary border-khor-primary/30 hover:bg-khor-primary-light/20' },
+      { variant: 'outline', color: 'secondary', className: 'text-khor-secondary border-khor-secondary/30 hover:bg-khor-secondary/5' },
+      { variant: 'outline', color: 'danger', className: 'text-khor-error border-khor-error/30 hover:bg-khor-error-light/20' },
+      { variant: 'outline', color: 'volcano', className: 'text-khor-feedback-volcano border-khor-feedback-volcano/30 hover:bg-khor-feedback-volcano/5' },
       
-      // Ghost combinations
-      { variant: 'primary', ghost: true, className: 'text-khor-primary border-khor-primary hover:bg-khor-primary-light/10 active:bg-khor-primary-light/20' },
-      { variant: 'primary', ghost: true, danger: true, className: 'text-khor-error border-khor-error hover:bg-khor-error-light/10 active:bg-khor-error-light/20' },
-      { variant: 'navy', ghost: true, className: 'text-khor-navy border-khor-navy hover:bg-khor-navy/10 active:bg-khor-navy/20' },
+      // Semantic Colors + Link/Text
+      { variant: 'link', color: 'secondary', className: 'text-khor-secondary' },
+      { variant: 'text', color: 'secondary', className: 'text-khor-secondary' },
+
+      // Legacy Danger compatibility
+      { variant: 'primary', danger: true, className: 'bg-khor-error hover:bg-khor-error/90' },
     ],
     defaultVariants: {
       variant: 'primary',
@@ -130,10 +133,10 @@ export const KButton = React.forwardRef<any, KButtonProps>(function KButton(
 
   const computedClasses = cn(buttonVariants({ 
     variant: resolvedVariant as any, 
+    color: color as any,
     size: computedSize, 
     shape, 
     fullWidth: isFullWidth, 
-    danger, 
     ghost,
     className 
   }));

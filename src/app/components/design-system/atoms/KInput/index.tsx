@@ -13,13 +13,13 @@ const inputVariants = cva(
   {
     variants: {
       variant: {
-        outlined: 'border-khor-neutral-200 bg-khor-neutral-50 text-khor-neutral-900',
+        outlined: 'border-khor-slate-200 bg-white text-khor-neutral-900 shadow-khor-sm focus-within:border-khor-primary focus-within:ring-khor-primary/20',
         borderless: 'border-transparent bg-transparent text-khor-neutral-900 shadow-none focus-within:ring-0 px-0',
-        filled: 'border-transparent bg-khor-neutral-100 text-khor-neutral-900 focus-within:bg-khor-neutral-50',
+        filled: 'border-transparent bg-khor-slate-100 text-khor-neutral-900 focus-within:bg-khor-slate-50 focus-within:ring-khor-primary/20',
       },
       size: {
         sm: 'h-8 px-2 text-xs',
-        md: 'h-[var(--khor-density-height-input)] px-3 text-[length:var(--khor-density-font-body)]',
+        md: 'h-10 px-3 text-sm',
         lg: 'h-12 px-4 text-base',
       },
       status: {
@@ -28,7 +28,7 @@ const inputVariants = cva(
         warning: 'border-khor-warning focus-within:ring-khor-warning',
       },
       disabled: {
-        true: 'bg-khor-neutral-100 border-khor-neutral-200 opacity-60 cursor-not-allowed select-none pointer-events-none grayscale-[0.5]',
+        true: 'bg-khor-slate-100 border-khor-slate-200 opacity-60 cursor-not-allowed select-none pointer-events-none grayscale-[0.5]',
         false: '',
       }
     },
@@ -112,9 +112,17 @@ const BaseInput = React.forwardRef<HTMLInputElement, KInputProps>(function KInpu
 
   const renderAddon = (content: React.ReactNode, pos: 'before' | 'after') => {
     if (!content) return null;
+    
+    // Si el contenido es un botón o un componente con estilos propios, 
+    // evitamos el padding y el fondo por defecto si es deseable.
+    // Aquí implementamos una lógica sutil para permitir "full-bleed" addons.
+    const isMinimal = React.isValidElement(content) && 
+      (typeof content.type === 'function' || (content.props as any)?.className?.includes('h-'));
+
     return (
       <div className={cn(
-        "flex items-center justify-center bg-khor-neutral-100 border border-khor-neutral-200 px-3 text-khor-neutral-600 shrink-0 select-none",
+        "flex items-center justify-center shrink-0 select-none",
+        !isMinimal && "bg-khor-slate-100 border border-khor-slate-200 px-3 text-khor-neutral-500",
         pos === 'before' ? "rounded-l-md border-r-0" : "rounded-r-md border-l-0"
       )}>
         {content}
@@ -149,14 +157,14 @@ const BaseInput = React.forwardRef<HTMLInputElement, KInputProps>(function KInpu
           addonBefore && "rounded-l-none",
           addonAfter && "rounded-r-none"
         )}>
-          {prefix && <div className="mr-2 flex items-center text-khor-neutral-500 shrink-0">{prefix}</div>}
+          {prefix && <div className="ml-3 mr-1 flex items-center text-khor-neutral-400 shrink-0">{prefix}</div>}
           <input
             ref={inputRef}
             disabled={disabled}
             value={currentVal}
             onChange={handleChange}
             maxLength={maxLength}
-            className="w-full bg-transparent outline-none placeholder:text-khor-neutral-400 h-full disabled:cursor-not-allowed"
+            className="w-full bg-transparent outline-none placeholder:text-khor-neutral-400 h-full disabled:cursor-not-allowed px-1"
             {...rest}
           />
           <div className="flex items-center gap-2 shrink-0 ml-2">

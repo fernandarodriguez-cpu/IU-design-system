@@ -64,10 +64,10 @@ export function KCommandBar({ open, onClose }: { open: boolean; onClose: () => v
       open={open} 
       onOpenChange={onClose}
       className={cn(
-        "fixed left-[50%] top-[50%] z-[9999] w-full max-w-2xl translate-x-[-50%] translate-y-[-50%] overflow-hidden rounded-xl border bg-khor-surface-page shadow-2xl font-primary text-khor-neutral-900",
+        "fixed left-[50%] top-[50%] z-[9999] w-full max-w-2xl translate-x-[-50%] translate-y-[-50%] overflow-hidden rounded-xl border border-khor-slate-200 bg-white shadow-khor-xl font-primary text-khor-neutral-900",
         "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]"
       )}
-      overlayClassName="fixed inset-0 z-[9999] bg-khor-brand-navy/40 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
+      overlayClassName="fixed inset-0 z-[9999] bg-khor-brand-navy/60 backdrop-blur-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
     >
       <div className="flex items-center border-b px-3">
         <Search className="mr-2 h-5 w-5 shrink-0 opacity-50" />
@@ -75,7 +75,7 @@ export function KCommandBar({ open, onClose }: { open: boolean; onClose: () => v
           className="flex h-14 w-full rounded-md bg-transparent py-3 text-base outline-none disabled:cursor-not-allowed disabled:opacity-50 placeholder:text-khor-neutral-400 text-khor-neutral-900" 
           placeholder="¿Qué estás buscando? (ej. Componentes, Tokens...)" 
         />
-        <div className="ml-2 flex shrink-0 items-center justify-center rounded-md border border-khor-neutral-200 bg-khor-neutral-100 px-2 text-xs font-semibold text-khor-neutral-500 shadow-sm">
+        <div className="ml-2 flex shrink-0 items-center justify-center rounded-md border border-khor-slate-200 bg-khor-slate-100 px-2 text-xs font-semibold text-khor-neutral-500 shadow-sm">
           ESC
         </div>
       </div>
@@ -102,7 +102,7 @@ export function KCommandBar({ open, onClose }: { open: boolean; onClose: () => v
         </Command.Group>
       </Command.List>
 
-      <div className="flex items-center gap-4 border-t bg-khor-neutral-50 px-4 py-3 text-xs text-khor-neutral-500">
+      <div className="flex items-center gap-4 border-t border-khor-slate-100 bg-khor-slate-50 px-4 py-3 text-xs text-khor-neutral-500">
         <div className="flex items-center gap-1.5">
           <kbd className="rounded border bg-khor-neutral-200 px-1.5 py-0.5 font-bold">↑↓</kbd> 
           <span>Navegar</span>
@@ -121,15 +121,15 @@ function CommandRow({ item, onSelect }: { item: CommandItem; onSelect: () => voi
     <Command.Item
       value={`${item.title} ${item.description} ${item.category} ${item.keywords?.join(' ')}`}
       onSelect={onSelect}
-      className="relative flex cursor-pointer select-none items-center gap-3 rounded-lg px-2 py-2 text-sm outline-none data-[selected='true']:bg-khor-neutral-100 data-[selected='true']:text-khor-neutral-900 text-khor-neutral-700 my-1"
+      className="relative flex cursor-pointer select-none items-center gap-3 rounded-lg px-2 py-2 text-sm outline-none data-[selected='true']:bg-khor-slate-100 data-[selected='true']:text-khor-primary text-khor-neutral-700 my-1 transition-all"
     >
-      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-khor-neutral-200 bg-khor-surface-page text-khor-primary group-data-[selected='true']:border-khor-primary">
+      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-khor-slate-200 bg-white text-khor-primary group-data-[selected='true']:border-khor-primary shadow-khor-sm">
         <ChevronRight className="h-4 w-4" />
       </div>
       <div className="flex flex-col gap-0.5">
         <div className="flex items-center gap-2">
           <span className="font-medium text-khor-neutral-900">{item.title}</span>
-          <span className="rounded-full bg-khor-neutral-200 px-1.5 py-0.5 text-[10px] uppercase font-bold text-khor-neutral-600">
+          <span className="rounded-full bg-khor-slate-100 px-1.5 py-0.5 text-[10px] uppercase font-bold text-khor-neutral-600">
             {item.category}
           </span>
         </div>
@@ -146,10 +146,10 @@ function CommandRow({ item, onSelect }: { item: CommandItem; onSelect: () => voi
 export function KCommandBarPreview() {
   const { open, setOpen } = useCommandBar();
   return (
-    <div className="text-center py-10 border rounded-xl bg-khor-neutral-50">
+    <div className="text-center py-10 border border-khor-slate-200 rounded-xl bg-khor-slate-50">
       <button 
         onClick={() => setOpen(true)} 
-        className="inline-flex items-center gap-2 rounded-md bg-khor-surface-page px-4 py-2 text-sm font-medium border shadow-sm hover:bg-khor-neutral-100 transition-colors text-khor-neutral-900 font-primary"
+        className="inline-flex items-center gap-2 rounded-md bg-white px-4 py-2 text-sm font-medium border border-khor-slate-200 shadow-khor-sm hover:bg-khor-slate-50 transition-all text-khor-neutral-900 font-primary active:scale-[0.98]"
       >
         <CommandIcon className="h-4 w-4 text-khor-neutral-500" />
         Abrir Busqueda Global (⌘K)

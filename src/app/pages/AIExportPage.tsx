@@ -20,13 +20,14 @@ import { khorTokens } from '../theme/khor-theme';
 import { patterns } from '../patterns/index';
 import { atoms } from './AtomsPage';
 import { molecules } from './MoleculesPage';
-// import { organisms } from './OrganismsPage';
-const organisms = {}; // Temporary dummy for isolation testing
+import { organisms } from './OrganismsPage';
+
 
 const t = khorTokens;
 
 /* ─── Version (must match ChangelogPage & AppShell) ─── */
-export const KHOR_VERSION = '4.0.3';
+export const KHOR_VERSION = '4.0.4';
+
 
 /* ─── Sections config ───────────────────────── */
 export interface SectionConfig {
@@ -89,7 +90,6 @@ Para que el código generado sea funcional, la IA DEBE conocer estos valores y D
 \`\`\`css
 :root {
   /* Colores de Marca y Estado */
-  --khor-brand-navy: #051758;
   --khor-brand-primary: #E04D36;
   --khor-brand-secondary: #051758;
   --khor-brand-accent: #FF9500;
@@ -107,14 +107,16 @@ Para que el código generado sea funcional, la IA DEBE conocer estos valores y D
   --khor-neutral-800: #11141C;   /* Dark Text */
   --khor-neutral-900: #051758;   /* Heading Text */
 
-  /* Geometría y Elevación */
+  /* Geometría y Elevación (Myna-Adopted) */
   --khor-radius-sm: 6px;
   --khor-radius-md: 8px;
   --khor-radius-lg: 10px;
   --khor-radius-xl: 14px;
-  --khor-shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
-  --khor-shadow-md: 0 4px 12px rgba(0,0,0,0.08);
-  --khor-shadow-lg: 0 12px 32px rgba(5,23,88,0.12);
+  --khor-shadow-sm: 0 1px 2px rgba(5,23,88,0.04), 0 1px 1px rgba(0,0,0,0.02);
+  --khor-shadow-md: 0 4px 6px -1px rgba(5,23,88,0.08), 0 2px 4px -1px rgba(0,0,0,0.04);
+  --khor-shadow-lg: 0 10px 15px -3px rgba(5,23,88,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+  --khor-shadow-xl: 0 20px 25px -5px rgba(5,23,88,0.12), 0 10px 10px -5px rgba(0,0,0,0.04);
+  --khor-shadow-2xl: 0 25px 50px -12px rgba(5,23,88,0.25);
 }
 \`\`\`
 
@@ -125,12 +127,8 @@ Para que el código generado sea funcional, la IA DEBE conocer estos valores y D
 | Token | Hex | CSS Variable | Uso |
 |-------|-----|-------------|-----|
 | Primary | \`#E04D36\` | \`var(--khor-primary)\` | CTAs, botones principales, enlaces activos |
-| Primary Hover | \`#e8644f\` | \`var(--khor-primary-hover)\` | Hover de primary |
-| Primary Active | \`#c9442f\` | \`var(--khor-primary-active)\` | Click/active de primary |
-| Navy | \`#051758\` | \`var(--khor-navy)\` | Sidebar, titulos, navegacion, headings |
-| Navy Hover | \`#0a2270\` | \`var(--khor-navy-hover)\` | Hover de navy |
-| Accent | \`#FF9500\` | \`var(--khor-accent)\` | Warnings, destacados, badges, CTA secundario |
-| Accent Hover | \`#ffaa33\` | \`var(--khor-accent-hover)\` | Hover de accent |
+| Secondary | \`#051758\` | \`var(--khor-secondary)\` | Botones secundarios, sidebar, titulos, navegacion |
+| Accent | \`#FF9500\` | \`var(--khor-accent)\` | Warnings, destacados, badges, CTA destacado |
 
 ### Colores Neutros
 
@@ -154,25 +152,28 @@ Para que el código generado sea funcional, la IA DEBE conocer estos valores y D
 | error-light | \`#FFEBEE\` | Fondo de alertas/badges de error |
 | warning | \`#FF9500\` | Advertencias (coincide con accent) |
 | warning-light | \`#FFF3E0\` | Fondo de advertencias |
-| info | \`#051758\` | Informativo (coincide con navy) |
 | info-light | \`#E3F2FD\` | Fondo de alertas informativas |
 
-**Nota para la IA:** En Tailwind v4, estos colores se consumen como \`bg-khor-primary\`, \`text-khor-navy\`, \`border-khor-accent\`, etc.
+**Nota para la IA:** En Tailwind v4, estos colores se consumen como \`bg-khor-primary\`, \`text-khor-secondary\`, \`border-khor-accent\`, etc.
 
 ### Tipografia
 
 | Escala | Tamano | Peso | Line Height | Fuente |
 |--------|--------|------|-------------|--------|
-| h1 | 38px | 700 (bold) | 1.2 | Raleway |
-| h2 | 30px | 700 | 1.2 | Raleway |
-| h3 | 24px | 600 (semi) | 1.3 | Raleway |
-| body-lg | 16px | 400 | 1.5 | Raleway |
-| body-md | 14px | 400 | 1.5 | Raleway |
-| small | 12px | 500 | 1.5 | Raleway |
+| display1| 64px | 700 (bold) | 1.1 | Montserrat |
+| display2| 48px | 700 | 1.1 | Montserrat |
+| h1 | 38px | 700 | 1.2 | Montserrat |
+| h2 | 30px | 700 | 1.2 | Montserrat |
+| h3 | 24px | 600 | 1.3 | Montserrat |
+| body-lg | 16px | 400 | 1.5 | Montserrat |
+| body-md | 14px | 400 | 1.5 | Montserrat |
+| small | 12px | 500 | 1.5 | Montserrat |
+| caption | 11px | 400 | 1.4 | Montserrat |
+| overline| 10px | 600 | 1.2 | Montserrat |
 
 **Importar fuentes:**
 \`\`\`css
-@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 \`\`\`
 

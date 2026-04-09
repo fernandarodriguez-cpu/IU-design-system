@@ -131,7 +131,7 @@ function generateFigmaVariablesJSON() {
       },
       Typography: {
         Family: {
-          Primary: { $value: 'Raleway', $type: 'string' },
+          Primary: { $value: 'Montserrat', $type: 'string' },
           Secondary: { $value: 'Plus Jakarta Sans', $type: 'string' },
         },
         H1: {
@@ -216,7 +216,7 @@ function generateFigmaStylesJSON() {
   const textStyles = [
     {
       name: "Typography/Heading/H1",
-      font: { family: "Raleway", style: "Bold" },
+      font: { family: "Montserrat", style: "Bold" },
       fontSize: t.typography.h1.size,
       lineHeight: { unit: "PIXELS", value: Math.round(t.typography.h1.size * t.typography.h1.lineHeight * 10) / 10 },
       letterSpacing: { unit: "PERCENT", value: 0 },
@@ -224,7 +224,7 @@ function generateFigmaStylesJSON() {
     },
     {
       name: "Typography/Heading/H2",
-      font: { family: "Raleway", style: "Bold" },
+      font: { family: "Montserrat", style: "Bold" },
       fontSize: t.typography.h2.size,
       lineHeight: { unit: "PIXELS", value: Math.round(t.typography.h2.size * t.typography.h2.lineHeight * 10) / 10 },
       letterSpacing: { unit: "PERCENT", value: 0 },
@@ -232,7 +232,7 @@ function generateFigmaStylesJSON() {
     },
     {
       name: "Typography/Heading/H3",
-      font: { family: "Raleway", style: "SemiBold" },
+      font: { family: "Montserrat", style: "SemiBold" },
       fontSize: t.typography.h3.size,
       lineHeight: { unit: "PIXELS", value: Math.round(t.typography.h3.size * t.typography.h3.lineHeight * 10) / 10 },
       letterSpacing: { unit: "PERCENT", value: 0 },

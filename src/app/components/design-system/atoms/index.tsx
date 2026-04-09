@@ -11,7 +11,7 @@ export { default as KSwitch } from './KSwitch';
 export { default as KCheckbox } from './KCheckbox';
 export { default as KRadio } from './KRadio';
 export { default as KProgress } from './KProgress';
-export { default as KText, KLink, KParagraph } from './KText';
+export { default as KTypography, KText, KLink, KParagraph } from './KText';
 export { default as KDivider } from './KDivider';
 export { default as KAlert } from './KAlert';
 export { default as KSkeleton } from './KSkeleton';
