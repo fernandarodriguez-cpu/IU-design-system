@@ -2141,8 +2141,8 @@ import { KInput } from '@khor/design-system/atoms/index';
     ],
     guidelines: ['Usa para dashboards o KPIs importantes.', 'Combina con prefijos como "$" o "MXN" para contextos financieros.'],
   },
-  'timepicker': {
-    id: 'timepicker', name: 'KTimePicker',
+  'time-picker': {
+    id: 'time-picker', name: 'KTimePicker',
     description: 'Selector de hora con formato personalizable (12h/24h) y selección de intervalos.',
     preview: (<div><KTimePicker placeholder="Seleccionar..." /></div>),
     code: `import { KTimePicker } from '@khor/design-system/molecules/index';
@@ -2344,7 +2344,7 @@ import { KInput } from '@khor/design-system/atoms/index';
     ],
     guidelines: ['Usa para mostrar información estructurada repetitiva.', 'Combina con avatares para facilitar el reconocimiento visual.'],
   },
-  'divider-ext': { id: 'divider-ext', name: 'KDividerExtended', description: 'Divisor con soporte para texto central y estilo dashed.',
+  'divider-extended': { id: 'divider-extended', name: 'KDividerExtended', description: 'Divisor con soporte para texto central y estilo dashed.',
     preview: (<div><KDividerExtended /><KDividerExtended>O continúa con</KDividerExtended><KDividerExtended dashed /></div>),
     code: `<KDividerExtended>O continúa con</KDividerExtended>`, filename: 'KDividerExtended.tsx',
     stateShowcase: (

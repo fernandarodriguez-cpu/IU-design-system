@@ -379,7 +379,11 @@ async function drawKDataTable(node: ComponentNode, combo: any) {
 // --- MAIN ENGINE ---
 
 figma.ui.onmessage = async (msg) => {
-    if (msg.type === 'ui-ready') figma.ui.postMessage({ type: 'sync-data', data: khorMetadata });
+    log(`Accion recibida: ${msg.type}`);
+    if (msg.type === 'ui-ready') {
+        figma.ui.postMessage({ type: 'sync-data', data: khorMetadata });
+        log("📡 Sincronización de componentes enviada");
+    }
     
     if (msg.type === 'sync-tokens') {
         try {
@@ -417,13 +421,22 @@ figma.ui.onmessage = async (msg) => {
 
     if (msg.type === 'insert-component') {
         try {
-            const { component } = msg; log(`🚀 Sintetizando ${component.name} (v8.2)...`);
+            const { component, overrides } = msg; 
+            log(`🚀 Sintetizando ${component.name} (v8.2)...`);
             const pN = `[v8.2] ${component.name}`;
             const page = figma.root.children.find(c => c.name === pN) as PageNode || figma.createPage();
             page.name = pN; figma.currentPage = page;
             
-            const pM = component.props.filter((p: any) => p.options?.length > 0);
-            const combs = generateCombinations(pM).slice(0, 50);
+            let combs = [];
+            if (overrides && Object.keys(overrides).length > 0) {
+                log(`Usando configuración manual: ${JSON.stringify(overrides)}`);
+                combs = [overrides];
+            } else {
+                const pM = component.props.filter((p: any) => p.options?.length > 0);
+                combs = generateCombinations(pM).slice(0, 50);
+                log(`Generando ${combs.length} variantes estándar`);
+            }
+
             const comps: ComponentNode[] = [];
             
             for (const combo of combs) {

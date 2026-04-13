@@ -4,13 +4,13 @@ import { cn } from '../../../../../imports/utils';
 import { X } from 'lucide-react';
 
 export type KTagColor = 
-  | 'primary' | 'secondary' | 'accent' | 'success' | 'error' | 'warning' | 'info' | 'default' | 'processing'
+  | 'primary' | 'secondary' | 'accent' | 'success' | 'error' | 'warning' | 'info' | 'default' | 'processing' | 'teal'
   | 'magenta' | 'red' | 'volcano' | 'orange' | 'gold' | 'lime' | 'green' | 'cyan' | 'blue' | 'geekblue' | 'purple'
   // Legacy
   | 'navy';
 
 const tagVariants = cva(
-  'inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 text-xs font-semibold font-primary border transition-all focus:outline-none focus:ring-2 focus:ring-khor-primary focus:ring-offset-2 select-none',
+  'inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 min-h-[var(--khor-density-height-tag)] text-xs font-semibold font-primary border transition-all focus:outline-none focus:ring-2 focus:ring-khor-primary focus:ring-offset-2 select-none',
   {
     variants: {
       color: {
@@ -22,7 +22,8 @@ const tagVariants = cva(
         error: 'bg-khor-error/10 text-khor-error border-khor-error/20',
         warning: 'bg-khor-warning/10 text-khor-warning border-khor-warning/20',
         info: 'bg-khor-info/10 text-khor-info border-khor-info/20',
-        processing: 'bg-khor-primary/10 text-khor-primary border-khor-primary/20 animate-pulse',
+        processing: 'bg-khor-processing/10 text-khor-processing border-khor-processing/20 animate-pulse',
+        teal: 'bg-khor-teal/10 text-khor-teal border-khor-teal/20',
         default: 'bg-khor-neutral-100 text-khor-neutral-600 border-khor-neutral-200',
         // AntD Presets
         magenta: 'bg-pink-50 text-pink-600 border-pink-200',
@@ -53,7 +54,7 @@ export interface KTagProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, '
   /** Color predefinido o CSS color */
   color?: KTagColor | string;
   /** Estado semántico (v4) */
-  status?: 'success' | 'processing' | 'error' | 'warning' | 'default';
+  status?: 'success' | 'processing' | 'error' | 'warning' | 'default' | 'teal';
   /** Icono al inicio */
   icon?: React.ReactNode;
   /** Si tiene borde visible */
@@ -85,7 +86,7 @@ const KTagInternal = React.forwardRef<HTMLSpanElement, KTagProps>(function KTag(
   const [visible, setVisible] = useState(true);
   
   const finalColor = status || color || 'default';
-  const isCustomColor = color && !['primary', 'secondary', 'navy', 'accent', 'success', 'error', 'warning', 'info', 'default', 'processing', 'magenta', 'red', 'volcano', 'orange', 'gold', 'lime', 'green', 'cyan', 'blue', 'geekblue', 'purple'].includes(color) && !status;
+  const isCustomColor = color && !['primary', 'secondary', 'navy', 'accent', 'success', 'error', 'warning', 'info', 'default', 'processing', 'teal', 'magenta', 'red', 'volcano', 'orange', 'gold', 'lime', 'green', 'cyan', 'blue', 'geekblue', 'purple'].includes(color) && !status;
   
   const customStyles = isCustomColor ? {
     backgroundColor: color, 

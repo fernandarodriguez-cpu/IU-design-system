@@ -22,6 +22,7 @@ import { KSkeleton } from '../components/design-system/atoms/KSkeleton/index';
 import { KSlider } from '../components/design-system/atoms/KSlider/index';
 import { KRate } from '../components/design-system/atoms/KRate/index';
 import { KSpin } from '../components/design-system/atoms/KSpin/index';
+import { KScrollBar } from '../components/design-system/atoms/KScrollBar/index';
 import { KButtonGroup } from '../components/design-system/atoms/KButtonGroup/index';
 import { KLabel } from '../components/design-system/atoms/KLabel/index';
 import { KFloatButton } from '../components/design-system/atoms/KFloatButton/index';
@@ -36,6 +37,7 @@ import { KPagination } from '../components/design-system/organisms/KPagination/i
 import {
   Plus, Save, Trash2, Download, Mail, Lock, User,
   Bell, Star, Heart, Search, AlertCircle, Info, ThumbsUp,
+  CheckCircle,
 } from 'lucide-react';
 import { khorTokens } from '../theme/khor-theme';
 
@@ -56,6 +58,8 @@ function ButtonPlayground() {
   const [block, setBlock] = useState(false);
   const [ghost, setGhost] = useState(false);
   const [danger, setDanger] = useState(false);
+  const [showIcon, setShowIcon] = useState(true);
+  const [iconPosition, setIconPosition] = useState<'start' | 'end'>('start');
   const [href, setHref] = useState('');
   
   const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
@@ -92,15 +96,24 @@ function ButtonPlayground() {
             </select>
           </div>
           
-          <div>
-            <label style={ctrl}>Enlace (href)</label>
-            <input 
-              type="text" 
-              value={href} 
-              onChange={(e) => setHref(e.target.value)} 
-              placeholder="Ej: https://google.com" 
-              style={sel} 
-            />
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+            <div>
+              <label style={ctrl}>Enlace (href)</label>
+              <input 
+                type="text" 
+                value={href} 
+                onChange={(e) => setHref(e.target.value)} 
+                placeholder="Ej: https://google.com" 
+                style={sel} 
+              />
+            </div>
+            <div>
+              <label style={ctrl}>Posición Icono</label>
+              <select value={iconPosition} onChange={(e) => setIconPosition(e.target.value as any)} style={sel}>
+                <option value="start">Start (Izquierda)</option>
+                <option value="end">End (Derecha)</option>
+              </select>
+            </div>
           </div>
           
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 4 }}>
@@ -119,6 +132,9 @@ function ButtonPlayground() {
             <label style={checkStyle}>
               <input type="checkbox" checked={ghost} onChange={(e) => setGhost(e.target.checked)} /> Ghost
             </label>
+            <label style={checkStyle}>
+              <input type="checkbox" checked={showIcon} onChange={(e) => setShowIcon(e.target.checked)} /> Mostrar Icono
+            </label>
           </div>
         </div>
       </div>
@@ -135,7 +151,8 @@ function ButtonPlayground() {
           ghost={ghost}
           href={href || undefined}
           target="_blank"
-          icon={<Save size={16} />}
+          icon={showIcon ? <Save size={16} /> : undefined}
+          iconPosition={iconPosition}
         >
           {shape === 'circle' ? '' : (href ? 'Ir a Enlace' : 'Guardar Cambios')}
         </KButton>
@@ -901,30 +918,104 @@ function QRCodePlayground() {
 }
 
 function SkeletonPlayground() {
-  const [lines, setLines] = useState(3);
-  const [circle, setCircle] = useState(false);
+  const [mode, setMode] = useState<'text' | 'avatar' | 'element'>('text');
   const [loading, setLoading] = useState(true);
-  const [active, setActive] = useState(false);
+  const [active, setActive] = useState(true);
+  const [lines, setLines] = useState(3);
+  const [size, setSize] = useState(48);
   const [w, setW] = useState(200);
-  const [h, setH] = useState(40);
+  const [h, setH] = useState(80);
+
   const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
+  const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
+
+  return (
+    <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
+      <div style={{ flex: 1, minWidth: 260 }}>
+        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div>
+            <label style={ctrl}>Modo de Skeleton</label>
+            <select value={mode} onChange={(e) => setMode(e.target.value as any)} style={sel}>
+              <option value="text">Párrafo (Texto)</option>
+              <option value="avatar">Avatar (Círculo)</option>
+              <option value="element">Elemento (Rectángulo)</option>
+            </select>
+          </div>
+          
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, padding: '4px 0' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={loading} onChange={(e) => setLoading(e.target.checked)} /> Loading</label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={active} onChange={(e) => setActive(e.target.checked)} /> Animación (Pulse)</label>
+          </div>
+
+          {mode === 'text' && (
+            <div><label style={ctrl}>Líneas: {lines}</label><input type="range" min={1} max={10} value={lines} onChange={(e) => setLines(Number(e.target.value))} style={{ width: '100%' }} /></div>
+          )}
+          
+          {mode === 'avatar' && (
+            <div><label style={ctrl}>Dimensión: {size}px</label><input type="range" min={24} max={120} value={size} onChange={(e) => setSize(Number(e.target.value))} style={{ width: '100%' }} /></div>
+          )}
+
+          {mode === 'element' && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <div><label style={ctrl}>Ancho: {w}px</label><input type="range" min={40} max={400} value={w} onChange={(e) => setW(Number(e.target.value))} style={{ width: '100%' }} /></div>
+              <div><label style={ctrl}>Alto: {h}px</label><input type="range" min={20} max={200} value={h} onChange={(e) => setH(Number(e.target.value))} style={{ width: '100%' }} /></div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div style={{ flex: 1, minWidth: 300, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 40, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg, border: `1px dashed ${khorTokens.colors.neutral[300]}` }}>
+        <div style={{ width: '100%', maxWidth: 400 }}>
+          <KSkeleton loading={loading} active={active} circle={mode === 'avatar'} lines={mode === 'text' ? lines : 1} width={mode === 'element' ? w : (mode === 'avatar' ? size : undefined)} height={mode === 'text' ? undefined : (mode === 'avatar' ? size : h)}>
+            <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+              {mode === 'avatar' && <div style={{ width: size, height: size, backgroundColor: khorTokens.colors.brand.primary, borderRadius: '50%' }} />}
+              <div style={{ flex: 1 }}>
+                <h3 style={{ margin: 0, color: khorTokens.colors.brand.navy }}>¡Contenido Cargado!</h3>
+                <p style={{ margin: '4px 0 0', color: khorTokens.colors.neutral[500], fontSize: 13 }}>Este es el contenido real que se muestra cuando loading=false.</p>
+              </div>
+            </div>
+          </KSkeleton>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ScrollBarPlayground() {
+  const [size, setSize] = useState<'small' | 'middle' | 'large'>('middle');
+  const [orientation, setOrientation] = useState<'vertical' | 'horizontal' | 'both'>('vertical');
+  const [autoHide, setAutoHide] = useState(true);
+
+  const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
+  const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
+
   return (
     <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
       <div style={{ flex: 1, minWidth: 240 }}>
-        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
+        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles (KScrollBar)</h4>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
-            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={circle} onChange={(e) => setCircle(e.target.checked)} /> Circulo</label>
-            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={loading} onChange={(e) => setLoading(e.target.checked)} /> Loading</label>
-            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={active} onChange={(e) => setActive(e.target.checked)} /> Active (Pulse)</label>
-          </div>
-          {!circle && <div><label style={ctrl}>Lineas: {lines}</label><input type="range" min={1} max={6} value={lines} onChange={(e) => setLines(Number(e.target.value))} style={{ width: '100%' }} /></div>}
-          <div><label style={ctrl}>Ancho: {w}px</label><input type="range" min={50} max={400} value={w} onChange={(e) => setW(Number(e.target.value))} style={{ width: '100%' }} /></div>
-          <div><label style={ctrl}>Alto: {h}px</label><input type="range" min={12} max={100} value={h} onChange={(e) => setH(Number(e.target.value))} style={{ width: '100%' }} /></div>
+          <div><label style={ctrl}>Tamaño (Grosor)</label><select value={size} onChange={(e) => setSize(e.target.value as any)} style={sel}>{['small','middle','large'].map(s=><option key={s}>{s}</option>)}</select></div>
+          <div><label style={ctrl}>Orientación</label><select value={orientation} onChange={(e) => setOrientation(e.target.value as any)} style={sel}>{['vertical','horizontal','both'].map(o=><option key={o}>{o}</option>)}</select></div>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer', marginTop: 4 }}><input type="checkbox" checked={autoHide} onChange={(e) => setAutoHide(e.target.checked)} /> Auto-hide (mostrar solo on hover)</label>
         </div>
       </div>
       <div style={{ flex: 1, minWidth: 280, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-        {circle ? <KSkeleton circle height={h} loading={loading} active={active} /> : <KSkeleton lines={lines} width={w} loading={loading} active={active} />}
+        <KScrollBar 
+          size={size} 
+          orientation={orientation} 
+          autoHide={autoHide} 
+          style={{ width: orientation === 'vertical' ? 300 : '100%', height: 200, backgroundColor: '#fff', border: `1px solid ${khorTokens.colors.neutral[200]}`, borderRadius: 8, padding: 16 }}
+        >
+          <div style={{ width: orientation === 'vertical' ? '100%' : 800, height: orientation === 'horizontal' ? '100%' : 500 }}>
+            <h5 style={{ margin: '0 0 12px 0' }}>Contenido de Ejemplo</h5>
+            {Array.from({ length: 20 }).map((_, i) => (
+              <p key={i} style={{ fontSize: 13, color: khorTokens.colors.neutral[500], marginBottom: 8 }}>
+                Fila de prueba {i + 1}: El scrollbar premium de Khor se aplica automáticamente a este contenedor respetando los tokens de diseño.
+              </p>
+            ))}
+          </div>
+        </KScrollBar>
       </div>
     </div>
   );
@@ -2549,6 +2640,39 @@ export const atoms: Record<string, AtomEntry> = {
     ],
     guidelines: ['Usa gutters múltiplos de 8 (ej. 16, 24).', 'Ideal para dashboards y formularios multi-columna.']
   },
+  scrollbar: {
+    id: 'scrollbar',
+    name: 'KScrollBar',
+    description: 'Átomo para estilización premium de barras de desplazamiento. Centraliza la estética de los scrollbars en el sistema para evitar variaciones nativas feas.',
+    preview: (
+      <KScrollBar style={{ height: 120, border: `1px solid ${khorTokens.colors.neutral[200]}`, borderRadius: 8, padding: 12 }}>
+        <div style={{ height: 300 }}>
+          <p style={{ fontSize: 13, color: khorTokens.colors.neutral[500] }}>Contenido con scroll customizado premium.</p>
+          <div style={{ height: 200 }} />
+          <p style={{ fontSize: 13, color: khorTokens.colors.neutral[500] }}>Fin del contenido.</p>
+        </div>
+      </KScrollBar>
+    ),
+    playground: <ScrollBarPlayground />,
+    code: `import { KScrollBar } from '@khor/design-system/atoms/index';
+
+<KScrollBar 
+  size="middle" 
+  orientation="vertical" 
+  autoHide={true} 
+  style={{ height: 300 }}
+>
+  {/* contenido largo */}
+</KScrollBar>`,
+    filename: 'KScrollBar.tsx',
+    props: [
+      { name: 'orientation', type: "'vertical' | 'horizontal' | 'both'", default: "'vertical'", description: 'Orientación del scroll.' },
+      { name: 'size', type: "'small' | 'middle' | 'large'", default: "'middle'", description: 'Grosor de la barra.' },
+      { name: 'autoHide', type: 'boolean', default: 'true', description: 'Esconde la barra si no hay hover.' },
+      { name: 'children', type: 'ReactNode', description: 'Contenido a scrollear.' },
+    ],
+    guidelines: ['Usa para contenedores con contenido que excede su tamaño.', 'Evita scrollbars en elementos minúsculos.'],
+  }
 };
 
 export function AtomsPage() {

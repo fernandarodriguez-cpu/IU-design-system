@@ -21,10 +21,10 @@ const buttonVariants = cva(
         filled: 'bg-khor-neutral-100 text-khor-neutral-900 hover:bg-khor-neutral-200 border-none shadow-none',
       },
       size: {
-        sm: 'h-[var(--khor-space-8)] px-[var(--khor-space-3)] text-xs',
-        md: 'h-[var(--khor-space-10)] px-[var(--khor-space-4)] text-[length:var(--khor-density-font-body)]',
-        lg: 'h-[var(--khor-space-12)] px-[var(--khor-space-8)]',
-        icon: 'h-9 w-9 p-0',
+        sm: 'h-[var(--khor-density-height-sm)] min-w-[var(--khor-density-min-width-button)] px-[var(--khor-space-3)] text-xs',
+        md: 'h-[var(--khor-density-height-md)] min-w-[var(--khor-density-min-width-button)] px-[var(--khor-space-4)] text-[length:var(--khor-density-font-body)]',
+        lg: 'h-[var(--khor-density-height-lg)] min-w-[var(--khor-density-min-width-button)] px-[var(--khor-space-8)]',
+        icon: 'h-[var(--khor-density-height-md)] w-[var(--khor-density-height-md)] p-0 !min-w-0',
       },
       color: {
         default: '',

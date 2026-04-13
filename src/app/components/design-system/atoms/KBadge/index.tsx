@@ -1,7 +1,7 @@
 import React from 'react';
 import { cn } from '../../../../../imports/utils';
 
-export type KBadgeStatus = 'success' | 'error' | 'warning' | 'info' | 'default' | 'primary' | 'processing';
+export type KBadgeStatus = 'success' | 'error' | 'warning' | 'info' | 'default' | 'primary' | 'processing' | 'teal';
 
 export interface KBadgeStyles {
   root?: React.CSSProperties;
@@ -51,7 +51,8 @@ const statusColorMap: Record<KBadgeStatus, string> = {
   info: 'bg-khor-info',
   default: 'bg-khor-slate-400',
   primary: 'bg-khor-primary',
-  processing: 'bg-khor-primary animate-pulse',
+  processing: 'bg-khor-processing animate-pulse',
+  teal: 'bg-khor-teal',
 };
 
 /**
@@ -196,7 +197,7 @@ export const KBadge = React.forwardRef<HTMLSpanElement, KBadgeProps>(
                 ? `w-1.5 h-1.5 rounded-full ${color ? '' : badgeColorClass}`
                 : cn(
                     "rounded-full font-bold select-none",
-                    size === 'small' ? "h-4 min-w-[16px] px-1 text-[9px]" : "h-5 min-w-[20px] px-1.5 text-[11px]",
+                    size === 'small' ? "h-4 min-w-[16px] px-1 text-[9px]" : "h-[var(--khor-density-height-badge)] min-w-[var(--khor-density-height-badge)] px-1.5 text-[11px]",
                     color ? '' : badgeColorClass
                   ),
               classNames?.indicator

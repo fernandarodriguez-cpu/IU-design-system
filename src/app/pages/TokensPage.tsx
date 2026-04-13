@@ -89,19 +89,28 @@ export function TokensPage() {
         </div>
       </Section>
 
-      <Section title="🛡️ Status & Feedback">
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 16 }}>
-          <ColorSwatch name="Success" variable="--khor-success" hex="#2E7D32" />
-          <ColorSwatch name="Error" variable="--khor-error" hex="#D32F2F" />
-          <ColorSwatch name="Warning" variable="--khor-warning" hex="#FF9500" />
-          <ColorSwatch name="Info" variable="--khor-info" hex="#051758" />
-        </div>
-        <h4 style={{ fontSize: 14, fontWeight: 700, margin: '24px 0 12px', color: 'var(--khor-secondary)' }}>Feedback Extendido v10.4</h4>
+      <Section title="🛡️ Status & Feedback (v10.4.2 Full Scaling)">
+        <p style={{ fontSize: 14, color: 'var(--khor-slate-500)', marginBottom: 20 }}>
+          Tokens semánticos optimizados con escalas completas 50-900.
+        </p>
+        
+        {['Teal', 'Success', 'Error', 'Warning', 'Info'].map(color => (
+          <div key={color} style={{ marginBottom: 32 }}>
+            <h4 style={{ fontSize: 13, fontWeight: 700, marginBottom: 12, color: 'var(--khor-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              {color} Scale
+            </h4>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 10 }}>
+              {[50, 100, 200, 300, 400, 500, 600, 700, 800, 900].map(n => (
+                <ColorSwatch key={n} name={`${color} ${n}`} variable={`--khor-${color.toLowerCase()}-${n}`} />
+              ))}
+            </div>
+          </div>
+        ))}
+
+        <h4 style={{ fontSize: 13, fontWeight: 700, margin: '24px 0 12px', color: 'var(--khor-secondary)', textTransform: 'uppercase' }}>Legacy & Special</h4>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 16 }}>
           <ColorSwatch name="Processing" variable="--khor-feedback-processing" hex="#0ea5e9" />
           <ColorSwatch name="Volcano" variable="--khor-feedback-volcano" hex="#ea580c" />
-          <ColorSwatch name="Gold" variable="--khor-feedback-gold" hex="#eab308" />
-          <ColorSwatch name="Lime" variable="--khor-feedback-lime" hex="#84cc16" />
           <ColorSwatch name="Purple" variable="--khor-feedback-purple" hex="#a855f7" />
         </div>
       </Section>

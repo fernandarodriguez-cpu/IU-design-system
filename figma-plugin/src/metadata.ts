@@ -1,6 +1,6 @@
 export const khorMetadata = {
   "version": "5.0.0",
-  "generatedAt": "2026-04-08T21:51:04.797Z",
+  "generatedAt": "2026-04-10T22:04:03.714Z",
   "components": [
     {
       "name": "KAffix",
@@ -44,14 +44,15 @@ export const khorMetadata = {
       "props": [
         {
           "name": "type",
-          "type": "'success' | 'error' | 'warning' | 'info'",
+          "type": "'success' | 'error' | 'warning' | 'info' | 'teal'",
           "required": false,
           "description": "",
           "options": [
             "success",
             "error",
             "warning",
-            "info"
+            "info",
+            "teal"
           ],
           "isIcon": false
         },
@@ -437,7 +438,8 @@ export const khorMetadata = {
             "info",
             "default",
             "primary",
-            "processing"
+            "processing",
+            "teal"
           ],
           "isIcon": false
         },
@@ -588,6 +590,221 @@ export const khorMetadata = {
           "name": "Ribbon",
           "type": "typeof KBadgeRibbon",
           "required": true,
+          "description": "",
+          "isIcon": false
+        }
+      ]
+    },
+    {
+      "name": "KButton",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KButton/types.ts",
+      "props": [
+        {
+          "name": "variant",
+          "type": "KButtonVariant | 'outlined' | 'navy'",
+          "required": false,
+          "description": "",
+          "options": [
+            "outlined",
+            "navy"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "color",
+          "type": "KButtonColor",
+          "required": false,
+          "description": "",
+          "options": [
+            "default",
+            "primary",
+            "secondary",
+            "danger",
+            "processing",
+            "volcano",
+            "gold",
+            "lime",
+            "purple"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "kVariant",
+          "type": "KButtonVariant | 'outlined' | 'navy'",
+          "required": false,
+          "description": "",
+          "options": [
+            "outlined",
+            "navy"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "size",
+          "type": "KButtonSize",
+          "required": false,
+          "description": "",
+          "options": [
+            "sm",
+            "md",
+            "lg",
+            "icon"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "shape",
+          "type": "KButtonShape",
+          "required": false,
+          "description": "",
+          "options": [
+            "default",
+            "circle",
+            "round"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "htmlType",
+          "type": "'button' | 'submit' | 'reset'",
+          "required": false,
+          "description": "",
+          "options": [
+            "button",
+            "submit",
+            "reset"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "type",
+          "type": "'button' | 'submit' | 'reset'",
+          "required": false,
+          "description": "",
+          "options": [
+            "button",
+            "submit",
+            "reset"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "icon",
+          "type": "ReactNode",
+          "required": false,
+          "description": "",
+          "isIcon": true
+        },
+        {
+          "name": "iconPosition",
+          "type": "'start' | 'end'",
+          "required": false,
+          "description": "",
+          "options": [
+            "start",
+            "end"
+          ],
+          "isIcon": true
+        },
+        {
+          "name": "fullWidth",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "block",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "loading",
+          "type": "boolean | { delay?: number }",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "href",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "target",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "danger",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "ghost",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "autoInsertSpace",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "classNames",
+          "type": "{\n    icon?: string;\n    content?: string;\n  }",
+          "required": false,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "styles",
+          "type": "{\n    icon?: CSSProperties;\n    content?: CSSProperties;\n  }",
+          "required": false,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "onClick",
+          "type": "(e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => void",
+          "required": false,
           "description": "",
           "isIcon": false
         }
@@ -1944,6 +2161,88 @@ export const khorMetadata = {
       ]
     },
     {
+      "name": "KScrollArea",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KScrollArea/index.tsx",
+      "props": [
+        {
+          "name": "orientation",
+          "type": "'vertical' | 'horizontal' | 'both'",
+          "required": false,
+          "description": "",
+          "options": [
+            "vertical",
+            "horizontal",
+            "both"
+          ],
+          "isIcon": false
+        }
+      ]
+    },
+    {
+      "name": "KScrollBar",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KScrollBar/index.tsx",
+      "props": [
+        {
+          "name": "orientation",
+          "type": "'vertical' | 'horizontal' | 'both'",
+          "required": false,
+          "description": "",
+          "options": [
+            "vertical",
+            "horizontal",
+            "both"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'middle' | 'large'",
+          "required": false,
+          "description": "",
+          "options": [
+            "small",
+            "middle",
+            "large"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "autoHide",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties",
+          "required": false,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": "",
+          "isIcon": false
+        }
+      ]
+    },
+    {
       "name": "KSkeleton",
       "category": "atom",
       "path": "/src/app/components/design-system/atoms/KSkeleton/index.tsx",
@@ -2434,7 +2733,7 @@ export const khorMetadata = {
         },
         {
           "name": "status",
-          "type": "'success' | 'processing' | 'error' | 'warning' | 'default'",
+          "type": "'success' | 'processing' | 'error' | 'warning' | 'default' | 'teal'",
           "required": false,
           "description": "",
           "options": [
@@ -2442,7 +2741,8 @@ export const khorMetadata = {
             "processing",
             "error",
             "warning",
-            "default"
+            "default",
+            "teal"
           ],
           "isIcon": false
         },
@@ -4500,6 +4800,13 @@ export const khorMetadata = {
           "required": false,
           "description": "",
           "isIcon": false
+        },
+        {
+          "name": "opacity",
+          "type": "number",
+          "required": false,
+          "description": "",
+          "isIcon": false
         }
       ]
     },
@@ -6224,6 +6531,13 @@ export const khorMetadata = {
       "path": "/src/app/components/design-system/organisms/KCardSection/index.tsx",
       "props": [
         {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "isIcon": false
+        },
+        {
           "name": "title",
           "type": "string",
           "required": false,
@@ -7009,62 +7323,6 @@ export const khorMetadata = {
         {
           "name": "className",
           "type": "string",
-          "required": false,
-          "description": "",
-          "isIcon": false
-        }
-      ]
-    },
-    {
-      "name": "KNotificationOptions",
-      "category": "organism",
-      "path": "/src/app/components/design-system/organisms/KNotification/index.tsx",
-      "props": [
-        {
-          "name": "type",
-          "type": "KNotificationType",
-          "required": false,
-          "description": "",
-          "options": [
-            "success",
-            "error",
-            "warning",
-            "info",
-            "open"
-          ],
-          "isIcon": false
-        },
-        {
-          "name": "message",
-          "type": "React.ReactNode",
-          "required": true,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "description",
-          "type": "React.ReactNode",
-          "required": false,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "duration",
-          "type": "number",
-          "required": false,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "icon",
-          "type": "React.ReactNode",
-          "required": false,
-          "description": "",
-          "isIcon": true
-        },
-        {
-          "name": "onClose",
-          "type": "() => void",
           "required": false,
           "description": "",
           "isIcon": false

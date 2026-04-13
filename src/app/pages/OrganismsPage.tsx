@@ -277,19 +277,18 @@ function DrawerDemo() {
 
 function ToastDemo() {
   return (
-    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-      <KToastProvider />
-      <KButton variant="primary" onClick={() => kToast({ type: 'success', title: 'Empleado registrado', description: 'Maria Garcia fue dada de alta exitosamente.' })}>
-        <CheckCircle size={16} style={{ marginRight: 4 }} /> Exito
+    <div style={{ display: 'flex', gap: 12, flexWrap: 'nowrap', overflowX: 'auto', paddingBottom: 8 }}>
+      <KButton variant="primary" icon={<CheckCircle size={16} />} onClick={() => kToast({ type: 'success', title: 'Empleado registrado', description: 'Maria Garcia fue dada de alta exitosamente.' })}>
+        Éxito
       </KButton>
-      <KButton variant="danger" onClick={() => kToast({ type: 'error', title: 'Error al guardar', description: 'No se pudo conectar con el servidor.' })}>
-        <XCircle size={16} style={{ marginRight: 4 }} /> Error
+      <KButton variant="danger" icon={<XCircle size={16} />} onClick={() => kToast({ type: 'error', title: 'Error al guardar', description: 'No se pudo conectar con el servidor.' })}>
+        Error
       </KButton>
-      <KButton variant="secondary" onClick={() => kToast({ type: 'warning', title: 'Contrato por vencer', description: 'El contrato de Juan Perez vence en 5 dias.' })}>
-        <AlertTriangle size={16} style={{ marginRight: 4 }} /> Advertencia
+      <KButton variant="secondary" icon={<AlertTriangle size={16} />} onClick={() => kToast({ type: 'warning', title: 'Contrato por vencer', description: 'El contrato de Juan Perez vence en 5 días.' })}>
+        Advertencia
       </KButton>
-      <KButton variant="navy" onClick={() => kToast({ type: 'info', title: 'Actualizacion disponible', description: 'Version 2.1 lista para instalar.' })}>
-        <Info size={16} style={{ marginRight: 4 }} /> Info
+      <KButton variant="navy" icon={<Info size={16} />} onClick={() => kToast({ type: 'info', title: 'Actualización disponible', description: 'Versión 2.1 lista para instalar.' })}>
+        Info
       </KButton>
     </div>
   );
@@ -442,14 +441,14 @@ function ToastPlayground() {
   const [desc, setDesc] = useState('El registro fue guardado correctamente.');
   const [duration, setDuration] = useState(4000);
   const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
-  const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
+  const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%', backgroundColor: 'white' };
   return (
     <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
       <div style={{ flex: 1, minWidth: 240 }}>
-        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
+        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Parámetros de Feedback</h4>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <div>
-            <label style={ctrl}>Tipo</label>
+            <label style={ctrl}>Tipo de Mensaje</label>
             <select value={type} onChange={(e) => setType(e.target.value as any)} style={sel}>
               {['success', 'error', 'warning', 'info'].map((t) => <option key={t} value={t}>{t}</option>)}
             </select>
@@ -468,21 +467,81 @@ function ToastPlayground() {
         </div>
       </div>
       <div style={{ flex: 2, minWidth: 300, padding: 24, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Vista rápida</h4>
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-          <KButton size="sm" variant="primary" onClick={() => kToast({ type: 'success', title: 'Guardado', description: 'Registro exitoso.' })}>
-            <CheckCircle size={14} style={{ marginRight: 4 }} /> Éxito
+        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Acciones Rápidas</h4>
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'nowrap' }}>
+          <KButton size="sm" variant="primary" icon={<CheckCircle size={14} />} onClick={() => kToast({ type: 'success', title: 'Guardado', description: 'Registro exitoso.' })}>
+            Éxito
           </KButton>
-          <KButton size="sm" variant="danger" onClick={() => kToast({ type: 'error', title: 'Error', description: 'No se pudo guardar.' })}>
-            <XCircle size={14} style={{ marginRight: 4 }} /> Error
+          <KButton size="sm" variant="danger" icon={<XCircle size={14} />} onClick={() => kToast({ type: 'error', title: 'Error', description: 'No se pudo guardar.' })}>
+            Error
           </KButton>
-          <KButton size="sm" variant="secondary" onClick={() => kToast({ type: 'warning', title: 'Advertencia', description: 'Revisa los campos.' })}>
-            <AlertTriangle size={14} style={{ marginRight: 4 }} /> Warning
+          <KButton size="sm" variant="secondary" icon={<AlertTriangle size={14} />} onClick={() => kToast({ type: 'warning', title: 'Advertencia', description: 'Revisa los campos.' })}>
+            Warning
           </KButton>
-          <KButton size="sm" variant="navy" onClick={() => kToast({ type: 'info', title: 'Info', description: 'Hay una actualización.' })}>
-            <Info size={14} style={{ marginRight: 4 }} /> Info
+          <KButton size="sm" variant="navy" icon={<Info size={14} />} onClick={() => kToast({ type: 'info', title: 'Info', description: 'Hay una actualización.' })}>
+            Info
           </KButton>
         </div>
+      </div>
+    </div>
+  );
+}
+
+function NotificationPlayground() {
+  const [type, setType] = useState<'success' | 'error' | 'warning' | 'info'>('success');
+  const [msg, setMsg] = useState('Título de la Notificación');
+  const [desc, setDesc] = useState('Descripción detallada del evento del sistema.');
+  const [opacity, setOpacity] = useState(0.95);
+  const [duration, setDuration] = useState(5000);
+  
+  const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
+  const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%', backgroundColor: 'white' };
+
+  return (
+    <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
+      <div style={{ flex: 1, minWidth: 260 }}>
+        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Parámetros de Sistema</h4>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div>
+            <label style={ctrl}>Tipo de Estado</label>
+            <select value={type} onChange={(e) => setType(e.target.value as any)} style={sel}>
+              <option value="success">Success (Urgencia Baja)</option>
+              <option value="error">Error (Urgencia Alta)</option>
+              <option value="warning">Warning (Prevención)</option>
+              <option value="info">Info (Noticia)</option>
+            </select>
+          </div>
+          <div><label style={ctrl}>Cuerpo (Message)</label><input value={msg} onChange={(e) => setMsg(e.target.value)} style={sel} /></div>
+          <div><label style={ctrl}>Detalle (Description)</label><textarea value={desc} onChange={(e) => setDesc(e.target.value)} style={{ ...sel, minHeight: 60, resize: 'vertical' }} /></div>
+          
+          <div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <label style={ctrl}>Opacidad (Apilamiento)</label>
+              <span style={{ fontSize: 11, fontWeight: 700, color: khorTokens.colors.brand.primary }}>{(opacity * 100).toFixed(0)}%</span>
+            </div>
+            <input 
+              type="range" 
+              min="0.5" 
+              max="1" 
+              step="0.01" 
+              value={opacity} 
+              onChange={(e) => setOpacity(parseFloat(e.target.value))} 
+              style={{ width: '100%', accentColor: khorTokens.colors.brand.primary }}
+            />
+          </div>
+
+          <KButton variant="primary" onClick={() => kNotification({ type, message: msg, description: desc, opacity, duration })}>
+            Disparar Notificación
+          </KButton>
+          <p style={{ fontSize: 11, color: khorTokens.colors.neutral[400], marginTop: 4 }}>
+            * Dispara varias para probar el efecto de transparencia al apilar.
+          </p>
+        </div>
+      </div>
+      <div style={{ flex: 2, minWidth: 300, padding: 24, backgroundColor: khorTokens.colors.neutral[50], border: `1px dashed ${khorTokens.colors.neutral[200]}`, borderRadius: khorTokens.radius.lg, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+         <div style={{ textAlign: 'center', color: khorTokens.colors.neutral[400] }}>
+            <p>Las notificaciones aparecen en el portal global configurado (top-right).</p>
+         </div>
       </div>
     </div>
   );
@@ -1355,21 +1414,24 @@ const methods = KForm.useForm({ defaultValues: { username: '' } });
     name: 'KNotification',
     description: 'Notificaciones emergentes imperativas que aparecen en las esquinas de la pantalla. Ideales para avisos de larga duración o que requieren más contexto.',
     preview: (
-      <div style={{ display: 'flex', gap: 12 }}>
-        <KButton onClick={() => kNotification.success({ message: 'Proceso completado', description: 'Los cambios se han guardado correctamente.' })}>Success</KButton>
-        <KButton onClick={() => kNotification.error({ message: 'Error de red', description: 'No se pudo conectar con el servidor.' })}>Error</KButton>
+      <div style={{ display: 'flex', gap: 12, flexWrap: 'nowrap' }}>
+        <KButton variant="primary" icon={<CheckCircle size={16} />} onClick={() => kNotification.success({ message: 'Proceso completado', description: 'Los cambios se han guardado correctamente.' })}>Success</KButton>
+        <KButton variant="danger" icon={<XCircle size={16} />} onClick={() => kNotification.error({ message: 'Error de red', description: 'No se pudo conectar con el servidor.' })}>Error</KButton>
+        <KButton variant="secondary" icon={<AlertTriangle size={16} />} onClick={() => kNotification.warning({ message: 'Alerta de Seguridad', description: 'Se ha detectado un acceso inusual.' })}>Warning</KButton>
       </div>
     ),
+    playground: <NotificationPlayground />,
     code: `import { kNotification } from '@khor/design-system/organisms/index';
 
 kNotification.success({
   message: 'Certificación Guardada',
   description: 'El documento ha sido procesado y archivado.',
+  opacity: 0.95, // Control de transparencia opcional
 });`,
     filename: 'KNotification.tsx',
     stateShowcase: (
       <div style={{ padding: 16 }}>
-        <KText color="secondary">KNotification es de acción global y se controla vía hooks o imperativamente.</KText>
+        <KText color="secondary">KNotification es de acción global (Sistema) y soporta niveles de opacidad para mejorar el apilamiento visual.</KText>
       </div>
     ),
     a11ySummary: {
@@ -1381,7 +1443,9 @@ kNotification.success({
     props: [
       { name: 'message', type: 'ReactNode', required: true, description: 'Cuerpo principal (título) del aviso.' },
       { name: 'description', type: 'ReactNode', description: 'Contenido adicional detallado.' },
-      { name: 'duration', type: 'number', default: '4.5', description: 'Segundos antes de cerrar.' },
+      { name: 'type', type: "'success'|'error'|'warning'|'info'", default: "'info'", description: 'Tipo semántico del estado.' },
+      { name: 'opacity', type: 'number', default: '0.95', description: 'Nivel de opacidad (0 a 1) para el efecto de apilamiento.' },
+      { name: 'duration', type: 'number', default: '5000', description: 'Milisegundos antes de cerrar.' },
     ],
     guidelines: ['Usa para avisos que no deben desaparecer tan pronto como un Toast.', 'Soporta iconos y estilos semánticos.'],
   },

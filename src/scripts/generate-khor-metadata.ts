@@ -21,7 +21,7 @@ function getAllFiles(dirPath: string, arrayOfFiles: string[] = []): string[] {
     const fullPath = path.join(dirPath, file);
     if (fs.statSync(fullPath).isDirectory()) {
        arrayOfFiles = getAllFiles(fullPath, arrayOfFiles);
-    } else if (file.endsWith('.tsx')) {
+    } else if (file.endsWith('.tsx') || file.endsWith('.ts')) {
       arrayOfFiles.push(fullPath);
     }
   });

@@ -2,6 +2,13 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo. Khor sigue una metodología de desarrollo por "Olas" (Waves) dentro de fases evolutivas.
 
+## [4.0.5] — 2026-04-10
+### 🌊 Ola 16: Refinamiento de Feedback e Infraestructura
+- **KNotification**: Consolidación de la arquitectura imperativa. Mejora visual con opacidad dinámica del 95% para apilamiento profesional y base sólida blanca.
+- **KScrollBar**: Restauración de la navegación global y adición de controles dinámicos en el playground (tamaños, orientación, auto-hide).
+- **KSkeleton**: Implementación de animaciones por defecto y soporte multiforme (Círculo, Rectángulo, Líneas) sincronizado con el estado de carga.
+- **Tokens v10.4.5**: Expansión del motor de tokens para incluir escalas de Blur (Backdrop & Layer) y alineación técnica con Penpot.
+
 ## [v4.0.4] — 2026-04-07
 ### 🌊 Ola 15: Finalización de Base y Gobernanza
 - **Estabilización Final**: Restauración del registro total de organismos (KTabs, KCalendar, KDrawer, etc.).

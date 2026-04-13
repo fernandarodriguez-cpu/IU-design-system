@@ -29,10 +29,17 @@
         #content { flex: 1; overflow-y: auto; padding: 4px 0; }
         .component-item { padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
         .component-item:hover { background: var(--hover); }
-        .component-info h4 { margin: 0; font-size: 12px; font-weight: 600; color: var(--navy); }
+        .component-info { flex: 1; overflow: hidden; margin-right: 8px; }
+        .component-info h4 { margin: 0; font-size: 12px; font-weight: 600; color: var(--navy); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .component-info span { font-size: 10px; color: var(--muted); text-transform: uppercase; }
         
-        .btn-insert { background: var(--navy); color: white; border: none; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 600; cursor: pointer; }
+        .btn-insert { background: var(--navy); color: white; border: none; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 600; cursor: pointer; flex-shrink: 0; }
+        .btn-insert:hover { opacity: 0.9; }
+
+        /* Prop Configurator */
+        .prop-config { margin-bottom: 12px; }
+        .prop-config label { display: block; font-size: 10px; color: var(--muted); margin-bottom: 4px; font-weight: 600; text-transform: uppercase; }
+        .prop-select { width: 100%; padding: 6px; font-size: 11px; border: 1px solid var(--border); border-radius: 4px; margin-bottom: 8px; }
 
         #details { display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: white; padding: 16px; z-index: 100; overflow-y: auto; }
         .back-btn { color: var(--primary); font-size: 12px; cursor: pointer; margin-bottom: 12px; display: inline-block; font-weight: 600; }
@@ -116,20 +123,35 @@
 
         window.onmessage = (event) => {
             const msg = event.data.pluginMessage;
+            if (!msg) return;
+            
+            log(`Mensaje recibido: ${msg.type}`);
+
             if (msg.type === 'sync-data') { 
+                if (!msg.data || !msg.data.components) {
+                    log('Error: Metadata de componentes vacía');
+                    return;
+                }
                 allComponents = msg.data.components; 
                 document.getElementById('comp-count').innerText = allComponents.length + ' comps';
+                log(`Sincronizados ${allComponents.length} componentes`);
                 renderList(); 
             }
-            if (msg.type === 'log') { 
-                const log = document.getElementById('debug-log');
-                log.innerHTML += '• ' + msg.message + '<br/>'; log.scrollTop = log.scrollHeight;
-            }
+            if (msg.type === 'log') log(msg.message);
             if (msg.type === 'display-json') {
                 document.getElementById('extraction-result').value = msg.data;
                 document.getElementById('extraction-view').style.display = 'flex';
             }
         };
+
+        function log(msg) {
+            const logEl = document.getElementById('debug-log');
+            if (logEl) {
+                logEl.innerHTML += '• ' + msg + '<br/>'; 
+                logEl.scrollTop = logEl.scrollHeight;
+            }
+            console.log(`[Khor Plugin] ${msg}`);
+        }
 
         // Handlers
         document.getElementById('nuke-btn').onclick = () => {
@@ -176,19 +198,63 @@
             }));
         }
 
+        let currentComp = null;
         function showDetail(comp) {
+            currentComp = comp;
             document.getElementById('detail-name').innerText = comp.name;
             const propsList = document.getElementById('props-list');
-            propsList.innerHTML = comp.props.slice(0, 8).map(p => `• ${p.name}: ${p.type}`).join('<br/>') + (comp.props.length > 8 ? '<br/>...' : '');
+            
+            // Render basic props info + selectors for variants
+            let html = '<div style="margin-bottom: 12px;">';
+            
+            // Only show prop selectors for props with options
+            const configurableProps = comp.props.filter(p => p.options && p.options.length > 0);
+            
+            if (configurableProps.length > 0) {
+                html += '<div class="section-title" style="font-size: 10px; font-weight: 700; margin-bottom: 8px; border-bottom: 1px solid #eee;">CONFIGURACIÓN</div>';
+                configurableProps.forEach(p => {
+                    html += `
+                        <div class="prop-config">
+                            <label>${p.name}</label>
+                            <select class="prop-select" data-prop="${p.name}">
+                                ${p.options.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
+                            </select>
+                        </div>
+                    `;
+                });
+            }
+            
+            html += '</div>';
+            
+            // List all other props as info
+            html += '<div class="section-title" style="font-size: 10px; font-weight: 700; margin-bottom: 4px;">TODOS LOS ARGS</div>';
+            html += comp.props.map(p => `<span style="opacity: 0.6">• ${p.name}: ${p.type}</span>`).join('<br/>');
+            
+            propsList.innerHTML = html;
             document.getElementById('details').style.display = 'block';
-            document.getElementById('insert-from-detail').onclick = () => insertComponent(comp.name);
+            
+            document.getElementById('insert-from-detail').onclick = () => {
+                const selectedProps = {};
+                document.querySelectorAll('.prop-select').forEach(select => {
+                    selectedProps[select.dataset.prop] = select.value;
+                });
+                insertComponent(comp.name, null, selectedProps);
+            };
         }
 
         document.getElementById('back-to-list').onclick = () => document.getElementById('details').style.display = 'none';
-        function insertComponent(name, event) { 
+        
+        function insertComponent(name, event, overrides = {}) { 
             if (event) event.stopPropagation(); 
             const comp = allComponents.find(c => c.name === name); 
-            parent.postMessage({ pluginMessage: { type: 'insert-component', component: comp } }, '*'); 
+            if (!comp) return;
+            
+            log(`Insertando ${name}...`);
+            parent.postMessage({ pluginMessage: { 
+                type: 'insert-component', 
+                component: comp,
+                overrides: overrides 
+            } }, '*'); 
         }
         document.getElementById('search').addEventListener('input', (e) => { searchQuery = e.target.value; renderList(); });
 

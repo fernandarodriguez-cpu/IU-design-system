@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { KPopover, KPopoverTrigger, KPopoverContent } from '../KPopover';
+import { KPopoverRoot, KPopoverTrigger, KPopoverContent } from '../KPopover';
 import { khorStaticTokens } from '../../../../theme/khor-theme';
 import { cn } from '../../../../../imports/utils';
 
@@ -67,7 +67,7 @@ export function KColorPicker({
   const activeColor = value !== undefined ? value : internalColor;
 
   return (
-    <KPopover open={open} onOpenChange={disabled ? undefined : setOpen}>
+    <KPopoverRoot open={open} onOpenChange={disabled ? undefined : setOpen}>
       <KPopoverTrigger asChild>
         <button
           type="button"
@@ -131,7 +131,7 @@ export function KColorPicker({
           </div>
         </div>
       </KPopoverContent>
-    </KPopover>
+    </KPopoverRoot>
   );
 }
 

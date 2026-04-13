@@ -25,14 +25,14 @@ export function KSkeleton({
   height, 
   variant = 'text',
   loading = true,
-  active = false,
+  active = true,
   className,
   style,
   children
 }: KSkeletonProps) {
   
-  if (!loading && children) {
-    return <>{children}</>;
+  if (!loading) {
+    return children ? <>{children}</> : null;
   }
 
   // Si se pasan múltiples líneas para texto

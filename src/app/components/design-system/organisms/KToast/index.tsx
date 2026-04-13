@@ -29,16 +29,16 @@ export function kToast({
 }: KToastProps) {
   
   const icons = {
-    success: <CheckCircle2 className="w-5 h-5 text-emerald-500" />,
-    error: <XCircle className="w-5 h-5 text-red-500" />,
-    info: <Info className="w-5 h-5 text-sky-500" />,
-    warning: <AlertTriangle className="w-5 h-5 text-amber-500" />,
+    success: <CheckCircle2 className="w-5 h-5 text-khor-success" />,
+    error: <XCircle className="w-5 h-5 text-khor-error" />,
+    info: <Info className="w-5 h-5 text-khor-info" />,
+    warning: <AlertTriangle className="w-5 h-5 text-khor-warning" />,
   };
 
   return toast.custom((t) => (
     <div 
       className={cn(
-        "flex items-start gap-4 p-4 min-w-[320px] max-w-[420px] bg-white border border-khor-neutral-200 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] animate-in slide-in-from-right-full duration-300 font-primary relative",
+        "flex items-start gap-3 p-4 min-w-[320px] max-w-[420px] bg-white border border-khor-neutral-200 rounded-2xl shadow-khor-xl animate-in slide-in-from-right-full duration-300 font-primary relative",
         className
       )}
       style={style}
@@ -47,14 +47,14 @@ export function kToast({
         {icons[type]}
       </div>
       
-      <div className="flex-1 flex flex-col gap-1 pr-6">
+      <div className="flex-1 flex flex-col gap-0.5 pr-6">
         {title && (
-          <h4 className="text-sm font-extrabold text-khor-neutral-900 leading-tight tracking-tight">
+          <h4 className="text-sm font-bold text-khor-neutral-900 leading-tight tracking-tight">
             {title}
           </h4>
         )}
         {description && (
-          <p className="text-xs text-khor-neutral-500 leading-relaxed font-medium">
+          <p className="text-xs text-khor-neutral-500 leading-relaxed">
             {description}
           </p>
         )}
@@ -62,7 +62,7 @@ export function kToast({
 
       <button 
         onClick={() => toast.dismiss(t)} 
-        className="absolute top-4 right-4 p-1 text-khor-neutral-300 hover:text-khor-neutral-900 transition-colors"
+        className="absolute top-4 right-3 p-1 text-khor-neutral-300 hover:text-khor-neutral-900 transition-colors"
       >
         <X className="w-3.5 h-3.5" />
       </button>

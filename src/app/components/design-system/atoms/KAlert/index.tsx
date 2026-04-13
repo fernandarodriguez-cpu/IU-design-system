@@ -3,7 +3,7 @@ import { Info, CheckCircle2, AlertTriangle, XCircle, X } from 'lucide-react';
 import { cn } from '../../../../../imports/utils';
 
 export interface KAlertProps {
-  type?: 'success' | 'error' | 'warning' | 'info';
+  type?: 'success' | 'error' | 'warning' | 'info' | 'teal';
   title: string;
   description?: string;
   closable?: boolean;
@@ -21,20 +21,23 @@ const icons = {
   error: XCircle,
   warning: AlertTriangle,
   info: Info,
+  teal: CheckCircle2,
 };
 
 const styles = {
-  success: "bg-emerald-50 border-emerald-200 text-emerald-800",
-  error: "bg-red-50 border-red-200 text-red-800",
-  warning: "bg-amber-50 border-amber-200 text-amber-800",
-  info: "bg-sky-50 border-sky-200 text-sky-800",
+  success: "bg-khor-success-light border-khor-success/30 text-khor-success",
+  error: "bg-khor-error-light border-khor-error/30 text-khor-error",
+  warning: "bg-khor-warning-light border-khor-warning/30 text-khor-warning",
+  info: "bg-khor-info-light border-khor-info/30 text-khor-info",
+  teal: "bg-khor-teal-light border-khor-teal/30 text-khor-teal",
 };
 
 const iconStyles = {
-  success: "text-emerald-500",
-  error: "text-red-500",
-  warning: "text-amber-500",
-  info: "text-sky-500",
+  success: "text-khor-success",
+  error: "text-khor-error",
+  warning: "text-khor-warning",
+  info: "text-khor-info",
+  teal: "text-khor-teal",
 };
 
 export function KAlert({
