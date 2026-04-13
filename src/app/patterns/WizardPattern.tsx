@@ -24,14 +24,14 @@ function WizardPatternComponent() {
   return (
     <div style={{ maxWidth: 520, margin: '0 auto' }}>
       <KSteps items={steps} current={step} />
-      <div style={{ marginTop: 24, padding: 24, borderRadius: t.radius.lg, backgroundColor: 'var(--card)', border: '1px solid var(--border)' }}>
+      <div style={{ marginTop: t.spacing.lg, padding: t.spacing.lg, borderRadius: t.radius.lg, backgroundColor: t.semantic.surface.card, border: `1px solid ${t.semantic.border.default}` }}>
         {step === 0 && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: t.spacing.md }}>
             <KFormField label="Nombre Completo" required>
               <KInput placeholder="Juan Pérez" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
             </KFormField>
             <KFormField label="Email" required>
-              <KInput placeholder="juan@empresa.com" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} prefix={<Mail size={16} />} />
+              <KInput placeholder="juan@empresa.com" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} prefix={<Mail size={t.icon.sm} />} />
             </KFormField>
           </div>
         )}
@@ -50,36 +50,40 @@ function WizardPatternComponent() {
               }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div>
-                    <div style={{ fontSize: 15, fontWeight: 600, color: 'var(--foreground)' }}>{p.name}</div>
-                    <div style={{ fontSize: 12, color: 'var(--muted-foreground)' }}>{p.desc}</div>
+                    <div style={{ fontSize: 15, fontWeight: t.typography.fontWeights.semibold, color: t.semantic.text.primary }}>{p.name}</div>
+                    <div style={{ fontSize: 12, color: t.semantic.text.muted }}>{p.desc}</div>
                   </div>
-                  <div style={{ fontSize: 16, fontWeight: 700, color: form.plan === p.name ? t.colors.brand.primary : 'var(--foreground)' }}>{p.price}</div>
+                  <div style={{ fontSize: t.typography.bodyLg.size, fontWeight: t.typography.fontWeights.bold, color: form.plan === p.name ? t.colors.brand.primary : t.semantic.text.primary }}>{p.price}</div>
                 </div>
               </div>
             ))}
           </div>
         )}
         {step === 2 && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: t.spacing.md }}>
             <KFormField label="Nombre en la tarjeta">
               <KInput placeholder="Juan Pérez" value={form.cardName} onChange={(e) => setForm({ ...form, cardName: e.target.value })} />
             </KFormField>
             <KFormField label="Número de tarjeta">
-              <KInput placeholder="4242 4242 4242 4242" prefix={<DollarSign size={16} />} />
+              <KInput placeholder="4242 4242 4242 4242" prefix={<DollarSign size={t.icon.sm} />} />
             </KFormField>
-            <div style={{ display: 'flex', gap: 12 }}>
+            <div style={{ display: 'flex', gap: t.spacing.sm }}>
               <KFormField label="Expiración"><KInput placeholder="MM/AA" /></KFormField>
               <KFormField label="CVC"><KInput placeholder="123" /></KFormField>
             </div>
           </div>
         )}
         {step === 3 && (
-          <div style={{ textAlign: 'center', padding: '16px 0' }}>
-            <div style={{ width: 56, height: 56, borderRadius: '50%', backgroundColor: t.colors.feedback.successLight, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
-              <Check size={28} color="#2E7D32" />
+          <div style={{ textAlign: 'center', padding: `${t.spacing.md}px 0` }}>
+            <div style={{ 
+              width: t.sizing[14], height: t.sizing[14], borderRadius: '50%', 
+              backgroundColor: t.colors.feedback.successLight, display: 'inline-flex', 
+              alignItems: 'center', justifyContent: 'center', marginBottom: t.spacing.md 
+             }}>
+              <Check size={28} color={t.colors.feedback.success} />
             </div>
-            <h3 style={{ margin: '0 0 8px', fontSize: 18, fontWeight: 600, color: 'var(--foreground)' }}>Todo listo</h3>
-            <p style={{ margin: '0 0 12px', fontSize: 13, color: 'var(--muted-foreground)' }}>
+            <h3 style={{ margin: `0 0 ${t.spacing.sm}px`, fontSize: t.typography.h4.size, fontWeight: t.typography.fontWeights.semibold, color: t.semantic.text.primary }}>Todo listo</h3>
+            <p style={{ margin: `0 0 ${t.spacing.md}px`, fontSize: t.typography.bodySm.size, color: t.semantic.text.muted }}>
               {form.name || 'Usuario'} &bull; {form.email || 'email@ejemplo.com'} &bull; Plan {form.plan || 'Starter'}
             </p>
             <KBadge status="success" label="Suscripción activa" />

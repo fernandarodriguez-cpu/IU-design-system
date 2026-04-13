@@ -221,7 +221,7 @@
   --khor-stroke-6: 6px;
   --khor-stroke-8: 8px;
 
-  /* ── Khor Text Attributes ── */
+  /* ── Khor Text Attributes (v10.5) ── */
   --khor-text-case-none: none;
   --khor-text-case-upper: uppercase;
   --khor-text-case-lower: lowercase;
@@ -230,6 +230,19 @@
   --khor-text-decoration-none: none;
   --khor-text-decoration-underline: underline;
   --khor-text-decoration-line-through: line-through;
+
+  --khor-font-weight-light: 300;
+  --khor-font-weight-regular: 400;
+  --khor-font-weight-medium: 500;
+  --khor-font-weight-semibold: 600;
+  --khor-font-weight-bold: 700;
+  --khor-font-weight-extrabold: 800;
+
+  --khor-letter-spacing-tighter: -0.05em;
+  --khor-letter-spacing-tight: -0.02em;
+  --khor-letter-spacing-normal: 0em;
+  --khor-letter-spacing-wide: 0.025em;
+  --khor-letter-spacing-wider: 0.05em;
 
   /* ── Khor Number Tokens ── */
   --khor-number-0: 0;
@@ -241,13 +254,28 @@
   --khor-number-10: 10;
   --khor-number-100: 100;
 
-  /* ── Khor Dimensions & Sizing (Following Spacing Steps) ── */
-  --khor-size-1: var(--khor-space-1);
-  --khor-size-2: var(--khor-space-2);
-  --khor-size-3: var(--khor-space-3);
-  --khor-size-4: var(--khor-space-4);
-  --khor-size-5: var(--khor-space-5);
-  --khor-size-6: var(--khor-space-6);
+  /* ── Khor Dimensions & Sizing (Extended v10.5) ── */
+  --khor-size-0: 0px;
+  --khor-size-1: 4px;
+  --khor-size-2: 8px;
+  --khor-size-3: 12px;
+  --khor-size-4: 16px;
+  --khor-size-5: 20px;
+  --khor-size-6: 24px;
+  --khor-size-8: 32px;
+  --khor-size-10: 40px;
+  --khor-size-12: 48px;
+  --khor-size-16: 64px;
+  --khor-size-20: 80px;
+  --khor-size-24: 96px;
+  --khor-size-32: 128px;
+  --khor-size-40: 160px;
+  --khor-size-48: 192px;
+  --khor-size-56: 224px;
+  --khor-size-64: 256px;
+  --khor-size-full: 100%;
+  --khor-size-screen-w: 100vw;
+  --khor-size-screen-h: 100vh;
   --khor-size-8: var(--khor-space-8);
   --khor-size-10: var(--khor-space-10);
   --khor-size-12: var(--khor-space-12);

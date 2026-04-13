@@ -29,8 +29,8 @@ const NavDot = () => (
 );
 
 /* Color fijo del sidebar — no debe cambiar con dark mode */
-const SIDEBAR_BG = '#051758';
-const SIDEBAR_COLLAPSED_WIDTH = 64;
+const SIDEBAR_BG = khorTokens.colors.brand.secondary;
+const SIDEBAR_COLLAPSED_WIDTH = khorTokens.sizing[16];
 
 interface NavSection {
   title: string;
@@ -208,23 +208,23 @@ export function AppShell() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: collapsed ? 'center' : 'flex-start',
-          padding: collapsed ? '0' : '0 20px',
+          padding: collapsed ? '0' : `0 ${khorTokens.spacing.md}px`,
           borderBottom: '1px solid rgba(255,255,255,0.08)',
           flexShrink: 0,
         }}>
           {collapsed ? (
-            <div style={{ width: 32, height: 32, borderRadius: 8, backgroundColor: khorTokens.colors.brand.primary, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 14 }}>
+            <div style={{ width: khorTokens.sizing[8], height: khorTokens.sizing[8], borderRadius: khorTokens.radius.md, backgroundColor: khorTokens.colors.brand.primary, display: 'flex', alignItems: 'center', justifyContent: 'center', color: khorTokens.colors.feedback.white, fontWeight: khorTokens.typography.fontWeights.bold, fontSize: 14 }}>
               K
             </div>
           ) : (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: khorTokens.spacing.sm }}>
               {/* Logo placeholder */}
-              <div style={{ width: 32, height: 32, borderRadius: 8, backgroundColor: khorTokens.colors.brand.primary, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 14 }}>
+              <div style={{ width: khorTokens.sizing[8], height: khorTokens.sizing[8], borderRadius: khorTokens.radius.md, backgroundColor: khorTokens.colors.brand.primary, display: 'flex', alignItems: 'center', justifyContent: 'center', color: khorTokens.colors.feedback.white, fontWeight: khorTokens.typography.fontWeights.bold, fontSize: 14 }}>
                 K
               </div>
               <div>
-                <div style={{ color: '#fff', fontWeight: 700, fontSize: 16, lineHeight: 1 }}>Khor</div>
-                <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: 10, fontWeight: 500 }}>Design System</div>
+                <div style={{ color: khorTokens.colors.feedback.white, fontWeight: khorTokens.typography.fontWeights.bold, fontSize: khorTokens.typography.bodyLg.size, lineHeight: 1 }}>Khor</div>
+                <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: 10, fontWeight: khorTokens.typography.fontWeights.medium }}>Design System</div>
               </div>
             </div>
           )}
@@ -258,23 +258,23 @@ export function AppShell() {
                       padding: 0,
                       border: 'none',
                       background: isDirectActive ? 'rgba(255,255,255,0.12)' : 'none',
-                      color: isDirectActive ? '#FFFFFF' : 'rgba(255,255,255,0.6)',
+                      color: isDirectActive ? khorTokens.colors.feedback.white : 'rgba(255,255,255,0.6)',
                       cursor: 'pointer',
-                      borderRadius: 8,
+                      borderRadius: khorTokens.radius.md,
                       transition: 'all 0.15s ease',
                       position: 'relative',
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.08)';
-                      e.currentTarget.style.color = '#FFFFFF';
+                      e.currentTarget.style.color = khorTokens.colors.feedback.white;
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.backgroundColor = isDirectActive ? 'rgba(255,255,255,0.12)' : 'transparent';
-                      e.currentTarget.style.color = isDirectActive ? '#FFFFFF' : 'rgba(255,255,255,0.6)';
+                      e.currentTarget.style.color = isDirectActive ? khorTokens.colors.feedback.white : 'rgba(255,255,255,0.6)';
                     }}
                   >
                     {isDirectActive && (
-                      <div style={{ position: 'absolute', left: 0, top: '50%', transform: 'translateY(-50%)', width: 3, height: 20, borderRadius: '0 3px 3px 0', backgroundColor: '#E04D36' }} />
+                      <div style={{ position: 'absolute', left: 0, top: '50%', transform: 'translateY(-50%)', width: 3, height: 20, borderRadius: '0 3px 3px 0', backgroundColor: khorTokens.colors.brand.primary }} />
                     )}
                     {section.icon}
                   </button>
@@ -285,26 +285,26 @@ export function AppShell() {
                     style={{
                       display: 'flex',
                       alignItems: 'center',
-                      gap: 8,
+                      gap: khorTokens.spacing.sm,
                       width: '100%',
-                      padding: '8px 12px',
+                      padding: `${khorTokens.spacing.sm}px ${khorTokens.spacing.md}px`,
                       border: 'none',
                       background: isDirectActive ? 'rgba(255,255,255,0.12)' : 'none',
-                      color: isDirectActive ? '#FFFFFF' : 'rgba(255,255,255,0.7)',
+                      color: isDirectActive ? khorTokens.colors.feedback.white : 'rgba(255,255,255,0.7)',
                       fontSize: 13,
-                      fontWeight: 600,
+                      fontWeight: khorTokens.typography.fontWeights.semibold,
                       cursor: 'pointer',
                       fontFamily: khorTokens.typography.fontPrimary,
-                      borderRadius: 8,
+                      borderRadius: khorTokens.radius.md,
                       transition: 'all 0.15s ease',
                       position: 'relative',
                       textTransform: 'uppercase',
-                      letterSpacing: 1,
+                      letterSpacing: khorTokens.typography.letterSpacing.wide,
                     }}
                     onMouseEnter={(e) => {
                       if (!isDirectActive) {
                         e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.06)';
-                        e.currentTarget.style.color = '#FFFFFF';
+                        e.currentTarget.style.color = khorTokens.colors.feedback.white;
                       }
                     }}
                     onMouseLeave={(e) => {
@@ -328,16 +328,16 @@ export function AppShell() {
                       style={{
                         display: 'flex',
                         alignItems: 'center',
-                        gap: 8,
+                        gap: khorTokens.spacing.sm,
                         width: '100%',
-                        padding: '6px 12px',
+                        padding: `6px ${khorTokens.spacing.md}px`,
                         border: 'none',
                         background: 'none',
                         color: 'rgba(255,255,255,0.4)',
                         fontSize: 11,
-                        fontWeight: 600,
+                        fontWeight: khorTokens.typography.fontWeights.semibold,
                         textTransform: 'uppercase',
-                        letterSpacing: 1,
+                        letterSpacing: khorTokens.typography.letterSpacing.wider,
                         cursor: 'pointer',
                         fontFamily: khorTokens.typography.fontPrimary,
                       }}
@@ -444,8 +444,8 @@ export function AppShell() {
           borderBottom: '1px solid var(--border)',
           transition: 'background-color 0.2s ease, border-color 0.2s ease',
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-            <h3 style={{ margin: 0, fontSize: 18, fontWeight: 600, color: 'var(--foreground)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: khorTokens.spacing.md }}>
+            <h3 style={{ margin: 0, fontSize: khorTokens.typography.h4.size, fontWeight: khorTokens.typography.fontWeights.semibold, color: 'var(--foreground)' }}>
               Khor Design System
             </h3>
             <span style={{

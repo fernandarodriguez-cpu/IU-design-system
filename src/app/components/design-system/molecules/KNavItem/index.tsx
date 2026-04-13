@@ -1,5 +1,8 @@
 import React from 'react';
 import { cn } from '../../../../../imports/utils';
+import { khorTokens } from '../../../../theme/khor-theme';
+
+const t = khorTokens;
 
 export interface KNavItemProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   icon?: React.ReactNode;
@@ -15,12 +18,15 @@ export const KNavItem = React.forwardRef<HTMLButtonElement, KNavItemProps>(funct
   return (
     <button
       ref={ref}
+      style={{
+        backgroundColor: active ? t.colors.brand.secondaryHover : 'transparent',
+        color: active ? t.colors.feedback.white : 'rgba(255,255,255,0.7)',
+        fontWeight: active ? t.typography.fontWeights.semibold : t.typography.fontWeights.regular,
+      }}
       className={cn(
         "relative flex w-full items-center border-none font-primary text-xs transition-all duration-150 ease-in h-10 cursor-pointer outline-none",
         collapsed ? "justify-center p-2.5" : "justify-start px-4 py-0 gap-2.5",
-        active 
-          ? "bg-[#202f73] font-semibold text-white" 
-          : "bg-transparent font-normal text-white/70 hover:bg-white/5 hover:text-white/90",
+        !active && "hover:bg-white/5 hover:text-white/90",
         className
       )}
       {...rest}
@@ -44,7 +50,10 @@ export const KNavItem = React.forwardRef<HTMLButtonElement, KNavItemProps>(funct
       )}
 
       {active && (
-        <div className="absolute bottom-0 right-0 top-0 w-1 rounded-l-sm bg-khor-primary" />
+        <div 
+          style={{ backgroundColor: t.colors.brand.primary }}
+          className="absolute bottom-0 right-0 top-0 w-1 rounded-l-sm" 
+        />
       )}
     </button>
   );

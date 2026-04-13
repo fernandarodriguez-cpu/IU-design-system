@@ -25,7 +25,7 @@ function SidebarPatternComponent() {
     { title: 'Configuración', icon: <Settings size={18} strokeWidth={2} />, path: '/settings' }
   ];
 
-  const SIDEBAR_BG = '#051758';
+  const SIDEBAR_BG = t.colors.brand.secondary;
   const toggleSection = (t: string) => setOpenSections(prev => ({ ...prev, [t]: !prev[t] }));
   const NavDot = () => <span style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: 'currentColor', opacity: 0.6, display: 'inline-block', flexShrink: 0 }} />;
 
@@ -42,13 +42,13 @@ function SidebarPatternComponent() {
       }}>
         <div style={{ height: 64, display: 'flex', alignItems: 'center', justifyContent: collapsed ? 'center' : 'flex-start', padding: collapsed ? 0 : '0 20px', borderBottom: '1px solid rgba(255,255,255,0.08)', flexShrink: 0 }}>
           {collapsed ? (
-            <div style={{ width: 32, height: 32, borderRadius: 8, backgroundColor: t.colors.brand.primary, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700 }}>K</div>
+            <div style={{ width: t.sizing[8], height: t.sizing[8], borderRadius: t.radius.md, backgroundColor: t.colors.brand.primary, display: 'flex', alignItems: 'center', justifyContent: 'center', color: t.colors.feedback.white, fontWeight: t.typography.fontWeights.bold }}>K</div>
           ) : (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <div style={{ width: 32, height: 32, borderRadius: 8, backgroundColor: t.colors.brand.primary, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700 }}>K</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: t.spacing.sm }}>
+              <div style={{ width: t.sizing[8], height: t.sizing[8], borderRadius: t.radius.md, backgroundColor: t.colors.brand.primary, display: 'flex', alignItems: 'center', justifyContent: 'center', color: t.colors.feedback.white, fontWeight: t.typography.fontWeights.bold }}>K</div>
               <div>
-                <div style={{ color: '#fff', fontWeight: 700, fontSize: 16, lineHeight: 1 }}>Khor</div>
-                <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: 10, fontWeight: 500 }}>System</div>
+                <div style={{ color: t.colors.feedback.white, fontWeight: t.typography.fontWeights.bold, fontSize: t.typography.h4.size, lineHeight: 1 }}>Khor</div>
+                <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: 10, fontWeight: t.typography.fontWeights.medium }}>System</div>
               </div>
             </div>
           )}
@@ -69,26 +69,26 @@ function SidebarPatternComponent() {
                   onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.08)'; e.currentTarget.style.color = '#fff'; }}
                   onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = isDirectActive ? 'rgba(255,255,255,0.12)' : 'transparent'; e.currentTarget.style.color = isDirectActive ? '#fff' : 'rgba(255,255,255,0.6)'; }}
                   >
-                    {isDirectActive && <div style={{ position: 'absolute', left: 0, top: '50%', transform: 'translateY(-50%)', width: 3, height: 20, borderRadius: '0 3px 3px 0', backgroundColor: '#E04D36' }} />}
+                    {isDirectActive && <div style={{ position: 'absolute', left: 0, top: '50%', transform: 'translateY(-50%)', width: 3, height: 20, borderRadius: '0 3px 3px 0', backgroundColor: t.colors.brand.primary }} />}
                     {section.icon}
                   </button>
                 ) : isDirectLink ? (
                   <button onClick={() => setActivePath(section.path!)} style={{
-                    width: '100%', padding: '8px 12px', display: 'flex', alignItems: 'center', gap: 8, border: 'none', borderRadius: 8,
+                    width: '100%', padding: `${t.spacing.sm}px ${t.spacing.md}px`, display: 'flex', alignItems: 'center', gap: t.spacing.sm, border: 'none', borderRadius: t.radius.md,
                     background: isDirectActive ? 'rgba(255,255,255,0.12)' : 'transparent',
-                    color: isDirectActive ? '#fff' : 'rgba(255,255,255,0.7)', fontSize: 13, fontWeight: 600, fontFamily: font, textTransform: 'uppercase', letterSpacing: 1, cursor: 'pointer', position: 'relative', transition: 'all 0.15s ease'
+                    color: isDirectActive ? t.colors.feedback.white : 'rgba(255,255,255,0.7)', fontSize: 13, fontWeight: t.typography.fontWeights.semibold, fontFamily: font, textTransform: 'uppercase', letterSpacing: t.typography.letterSpacing.wider, cursor: 'pointer', position: 'relative', transition: 'all 0.15s ease'
                   }}
-                  onMouseEnter={(e) => { if(!isDirectActive) { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.06)'; e.currentTarget.style.color = '#fff'; } }}
+                  onMouseEnter={(e) => { if(!isDirectActive) { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.06)'; e.currentTarget.style.color = t.colors.feedback.white; } }}
                   onMouseLeave={(e) => { if(!isDirectActive) { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = 'rgba(255,255,255,0.7)'; } }}
                   >
-                    {isDirectActive && <div style={{ position: 'absolute', left: 0, top: '50%', transform: 'translateY(-50%)', width: 3, height: 20, borderRadius: '0 3px 3px 0', backgroundColor: '#E04D36' }} />}
+                    {isDirectActive && <div style={{ position: 'absolute', left: 0, top: '50%', transform: 'translateY(-50%)', width: 3, height: 20, borderRadius: '0 3px 3px 0', backgroundColor: t.colors.brand.primary }} />}
                     {section.icon}<span>{section.title}</span>
                   </button>
                 ) : (
                   <>
                     <button onClick={() => toggleSection(section.title)} style={{
-                      width: '100%', padding: '6px 12px', display: 'flex', alignItems: 'center', gap: 8, border: 'none', background: 'transparent',
-                      color: 'rgba(255,255,255,0.4)', fontSize: 11, fontWeight: 600, fontFamily: font, textTransform: 'uppercase', letterSpacing: 1, cursor: 'pointer'
+                      width: '100%', padding: `6px ${t.spacing.md}px`, display: 'flex', alignItems: 'center', gap: t.spacing.sm, border: 'none', background: 'transparent',
+                      color: 'rgba(255,255,255,0.4)', fontSize: 11, fontWeight: t.typography.fontWeights.semibold, fontFamily: font, textTransform: 'uppercase', letterSpacing: t.typography.letterSpacing.wider, cursor: 'pointer'
                     }}>
                       {section.icon}<span style={{ flex: 1, textAlign: 'left' }}>{section.title}</span>
                       {openSections[section.title] ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
@@ -108,10 +108,10 @@ function SidebarPatternComponent() {
         </nav>
         <div style={{ padding: 8, borderTop: '1px solid rgba(255,255,255,0.08)' }}>
           <button onClick={() => setCollapsed(!collapsed)} style={{
-            width: '100%', padding: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, border: 'none', borderRadius: t.radius.md,
-            background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.5)', fontSize: 12, fontWeight: 500, fontFamily: font, cursor: 'pointer', transition: 'all 0.15s ease'
+            width: '100%', padding: t.spacing.sm, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: t.spacing.sm, border: 'none', borderRadius: t.radius.md,
+            background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.5)', fontSize: 12, fontWeight: t.typography.fontWeights.medium, fontFamily: font, cursor: 'pointer', transition: 'all 0.15s ease'
           }}
-          onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = '#fff'; }}
+          onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = t.colors.feedback.white; }}
           onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)'; e.currentTarget.style.color = 'rgba(255,255,255,0.5)'; }}
           >
             {collapsed ? <Menu size={16} /> : <><X size={14} /> Colapsar</>}
