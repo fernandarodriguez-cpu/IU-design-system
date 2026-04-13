@@ -20,75 +20,75 @@ function OnboardingInternal() {
   return (
     <div style={{ 
       display: 'grid', 
-      gridTemplateColumns: 'minmax(300px, 400px) 1fr', 
-      minHeight: '600px',
-      backgroundColor: 'var(--card)',
-      borderRadius: 24,
+      gridTemplateColumns: `minmax(${t.sizing[64] * 4.68}px, ${t.sizing[64] * 6.25}px) 1fr`, 
+      minHeight: t.sizing[64] * 9.375,
+      backgroundColor: t.semantic.surface.card,
+      borderRadius: t.spacing.lg,
       overflow: 'hidden',
-      border: '1px solid var(--border)',
+      border: `1px solid ${t.semantic.border.default}`,
       boxShadow: t.shadows.lg
     }}>
       {/* ... rest of the component exactly as before ... */}
-      <div style={{ backgroundColor: t.colors.brand.navy, padding: 40, color: '#fff', backgroundImage: 'linear-gradient(180deg, #051758 0%, #0a257a 100%)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+      <div style={{ backgroundColor: t.colors.brand.secondary, padding: t.spacing.xl, color: t.colors.feedback.white, backgroundImage: `linear-gradient(180deg, ${t.colors.brand.secondary} 0%, ${t.colors.brand.secondaryHover} 100%)`, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 40 }}>
-            <div style={{ width: 32, height: 32, borderRadius: 8, backgroundColor: t.colors.brand.primary, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800 }}>K</div>
-            <span style={{ fontWeight: 700, fontSize: 18 }}>Khor Systems</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: t.spacing.sm, marginBottom: t.spacing.xl }}>
+            <div style={{ width: t.sizing[8], height: t.sizing[8], borderRadius: t.radius.md, backgroundColor: t.colors.brand.primary, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: t.typography.fontWeights.extrabold }}>K</div>
+            <span style={{ fontWeight: t.typography.fontWeights.bold, fontSize: t.typography.h4.size }}>Khor Systems</span>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: t.spacing.lg }}>
             {[
-              { id: 1, label: 'Perfil de Empresa', icon: <Building2 size={18} /> },
-              { id: 2, label: 'Configuración de Equipo', icon: <Users size={18} /> },
-              { id: 3, label: 'Seguridad y Accesos', icon: <ShieldCheck size={18} /> }
+              { id: 1, label: 'Perfil de Empresa', icon: <Building2 size={t.icon.sm} /> },
+              { id: 2, label: 'Configuración de Equipo', icon: <Users size={t.icon.sm} /> },
+              { id: 3, label: 'Seguridad y Accesos', icon: <ShieldCheck size={t.icon.sm} /> }
             ].map((s) => (
-              <div key={s.id} style={{ display: 'flex', alignItems: 'center', gap: 16, opacity: step >= s.id ? 1 : 0.4, transition: 'opacity 0.3s' }}>
-                <div style={{ width: 32, height: 32, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: step > s.id ? t.colors.brand.primary : 'rgba(255,255,255,0.1)', border: step === s.id ? `2px solid ${t.colors.brand.primary}` : 'none', fontSize: 12, fontWeight: 700 }}>
-                  {step > s.id ? <Check size={16} /> : s.id}
+              <div key={s.id} style={{ display: 'flex', alignItems: 'center', gap: t.spacing.md, opacity: step >= s.id ? 1 : 0.4, transition: 'opacity 0.3s' }}>
+                <div style={{ width: t.sizing[8], height: t.sizing[8], borderRadius: t.radius.full, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: step > s.id ? t.colors.brand.primary : `${t.colors.feedback.white}1a`, border: step === s.id ? `2px solid ${t.colors.brand.primary}` : 'none', fontSize: t.typography.bodyXs.size, fontWeight: t.typography.fontWeights.bold }}>
+                  {step > s.id ? <Check size={t.icon.sm} /> : s.id}
                 </div>
-                <span style={{ fontSize: 14, fontWeight: step === s.id ? 600 : 400 }}>{s.label}</span>
+                <span style={{ fontSize: t.typography.bodySm.size, fontWeight: step === s.id ? t.typography.fontWeights.semibold : t.typography.fontWeights.regular }}>{s.label}</span>
               </div>
             ))}
           </div>
         </div>
-        <div style={{ padding: 20, borderRadius: 16, backgroundColor: 'rgba(255,255,255,0.05)', fontSize: 13, border: '1px solid rgba(255,255,255,0.1)' }}>
-          <Sparkles size={16} style={{ color: t.colors.brand.primary, marginBottom: 12 }} />
+        <div style={{ padding: t.spacing.md, borderRadius: t.radius.lg, backgroundColor: 'rgba(255,255,255,0.05)', fontSize: t.typography.bodySm.size, border: '1px solid rgba(255,255,255,0.1)' }}>
+          <Sparkles size={t.icon.sm} style={{ color: t.colors.brand.primary, marginBottom: t.spacing.sm }} />
           <p style={{ margin: 0, opacity: 0.8, lineHeight: 1.5 }}>"La configuración inicial toma menos de 2 minutos. Estás a punto de potenciar tu flujo de trabajo."</p>
         </div>
       </div>
-      <div style={{ padding: '60px 80px', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ padding: `${t.spacing.xl}px ${t.spacing.xxl * 1.66}px`, display: 'flex', flexDirection: 'column' }}>
         <div style={{ flex: 1 }}>
           {step === 1 && (
             <div style={{ animation: 'fadeIn 0.3s ease-out' }}>
-              <h2 style={{ fontSize: 28, fontWeight: 800, color: 'var(--foreground)', marginBottom: 8 }}>Cuéntanos de tu empresa</h2>
-              <p style={{ color: 'var(--muted-foreground)', marginBottom: 32 }}>Utilizamos esta información para personalizar tu experiencia en el dashboard.</p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 20, maxWidth: 400 }}>
-                <KFormField label="Nombre de la Organización" required><KInput prefix={<Building2 size={16} />} placeholder="Ej. Acme Corp" /></KFormField>
-                <KFormField label="Sitio Web"><KInput prefix={<Globe size={16} />} placeholder="https://example.com" /></KFormField>
+              <h2 style={{ fontSize: t.typography.display1.size, fontWeight: t.typography.fontWeights.extrabold, color: t.semantic.text.primary, marginBottom: t.spacing.xs }}>Cuéntanos de tu empresa</h2>
+              <p style={{ color: t.semantic.text.muted, marginBottom: t.spacing.xl }}>Utilizamos esta información para personalizar tu experiencia en el dashboard.</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: t.spacing.md, maxWidth: t.layout.sidebarWidth * 1.5 }}>
+                <KFormField label="Nombre de la Organización" required><KInput prefix={<Building2 size={t.icon.sm} />} placeholder="Ej. Acme Corp" /></KFormField>
+                <KFormField label="Sitio Web"><KInput prefix={<Globe size={t.icon.sm} />} placeholder="https://example.com" /></KFormField>
                 <KFormField label="Industria"><KInput placeholder="SaaS, E-commerce, etc." /></KFormField>
               </div>
             </div>
           )}
           {step === 2 && (
             <div style={{ animation: 'fadeIn 0.3s ease-out' }}>
-              <h2 style={{ fontSize: 28, fontWeight: 800, color: 'var(--foreground)', marginBottom: 8 }}>Invita a tu equipo</h2>
-              <p style={{ color: 'var(--muted-foreground)', marginBottom: 32 }}>Khor es mejor cuando se usa en equipo. Invita a tus colaboradores iniciales.</p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 400 }}>
-                {[1, 2, 3].map(i => <KInput key={i} prefix={<Mail size={16} />} placeholder={`colega${i}@empresa.com`} />)}
+              <h2 style={{ fontSize: t.typography.display1.size, fontWeight: t.typography.fontWeights.extrabold, color: t.semantic.text.primary, marginBottom: t.spacing.xs }}>Invita a tu equipo</h2>
+              <p style={{ color: t.semantic.text.muted, marginBottom: t.spacing.xl }}>Khor es mejor cuando se usa en equipo. Invita a tus colaboradores iniciales.</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: t.spacing.md, maxWidth: t.layout.sidebarWidth * 1.5 }}>
+                {[1, 2, 3].map(i => <KInput key={i} prefix={<Mail size={t.icon.sm} />} placeholder={`colega${i}@empresa.com`} />)}
                 <KButton variant="outline" size="sm" style={{ alignSelf: 'flex-start' }}>+ Añadir más</KButton>
               </div>
             </div>
           )}
           {step === 3 && (
-            <div style={{ animation: 'fadeIn 0.3s ease-out', textAlign: 'center', paddingTop: 40 }}>
-              <div style={{ width: 80, height: 80, borderRadius: '50%', backgroundColor: `${t.colors.feedback.success}10`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px' }}><Rocket size={40} style={{ color: t.colors.feedback.success }} /></div>
-              <h2 style={{ fontSize: 28, fontWeight: 800, color: 'var(--foreground)', marginBottom: 8 }}>¡Todo listo, Dani!</h2>
-              <p style={{ color: 'var(--muted-foreground)', marginBottom: 32, maxWidth: 400, margin: '0 auto' }}>Tu espacio de trabajo ha sido creado. Hemos enviado las invitaciones a tu equipo.</p>
-              <div style={{ backgroundColor: 'var(--muted)', padding: 24, borderRadius: 16, maxWidth: 400, margin: '32px auto', border: '1px solid var(--border)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12, textAlign: 'left' }}>
+            <div style={{ animation: 'fadeIn 0.3s ease-out', textAlign: 'center', paddingTop: t.spacing.xl }}>
+              <div style={{ width: t.sizing[20], height: t.sizing[20], borderRadius: t.radius.full, backgroundColor: `${t.colors.feedback.success}10`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: `0 auto ${t.spacing.lg}px` }}><Rocket size={t.icon.lg} style={{ color: t.colors.feedback.success }} /></div>
+              <h2 style={{ fontSize: t.typography.display1.size, fontWeight: t.typography.fontWeights.extrabold, color: t.semantic.text.primary, marginBottom: t.spacing.xs }}>¡Todo listo, Dani!</h2>
+              <p style={{ color: t.semantic.text.muted, marginBottom: t.spacing.xl, maxWidth: t.layout.sidebarWidth * 1.5, margin: '0 auto' }}>Tu espacio de trabajo ha sido creado. Hemos enviado las invitaciones a tu equipo.</p>
+              <div style={{ backgroundColor: t.semantic.surface.raised, padding: t.spacing.lg, borderRadius: t.radius.lg, maxWidth: t.layout.sidebarWidth * 1.5, margin: `${t.spacing.xl}px auto`, border: `1px solid ${t.semantic.border.default}` }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: t.spacing.md, textAlign: 'left' }}>
                   <KAvatar size="lg" name="Dani Khor" />
                   <div>
-                    <div style={{ fontWeight: 700, fontSize: 15 }}>Dani Khor</div>
-                    <div style={{ fontSize: 13, color: 'var(--muted-foreground)' }}>Administrador • Plan Pro</div>
+                    <div style={{ fontWeight: t.typography.fontWeights.bold, fontSize: t.typography.bodyMd.size }}>Dani Khor</div>
+                    <div style={{ fontSize: t.typography.bodySm.size, color: t.semantic.text.muted }}>Administrador • Plan Pro</div>
                   </div>
                 </div>
               </div>
@@ -99,22 +99,22 @@ function OnboardingInternal() {
         {/* Footer Actions */}
         <div style={{ 
           display: 'flex', justifyContent: 'space-between', alignItems: 'center', 
-          paddingTop: 40, borderTop: '1px solid var(--border)' 
+          paddingTop: t.spacing.xl, borderTop: `1px solid ${t.semantic.border.default}` 
         }}>
           <KButton 
             variant="ghost" 
             onClick={prev} 
             disabled={step === 1}
-            icon={<ArrowLeft size={16} />}
+            icon={<ArrowLeft size={t.icon.sm} />}
           >
             Atrás
           </KButton>
           
-          <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
-            <span style={{ fontSize: 13, color: 'var(--muted-foreground)', fontWeight: 600 }}>Paso {step} de {totalSteps}</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: t.spacing.lg }}>
+            <span style={{ fontSize: t.typography.bodySm.size, color: t.semantic.text.muted, fontWeight: t.typography.fontWeights.semibold }}>Paso {step} de {totalSteps}</span>
             <KButton 
               onClick={step === totalSteps ? () => {} : next}
-              icon={step === totalSteps ? <Check size={16} /> : <ArrowRight size={16} />}
+              icon={step === totalSteps ? <Check size={t.icon.sm} /> : <ArrowRight size={t.icon.sm} />}
               iconPosition="end"
             >
               {step === totalSteps ? 'Ir al Dashboard' : 'Continuar'}

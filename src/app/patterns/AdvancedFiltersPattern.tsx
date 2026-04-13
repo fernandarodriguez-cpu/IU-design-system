@@ -1,13 +1,13 @@
 import React from 'react';
 import { 
-  Search, Filter, Download, Calendar, MoreHorizontal, 
-  Zap, LayoutGrid, List
+  Search, SearchX, Filter, Download, Calendar, MoreHorizontal, 
+  Zap, LayoutGrid, List, CloudOff
 } from 'lucide-react';
 import { 
-  KButton, KInput, KBadge, KTag, KCheckbox, KAvatar 
+  KButton, KTag, KSearchInput, KInput, KBadge, KCheckbox, KAvatar 
 } from '../components/design-system/atoms/index';
-// KSelectField is a molecule
-import { KFormField, KSelectField } from '../components/design-system/molecules/index';
+// Molecules and Organisms
+import { KFormField, KSelectField, KEmptyState } from '../components/design-system/molecules/index';
 import { khorTokens } from '../theme/khor-theme';
 
 const t = khorTokens;
@@ -24,97 +24,76 @@ function AdvancedFiltersInternal() {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {/* Search and Filters Bar */}
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: t.spacing.lg }}>
+      {/* 1. Initial State (No Data) */}
       <div style={{ 
-        padding: 24, borderRadius: 24, backgroundColor: 'var(--card)', border: `1px solid var(--border)`,
-        boxShadow: t.shadows.sm, display: 'flex', flexDirection: 'column', gap: 20
+        padding: t.spacing.xl, backgroundColor: t.semantic.surface.card, border: `1px solid ${t.semantic.border.default}`, 
+        borderRadius: t.radius.lg, boxShadow: t.shadows.sm, textAlign: 'center' 
       }}>
-        <div style={{ display: 'flex', gap: 12, alignItems: 'flex-end' }}>
-          <div style={{ flex: 4 }}>
-            <KFormField label="Búsqueda avanzada" hint="Busca por nombre, ID o correo electrónico">
-              <KInput placeholder="Ej: Khor Guard..." />
-            </KFormField>
-          </div>
-          <div style={{ flex: 2 }}>
-            <KFormField label="Estado">
-              <KSelectField 
-                placeholder="Todos los estados"
-                options={[
-                  { label: 'Activo', value: 'active' },
-                  { label: 'Pendiente', value: 'pending' },
-                  { label: 'Inactivo', value: 'inactive' },
-                ]}
-              />
-            </KFormField>
-          </div>
-          <div style={{ flex: 2 }}>
-            <KFormField label="Fecha">
-              <KInput type="date" />
-            </KFormField>
-          </div>
-          <KButton variant="navy" icon={<Filter size={18} />} style={{ height: 42 }}>Filtrar</KButton>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: t.spacing.lg }}>
+          <span style={{ fontSize: t.typography.bodySm.size, fontWeight: t.typography.fontWeights.bold, color: t.semantic.text.muted }}>INITIAL STATE</span>
+          <KTag color="primary">MODO: EMPTY</KTag>
         </div>
+        <KFormField label="Búsqueda avanzada" hint="Busca por nombre, ID o correo electrónico">
+          <KInput placeholder="Ej: Khor Guard..." />
+        </KFormField>
+      </div>
 
-        {/* Active Tags */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap', paddingTop: 16, borderTop: '1px solid var(--border)' }}>
-          <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--muted-foreground)', display: 'flex', alignItems: 'center', gap: 6 }}>
-            <Zap size={14} /> Filtros activos:
-          </span>
-          {activeFilters.map(filter => (
-            <KTag 
-              key={filter.id} 
-              color="primary" 
-              closable 
-              onClose={() => removeFilter(filter.id)}
-            >
-              {filter.label}
-            </KTag>
-          ))}
-          {activeFilters.length > 0 && (
-            <KButton variant="ghost" size="sm" onClick={() => setActiveFilters([])} style={{ fontSize: 12, height: 24 }}>Limpiar todo</KButton>
-          )}
+      {/* 2. No Results (Search State) */}
+      <div style={{ 
+        padding: t.spacing.xl, backgroundColor: t.semantic.surface.card, border: `1px solid ${t.semantic.border.default}`, 
+        borderRadius: t.radius.lg, boxShadow: t.shadows.sm, textAlign: 'center' 
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: t.spacing.lg }}>
+          <span style={{ fontSize: t.typography.bodySm.size, fontWeight: t.typography.fontWeights.bold, color: t.semantic.text.muted }}>SEARCH STATE</span>
+          <KTag color="warning">MODO: NOT FOUND</KTag>
         </div>
+        <KEmptyState 
+          icon={<SearchX size={t.icon.xl} style={{ color: t.colors.feedback.warning }} />}
+          title="Sin resultados para 'Khor Guard'"
+          description="No pudimos encontrar nada que coincida con tu búsqueda. Intenta con palabras clave más generales."
+          actions={<KButton variant="outline" size="sm">Limpiar Filtros</KButton>}
+        />
       </div>
 
       {/* Results Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: 8, paddingRight: 8 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <h3 style={{ margin: 0, fontSize: 18, fontWeight: 700 }}>Resultados <span style={{ opacity: 0.5, fontWeight: 400 }}>(128)</span></h3>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: t.spacing.xs, paddingRight: t.spacing.xs }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: t.spacing.sm }}>
+          <h3 style={{ margin: 0, fontSize: t.typography.bodyLg.size, fontWeight: t.typography.fontWeights.bold }}>Resultados <span style={{ opacity: 0.5, fontWeight: t.typography.fontWeights.regular }}>(128)</span></h3>
           <KBadge count={12} color="navy" />
         </div>
-        <div style={{ display: 'flex', gap: 8 }}>
-          <KButton variant="outline" size="sm" icon={<Download size={14} />}>Exportar</KButton>
-          <div style={{ width: 1, height: 24, backgroundColor: 'var(--border)', marginLeft: 16, marginRight: 16 }} />
-          <KButton variant="ghost" size="sm" icon={<LayoutGrid size={14} />} />
-          <KButton variant="secondary" size="sm" icon={<List size={14} />} />
+        <div style={{ display: 'flex', gap: t.spacing.sm }}>
+          <KButton variant="outline" size="sm" icon={<Download size={t.icon.sm} />}>Exportar</KButton>
+          <div style={{ width: '1px', height: t.sizing[6], backgroundColor: t.semantic.border.default, marginLeft: t.spacing.md, marginRight: t.spacing.md }} />
+          <KButton variant="ghost" size="sm" icon={<LayoutGrid size={t.icon.sm} />} />
+          <KButton variant="secondary" size="sm" icon={<List size={t.icon.sm} />} />
         </div>
       </div>
 
       {/* Grid of Results (Mini Cards) */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 16 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: t.spacing.md }}>
         {[1, 2, 3, 4, 5, 6].map(i => (
           <div key={i} style={{ 
-            padding: 20, borderRadius: 20, backgroundColor: 'var(--card)', border: '1px solid var(--border)',
-            display: 'flex', flexDirection: 'column', gap: 16, transition: 'all 0.2s hover', cursor: 'pointer'
+            padding: t.spacing.md, borderRadius: t.radius.lg, backgroundColor: t.semantic.surface.card, border: `1px solid ${t.semantic.border.default}`,
+            display: 'flex', flexDirection: 'column', gap: t.spacing.md, transition: 'all 0.2s hover', cursor: 'pointer'
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
               <KAvatar name={`User ${i}`} size="md" />
               <KCheckbox />
             </div>
             <div>
-              <div style={{ fontWeight: 700, fontSize: 15 }}>Terminal Node {i}</div>
-              <div style={{ fontSize: 13, color: 'var(--muted-foreground)' }}>dc-cluster-0{i}.khor.cloud</div>
+              <div style={{ fontWeight: t.typography.fontWeights.bold, fontSize: t.typography.bodyMd.size }}>Terminal Node {i}</div>
+              <div style={{ fontSize: t.typography.bodySm.size, color: t.semantic.text.muted }}>dc-cluster-0{i}.khor.cloud</div>
             </div>
-            <div style={{ display: 'flex', gap: 6 }}>
+            <div style={{ display: 'flex', gap: t.spacing.xs }}>
               <KTag color={i % 2 === 0 ? 'success' : 'warning'} bordered={false}>
                 {i % 2 === 0 ? 'Online' : 'Syncing'}
               </KTag>
               <KTag color="default" bordered={false}>v4.0.{i}</KTag>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 8, paddingTop: 12, borderTop: '1px dotted var(--border)' }}>
-              <div style={{ fontSize: 12, color: 'var(--muted-foreground)' }}>Last seen: 2m ago</div>
-              <KButton variant="ghost" size="sm" icon={<MoreHorizontal size={16} />} />
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: t.spacing.sm, paddingTop: t.spacing.sm, borderTop: `1px dotted ${t.semantic.border.muted}` }}>
+              <div style={{ fontSize: t.typography.bodyXs.size, color: t.semantic.text.muted }}>Last seen: 2m ago</div>
+              <KButton variant="ghost" size="sm" icon={<MoreHorizontal size={t.icon.sm} />} />
             </div>
           </div>
         ))}

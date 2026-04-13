@@ -19,32 +19,32 @@ function FilterableListComponent() {
   const filtered = items.filter((i) => i.name.toLowerCase().includes(search.toLowerCase()) || i.email.toLowerCase().includes(search.toLowerCase()));
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-      <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: t.spacing.sm }}>
+      <div style={{ display: 'flex', gap: t.spacing.sm, alignItems: 'center' }}>
         <div style={{ flex: 1 }}>
           <KSearchInput placeholder="Buscar usuarios..." value={search} onChange={setSearch} />
         </div>
-        <KButton variant="primary" icon={<Plus size={16} />} size="sm">Nuevo</KButton>
+        <KButton variant="primary" icon={<Plus size={t.icon.sm} />} size="sm">Nuevo</KButton>
       </div>
-      <div style={{ borderRadius: t.radius.lg, border: '1px solid var(--border)', overflow: 'hidden' }}>
+      <div style={{ borderRadius: t.radius.lg, border: `1px solid ${t.semantic.border.default}`, overflow: 'hidden' }}>
         {filtered.map((u, i) => (
           <div key={u.id} style={{
-            display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px',
-            borderBottom: i < filtered.length - 1 ? '1px solid var(--border)' : 'none',
-            backgroundColor: 'var(--card)',
+            display: 'flex', alignItems: 'center', gap: t.spacing.sm, padding: `${t.spacing.sm}px ${t.spacing.md}px`,
+            borderBottom: i < filtered.length - 1 ? `1px solid ${t.semantic.border.default}` : 'none',
+            backgroundColor: t.semantic.surface.card,
           }}>
-            <div style={{ width: 32, height: 32, borderRadius: '50%', backgroundColor: 'rgba(224,77,54,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: t.colors.brand.primary, fontSize: 13, fontWeight: 600 }}>
+            <div style={{ width: t.sizing[8], height: t.sizing[8], borderRadius: t.radius.full, backgroundColor: `${t.colors.brand.primary}1a`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: t.colors.brand.primary, fontSize: t.typography.bodySm.size, fontWeight: t.typography.fontWeights.semibold }}>
               {u.name[0]}
             </div>
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 14, fontWeight: 500, color: 'var(--foreground)' }}>{u.name}</div>
-              <div style={{ fontSize: 12, color: 'var(--muted-foreground)' }}>{u.email}</div>
+              <div style={{ fontSize: t.typography.bodySm.size, fontWeight: t.typography.fontWeights.medium, color: t.semantic.text.primary }}>{u.name}</div>
+              <div style={{ fontSize: t.typography.bodyXs.size, color: t.semantic.text.muted }}>{u.email}</div>
             </div>
             <KBadge status={u.role === 'Admin' ? 'info' : 'default'} label={u.role} />
             <KBadge status={u.status === 'Activo' ? 'success' : 'default'} label={u.status} />
-            <div style={{ display: 'flex', gap: 4 }}>
-              <KButton variant="ghost" size="sm" icon={<Edit size={14} />} />
-              <KButton variant="ghost" size="sm" icon={<Trash2 size={14} />} />
+            <div style={{ display: 'flex', gap: t.spacing.xs }}>
+              <KButton variant="ghost" size="sm" icon={<Edit size={t.icon.xs} />} />
+              <KButton variant="ghost" size="sm" icon={<Trash2 size={t.icon.xs} />} />
             </div>
           </div>
         ))}
@@ -59,19 +59,19 @@ export const FilterableListPattern: Pattern = {
   description: 'Lista de datos con búsqueda, badges de estado/rol y acciones inline (editar, eliminar).',
   category: 'Datos',
   component: <FilterableListComponent />,
-  code: `import { KSearchInput, KStatCard } from '@khor/molecules';
+  code: `import { KSearchInput } from '@khor/atoms';
 import { KButton, KBadge } from '@khor/atoms';
 
 // Barra de búsqueda + botón de acción
-<div style={{ display: 'flex', gap: 8 }}>
+<div style={{ display: 'flex', gap: t.spacing.sm }}>
   <KSearchInput placeholder="Buscar..." value={search} onChange={setSearch} />
-  <KButton variant="primary" icon={<Plus size={16} />}>Nuevo</KButton>
+  <KButton variant="primary" icon={<Plus size={t.icon.sm} />}>Nuevo</KButton>
 </div>
 // Lista con badges y acciones
 {users.map(u => (
   <div key={u.id}>
-    <KBadge khorStatus={u.role === 'Admin' ? 'info' : 'default'} label={u.role} />
-    <KButton variant="ghost" size="sm" icon={<Edit size={14} />} />
+    <KBadge status={u.role === 'Admin' ? 'info' : 'default'} label={u.role} />
+    <KButton variant="ghost" size="sm" icon={<Edit size={t.icon.xs} />} />
   </div>
 ))}`,
 };

@@ -31,12 +31,15 @@ export function CodeBlock({ code, filename, language = 'tsx' }: CodeBlockProps) 
   };
 
   return (
-    <div style={{ borderRadius: khorTokens.radius.lg, overflow: 'hidden', border: `1px solid ${khorTokens.colors.neutral[200]}`, fontFamily: "'Plus Jakarta Sans', monospace" }}>
+    <div style={{ borderRadius: khorTokens.radius.lg, overflow: 'hidden', border: `1px solid ${khorTokens.colors.neutral[200]}`, fontFamily: khorTokens.typography.fontSecondary }}>
       {/* Header */}
       <div style={{
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        padding: '8px 16px',
-        backgroundColor: '#1e1e2e', color: '#cdd6f4', fontSize: 12,
+        padding: `${khorTokens.spacing.xs}px ${khorTokens.spacing.md}px`,
+        backgroundColor: khorTokens.colors.brand.secondary, color: khorTokens.colors.feedback.white, 
+        fontSize: khorTokens.typography.bodyXs.size,
+        fontWeight: khorTokens.typography.fontWeights.semibold,
+        letterSpacing: khorTokens.typography.letterSpacing.wide,
       }}>
         <span>{filename || language}</span>
         <div style={{ display: 'flex', gap: 8 }}>
@@ -44,8 +47,8 @@ export function CodeBlock({ code, filename, language = 'tsx' }: CodeBlockProps) 
             onClick={handleCopy}
             style={{
               display: 'flex', alignItems: 'center', gap: 4,
-              background: 'none', border: 'none', color: '#cdd6f4',
-              cursor: 'pointer', fontSize: 12, padding: '4px 8px', borderRadius: 4,
+              color: khorTokens.colors.feedback.white,
+              cursor: 'pointer', fontSize: khorTokens.typography.bodyXs.size, padding: '4px 8px', borderRadius: khorTokens.radius.sm,
             }}
             onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.1)'}
             onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
@@ -56,14 +59,14 @@ export function CodeBlock({ code, filename, language = 'tsx' }: CodeBlockProps) 
           <button
             onClick={handleDownload}
             style={{
-              display: 'flex', alignItems: 'center', gap: 4,
+              display: 'flex', alignItems: 'center', gap: khorTokens.spacing.xs,
               background: 'none', border: 'none', color: '#cdd6f4',
-              cursor: 'pointer', fontSize: 12, padding: '4px 8px', borderRadius: 4,
+              cursor: 'pointer', fontSize: khorTokens.typography.bodyXs.size, padding: `${khorTokens.spacing.xxs}px ${khorTokens.spacing.sm}px`, borderRadius: khorTokens.radius.sm,
             }}
             onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.1)'}
             onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
           >
-            <Download size={14} />
+            <Download size={khorTokens.icon.xs} />
             Descargar
           </button>
         </div>
@@ -71,10 +74,10 @@ export function CodeBlock({ code, filename, language = 'tsx' }: CodeBlockProps) 
       {/* Code */}
       <pre style={{
         margin: 0,
-        padding: 20,
-        backgroundColor: '#1e1e2e',
+        padding: khorTokens.spacing.md,
+        backgroundColor: '#030d2e', // Background ligeramente más oscuro para el código
         color: '#cdd6f4',
-        fontSize: 13,
+        fontSize: khorTokens.typography.bodyXs.size,
         lineHeight: 1.6,
         overflowX: 'auto',
         tabSize: 2,

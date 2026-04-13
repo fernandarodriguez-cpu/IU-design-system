@@ -31,34 +31,34 @@ function PaginatedTableComponent() {
   const statusColor = (s: string) => s === 'Pagado' ? 'success' : s === 'Pendiente' ? 'warning' : 'error';
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-      <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: t.spacing.sm }}>
+      <div style={{ display: 'flex', gap: t.spacing.sm, alignItems: 'center' }}>
         <div style={{ flex: 1 }}><KSearchInput placeholder="Buscar factura o cliente..." value={search} onChange={(v) => { setSearch(v); setPage(1); }} /></div>
-        <KButton variant="primary" icon={<Plus size={16} />} size="sm">Nueva Factura</KButton>
+        <KButton variant="primary" icon={<Plus size={t.icon.sm} />} size="sm">Nueva Factura</KButton>
       </div>
-      <div style={{ borderRadius: t.radius.lg, border: '1px solid var(--border)', overflow: 'hidden' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+      <div style={{ borderRadius: t.radius.lg, border: `1px solid ${t.semantic.border.default}`, overflow: 'hidden' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: t.typography.bodySm.size }}>
           <thead>
-            <tr style={{ backgroundColor: 'var(--muted)' }}>
+            <tr style={{ backgroundColor: t.semantic.surface.raised }}>
               {['# Factura', 'Cliente', 'Monto', 'Estado', 'Fecha', ''].map((h) => (
-                <th key={h} style={{ padding: '10px 14px', textAlign: 'left', fontWeight: 600, borderBottom: '1px solid var(--border)', color: 'var(--foreground)' }}>{h}</th>
+                <th key={h} style={{ padding: `${t.spacing.sm}px ${t.spacing.md}px`, textAlign: 'left', fontWeight: t.typography.fontWeights.semibold, borderBottom: `1px solid ${t.semantic.border.default}`, color: t.semantic.text.primary }}>{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {paged.map((r, i) => (
-              <tr key={r.id} style={{ backgroundColor: i % 2 === 0 ? 'var(--card)' : 'var(--muted)' }}>
-                <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)', fontWeight: 600, color: 'var(--foreground)' }}>{r.id}</td>
-                <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)', color: 'var(--foreground)' }}>{r.cliente}</td>
-                <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)', fontWeight: 600, color: 'var(--foreground)' }}>{r.monto}</td>
-                <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)' }}>
+              <tr key={r.id} style={{ backgroundColor: i % 2 === 0 ? t.semantic.surface.card : t.semantic.surface.raised }}>
+                <td style={{ padding: `${t.spacing.sm}px ${t.spacing.md}px`, borderBottom: `1px solid ${t.semantic.border.default}`, fontWeight: t.typography.fontWeights.semibold, color: t.semantic.text.primary }}>{r.id}</td>
+                <td style={{ padding: `${t.spacing.sm}px ${t.spacing.md}px`, borderBottom: `1px solid ${t.semantic.border.default}`, color: t.semantic.text.primary }}>{r.cliente}</td>
+                <td style={{ padding: `${t.spacing.sm}px ${t.spacing.md}px`, borderBottom: `1px solid ${t.semantic.border.default}`, fontWeight: t.typography.fontWeights.semibold, color: t.semantic.text.primary }}>{r.monto}</td>
+                <td style={{ padding: `${t.spacing.sm}px ${t.spacing.md}px`, borderBottom: `1px solid ${t.semantic.border.default}` }}>
                   <KBadge status={statusColor(r.estado) as any} label={r.estado} />
                 </td>
-                <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)', color: 'var(--muted-foreground)' }}>{r.fecha}</td>
-                <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)' }}>
-                  <div style={{ display: 'flex', gap: 4 }}>
-                    <KButton variant="ghost" size="sm" icon={<Edit size={14} />} />
-                    <KButton variant="ghost" size="sm" icon={<Trash2 size={14} />} />
+                <td style={{ padding: `${t.spacing.sm}px ${t.spacing.md}px`, borderBottom: `1px solid ${t.semantic.border.default}`, color: t.semantic.text.muted }}>{r.fecha}</td>
+                <td style={{ padding: `${t.spacing.sm}px ${t.spacing.md}px`, borderBottom: `1px solid ${t.semantic.border.default}` }}>
+                  <div style={{ display: 'flex', gap: t.spacing.xs }}>
+                    <KButton variant="ghost" size="sm" icon={<Edit size={t.icon.xs} />} />
+                    <KButton variant="ghost" size="sm" icon={<Trash2 size={t.icon.xs} />} />
                   </div>
                 </td>
               </tr>
@@ -68,19 +68,19 @@ function PaginatedTableComponent() {
       </div>
       {/* Pagination */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <span style={{ fontSize: 12, color: 'var(--muted-foreground)' }}>
+        <span style={{ fontSize: t.typography.bodySm.size, color: t.semantic.text.muted }}>
           {filtered.length} resultados &bull; Página {page} de {totalPages}
         </span>
-        <div style={{ display: 'flex', gap: 4 }}>
-          <KButton variant="outline" size="sm" icon={<ChevronLeft size={14} />} disabled={page <= 1} onClick={() => setPage(page - 1)} />
+        <div style={{ display: 'flex', gap: t.spacing.xs }}>
+          <KButton variant="outline" size="sm" icon={<ChevronLeft size={t.icon.xs} />} disabled={page <= 1} onClick={() => setPage(page - 1)} />
           {Array.from({ length: totalPages }, (_, i) => (
             <button key={i} onClick={() => setPage(i + 1)} style={{
-              width: 32, height: 32, borderRadius: 6, border: 'none', fontSize: 13, fontWeight: 500,
+              width: t.sizing[8], height: t.sizing[8], borderRadius: t.radius.sm, border: 'none', fontSize: t.typography.bodySm.size, fontWeight: t.typography.fontWeights.medium,
               backgroundColor: page === i + 1 ? t.colors.brand.primary : 'transparent',
-              color: page === i + 1 ? '#fff' : 'var(--muted-foreground)', cursor: 'pointer', fontFamily: font,
+              color: page === i + 1 ? t.colors.feedback.white : t.semantic.text.muted, cursor: 'pointer', fontFamily: font,
             }}>{i + 1}</button>
           ))}
-          <KButton variant="outline" size="sm" icon={<ChevronRight size={14} />} disabled={page >= totalPages} onClick={() => setPage(page + 1)} />
+          <KButton variant="outline" size="sm" icon={<ChevronRight size={t.icon.xs} />} disabled={page >= totalPages} onClick={() => setPage(page + 1)} />
         </div>
       </div>
     </div>
@@ -97,15 +97,15 @@ export const PaginatedTablePattern: Pattern = {
 import { KButton, KBadge } from '@khor/atoms';
 
 // Barra de búsqueda + botón de acción
-<div style={{ display: 'flex', gap: 8 }}>
+<div style={{ display: 'flex', gap: t.spacing.sm }}>
   <KSearchInput placeholder="Buscar..." value={search} onChange={setSearch} />
-  <KButton variant="primary" icon={<Plus size={16} />}>Nuevo</KButton>
+  <KButton variant="primary" icon={<Plus size={t.icon.sm} />}>Nuevo</KButton>
 </div>
 // Lista con badges y acciones
 {users.map(u => (
   <div key={u.id}>
-    <KBadge khorStatus={u.role === 'Admin' ? 'info' : 'default'} label={u.role} />
-    <KButton variant="ghost" size="sm" icon={<Edit size={14} />} />
+    <KBadge status={u.role === 'Admin' ? 'info' : 'default'} label={u.role} />
+    <KButton variant="ghost" size="sm" icon={<Edit size={t.icon.xs} />} />
   </div>
 ))}`,
 };

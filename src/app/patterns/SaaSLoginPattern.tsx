@@ -28,7 +28,7 @@ function SaaSLoginInternal() {
   return (
     <div style={{ 
       display: 'flex', alignItems: 'center', justifyContent: 'center', 
-      minHeight: 700, borderRadius: t.radius.xl, padding: t.spacing.xl,
+      minHeight: 640, borderRadius: t.radius.xl, padding: t.spacing.xl,
       fontFamily: t.typography.fontPrimary,
       position: 'relative',
       overflow: 'hidden',
@@ -49,10 +49,10 @@ function SaaSLoginInternal() {
         variants={staggerContainer}
         initial="hidden"
         animate="visible"
-        style={{ width: '100%', maxWidth: 440, position: 'relative', zIndex: 1, padding: '0 16px' }}
+        style={{ width: '100%', maxWidth: t.layout.mainWidth / 2.5, position: 'relative', zIndex: 1, padding: `0 ${t.spacing.md}px` }}
       >
         {/* Brand Header */}
-        <motion.div variants={fadeInUp} style={{ textAlign: 'center', marginBottom: t.spacing.xl }}>
+        <motion.div variants={fadeInUp} style={{ textAlign: 'center', marginBottom: t.spacing.xxl, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <div style={{ 
             width: t.sizing[12], height: t.sizing[12], borderRadius: t.radius.lg, backgroundColor: t.colors.brand.primary, 
             display: 'inline-flex', alignItems: 'center', justifyContent: 'center', color: t.colors.feedback.white, 
@@ -61,10 +61,10 @@ function SaaSLoginInternal() {
           }}>
             K
           </div>
-          <KText variant="h1" style={{ color: t.colors.feedback.white, fontSize: 'clamp(24px, 5vw, 32px)', fontWeight: t.typography.fontWeights.extrabold, letterSpacing: t.typography.letterSpacing.tighter }}>Khor Intelligence</KText>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: t.spacing.sm, marginTop: t.spacing.md }}>
+          <KText variant="h1" style={{ color: t.colors.feedback.white, fontSize: 'clamp(24px, 5vw, 32px)', fontWeight: t.typography.fontWeights.extrabold, letterSpacing: t.typography.letterSpacing.tighter, margin: 0 }}>Khor Intelligence</KText>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: t.spacing.sm, marginTop: t.spacing.sm }}>
             <KBadge status="processing" text="Wave 13 Active" />
-            <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', fontWeight: t.typography.fontWeights.semibold }}>v4.0.3 Platform</span>
+            <span style={{ fontSize: t.typography.bodyXs.size, color: `${t.colors.feedback.white}80`, fontWeight: t.typography.fontWeights.semibold }}>v4.0.3 Platform</span>
           </div>
         </motion.div>
 
@@ -75,7 +75,7 @@ function SaaSLoginInternal() {
           style={{ 
             backgroundColor: 'rgba(255, 255, 255, 0.03)', 
             backdropFilter: 'blur(20px)',
-            padding: 'calc(24px + 2vw) calc(20px + 1vw)', 
+            padding: `calc(${t.spacing.lg}px + 2vw) calc(${t.spacing.md}px + 1vw)`, 
             borderRadius: t.radius.xl, 
             border: '1px solid rgba(255, 255, 255, 0.08)',
             boxShadow: t.shadows.xl,
@@ -83,7 +83,7 @@ function SaaSLoginInternal() {
         >
           <div style={{ marginBottom: t.spacing.lg }}>
              <KText variant="h3" style={{ color: t.colors.feedback.white, marginBottom: t.spacing.xs, fontWeight: t.typography.fontWeights.extrabold }}>Panel de Control</KText>
-             <KText variant="small" style={{ color: 'rgba(255,255,255,0.5)', fontWeight: t.typography.fontWeights.medium }}>Ingresa tus credenciales de ingeniería.</KText>
+             <KText variant="small" style={{ color: `${t.colors.feedback.white}80`, fontWeight: t.typography.fontWeights.medium }}>Ingresa tus credenciales de ingeniería.</KText>
           </div>
 
           <div className="login-form-custom">
@@ -109,9 +109,9 @@ function SaaSLoginInternal() {
         </motion.div>
 
         {/* Footer Links */}
-        <motion.div variants={fadeInUp} style={{ textAlign: 'center', marginTop: 32 }}>
-          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.4)' }}>
-            ¿Problemas Técnicos? <a href="#" style={{ color: t.colors.brand.primary, fontWeight: 700, textDecoration: 'none' }}>Contactar NOC</a>
+        <motion.div variants={fadeInUp} style={{ textAlign: 'center', marginTop: t.spacing.xl }}>
+          <p style={{ fontSize: t.typography.bodyXs.size, color: `${t.colors.feedback.white}66` }}>
+            ¿Problemas Técnicos? <a href="#" style={{ color: t.colors.brand.primary, fontWeight: t.typography.fontWeights.bold, textDecoration: 'none' }}>Contactar NOC</a>
           </p>
         </motion.div>
       </motion.div>

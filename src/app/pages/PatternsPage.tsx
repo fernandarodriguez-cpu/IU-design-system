@@ -32,25 +32,25 @@ export function PatternsPage() {
   }
 
   return (
-    <div style={{ fontFamily: font }}>
+    <div style={{ fontFamily: font, backgroundColor: t.semantic.surface.page, minHeight: '100vh', padding: t.spacing.xl }}>
       {!id && (
         <>
-          <div style={{ marginBottom: 24 }}>
-            <span style={{ fontSize: 11, fontWeight: 600, color: t.colors.brand.primary, textTransform: 'uppercase', letterSpacing: 1 }}>Recipes</span>
-            <h2 style={{ margin: '4px 0 0', fontSize: 30, fontWeight: 700, color: 'var(--foreground)' }}>Patrones de Diseño</h2>
-            <p style={{ margin: '8px 0 0', fontSize: 16, color: 'var(--muted-foreground)', lineHeight: 1.5 }}>
+          <div style={{ marginBottom: t.spacing.lg }}>
+            <span style={{ fontSize: t.typography.bodyXs.size, fontWeight: t.typography.fontWeights.semibold, color: t.colors.brand.primary, textTransform: 'uppercase', letterSpacing: t.typography.letterSpacing.wide }}>Recipes</span>
+            <h2 style={{ margin: `${t.spacing.xxs}px 0 0`, fontSize: t.typography.h2.size, fontWeight: t.typography.fontWeights.bold, color: t.semantic.text.primary }}>Patrones de Diseño</h2>
+            <p style={{ margin: `${t.spacing.sm}px 0 0`, fontSize: t.typography.bodyMd.size, color: t.semantic.text.secondary, lineHeight: 1.5 }}>
               Combinaciones probadas de componentes Khor que resuelven casos de uso reales.
               Cada patrón incluye código copiable listo para producción.
             </p>
           </div>
 
           {/* Category Filter */}
-          <div style={{ display: 'flex', gap: 4, marginBottom: 24, flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: t.spacing.xs, marginBottom: t.spacing.lg, flexWrap: 'wrap' }}>
             {categories.map((c) => (
               <button key={c} onClick={() => setActiveCategory(c)} style={{
-                padding: '6px 14px', borderRadius: 999, border: 'none', fontSize: 13, fontWeight: 500,
-                backgroundColor: activeCategory === c ? t.colors.brand.primary : 'var(--muted)',
-                color: activeCategory === c ? '#fff' : 'var(--muted-foreground)', cursor: 'pointer', fontFamily: font,
+                padding: `${t.spacing.xxs}px ${t.spacing.md}px`, borderRadius: t.radius.xl, border: 'none', fontSize: t.typography.bodySm.size, fontWeight: t.typography.fontWeights.medium,
+                backgroundColor: activeCategory === c ? t.colors.brand.primary : t.semantic.surface.raised,
+                color: activeCategory === c ? t.colors.feedback.white : t.semantic.text.muted, cursor: 'pointer', fontFamily: font,
                 transition: 'all 0.15s ease',
               }}>{c}</button>
             ))}
@@ -59,32 +59,32 @@ export function PatternsPage() {
       )}
 
       {id && (
-        <div style={{ marginBottom: 24, display: 'flex', alignItems: 'center' }}>
-          <KButton variant="ghost" size="sm" icon={<ChevronLeft size={16} />} onClick={() => navigate('/patterns')}>
+        <div style={{ marginBottom: t.spacing.lg, display: 'flex', alignItems: 'center' }}>
+          <KButton variant="ghost" size="sm" icon={<ChevronLeft size={t.icon.sm} />} onClick={() => navigate('/patterns')}>
             Ver todos los patrones
           </KButton>
         </div>
       )}
 
       {/* Patterns Grid */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: t.spacing.lg }}>
         {filtered.map((pattern) => {
           if (id) {
             // Single view structure: similar to TemplatesPage
             return (
               <div key={pattern.id}>
                 {/* Intro */}
-                <div style={{ marginBottom: 24 }}>
-                  <span style={{ fontSize: 11, fontWeight: 600, color: t.colors.brand.primary, textTransform: 'uppercase', letterSpacing: 1 }}>{pattern.category}</span>
-                  <h2 style={{ margin: '4px 0 0', fontSize: 30, fontWeight: 700, color: t.colors.brand.navy }}>{pattern.title}</h2>
-                  <p style={{ margin: '8px 0 0', fontSize: 16, color: t.colors.neutral[500], lineHeight: 1.5 }}>{pattern.description}</p>
+                <div style={{ marginBottom: t.spacing.lg }}>
+                  <span style={{ fontSize: t.typography.bodyXs.size, fontWeight: t.typography.fontWeights.semibold, color: t.colors.brand.primary, textTransform: 'uppercase', letterSpacing: t.typography.letterSpacing.wide }}>{pattern.category}</span>
+                  <h2 style={{ margin: `${t.spacing.xxs}px 0 0`, fontSize: t.typography.h2.size, fontWeight: t.typography.fontWeights.bold, color: t.semantic.text.primary }}>{pattern.title}</h2>
+                  <p style={{ margin: `${t.spacing.sm}px 0 0`, fontSize: t.typography.bodyMd.size, color: t.semantic.text.secondary, lineHeight: 1.5 }}>{pattern.description}</p>
                 </div>
 
                 {/* Preview */}
-                <div style={{ marginBottom: 24 }}>
-                  <h4 style={{ fontSize: 14, fontWeight: 600, color: t.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Vista Previa</h4>
-                  <div style={{ borderRadius: t.radius.lg, border: `1px solid ${t.colors.neutral[200]}`, overflow: 'hidden', backgroundColor: 'var(--background)' }}>
-                    <div style={{ padding: 24 }}>
+                <div style={{ marginBottom: t.spacing.lg }}>
+                  <h4 style={{ fontSize: t.typography.bodySm.size, fontWeight: t.typography.fontWeights.bold, color: t.semantic.text.primary, marginBottom: t.spacing.sm, marginTop: 0 }}>Vista Previa</h4>
+                  <div style={{ borderRadius: t.radius.lg, border: `1px solid ${t.semantic.border.default}`, overflow: 'hidden', backgroundColor: t.semantic.surface.card }}>
+                    <div style={{ padding: t.spacing.lg }}>
                       {pattern.component}
                     </div>
                   </div>
@@ -92,7 +92,7 @@ export function PatternsPage() {
 
                 {/* Code */}
                 <div>
-                  <h4 style={{ fontSize: 14, fontWeight: 600, color: t.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Código</h4>
+                  <h4 style={{ fontSize: t.typography.bodySm.size, fontWeight: t.typography.fontWeights.bold, color: t.semantic.text.primary, marginBottom: t.spacing.sm, marginTop: 0 }}>Código</h4>
                   <CodeBlock code={pattern.code} filename={`${pattern.id}.tsx`} />
                 </div>
               </div>
@@ -102,23 +102,23 @@ export function PatternsPage() {
           // Gallery view structure
           return (
             <div key={pattern.id} style={{
-              borderRadius: t.radius.xl, border: `1px solid var(--border)`,
-              overflow: 'hidden', backgroundColor: 'var(--card)',
+              borderRadius: t.radius.xl, border: `1px solid ${t.semantic.border.default}`,
+              overflow: 'hidden', backgroundColor: t.semantic.surface.card,
               transition: 'box-shadow 0.2s ease',
             }}>
               {/* Pattern Header */}
-              <div style={{ padding: '16px 24px', borderBottom: `1px solid var(--border)`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div style={{ padding: `${t.spacing.md}px ${t.spacing.lg}px`, borderBottom: `1px solid ${t.semantic.border.default}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <h3 style={{ margin: 0, fontSize: 16, fontWeight: 600, color: 'var(--foreground)' }}>{pattern.title}</h3>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: t.spacing.sm }}>
+                    <h3 style={{ margin: 0, fontSize: t.typography.bodyLg.size, fontWeight: t.typography.fontWeights.bold, color: t.semantic.text.primary }}>{pattern.title}</h3>
                     <KBadge khorStatus="default" label={pattern.category} />
                   </div>
-                  <p style={{ margin: '4px 0 0', fontSize: 13, color: 'var(--muted-foreground)' }}>{pattern.description}</p>
+                  <p style={{ margin: `${t.spacing.xxs}px 0 0`, fontSize: t.typography.bodySm.size, color: t.semantic.text.muted }}>{pattern.description}</p>
                 </div>
                 <KButton
                   variant={showCode[pattern.id] ? 'primary' : 'outline'}
                   size="sm"
-                  icon={<Copy size={14} />}
+                  icon={<Copy size={t.icon.sm} />}
                   onClick={() => setShowCode((prev) => ({ ...prev, [pattern.id]: !prev[pattern.id] }))}
                 >
                   Código
@@ -126,13 +126,13 @@ export function PatternsPage() {
               </div>
 
               {/* Pattern Preview */}
-              <div style={{ padding: 24, backgroundColor: 'var(--background)' }}>
+              <div style={{ padding: t.spacing.lg, backgroundColor: t.semantic.surface.page }}>
                 {pattern.component}
               </div>
 
               {/* Code Block (toggle) */}
               {showCode[pattern.id] && (
-                <div style={{ borderTop: `1px solid var(--border)` }}>
+                <div style={{ borderTop: `1px solid ${t.semantic.border.default}` }}>
                   <CodeBlock code={pattern.code} filename={`${pattern.id}.tsx`} />
                 </div>
               )}

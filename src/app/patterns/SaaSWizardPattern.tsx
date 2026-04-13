@@ -63,31 +63,31 @@ function SaaSWizardInternal() {
   };
 
   return (
-    <div style={{ maxWidth: 840, margin: '0 auto', fontFamily: t.typography.fontPrimary, padding: '20px 16px' }}>
+    <div style={{ maxWidth: t.layout.mainWidth, margin: '0 auto', fontFamily: t.typography.fontPrimary, padding: `${t.spacing.md}px ${t.spacing.sm}px` }}>
       {/* Wizard Header */}
       <motion.div 
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        style={{ textAlign: 'center', marginBottom: 40 }}
+        style={{ textAlign: 'center', marginBottom: t.spacing.xl }}
       >
-        <KFlex justify="center" style={{ marginBottom: 16 }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '4px 12px', backgroundColor: 'rgba(224,77,54,0.1)', borderRadius: 100, color: t.colors.brand.primary, fontSize: 11, fontWeight: 800, letterSpacing: 1 }}>
+        <KFlex justify="center" style={{ marginBottom: t.spacing.md }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing.xs, padding: '4px 12px', backgroundColor: `${t.colors.brand.primary}1a`, borderRadius: t.radius.full, color: t.colors.brand.primary, fontSize: t.typography.bodyXs.size, fontWeight: t.typography.fontWeights.extrabold, letterSpacing: t.typography.letterSpacing.wider }}>
             <Sparkles size={14} /> WAVE 13: RESPONSIVE FLOW
           </div>
         </KFlex>
-        <h2 style={{ fontSize: 'clamp(24px, 5vw, 36px)', fontWeight: 900, color: 'var(--foreground)', letterSpacing: -1.5, margin: 0 }}>Onboarding de Ingeniería</h2>
-        <p style={{ fontSize: 15, color: 'var(--muted-foreground)', marginTop: 8, fontWeight: 500 }}>Configura tu infraestructura distribuida en segundos.</p>
+        <h2 style={{ fontSize: t.typography.display2.size, fontWeight: t.typography.fontWeights.extrabold, color: t.semantic.text.primary, letterSpacing: t.typography.letterSpacing.tight, margin: 0 }}>Onboarding de Ingeniería</h2>
+        <p style={{ fontSize: t.typography.bodyMd.size, color: t.semantic.text.muted, marginTop: t.spacing.xs, fontWeight: t.typography.fontWeights.medium }}>Configura tu infraestructura distribuida en segundos.</p>
       </motion.div>
 
       {/* Stepper Component */}
-      <div style={{ marginBottom: 48 }} className="k-show-md">
+      <div style={{ marginBottom: t.spacing.xl }} className="k-show-md">
         <KSteps current={step} items={steps} onChange={setStep} />
       </div>
 
       {/* Steps Content Area with AnimatePresence */}
       <div style={{ 
-        backgroundColor: 'var(--card)', borderRadius: 32, padding: 'calc(24px + 2vw)', 
-        border: '1px solid var(--border)', boxShadow: t.shadows.lg,
+        backgroundColor: t.semantic.surface.card, borderRadius: t.radius.lg, padding: t.spacing.xl, 
+        border: `1px solid ${t.semantic.border.default}`, boxShadow: t.shadows.lg,
         minHeight: 480, display: 'flex', flexDirection: 'column',
         position: 'relative',
         overflow: 'hidden'
@@ -103,9 +103,9 @@ function SaaSWizardInternal() {
             style={{ flex: 1, width: '100%', display: 'flex', flexDirection: 'column' }}
           >
             {step === 0 && (
-              <motion.div variants={staggerContainer} initial="hidden" animate="visible" style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-                <KText variant="h3" color="navy" style={{ fontWeight: 800 }}>Información de Identidad</KText>
-                <KRow gutter={[20, 20]}>
+              <motion.div variants={staggerContainer} initial="hidden" animate="visible" style={{ display: 'flex', flexDirection: 'column', gap: t.spacing.lg }}>
+                <KText variant="h3" color="navy" style={{ fontWeight: t.typography.fontWeights.extrabold }}>Información de Identidad</KText>
+                <KRow gutter={[t.spacing.md, t.spacing.md]}>
                   <KCol span={24} md={12}>
                     <motion.div variants={fadeInUp}>
                       <KFormField label="Nombre Completo" required>
@@ -138,8 +138,8 @@ function SaaSWizardInternal() {
             )}
 
             {step === 1 && (
-              <motion.div variants={staggerContainer} initial="hidden" animate="visible" style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-                <KText variant="h3" color="navy" style={{ fontWeight: 800 }}>Workspace de Organización</KText>
+              <motion.div variants={staggerContainer} initial="hidden" animate="visible" style={{ display: 'flex', flexDirection: 'column', gap: t.spacing.lg }}>
+                <KText variant="h3" color="navy" style={{ fontWeight: t.typography.fontWeights.extrabold }}>Workspace de Organización</KText>
                 <KRow gutter={[20, 20]}>
                   <KCol span={24} md={16}>
                     <motion.div variants={fadeInUp}>
@@ -172,9 +172,30 @@ function SaaSWizardInternal() {
             )}
 
             {step === 2 && (
-              <motion.div variants={staggerContainer} initial="hidden" animate="visible" style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-                <KText variant="h3" color="navy" style={{ fontWeight: 800 }}>Nivel de Servicio & Seguridad</KText>
-                <KRow gutter={[16, 16]}>
+              <motion.div variants={staggerContainer} initial="hidden" animate="visible" style={{ display: 'flex', flexDirection: 'column', gap: t.spacing.lg }}>
+                <KText variant="h3" color="navy" style={{ fontWeight: t.typography.fontWeights.extrabold }}>Nivel de Servicio & Seguridad</KText>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: t.spacing.md, marginBottom: t.spacing.lg }}>
+                  {[
+                    { id: 'dev', label: 'Development', desc: 'Auto-scaling for testing.' },
+                    { id: 'stg', label: 'Staging', desc: 'Pre-production environment.' },
+                    { id: 'prd', label: 'Production', desc: 'High availability clusters.' }
+                  ].map(env => (
+                    <div 
+                      key={env.id}
+                      onClick={() => setForm({ ...form, environment: env.id })}
+                      style={{ 
+                        flex: '1 1 200px', padding: t.spacing.md, borderRadius: t.radius.md,
+                        border: `2px solid ${form.environment === env.id ? t.colors.brand.primary : t.semantic.border.default}`,
+                        backgroundColor: form.environment === env.id ? `${t.colors.brand.primary}08` : 'transparent',
+                        cursor: 'pointer', transition: 'all 0.2s ease'
+                      }}
+                    >
+                      <div style={{ fontWeight: t.typography.fontWeights.bold, color: t.semantic.text.primary }}>{env.label}</div>
+                      <div style={{ fontSize: t.typography.bodySm.size, color: t.semantic.text.muted }}>{env.desc}</div>
+                    </div>
+                  ))}
+                </div>
+                <KRow gutter={[t.spacing.md, t.spacing.md]}>
                   {['Starter', 'Pro', 'Enterprise'].map((p) => (
                     <KCol key={p} span={24} md={8}>
                       <motion.div 
@@ -182,32 +203,32 @@ function SaaSWizardInternal() {
                         whileHover={{ scale: 1.02, y: -2 }}
                         whileTap={{ scale: 0.98 }}
                         onClick={() => setForm({ ...form, plan: p.toLowerCase() })}
-                        style={{ 
-                          padding: 24, borderRadius: 24, border: '2px solid var(--border)', cursor: 'pointer',
-                          borderColor: form.plan === p.toLowerCase() ? t.colors.brand.primary : 'var(--border)',
-                          backgroundColor: form.plan === p.toLowerCase() ? 'rgba(224,77,54,0.04)' : 'var(--card)',
+                         style={{ 
+                          padding: t.spacing.lg, borderRadius: t.radius.lg, border: `2px solid ${t.semantic.border.default}`, cursor: 'pointer',
+                          borderColor: form.plan === p.toLowerCase() ? t.colors.brand.primary : t.semantic.border.default,
+                          backgroundColor: form.plan === p.toLowerCase() ? `${t.colors.brand.primary}0a` : t.semantic.surface.card,
                           transition: 'all 0.2s ease',
                           height: '100%',
                           display: 'flex',
                           flexDirection: 'column',
                           justifyContent: 'space-between',
-                          boxShadow: form.plan === p.toLowerCase() ? '0 15px 30px -10px rgba(224,77,54,0.3)' : 'none'
+                          boxShadow: form.plan === p.toLowerCase() ? `0 15px 30px -10px ${t.colors.brand.primary}4d` : 'none'
                         }}
                       >
                         <KFlex justify="space-between" align="center">
-                          <span style={{ fontWeight: 900, fontSize: 18, letterSpacing: -0.5 }}>{p}</span>
+                          <span style={{ fontWeight: t.typography.fontWeights.extrabold, fontSize: t.typography.h4.size, letterSpacing: t.typography.letterSpacing.tight }}>{p}</span>
                           {form.plan === p.toLowerCase() && <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}><CheckCircle2 size={20} color={t.colors.brand.primary} strokeWidth={3} /></motion.div>}
                         </KFlex>
                       </motion.div>
                     </KCol>
                   ))}
                 </KRow>
-                <motion.div variants={fadeInUp} style={{ marginTop: 8 }}>
-                  <KFlex gap={12} align="flex-start">
+                <motion.div variants={fadeInUp} style={{ marginTop: t.spacing.sm }}>
+                  <KFlex gap={t.spacing.sm} align="flex-start">
                     <KCheckbox checked />
                     <div>
                       <KText strong>Arquitectura Zero-Trust</KText>
-                      <p style={{ fontSize: 13, color: 'var(--muted-foreground)', marginTop: 4, margin: 0 }}>Cifrado de grado militar para todos los nodos del workspace.</p>
+                      <p style={{ fontSize: t.typography.bodySm.size, color: t.semantic.text.muted, marginTop: t.spacing.xs, margin: 0 }}>Cifrado de grado militar para todos los nodos del workspace.</p>
                     </div>
                   </KFlex>
                 </motion.div>
@@ -217,31 +238,31 @@ function SaaSWizardInternal() {
             {step === 3 && (
               <motion.div 
                 variants={staggerContainer} initial="hidden" animate="visible"
-                style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', flex: 1, gap: 16 }}
+                style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', flex: 1, gap: t.spacing.md }}
               >
                 <motion.div 
                   initial={{ scale: 0, rotate: -45 }}
                   animate={{ scale: 1, rotate: 0 }}
                   transition={{ type: 'spring', stiffness: 200, damping: 12, delay: 0.2 }}
-                  style={{ width: 100, height: 100, borderRadius: 32, backgroundColor: 'rgba(224,77,54,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: t.colors.brand.primary, marginBottom: 8 }}
+                  style={{ width: t.sizing[24] || 100, height: t.sizing[24] || 100, borderRadius: t.radius.lg, backgroundColor: `${t.colors.brand.primary}1a`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: t.colors.brand.primary, marginBottom: t.spacing.sm }}
                 >
                   <Rocket size={48} strokeWidth={2.5} />
                 </motion.div>
                 <motion.div variants={fadeInUp}>
-                  <KText variant="h2" color="navy" style={{ fontSize: 'clamp(24px, 5vw, 32px)', fontWeight: 900, letterSpacing: -1 }}>¡Sistema Operativo!</KText>
+                  <KText variant="h2" color="navy" style={{ fontSize: t.typography.display2.size, fontWeight: t.typography.fontWeights.extrabold, letterSpacing: t.typography.letterSpacing.tight }}>¡Sistema Operativo!</KText>
                 </motion.div>
                 <motion.div variants={fadeInUp}>
-                  <KText variant="body-md" color="secondary" style={{ fontWeight: 600 }}>Workspace <strong>{form.org || 'Khor Engineering'}</strong> desplegado con éxito.</KText>
+                  <KText variant="body-md" color="secondary" style={{ fontWeight: t.typography.fontWeights.semibold }}>Workspace <strong>{form.org || 'Khor Engineering'}</strong> desplegado con éxito.</KText>
                 </motion.div>
-                <motion.div variants={fadeInUp} style={{ padding: '24px 32px', borderRadius: 24, backgroundColor: 'var(--muted)', width: '100%', maxWidth: 460, marginTop: 12, border: '1px solid var(--border)' }}>
-                  <div style={{ fontSize: 11, textTransform: 'uppercase', fontWeight: 900, color: 'var(--muted-foreground)', marginBottom: 16, letterSpacing: 1.5 }}>Token de Acceso Generado</div>
-                  <KFlex vertical gap={12}>
+                <motion.div variants={fadeInUp} style={{ padding: `${t.spacing.lg}px ${t.spacing.xl}px`, borderRadius: t.radius.lg, backgroundColor: t.semantic.surface.raised, width: '100%', maxWidth: 460, marginTop: t.spacing.md, border: `1px solid ${t.semantic.border.default}` }}>
+                  <div style={{ fontSize: t.typography.bodyXs.size, textTransform: 'uppercase', fontWeight: t.typography.fontWeights.extrabold, color: t.semantic.text.muted, marginBottom: t.spacing.md, letterSpacing: t.typography.letterSpacing.wider }}>Token de Acceso Generado</div>
+                  <KFlex vertical gap={t.spacing.sm}>
                     <KFlex justify="space-between" align="center">
-                      <span style={{ fontSize: 13, color: 'var(--muted-foreground)', fontWeight: 600 }}>Ingeniero</span>
-                      <span style={{ fontWeight: 800, fontSize: 14 }}>{form.name}</span>
+                      <span style={{ fontSize: t.typography.bodySm.size, color: t.semantic.text.muted, fontWeight: t.typography.fontWeights.semibold }}>Ingeniero</span>
+                      <span style={{ fontWeight: t.typography.fontWeights.bold, fontSize: t.typography.bodyMd.size }}>{form.name}</span>
                     </KFlex>
                     <KFlex justify="space-between" align="center">
-                      <span style={{ fontSize: 13, color: 'var(--muted-foreground)', fontWeight: 600 }}>Plan Activo</span>
+                      <span style={{ fontSize: t.typography.bodySm.size, color: t.semantic.text.muted, fontWeight: t.typography.fontWeights.semibold }}>Plan Activo</span>
                       <KBadge status="success" text={form.plan.toUpperCase() + ' CLOUD'} />
                     </KFlex>
                   </KFlex>
@@ -252,8 +273,8 @@ function SaaSWizardInternal() {
         </AnimatePresence>
 
         {/* Action Buttons */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 'auto', paddingTop: 40, borderTop: '1px solid var(--border)' }}>
-          <KButton variant="ghost" icon={<ArrowLeft size={16} />} disabled={step === 0} onClick={handleBack}>Regresar</KButton>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 'auto', paddingTop: t.spacing.xl, borderTop: `1px solid ${t.semantic.border.default}` }}>
+          <KButton variant="ghost" icon={<ArrowLeft size={t.icon.md} />} disabled={step === 0} onClick={handleBack}>Regresar</KButton>
           {step < 3 ? (
             <KButton variant="primary" icon={<ArrowRight size={16} />} disabled={!canContinue} onClick={handleNext}>Siguiente</KButton>
           ) : (

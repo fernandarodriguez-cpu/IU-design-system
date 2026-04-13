@@ -39,8 +39,8 @@ function SaaSCRUDTableInternal() {
           <p style={{ margin: `${t.spacing.xs}px 0 0`, fontSize: t.typography.bodyMd.size, color: 'var(--muted-foreground)' }}>Lista completa de colaboradores activos en la organización.</p>
         </div>
         <div style={{ display: 'flex', gap: t.spacing.sm }}>
-          <KButton variant="outline" icon={<Download size={16} />}>Exportar</KButton>
-          <KButton variant="primary" icon={<Plus size={16} />}>Nuevo Empleado</KButton>
+          <KButton variant="outline" icon={<Download size={t.icon.sm} />}>Exportar</KButton>
+          <KButton variant="primary" icon={<Plus size={t.icon.sm} />}>Nuevo Empleado</KButton>
         </div>
       </div>
 
@@ -101,9 +101,9 @@ function SaaSCRUDTableInternal() {
             id: 'actions',
             header: '',
             cell: () => (
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 4 }}>
-                <KButton variant="ghost" size="sm" icon={<Edit size={14} />} />
-                <KButton variant="ghost" size="sm" icon={<Trash2 size={14} />} />
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: t.spacing.xs }}>
+                <KButton variant="ghost" size="sm" icon={<Edit size={t.icon.xs} />} />
+                <KButton variant="ghost" size="sm" icon={<Trash2 size={t.icon.xs} />} />
               </div>
             )
           }
@@ -113,7 +113,7 @@ function SaaSCRUDTableInternal() {
         enableColumnToggle={true}
         enableExport={true}
         actions={
-          <KButton variant="secondary" size="sm" icon={<Filter size={14} />}>Filtros Avanzados</KButton>
+          <KButton variant="secondary" size="sm" icon={<Filter size={t.icon.xs} />}>Filtros Avanzados</KButton>
         }
       />
     </div>

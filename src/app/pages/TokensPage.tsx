@@ -63,6 +63,59 @@ const ColorCard = ({ variable, name, hex }: { variable: string; name: string; he
   </div>
 );
 
+const ShadowLayerInfo = ({ layer, x, y, blur, spread, color, opacity, inset }: { 
+  layer: number; x: number; y: number; blur: number; spread: number; color: string; opacity: string; inset?: boolean 
+}) => (
+  <div className="flex items-center gap-2 py-2 border-b border-khor-border-muted/50 last:border-0">
+    <div className="w-5 h-5 rounded bg-khor-secondary/10 flex items-center justify-center text-[10px] font-bold text-khor-secondary">
+      {layer}
+    </div>
+    <div className="flex flex-wrap gap-2 text-[10px] text-khor-slate-500 font-medium">
+      <span className="bg-white px-1.5 py-0.5 rounded border border-khor-border-muted">X: <span className="text-khor-secondary font-bold">{x}</span></span>
+      <span className="bg-white px-1.5 py-0.5 rounded border border-khor-border-muted">Y: <span className="text-khor-secondary font-bold">{y}</span></span>
+      <span className="bg-white px-1.5 py-0.5 rounded border border-khor-border-muted">Blur: <span className="text-khor-secondary font-bold">{blur}</span></span>
+      <span className="bg-white px-1.5 py-0.5 rounded border border-khor-border-muted">Spread: <span className="text-khor-secondary font-bold">{spread || 0}</span></span>
+      <span className="bg-white px-1.5 py-0.5 rounded border border-khor-border-muted">Opacity: <span className="text-khor-primary font-bold">{opacity}</span></span>
+      {inset && <KTag size="xxs" color="info" label="INSET" className="text-[8px] h-4" />}
+    </div>
+  </div>
+);
+
+const ShadowDetailCard = ({ name, variable, layers }: { 
+  name: string; variable: string; layers: Array<{ x: number, y: number, blur: number, spread: number, opacity: string, color: string, inset?: boolean }> 
+}) => (
+  <div className="p-6 border-b border-khor-border-muted last:border-0 hover:bg-white/40 transition-all">
+    <div className="flex flex-col md:flex-row gap-8">
+      <div className="flex-shrink-0 w-32 h-32 bg-white rounded-2xl border border-khor-border-muted shadow-inner flex items-center justify-center relative overflow-hidden group">
+        <div className="absolute inset-0 opacity-[0.2] bg-[radial-gradient(#051758_1px,transparent_1px)] [background-size:16px_16px]" />
+        <div className="w-16 h-16 bg-white rounded-xl border border-khor-border-muted z-10 transition-transform group-hover:scale-110" style={{ boxShadow: `var(${variable})` }} />
+      </div>
+      <div className="flex-1">
+        <div className="flex items-center gap-3 mb-4">
+          <h3 className="text-sm font-bold text-khor-secondary">{name}</h3>
+          <code className="text-[10px] text-khor-slate-400 font-mono tracking-tighter">{variable}</code>
+          <button 
+            onClick={() => {
+              const val = getComputedStyle(document.documentElement).getPropertyValue(variable);
+              navigator.clipboard.writeText(val);
+            }}
+            className="p-1 hover:bg-khor-primary/10 text-khor-slate-400 hover:text-khor-primary rounded transition-colors"
+            title="Copiar Box-Shadow"
+          >
+            <Zap size={14} />
+          </button>
+        </div>
+        <div className="bg-khor-neutral-100/50 rounded-xl p-3 border border-khor-border-muted">
+          <h4 className="text-[9px] font-bold text-khor-slate-400 uppercase tracking-widest mb-2 px-1">Construcción Técnica</h4>
+          {layers.map((l, i) => (
+            <ShadowLayerInfo key={i} layer={i + 1} {...l} />
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
 export function TokensPage() {
   return (
     <div className="max-w-7xl mx-auto py-16 px-8">
@@ -230,12 +283,60 @@ export function TokensPage() {
           </TokenSection>
 
           {/* 8. SHADOW */}
-          <TokenSection id="shadow" icon={BoxSelect} title="Shadow Construction">
-            {['sm', 'md', 'lg', 'xl'].map(s => (
-              <TokenItem key={s} name={`Shadow ${s.toUpperCase()}`} variable={`--khor-shadow-${s}`}>
-                <div className="w-16 h-16 bg-white rounded-xl border border-khor-border-muted" style={{ boxShadow: `var(--khor-shadow-${s})` }} />
-              </TokenItem>
-            ))}
+          <TokenSection 
+            id="shadow" 
+            icon={BoxSelect} 
+            title="Shadow Construction (Figma & Penpot)" 
+            description="Sombras multi-capa optimizadas para profundidad y branding. Valores listos para replicar en herramientas de diseño."
+          >
+            <div className="flex flex-col">
+              <ShadowDetailCard 
+                name="Shadow SM" 
+                variable="--khor-shadow-sm" 
+                layers={[
+                  { x: 0, y: 1, blur: 2, spread: 0, opacity: "4%", color: "#051758" },
+                  { x: 0, y: 1, blur: 1, spread: 0, opacity: "2%", color: "#000000" }
+                ]} 
+              />
+              <ShadowDetailCard 
+                name="Shadow MD" 
+                variable="--khor-shadow-md" 
+                layers={[
+                  { x: 0, y: 4, blur: 6, spread: -1, opacity: "8%", color: "#051758" },
+                  { x: 0, y: 2, blur: 4, spread: -1, opacity: "4%", color: "#000000" }
+                ]} 
+              />
+              <ShadowDetailCard 
+                name="Shadow LG" 
+                variable="--khor-shadow-lg" 
+                layers={[
+                  { x: 0, y: 10, blur: 15, spread: -3, opacity: "10%", color: "#051758" },
+                  { x: 0, y: 4, blur: 6, spread: -2, opacity: "5%", color: "#000000" }
+                ]} 
+              />
+              <ShadowDetailCard 
+                name="Shadow XL" 
+                variable="--khor-shadow-xl" 
+                layers={[
+                  { x: 0, y: 20, blur: 25, spread: -5, opacity: "12%", color: "#051758" },
+                  { x: 0, y: 10, blur: 10, spread: -5, opacity: "4%", color: "#000000" }
+                ]} 
+              />
+              <ShadowDetailCard 
+                name="Shadow 2XL" 
+                variable="--khor-shadow-2xl" 
+                layers={[
+                  { x: 0, y: 25, blur: 50, spread: -12, opacity: "25%", color: "#051758" }
+                ]} 
+              />
+              <ShadowDetailCard 
+                name="Shadow Inner" 
+                variable="--khor-shadow-inner" 
+                layers={[
+                  { x: 0, y: 2, blur: 4, spread: 0, opacity: "6%", color: "#000000", inset: true }
+                ]} 
+              />
+            </div>
           </TokenSection>
 
           {/* 9. OPACITY */}
