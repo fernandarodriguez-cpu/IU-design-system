@@ -716,13 +716,15 @@ interface KAccordionProps {
 ```
 
 ### KDatePicker
-Selector de fecha con calendario.
+Selector de fecha headless usando react-day-picker y date-fns.
 ```tsx
 interface KDatePickerProps {
   value?: Date;
-  onChange?: (date: Date) => void;
+  onChange?: (date: Date | undefined) => void;
   placeholder?: string;
   disabled?: boolean;
+  minDate?: Date;
+  maxDate?: Date;
   size?: 'sm' | 'md' | 'lg';
   className?: string;
 }
@@ -774,37 +776,50 @@ Componentes complejos que conforman secciones completas de UI.
 Importar: `import { KDataTable, KModal, ... } from './components/design-system/organisms'`
 
 ### KDataTable
-Tabla de datos con sorting, paginacion, busqueda y acciones.
+Tabla de datos headless basada en @tanstack/react-table.
 ```tsx
-interface KDataTableColumn<T> {
-  key: string;
-  title: string;
-  dataIndex: string;
-  render?: (value: any, record: T, index: number) => ReactNode;
-  sortable?: boolean;
-  width?: number | string;
-}
+import { ColumnDef } from '@tanstack/react-table';
 
-interface KDataTableProps<T> {
-  columns: KDataTableColumn<T>[];
-  data: T[];
+interface KDataTableProps<TData, TValue> {
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
   loading?: boolean;
   searchable?: boolean;
   searchPlaceholder?: string;
-  actions?: ReactNode;       // Botones en el header de la tabla
+  actions?: React.ReactNode; 
   pageSize?: number;
+  rowSelection?: Record<string, boolean>;
+  onRowSelectionChange?: (selection: Record<string, boolean>) => void;
 }
 
+// Ejemplo de uso:
 <KDataTable
   columns={[
-    { key: 'name', title: 'Nombre', dataIndex: 'name', sortable: true },
-    { key: 'status', title: 'Estado', dataIndex: 'status',
-      render: (val) => <KBadge status={val} label={val} /> },
+    { accessorKey: 'name', header: 'Nombre' },
+    { accessorKey: 'status', header: 'Estado', cell: ({ row }) => <KBadge label={row.original.status} /> }
   ]}
   data={users}
-  searchable
-  actions={<KButton variant="primary" icon={<Plus size={16} />}>Nuevo</KButton>}
 />
+```
+
+### KForm
+Sistema de formularios headless basado en react-hook-form y conformante a los estándares Radix.
+```tsx
+import { KForm, KFormItem } from './organisms';
+import { useForm } from 'react-hook-form';
+
+const methods = useForm();
+
+<KForm methods={methods} onSubmit={console.log}>
+  <KForm.Field
+    name="email"
+    render={({ field }) => (
+      <KFormItem label="Email">
+        <KInput {...field} />
+      </KFormItem>
+    )}
+  />
+</KForm>
 ```
 
 ### KModal

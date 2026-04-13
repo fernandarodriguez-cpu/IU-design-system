@@ -1,0 +1,14 @@
+{
+  "name": "khor-ds-sync-plugin",
+  "version": "1.0.0",
+  "description": "Figma plugin to sync Khor Design System metadata",
+  "main": "dist/code.js",
+  "scripts": {
+    "build": "node build.js",
+    "watch": "node build.js --watch"
+  },
+  "devDependencies": {
+    "@figma/plugin-typings": "^1.83.0",
+    "esbuild": "^0.19.11"
+  }
+}

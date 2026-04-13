@@ -1,456 +1,291 @@
-/**
- * TokensPage — Referencia visual de todos los design tokens Khor
- */
 import React from 'react';
 import { khorTokens } from '../theme/khor-theme';
-import { CodeBlock } from '../components/docs/CodeBlock';
+import { KTypography, KTag, KBadge } from '../components/design-system/atoms';
+import { KCardSection } from '../components/design-system/organisms';
 
-function ColorSwatch({ name, hex, desc }: { name: string; hex: string; desc: string }) {
-  const isLight = ['#FFFFFF', '#EDF0F1', '#E8F5E9', '#FFEBEE', '#FFF3E0', '#E3F2FD', '#D5DBE0'].includes(hex);
-  return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '8px 0' }}>
-      <div style={{
-        width: 48, height: 48, borderRadius: 10,
-        backgroundColor: hex,
-        border: isLight ? `1px solid ${khorTokens.colors.neutral[200]}` : 'none',
-        boxShadow: khorTokens.shadows.sm,
-        flexShrink: 0,
-      }} />
-      <div style={{ flex: 1 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <code style={{ fontSize: 13, fontWeight: 600, color: khorTokens.colors.brand.navy }}>{name}</code>
-          <code style={{ fontSize: 11, color: khorTokens.colors.neutral[400], backgroundColor: khorTokens.colors.neutral[100], padding: '1px 6px', borderRadius: 4 }}>{hex}</code>
-        </div>
-        <p style={{ margin: '2px 0 0', fontSize: 12, color: khorTokens.colors.neutral[400] }}>{desc}</p>
-      </div>
+const Section = ({ title, children, id }: { title: string; children: React.ReactNode; id?: string }) => (
+  <KCardSection id={id} title={title} className="mb-8">
+    {children}
+  </KCardSection>
+);
+
+const TokenRow = ({ name, variable, value, children }: { name: string; variable: string; value?: string; children?: React.ReactNode }) => (
+  <div style={{ 
+    display: 'flex', 
+    alignItems: 'center', 
+    gap: 16, 
+    padding: '12px 16px', 
+    backgroundColor: 'var(--khor-neutral-50)', 
+    borderRadius: khorTokens.radius.md, 
+    border: `1px solid var(--khor-border-muted)`,
+    marginBottom: 8
+  }}>
+    <div style={{ flex: '0 0 160px' }}>
+      <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--khor-secondary)' }}>{name}</div>
+      <div style={{ fontSize: 11, color: 'var(--khor-slate-400)', fontFamily: 'monospace' }}>{variable}</div>
     </div>
-  );
-}
-
-function Section({ title, id, children }: { title: string; id?: string; children: React.ReactNode }) {
-  return (
-    <div
-      id={id}
-      style={{
-        backgroundColor: khorTokens.colors.neutral[50],
-        borderRadius: khorTokens.radius.lg,
-        padding: 28,
-        boxShadow: khorTokens.shadows.sm,
-        marginBottom: 20,
-        scrollMarginTop: 24,
-      }}
-    >
-      <h3 style={{ margin: '0 0 20px', fontSize: 20, fontWeight: 700, color: khorTokens.colors.brand.navy }}>{title}</h3>
+    <div style={{ flex: 1 }}>
       {children}
     </div>
-  );
-}
+    {value && (
+      <div style={{ 
+        fontSize: 11, 
+        color: 'var(--khor-slate-500)', 
+        backgroundColor: 'var(--khor-neutral-100)', 
+        padding: '2px 6px', 
+        borderRadius: 4,
+        fontFamily: 'monospace'
+      }}>
+        {value}
+      </div>
+    )}
+  </div>
+);
+
+const ColorSwatch = ({ name, variable, hex }: { name: string; variable: string; hex?: string }) => (
+  <div style={{ 
+    display: 'flex', 
+    flexDirection: 'column',
+    gap: 8, 
+    padding: 12, 
+    backgroundColor: 'var(--khor-neutral-50)', 
+    borderRadius: khorTokens.radius.md, 
+    border: `1px solid var(--khor-border-muted)`,
+    boxShadow: 'var(--khor-shadow-sm)'
+  }}>
+    <div style={{ width: '100%', height: 48, borderRadius: khorTokens.radius.sm, backgroundColor: `var(${variable})`, border: '1px solid rgba(0,0,0,0.05)' }} />
+    <div>
+      <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--khor-secondary)' }}>{name}</div>
+      <div style={{ fontSize: 10, color: 'var(--khor-slate-400)', fontFamily: 'monospace', overflow: 'hidden', textOverflow: 'ellipsis' }}>{variable}</div>
+      {hex && <div style={{ fontSize: 10, color: 'var(--khor-slate-500)', marginTop: 2 }}>{hex}</div>}
+    </div>
+  </div>
+);
 
 export function TokensPage() {
   return (
-    <div style={{ fontFamily: khorTokens.typography.fontPrimary }}>
-      <div style={{ marginBottom: 24 }}>
-        <span style={{ fontSize: 11, fontWeight: 600, color: khorTokens.colors.brand.primary, textTransform: 'uppercase', letterSpacing: 1 }}>FUNDAMENTOS</span>
-        <h2 style={{ margin: '4px 0 0', fontSize: 30, fontWeight: 700, color: khorTokens.colors.brand.navy }}>Design Tokens</h2>
-        <p style={{ margin: '8px 0 0', fontSize: 16, color: khorTokens.colors.neutral[500] }}>
-          Variables atómicas que definen la identidad visual de todo el sistema Khor.
-        </p>
+    <div className="max-w-6xl mx-auto py-10 px-6">
+      <div className="mb-12">
+        <h1 style={{ fontSize: 32, fontWeight: 700, color: 'var(--khor-secondary)', marginBottom: 8 }}>Tokens de Diseño</h1>
+        <p style={{ color: 'var(--khor-slate-500)', fontSize: 16 }}>La base técnica v10.4 del Khor Design System para agentes y desarrolladores.</p>
       </div>
 
-      {/* Brand Colors */}
-      <Section title="1. Colores de Identidad (Brand)" id="colores">
-        <p style={{ fontSize: 14, color: khorTokens.colors.neutral[400], marginTop: 0, marginBottom: 16 }}>
-          El Rojo es energía y acción; el Navy es estabilidad y estructura profesional.
-        </p>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 8 }}>
-          <ColorSwatch name="color.brand.primary" hex="#E04D36" desc="Rojo Khor. Acciones principales, branding activo." />
-          <ColorSwatch name="color.brand.navy" hex="#051758" desc="Azul Profundo. Navegacion, Sidebar, textos de alta jerarquia." />
-          <ColorSwatch name="color.brand.accent" hex="#FF9500" desc="Naranja Accent. Destacados y alertas preventivas." />
+      <Section title="🎨 Paleta de Marca (Core)">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
+          <ColorSwatch name="Primary (Khor Orange)" variable="--khor-primary" hex="#E04D36" />
+          <ColorSwatch name="Secondary (Khor Navy)" variable="--khor-secondary" hex="#051758" />
+          <ColorSwatch name="Accent (Khor Gold)" variable="--khor-accent" hex="#FF9500" />
         </div>
       </Section>
 
-      {/* Neutrals */}
-      <Section title="2. Paleta Neutra y Superficies">
-        <p style={{ fontSize: 14, color: khorTokens.colors.neutral[400], marginTop: 0, marginBottom: 16 }}>
-          Escala disenada para reducir la fatiga visual en aplicaciones SaaS de uso intensivo (8+ horas al dia).
+      <Section title="🌑 Neutros (v10.4 Slate-Blue Scale)">
+        <p style={{ fontSize: 14, color: 'var(--khor-slate-500)', marginBottom: 20 }}>
+          Escala optimizada con tintado azulado para eliminar la fatiga visual. Los neutros antiguos están disponibles como <code>--khor-neutral-secondary-*</code>.
         </p>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 8 }}>
-          <ColorSwatch name="color.neutral.50" hex="#FFFFFF" desc="Fondos de tarjetas, inputs y areas de contenido." />
-          <ColorSwatch name="color.neutral.100" hex="#EDF0F1" desc="Fondo de canvas y divisores." />
-          <ColorSwatch name="color.neutral.200" hex="#D5DBE0" desc="Bordes y separadores sutiles." />
-          <ColorSwatch name="color.neutral.300" hex="#A0AEC0" desc="Placeholders y texto desactivado." />
-          <ColorSwatch name="color.neutral.400" hex="#718096" desc="Texto secundario." />
-          <ColorSwatch name="color.neutral.500" hex="#4A5568" desc="Texto de cuerpo." />
-          <ColorSwatch name="color.neutral.900" hex="#000000" desc="Datos numericos criticos y contraste maximo." />
-        </div>
-      </Section>
-
-      {/* Feedback */}
-      <Section title="3. Colores de Retroalimentación">
-        <p style={{ fontSize: 14, color: khorTokens.colors.neutral[400], marginTop: 0, marginBottom: 16 }}>
-          Colores con significado universal para comunicar estados del sistema sin ambiguedad.
-        </p>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 8 }}>
-          <ColorSwatch name="feedback.success" hex="#2E7D32" desc="Altas exitosas, pagos procesados." />
-          <ColorSwatch name="feedback.success-light" hex="#E8F5E9" desc="Fondo de estados exitosos." />
-          <ColorSwatch name="feedback.error" hex="#D32F2F" desc="Errores de validacion, acciones de eliminar." />
-          <ColorSwatch name="feedback.error-light" hex="#FFEBEE" desc="Fondo de estados de error." />
-          <ColorSwatch name="feedback.warning" hex="#FF9500" desc="Contratos por expirar, campos incompletos." />
-          <ColorSwatch name="feedback.warning-light" hex="#FFF3E0" desc="Fondo de advertencias." />
-        </div>
-      </Section>
-
-      {/* Interaction States */}
-      <Section title="4. Estados de Interacción">
-        <div style={{ overflowX: 'auto', borderRadius: khorTokens.radius.md, border: `1px solid ${khorTokens.colors.neutral[200]}` }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
-            <thead>
-              <tr style={{ backgroundColor: khorTokens.colors.neutral[100] }}>
-                <th style={{ padding: '10px 16px', textAlign: 'left', fontWeight: 600, borderBottom: `1px solid ${khorTokens.colors.neutral[200]}` }}>Estado</th>
-                <th style={{ padding: '10px 16px', textAlign: 'left', fontWeight: 600, borderBottom: `1px solid ${khorTokens.colors.neutral[200]}` }}>Lógica de Color</th>
-                <th style={{ padding: '10px 16px', textAlign: 'left', fontWeight: 600, borderBottom: `1px solid ${khorTokens.colors.neutral[200]}` }}>Resultado Visual</th>
-                <th style={{ padding: '10px 16px', textAlign: 'left', fontWeight: 600, borderBottom: `1px solid ${khorTokens.colors.neutral[200]}` }}>Ejemplo</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td style={{ padding: '10px 16px', fontWeight: 500, borderBottom: `1px solid ${khorTokens.colors.neutral[200]}` }}>Hover</td>
-                <td style={{ padding: '10px 16px', borderBottom: `1px solid ${khorTokens.colors.neutral[200]}` }}>color + 10% Brightness</td>
-                <td style={{ padding: '10px 16px', borderBottom: `1px solid ${khorTokens.colors.neutral[200]}` }}>Se aclara levemente</td>
-                <td style={{ padding: '10px 16px', borderBottom: `1px solid ${khorTokens.colors.neutral[200]}` }}>
-                  <div style={{ display: 'flex', gap: 4 }}>
-                    <span style={{ width: 32, height: 24, borderRadius: 4, backgroundColor: '#E04D36', display: 'inline-block' }} />
-                    <span style={{ fontSize: 16 }}>→</span>
-                    <span style={{ width: 32, height: 24, borderRadius: 4, backgroundColor: '#e8644f', display: 'inline-block' }} />
-                  </div>
-                </td>
-              </tr>
-              <tr style={{ backgroundColor: khorTokens.colors.neutral[100] }}>
-                <td style={{ padding: '10px 16px', fontWeight: 500, borderBottom: `1px solid ${khorTokens.colors.neutral[200]}` }}>Active</td>
-                <td style={{ padding: '10px 16px', borderBottom: `1px solid ${khorTokens.colors.neutral[200]}` }}>color - 10% Brightness</td>
-                <td style={{ padding: '10px 16px', borderBottom: `1px solid ${khorTokens.colors.neutral[200]}` }}>Se oscurece</td>
-                <td style={{ padding: '10px 16px', borderBottom: `1px solid ${khorTokens.colors.neutral[200]}` }}>
-                  <div style={{ display: 'flex', gap: 4 }}>
-                    <span style={{ width: 32, height: 24, borderRadius: 4, backgroundColor: '#E04D36', display: 'inline-block' }} />
-                    <span style={{ fontSize: 16 }}>→</span>
-                    <span style={{ width: 32, height: 24, borderRadius: 4, backgroundColor: '#c9442f', display: 'inline-block' }} />
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td style={{ padding: '10px 16px', fontWeight: 500 }}>Disabled</td>
-                <td style={{ padding: '10px 16px' }}>Greyscale + Opacity 50%</td>
-                <td style={{ padding: '10px 16px' }}>Pierde saturación</td>
-                <td style={{ padding: '10px 16px' }}>
-                  <span style={{ width: 32, height: 24, borderRadius: 4, backgroundColor: '#E04D36', display: 'inline-block', opacity: 0.5, filter: 'grayscale(1)' }} />
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </Section>
-
-      {/* Typography */}
-      <Section title="5. Tipografía" id="tipografia">
-        <p style={{ fontSize: 14, color: khorTokens.colors.neutral[400], marginTop: 0, marginBottom: 16 }}>
-          Fuente principal: <strong>Raleway</strong> | Fuente secundaria: <strong>Plus Jakarta Sans</strong>
-        </p>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-          {[
-            { label: 'H1', size: '38px', weight: '700 (Bold)', lh: '1.2', sample: 'Título de Sección Principal' },
-            { label: 'H2', size: '30px', weight: '700 (Bold)', lh: '1.2', sample: 'Título de Módulo' },
-            { label: 'H3', size: '24px', weight: '600 (SemiBold)', lh: '1.3', sample: 'Título de Tarjeta o Modal' },
-            { label: 'Body LG', size: '16px', weight: '400 (Regular)', lh: '1.5', sample: 'Párrafos de lectura larga y descripciones.' },
-            { label: 'Body MD', size: '14px', weight: '400 (Regular)', lh: '1.5', sample: 'Texto estándar de la interfaz.' },
-            { label: 'Small', size: '12px', weight: '500 (Medium)', lh: '1.5', sample: 'Etiquetas, tooltips y captions.' },
-          ].map((t) => (
-            <div key={t.label} style={{ display: 'flex', alignItems: 'baseline', gap: 16, padding: '12px 0', borderBottom: `1px solid ${khorTokens.colors.neutral[200]}` }}>
-              <span style={{ width: 80, fontSize: 12, fontWeight: 600, color: khorTokens.colors.brand.primary, flexShrink: 0 }}>{t.label}</span>
-              <span style={{ fontSize: parseInt(t.size), fontWeight: parseInt(t.weight), lineHeight: parseFloat(t.lh), color: khorTokens.colors.neutral[900], flex: 1 }}>
-                {t.sample}
-              </span>
-              <span style={{ fontSize: 11, color: khorTokens.colors.neutral[300], flexShrink: 0, whiteSpace: 'nowrap' }}>
-                {t.size} / {t.weight} / LH {t.lh}
-              </span>
-            </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 12 }}>
+          {[50, 100, 200, 300, 400, 500, 600, 700, 800, 900].map(n => (
+            <ColorSwatch key={n} name={`Neutral ${n}`} variable={`--khor-neutral-${n}`} />
           ))}
         </div>
       </Section>
 
-      {/* Spacing */}
-      <Section title="6. Espaciado (Sistema Modular 8px)" id="espaciado">
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          {[
-            { token: 'spacing.xs', value: '4px', desc: 'Entre icono y texto.' },
-            { token: 'spacing.sm', value: '8px', desc: 'Padding interno de botones pequenos.' },
-            { token: 'spacing.md', value: '16px', desc: 'Padding estandar de contenedores.' },
-            { token: 'spacing.lg', value: '24px', desc: 'Espacio entre secciones.' },
-            { token: 'spacing.xl', value: '40px', desc: 'Margenes laterales de la pagina.' },
-          ].map((s) => (
-            <div key={s.token} style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-              <code style={{ width: 110, fontSize: 12, fontWeight: 600, color: khorTokens.colors.brand.navy, flexShrink: 0 }}>{s.token}</code>
-              <div style={{
-                width: parseInt(s.value),
-                height: 24,
-                backgroundColor: khorTokens.colors.brand.primary,
-                borderRadius: 3,
-                opacity: 0.7,
-                flexShrink: 0,
-              }} />
-              <span style={{ fontSize: 13, color: khorTokens.colors.neutral[400], fontWeight: 500 }}>{s.value}</span>
-              <span style={{ fontSize: 12, color: khorTokens.colors.neutral[300] }}>{s.desc}</span>
-            </div>
-          ))}
-        </div>
-      </Section>
-
-      {/* Shadows */}
-      <Section title="7. Sombras y Elevación" id="sombras">
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 20 }}>
-          {[
-            { label: 'Elevation Low (sm)', shadow: khorTokens.shadows.sm, desc: 'Tarjetas simples' },
-            { label: 'Elevation Medium (md)', shadow: khorTokens.shadows.md, desc: 'Dropdowns y Menus' },
-            { label: 'Elevation High (lg)', shadow: khorTokens.shadows.lg, desc: 'Modales y Drawers' },
-          ].map((s) => (
-            <div key={s.label} style={{
-              padding: 24,
-              backgroundColor: '#fff',
-              borderRadius: khorTokens.radius.lg,
-              boxShadow: s.shadow,
-              textAlign: 'center',
-            }}>
-              <p style={{ margin: '0 0 4px', fontSize: 13, fontWeight: 600, color: khorTokens.colors.brand.navy }}>{s.label}</p>
-              <p style={{ margin: 0, fontSize: 11, color: khorTokens.colors.neutral[300] }}>{s.desc}</p>
-            </div>
-          ))}
-        </div>
-      </Section>
-
-      {/* Code Export */}
-      <Section title="8. Tokens en Código" id="codigo">
-        <CodeBlock
-          filename="khor-theme.ts"
-          code={`import { khorTokens } from '@khor/design-system/theme';
-
-// Acceso a colores
-khorTokens.colors.brand.primary  // '#E04D36'
-khorTokens.colors.brand.navy     // '#051758'
-khorTokens.colors.feedback.success // '#2E7D32'
-
-// Acceso a espaciado
-khorTokens.spacing.md  // 16
-khorTokens.spacing.lg  // 24
-
-// Acceso a sombras
-khorTokens.shadows.sm  // '0 2px 4px rgba(0,0,0,0.05)'
-
-// Acceso a tipografia
-khorTokens.typography.fontPrimary  // 'Raleway'
-khorTokens.typography.h1.size      // 38
-
-// Acceso a tokens semánticos (2ª capa)
-khorTokens.semantic.action.primary.default  // acción principal
-khorTokens.semantic.text.secondary          // texto secundario
-khorTokens.semantic.surface.card            // fondo de tarjeta
-
-// Acceso a motion tokens
-khorTokens.motion.duration.normal  // 200ms
-khorTokens.motion.easing.standard  // cubic-bezier(...)`}
-        />
-      </Section>
-
-      {/* Semantic Tokens */}
-      <Section title="9. Tokens Semánticos (2ª Capa)" id="semanticos">
-        <p style={{ fontSize: 14, color: khorTokens.colors.neutral[400], marginTop: 0, marginBottom: 16, lineHeight: 1.6 }}>
-          Capa de abstracción que mapea <strong>función → token primitivo</strong>. Si mañana la marca cambia de rojo a azul, solo se actualiza este mapeo y todo el sistema se actualiza sin tocar componentes.
+      <Section title="🛡️ Status & Feedback (v10.4.2 Full Scaling)">
+        <p style={{ fontSize: 14, color: 'var(--khor-slate-500)', marginBottom: 20 }}>
+          Tokens semánticos optimizados con escalas completas 50-900.
         </p>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-          {/* Action Tokens */}
-          <div>
-            <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 8, marginTop: 0 }}>Acciones</h4>
-            <div style={{ overflowX: 'auto', borderRadius: khorTokens.radius.md, border: `1px solid ${khorTokens.colors.neutral[200]}` }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
-                <thead>
-                  <tr style={{ backgroundColor: khorTokens.colors.neutral[100] }}>
-                    <th style={{ padding: '8px 12px', textAlign: 'left', fontWeight: 600, borderBottom: `1px solid ${khorTokens.colors.neutral[200]}` }}>Token Semántico</th>
-                    <th style={{ padding: '8px 12px', textAlign: 'left', fontWeight: 600, borderBottom: `1px solid ${khorTokens.colors.neutral[200]}` }}>Mapea a</th>
-                    <th style={{ padding: '8px 12px', textAlign: 'left', fontWeight: 600, borderBottom: `1px solid ${khorTokens.colors.neutral[200]}` }}>Propósito</th>
-                    <th style={{ padding: '8px 12px', textAlign: 'center', fontWeight: 600, borderBottom: `1px solid ${khorTokens.colors.neutral[200]}` }}>Muestra</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {[
-                    { token: 'action.primary.default', maps: '--khor-primary', purpose: 'Botones y acciones principales', color: '#E04D36' },
-                    { token: 'action.primary.hover', maps: '--khor-primary-hover', purpose: 'Hover de acción principal', color: '#e8644f' },
-                    { token: 'action.primary.active', maps: '--khor-primary-active', purpose: 'Active/pressed de acción', color: '#c9442f' },
-                    { token: 'action.secondary.default', maps: '--khor-navy', purpose: 'Acciones secundarias', color: '#051758' },
-                    { token: 'action.danger.default', maps: '--khor-error', purpose: 'Acciones destructivas', color: '#D32F2F' },
-                  ].map((row, i) => (
-                    <tr key={row.token} style={{ backgroundColor: i % 2 !== 0 ? khorTokens.colors.neutral[100] : undefined }}>
-                      <td style={{ padding: '8px 12px', borderBottom: `1px solid ${khorTokens.colors.neutral[200]}` }}><code style={{ fontSize: 11, fontWeight: 600, color: khorTokens.colors.brand.navy }}>{row.token}</code></td>
-                      <td style={{ padding: '8px 12px', borderBottom: `1px solid ${khorTokens.colors.neutral[200]}`, color: khorTokens.colors.neutral[400] }}><code style={{ fontSize: 11 }}>{row.maps}</code></td>
-                      <td style={{ padding: '8px 12px', borderBottom: `1px solid ${khorTokens.colors.neutral[200]}`, color: khorTokens.colors.neutral[500] }}>{row.purpose}</td>
-                      <td style={{ padding: '8px 12px', borderBottom: `1px solid ${khorTokens.colors.neutral[200]}`, textAlign: 'center' }}>
-                        <span style={{ display: 'inline-block', width: 32, height: 20, borderRadius: 4, backgroundColor: row.color }} />
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+        
+        {['Teal', 'Success', 'Error', 'Warning', 'Info'].map(color => (
+          <div key={color} style={{ marginBottom: 32 }}>
+            <h4 style={{ fontSize: 13, fontWeight: 700, marginBottom: 12, color: 'var(--khor-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              {color} Scale
+            </h4>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 10 }}>
+              {[50, 100, 200, 300, 400, 500, 600, 700, 800, 900].map(n => (
+                <ColorSwatch key={n} name={`${color} ${n}`} variable={`--khor-${color.toLowerCase()}-${n}`} />
+              ))}
             </div>
           </div>
+        ))}
 
-          {/* Surface / Text / Border */}
-          <div>
-            <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 8, marginTop: 0 }}>Superficies, Texto y Bordes</h4>
-            <div style={{ overflowX: 'auto', borderRadius: khorTokens.radius.md, border: `1px solid ${khorTokens.colors.neutral[200]}` }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
-                <thead>
-                  <tr style={{ backgroundColor: khorTokens.colors.neutral[100] }}>
-                    <th style={{ padding: '8px 12px', textAlign: 'left', fontWeight: 600, borderBottom: `1px solid ${khorTokens.colors.neutral[200]}` }}>Token Semántico</th>
-                    <th style={{ padding: '8px 12px', textAlign: 'left', fontWeight: 600, borderBottom: `1px solid ${khorTokens.colors.neutral[200]}` }}>Mapea a</th>
-                    <th style={{ padding: '8px 12px', textAlign: 'left', fontWeight: 600, borderBottom: `1px solid ${khorTokens.colors.neutral[200]}` }}>Uso</th>
-                    <th style={{ padding: '8px 12px', textAlign: 'center', fontWeight: 600, borderBottom: `1px solid ${khorTokens.colors.neutral[200]}` }}>Muestra</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {[
-                    { token: 'surface.page', maps: '--khor-neutral-100', use: 'Fondo de página', color: '#EDF0F1' },
-                    { token: 'surface.card', maps: '--khor-neutral-50', use: 'Fondo de tarjetas', color: '#FFFFFF' },
-                    { token: 'text.primary', maps: '--khor-neutral-900', use: 'Texto principal', color: '#000000' },
-                    { token: 'text.secondary', maps: '--khor-neutral-500', use: 'Texto de cuerpo', color: '#4A5568' },
-                    { token: 'text.muted', maps: '--khor-neutral-400', use: 'Texto secundario', color: '#718096' },
-                    { token: 'text.disabled', maps: '--khor-neutral-300', use: 'Texto desactivado', color: '#A0AEC0' },
-                    { token: 'text.link', maps: '--khor-primary', use: 'Links y anclas', color: '#E04D36' },
-                    { token: 'border.default', maps: '--khor-neutral-200', use: 'Bordes estándar', color: '#D5DBE0' },
-                    { token: 'border.focus', maps: '--khor-primary', use: 'Focus ring', color: '#E04D36' },
-                    { token: 'border.error', maps: '--khor-error', use: 'Borde de error', color: '#D32F2F' },
-                  ].map((row, i) => (
-                    <tr key={row.token} style={{ backgroundColor: i % 2 !== 0 ? khorTokens.colors.neutral[100] : undefined }}>
-                      <td style={{ padding: '8px 12px', borderBottom: `1px solid ${khorTokens.colors.neutral[200]}` }}><code style={{ fontSize: 11, fontWeight: 600, color: khorTokens.colors.brand.navy }}>{row.token}</code></td>
-                      <td style={{ padding: '8px 12px', borderBottom: `1px solid ${khorTokens.colors.neutral[200]}`, color: khorTokens.colors.neutral[400] }}><code style={{ fontSize: 11 }}>{row.maps}</code></td>
-                      <td style={{ padding: '8px 12px', borderBottom: `1px solid ${khorTokens.colors.neutral[200]}`, color: khorTokens.colors.neutral[500] }}>{row.use}</td>
-                      <td style={{ padding: '8px 12px', borderBottom: `1px solid ${khorTokens.colors.neutral[200]}`, textAlign: 'center' }}>
-                        <span style={{ display: 'inline-block', width: 32, height: 20, borderRadius: 4, backgroundColor: row.color, border: ['#FFFFFF', '#EDF0F1', '#D5DBE0'].includes(row.color) ? `1px solid ${khorTokens.colors.neutral[200]}` : 'none' }} />
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+        <h4 style={{ fontSize: 13, fontWeight: 700, margin: '24px 0 12px', color: 'var(--khor-secondary)', textTransform: 'uppercase' }}>Legacy & Special</h4>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 16 }}>
+          <ColorSwatch name="Processing" variable="--khor-feedback-processing" hex="#0ea5e9" />
+          <ColorSwatch name="Volcano" variable="--khor-feedback-volcano" hex="#ea580c" />
+          <ColorSwatch name="Purple" variable="--khor-feedback-purple" hex="#a855f7" />
+        </div>
+      </Section>
+
+      <Section title="✏️ Strokes & Borders (High-Fidelity)">
+        <p style={{ fontSize: 14, color: 'var(--khor-slate-500)', marginBottom: 20 }}>
+          Rememplazo premium de los bordes Navy por acabados tintados y sutiles.
+        </p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 16 }}>
+          <div style={{ padding: 16, backgroundColor: 'var(--khor-neutral-50)', borderRadius: 12, border: '1px solid var(--khor-border-muted)' }}>
+            <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 4 }}>Border Muted</div>
+            <code style={{ fontSize: 10, color: 'var(--khor-slate-400)' }}>--khor-border-muted</code>
+          </div>
+          <div style={{ padding: 16, backgroundColor: 'var(--khor-neutral-50)', borderRadius: 12, border: '1px solid var(--khor-border-default)' }}>
+            <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 4 }}>Border Default</div>
+            <code style={{ fontSize: 10, color: 'var(--khor-slate-400)' }}>--khor-border-default</code>
+          </div>
+          <div style={{ padding: 16, backgroundColor: 'var(--khor-neutral-50)', borderRadius: 12, border: '2px solid var(--khor-border-strong)' }}>
+            <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 4 }}>Border Strong</div>
+            <code style={{ fontSize: 10, color: 'var(--khor-slate-400)' }}>--khor-border-strong</code>
           </div>
         </div>
       </Section>
 
-      {/* Motion Tokens */}
-      <Section title="10. Motion & Animaciones" id="motion">
-        <p style={{ fontSize: 14, color: khorTokens.colors.neutral[400], marginTop: 0, marginBottom: 16, lineHeight: 1.6 }}>
-          Tokens de duración y curvas de easing para animaciones coordinadas. Respetan <code>prefers-reduced-motion</code> automáticamente.
+      <Section title="🖋️ Tipografía (Typography v10.4 Responsive)">
+        <p style={{ fontSize: 14, color: 'var(--khor-slate-500)', marginBottom: 24 }}>
+          Escala tipográfica completa basada en jerarquías de sistemas enterprise. Todos los niveles son <strong>responsivos por defecto</strong>; los títulos grandes reducen su tamaño automáticamente en dispositivos móviles mediante media-queries globales.
         </p>
 
-        {/* Duration */}
-        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Duraciones</h4>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 24 }}>
-          {[
-            { token: 'duration-fast', value: '100ms', desc: 'Tooltips, fades sutiles' },
-            { token: 'duration-normal', value: '200ms', desc: 'Transiciones estándar (hover, focus)' },
-            { token: 'duration-slow', value: '400ms', desc: 'Modales, drawers, expansiones' },
-            { token: 'duration-slower', value: '600ms', desc: 'Animaciones de entrada complejas' },
-          ].map(d => (
-            <div key={d.token} style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-              <code style={{ width: 140, fontSize: 12, fontWeight: 600, color: khorTokens.colors.brand.navy, flexShrink: 0 }}>{d.token}</code>
-              <div style={{ width: 200, height: 8, backgroundColor: khorTokens.colors.neutral[200], borderRadius: 4, overflow: 'hidden', flexShrink: 0 }}>
-                <div style={{ width: `${(parseInt(d.value) / 600) * 100}%`, height: '100%', backgroundColor: khorTokens.colors.brand.primary, borderRadius: 4 }} />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+          {/* Display & Headings */}
+          <div>
+            <h4 style={{ fontSize: 13, fontWeight: 700, marginBottom: 16, color: 'var(--khor-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Headings & Display</h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+              {[
+                { tag: 'Display 1', variant: 'display-1' as const, desc: 'Hero & Landing titles' },
+                { tag: 'Display 2', variant: 'display-2' as const, desc: 'Section highlights' },
+                { tag: 'Heading 1', variant: 'h1' as const, desc: 'Page titles' },
+                { tag: 'Heading 2', variant: 'h2' as const, desc: 'Section titles' },
+                { tag: 'Heading 3', variant: 'h3' as const, desc: 'Card titles' },
+                { tag: 'Heading 4', variant: 'h4' as const, desc: 'Sub-sections' },
+                { tag: 'Heading 5', variant: 'h5' as const, desc: 'Small titles' },
+                { tag: 'Heading 6', variant: 'h6' as const, desc: 'Labels' },
+              ].map(item => (
+                <div key={item.tag} style={{ borderBottom: '1px solid var(--khor-border-muted)', paddingBottom: 12 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 8 }}>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--khor-primary)' }}>{item.tag}</div>
+                    <code style={{ fontSize: 10, color: 'var(--khor-slate-400)' }}>--khor-font-size-{item.variant}</code>
+                  </div>
+                  <KTypography.Text variant={item.variant} className="block text-khor-secondary">
+                    The quick brown fox jumps over the lazy dog
+                  </KTypography.Text>
+                  <div style={{ fontSize: 11, color: 'var(--khor-slate-400)', marginTop: 4, fontStyle: 'italic' }}>{item.desc}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Body & Micro */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 32 }}>
+            <div>
+              <h4 style={{ fontSize: 13, fontWeight: 700, marginBottom: 16, color: 'var(--khor-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Body & Paragraphs</h4>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+                {[
+                  { tag: 'Body Large', variant: 'body-lg' as const, code: 'body-lg' },
+                  { tag: 'Body Medium', variant: 'body-md' as const, code: 'body-md' },
+                  { tag: 'Body Small', variant: 'small' as const, code: 'body-sm' },
+                ].map(item => (
+                  <div key={item.tag}>
+                    <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--khor-slate-400)', marginBottom: 4 }}>{item.tag} (<code>--khor-font-size-{item.code}</code>)</div>
+                    <KTypography.Text variant={item.variant}>
+                      Nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate.
+                    </KTypography.Text>
+                  </div>
+                ))}
               </div>
-              <span style={{ fontSize: 13, color: khorTokens.colors.brand.primary, fontWeight: 600, width: 50, flexShrink: 0 }}>{d.value}</span>
-              <span style={{ fontSize: 12, color: khorTokens.colors.neutral[400] }}>{d.desc}</span>
+            </div>
+            <div>
+              <h4 style={{ fontSize: 13, fontWeight: 700, marginBottom: 16, color: 'var(--khor-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Micro Typography</h4>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+                <div>
+                  <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--khor-slate-400)', marginBottom: 4 }}>Caption</div>
+                  <KTypography.Text variant="caption">
+                    Accurate and detailed information about current status.
+                  </KTypography.Text>
+                </div>
+                <div>
+                  <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--khor-slate-400)', marginBottom: 4 }}>Overline</div>
+                  <KTypography.Text variant="overline">
+                    Last update detected 2 mins ago
+                  </KTypography.Text>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Section>
+
+      <Section title="📏 Espaciado (Spacing)">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
+          {[1, 2, 3, 4, 5, 6, 8, 10, 12, 16].map(s => (
+            <div key={s} style={{ 
+              padding: 16, 
+              backgroundColor: 'var(--khor-neutral-50)', 
+              borderRadius: 12, 
+              border: '1px solid var(--khor-border-muted)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 12
+            }}>
+              <div style={{ width: s * 4, height: 16, backgroundColor: 'var(--khor-primary)', borderRadius: 2 }} title={`${s * 4}px`} />
+              <div>
+                <div style={{ fontSize: 12, fontWeight: 700 }}>Space {s}</div>
+                <code style={{ fontSize: 10, color: 'var(--khor-slate-400)' }}>--khor-space-{s} ({s*4}px)</code>
+              </div>
             </div>
           ))}
         </div>
+      </Section>
 
-        {/* Easing */}
-        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Curvas de Easing</h4>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16 }}>
-          {[
-            { token: 'easing-standard', value: 'cubic-bezier(0.4, 0, 0.2, 1)', desc: 'Transiciones generales', emoji: '━━━━━╮' },
-            { token: 'easing-enter', value: 'cubic-bezier(0, 0, 0.2, 1)', desc: 'Elementos que aparecen', emoji: '─────╮' },
-            { token: 'easing-exit', value: 'cubic-bezier(0.4, 0, 1, 1)', desc: 'Elementos que salen', emoji: '╭─────' },
-            { token: 'easing-spring', value: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)', desc: 'Rebote sutil (modals, tooltips)', emoji: '─╮╭──' },
-          ].map(e => (
-            <div key={e.token} style={{
-              padding: 16, backgroundColor: khorTokens.colors.neutral[50], borderRadius: khorTokens.radius.md,
-              border: `1px solid ${khorTokens.colors.neutral[200]}`,
-            }}>
-              <code style={{ fontSize: 12, fontWeight: 600, color: khorTokens.colors.brand.navy, display: 'block', marginBottom: 6 }}>{e.token}</code>
-              <div style={{
-                width: '100%', height: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: 4,
-                display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 8,
-                position: 'relative', overflow: 'hidden',
+      <Section title="📐 Geometría (Radii)">
+        <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap' }}>
+          {['xs', 'sm', 'md', 'lg', 'xl'].map(r => (
+            <div key={r} style={{ textAlign: 'center' }}>
+              <div style={{ 
+                width: 80, height: 80, 
+                backgroundColor: 'var(--khor-primary)', 
+                borderRadius: `var(--khor-radius-${r})`,
+                marginBottom: 8,
+                boxShadow: 'var(--khor-shadow-sm)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#fff',
+                fontSize: 10,
+                fontWeight: 700
               }}>
-                <div style={{
-                  width: 16, height: 16, borderRadius: '50%', backgroundColor: khorTokens.colors.brand.primary,
-                  animation: `slide-demo 2s ${e.value} infinite alternate`,
-                  position: 'absolute', left: 8,
-                }} />
+                RADIUS {r.toUpperCase()}
               </div>
-              <p style={{ fontSize: 11, color: khorTokens.colors.neutral[400], margin: '0 0 4px', lineHeight: 1.4 }}>{e.desc}</p>
-              <code style={{ fontSize: 10, color: khorTokens.colors.neutral[300], wordBreak: 'break-all' }}>{e.value}</code>
+              <code style={{ fontSize: 10, color: 'var(--khor-slate-400)' }}>--khor-radius-{r}</code>
             </div>
           ))}
         </div>
-        <style>{`
-          @keyframes slide-demo {
-            from { left: 8px; }
-            to { left: calc(100% - 24px); }
-          }
-        `}</style>
       </Section>
 
-      {/* Internationalization */}
-      <Section title="11. Internacionalización (i18n) y RTL" id="i18n">
-        <p style={{ fontSize: 14, color: khorTokens.colors.neutral[400], marginTop: 0, marginBottom: 16, lineHeight: 1.6 }}>
-          Soporte para lenguajes de derecha a izquierda (RTL) y fuentes alternativas para scripts no latinos.
-        </p>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-          {/* Font Fallbacks */}
-          <div>
-            <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 8, marginTop: 0 }}>Tipografías Alternativas (Fallbacks)</h4>
-            <div style={{ padding: 16, border: `1px solid ${khorTokens.colors.neutral[200]}`, borderRadius: khorTokens.radius.md, backgroundColor: khorTokens.colors.neutral[50] }}>
-               <code style={{ fontSize: 12, color: khorTokens.colors.neutral[500], display: 'block', wordBreak: 'break-all' }}>
-                 font-family: var(--khor-font-primary), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-               </code>
-               <p style={{ margin: '8px 0 0', fontSize: 13, color: khorTokens.colors.neutral[500] }}>
-                 Garantiza la correcta visualización de caracteres cirílicos, árabes, hebreos y asiáticos.
-               </p>
+      <Section title="☁️ Sombras Multi-capa (Shadows)">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 32 }}>
+          {[
+            { s: 'sm', desc: 'Sutil / Cards' },
+            { s: 'md', desc: 'Elevado / Modals' },
+            { s: 'lg', desc: 'Flotante / Popovers' },
+            { s: 'xl', desc: 'Profundo' },
+            { s: '2xl', desc: 'Extra Profundo' }
+          ].map(({s, desc}) => (
+            <div key={s} style={{ 
+              height: 120, 
+              backgroundColor: '#fff', 
+              borderRadius: 16, 
+              boxShadow: `var(--khor-shadow-${s})`,
+              display: 'flex', 
+              flexDirection: 'column',
+              alignItems: 'center', 
+              justifyContent: 'center',
+              gap: 4,
+              border: '1px solid var(--khor-border-muted)'
+            }}>
+              <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--khor-secondary)' }}>Shadow {s.toUpperCase()}</span>
+              <code style={{ fontSize: 10, color: 'var(--khor-slate-400)' }}>--khor-shadow-{s}</code>
+              <span style={{ fontSize: 10, color: 'var(--khor-slate-400)', fontStyle: 'italic' }}>{desc}</span>
             </div>
-          </div>
-          {/* RTL */}
-          <div>
-            <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 8, marginTop: 0 }}>Soporte RTL (Right-to-Left)</h4>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 16 }}>
-               {/* LTR */}
-               <div style={{ padding: 16, border: `1px solid ${khorTokens.colors.neutral[200]}`, borderRadius: khorTokens.radius.md, backgroundColor: khorTokens.colors.neutral[100] }}>
-                 <p style={{ margin: '0 0 8px', fontSize: 12, fontWeight: 600, color: khorTokens.colors.brand.navy }}>LTR (Left-to-Right)</p>
-                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: 12, backgroundColor: '#fff', borderRadius: 4, boxShadow: khorTokens.shadows.sm }}>
-                    <div style={{ width: 16, height: 16, borderRadius: '50%', backgroundColor: khorTokens.colors.brand.primary }} />
-                    <span style={{ fontSize: 14, color: khorTokens.colors.neutral[900] }}>Content aligned left</span>
-                 </div>
-               </div>
-               {/* RTL */}
-               <div style={{ padding: 16, border: `1px solid ${khorTokens.colors.neutral[200]}`, borderRadius: khorTokens.radius.md, backgroundColor: khorTokens.colors.neutral[100] }} dir="rtl">
-                 <p style={{ margin: '0 0 8px', fontSize: 12, fontWeight: 600, color: khorTokens.colors.brand.navy }}>RTL (Right-to-Left)</p>
-                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: 12, backgroundColor: '#fff', borderRadius: 4, boxShadow: khorTokens.shadows.sm }}>
-                    <div style={{ width: 16, height: 16, borderRadius: '50%', backgroundColor: khorTokens.colors.brand.primary }} />
-                    <span style={{ fontSize: 14, color: khorTokens.colors.neutral[900] }}>محتوى محاذاة لليمين</span>
-                 </div>
-               </div>
-            </div>
-            <p style={{ margin: '8px 0 0', fontSize: 13, color: khorTokens.colors.neutral[500] }}>
-              Los componentes usan propiedades lógicas CSS (<code>margin-inline-start</code>, <code>padding-inline-end</code>) para adaptarse automáticamente.
-            </p>
-          </div>
+          ))}
         </div>
       </Section>
     </div>
   );
 }
+
+export default TokensPage;

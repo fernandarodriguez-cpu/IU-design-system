@@ -1,70 +1,172 @@
-import React from 'react';
-import { Tour } from 'antd';
-import type { TourProps, TourStepProps } from 'antd';
-import { khorTokens } from '../../../../theme/khor-theme';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { X, ChevronRight, ChevronLeft, Check } from 'lucide-react';
+import { cn } from '../../../../../imports/utils';
+import { KButton } from '../../atoms/KButton';
 
-const t = khorTokens;
-const font = t.typography.fontPrimary;
-
-/* ═══════════════════════════════════════════════
-   KTour — Tour guiado (onboarding)
-   ═══════════════════════════════════════════════ */
-export interface KTourStep extends Omit<TourStepProps, 'target'> {
-  target: string | (() => HTMLElement | null) | HTMLElement | null;
+export interface KTourStep {
+  title: React.ReactNode;
+  description: React.ReactNode;
+  target?: string | HTMLElement | null;
+  placement?: 'top' | 'bottom' | 'left' | 'right' | 'center';
 }
 
-export interface KTourProps extends Omit<TourProps, 'steps' | 'open' | 'onClose'> {
+export interface KTourProps {
   steps: KTourStep[];
   open?: boolean;
   onClose?: () => void;
   onFinish?: () => void;
+  className?: string;
 }
 
-export function KTour({ 
-  steps, 
-  open = false, 
-  onClose, 
-  onFinish, 
-  mask = true,
-  type,
-  ...rest 
+/**
+ * KTour — Tour guiado secuencial (Total Headless)
+ * Implementación basada en modales flotantes con seguimiento de posición.
+ */
+export function KTour({
+  steps,
+  open = false,
+  onClose,
+  onFinish,
+  className,
 }: KTourProps) {
-  
-  const mappedSteps = steps.map(step => {
-    let target: any = step.target;
-    if (typeof step.target === 'string') {
-      target = () => document.querySelector(step.target as string);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [coords, setCoords] = useState<{ top: number; left: number } | null>(null);
+  const step = steps[currentStep];
+
+  useEffect(() => {
+    if (open && step?.target) {
+      const updatePosition = () => {
+        let el: HTMLElement | null = null;
+        if (typeof step.target === 'string') {
+          el = document.querySelector(step.target);
+        } else {
+          el = step.target as HTMLElement;
+        }
+
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          const scrollY = window.scrollY;
+          const scrollX = window.scrollX;
+
+          // Posicionamiento básico debajo del elemento
+          setCoords({
+            top: rect.bottom + scrollY + 12,
+            left: rect.left + scrollX + (rect.width / 2) - 160, // Centrado relativo a 320px de ancho
+          });
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          setCoords(null); // Centrar si no hay target
+        }
+      };
+
+      updatePosition();
+      window.addEventListener('resize', updatePosition);
+      return () => window.removeEventListener('resize', updatePosition);
+    } else {
+      setCoords(null);
     }
-    return {
-      ...step,
-      target
-    };
-  });
+  }, [open, currentStep, step]);
 
-  const handleClose = () => {
-    onClose?.();
+  const handleNext = () => {
+    if (currentStep < steps.length - 1) {
+      setCurrentStep(prev => prev + 1);
+    } else {
+      onFinish?.();
+      onClose?.();
+    }
   };
 
-  const handleFinish = () => {
-    onFinish?.();
-    onClose?.();
+  const handleBack = () => {
+    if (currentStep > 0) {
+      setCurrentStep(prev => prev - 1);
+    }
   };
+
+  if (!open) return null;
+
+  const isLast = currentStep === steps.length - 1;
 
   return (
-    <Tour
-      open={open}
-      onClose={handleClose}
-      mask={mask}
-      steps={mappedSteps}
-      type={type}
-      rootClassName="khor-tour"
-      {...rest}
-    />
+    <div className="fixed inset-0 z-[1000] pointer-events-none font-primary">
+      {/* Overlay opcional si quisiéramos bloquear interacción, pero el usuario pidió algo simple */}
+      <div className="absolute inset-0 bg-black/10 pointer-events-auto" onClick={onClose} />
+
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={currentStep}
+          initial={{ opacity: 0, y: 10, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: -10, scale: 0.95 }}
+          className={cn(
+            "absolute pointer-events-auto w-80 bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.2)] border border-khor-neutral-200 p-5 overflow-hidden",
+            !coords && "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
+            className
+          )}
+          style={coords ? { top: coords.top, left: coords.left } : {}}
+        >
+          {/* Header */}
+          <div className="flex justify-between items-start mb-3">
+            <span className="text-[10px] font-bold text-khor-primary uppercase tracking-widest bg-khor-primary-light/10 px-2 py-0.5 rounded-full">
+              Paso {currentStep + 1} de {steps.length}
+            </span>
+            <button onClick={onClose} className="p-1 text-khor-neutral-400 hover:text-khor-neutral-800 transition-colors">
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+
+          {/* Content */}
+          <h4 className="text-base font-extrabold text-khor-neutral-900 mb-1.5 leading-tight">
+            {step?.title}
+          </h4>
+          <p className="text-sm text-khor-neutral-600 leading-relaxed mb-6 font-medium">
+            {step?.description}
+          </p>
+
+          {/* Footer */}
+          <div className="flex justify-between items-center gap-4">
+            <div className="flex gap-1">
+              {steps.map((_, i) => (
+                <div 
+                  key={i} 
+                  className={cn(
+                    "w-1.5 h-1.5 rounded-full transition-all",
+                    i === currentStep ? "w-4 bg-khor-primary" : "bg-khor-neutral-200"
+                  )} 
+                />
+              ))}
+            </div>
+            
+            <div className="flex gap-2">
+              {currentStep > 0 && (
+                <KButton 
+                  size="sm" 
+                  variant="neutral" 
+                  onClick={handleBack}
+                  className="px-3"
+                >
+                  ATRÁS
+                </KButton>
+              )}
+              <KButton 
+                size="sm" 
+                variant="primary" 
+                onClick={handleNext}
+                className="px-4"
+              >
+                {isLast ? 'FINALIZAR' : 'SIGUIENTE'}
+              </KButton>
+            </div>
+          </div>
+
+          {/* Connector Arrow (si hay coords) */}
+          {coords && (
+            <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-white border-t border-l border-khor-neutral-200 rotate-45 shadow-[-2px_-2px_5px_rgba(0,0,0,0.02)]" />
+          )}
+        </motion.div>
+      </AnimatePresence>
+    </div>
   );
 }
-
-// Add global styles for the tour to ensure khor aesthetic if needed, 
-// though AntD 5 handles most via token-style if configured globally.
-// Here we rely on the AntD component being styled by the parent ConfigProvider or default tokens.
 
 export default KTour;

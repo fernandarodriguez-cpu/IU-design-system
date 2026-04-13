@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { Mail, Check, ArrowRight, DollarSign } from 'lucide-react';
-import { KInput, KButton, KBadge } from '../components/design-system/atoms/index';
-import { KFormField, KSteps } from '../components/design-system/molecules/index';
+import { KInput } from '../components/design-system/atoms/KInput/index';
+import { KButton } from '../components/design-system/atoms/KButton/index';
+import { KBadge } from '../components/design-system/atoms/KBadge/index';
+import { KFormField } from '../components/design-system/molecules/KFormField/index';
+import { KSteps } from '../components/design-system/molecules/KSteps/index';
 import { khorTokens } from '../theme/khor-theme';
 import { Pattern } from './types';
 
@@ -28,7 +31,7 @@ function WizardPatternComponent() {
               <KInput placeholder="Juan Pérez" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
             </KFormField>
             <KFormField label="Email" required>
-              <KInput placeholder="juan@empresa.com" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} icon={<Mail size={16} />} />
+              <KInput placeholder="juan@empresa.com" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} prefix={<Mail size={16} />} />
             </KFormField>
           </div>
         )}
@@ -79,7 +82,7 @@ function WizardPatternComponent() {
             <p style={{ margin: '0 0 12px', fontSize: 13, color: 'var(--muted-foreground)' }}>
               {form.name || 'Usuario'} &bull; {form.email || 'email@ejemplo.com'} &bull; Plan {form.plan || 'Starter'}
             </p>
-            <KBadge khorStatus="success" label="Suscripción activa" />
+            <KBadge status="success" label="Suscripción activa" />
           </div>
         )}
       </div>

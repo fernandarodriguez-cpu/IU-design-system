@@ -1,6 +1,8 @@
 import React from 'react';
-import { KForm, KFormItem, useKForm } from '../KForm';
-import { KInput, KButton, KText } from '../../atoms';
+import { KForm, KFormItem, useKForm } from '../KForm/index';
+import { KInput } from '../../atoms/KInput';
+import { KButton } from '../../atoms/KButton';
+import { KText } from '../../atoms/KText';
 import { khorTokens } from '../../../../theme/khor-theme';
 
 const t = khorTokens;
@@ -11,7 +13,7 @@ export interface KLoginFormProps {
 }
 
 export function KLoginForm({ onFinish, loading }: KLoginFormProps) {
-  const [form] = useKForm();
+  const form = useKForm();
 
   return (
     <div style={{ maxWidth: 400, margin: '0 auto', padding: 24, backgroundColor: t.colors.neutral[50], borderRadius: t.radius.lg, border: `1px solid ${t.colors.neutral[200]}` }}>
@@ -19,13 +21,25 @@ export function KLoginForm({ onFinish, loading }: KLoginFormProps) {
         <KText variant="h2" color="navy">Bienvenido</KText>
         <KText variant="body-md" color="secondary">Ingresa tus credenciales para continuar</KText>
       </div>
-      <KForm form={form} layout="vertical" onFinish={onFinish}>
-        <KFormItem name="email" label="Correo Electrónico" rules={[{ required: true, type: 'email', message: 'Ingresa un email válido' }]}>
-          <KInput placeholder="ejemplo@khor.com" />
-        </KFormItem>
-        <KFormItem name="password" label="Contraseña" rules={[{ required: true, message: 'Ingresa tu contraseña' }]}>
-          <KInput type="password" placeholder="••••••••" />
-        </KFormItem>
+      <KForm methods={form} layout="vertical" onSubmit={onFinish}>
+        <KForm.Field
+          name="email"
+          rules={{ required: 'Ingresa un email válido' }}
+          render={({ field, fieldState }) => (
+            <KFormItem label="Correo Electrónico" required error={fieldState.error?.message}>
+              <KInput {...field} placeholder="ejemplo@khor.com" />
+            </KFormItem>
+          )}
+        />
+        <KForm.Field
+          name="password"
+          rules={{ required: 'Ingresa tu contraseña' }}
+          render={({ field, fieldState }) => (
+            <KFormItem label="Contraseña" required error={fieldState.error?.message}>
+              <KInput {...field} type="password" placeholder="••••••••" />
+            </KFormItem>
+          )}
+        />
         <KFormItem>
           <KButton variant="primary" block loading={loading} htmlType="submit">
             Iniciar Sesión

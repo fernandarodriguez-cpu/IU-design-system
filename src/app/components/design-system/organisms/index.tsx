@@ -1,4 +1,5 @@
 export { default as KDataTable } from './KDataTable';
+export { KTableDateCell } from './KDataTable/KTableDateCell';
 export { default as KModal } from './KModal';
 export { default as KDrawer } from './KDrawer';
 export { default as KCardSection } from './KCardSection';
@@ -6,7 +7,7 @@ export { default as KTabs } from './KTabs';
 export { default as KUpload, type KUploadFile } from './KUpload';
 export { default as KTree, type KTreeNode } from './KTree';
 export { default as KTour } from './KTour';
-export { default as KForm, KFormItem, useKForm, useKFormWatch, useKFormInstance } from './KForm';
+export { default as KForm, KFormItem, useKForm, useKFormWatch, useKFormContext } from './KForm';
 export { default as KPagination } from './KPagination';
 export { default as KCommandBar, KCommandBarPreview, useCommandBar } from './KCommandBar';
 export { default as KSparklineCell } from './KSparklineCell';
@@ -16,7 +17,7 @@ export { default as KModalConfirm } from './KModalConfirm';
 export { default as KFormList, type KFormListField } from './KFormList';
 export { default as KCarousel } from './KCarousel';
 export { default as KCalendar } from './KCalendar';
-export { default as kNotification, KNotificationInstance, KNotificationProvider } from './KNotification';
+export { default as kNotification, type KNotificationType, KNotificationProvider } from './KNotification';
 // Keep legacy alias for KNotification to avoid conflict
 export { default as KNotification } from './KNotification';
 export { default as KMessage } from './KMessage';

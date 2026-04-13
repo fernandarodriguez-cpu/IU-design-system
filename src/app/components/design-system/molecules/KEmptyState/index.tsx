@@ -1,6 +1,7 @@
 import React from 'react';
 import { Search } from 'lucide-react';
-import { KButton, KText } from '../../atoms';
+import { KButton } from '../../atoms/KButton/index';
+import { KText } from '../../atoms/KText/index';
 import { khorTokens } from '../../../../theme/khor-theme';
 
 const t = khorTokens;

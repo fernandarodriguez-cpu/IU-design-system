@@ -1,0 +1,14 @@
+{
+  "name": "Khor Design System Sync",
+  "id": "khor-ds-sync",
+  "api": "1.0.0",
+  "main": "dist/code.js",
+  "ui": "dist/ui.html",
+  "capabilities": [],
+  "enableProposedApi": false,
+  "editorType": ["figma"],
+  "networkAccess": {
+    "allowedDomains": ["*"],
+    "reasoning": "Necesario para descargar el esquema de metadatos (khor-schema-v1.json) desde el servidor del Design System."
+  }
+}

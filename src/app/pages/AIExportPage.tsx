@@ -8,29 +8,36 @@ import {
   Bot, Sparkles, Info, Zap, Settings2,
   ChevronDown, ChevronRight, MousePointerClick,
 } from 'lucide-react';
-import { KButton, KText, KBadge, KAlert, KSwitch } from '../components/design-system/atoms/index';
-import { KCardSection, KTabs } from '../components/design-system/organisms/index';
-import { kToast } from '../components/design-system/organisms/index';
+import { KButton } from '../components/design-system/atoms/KButton/index';
+import { KText } from '../components/design-system/atoms/KText/index';
+import { KBadge } from '../components/design-system/atoms/KBadge/index';
+import { KAlert } from '../components/design-system/atoms/KAlert/index';
+import { KSwitch } from '../components/design-system/atoms/KSwitch/index';
+import { KCardSection } from '../components/design-system/organisms/KCardSection/index';
+import { KTabs } from '../components/design-system/organisms/KTabs/index';
+import { kToast } from '../components/design-system/organisms/KToast/index';
 import { khorTokens } from '../theme/khor-theme';
 import { patterns } from '../patterns/index';
 import { atoms } from './AtomsPage';
 import { molecules } from './MoleculesPage';
 import { organisms } from './OrganismsPage';
 
+
 const t = khorTokens;
 
 /* ─── Version (must match ChangelogPage & AppShell) ─── */
-const KHOR_VERSION = '3.2.1';
+export const KHOR_VERSION = '4.0.4';
+
 
 /* ─── Sections config ───────────────────────── */
-interface SectionConfig {
+export interface SectionConfig {
   id: string;
   label: string;
   description: string;
   enabled: boolean;
 }
 
-const defaultSections: SectionConfig[] = [
+export const defaultSections: SectionConfig[] = [
   { id: 'header', label: 'Encabezado y contexto', description: 'Nombre, version, stack tecnologico y proposito del sistema.', enabled: true },
   { id: 'tokens', label: 'Design Tokens', description: 'Colores de marca, neutrales, feedback, tipografia, espaciado, radios y sombras.', enabled: true },
   { id: 'darkmode', label: 'Dark Mode', description: 'Tokens alternativos para modo oscuro y CSS variables.', enabled: true },
@@ -44,7 +51,7 @@ const defaultSections: SectionConfig[] = [
 ];
 
 /* ─── Markdown Generator ────────────────────── */
-function generateMarkdown(sections: SectionConfig[]): string {
+export function generateMarkdown(sections: SectionConfig[]): string {
   const enabled = new Set(sections.filter((s) => s.enabled).map((s) => s.id));
   const parts: string[] = [];
   const today = new Date().toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' });
@@ -59,7 +66,7 @@ Este documento es la única fuente de verdad para el desarrollo en el ecosistema
 ## 🤖 Instrucciones Críticas para la IA (System Prompt)
 
 Como IA, DEBES seguir estas reglas estrictamente al generar código:
-1. **Identidad Visual:** NUNCA importes ni uses componentes directamente desde \`antd\`, \`@ant-design/*\`, Material UI o similares. Usa exclusivamente los componentes del sistema (prefijo \`K\`). Los componentes K* son la única abstracción oficial; aunque internamente usen AntD o Radix, tú solo debes interactuar con la capa Khor.
+1. **Identidad Visual:** NUNCA importes ni uses componentes directamente desde \`antd\`, \`@ant-design/*\`, Material UI o similares. Usa exclusivamente los componentes del sistema (prefijo \`K\`). Los componentes K* son la única abstracción oficial basada en Radix UI y Tailwind CSS v4; tú solo debes interactuar con la capa Khor.
 2. **Componentes Khor:** Ejemplo: \`KButton\`, \`KInput\`, \`KCardSection\`.
 3. **Estilos:** Usa Tailwind CSS SOLO para el layout (grid, flex, spacing) y clases de utilidad de Khor. NUNCA hardcodees colores hexadecimales; usa siempre los Design Tokens (\`khorTokens\`) o CSS Variables (\`var(--khor-*)\`).
 4. **React Router:** Usa \`react-router\` (v6/v7), NO \`react-router-dom\`.
@@ -76,19 +83,52 @@ Como IA, DEBES seguir estas reglas estrictamente al generar código:
 
   if (enabled.has('tokens')) {
     parts.push(`
-## Design Tokens
+## 🎨 Especificación Técnica de Tokens (Fuente de Verdad)
+
+Para que el código generado sea funcional, la IA DEBE conocer estos valores y DEBE incluirlos en su CSS global o mediante objeto de estilos si está en entorno aislado:
+
+\`\`\`css
+:root {
+  /* Colores de Marca y Estado */
+  --khor-brand-primary: #E04D36;
+  --khor-brand-secondary: #051758;
+  --khor-brand-accent: #FF9500;
+  --khor-status-success: #2E7D32;
+  --khor-status-error: #D32F2F;
+  --khor-status-info: #051758;
+
+  /* Neutros y Superficies */
+  --khor-neutral-50: #FFFFFF;    /* Surface Page / Card */
+  --khor-neutral-100: #EDF0F1;   /* Canvas Background */
+  --khor-neutral-200: #D5DBE0;   /* Borders / Dividers */
+  --khor-neutral-300: #A0AEC0;   /* Placeholders */
+  --khor-neutral-400: #718096;   /* Muted Text */
+  --khor-neutral-500: #4A5568;   /* Body Text */
+  --khor-neutral-800: #11141C;   /* Dark Text */
+  --khor-neutral-900: #051758;   /* Heading Text */
+
+  /* Geometría y Elevación (Myna-Adopted) */
+  --khor-radius-sm: 6px;
+  --khor-radius-md: 8px;
+  --khor-radius-lg: 10px;
+  --khor-radius-xl: 14px;
+  --khor-shadow-sm: 0 1px 2px rgba(5,23,88,0.04), 0 1px 1px rgba(0,0,0,0.02);
+  --khor-shadow-md: 0 4px 6px -1px rgba(5,23,88,0.08), 0 2px 4px -1px rgba(0,0,0,0.04);
+  --khor-shadow-lg: 0 10px 15px -3px rgba(5,23,88,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+  --khor-shadow-xl: 0 20px 25px -5px rgba(5,23,88,0.12), 0 10px 10px -5px rgba(0,0,0,0.04);
+  --khor-shadow-2xl: 0 25px 50px -12px rgba(5,23,88,0.25);
+}
+\`\`\`
+
+### Detalle Analítico de Tokens (Tabla extendida)
 
 ### Colores de Marca
 
 | Token | Hex | CSS Variable | Uso |
 |-------|-----|-------------|-----|
 | Primary | \`#E04D36\` | \`var(--khor-primary)\` | CTAs, botones principales, enlaces activos |
-| Primary Hover | \`#e8644f\` | \`var(--khor-primary-hover)\` | Hover de primary |
-| Primary Active | \`#c9442f\` | \`var(--khor-primary-active)\` | Click/active de primary |
-| Navy | \`#051758\` | \`var(--khor-navy)\` | Sidebar, titulos, navegacion, headings |
-| Navy Hover | \`#0a2270\` | \`var(--khor-navy-hover)\` | Hover de navy |
-| Accent | \`#FF9500\` | \`var(--khor-accent)\` | Warnings, destacados, badges, CTA secundario |
-| Accent Hover | \`#ffaa33\` | \`var(--khor-accent-hover)\` | Hover de accent |
+| Secondary | \`#051758\` | \`var(--khor-secondary)\` | Botones secundarios, sidebar, titulos, navegacion |
+| Accent | \`#FF9500\` | \`var(--khor-accent)\` | Warnings, destacados, badges, CTA destacado |
 
 ### Colores Neutros
 
@@ -112,25 +152,28 @@ Como IA, DEBES seguir estas reglas estrictamente al generar código:
 | error-light | \`#FFEBEE\` | Fondo de alertas/badges de error |
 | warning | \`#FF9500\` | Advertencias (coincide con accent) |
 | warning-light | \`#FFF3E0\` | Fondo de advertencias |
-| info | \`#051758\` | Informativo (coincide con navy) |
 | info-light | \`#E3F2FD\` | Fondo de alertas informativas |
 
-**Nota para la IA:** En Tailwind v4, estos colores se consumen como \`bg-khor-primary\`, \`text-khor-navy\`, \`border-khor-accent\`, etc.
+**Nota para la IA:** En Tailwind v4, estos colores se consumen como \`bg-khor-primary\`, \`text-khor-secondary\`, \`border-khor-accent\`, etc.
 
 ### Tipografia
 
 | Escala | Tamano | Peso | Line Height | Fuente |
 |--------|--------|------|-------------|--------|
-| h1 | 38px | 700 (bold) | 1.2 | Raleway |
-| h2 | 30px | 700 | 1.2 | Raleway |
-| h3 | 24px | 600 (semi) | 1.3 | Raleway |
-| body-lg | 16px | 400 | 1.5 | Raleway |
-| body-md | 14px | 400 | 1.5 | Raleway |
-| small | 12px | 500 | 1.5 | Raleway |
+| display1| 64px | 700 (bold) | 1.1 | Montserrat |
+| display2| 48px | 700 | 1.1 | Montserrat |
+| h1 | 38px | 700 | 1.2 | Montserrat |
+| h2 | 30px | 700 | 1.2 | Montserrat |
+| h3 | 24px | 600 | 1.3 | Montserrat |
+| body-lg | 16px | 400 | 1.5 | Montserrat |
+| body-md | 14px | 400 | 1.5 | Montserrat |
+| small | 12px | 500 | 1.5 | Montserrat |
+| caption | 11px | 400 | 1.4 | Montserrat |
+| overline| 10px | 600 | 1.2 | Montserrat |
 
 **Importar fuentes:**
 \`\`\`css
-@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 \`\`\`
 
@@ -979,7 +1022,7 @@ export function AIExportPage() {
               <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--foreground)' }}>
                 khor-design-system-ai-guide.md
               </span>
-              <KBadge khorStatus="info" label={`${words.toLocaleString()} palabras`} dot={false} />
+              <KBadge status="info" label={`${words.toLocaleString()} palabras`} dot={false} />
             </div>
             <button
               onClick={() => setExpandedPreview(!expandedPreview)}

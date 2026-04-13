@@ -1,47 +1,90 @@
 import React from 'react';
-import { Switch } from 'antd';
-import type { SwitchProps } from 'antd';
-import { khorTokens } from '../../../../theme/khor-theme';
+import * as SwitchPrimitive from '@radix-ui/react-switch';
+import { Loader2 } from 'lucide-react';
+import { cn } from '../../../../../imports/utils';
 
-const t = khorTokens;
-const font = t.typography.fontPrimary;
-
-export interface KSwitchProps extends SwitchProps {
-  label?: string;
+export interface KSwitchProps extends React.ComponentPropsWithoutRef<typeof SwitchPrimitive.Root> {
+  label?: React.ReactNode;
+  size?: 'sm' | 'md' | 'small' | 'default';
+  loading?: boolean;
+  checkedChildren?: React.ReactNode;
+  unCheckedChildren?: React.ReactNode;
 }
 
-export function KSwitch({ 
-  label, style, variant, size, fullWidth, ...rest 
-}: KSwitchProps & { variant?: any, size?: any, fullWidth?: any }) {
+export const KSwitch = React.forwardRef<React.ElementRef<typeof SwitchPrimitive.Root>, KSwitchProps>(function KSwitch(
+  { className, label, children, size = 'md', loading, disabled, checkedChildren, unCheckedChildren, ...rest }, ref
+) {
+  const isSmall = size === 'sm' || size === 'small';
+  const content = label || children;
+  
   const switchElement = (
-    <Switch
-      style={{
-        backgroundColor: (rest.checked || rest.defaultChecked) ? t.colors.brand.primary : undefined,
-        ...style
-      }}
-      {...rest}
-    />
+    <div className={cn("relative inline-flex items-center", (disabled || loading) ? "cursor-not-allowed opacity-50" : "cursor-pointer")}>
+      <SwitchPrimitive.Root
+        ref={ref}
+        disabled={disabled || loading}
+        className={cn(
+          "peer group relative inline-flex shrink-0 items-center rounded-full border-2 border-transparent transition-all duration-300",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-khor-primary/20 focus-visible:ring-offset-1",
+          "disabled:cursor-not-allowed disabled:opacity-100",
+          "hover:data-[state=unchecked]:bg-khor-slate-300",
+          "data-[state=checked]:bg-khor-success data-[state=unchecked]:bg-khor-slate-200",
+          isSmall ? "min-w-[28px] h-[16px]" : "min-w-[44px] h-[22px]",
+          className
+        )}
+        {...rest}
+      >
+        <span className={cn(
+          "absolute inset-0 flex items-center justify-between pointer-events-none select-none text-white font-medium",
+          isSmall ? "text-[10px]" : "text-xs"
+        )}>
+          <span className={cn(
+            "flex-1 flex justify-start opacity-0 group-data-[state=checked]:opacity-100 transition-opacity",
+            isSmall ? "pl-1 mr-[12px]" : "pl-1.5 mr-[18px]"
+          )}>
+             {checkedChildren}
+          </span>
+          <span className={cn(
+            "flex-1 flex justify-end opacity-100 group-data-[state=checked]:opacity-0 transition-opacity",
+            isSmall ? "pr-1 ml-[12px]" : "pr-1.5 ml-[18px]"
+          )}>
+             {unCheckedChildren}
+          </span>
+        </span>
+
+        <SwitchPrimitive.Thumb
+          className={cn(
+            "pointer-events-none block rounded-full bg-white shadow-khor-sm ring-0 transition-transform relative flex items-center justify-center border border-black/5",
+            isSmall 
+              ? "h-[12px] w-[12px] data-[state=checked]:translate-x-[12px] data-[state=unchecked]:translate-x-0" 
+              : "h-[18px] w-[18px] data-[state=checked]:translate-x-[22px] data-[state=unchecked]:translate-x-0"
+          )}
+        >
+          {loading && (
+            <Loader2 className={cn("animate-spin text-khor-primary absolute", isSmall ? "w-[8px] h-[8px]" : "w-[12px] h-[12px]")} />
+          )}
+        </SwitchPrimitive.Thumb>
+      </SwitchPrimitive.Root>
+    </div>
   );
 
-  if (!label) return switchElement;
+  if (!content) return switchElement;
 
   return (
-    <label style={{ 
-      display: 'inline-flex', 
-      alignItems: 'center', 
-      gap: 8, 
-      cursor: rest.disabled ? 'not-allowed' : 'pointer' 
-    }}>
+    <label className={cn(
+      "inline-flex items-center gap-2 cursor-pointer font-primary",
+      (disabled || loading) ? "cursor-not-allowed opacity-50" : ""
+    )}>
       {switchElement}
-      <span style={{ 
-        fontSize: 14, 
-        color: rest.disabled ? t.colors.neutral[300] : t.colors.neutral[900], 
-        fontFamily: font 
-      }}>
-        {label}
+      <span className={cn(
+        "font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-khor-neutral-900",
+        isSmall ? "text-xs" : "text-sm"
+      )}>
+        {content}
       </span>
     </label>
   );
-}
+});
+
+KSwitch.displayName = 'KSwitch';
 
 export default KSwitch;

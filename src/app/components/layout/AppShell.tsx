@@ -12,11 +12,12 @@ import {
   ChevronDown, ChevronRight, Sparkles, Menu, X, Search,
   Shield, Clock, Figma, Moon, Sun, Bot, Brush, BookOpen,
 } from 'lucide-react';
-import { KNavItem } from '../design-system/molecules/index';
+import { KNavItem } from '../design-system/molecules/KNavItem';
 import { patterns } from '../../patterns/index';
 import { khorTokens } from '../../theme/khor-theme';
 import { KCommandBar, useCommandBar } from '../design-system/command-bar';
 import { useTheme } from '../../theme/theme-context';
+import khorCounts from '../../metadata/khor-counts.json';
 
 /* Dot estilizado para sub-items en sidebar expandido */
 const NavDot = () => (
@@ -67,18 +68,19 @@ const navigation: NavSection[] = [
       { label: 'KButtonGroup', path: '/atoms/button-group' },
       { label: 'KCheckbox', path: '/atoms/checkbox' },
       { label: 'KDivider', path: '/atoms/divider' },
+      { label: 'KScrollBar', path: '/atoms/scrollbar' },
+      { label: 'KSkeleton', path: '/atoms/skeleton' },
       { label: 'KFlex', path: '/atoms/flex' },
       { label: 'KFloatButton', path: '/atoms/float-button' },
       { label: 'KGrid (Row/Col)', path: '/atoms/grid' },
       { label: 'KImage', path: '/atoms/image' },
       { label: 'KInput', path: '/atoms/input' },
       { label: 'KInputPassword', path: '/atoms/input-password' },
-      { label: 'KInputSearch', path: '/atoms/input-search' },
+      { label: 'KSearchInput', path: '/atoms/search-input' },
       { label: 'KProgress', path: '/atoms/progress' },
       { label: 'KQRCode', path: '/atoms/qrcode' },
       { label: 'KRadio', path: '/atoms/radio' },
       { label: 'KRate', path: '/atoms/rate' },
-      { label: 'KSkeleton', path: '/atoms/skeleton' },
       { label: 'KSlider', path: '/atoms/slider' },
       { label: 'KSpace', path: '/atoms/space' },
       { label: 'KSpin', path: '/atoms/spin' },
@@ -114,7 +116,6 @@ const navigation: NavSection[] = [
       { label: 'KPopconfirm', path: '/molecules/popconfirm' },
       { label: 'KPopover', path: '/molecules/popover' },
       { label: 'KResult', path: '/molecules/result' },
-      { label: 'KSearchInput', path: '/molecules/search-input' },
       { label: 'KSegmented', path: '/molecules/segmented' },
       { label: 'KSelectAdvanced', path: '/molecules/select-advanced' },
       { label: 'KSelectField', path: '/molecules/select-field' },
@@ -160,10 +161,6 @@ const navigation: NavSection[] = [
     items: [
       { label: 'Todos los Patrones', path: '/patterns' },
       ...patterns.map(p => ({ label: p.title, path: `/patterns/${p.id}` })),
-      { label: 'TPL: Login', path: '/templates/login' },
-      { label: 'TPL: Dashboard', path: '/templates/dashboard' },
-      { label: 'TPL: CRUD Table', path: '/templates/crud' },
-      { label: 'TPL: Multi-Step', path: '/templates/form' },
     ],
   },
   {
@@ -171,8 +168,7 @@ const navigation: NavSection[] = [
     icon: <Sparkles size={18} strokeWidth={2} />,
     items: [
       { label: 'Theming en Vivo', path: '/theming' },
-      { label: 'Contraste WCAG', path: '/wcag-checker' },
-      { label: 'Accesibilidad WCAG', path: '/accessibility' },
+      { label: 'Khor Guardian (A11y)', path: '/guardian' },
       { label: 'Exportar a Figma', path: '/figma-export' },
       { label: 'Guía para IA', path: '/ai-export' },
       { label: 'Changelog', path: '/changelog' },
@@ -186,7 +182,7 @@ export function AppShell() {
   const [collapsed, setCollapsed] = useState(false);
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({});
   const { open: cmdOpen, setOpen: setCmdOpen } = useCommandBar();
-  const { mode, toggle: toggleTheme, isDark } = useTheme();
+  const { mode, toggleDark, isDark } = useTheme();
 
   const toggleSection = (title: string) => {
     setOpenSections((prev) => ({ ...prev, [title]: !prev[title] }));
@@ -348,6 +344,27 @@ export function AppShell() {
                     >
                       {section.icon}
                       <span style={{ flex: 1, textAlign: 'left' }}>{section.title}</span>
+                      {!collapsed && (
+                        <span style={{ 
+                          fontSize: 10, 
+                          color: 'rgba(255,255,255,0.3)', 
+                          backgroundColor: 'rgba(255,255,255,0.05)', 
+                          padding: '1px 6px', 
+                          borderRadius: 4,
+                          marginRight: 6,
+                          fontWeight: 700
+                        }}>
+                          {section.title === 'Átomos' && khorCounts.atoms}
+                          {section.title === 'Moléculas' && khorCounts.molecules}
+                          {section.title === 'Organismos' && khorCounts.organisms}
+                          {section.title === 'Patrones / Recipes' && (
+                            <div style={{ display: 'flex', gap: 4 }}>
+                              <span title="Patrones">🧩 {khorCounts.patterns}</span>
+                              <span title="Templates">🖼️ {khorCounts.templates}</span>
+                            </div>
+                          )}
+                        </span>
+                      )}
                       {openSections[section.title] ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
                     </button>
                     {openSections[section.title] && section.items && (
@@ -439,13 +456,13 @@ export function AppShell() {
               backgroundColor: 'var(--khor-success-light)',
               color: 'var(--khor-success)',
             }}>
-              v3.2.1
+              v4.0.4
             </span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             {/* Dark mode toggle */}
             <button
-              onClick={toggleTheme}
+              onClick={toggleDark}
               title={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
               style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center',

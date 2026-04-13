@@ -1,0 +1,12 @@
+{
+  "name": "Khor Design System",
+  "id": "com.khor.designsystem.plugin",
+  "version": "0.3.0",
+  "description": "Khor Design System — Elite Expansion con soporte para KButton, KTag y KBadge.",
+  "permissions": [
+    "content:read",
+    "content:write",
+    "library:write"
+  ],
+  "code": "dist/main-045-stable.js"
+}

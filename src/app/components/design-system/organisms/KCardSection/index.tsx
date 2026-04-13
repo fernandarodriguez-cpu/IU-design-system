@@ -1,11 +1,12 @@
 import React from 'react';
-import { KText } from '../../atoms';
+import { KText } from '../../atoms/KText/index';
 import { khorTokens } from '../../../../theme/khor-theme';
 
 const t = khorTokens;
 const font = t.typography.fontPrimary;
 
 export interface KCardSectionProps {
+  id?: string;
   title?: string;
   subtitle?: string;
   extra?: React.ReactNode;
@@ -14,9 +15,10 @@ export interface KCardSectionProps {
   noPadding?: boolean;
 }
 
-export function KCardSection({ title, subtitle, extra, children, className, noPadding }: KCardSectionProps) {
+export function KCardSection({ id, title, subtitle, extra, children, className, noPadding }: KCardSectionProps) {
   return (
     <div
+      id={id}
       className={className}
       style={{
         backgroundColor: t.colors.neutral[50], borderRadius: t.radius.lg,

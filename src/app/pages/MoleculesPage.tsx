@@ -5,19 +5,43 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router';
 import { ComponentDoc } from '../components/docs/ComponentDoc';
 import type { PropDef } from '../components/docs/ComponentDoc';
-import {
-  KFormField, KSearchInput, KStatCard, KNavItem,
-  KSelectField, KUserCell, KEmptyState,
-  KBreadcrumb, KSteps, KDropdownMenu, KPopover, KAccordion,
-  KInputNumber, KSegmented, KAutocomplete, KDatePicker,
-  KDateRangePicker, KSelectAdvanced, KDescriptions,
-  KPopconfirm, KResult, KTimeline, KTooltip,
-  KCascader, KStatistic, KTimePicker, KMentions,
-  KColorPicker, KAnchor, KList, KDividerExtended,
-  KTreeSelect, KTransfer,
-} from '../components/design-system/molecules/index';
-import { KButton, KInput, KText } from '../components/design-system/atoms/index';
-import dayjs from 'dayjs';
+import { KFormField } from '../components/design-system/molecules/KFormField';
+import { KSearchInput } from '../components/design-system/atoms/KSearchInput';
+import { KStatCard } from '../components/design-system/molecules/KStatCard';
+import { KNavItem } from '../components/design-system/molecules/KNavItem';
+import { KSelectField } from '../components/design-system/molecules/KSelectField';
+import { KUserCell } from '../components/design-system/molecules/KUserCell';
+import { KEmptyState } from '../components/design-system/molecules/KEmptyState';
+import { KBreadcrumb } from '../components/design-system/molecules/KBreadcrumb';
+import { KSteps } from '../components/design-system/molecules/KSteps';
+import { KDropdownMenu } from '../components/design-system/molecules/KDropdownMenu';
+import { KPopover } from '../components/design-system/molecules/KPopover';
+import { KAccordion } from '../components/design-system/molecules/KAccordion';
+import { KInputNumber } from '../components/design-system/molecules/KInputNumber';
+import { KSegmented } from '../components/design-system/molecules/KSegmented';
+import { KAutocomplete } from '../components/design-system/molecules/KAutocomplete';
+import { KDatePicker, KDateRangePicker } from '../components/design-system/molecules/KDatePicker';
+import type { KDateRange } from '../components/design-system/molecules/KDatePicker';
+import { KSelectAdvanced } from '../components/design-system/molecules/KSelectAdvanced';
+import { KDescriptions } from '../components/design-system/molecules/KDescriptions';
+import { KPopconfirm } from '../components/design-system/molecules/KPopconfirm';
+import { KResult } from '../components/design-system/molecules/KResult';
+import { KTimeline } from '../components/design-system/molecules/KTimeline';
+import { KTooltip } from '../components/design-system/molecules/KTooltip';
+import { KCascader } from '../components/design-system/molecules/KCascader';
+import { KStatistic } from '../components/design-system/molecules/KStatistic';
+import { KTimePicker } from '../components/design-system/molecules/KTimePicker';
+import { KMentions } from '../components/design-system/molecules/KMentions';
+import { KColorPicker } from '../components/design-system/molecules/KColorPicker';
+import { KAnchor } from '../components/design-system/molecules/KAnchor';
+import { KList } from '../components/design-system/molecules/KList';
+import { KDividerExtended } from '../components/design-system/molecules/KDividerExtended';
+import { KTreeSelect } from '../components/design-system/molecules/KTreeSelect';
+import { KTransfer } from '../components/design-system/molecules/KTransfer';
+import { KButton } from '../components/design-system/atoms/KButton';
+import { KInput } from '../components/design-system/atoms/KInput';
+import { KText } from '../components/design-system/atoms/KText';
+import { format as formatDate, parse, startOfDay, endOfDay, subDays } from 'date-fns';
 import {
   Users, DollarSign, TrendingUp, Calendar, Home,
   Settings, FileText, Inbox, Search, BarChart3,
@@ -100,28 +124,6 @@ function FormFieldPlayground() {
   );
 }
 
-function SearchInputPlayground() {
-  const [val, setVal] = useState('');
-  const [size, setSize] = useState<any>('md');
-  const [placeholder, setPlaceholder] = useState('Buscar empleados...');
-  const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
-  const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
-  return (
-    <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
-      <div style={{ flex: 1, minWidth: 240 }}>
-        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <div><label style={ctrl}>Placeholder</label><input value={placeholder} onChange={(e) => setPlaceholder(e.target.value)} style={sel} /></div>
-          <div><label style={ctrl}>Tamano</label><select value={size} onChange={(e) => setSize(e.target.value)} style={sel}>{['sm','md','lg'].map(s=><option key={s}>{s}</option>)}</select></div>
-          <p style={{ fontSize: 12, color: khorTokens.colors.neutral[400], margin: 0 }}>Valor actual: "{val}"</p>
-        </div>
-      </div>
-      <div style={{ flex: 1, minWidth: 300, display: 'flex', alignItems: 'center', padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-        <div style={{ width: '100%' }}><KSearchInput placeholder={placeholder} size={size} value={val} onChange={setVal} /></div>
-      </div>
-    </div>
-  );
-}
 
 function SelectFieldPlayground() {
   const [value, setValue] = useState<string>('');
@@ -132,7 +134,8 @@ function SelectFieldPlayground() {
   const [loading, setLoading] = useState(false);
   const [showSearch, setShowSearch] = useState(true);
   const [allowClear, setAllowClear] = useState(true);
-  const [size, setSize] = useState<any>('middle');
+  const [size, setSize] = useState<'small' | 'middle' | 'large'>('middle');
+  const [mode, setMode] = useState<any>('single');
   const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
   const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
   return (
@@ -140,7 +143,8 @@ function SelectFieldPlayground() {
       <div style={{ flex: 1, minWidth: 260 }}>
         <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <div><label style={ctrl}>Tamano</label><select value={size} onChange={(e) => setSize(e.target.value)} style={sel}>{['small','middle','large'].map(s=><option key={s}>{s}</option>)}</select></div>
+          <div><label style={ctrl}>Tamano</label><select value={size} onChange={(e) => setSize(e.target.value as any)} style={sel}>{['small','middle','large'].map(s=><option key={s}>{s}</option>)}</select></div>
+          <div><label style={ctrl}>Modo</label><select value={mode} onChange={(e) => { setMode(e.target.value as any); setValue(e.target.value === 'single' ? '' : [] as any); }} style={sel}>{['single','multiple','tags'].map(s=><option key={s}>{s}</option>)}</select></div>
           <div><label style={ctrl}>Error</label><input value={error} onChange={(e) => setError(e.target.value)} placeholder="Dejar vacio" style={sel} /></div>
           <div><label style={ctrl}>Hint</label><input value={hint} onChange={(e) => setHint(e.target.value)} style={sel} /></div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 4 }}>
@@ -154,26 +158,29 @@ function SelectFieldPlayground() {
         </div>
       </div>
       <div style={{ flex: 1, minWidth: 320, padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-        <KSelectField
-          label="Departamento"
-          placeholder="Seleccionar..."
-          options={[
-            { label: 'Recursos Humanos', value: 'rh' },
-            { label: 'Tecnologia', value: 'tech' },
-            { label: 'Finanzas', value: 'fin' },
-            { label: 'Operaciones', value: 'ops' }
-          ]}
-          value={value}
-          onChange={setValue}
-          disabled={disabled}
-          loading={loading}
-          showSearch={showSearch}
-          allowClear={allowClear}
-          size={size}
-          required={required}
-          error={error || undefined}
-          hint={hint || undefined}
-        />
+          <div style={{ padding: 24, background: khorTokens.colors.neutral[50], borderRadius: 12, border: `1px dashed ${khorTokens.colors.neutral[200]}` }}>
+            <KSelectField
+              label="Departamento"
+              placeholder="Seleccionar..."
+              options={[
+                { label: 'Recursos Humanos', value: 'rh' },
+                { label: 'Tecnología', value: 'tech' },
+                { label: 'Finanzas', value: 'fin' },
+                { label: 'Operaciones', value: 'ops' }
+              ]}
+              value={value}
+              onChange={setValue}
+              disabled={disabled}
+              loading={loading}
+              size={size}
+              mode={mode}
+              allowClear={allowClear}
+              showSearch={showSearch}
+              required={required}
+              error={error || undefined}
+              hint={hint || undefined}
+            />
+          </div>
       </div>
     </div>
   );
@@ -220,8 +227,11 @@ function UserCellPlayground() {
 
 function StepsPlayground() {
   const [current, setCurrent] = useState(1);
-  const [direction, setDirection] = useState<any>('horizontal');
-  const [size, setSize] = useState<any>('default');
+  const [direction, setDirection] = useState<'horizontal' | 'vertical'>('horizontal');
+  const [size, setSize] = useState<'default' | 'small'>('default');
+  const [progressDot, setProgressDot] = useState(false);
+  const [labelPlacement, setLabelPlacement] = useState<'horizontal' | 'vertical'>('horizontal');
+  const [percent, setPercent] = useState(60);
   
   const steps = [
     { title: 'Datos Personales', description: 'Nombre, email' },
@@ -242,8 +252,18 @@ function StepsPlayground() {
             <label style={ctrl}>Paso actual: {current + 1}</label>
             <input type="range" min={0} max={3} value={current} onChange={(e) => setCurrent(Number(e.target.value))} style={{ width: '100%' }} />
           </div>
-          <div><label style={ctrl}>Direccion</label><select value={direction} onChange={(e) => setDirection(e.target.value)} style={sel}>{['horizontal','vertical'].map(d=><option key={d}>{d}</option>)}</select></div>
-          <div><label style={ctrl}>Tamano</label><select value={size} onChange={(e) => setSize(e.target.value)} style={sel}>{['default','small'].map(s=><option key={s}>{s}</option>)}</select></div>
+          <div><label style={ctrl}>Direccion</label><select value={direction} onChange={(e) => setDirection(e.target.value as any)} style={sel}>{['horizontal','vertical'].map(d=><option key={d}>{d}</option>)}</select></div>
+          <div><label style={ctrl}>Tamano</label><select value={size} onChange={(e) => setSize(e.target.value as any)} style={sel}>{['default','small'].map(s=><option key={s} value={s}>{s}</option>)}</select></div>
+          <div><label style={ctrl}>Ubicación Etiqueta</label><select value={labelPlacement} onChange={(e) => setLabelPlacement(e.target.value as any)} style={sel}>{['horizontal','vertical'].map(p=><option key={p}>{p}</option>)}</select></div>
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={progressDot} onChange={(e) => setProgressDot(e.target.checked)} /> Modo Punto (Dot)</label>
+          </div>
+          {current === 1 && (
+            <div>
+              <label style={ctrl}>Porcentaje paso activo: {percent}%</label>
+              <input type="range" min={0} max={100} value={percent} onChange={(e) => setPercent(Number(e.target.value))} style={{ width: '100%' }} />
+            </div>
+          )}
         </div>
       </div>
       <div style={{ flex: 2, minWidth: 400, padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
@@ -252,6 +272,9 @@ function StepsPlayground() {
           onChange={setCurrent} 
           direction={direction}
           size={size}
+          progressDot={progressDot}
+          labelPlacement={labelPlacement}
+          percent={percent}
           items={steps} 
         />
       </div>
@@ -262,9 +285,22 @@ function StepsPlayground() {
 function BreadcrumbPlayground() {
   const [levels, setLevels] = useState(3);
   const [separator, setSeparator] = useState('/');
+  const [useMenu, setUseMenu] = useState(false);
+  
   const allItems = [
     { title: 'Inicio', icon: <Home size={14} />, onClick: () => {} },
-    { title: 'Empleados', icon: <Users size={14} />, onClick: () => {} },
+    { 
+      title: 'Empleados', 
+      icon: <Users size={14} />, 
+      menu: useMenu ? {
+        items: [
+          { key: 'active', label: 'Activos' },
+          { key: 'disabled', label: 'Inactivos' },
+          { key: 'onboarding', label: 'Onboarding' }
+        ]
+      } : undefined,
+      onClick: () => {} 
+    },
     { title: 'Departamento RH', onClick: () => {} },
     { title: 'Maria Garcia' },
   ];
@@ -281,13 +317,18 @@ function BreadcrumbPlayground() {
             <label style={{ fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block', marginBottom: 4 }}>Separador</label>
             <input value={separator} onChange={(e) => setSeparator(e.target.value)} style={{ padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' }} />
           </div>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}>
+            <input type="checkbox" checked={useMenu} onChange={(e) => setUseMenu(e.target.checked)} /> Menu en Empleados
+          </label>
         </div>
       </div>
       <div style={{ flex: 2, minWidth: 300, display: 'flex', alignItems: 'center', padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-        <KBreadcrumb 
-          items={allItems.slice(0, levels)} 
-          separator={separator}
-        />
+        <div style={{ padding: 24, background: khorTokens.colors.neutral[50], borderRadius: 12, width: '100%' }}>
+          <KBreadcrumb 
+            items={allItems.slice(0, levels)} 
+            separator={separator}
+          />
+        </div>
       </div>
     </div>
   );
@@ -295,8 +336,10 @@ function BreadcrumbPlayground() {
 
 function AccordionPlayground() {
   const [accordion, setAccordion] = useState(true);
-  const [ghost, setGhost] = useState(true);
-  const [expandIconPosition, setExpandIconPosition] = useState<any>('end');
+  const [ghost, setGhost] = useState(false);
+  const [expandIconPosition, setExpandIconPosition] = useState<'start' | 'end'>('end');
+  const [showArrow, setShowArrow] = useState(true);
+  const [showExtra, setShowExtra] = useState(false);
 
   const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
   const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
@@ -308,17 +351,30 @@ function AccordionPlayground() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={accordion} onChange={(e) => setAccordion(e.target.checked)} /> Modo Acordeon</label>
           <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={ghost} onChange={(e) => setGhost(e.target.checked)} /> Modo Ghost</label>
-          <div><label style={ctrl}>Posicion Icono</label><select value={expandIconPosition} onChange={(e) => setExpandIconPosition(e.target.value)} style={sel}>{['start','end'].map(p=><option key={p}>{p}</option>)}</select></div>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={showArrow} onChange={(e) => setShowArrow(e.target.checked)} /> Mostrar Flecha</label>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={showExtra} onChange={(e) => setShowExtra(e.target.checked)} /> Mostrar Acciones (Extra)</label>
+          <div><label style={ctrl}>Posicion Icono</label><select value={expandIconPosition} onChange={(e) => setExpandIconPosition(e.target.value as any)} style={sel}>{['start','end'].map(p=><option key={p}>{p}</option>)}</select></div>
         </div>
       </div>
       <div style={{ flex: 2, minWidth: 350, padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
         <KAccordion 
           accordion={accordion}
           ghost={ghost}
+          showArrow={showArrow}
           expandIconPosition={expandIconPosition}
           items={[
-            { key: '1', label: '¿Cómo registro un nuevo empleado?', children: <KText variant="body-md" color="secondary">Navega a Empleados y completa el formulario.</KText> },
-            { key: '2', label: '¿Cómo genero la nómina?', children: <KText variant="body-md" color="secondary">Ve a Nómina, selecciona fechas y confirma.</KText> },
+            { 
+              key: '1', 
+              label: '¿Cómo registro un nuevo empleado?', 
+              extra: showExtra ? <KButton size="sm" variant="ghost" icon={<Settings size={14} />} onClick={() => alert('Config tab 1')} /> : undefined,
+              children: <KText variant="body-md" color="secondary">Navega a Empleados y completa el formulario.</KText> 
+            },
+            { 
+              key: '2', 
+              label: '¿Cómo genero la nómina?', 
+              extra: showExtra ? <KButton size="sm" variant="ghost" icon={<Share2 size={14} />} /> : undefined,
+              children: <KText variant="body-md" color="secondary">Ve a Nómina, selecciona fechas y confirma.</KText> 
+            },
             { key: '3', label: '¿Cómo exporto reportes?', children: <KText variant="body-md" color="secondary">Usa el botón Exportar en cualquier tabla.</KText> },
           ]} 
           defaultActiveKey={['1']} 
@@ -392,17 +448,18 @@ function DropdownPlayground() {
         </div>
       </div>
       <div style={{ flex: 1, minWidth: 240, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-        <KDropdownMenu
-          menu={{
-            items: items as any,
-            onClick: (info) => setLastSelected(info.key)
-          }}
-          placement={placement}
-          arrow={arrow}
-          trigger={['click']}
-        >
-          <KButton variant="secondary" icon={<MoreHorizontal size={16} />}>Acciones</KButton>
-        </KDropdownMenu>
+          <div style={{ padding: 40, background: khorTokens.colors.neutral[50], borderRadius: 12, display: 'flex', justifyContent: 'center' }}>
+            <KDropdownMenu
+              menu={{
+                items: items as any,
+                onClick: (info) => setLastSelected(info.key)
+              }}
+              placement={placement}
+              arrow={arrow}
+            >
+              <KButton variant="secondary" icon={<MoreHorizontal size={16} />}>Acciones</KButton>
+            </KDropdownMenu>
+          </div>
       </div>
     </div>
   );
@@ -448,23 +505,22 @@ function PopoverPlayground() {
           <div><label style={ctrl}>Disparador</label><select value={trigger} onChange={(e) => setTrigger(e.target.value)} style={sel}>{['click','hover','focus'].map(t=><option key={t}>{t}</option>)}</select></div>
         </div>
       </div>
-      <div style={{ flex: 2, minWidth: 400, padding: 48, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-        <KPopover
-          placement={placement}
-          trigger={trigger}
-          title={<KText strong>Configuración</KText>}
-          content={
-            <div style={{ width: 240 }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 8 }}>
-                <KSelectField label="Departamento" placeholder="Seleccionar..." />
-                <KButton variant="primary" block size="sm">Aplicar Cambios</KButton>
-              </div>
-            </div>
-          }
-        >
-          <KButton variant="secondary" icon={<Settings size={16} />}>Configurar</KButton>
-        </KPopover>
-      </div>
+          <div style={{ padding: 48, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
+            <KPopover
+              placement={placement}
+              title={<KText strong>Configuración</KText>}
+              content={
+                <div style={{ width: 240 }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 8 }}>
+                    <KSelectField label="Departamento" placeholder="Seleccionar..." />
+                    <KButton variant="primary" block size="sm">Aplicar Cambios</KButton>
+                  </div>
+                </div>
+              }
+            >
+              <KButton variant="secondary" icon={<Settings size={16} />}>Configurar</KButton>
+            </KPopover>
+          </div>
     </div>
   );
 }
@@ -507,24 +563,32 @@ function InputNumberPlayground() {
 
 function SegmentedPlayground() {
   const [val, setVal] = useState<any>('Diario');
-  const [size, setSize] = useState<any>('md');
+  const [size, setSize] = useState<'sm' | 'md' | 'lg'>('md');
   const [block, setBlock] = useState(false);
+  const [iconOnly, setIconOnly] = useState(false);
 
   const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
   const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
+
+  const options = iconOnly ? [
+    { value: 'grid', icon: <FileText size={16} /> },
+    { value: 'list', icon: <Users size={16} /> },
+    { value: 'settings', icon: <Settings size={16} /> }
+  ] : ['Diario', 'Semanal', 'Mensual', 'Anual'];
 
   return (
     <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
       <div style={{ flex: 1, minWidth: 200 }}>
         <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <div><label style={ctrl}>Tamano</label><select value={size} onChange={(e) => setSize(e.target.value)} style={sel}>{['sm','md','lg'].map(s=><option key={s}>{s}</option>)}</select></div>
+          <div><label style={ctrl}>Tamano</label><select value={size} onChange={(e) => setSize(e.target.value as any)} style={sel}>{['sm','md','lg'].map(s=><option key={s}>{s}</option>)}</select></div>
           <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={block} onChange={(e) => setBlock(e.target.checked)} /> Ancho Completo</label>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={iconOnly} onChange={(e) => setIconOnly(e.target.checked)} /> Solo Iconos</label>
         </div>
       </div>
       <div style={{ flex: 2, minWidth: 400, padding: 48, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
         <KSegmented 
-          options={['Diario', 'Semanal', 'Mensual', 'Anual']} 
+          options={options} 
           value={val} 
           onChange={setVal} 
           size={size} 
@@ -574,23 +638,32 @@ function AutocompletePlayground() {
 }
 
 function DatePickerPlayground() {
-  const [date, setDate] = useState<any>(null);
-  const [range, setRange] = useState<any>(null);
+  const [date, setDate] = useState<Date | undefined>(undefined);
+  const [range, setRange] = useState<KDateRange | undefined>(undefined);
   const [picker, setPicker] = useState<any>('date');
   const [size, setSize] = useState<any>('md');
   const [showTime, setShowTime] = useState(false);
+  const [rangeShowTime, setRangeShowTime] = useState(false);
 
   const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
   const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
+
+  const rangePresets = [
+    { label: 'Hoy', value: [startOfDay(new Date()), endOfDay(new Date())] as [Date, Date] },
+    { label: 'Ayer', value: [startOfDay(subDays(new Date(), 1)), endOfDay(subDays(new Date(), 1))] as [Date, Date] },
+    { label: 'L7D', value: [startOfDay(subDays(new Date(), 7)), endOfDay(new Date())] as [Date, Date] },
+    { label: 'Este Mes', value: [new Date(new Date().getFullYear(), new Date().getMonth(), 1), endOfDay(new Date())] as [Date, Date] },
+  ];
 
   return (
     <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
       <div style={{ flex: 1, minWidth: 200 }}>
         <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <div><label style={ctrl}>Tipo</label><select value={picker} onChange={(e) => setPicker(e.target.value)} style={sel}>{['date','week','month','quarter','year'].map(p=><option key={p}>{p}</option>)}</select></div>
+          <div><label style={ctrl}>Tipo (Single)</label><select value={picker} onChange={(e) => setPicker(e.target.value)} style={sel}>{['date','week','month','quarter','year'].map(p=><option key={p}>{p}</option>)}</select></div>
           <div><label style={ctrl}>Tamano</label><select value={size} onChange={(e) => setSize(e.target.value)} style={sel}>{['sm','md','lg'].map(s=><option key={s}>{s}</option>)}</select></div>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={showTime} onChange={(e) => setShowTime(e.target.checked)} /> Mostrar Hora</label>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={showTime} onChange={(e) => setShowTime(e.target.checked)} /> Time (Single)</label>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={rangeShowTime} onChange={(e) => setRangeShowTime(e.target.checked)} /> Time (Range)</label>
         </div>
       </div>
       <div style={{ flex: 2, minWidth: 400, padding: 32, display: 'flex', flexDirection: 'column', gap: 24, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
@@ -598,9 +671,15 @@ function DatePickerPlayground() {
           <KText variant="small" strong style={{ marginBottom: 8, display: 'block' }}>Selector Individual</KText>
           <KDatePicker value={date} onChange={setDate} picker={picker} allowClear size={size} showTime={showTime} />
         </div>
-        <div style={{ width: '100%', maxWidth: 400 }}>
-          <KText variant="small" strong style={{ marginBottom: 8, display: 'block' }}>Selector de Rango</KText>
-          <KDateRangePicker value={range} onChange={setRange} />
+        <div style={{ width: '100%', maxWidth: 450 }}>
+          <KText variant="small" strong style={{ marginBottom: 8, display: 'block' }}>Selector de Rango (con Atajos y Tiempo)</KText>
+          <KDateRangePicker 
+            value={range} 
+            onChange={setRange} 
+            showTime={rangeShowTime}
+            presets={rangePresets}
+            size={size}
+          />
         </div>
       </div>
     </div>
@@ -678,26 +757,68 @@ function SelectAdvancedPlayground() {
 }
 
 function DescriptionsPlayground() {
+  const [layout, setLayout] = useState<'horizontal' | 'vertical'>('vertical');
+  const [bordered, setBordered] = useState(true);
+  const [colon, setColon] = useState(true);
+  const [size, setSize] = useState<'sm' | 'md' | 'lg'>('md');
+
   const items = [
     { label: 'Usuario', children: 'Dani Lezcano', span: 2 },
     { label: 'Email', children: 'dani@khor.com', span: 2 },
     { label: 'Rol', children: 'Admin' },
-    { label: 'Estado', children: <span style={{ color: khorTokens.colors.brand.primary }}>Activo</span> },
+    { label: 'Estado', children: <KText strong color="primary">Activo</KText> },
     { label: 'Biografía', children: 'Desarrollador enfocado en sistemas de diseño y arquitectura frontend.', span: 4 },
   ];
 
+  const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
+  const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
+
   return (
-    <div style={{ padding: 24, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-      <KDescriptions title="Información de Perfil" bordered items={items} column={4} />
+    <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
+      <div style={{ flex: 1, minWidth: 200 }}>
+        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div><label style={ctrl}>Disposicion</label><select value={layout} onChange={(e) => setLayout(e.target.value as any)} style={sel}>{['horizontal','vertical'].map(l=><option key={l}>{l}</option>)}</select></div>
+          <div><label style={ctrl}>Tamano</label><select value={size} onChange={(e) => setSize(e.target.value as any)} style={sel}>{['sm','md','lg'].map(s=><option key={s}>{s}</option>)}</select></div>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={bordered} onChange={(e) => setBordered(e.target.checked)} /> Con Bordes</label>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={colon} onChange={(e) => setColon(e.target.checked)} /> Mostrar Dos Puntos (:)</label>
+        </div>
+      </div>
+      <div style={{ flex: 2, minWidth: 400, padding: 24, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
+        <KDescriptions title="Información de Perfil" bordered={bordered} items={items} column={4} layout={layout} colon={colon} size={size} />
+      </div>
     </div>
   );
 }
 
 function PopconfirmPlayground() {
+  const [loading, setLoading] = useState(false);
+  const handleConfirm = async () => {
+    setLoading(true);
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    setLoading(false);
+  };
+
   return (
-    <div style={{ padding: 48, display: 'flex', gap: 24, justifyContent: 'center', backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-      <KPopconfirm title="¿Estás seguro?" description="Esta acción no se puede deshacer." onConfirm={() => console.log('Confirmado')}>
-        <button style={{ padding: '8px 16px', borderRadius: 6, border: 'none', backgroundColor: khorTokens.colors.brand.primary, color: 'white', cursor: 'pointer' }}>Eliminar Elemento</button>
+    <div style={{ padding: 48, display: 'flex', gap: 24, justifyContent: 'center', flexWrap: 'wrap', backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
+      <KPopconfirm 
+        title="¿Eliminar registro?" 
+        description="Esta acción borrará permanentemente el empleado." 
+        okType="danger"
+        okText="Eliminar"
+        onConfirm={handleConfirm}
+      >
+        <KButton variant="danger" icon={<Trash2 size={16} />}>Borrar Empleado</KButton>
+      </KPopconfirm>
+
+      <KPopconfirm 
+        title="¿Publicar cambios?" 
+        description="Se notificará a todos los usuarios seleccionados." 
+        okType="primary"
+        okText="Publicar"
+        onConfirm={() => console.log('Publicado')}
+      >
+        <KButton variant="primary" icon={<Share2 size={16} />}>Publicar</KButton>
       </KPopconfirm>
     </div>
   );
@@ -730,44 +851,83 @@ function ResultPlayground() {
 }
 
 function TimelinePlayground() {
+  const [mode, setMode] = useState<'left' | 'alternate' | 'right'>('alternate');
   const items = [
-    { label: '2023-10-01', children: 'Creación de la cuenta' },
-    { label: '2023-10-05', children: 'Verificación de identidad' },
-    { label: '2023-10-10', children: 'Primer depósito realizado', color: khorTokens.colors.feedback.success },
-    { label: '2023-10-15', children: 'Pendiente de aprobación', color: khorTokens.colors.brand.accent },
+    { label: '2023-10-01', children: 'Creación de la cuenta corporativa', color: 'navy' },
+    { label: '2023-10-05', children: 'Verificación de identidad completada', color: 'success' },
+    { label: '2023-10-08', children: 'Error en validación bancaria', color: 'error', dot: <AlertTriangle size={12} className="text-white" /> },
+    { label: '2023-10-10', children: 'Primer depósito realizado exitosamente', color: 'success' },
+    { label: '2023-10-15', children: 'Suscripción Premium activada', color: 'primary' },
   ];
 
+  const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
+  const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
+
   return (
-    <div style={{ padding: 48, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-      <KTimeline mode="alternate" items={items} />
+    <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
+      <div style={{ flex: 1, minWidth: 200 }}>
+        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
+        <div><label style={ctrl}>Modo</label><select value={mode} onChange={(e) => setMode(e.target.value as any)} style={sel}>{['left','alternate','right'].map(m=><option key={m}>{m}</option>)}</select></div>
+      </div>
+      <div style={{ flex: 3, minWidth: 400, padding: 48, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
+        <KTimeline mode={mode} items={items} pending="Sincronizando últimos eventos..." />
+      </div>
     </div>
   );
 }
 
 function CascaderPlayground() {
-  const [val, setVal] = useState<string[]>([]);
+  const [val, setVal] = useState<(string | number)[]>([]);
+  const [changeOnSelect, setChangeOnSelect] = useState(false);
+  const [showSearch, setShowSearch] = useState(true);
   
   const options = [
     {
-      value: 'zhejiang', label: 'Zhejiang',
+      value: 'americas', label: 'Américas',
       children: [
-        { value: 'hangzhou', label: 'Hangzhou', children: [{ value: 'xihu', label: 'West Lake' }] },
+        { 
+          value: 'norte', label: 'Norteamérica', 
+          children: [
+            { value: 'mx', label: 'México', children: [{ value: 'cdmx', label: 'CDMX' }, { value: 'mty', label: 'Monterrey' }] },
+            { value: 'us', label: 'USA', children: [{ value: 'ny', label: 'New York' }, { value: 'la', label: 'Los Angeles' }] }
+          ] 
+        },
+        { value: 'sur', label: 'Sudamérica', children: [{ value: 'ar', label: 'Argentina' }, { value: 'br', label: 'Brasil' }] },
       ],
     },
     {
-      value: 'jiangsu', label: 'Jiangsu',
+      value: 'europa', label: 'Europa',
       children: [
-        { value: 'nanjing', label: 'Nanjing', children: [{ value: 'zhonghuamen', label: 'Zhong Hua Men' }] },
+        { value: 'es', label: 'España', children: [{ value: 'mad', label: 'Madrid' }] },
+        { value: 'fr', label: 'Francia', children: [{ value: 'par', label: 'París' }] },
       ],
     },
   ];
 
+  const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
+
   return (
-    <div style={{ padding: 48, display: 'flex', justifyContent: 'center', backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-      <div style={{ width: '100%', maxWidth: 400 }}>
-        <KCascader options={options} value={val} onChange={setVal} placeholder="Selecciona ubicación..." />
-        <div style={{ marginTop: 12 }}>
-          <KText variant="small" color="secondary">Selección: {val.join(' / ') || '(ninguna)'}</KText>
+    <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
+      <div style={{ flex: 1, minWidth: 200 }}>
+        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={changeOnSelect} onChange={(e) => setChangeOnSelect(e.target.checked)} /> Change on Select (Selección niveles intermedios)</label>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={showSearch} onChange={(e) => setShowSearch(e.target.checked)} /> Show Search</label>
+        </div>
+      </div>
+      <div style={{ flex: 2, minWidth: 400, padding: 48, display: 'flex', flexDirection: 'column', alignItems: 'center', backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
+        <div style={{ width: '100%', maxWidth: 400 }}>
+          <KCascader 
+            options={options} 
+            value={val} 
+            onChange={setVal} 
+            changeOnSelect={changeOnSelect}
+            showSearch={showSearch}
+            placeholder="Selecciona ubicación (Profundidad Dinámica)..." 
+          />
+          <div style={{ marginTop: 12 }}>
+            <KText variant="small" color="secondary">Ruta seleccionada: {val.join(' / ') || '(ninguna)'}</KText>
+          </div>
         </div>
       </div>
     </div>
@@ -775,18 +935,44 @@ function CascaderPlayground() {
 }
 
 function StatisticPlayground() {
+  const [val, setVal] = useState(112893);
+  const [loading, setLoading] = useState(false);
+  
+  const refresh = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setVal(Math.floor(Math.random() * 200000));
+      setLoading(false);
+    }, 800);
+  };
+
   return (
-    <div style={{ display: 'flex', gap: 48, padding: 48, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-      <KStatistic title="Usuarios Activos" value={112893} precision={0} trend="up" trendValue="12.5%" />
-      <KStatistic title="Ingresos Mensuales" value={93412.50} precision={2} prefix="$" trend="down" trendValue="3.2%" />
+    <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
+      <div style={{ flex: 1, minWidth: 200 }}>
+        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
+        <KButton size="sm" onClick={refresh} loading={loading}>Simular Actualización</KButton>
+        <p style={{ fontSize: 11, color: khorTokens.colors.neutral[400], marginTop: 12 }}>El efecto CountUp se activa automáticamente al cambiar el valor.</p>
+      </div>
+      <div style={{ flex: 3, minWidth: 400, display: 'flex', gap: 48, padding: 48, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
+        <KStatistic title="Usuarios Activos" value={val} precision={0} trend="up" trendValue="12.5%" groupSeparator="." loading={loading} />
+        <KStatistic 
+          title="Balance Total" 
+          value={93412.50} 
+          precision={2} 
+          prefix="$" 
+          valueStyle={{ color: khorTokens.colors.brand.primary }}
+          groupSeparator=","
+          decimalSeparator="."
+        />
+      </div>
     </div>
   );
 }
 
 function TimePickerPlayground() {
-  const [time, setTime] = useState<string | null>(null);
+  const [time, setTime] = useState<string>('12:00');
   const [use12Hours, setUse12Hours] = useState(false);
-  const [format, setFormat] = useState('HH:mm:ss');
+  const [format, setFormat] = useState('HH:mm');
 
   const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
   const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
@@ -803,7 +989,7 @@ function TimePickerPlayground() {
       <div style={{ flex: 2, minWidth: 300, padding: 48, display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'center', backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
         <div style={{ width: 200 }}>
           <KTimePicker 
-            value={time ? dayjs(time, format) : undefined} 
+            value={time} 
             onChange={setTime} 
             use12Hours={use12Hours}
             format={format}
@@ -881,22 +1067,40 @@ function ListPlayground() {
 
 function TransferPlayground() {
   const [targetKeys, setTargetKeys] = useState<string[]>(['1', '3']);
+  const [oneWay, setOneWay] = useState(false);
   const data = [
-    { key: '1', title: 'Usuario Admin' },
-    { key: '2', title: 'Editor Contenido' },
-    { key: '3', title: 'Analista Datos' },
-    { key: '4', title: 'Invitado' },
+    { key: '1', title: 'Usuario Admin', description: 'Acceso total al sistema' },
+    { key: '2', title: 'Editor Contenido', description: 'Publicación y edición' },
+    { key: '3', title: 'Analista Datos', description: 'Lectura de reportes' },
+    { key: '4', title: 'Invitado', description: 'Acceso restringido' },
+    { key: '5', title: 'Soporte N1', description: 'Tickets básicos', disabled: true },
   ];
 
   return (
-    <div style={{ padding: 48, display: 'flex', justifyContent: 'center', backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-      <KTransfer dataSource={data} targetKeys={targetKeys} onChange={setTargetKeys as any} showSearch />
+    <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
+      <div style={{ flex: 1, minWidth: 200 }}>
+        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
+        <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={oneWay} onChange={(e) => setOneWay(e.target.checked)} /> Modo One Way</label>
+      </div>
+      <div style={{ flex: 3, minWidth: 500, padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
+        <KTransfer 
+          dataSource={data} 
+          targetKeys={targetKeys} 
+          onChange={setTargetKeys as any} 
+          showSearch 
+          oneWay={oneWay}
+          titles={['Disponibles', 'Asignados']}
+        />
+      </div>
     </div>
   );
 }
 
 function TreeSelectPlayground() {
-  const [val, setVal] = useState<string>();
+  const [val, setVal] = useState<any>();
+  const [multiple, setMultiple] = useState(false);
+  const [treeCheckable, setTreeCheckable] = useState(false);
+
   const data = [
     { title: 'Corporativo', value: 'corp', children: [
         { title: 'Recursos Humanos', value: 'hr' },
@@ -905,14 +1109,37 @@ function TreeSelectPlayground() {
             { title: 'Backend', value: 'be' },
         ]},
     ]},
+    { title: 'Ventas', value: 'sales', children: [
+      { title: 'Directas', value: 'direct' },
+      { title: 'Indirectas', value: 'indirect' },
+    ]},
   ];
 
   return (
-    <div style={{ padding: 48, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-      <div style={{ width: 300 }}>
-        <KTreeSelect treeData={data} value={val} onChange={setVal} placeholder="Selecciona departamento..." treeDefaultExpandAll />
+    <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
+      <div style={{ flex: 1, minWidth: 200 }}>
+        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={multiple} onChange={(e) => { setMultiple(e.target.checked); setVal(undefined); }} /> Multiple</label>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={treeCheckable} onChange={(e) => { setTreeCheckable(e.target.checked); setVal(undefined); }} /> Tree Checkable</label>
+        </div>
       </div>
-      <KText variant="small" color="secondary">Selección: {val || '(ninguna)'}</KText>
+      <div style={{ flex: 2, minWidth: 300, padding: 48, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
+        <div style={{ width: 350 }}>
+          <KTreeSelect 
+            treeData={data} 
+            value={val} 
+            onChange={setVal} 
+            multiple={multiple}
+            treeCheckable={treeCheckable}
+            placeholder="Selecciona departamentos..." 
+            treeDefaultExpandAll 
+          />
+        </div>
+        <KText variant="small" color="secondary">
+          Seleccionados: {Array.isArray(val) ? val.join(', ') : val || '(ninguna)'}
+        </KText>
+      </div>
     </div>
   );
 }
@@ -984,48 +1211,6 @@ import { KInput } from '@khor/design-system/atoms/index';
       'El hint se oculta cuando hay un error activo.',
     ],
     aiNotes: 'Al generar formularios, cada campo debe estar envuelto en KFormField. Los campos required deben validarse antes de enviar.',
-  },
-  'search-input': {
-    id: 'search-input',
-    name: 'KSearchInput',
-    description: 'Input especializado para busqueda con icono de lupa integrado, boton de limpiar automatico y callback de busqueda.',
-    preview: (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 12, maxWidth: 400 }}>
-        <KSearchInput placeholder="Buscar empleados..." />
-        <KSearchInput placeholder="Buscar en tabla..." size="sm" />
-        <KSearchInput placeholder="Busqueda global..." size="lg" />
-      </div>
-    ),
-    playground: <SearchInputPlayground />,
-    stateShowcase: (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}><span style={{ width: 80, fontSize: 11, color: khorTokens.colors.neutral[500] }}>Default</span><KSearchInput placeholder="Buscar..." /></div>
-        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}><span style={{ width: 80, fontSize: 11, color: khorTokens.colors.neutral[500] }}>Small</span><KSearchInput placeholder="En tabla..." size="sm" /></div>
-        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}><span style={{ width: 80, fontSize: 11, color: khorTokens.colors.neutral[500] }}>Large</span><KSearchInput placeholder="Búsqueda global..." size="lg" /></div>
-      </div>
-    ),
-    a11ySummary: {
-      keyboard: ['Enter: Ejecuta la búsqueda o presiona el enterButton.', 'Esc: Limpia el contenido si allowClear está activo.'],
-      aria: ['Incluye nativamente aria-label en el icono de limpiar.', 'role="searchbox" dictado implícitamente.'],
-      contrast: 'AAA entre placeholder gris y padding interno.',
-      score: 95,
-    },
-    code: `import { KSearchInput } from '@khor/design-system/molecules/index';
-
-<KSearchInput
-  placeholder="Buscar empleados..."
-  onChange={(value) => setSearchTerm(value)}
-  onSearch={(value) => handleSearch(value)}
-/>`,
-    filename: 'KSearchInput.tsx',
-    props: [
-      { name: 'placeholder', type: 'string', default: "'Buscar...'", description: 'Texto placeholder.' },
-      { name: 'value', type: 'string', description: 'Valor controlado.' },
-      { name: 'onChange', type: '(value: string) => void', description: 'Callback al escribir.' },
-      { name: 'onSearch', type: '(value: string) => void', description: 'Callback al presionar Enter.' },
-      { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Tamano del input.' },
-    ],
-    guidelines: ['Usa size="sm" dentro de tablas y toolbars.', 'Incluye debounce en onChange para busquedas con API.'],
   },
   'stat-card': {
     id: 'stat-card',
@@ -1158,9 +1343,9 @@ import { KInput } from '@khor/design-system/atoms/index';
     playground: <SelectFieldPlayground />,
     stateShowcase: (
       <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-        <div style={{ width: 180 }}><KSelectField label="Normal" placeholder="Opciones..." options={[{label:'A', value:1}]} /></div>
+        <div style={{ width: 180 }}><KSelectField label="Normal" placeholder="Opciones..." options={[{label:'A', value:'1'}]} /></div>
         <div style={{ width: 180 }}><KSelectField label="Disabled" disabled placeholder="Sin acceso" options={[]} /></div>
-        <div style={{ width: 180 }}><KSelectField label="Con Error" error="Inválido" options={[{label:'A', value:1}]} /></div>
+        <div style={{ width: 180 }}><KSelectField label="Con Error" error="Inválido" options={[{label:'A', value:'1'}]} /></div>
       </div>
     ),
     a11ySummary: {
@@ -1509,7 +1694,7 @@ import { KInput } from '@khor/design-system/atoms/index';
           items={[
             { key: '1', label: 'Cerrado por defecto', children: <p>Info 1</p> },
             { key: '2', label: 'Abierto por defecto', children: <p>Info 2</p> },
-            { key: '3', label: 'Deshabilitado', collapsible: 'disabled', children: <p>Info 3</p> }
+            { key: '3', label: 'Deshabilitado', children: <p>Info 3</p> }
           ]}
           defaultActiveKey={['2']}
         />
@@ -1747,7 +1932,7 @@ import { KInput } from '@khor/design-system/atoms/index';
   'descriptions': {
     id: 'descriptions', name: 'KDescriptions',
     description: 'Lista de información en formato clave-valor, ideal para mostrar detalles de perfiles o registros técnicos.',
-    preview: (<div style={{ width: '100%' }}><KDescriptions items={[{ label: 'Nombre', children: 'Juan Perez' }, { label: 'Edad', children: '30' }]} column={1} size="small" /></div>),
+    preview: (<div style={{ width: '100%' }}><KDescriptions items={[{ label: 'Nombre', children: 'Juan Perez' }, { label: 'Edad', children: '30' }]} column={1} size="sm" /></div>),
     code: `import { KDescriptions } from '@khor/design-system/molecules/index';
 
 <KDescriptions 
@@ -1956,12 +2141,11 @@ import { KInput } from '@khor/design-system/atoms/index';
     ],
     guidelines: ['Usa para dashboards o KPIs importantes.', 'Combina con prefijos como "$" o "MXN" para contextos financieros.'],
   },
-  'timepicker': {
-    id: 'timepicker', name: 'KTimePicker',
+  'time-picker': {
+    id: 'time-picker', name: 'KTimePicker',
     description: 'Selector de hora con formato personalizable (12h/24h) y selección de intervalos.',
     preview: (<div><KTimePicker placeholder="Seleccionar..." /></div>),
     code: `import { KTimePicker } from '@khor/design-system/molecules/index';
-import dayjs from 'dayjs';
 
 <KTimePicker 
   format="HH:mm" 
@@ -2074,7 +2258,7 @@ import dayjs from 'dayjs';
     playground: <ColorPickerPlayground />,
     stateShowcase: (
       <div style={{ display: 'flex', gap: 16 }}>
-        <KColorPicker value="#1677ff" />
+        <KColorPicker value="#E04D36" />
         <KColorPicker showText value="#E04D36" />
         <KColorPicker disabled value="#ccc" />
       </div>
@@ -2160,7 +2344,7 @@ import dayjs from 'dayjs';
     ],
     guidelines: ['Usa para mostrar información estructurada repetitiva.', 'Combina con avatares para facilitar el reconocimiento visual.'],
   },
-  'divider-ext': { id: 'divider-ext', name: 'KDividerExtended', description: 'Divisor con soporte para texto central y estilo dashed.',
+  'divider-extended': { id: 'divider-extended', name: 'KDividerExtended', description: 'Divisor con soporte para texto central y estilo dashed.',
     preview: (<div><KDividerExtended /><KDividerExtended>O continúa con</KDividerExtended><KDividerExtended dashed /></div>),
     code: `<KDividerExtended>O continúa con</KDividerExtended>`, filename: 'KDividerExtended.tsx',
     stateShowcase: (

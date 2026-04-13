@@ -1,201 +1,465 @@
-import React, { useState, useMemo } from 'react';
-import { Table } from 'antd';
-import type { ColumnsType, TableProps } from 'antd/es/table';
-import { Download, Columns3 } from 'lucide-react';
-import { khorTokens } from '../../../../theme/khor-theme';
-import { KButton, KCheckbox, KText } from '../../atoms';
-import { KSearchInput } from '../../molecules';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
+import {
+  useReactTable,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  getExpandedRowModel,
+  flexRender,
+  ColumnDef,
+  SortingState,
+  VisibilityState,
+  RowSelectionState,
+  ExpandedState,
+  ColumnFiltersState,
+} from '@tanstack/react-table';
+import { useVirtualizer } from '@tanstack/react-virtual';
+import { 
+  Download, Columns3, ChevronUp, ChevronDown, ChevronLeft, 
+  ChevronRight, ChevronsLeft, ChevronsRight, Filter, ChevronRight as ExpandIcon,
+  Search, X
+} from 'lucide-react';
+import { cn } from '../../../../../imports/utils';
+import { KCheckbox } from '../../atoms/KCheckbox/index';
+import { KSearchInput } from '../../atoms/KSearchInput/index';
+import { KButton } from '../../atoms/KButton';
+import { KSkeleton } from '../../atoms/KSkeleton';
+import { 
+  KDropdownMenuRoot,
+  KDropdownMenuTrigger, 
+  KDropdownMenuContent, 
+  KDropdownMenuLabel, 
+  KDropdownMenuSeparator, 
+  KDropdownMenuCheckboxItem 
+} from '../../molecules/KDropdownMenu/index';
+import { KSelectAdvanced, KSelectAdvancedOption } from '../../molecules/KSelectAdvanced/index';
+import { KPopoverRoot, KPopoverTrigger, KPopoverContent } from '../../molecules/KPopover/index';
 
-const t = khorTokens;
-const font = t.typography.fontPrimary;
-
-/* ─── KDataTable Props ──── */
-export interface KDataTableColumn<T = any> {
-  key: string;
-  title: string;
-  dataIndex: string;
-  render?: (value: any, record: T, index: number) => React.ReactNode;
-  sortable?: boolean;
-  width?: number | string;
-  hidden?: boolean;
-  ellipsis?: boolean;
-  fixed?: 'left' | 'right';
-}
-
-export interface KDataTableProps<T = any> extends Omit<TableProps<T>, 'columns' | 'dataSource'> {
-  columns: KDataTableColumn<T>[];
-  data: T[];
+/* ─── Types ──────────────────────────────────────── */
+export interface KDataTableProps<TData> {
+  data: TData[];
+  columns: ColumnDef<TData, any>[];
   loading?: boolean;
+  
+  // Features
   searchable?: boolean;
   searchPlaceholder?: string;
   actions?: React.ReactNode;
-  rowKey?: string;
+  
+  // Layout & Pagination
+  rowKey?: string | ((row: TData) => string);
   pageSize?: number;
   pageSizes?: number[];
-  onRowClick?: (record: T) => void;
+  pagination?: boolean;
+  
+  // Interactions
+  onRowClick?: (record: TData) => void;
   enableRowSelection?: boolean;
   enableColumnToggle?: boolean;
   enableExport?: boolean;
+  
+  // Advanced Features (Wave 11)
   stickyHeader?: boolean;
   maxHeight?: string | number;
-  onSelectionChange?: (selectedRows: T[]) => void;
+  scroll?: { x?: number | string; y?: number | string };
+  virtual?: boolean;
+  rowExpansion?: {
+    expandedRowRender: (record: TData) => React.ReactNode;
+    defaultExpandAllRows?: boolean;
+  };
+  size?: 'small' | 'middle' | 'large';
+  onSelectionChange?: (selectedRows: TData[]) => void;
   className?: string;
 }
 
-const toolBtnStyle: React.CSSProperties = {
-  display: 'inline-flex', alignItems: 'center', padding: '6px 12px',
-  borderRadius: khorTokens.radius.md, border: `1px solid ${khorTokens.colors.neutral[200]}`,
-  backgroundColor: khorTokens.colors.neutral[50], fontFamily: khorTokens.typography.fontPrimary,
-  fontSize: 13, fontWeight: 500, color: khorTokens.colors.neutral[500], cursor: 'pointer',
-  transition: 'all 0.15s ease',
-};
+export function KDataTable<TData>({
+  data,
+  columns,
+  loading = false,
+  searchable = true,
+  searchPlaceholder = 'Buscar...',
+  actions,
+  rowKey,
+  pageSize = 10,
+  pageSizes = [10, 20, 50, 100],
+  pagination = true,
+  onRowClick,
+  enableRowSelection = false,
+  enableColumnToggle = false,
+  enableExport = false,
+  stickyHeader = false,
+  scroll,
+  virtual = false,
+  rowExpansion,
+  size = 'middle',
+  onSelectionChange,
+  className,
+}: KDataTableProps<TData>) {
+  
+  // ─── Table States ───
+  const [globalFilter, setGlobalFilter] = useState('');
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+  const [expanded, setExpanded] = useState<ExpandedState>(
+    rowExpansion?.defaultExpandAllRows ? true : {}
+  );
 
-export function KDataTable<T extends Record<string, any>>({
-  columns, data, loading, searchable = true, searchPlaceholder = 'Buscar en tabla...',
-  actions, rowKey = 'id', pageSize = 10, pageSizes = [10, 20, 50],
-  onRowClick, enableRowSelection, enableColumnToggle, enableExport,
-  stickyHeader, maxHeight, onSelectionChange, className,
-  pagination: customPagination, ...rest
-}: KDataTableProps<T>) {
-  const [search, setSearch] = useState('');
-  const [columnVisibility, setColumnVisibility] = useState<Record<string, boolean>>({});
-  const [colMenuOpen, setColMenuOpen] = useState(false);
-  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  // ─── Columns Enrichment ───
+  const tableColumns = useMemo<ColumnDef<TData, any>[]>(() => {
+    const cols = [...columns];
+    
+    // Inyectar Columna de Selección
+    if (enableRowSelection) {
+      cols.unshift({
+        id: 'k-selection',
+        size: 50,
+        header: ({ table }) => (
+          <div className="flex justify-center">
+            <KCheckbox
+              checked={table.getIsAllPageRowsSelected() ? true : table.getIsSomePageRowsSelected() ? 'indeterminate' : false}
+              onChange={(e) => table.toggleAllPageRowsSelected((e.target as HTMLInputElement).checked)}
+            />
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div className="flex justify-center">
+            <KCheckbox
+              checked={row.getIsSelected()}
+              onChange={row.getToggleSelectedHandler()}
+            />
+          </div>
+        ),
+        enableSorting: false,
+        enableHiding: false,
+      });
+    }
 
-  const filteredData = useMemo(() => {
-    if (!search) return data;
-    return data.filter((row) =>
-      Object.values(row).some((v) =>
-        String(v).toLowerCase().includes(search.toLowerCase())
-      )
-    );
-  }, [data, search]);
+    // Inyectar Columna de Expansión
+    if (rowExpansion) {
+      cols.unshift({
+        id: 'k-expander',
+        size: 40,
+        header: () => null,
+        cell: ({ row }) => (
+          <button
+            onClick={(e) => { e.stopPropagation(); row.toggleExpanded(); }}
+            className={cn(
+              "transition-transform duration-200 p-1 rounded-md hover:bg-neutral-100",
+              row.getIsExpanded() ? "rotate-90" : ""
+            )}
+          >
+            <ExpandIcon size={16} className="text-khor-neutral-400" />
+          </button>
+        ),
+      });
+    }
 
+    return cols;
+  }, [columns, enableRowSelection, rowExpansion]);
+
+  // ─── React Table Core ───
+  const table = useReactTable({
+    data,
+    columns: tableColumns,
+    state: {
+      globalFilter,
+      columnFilters,
+      sorting,
+      columnVisibility,
+      rowSelection,
+      expanded,
+    },
+    onGlobalFilterChange: setGlobalFilter,
+    onColumnFiltersChange: setColumnFilters,
+    onSortingChange: setSorting,
+    onColumnVisibilityChange: setColumnVisibility,
+    onExpandedChange: setExpanded,
+    onRowSelectionChange: (updater) => {
+      setRowSelection(updater);
+      if (onSelectionChange) {
+        setTimeout(() => {
+          onSelectionChange(table.getSelectedRowModel().rows.map(r => r.original));
+        }, 0);
+      }
+    },
+    getRowId: rowKey ? (typeof rowKey === 'string' ? (row: any) => row[rowKey] : rowKey) : undefined,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getPaginationRowModel: pagination ? getPaginationRowModel() : undefined,
+    getExpandedRowModel: getExpandedRowModel(),
+  });
+
+  // ─── Virtualization Logic ───
+  const parentRef = useRef<HTMLDivElement>(null);
+  const { rows } = table.getRowModel();
+  
+  const virtualizer = useVirtualizer({
+    count: rows.length,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => (size === 'small' ? 40 : size === 'large' ? 64 : 52),
+    overscan: 10,
+    measureElement: (el) => el?.getBoundingClientRect().height ?? 0,
+    enabled: virtual || !!scroll?.y,
+  });
+
+  const virtualRows = virtualizer.getVirtualItems();
+  const totalHeight = virtualizer.getTotalSize();
+
+  // ─── Auxiliary ───
   const handleExportCSV = () => {
-    const visibleCols = columns.filter((c) => columnVisibility[c.key] !== false);
-    const headers = visibleCols.map((c) => c.title).join(',');
-    const rows = filteredData.map((row) =>
-      visibleCols.map((c) => {
-        const val = row[c.dataIndex as keyof T];
-        return typeof val === 'string' && val.includes(',') ? `"${val}"` : String(val ?? '');
+    const visibleCols = table.getVisibleLeafColumns().filter(c => !['k-selection', 'k-expander'].includes(c.id));
+    const headers = visibleCols.map(c => String(c.columnDef.header || c.id)).join(',');
+    const csvRows = table.getCoreRowModel().rows.map(row =>
+      visibleCols.map(c => {
+        const val = row.getValue(c.id);
+        const strVal = String(val ?? '');
+        return strVal.includes(',') ? `"${strVal}"` : strVal;
       }).join(',')
     );
-    const csv = [headers, ...rows].join('\n');
+    const csv = [headers, ...csvRows].join('\n');
     const blob = new Blob([csv], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `export-${new Date().toISOString().slice(0, 10)}.csv`;
-    a.click();
+    const a = document.createElement('a'); a.href = url;
+    a.download = `khor-table-${new Date().getTime()}.csv`; a.click();
     URL.revokeObjectURL(url);
   };
 
-  const antdColumns: ColumnsType<T> = useMemo(() => {
-    return columns
-      .filter(col => columnVisibility[col.key] !== false)
-      .map(col => ({
-        key: col.key,
-        title: col.title,
-        dataIndex: col.dataIndex,
-        render: col.render,
-        width: col.width,
-        ellipsis: col.ellipsis,
-        fixed: col.fixed,
-        sorter: col.sortable ? (a: T, b: T) => {
-          const valA = a[col.dataIndex as keyof T];
-          const valB = b[col.dataIndex as keyof T];
-          if (typeof valA === 'number' && typeof valB === 'number') return valA - valB;
-          return String(valA).localeCompare(String(valB));
-        } : undefined,
-      }));
-  }, [columns, columnVisibility]);
+  /* ─── Components Locales ─── */
+  const TableSkeleton = () => (
+    <>
+      {Array.from({ length: pageSize || 5 }).map((_, i) => (
+        <tr key={i} className="border-b transition-colors">
+          {table.getVisibleLeafColumns().map((col, j) => (
+            <td key={j} className="px-4 py-4">
+              <KSkeleton active height={16} width={j === 0 ? "40%" : "80%"} />
+            </td>
+          ))}
+        </tr>
+      ))}
+    </>
+  );
 
-  const rowSelection = enableRowSelection ? {
-    selectedRowKeys,
-    onChange: (newSelectedRowKeys: React.Key[], selectedRows: T[]) => {
-      setSelectedRowKeys(newSelectedRowKeys);
-      onSelectionChange?.(selectedRows);
-    },
-  } : undefined;
+  const FilterPopover = ({ column }: { column: any }) => {
+    const isFiltered = column.getIsFiltered();
+    return (
+      <KPopoverRoot>
+        <KPopoverTrigger asChild>
+          <button 
+            className={cn(
+               "p-1 rounded transition-colors hover:bg-neutral-200",
+               isFiltered ? "text-khor-primary" : "text-khor-neutral-300"
+            )}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Filter size={13} fill={isFiltered ? "currentColor" : "none"} />
+          </button>
+        </KPopoverTrigger>
+        <KPopoverContent className="p-3 w-48 shadow-xl border">
+          <KSearchInput 
+            size="sm" 
+            placeholder="Filtrar..." 
+            value={(column.getFilterValue() as string) ?? ''}
+            onChange={(val) => column.setFilterValue(val)}
+            autoFocus
+          />
+          <div className="flex justify-between mt-3 pt-2 border-t">
+            <button className="text-xs text-khor-neutral-400 hover:text-khor-primary" onClick={() => column.setFilterValue(undefined)}>Limpiar</button>
+            <button className="text-xs font-bold text-khor-primary">OK</button>
+          </div>
+        </KPopoverContent>
+      </KPopoverRoot>
+    );
+  };
 
   return (
-    <div className={className} style={{ backgroundColor: t.colors.neutral[50], borderRadius: t.radius.lg, boxShadow: t.shadows.sm, overflow: 'hidden', border: `1px solid ${t.colors.neutral[200]}` }}>
+    <div className={cn(
+      "flex flex-col rounded-xl overflow-hidden border bg-white shadow-khor-md font-primary",
+      size === 'small' ? "text-xs" : "text-sm",
+      className
+    )}>
+      {/* TOOLBAR */}
       {(searchable || actions || enableColumnToggle || enableExport) && (
-        <div style={{ padding: '16px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, borderBottom: `1px solid ${t.colors.neutral[200]}`, flexWrap: 'wrap' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: 1, minWidth: 200 }}>
-            {searchable && <KSearchInput placeholder={searchPlaceholder} value={search} onChange={(v) => setSearch(v)} size="md" />}
+        <div className="flex flex-wrap items-center justify-between gap-3 p-3 border-b bg-khor-neutral-50/50">
+          <div className="flex-1 min-w-[200px]">
+            {searchable && (
+              <KSearchInput 
+                placeholder={searchPlaceholder} 
+                value={globalFilter} 
+                onChange={(e: any) => setGlobalFilter(e.target.value)} 
+                className="max-w-xs"
+                size={size === 'small' ? 'sm' : 'md'}
+              />
+            )}
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <div className="flex items-center gap-2">
             {enableExport && (
-              <button onClick={handleExportCSV} style={{ ...toolBtnStyle, gap: 6 }}>
-                <Download size={14} /> CSV
-              </button>
+               <KButton variant="outline" size="sm" icon={<Download size={14} />} onClick={handleExportCSV}>Exportar</KButton>
             )}
             {enableColumnToggle && (
-              <div style={{ position: 'relative' }}>
-                <button onClick={() => setColMenuOpen(!colMenuOpen)} onBlur={() => setTimeout(() => setColMenuOpen(false), 150)} style={{ ...toolBtnStyle, gap: 6 }}>
-                  <Columns3 size={14} /> Columnas
-                </button>
-                {colMenuOpen && (
-                  <div style={{
-                    position: 'absolute', top: '100%', right: 0, marginTop: 4, minWidth: 180,
-                    backgroundColor: t.colors.neutral[50], borderRadius: t.radius.md,
-                    border: `1px solid ${t.colors.neutral[200]}`, boxShadow: t.shadows.md,
-                    zIndex: 50, padding: '4px 0',
-                  }}>
-                    {columns.map((col) => (
-                      <label key={col.key} style={{
-                        display: 'flex', alignItems: 'center', gap: 8, padding: '6px 12px',
-                        fontSize: 13, fontFamily: font, cursor: 'pointer', color: t.colors.neutral[900],
-                      }}>
-                        <KCheckbox
-                          checked={columnVisibility[col.key] !== false}
-                          onChange={(e) => setColumnVisibility(prev => ({ ...prev, [col.key]: (e.target as HTMLInputElement).checked }))}
-                        />
-                        {col.title}
-                      </label>
+              <KDropdownMenuRoot>
+                <KDropdownMenuTrigger asChild><KButton variant="outline" size="sm" icon={<Columns3 size={14} />}>Columnas</KButton></KDropdownMenuTrigger>
+                <KDropdownMenuContent className="w-48 max-h-64 overflow-auto">
+                    {table.getAllLeafColumns().filter(c => !c.id.startsWith('k-')).map(col => (
+                      <KDropdownMenuCheckboxItem key={col.id} checked={col.getIsVisible()} onCheckedChange={col.toggleVisibility}>
+                        {String(col.columnDef.header || col.id)}
+                      </KDropdownMenuCheckboxItem>
                     ))}
-                  </div>
-                )}
-              </div>
+                </KDropdownMenuContent>
+              </KDropdownMenuRoot>
             )}
             {actions}
           </div>
         </div>
       )}
-      <div style={{ '& .ant-table-wrapper': { fontFamily: font } } as React.CSSProperties}>
-        <Table
-          dataSource={filteredData}
-          columns={antdColumns}
-          rowKey={rowKey}
-          loading={loading}
-          rowSelection={rowSelection}
-          pagination={customPagination !== false ? {
-            showSizeChanger: pageSizes.length > 1,
-            defaultPageSize: pageSize,
-            pageSizeOptions: pageSizes.map(String),
-            showTotal: (total, range) => (
-              <span style={{ fontFamily: font, fontSize: 13, color: t.colors.neutral[500] }}>
-                {enableRowSelection && selectedRowKeys.length > 0 && (
-                  <span style={{ color: t.colors.brand.primary, fontWeight: 500, marginRight: 8 }}>
-                    {selectedRowKeys.length} seleccionados
-                  </span>
-                )}
-                {range[0]}-{range[1]} de {total} registros
-              </span>
-            ),
-            ... (typeof customPagination === 'object' ? customPagination : {}),
-          } : false}
-          onRow={(record) => ({
-            onClick: () => onRowClick?.(record),
-            style: { cursor: onRowClick ? 'pointer' : 'default' }
-          })}
-          scroll={{ y: maxHeight, ...rest.scroll }}
-          sticky={stickyHeader}
-          style={{ fontFamily: font, ...rest.style }}
-          {...rest}
-        />
+
+      {/* TABLE VIEWPORT */}
+      <div 
+        ref={parentRef}
+        className="relative w-full overflow-auto"
+        style={{ height: scroll?.y ?? 'auto', maxHeight: scroll?.y ? undefined : '70vh' }}
+      >
+        <table className={cn("w-full border-collapse", scroll?.x ? "min-w-fit" : "min-w-full")}>
+          <thead className={cn(
+            "text-khor-neutral-500 font-bold bg-khor-slate-50 shadow-sm z-20 border-b",
+            (stickyHeader || scroll?.y || virtual) ? "sticky top-0" : ""
+          )}>
+            {table.getHeaderGroups().map(hg => (
+              <tr key={hg.id}>
+                {hg.headers.map(header => (
+                  <th 
+                    key={header.id}
+                    className="px-4 py-3 border-b text-left"
+                    style={{ width: header.getSize() }}
+                  >
+                    <div className="flex items-center justify-between gap-2 group/th">
+                      <div 
+                         className={cn("flex items-center gap-1.5 flex-1", header.column.getCanSort() ? "cursor-pointer" : "")}
+                         onClick={header.column.getToggleSortingHandler()}
+                      >
+                         {flexRender(header.column.columnDef.header, header.getContext())}
+                         {{
+                           asc: <ChevronUp size={14} className="text-khor-primary" />,
+                           desc: <ChevronDown size={14} className="text-khor-primary" />
+                         }[header.column.getIsSorted() as string] ?? (
+                           header.column.getCanSort() && <ChevronDown size={14} className="opacity-0 group-hover/th:opacity-30 transition-opacity" />
+                         )}
+                      </div>
+                      {header.column.getCanFilter() && <FilterPopover column={header.column} />}
+                    </div>
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+
+          <tbody style={{ height: (virtual || !!scroll?.y) ? `${totalHeight}px` : 'auto', position: 'relative' }}>
+            {loading ? (
+              <TableSkeleton />
+            ) : rows.length === 0 ? (
+              <tr><td colSpan={100} className="py-20 text-center text-khor-neutral-400 font-medium">No se encontraron resultados</td></tr>
+            ) : (virtual || !!scroll?.y) ? (
+              // Virtualized Rows
+              virtualRows.map(virtualRow => {
+                const row = rows[virtualRow.index];
+                return (
+                  <tr 
+                    key={row.id}
+                    data-index={virtualRow.index}
+                    ref={virtualizer.measureElement}
+                    className={cn(
+                        "absolute left-0 w-full hover:bg-khor-neutral-50 transition-colors border-b",
+                        row.getIsSelected() ? "bg-khor-primary-light/30" : ""
+                    )}
+                    style={{ transform: `translateY(${virtualRow.start}px)` }}
+                    onClick={() => onRowClick?.(row.original)}
+                  >
+                    <td colSpan={100} className="p-0 border-none">
+                      <div className="flex items-center w-full">
+                        {row.getVisibleCells().map(cell => (
+                          <div 
+                            key={cell.id} 
+                            className="px-4 py-3 whitespace-nowrap overflow-hidden text-ellipsis flex items-center" 
+                            style={{ 
+                              width: cell.column.getSize(),
+                              height: size === 'small' ? '40px' : size === 'large' ? '64px' : '52px' 
+                            }}
+                          >
+                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                          </div>
+                        ))}
+                      </div>
+                      
+                      {row.getIsExpanded() && rowExpansion?.expandedRowRender && (
+                        <div className="p-4 bg-khor-neutral-50/50 border-t w-full">
+                           {rowExpansion.expandedRowRender(row.original)}
+                        </div>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })
+            ) : (
+              // Normal Rows
+              rows.map(row => (
+                <React.Fragment key={row.id}>
+                  <tr 
+                    className={cn(
+                      "hover:bg-khor-neutral-50 transition-colors border-b",
+                      onRowClick ? "cursor-pointer" : "",
+                      row.getIsSelected() ? "bg-khor-primary-light/30" : ""
+                    )}
+                    onClick={() => onRowClick?.(row.original)}
+                  >
+                    {row.getVisibleCells().map(cell => (
+                      <td key={cell.id} className="px-4 py-3 align-middle" style={{ width: cell.column.getSize() }}>
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </td>
+                    ))}
+                  </tr>
+                  {row.getIsExpanded() && rowExpansion?.expandedRowRender && (
+                    <tr className="bg-khor-neutral-50/50 border-b">
+                      <td colSpan={100} className="p-6">
+                        {rowExpansion.expandedRowRender(row.original)}
+                      </td>
+                    </tr>
+                  )}
+                </React.Fragment>
+              ))
+            )}
+          </tbody>
+        </table>
       </div>
+
+      {/* PAGINATION */}
+      {pagination && !virtual && (
+        <div className="flex items-center justify-between p-3 border-t bg-khor-surface-page">
+          <div className="text-xs text-khor-neutral-400 font-medium">
+             {table.getFilteredSelectedRowModel().rows.length} de {table.getFilteredRowModel().rows.length} filas seleccionadas
+          </div>
+          <div className="flex items-center gap-4">
+             <div className="flex items-center gap-2">
+                <span className="text-xs text-khor-neutral-400">Filas:</span>
+                <KSelectAdvanced 
+                  className="!min-h-[32px] w-20 text-xs"
+                  options={pageSizes.map(ps => ({ label: String(ps), value: String(ps) }))}
+                  value={String(table.getState().pagination.pageSize)}
+                  onChange={val => table.setPageSize(Number(val))}
+                />
+             </div>
+             <div className="flex items-center gap-1">
+                <KButton variant="outline" size="sm" shape="circle" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}><ChevronLeft size={16}/></KButton>
+                <div className="px-3 text-xs font-bold text-khor-neutral-600">
+                   {table.getState().pagination.pageIndex + 1} / {table.getPageCount()}
+                </div>
+                <KButton variant="outline" size="sm" shape="circle" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}><ChevronRight size={16}/></KButton>
+             </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

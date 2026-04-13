@@ -1,32 +1,107 @@
 import React from 'react';
-import { message } from 'antd';
-import type { MessageArgsProps } from 'antd';
-export interface KToastProps extends Omit<MessageArgsProps, 'content'> {
+import { toast, Toaster as SonnerToaster } from 'sonner';
+import { CheckCircle2, XCircle, Info, AlertTriangle, X } from 'lucide-react';
+import { cn } from '../../../../../imports/utils';
+
+export type KToastType = 'success' | 'error' | 'info' | 'warning';
+
+export interface KToastProps {
   title?: React.ReactNode;
   description?: React.ReactNode;
   content?: React.ReactNode;
+  type?: KToastType;
+  duration?: number;
+  className?: string;
+  style?: React.CSSProperties;
 }
 
-export function kToast({ title, description, content, ...rest }: KToastProps) {
-  const finalContent = content || (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-      {title && <div style={{ fontWeight: 600, fontSize: 14 }}>{title}</div>}
-      {description && <div style={{ fontSize: 12, color: 'rgba(0,0,0,0.45)' }}>{description}</div>}
+/**
+ * kToast — Notificador flotante (v4 Headless)
+ * Implementación funcional sobre Sonner para una experiencia de usuario rápida y fluida.
+ */
+export function kToast({ 
+  title, 
+  description, 
+  type = 'info', 
+  duration = 4000, 
+  className,
+  style 
+}: KToastProps) {
+  
+  const icons = {
+    success: <CheckCircle2 className="w-5 h-5 text-khor-success" />,
+    error: <XCircle className="w-5 h-5 text-khor-error" />,
+    info: <Info className="w-5 h-5 text-khor-info" />,
+    warning: <AlertTriangle className="w-5 h-5 text-khor-warning" />,
+  };
+
+  return toast.custom((t) => (
+    <div 
+      className={cn(
+        "flex items-start gap-3 p-4 min-w-[320px] max-w-[420px] bg-white border border-khor-neutral-200 rounded-2xl shadow-khor-xl animate-in slide-in-from-right-full duration-300 font-primary relative",
+        className
+      )}
+      style={style}
+    >
+      <div className="shrink-0 mt-0.5">
+        {icons[type]}
+      </div>
+      
+      <div className="flex-1 flex flex-col gap-0.5 pr-6">
+        {title && (
+          <h4 className="text-sm font-bold text-khor-neutral-900 leading-tight tracking-tight">
+            {title}
+          </h4>
+        )}
+        {description && (
+          <p className="text-xs text-khor-neutral-500 leading-relaxed">
+            {description}
+          </p>
+        )}
+      </div>
+
+      <button 
+        onClick={() => toast.dismiss(t)} 
+        className="absolute top-4 right-3 p-1 text-khor-neutral-300 hover:text-khor-neutral-900 transition-colors"
+      >
+        <X className="w-3.5 h-3.5" />
+      </button>
     </div>
-  );
-
-  message.open({
-    ...rest,
-    content: finalContent,
-    style: {
-      fontFamily: 'Raleway, sans-serif',
-      ...rest.style,
-    },
-  });
+  ), { duration });
 }
 
+// ─── Metodos Estaticos (Wave 11) ───
+kToast.success = (props: KToastProps | string) => {
+  const p = typeof props === 'string' ? { title: props } : props;
+  return kToast({ ...p, type: 'success' });
+};
+kToast.error = (props: KToastProps | string) => {
+  const p = typeof props === 'string' ? { title: props } : props;
+  return kToast({ ...p, type: 'error' });
+};
+kToast.info = (props: KToastProps | string) => {
+  const p = typeof props === 'string' ? { title: props } : props;
+  return kToast({ ...p, type: 'info' });
+};
+kToast.warning = (props: KToastProps | string) => {
+  const p = typeof props === 'string' ? { title: props } : props;
+  return kToast({ ...p, type: 'warning' });
+};
+
+/**
+ * KToastProvider — Contenedor de notificaciones globales.
+ */
 export function KToastProvider() {
-  return null; // AntD 5 messages don't strictly require a provider unless using context bridge
+  return (
+    <SonnerToaster 
+      position="top-right" 
+      expand={false} 
+      visibleToasts={5}
+      toastOptions={{
+        unstyled: true,
+      }}
+    />
+  );
 }
 
 export default kToast;

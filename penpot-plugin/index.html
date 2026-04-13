@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Khor DS — v0.4.5 Expansion</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-primary: #E04D36;
+            --brand-gradient: linear-gradient(135deg, #FF6B53 0%, #E04D36 100%);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #FFFFFF;
+            --text-dim: #A1A1AA;
+            --bg-deep: #09090B;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .app-container { padding: 20px; display: flex; flex-direction: column; gap: 20px; flex: 1; overflow-y: auto; }
+
+        .header { display: flex; align-items: center; gap: 12px; }
+        .logo-box {
+            width: 40px; height: 40px; background: var(--brand-gradient); border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 12px rgba(224, 77, 54, 0.3);
+        }
+        .logo-box svg { width: 24px; height: 24px; fill: white; }
+        .title-group h1 { font-family: 'Montserrat', sans-serif; font-size: 14px; font-weight: 700; text-transform: uppercase; }
+        .title-group p { font-size: 11px; color: var(--text-dim); }
+
+        .section { display: flex; flex-direction: column; gap: 10px; }
+        .section-title { font-size: 10px; font-weight: 600; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+
+        .card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 16px; padding: 16px; backdrop-filter: blur(10px); }
+
+        .status-badge {
+            display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px;
+            background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.2);
+            color: #4ade80; border-radius: 20px; font-size: 11px; font-weight: 500;
+        }
+        .status-badge.pending { background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.2); color: #fbbf24; }
+
+        .form-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .input-group { display: flex; flex-direction: column; gap: 6px; }
+        .input-group label { font-size: 11px; color: var(--text-dim); }
+
+        select, input {
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px; padding: 10px; color: white; font-size: 12px; outline: none; transition: 0.2s;
+        }
+        select:focus, input:focus { border-color: var(--brand-primary); }
+
+        .checkbox-group { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; }
+        .checkbox-item { display: flex; align-items: center; gap: 8px; font-size: 12px; cursor: pointer; color: var(--text-dim); }
+        .checkbox-item input { width: auto; padding: 0; cursor: pointer; }
+
+        button {
+            cursor: pointer; border: none; border-radius: 12px; font-weight: 600; font-size: 13px;
+            transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .btn-primary { background: var(--brand-gradient); color: white; padding: 14px; width: 100%; box-shadow: 0 4px 12px rgba(224, 77, 54, 0.2); margin-top: 8px; }
+        .btn-primary:active { transform: scale(0.98); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: white; padding: 10px 16px; }
+
+        .footer { padding: 16px; border-top: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; font-size: 10px; color: var(--text-dim); }
+        .pulse-dot { width: 6px; height: 6px; background: #4ade80; border-radius: 50%; box-shadow: 0 0 8px #4ade80; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.5); opacity: 0.5; } 100% { transform: scale(1); opacity: 1; } }
+
+        #toast { position: fixed; bottom: 80px; left: 20px; right: 20px; background: #27272a; color: white; padding: 12px; border-radius: 12px; font-size: 12px; display: none; z-index: 100; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- HEADER -->
+        <div class="header">
+            <div class="logo-box">
+                <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+            </div>
+            <div class="title-group">
+                <h1>Khor Design System</h1>
+                <p>Elite Expansion Engine</p>
+            </div>
+        </div>
+
+        <!-- SYNC SECTION -->
+        <div class="section">
+            <span class="section-title">Gobernanza de Tokens</span>
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <div><div id="status-text" class="status-badge pending">No Sincronizado</div></div>
+                    <button class="btn-secondary" onclick="syncTokens()">Sincronizar</button>
+                </div>
+                <div id="sync-stats" style="display: none; font-size: 11px; color: var(--text-dim);">
+                    Inyectados <span id="sync-count" style="color:white; font-weight:600;">0</span> tokens en la librería.
+                </div>
+            </div>
+        </div>
+        <!-- COMPONENT SECTION -->
+        <div class="section">
+            <span class="section-title">Fábrica de Átomos - v0.4.5</span>
+            <div class="card" style="display: flex; flex-direction: column; gap: 16px;">
+                <div class="input-group">
+                    <label>Tipo de Componente</label>
+                    <select id="component-type" onchange="updateUIForComponent()">
+                        <option value="KButton">KButton (Botón)</option>
+                        <option value="KTag">KTag (Etiqueta)</option>
+                        <option value="KBadge">KBadge (Notificación)</option>
+                    </select>
+                </div>
+                
+                <div id="dynamic-props">
+                    <!-- Contenido dinámico aquí -->
+                </div>
+
+                <div id="state-props" class="checkbox-group">
+                    <label class="checkbox-item"><input type="checkbox" id="prop-loading"> Loading</label>
+                    <label class="checkbox-item"><input type="checkbox" id="prop-disabled"> Disabled</label>
+                    <label class="checkbox-item" id="icon-toggle-box"><input type="checkbox" id="prop-showIcon" checked> Icono</label>
+                </div>
+
+                <button class="btn-primary" onclick="createComponent()">
+                    Inyectar Componente +
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <div style="display: flex; align-items: center; gap: 6px;">
+            <div class="pulse-dot"></div>
+            <span>Engine v0.4.1 Stabilization</span>
+        </div>
+        <span>v0.4.5</span>
+    </div>
+
+    <div id="toast"></div>
+
+    <script type="module">
+        const KHOR_TOKENS_ENDPOINT = "http://localhost:4400/tokens.json";
+
+        const COMPONENT_CONFIGS = {
+            KButton: {
+                label: 'Texto del Botón',
+                props: [
+                    { id: 'variant', label: 'Variante', options: ['primary', 'secondary', 'outline', 'ghost', 'danger', 'navy', 'dashed', 'link', 'text'] },
+                    { id: 'size', label: 'Tamaño', options: ['sm', 'md', 'lg'] },
+                    { id: 'iconPosition', label: 'Posición Icono', options: ['start', 'end'] }
+                ],
+                showStates: true
+            },
+            KTag: {
+                label: 'Texto de la Etiqueta',
+                props: [
+                    { id: 'variant', label: 'Color', options: ['default', 'primary', 'success', 'error', 'warning', 'processing', 'teal', 'navy'] },
+                    { id: 'size', label: 'Tamaño', options: ['default'] }
+                ],
+                showStates: false
+            },
+            KBadge: {
+                label: 'Contador/Marca',
+                props: [
+                    { id: 'status', label: 'Estado', options: ['success', 'error', 'warning', 'info', 'processing', 'default'] },
+                    { id: 'size', label: 'Tamaño', options: ['default', 'small'] }
+                ],
+                showStates: false
+            }
+        };
+
+        window.updateUIForComponent = () => {
+            const type = document.getElementById('component-type').value;
+            const config = COMPONENT_CONFIGS[type];
+            const container = document.getElementById('dynamic-props');
+            const stateBox = document.getElementById('state-props');
+            
+            stateBox.style.display = config.showStates ? 'flex' : 'none';
+
+            let html = `
+                <div class="input-group" style="margin-bottom: 12px;">
+                    <label>${config.label}</label>
+                    <input type="text" id="label-val" value="Khor ${type.replace('K','')}">
+                </div>
+                <div class="form-cols">
+            `;
+            
+            config.props.forEach(p => {
+                html += `
+                    <div class="input-group">
+                        <label>${p.label}</label>
+                        <select id="prop-${p.id}">
+                            ${p.options.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
+                        </select>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            container.innerHTML = html;
+        };
+
+        // Inicializar UI
+        updateUIForComponent();
+
+        window.syncTokens = async () => {
+            const btn = document.querySelector('.btn-secondary');
+            btn.innerHTML = "Cargando..."; btn.disabled = true;
+            try {
+                const response = await fetch(KHOR_TOKENS_ENDPOINT + "?v=" + Date.now());
+                const tokens = await response.json();
+                parent.postMessage({ type: "sync-tokens", tokens }, "*");
+            } catch (err) {
+                showToast("Error de conexión local (Vite)");
+                btn.innerHTML = "Reintentar"; btn.disabled = false;
+            }
+        };
+
+        window.createComponent = () => {
+            const type = document.getElementById('component-type').value;
+            const config = COMPONENT_CONFIGS[type];
+            const props = {
+                label: document.getElementById('label-val').value,
+                loading: document.getElementById('prop-loading').checked,
+                disabled: document.getElementById('prop-disabled').checked,
+                showIcon: document.getElementById('prop-showIcon').checked
+            };
+            
+            config.props.forEach(p => {
+                props[p.id] = document.getElementById(`prop-${p.id}`).value;
+            });
+            
+            parent.postMessage({ type: "create-component", component: type, props }, "*");
+        };
+
+        window.addEventListener("message", (event) => {
+            const msg = event.data;
+            if (msg.type === "sync-success") {
+                const status = document.getElementById('status-text');
+                status.className = "status-badge";
+                status.innerHTML = "Khor DS Sincronizado";
+                document.getElementById('sync-stats').style.display = "block";
+                document.getElementById('sync-count').innerHTML = msg.stats.total;
+                const btn = document.querySelector('.btn-secondary');
+                btn.innerHTML = "Actualizado"; btn.disabled = false;
+                showToast(`Sincronización completada.`);
+            }
+            if (msg.type === "create-success") showToast("Elemento inyectado.");
+            if (msg.type === "error") showToast("Error: " + msg.message);
+        });
+
+        function showToast(text) {
+            const t = document.getElementById('toast');
+            t.innerHTML = text; t.style.display = "block";
+            setTimeout(() => t.style.display = "none", 3000);
+        }
+    </script>
+</body>
+</html>

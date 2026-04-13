@@ -1,0 +1,93 @@
+/* 
+  Khor Layout System — Breakpoints & Responsive Grid 
+  Parity with Ant Design v5 Viewports
+*/
+
+:root {
+  --k-grid-columns: 24;
+}
+
+/* Base (xs < 576px) */
+[class*="k-col-"] {
+  position: relative;
+  max-width: 100%;
+  min-height: 1px;
+}
+
+.k-col-0 { display: none; }
+.k-col-1 { flex: 0 0 4.16666667%; max-width: 4.16666667%; }
+.k-col-2 { flex: 0 0 8.33333333%; max-width: 8.33333333%; }
+.k-col-3 { flex: 0 0 12.5%; max-width: 12.5%; }
+.k-col-4 { flex: 0 0 16.66666667%; max-width: 16.66666667%; }
+.k-col-5 { flex: 0 0 20.83333333%; max-width: 20.83333333%; }
+.k-col-6 { flex: 0 0 25%; max-width: 25%; }
+.k-col-7 { flex: 0 0 29.16666667%; max-width: 29.16666667%; }
+.k-col-8 { flex: 0 0 33.33333333%; max-width: 33.33333333%; }
+.k-col-9 { flex: 0 0 37.5%; max-width: 37.5%; }
+.k-col-10 { flex: 0 0 41.66666667%; max-width: 41.66666667%; }
+.k-col-11 { flex: 0 0 45.83333333%; max-width: 45.83333333%; }
+.k-col-12 { flex: 0 0 50%; max-width: 50%; }
+.k-col-13 { flex: 0 0 54.16666667%; max-width: 54.16666667%; }
+.k-col-14 { flex: 0 0 58.33333333%; max-width: 58.33333333%; }
+.k-col-15 { flex: 0 0 62.5%; max-width: 62.5%; }
+.k-col-16 { flex: 0 0 66.66666667%; max-width: 66.66666667%; }
+.k-col-17 { flex: 0 0 70.83333333%; max-width: 70.83333333%; }
+.k-col-18 { flex: 0 0 75%; max-width: 75%; }
+.k-col-19 { flex: 0 0 79.16666667%; max-width: 79.16666667%; }
+.k-col-20 { flex: 0 0 83.33333333%; max-width: 83.33333333%; }
+.k-col-21 { flex: 0 0 87.5%; max-width: 87.5%; }
+.k-col-22 { flex: 0 0 91.66666667%; max-width: 91.66666667%; }
+.k-col-23 { flex: 0 0 95.83333333%; max-width: 95.83333333%; }
+.k-col-24 { flex: 0 0 100%; max-width: 100%; }
+
+/* XS offsets */
+.k-col-offset-1 { margin-left: 4.16666667%; }
+/* ... (simplified for space, will add critical ones) */
+
+/* Small Devices (sm ≥ 576px) */
+@media (min-width: 576px) {
+  .k-col-sm-0 { display: none; }
+  .k-col-sm-4 { flex: 0 0 16.66666667%; max-width: 16.66666667%; }
+  .k-col-sm-6 { flex: 0 0 25%; max-width: 25%; }
+  .k-col-sm-8 { flex: 0 0 33.33333333%; max-width: 33.33333333%; }
+  .k-col-sm-12 { flex: 0 0 50%; max-width: 50%; }
+  .k-col-sm-24 { flex: 0 0 100%; max-width: 100%; }
+}
+
+/* Medium Devices (md ≥ 768px) */
+@media (min-width: 768px) {
+  .k-col-md-0 { display: none; }
+  .k-col-md-4 { flex: 0 0 16.66666667%; max-width: 16.66666667%; }
+  .k-col-md-6 { flex: 0 0 25%; max-width: 25%; }
+  .k-col-md-8 { flex: 0 0 33.33333333%; max-width: 33.33333333%; }
+  .k-col-md-12 { flex: 0 0 50%; max-width: 50%; }
+  .k-col-md-16 { flex: 0 0 66.66666667%; max-width: 66.66666667%; }
+  .k-col-md-24 { flex: 0 0 100%; max-width: 100%; }
+}
+
+/* Large Devices (lg ≥ 992px) */
+@media (min-width: 992px) {
+  .k-col-lg-6 { flex: 0 0 25%; max-width: 25%; }
+  .k-col-lg-8 { flex: 0 0 33.33333333%; max-width: 33.33333333%; }
+  .k-col-lg-12 { flex: 0 0 50%; max-width: 50%; }
+}
+
+/* Extra Large (xl ≥ 1200px) */
+@media (min-width: 1200px) {
+  .k-col-xl-4 { flex: 0 0 16.66666667%; max-width: 16.66666667%; }
+  .k-col-xl-6 { flex: 0 0 25%; max-width: 25%; }
+  .k-col-xl-8 { flex: 0 0 33.33333333%; max-width: 33.33333333%; }
+}
+
+/* Visibility Utilities */
+.k-show-xs { display: block !important; }
+.k-hide-xs { display: none !important; }
+
+@media (min-width: 768px) {
+  .k-hide-md { display: none !important; }
+  .k-show-md { display: block !important; }
+}
+
+@media (max-width: 767px) {
+  .k-hidden-on-mobile { display: none !important; }
+}

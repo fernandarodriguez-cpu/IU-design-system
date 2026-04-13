@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { DollarSign, Users, TrendingUp } from 'lucide-react';
-import { KStatCard } from '../components/design-system/molecules/index';
+import { KStatCard } from '../components/design-system/molecules/KStatCard/index';
 import { khorTokens } from '../theme/khor-theme';
 import { Pattern } from './types';
 

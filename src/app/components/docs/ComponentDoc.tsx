@@ -135,7 +135,7 @@ export function ComponentDoc({
       )}
 
       {active === 'playground' && playground && (
-        <div style={{ padding: 24, backgroundColor: t.colors.neutral[50], borderRadius: t.radius.lg, border: `1px solid ${t.colors.neutral[200]}` }}>
+        <div id="khor-playground-root" style={{ padding: 24, backgroundColor: t.colors.neutral[50], borderRadius: t.radius.lg, border: `1px solid ${t.colors.neutral[200]}` }}>
           {playground}
         </div>
       )}

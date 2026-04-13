@@ -1,8 +1,6 @@
 import React from 'react';
-import { Layout } from 'antd';
 import { khorTokens } from '../../../../theme/khor-theme';
 
-const { Header, Sider, Content } = Layout;
 const t = khorTokens;
 const font = t.typography.fontPrimary;
 
@@ -16,6 +14,10 @@ export interface KAppLayoutProps {
   fixedSidebar?: boolean;
 }
 
+/**
+ * KAppLayout — Estructura base de la aplicación (Headless v4)
+ * Reemplaza Layout de AntD por CSS Grid/Flexbox nativo con Tailwind.
+ */
 export function KAppLayout({ 
   sidebar, 
   header, 
@@ -25,72 +27,88 @@ export function KAppLayout({
   fixedHeader = true,
   fixedSidebar = true 
 }: KAppLayoutProps) {
-  const sidebarWidth = collapsed ? 80 : (t.layout.sidebarWidth || 260);
-  const headerHeight = t.layout.headerHeight || 64;
+  // Calculamos anchos básicos dinámicos
+  const sidebarWidth = collapsed ? 80 : 260; // Standard Khor Sidebar widths
+  const headerHeight = 64; // Standard Khor header height
 
   return (
-    <Layout style={{ minHeight: '100vh', fontFamily: font }}>
+    <div className="min-h-screen flex flex-col bg-khor-slate-50" style={{ fontFamily: font }}>
+      {/* Sidebar (Sider alternativo) */}
       {sidebar && (
-        <Sider
-          trigger={null}
-          collapsible
-          collapsed={collapsed}
-          theme="light"
-          width={sidebarWidth}
-          style={{
-            overflow: 'auto',
+        <aside
+          className={`
+            fixed left-0 top-0 bottom-0 z-50 
+            transition-all duration-300 ease-in-out
+            border-r border-khor-slate-200/20 
+            bg-khor-brand-navy
+            overflow-y-auto overflow-x-hidden
+          `}
+          style={{ 
+            width: sidebarWidth,
             height: fixedSidebar ? '100vh' : 'auto',
-            position: fixedSidebar ? 'fixed' : 'relative',
-            left: 0,
-            top: 0,
-            bottom: 0,
-            zIndex: 100,
-            borderRight: `1px solid ${t.colors.neutral[200]}`,
-            backgroundColor: t.colors.brand.navy,
+            position: fixedSidebar ? 'fixed' : 'relative'
           }}
         >
-          {sidebar}
-        </Sider>
+          <div className="h-full w-full">
+            {sidebar}
+          </div>
+        </aside>
       )}
-      <Layout style={{ 
-        marginLeft: sidebar && fixedSidebar ? sidebarWidth : 0,
-        transition: 'all 0.2s'
-      }}>
+
+      {/* Area Principal (Header + Content + Footer) */}
+      <div 
+        className="flex flex-col flex-1 transition-all duration-300 ease-in-out"
+        style={{ 
+          marginLeft: sidebar && fixedSidebar ? sidebarWidth : 0,
+        }}
+      >
+        {/* Header (Header alternativo) */}
         {header && (
-          <Header style={{ 
-            padding: 0, 
-            background: t.colors.neutral[50],
-            borderBottom: `1px solid ${t.colors.neutral[200]}`,
-            height: headerHeight,
-            display: 'flex',
-            alignItems: 'center',
-            position: fixedHeader ? 'fixed' : 'relative',
-            top: 0,
-            right: 0,
-            width: sidebar && fixedSidebar ? `calc(100% - ${sidebarWidth}px)` : '100%',
-            zIndex: 99,
-            transition: 'all 0.2s'
-          }}>
-            {header}
-          </Header>
+          <header 
+            className={`
+              flex items-center px-6 z-40 
+              bg-white 
+              border-b border-khor-slate-200
+              transition-all duration-300 ease-in-out
+            `}
+            style={{ 
+              height: headerHeight,
+              position: fixedHeader ? 'fixed' : 'relative',
+              top: 0,
+              right: 0,
+              left: sidebar && fixedSidebar ? sidebarWidth : 0,
+              width: 'auto'
+            }}
+          >
+            <div className="w-full">
+              {header}
+            </div>
+          </header>
         )}
-        <Content style={{ 
-          padding: 24, 
-          background: t.colors.neutral[50], // Match neutral bg
-          marginTop: header && fixedHeader ? headerHeight : 0,
-          minHeight: `calc(100vh - ${header && fixedHeader ? headerHeight : 0}px - ${footer ? 64 : 0}px)`
-        }}>
-          <div style={{ maxWidth: 1400, margin: '0 auto' }}>
+
+        {/* Content Area */}
+        <main 
+          className="flex-1 p-6 transition-all"
+          style={{ 
+            marginTop: header && fixedHeader ? headerHeight : 0,
+            minHeight: `calc(100vh - ${header && fixedHeader ? headerHeight : 0}px - ${footer ? 64 : 0}px)`
+          }}
+        >
+          <div className="max-w-[1400px] mx-auto w-full animate-in fade-in duration-500">
             {children}
           </div>
-        </Content>
+        </main>
+
+        {/* FooterArea */}
         {footer && (
-          <Layout.Footer style={{ textAlign: 'center', background: t.colors.neutral[50], borderTop: `1px solid ${t.colors.neutral[200]}` }}>
+          <footer 
+            className="h-16 flex items-center justify-center border-t border-khor-neutral-200 bg-khor-surface-page text-sm text-khor-neutral-500"
+          >
             {footer}
-          </Layout.Footer>
+          </footer>
         )}
-      </Layout>
-    </Layout>
+      </div>
+    </div>
   );
 }
 

@@ -1,36 +1,61 @@
 import React from 'react';
-import { Spin } from 'antd';
-import type { SpinProps } from 'antd';
-import { khorTokens } from '../../../../theme/khor-theme';
+import { Loader2 } from 'lucide-react';
+import { cn } from '../../../../../imports/utils';
 
-const t = khorTokens;
-const font = t.typography.fontPrimary;
-
-export interface KSpinProps extends Omit<SpinProps, 'size'> {
-  size?: 'sm' | 'md' | 'lg';
+export interface KSpinProps {
+  size?: 'sm' | 'md' | 'lg' | 'xl';
   color?: string;
+  className?: string;
+  style?: React.CSSProperties;
+  label?: string;
+  fullscreen?: boolean;
 }
 
+const sizeMap = {
+  sm: "w-4 h-4",
+  md: "w-6 h-6",
+  lg: "w-10 h-10",
+  xl: "w-16 h-16",
+};
+
 /**
- * KSpin: Indicador de carga (spinner).
- * Refinado para evitar fugas de props al DOM (variant, fullWidth).
+ * KSpin — Indicador de carga (Headless v4)
+ * Reemplaza AntD Spin con un componente nativo animado y estéticamente refinado.
  */
 export function KSpin({ 
-  size = 'md', color, style, 
-  variant, fullWidth, ...rest 
-}: KSpinProps & { variant?: any, fullWidth?: any }) {
-  const antSize: SpinProps['size'] = size === 'sm' ? 'small' : size === 'lg' ? 'large' : 'default';
-  return (
-    <Spin
-      size={antSize}
-      style={{ 
-        color: color ?? t.colors.brand.primary, 
-        fontFamily: font, 
-        ...style 
-      }}
-      {...rest}
-    />
+  size = 'md', 
+  color, 
+  className, 
+  style,
+  label,
+  fullscreen = false
+}: KSpinProps) {
+  
+  const spinner = (
+    <div 
+      className={cn(
+        "flex flex-col items-center justify-center gap-3",
+        fullscreen && "fixed inset-0 z-[9999] bg-white/80 backdrop-blur-sm"
+      )}
+    >
+      <Loader2 
+        className={cn(
+          "animate-spin transition-all",
+          sizeMap[size] || sizeMap.md,
+          !color && "text-khor-primary",
+          className
+        )}
+        style={{ color, ...style }}
+      />
+      {label && (
+        <span className="text-sm font-bold text-khor-neutral-500 animate-pulse uppercase tracking-widest font-primary">
+          {label}
+        </span>
+      )}
+    </div>
   );
+
+  return spinner;
 }
 
 export default KSpin;

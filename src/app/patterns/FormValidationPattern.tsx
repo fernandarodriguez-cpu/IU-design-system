@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { Mail, Save } from 'lucide-react';
-import { KInput, KButton, KAlert } from '../components/design-system/atoms/index';
-import { KFormField, KSelectField } from '../components/design-system/molecules/index';
+import { KInput } from '../components/design-system/atoms/KInput/index';
+import { KButton } from '../components/design-system/atoms/KButton/index';
+import { KAlert } from '../components/design-system/atoms/KAlert/index';
+import { KFormField } from '../components/design-system/molecules/KFormField/index';
+import { KSelectField } from '../components/design-system/molecules/KSelectField/index';
 import { Pattern } from './types';
 
 function FormValidationComponent() {
@@ -27,12 +30,12 @@ function FormValidationComponent() {
 
   return (
     <div style={{ maxWidth: 400, display: 'flex', flexDirection: 'column', gap: 16 }}>
-      {submitted && <KAlert type="success" message="Usuario creado exitosamente" showIcon />}
+      {submitted && <KAlert type="success" title="Usuario creado exitosamente" showIcon />}
       <KFormField label="Nombre Completo" required error={errors.name}>
-        <KInput placeholder="Juan Pérez" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} error={!!errors.name} />
+        <KInput placeholder="Juan Pérez" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} error={errors.name} />
       </KFormField>
       <KFormField label="Email" required error={errors.email}>
-        <KInput placeholder="juan@empresa.com" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} error={!!errors.email} icon={<Mail size={16} />} />
+        <KInput placeholder="juan@empresa.com" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} error={errors.email} prefix={<Mail size={16} />} />
       </KFormField>
       <KFormField label="Rol" required error={errors.role}>
         <KSelectField placeholder="Seleccionar rol" options={[

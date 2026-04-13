@@ -1,131 +1,120 @@
-import React from 'react';
-import { Modal, Space } from 'antd';
-import type { ModalProps } from 'antd';
-import { AlertTriangle, Info, CheckCircle, AlertCircle } from 'lucide-react';
-import { khorTokens } from '../../../../theme/khor-theme';
-import { KButton } from '../../atoms';
+import React, { useState } from 'react';
+import * as DialogPrimitive from '@radix-ui/react-dialog';
+import { AlertTriangle, Info, CheckCircle, AlertCircle, X } from 'lucide-react';
+import { cn } from '../../../../../imports/utils';
+import { KButton } from '../../atoms/KButton';
 
-const t = khorTokens;
-const font = t.typography.fontPrimary;
-
-/* ═══════════════════════════════════════════════
-   KModalConfirm — Modal de confirmación declarativo
-   ═══════════════════════════════════════════════ */
 export type KModalConfirmType = 'confirm' | 'info' | 'success' | 'warning' | 'error';
 
-export interface KModalConfirmProps extends Omit<ModalProps, 'title' | 'onOk'> {
+export interface KModalConfirmProps {
   open: boolean;
   onClose: () => void;
   title?: React.ReactNode;
   content?: React.ReactNode;
   type?: KModalConfirmType;
   onOk?: () => void | Promise<void>;
+  okText?: string;
+  cancelText?: string;
   showCancel?: boolean;
+  width?: number;
+  className?: string;
 }
 
-const confirmIconMap: Record<KModalConfirmType, { icon: React.ReactNode; color: string }> = {
-  confirm: { icon: <AlertTriangle size={24} />, color: khorTokens.colors.brand.accent },
-  info: { icon: <Info size={24} />, color: khorTokens.colors.brand.navy },
-  success: { icon: <CheckCircle size={24} />, color: khorTokens.colors.feedback.success },
-  warning: { icon: <AlertTriangle size={24} />, color: khorTokens.colors.brand.accent },
-  error: { icon: <AlertCircle size={24} />, color: khorTokens.colors.feedback.error },
+const iconMap = {
+  confirm: <AlertTriangle className="w-8 h-8 text-amber-500" />,
+  info: <Info className="w-8 h-8 text-sky-500" />,
+  success: <CheckCircle className="w-8 h-8 text-emerald-500" />,
+  warning: <AlertTriangle className="w-8 h-8 text-amber-500" />,
+  error: <AlertCircle className="w-8 h-8 text-red-500" />,
 };
 
+/**
+ * KModalConfirm — Diálogo de confirmación (Total Headless)
+ * Basado en Radix UI Dialog y Tailwind CSS v4. Soporta estados de carga y diferentes variantes visuales.
+ */
 export function KModalConfirm({
-  open, 
-  onClose, 
-  title, 
-  content, 
-  okText = 'Aceptar', 
+  open,
+  onClose,
+  title,
+  content,
+  type = 'confirm',
+  onOk,
+  okText = 'Aceptar',
   cancelText = 'Cancelar',
-  type = 'confirm', 
-  onOk, 
-  onCancel, 
-  showCancel = true, 
+  showCancel = true,
   width = 420,
-  okButtonProps,
-  ...rest
+  className,
 }: KModalConfirmProps) {
-  
-  const [confirmLoading, setConfirmLoading] = React.useState(false);
-  const cfg = confirmIconMap[type];
+  const [loading, setLoading] = useState(false);
 
   const handleOk = async () => {
     if (onOk) {
+      setLoading(true);
       try {
-        const result = onOk();
-        if (result instanceof Promise) {
-          setConfirmLoading(true);
-          await result;
-        }
+        await onOk();
       } finally {
-        setConfirmLoading(false);
+        setLoading(false);
+        onClose();
       }
+    } else {
+      onClose();
     }
-    onClose();
-  };
-
-  const handleCancel = () => {
-    onCancel?.(null as any);
-    onClose();
   };
 
   return (
-    <Modal
-      open={open}
-      onCancel={handleCancel}
-      width={width}
-      centered
-      footer={
-        <Space size={8} style={{ width: '100%', justifyContent: 'flex-end' }}>
-          {showCancel && (
-            <KButton variant="secondary" onClick={handleCancel}>
-              {cancelText}
-            </KButton>
+    <DialogPrimitive.Root open={open} onOpenChange={(o) => !o && onClose()}>
+      <DialogPrimitive.Portal>
+        <DialogPrimitive.Overlay className="fixed inset-0 z-[100] bg-black/40 backdrop-blur-sm animate-in fade-in duration-300" />
+        <DialogPrimitive.Content
+          className={cn(
+            "fixed left-1/2 top-1/2 z-[101] -translate-x-1/2 -translate-y-1/2 bg-white rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.3)] p-8 font-primary animate-in zoom-in-95 fade-in duration-300 focus:outline-none",
+            className
           )}
-          <KButton
-            variant={type === 'error' ? 'danger' : 'primary'}
-            loading={confirmLoading}
-            onClick={handleOk}
-          >
-            {okText}
-          </KButton>
-        </Space>
-      }
-      closable={false}
-      bodyStyle={{ padding: '32px 32px 24px' }}
-      {...rest}
-    >
-      <div style={{ display: 'flex', gap: 16 }}>
-        <div style={{ color: cfg.color, flexShrink: 0, marginTop: 2 }}>
-          {cfg.icon}
-        </div>
-        <div style={{ flex: 1 }}>
-          {title && (
-            <h3 style={{ 
-              margin: '0 0 8px', 
-              fontSize: 18, 
-              fontWeight: 600, 
-              color: t.colors.neutral[900],
-              fontFamily: font 
-            }}>
-              {title}
-            </h3>
-          )}
-          {content && (
-            <div style={{ 
-              margin: 0, 
-              fontSize: 14, 
-              color: t.colors.neutral[500], 
-              lineHeight: 1.6,
-              fontFamily: font 
-            }}>
-              {content}
+          style={{ width: `${width}px` }}
+        >
+          <div className="flex gap-6 items-start">
+            <div className="shrink-0 p-3 bg-khor-neutral-50 rounded-2xl">
+              {iconMap[type]}
             </div>
-          )}
-        </div>
-      </div>
-    </Modal>
+            
+            <div className="flex-1 flex flex-col gap-2">
+              {title && (
+                <DialogPrimitive.Title className="text-xl font-extrabold text-khor-neutral-900 leading-tight tracking-tight">
+                  {title}
+                </DialogPrimitive.Title>
+              )}
+              {content && (
+                <DialogPrimitive.Description className="text-sm font-medium text-khor-neutral-500 leading-relaxed">
+                  {content}
+                </DialogPrimitive.Description>
+              )}
+
+              <div className="flex justify-end gap-3 mt-8">
+                {showCancel && (
+                  <KButton variant="neutral" onClick={onClose} disabled={loading}>
+                    {cancelText}
+                  </KButton>
+                )}
+                <KButton
+                  variant={type === 'error' ? 'danger' : 'primary'}
+                  loading={loading}
+                  onClick={handleOk}
+                  className="px-6"
+                >
+                  {okText}
+                </KButton>
+              </div>
+            </div>
+          </div>
+
+          <DialogPrimitive.Close asChild>
+            <button className="absolute top-5 right-5 text-khor-neutral-300 hover:text-khor-neutral-900 transition-colors p-1">
+              <X className="w-5 h-5" />
+            </button>
+          </DialogPrimitive.Close>
+        </DialogPrimitive.Content>
+      </DialogPrimitive.Portal>
+    </DialogPrimitive.Root>
   );
 }
 

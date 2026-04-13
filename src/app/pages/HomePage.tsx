@@ -10,18 +10,13 @@ import {
   Download, Package, Loader2,
   ShieldCheck, Figma, Clock, Bot, Brush, BookOpen,
 } from 'lucide-react';
-import { KButton, KText, KBadge } from '../components/design-system/atoms/index';
+import { KButton, KText, KBadge, KTag } from '../components/design-system/atoms/index';
 import { KStatCard } from '../components/design-system/molecules/index';
-import { kToast } from '../components/design-system/organisms/index';
+import { kToast, KCardSection } from '../components/design-system/organisms/index';
 import { khorTokens } from '../theme/khor-theme';
 
-const stats = [
-  { title: 'Átomos', value: 32, icon: <Atom size={20} />, sparkData: [2, 5, 8, 12, 15, 18, 22, 32] },
-  { title: 'Moléculas', value: 33, icon: <Layers size={20} />, sparkData: [1, 5, 9, 12, 18, 22, 28, 33] },
-  { title: 'Organismos', value: 24, icon: <Box size={20} />, sparkData: [1, 2, 4, 5, 8, 10, 12, 24] },
-  { title: 'Patrones', value: 8, icon: <BookOpen size={20} />, sparkData: [0, 1, 2, 3, 4, 5, 6, 8] },
-  { title: 'Templates', value: 4, icon: <Palette size={20} />, sparkData: [0, 1, 2, 3, 4, 4] },
-];
+import { generateMarkdown, defaultSections } from './AIExportPage';
+// Removed hardcoded stats as they are now being moved to the sidebar counters.
 
 const principles = [
   {
@@ -74,10 +69,17 @@ pnpm add lucide-react recharts sonner
 pnpm add tailwindcss @tailwindcss/vite
 \`\`\`
 
+## Arquitectura V4 (Headless)
+Khor v4 ha migrado a una arquitectura 100% agnóstica para eliminar la dependencia de Ant Design y DayJS.
+- **UI Core:** Radix UI Primitives
+- **Styling:** Tailwind CSS v4
+- **Date Engine:** date-fns
+
+
 ## Fuentes
 
 \`\`\`css
-@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 \`\`\`
 
@@ -274,12 +276,15 @@ export const categories = ['Todos', ...new Set(patterns.map((p) => p.category))]
   ds.folder('organisms')!.file('index.tsx', organismsCatalog);
   ds.folder('patterns')!.file('index.ts', patternsCatalog);
 
+  // Compile AI System Prompt
+  ds.file('ai_system_prompt.txt', generateMarkdown(defaultSections));
+
   // Generate ZIP and download
   const blob = await zip.generateAsync({ type: 'blob' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'khor-design-system-v3.1.0.zip';
+  a.download = 'khor-design-system-v4.0.4.zip';
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
@@ -322,10 +327,11 @@ export function HomePage() {
           backgroundColor: 'rgba(255,149,0,0.1)',
         }} />
         <div style={{ position: 'relative', zIndex: 1 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-            <KBadge khorStatus="info" label="v3.1.0 Stable" />
-            <KBadge khorStatus="success" label="Ant Design 5 Sync" />
-            <KBadge khorStatus="warning" label="IA Ready" />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
+            <KTag color="volcano">v4.0.4 Stable</KTag>
+            <KTag color="volcano">Core System Mastery</KTag>
+            <KTag color="#FF9500">ADV01: Figma Sync</KTag>
+            <KTag color="volcano">IA Ready</KTag>
           </div>
           <h1 style={{ margin: '0 0 12px', fontSize: 38, fontWeight: 700, color: '#fff' }}>
             Khor Design System
@@ -334,8 +340,13 @@ export function HomePage() {
             La fuente unica de verdad para construir aplicaciones SaaS y moviles con una experiencia de usuario excepcional y desarrollo agil.
           </p>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-            <KButton variant="primary" onClick={() => navigate('/atoms/button')}>
-              Explorar Componentes <ArrowRight size={16} style={{ marginLeft: 4 }} />
+            <KButton
+              variant="primary"
+              onClick={() => navigate('/atoms/button')}
+              icon={<ArrowRight size={16} />}
+              iconPosition="end"
+            >
+              Explorar Componentes
             </KButton>
             <KButton variant="outline" onClick={() => navigate('/tokens')} className="!border-white !text-white hover:!bg-white/10">
               Ver Tokens
@@ -344,40 +355,31 @@ export function HomePage() {
               Descargar DS
             </KButton>
           </div>
+
         </div>
       </div>
-
-      {/* Stats */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16, marginBottom: 32 }}>
-        {stats.map((s) => (
-          <KStatCard key={s.title} {...s} change={100} changeLabel="Completo" />
-        ))}
-      </div>
+      {/* Stats section removed in favor of Sidebar counters for a cleaner "Discovery" experience */}
 
       {/* Principles */}
-      <div style={{
-        backgroundColor: khorTokens.colors.neutral[50],
-        borderRadius: khorTokens.radius.lg,
-        padding: 32,
-        boxShadow: khorTokens.shadows.sm,
-        marginBottom: 32,
-      }}>
-        <h2 style={{ margin: '0 0 24px', fontSize: 24, fontWeight: 700, color: khorTokens.colors.brand.navy }}>
-          Principios del Sistema
-        </h2>
+      <KCardSection
+        title="Principios del Sistema"
+        className="mb-8"
+      >
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
           {principles.map((p) => (
             <div key={p.title} style={{
-              padding: 20,
+              padding: 24,
               borderRadius: khorTokens.radius.md,
               border: `1px solid ${khorTokens.colors.neutral[200]}`,
               display: 'flex',
               gap: 16,
               alignItems: 'flex-start',
+              transition: 'all 0.2s ease',
+              backgroundColor: 'var(--card)',
             }}>
               <div style={{
-                width: 44,
-                height: 44,
+                width: 48,
+                height: 48,
                 borderRadius: khorTokens.radius.md,
                 backgroundColor: 'rgba(224,77,54,0.08)',
                 color: khorTokens.colors.brand.primary,
@@ -389,24 +391,17 @@ export function HomePage() {
                 {p.icon}
               </div>
               <div>
-                <h4 style={{ margin: '0 0 4px', fontSize: 15, fontWeight: 600, color: khorTokens.colors.brand.navy }}>{p.title}</h4>
-                <p style={{ margin: 0, fontSize: 13, color: khorTokens.colors.neutral[400], lineHeight: 1.5 }}>{p.description}</p>
+                <h4 style={{ margin: '0 0 6px', fontSize: 16, fontWeight: 700, color: khorTokens.colors.brand.navy }}>{p.title}</h4>
+                <p style={{ margin: 0, fontSize: 13, color: khorTokens.colors.neutral[400], lineHeight: 1.6 }}>{p.description}</p>
               </div>
             </div>
           ))}
         </div>
-      </div>
+      </KCardSection>
+
 
       {/* Quick Start */}
-      <div style={{
-        backgroundColor: khorTokens.colors.neutral[50],
-        borderRadius: khorTokens.radius.lg,
-        padding: 32,
-        boxShadow: khorTokens.shadows.sm,
-      }}>
-        <h2 style={{ margin: '0 0 16px', fontSize: 24, fontWeight: 700, color: khorTokens.colors.brand.navy }}>
-          Inicio Rapido
-        </h2>
+      <KCardSection title="Inicio Rápido" className="mb-8">
         <div style={{
           backgroundColor: '#1e1e2e',
           borderRadius: khorTokens.radius.md,
@@ -415,15 +410,17 @@ export function HomePage() {
           fontSize: 13,
           fontFamily: "'Plus Jakarta Sans', monospace",
           lineHeight: 1.8,
+          boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.3)',
         }}>
-          <div><span style={{ color: '#89b4fa' }}>import</span> {'{ KButton, KInput, KBadge }'} <span style={{ color: '#89b4fa' }}>from</span> <span style={{ color: '#a6e3a1' }}>'@khor/design-system/atoms/index'</span>;</div>
-          <div><span style={{ color: '#89b4fa' }}>import</span> {'{ KFormField, KStatCard }'} <span style={{ color: '#89b4fa' }}>from</span> <span style={{ color: '#a6e3a1' }}>'@khor/design-system/molecules/index'</span>;</div>
-          <div><span style={{ color: '#89b4fa' }}>import</span> {'{ KDataTable, kToast }'} <span style={{ color: '#89b4fa' }}>from</span> <span style={{ color: '#a6e3a1' }}>'@khor/design-system/organisms/index'</span>;</div>
+          <div><span style={{ color: '#89b4fa' }}>import</span> {'{ KButton, KInput, KBadge }'} <span style={{ color: '#89b4fa' }}>from</span> <span style={{ color: '#a6e3a1' }}>'@khor/design-system/atoms'</span>;</div>
+          <div><span style={{ color: '#89b4fa' }}>import</span> {'{ KFormField, KStatCard }'} <span style={{ color: '#89b4fa' }}>from</span> <span style={{ color: '#a6e3a1' }}>'@khor/design-system/molecules'</span>;</div>
+          <div><span style={{ color: '#89b4fa' }}>import</span> {'{ KDataTable, kToast }'} <span style={{ color: '#89b4fa' }}>from</span> <span style={{ color: '#a6e3a1' }}>'@khor/design-system/organisms'</span>;</div>
           <br />
           <div style={{ color: '#6c7086' }}>{'// Usa los componentes con tokens Khor integrados'}</div>
           <div>{'<KButton variant="primary" size="md">Guardar</KButton>'}</div>
         </div>
-      </div>
+      </KCardSection>
+
 
       {/* Download Section */}
       <div style={{
@@ -458,16 +455,7 @@ export function HomePage() {
       </div>
 
       {/* Tools Section */}
-      <div style={{
-        marginTop: 32,
-        backgroundColor: khorTokens.colors.neutral[50],
-        borderRadius: khorTokens.radius.lg,
-        padding: 32,
-        boxShadow: khorTokens.shadows.sm,
-      }}>
-        <h2 style={{ margin: '0 0 20px', fontSize: 24, fontWeight: 700, color: khorTokens.colors.brand.navy }}>
-          Herramientas
-        </h2>
+      <KCardSection title="Herramientas">
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16 }}>
           {[
             { icon: <Brush size={24} />, title: 'Theming en Vivo', desc: 'Personaliza colores, tipografía, bordes y escalas en tiempo real con exportación a CSS/SCSS.', path: '/theming', color: khorTokens.colors.brand.primary },
@@ -483,30 +471,39 @@ export function HomePage() {
               style={{
                 padding: 20, borderRadius: khorTokens.radius.md,
                 border: `1px solid ${khorTokens.colors.neutral[200]}`,
-                backgroundColor: 'transparent',
+                backgroundColor: 'var(--card)',
                 cursor: 'pointer',
                 display: 'flex', gap: 16, alignItems: 'flex-start',
                 fontFamily: khorTokens.typography.fontPrimary,
                 textAlign: 'left',
-                transition: 'all 0.15s ease',
+                transition: 'all 0.2s ease',
+                boxShadow: 'var(--khor-shadow-sm)',
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.borderColor = `${tool.color}40`; e.currentTarget.style.backgroundColor = `${tool.color}05`; }}
-              onMouseLeave={(e) => { e.currentTarget.style.borderColor = khorTokens.colors.neutral[200]; e.currentTarget.style.backgroundColor = 'transparent'; }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = `${tool.color}60`;
+                e.currentTarget.style.transform = 'translateY(-4px)';
+                e.currentTarget.style.boxShadow = 'var(--khor-shadow-md)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = khorTokens.colors.neutral[200];
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = 'var(--khor-shadow-sm)';
+              }}
             >
               <div style={{
-                width: 44, height: 44, borderRadius: khorTokens.radius.md,
+                width: 48, height: 48, borderRadius: khorTokens.radius.md,
                 backgroundColor: `${tool.color}10`, color: tool.color,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 flexShrink: 0,
               }}>{tool.icon}</div>
               <div>
-                <h4 style={{ margin: '0 0 4px', fontSize: 15, fontWeight: 600, color: khorTokens.colors.brand.navy }}>{tool.title}</h4>
+                <h4 style={{ margin: '0 0 6px', fontSize: 16, fontWeight: 700, color: khorTokens.colors.brand.navy }}>{tool.title}</h4>
                 <p style={{ margin: 0, fontSize: 13, color: khorTokens.colors.neutral[400], lineHeight: 1.5 }}>{tool.desc}</p>
               </div>
             </button>
           ))}
         </div>
-      </div>
+      </KCardSection>
     </div>
   );
 }

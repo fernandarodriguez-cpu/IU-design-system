@@ -7,10 +7,13 @@ import {
   Download, Copy, Check, Eye, FileJson, Palette,
   Type, Maximize, Square, ArrowRight, Info, ExternalLink,
 } from 'lucide-react';
-import { KButton, KText, KBadge } from '../components/design-system/atoms/index';
-import { KCardSection, KTabs } from '../components/design-system/organisms/index';
+import { KButton } from '../components/design-system/atoms/KButton/index';
+import { KText } from '../components/design-system/atoms/KText/index';
+import { KBadge } from '../components/design-system/atoms/KBadge/index';
+import { KCardSection } from '../components/design-system/organisms/KCardSection/index';
+import { KTabs, KTabsList, KTabsTrigger, KTabsContent } from '../components/design-system/organisms/KTabs/index';
 import { khorTokens } from '../theme/khor-theme';
-import { kToast } from '../components/design-system/organisms/index';
+import { kToast } from '../components/design-system/organisms/KToast/index';
 
 const t = khorTokens;
 
@@ -128,7 +131,7 @@ function generateFigmaVariablesJSON() {
       },
       Typography: {
         Family: {
-          Primary: { $value: 'Raleway', $type: 'string' },
+          Primary: { $value: 'Montserrat', $type: 'string' },
           Secondary: { $value: 'Plus Jakarta Sans', $type: 'string' },
         },
         H1: {
@@ -213,7 +216,7 @@ function generateFigmaStylesJSON() {
   const textStyles = [
     {
       name: "Typography/Heading/H1",
-      font: { family: "Raleway", style: "Bold" },
+      font: { family: "Montserrat", style: "Bold" },
       fontSize: t.typography.h1.size,
       lineHeight: { unit: "PIXELS", value: Math.round(t.typography.h1.size * t.typography.h1.lineHeight * 10) / 10 },
       letterSpacing: { unit: "PERCENT", value: 0 },
@@ -221,7 +224,7 @@ function generateFigmaStylesJSON() {
     },
     {
       name: "Typography/Heading/H2",
-      font: { family: "Raleway", style: "Bold" },
+      font: { family: "Montserrat", style: "Bold" },
       fontSize: t.typography.h2.size,
       lineHeight: { unit: "PIXELS", value: Math.round(t.typography.h2.size * t.typography.h2.lineHeight * 10) / 10 },
       letterSpacing: { unit: "PERCENT", value: 0 },
@@ -229,7 +232,7 @@ function generateFigmaStylesJSON() {
     },
     {
       name: "Typography/Heading/H3",
-      font: { family: "Raleway", style: "SemiBold" },
+      font: { family: "Montserrat", style: "SemiBold" },
       fontSize: t.typography.h3.size,
       lineHeight: { unit: "PIXELS", value: Math.round(t.typography.h3.size * t.typography.h3.lineHeight * 10) / 10 },
       letterSpacing: { unit: "PERCENT", value: 0 },
@@ -614,7 +617,23 @@ export function FigmaExportPage() {
       </div>
 
       {/* Tabs with content */}
-      <KTabs items={exportFormats} />
+      <KTabs defaultValue={exportFormats[0]?.key}>
+        <KTabsList>
+          {exportFormats.map(f => (
+            <KTabsTrigger key={f.key} value={f.key}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                {f.icon}
+                {f.label}
+              </div>
+            </KTabsTrigger>
+          ))}
+        </KTabsList>
+        {exportFormats.map(f => (
+          <KTabsContent key={f.key} value={f.key}>
+            {f.children}
+          </KTabsContent>
+        ))}
+      </KTabs>
 
       {/* Workflow guide */}
       <div style={{

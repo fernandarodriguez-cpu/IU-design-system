@@ -22,7 +22,7 @@ export function KWatermark({ text, fontSize = 14, color = 'rgba(0,0,0,0.06)', ro
     if (!ctx) return;
     ctx.translate(size / 2, size / 2);
     ctx.rotate((rotate * Math.PI) / 180);
-    ctx.font = `${fontSize}px Raleway, sans-serif`;
+    ctx.font = `${fontSize}px Montserrat, sans-serif`;
     ctx.fillStyle = color;
     ctx.textAlign = 'center';
     ctx.fillText(text, 0, 0);

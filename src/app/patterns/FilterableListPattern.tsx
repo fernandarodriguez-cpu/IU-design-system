@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Plus, Edit, Trash2 } from 'lucide-react';
-import { KButton, KBadge } from '../components/design-system/atoms/index';
-import { KSearchInput } from '../components/design-system/molecules/index';
+import { KButton } from '../components/design-system/atoms/KButton/index';
+import { KBadge } from '../components/design-system/atoms/KBadge/index';
+import { KSearchInput } from '../components/design-system/atoms/KSearchInput/index';
 import { khorTokens } from '../theme/khor-theme';
 import { Pattern } from './types';
 
@@ -39,8 +40,8 @@ function FilterableListComponent() {
               <div style={{ fontSize: 14, fontWeight: 500, color: 'var(--foreground)' }}>{u.name}</div>
               <div style={{ fontSize: 12, color: 'var(--muted-foreground)' }}>{u.email}</div>
             </div>
-            <KBadge khorStatus={u.role === 'Admin' ? 'info' : 'default'} label={u.role} />
-            <KBadge khorStatus={u.status === 'Activo' ? 'success' : 'default'} label={u.status} />
+            <KBadge status={u.role === 'Admin' ? 'info' : 'default'} label={u.role} />
+            <KBadge status={u.status === 'Activo' ? 'success' : 'default'} label={u.status} />
             <div style={{ display: 'flex', gap: 4 }}>
               <KButton variant="ghost" size="sm" icon={<Edit size={14} />} />
               <KButton variant="ghost" size="sm" icon={<Trash2 size={14} />} />

@@ -1,30 +1,114 @@
 import React from 'react';
-import { Alert } from 'antd';
-import type { AlertProps } from 'antd';
-import { khorTokens } from '../../../../theme/khor-theme';
+import { Info, CheckCircle2, AlertTriangle, XCircle, X } from 'lucide-react';
+import { cn } from '../../../../../imports/utils';
 
-const t = khorTokens;
-const font = t.typography.fontPrimary;
-
-export interface KAlertProps extends AlertProps {
-  title?: string;
+export interface KAlertProps {
+  type?: 'success' | 'error' | 'warning' | 'info' | 'teal';
+  title: string;
+  description?: string;
+  closable?: boolean;
+  onClose?: () => void;
+  showIcon?: boolean;
+  banner?: boolean;
+  action?: React.ReactNode;
+  icon?: React.ReactNode;
+  className?: string;
+  style?: React.CSSProperties;
 }
 
-export function KAlert({ 
-  title, message, style, 
-  variant, size, ...rest 
-}: KAlertProps & { variant?: any, size?: any }) {
+const icons = {
+  success: CheckCircle2,
+  error: XCircle,
+  warning: AlertTriangle,
+  info: Info,
+  teal: CheckCircle2,
+};
+
+const styles = {
+  success: "bg-khor-success-light border-khor-success/30 text-khor-success",
+  error: "bg-khor-error-light border-khor-error/30 text-khor-error",
+  warning: "bg-khor-warning-light border-khor-warning/30 text-khor-warning",
+  info: "bg-khor-info-light border-khor-info/30 text-khor-info",
+  teal: "bg-khor-teal-light border-khor-teal/30 text-khor-teal",
+};
+
+const iconStyles = {
+  success: "text-khor-success",
+  error: "text-khor-error",
+  warning: "text-khor-warning",
+  info: "text-khor-info",
+  teal: "text-khor-teal",
+};
+
+export function KAlert({
+  type = 'info',
+  title,
+  description,
+  closable,
+  onClose,
+  showIcon = true,
+  banner,
+  action,
+  icon,
+  className,
+  style,
+}: KAlertProps) {
+  const [visible, setVisible] = React.useState(true);
+  const Icon = icons[type];
+
+  if (!visible) return null;
+
+  const handleClose = () => {
+    setVisible(false);
+    onClose?.();
+  };
+
+  const ResolvedIcon = icon || (Icon ? <Icon className="w-5 h-5" /> : null);
+
   return (
-    <Alert
-      message={title || message}
-      style={{ 
-        fontFamily: font, 
-        borderRadius: t.radius.md, 
-        ...style 
-      }}
-      showIcon
-      {...rest}
-    />
+    <div
+      role="alert"
+      className={cn(
+        "relative flex w-full gap-3 transition-all animate-in fade-in zoom-in-95 duration-300 font-primary",
+        banner ? "p-3 border-0 rounded-none items-center" : "p-4 border rounded-lg",
+        styles[type],
+        className
+      )}
+      style={style}
+    >
+      {showIcon && ResolvedIcon && (
+        <div className={cn("shrink-0", !banner && "mt-0.5", iconStyles[type])}>
+          {ResolvedIcon}
+        </div>
+      )}
+      <div className={cn("flex flex-1", banner ? "flex-row items-center gap-2" : "flex-col gap-1")}>
+        <h4 className="text-sm font-semibold leading-tight">
+          {title}
+        </h4>
+        {description && (
+          <p className="text-xs opacity-90 leading-normal">
+            {description}
+          </p>
+        )}
+      </div>
+      {(action || closable) && (
+         <div className={cn("flex items-center gap-2 shrink-0")}>
+            {action && <div>{action}</div>}
+            {closable && (
+              <button
+                onClick={handleClose}
+                className={cn(
+                  "focus:outline-none opacity-50 hover:opacity-100 transition-opacity", 
+                  !banner && "absolute top-4 right-4",
+                  banner && "relative ml-2"
+                )}
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
+         </div>
+      )}
+    </div>
   );
 }
 

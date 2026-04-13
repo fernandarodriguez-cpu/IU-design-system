@@ -43,6 +43,92 @@ const changeTypeConfig: Record<ChangeType, { color: string; bg: string; icon: Re
 
 const changelog: VersionEntry[] = [
   {
+    version: '4.0.4',
+    date: '7 de abril de 2026',
+    codename: 'Core Mastery & IA-Ready',
+    summary: 'Estabilización final de la base del sistema. Restauración total de organismos, optimización del exportador de IA y limpieza absoluta de Storybook para dar paso a la Phase 6 (ADV01).',
+    highlights: [
+      'Restauración 100%: Todos los organismos (KTabs, KCalendar, KDrawer, etc.) están plenamente operativos.',
+      'Zero Deuda Técnica: Remoción completa de Storybook del bundle y la estructura de archivos.',
+      'IA Guide Mastery: El exportador de IA ahora incluye contexto real de Organismos para mejores prompts.',
+      'Roadmap Activado: Inicio de la arquitectura para el plugin de Figma en src/app/components/figma.'
+    ],
+    changes: [
+      { type: 'fixed', component: 'Organisms', description: 'Restauración del registro maestro y solución de errores 404 en componentes complejos.' },
+      { type: 'removed', description: 'Eliminación masiva de archivos .stories.tsx y dependencias de Storybook.' },
+      { type: 'changed', component: 'AIExportPage', description: 'Versión v4.0.4 y restauración de la importación dinámica de organismos.' },
+      { type: 'changed', component: 'HomePage', description: 'Actualización visual del Dashboard con indicadores de éxito de la Ola 15.' }
+    ],
+    stats: { added: 0, changed: 2, fixed: 2 },
+  },
+  {
+    version: '4.0.3',
+    date: '7 de abril de 2026',
+    codename: 'Production & Governance',
+    summary: 'Culminación de las Olas 13, 14 y 15. Establecimiento de gobernanza AAA para contraste y layout responsivo, y despliegue del ecosistema local de exportación orientado a agentes de IA.',
+    highlights: [
+      'Motor de alto contraste (.high-contrast) inyectado nativamente con detección automática de prefers-color-scheme desde OS.',
+      'Accessibility Core AAA: Focus rings asimétricos globales que escalan su grosor en modos de contraste alto, logrando paridad con normativas gubernamentales.',
+      'Gobernanza Responsiva: Refactorizado el sistema de celdas (KRow/KCol/KFlex) eliminando configuraciones manuales.',
+      'Ecosistema AI Extendido: JSZip export engine ahora compila el archivo "ai_system_prompt.txt" listo para inyectarse a un LLM.',
+      'SaaS Patterns fluidos: SaaSWizardPattern reconstruido para mobile-first.'
+    ],
+    changes: [
+      { type: 'added', component: 'JSZip Exporter', componentPath: '/', description: 'Expansión del algoritmo de descarga para compilar paramétricamente "ai_system_prompt.txt" y encapsular todo el design system.' },
+      { type: 'changed', component: 'theme.css', componentPath: '/theming', description: 'Nueva capa de infraestructura CSS para alto contraste con mutación automática de variables (--khor-neutral-50 a #000000).' },
+      { type: 'changed', component: 'KButton', componentPath: '/atoms/button', description: 'Remoción de la dependencia a "ring" de Tailwind para adherirse al Outline global dinámico estipulado para estándares WCAG.' },
+      { type: 'changed', component: 'KBadge', componentPath: '/atoms/badge', description: 'Token text reemplazado de neutral-700 a dynamic foreground para lecturas impecables en contextos invertidos o polarizados.' },
+      { type: 'added', component: 'SaaSWizardPattern', componentPath: '/patterns/saas-wizard', description: 'Arquitectura responsiva estricta añadida usando las primitivas KRow y KCol auditadas.' },
+      { type: 'breaking', description: 'Tokens visuales de foco eliminados del DOM de forma aislada, gobernanza transferida a theme.css central.' }
+    ],
+    stats: { added: 2, changed: 3, fixed: 1 },
+  },
+  {
+    version: '4.0.2',
+    date: '1 de abril de 2026',
+    codename: 'Recipes',
+    summary: 'Migración completa de templates legacy (TPL:) al nuevo sistema modular de SaaS Recipes de alta fidelidad. Resolución del error crítico de KDataTable. Exportación Markdown AI-ready en Theming en Vivo. Unificación del sidebar y eliminación de deuda técnica.',
+    highlights: [
+      '3 nuevas SaaS Recipes de producción: Login Profesional, Gestión CRUD y Onboarding Multi-Paso.',
+      'Fix crítico: "Columns require an id" — columnas KDataTable ahora usan id + accessorKey (TanStack standard).',
+      'Exportación .md para AI/LLMs en Theming en Vivo con especificación completa de tokens, variables CSS y guías.',
+      'Eliminación total de templates legacy (TPL:) del sidebar, rutas y código fuente.',
+      'Fix de colapso de paneles en Theming en Vivo (flexShrink).',
+      'Registry unificado con 11 patrones SaaS de alta fidelidad.',
+    ],
+    changes: [
+      { type: 'added', component: 'SaaSLoginPattern', componentPath: '/patterns/saas-login', description: 'Nuevo recipe de login profesional SaaS con KLoginForm, branding de marca y diseño premium con gradientes sutiles.' },
+      { type: 'added', component: 'SaaSCRUDTablePattern', componentPath: '/patterns/saas-crud', description: 'Nuevo recipe CRUD con KDataTable, KUserCell, KSparklineCell, KBreadcrumb y panel de estadísticas. Todas las columnas con id explícito (fix TanStack).' },
+      { type: 'added', component: 'SaaSWizardPattern', componentPath: '/patterns/saas-wizard', description: 'Nuevo recipe de onboarding multi-paso con KSteps, validación de formularios, selección de planes y pantalla de confirmación.' },
+      { type: 'fixed', component: 'KDataTable', componentPath: '/organisms/data-table', description: 'Resolución del error "Columns require an id when using a non-string header" — todas las columnas ahora incluyen id explícito según estándar TanStack Table.' },
+      { type: 'changed', component: 'ThemingPage', componentPath: '/theming', description: 'Nueva exportación Markdown AI-ready con especificación completa: colores, tipografía, sombras, radii, espaciado, guía para LLMs y ejemplo CSS.' },
+      { type: 'fixed', component: 'ThemingPage', componentPath: '/theming', description: 'Corrección del colapso de paneles laterales al expandir secciones (flexShrink: 0 en SectionCard).' },
+      { type: 'changed', component: 'AppShell', componentPath: '/', description: 'Eliminación de 4 entradas hardcoded TPL: del sidebar. Navegación ahora 100% dinámica desde el registry de patrones.' },
+      { type: 'removed', description: 'TemplatesPage.tsx eliminado y ruta /templates/:id removida de routes.ts.' },
+      { type: 'changed', component: 'patterns/index', componentPath: '/patterns', description: 'Registry unificado con 11 patrones: 2 Dashboard, 5 SaaS, 4 Datos/Feedback. Categorías actualizadas.' },
+    ],
+    stats: { added: 3, changed: 4, fixed: 2 },
+  },
+  {
+    version: '4.0.0',
+    date: '31 de marzo de 2026',
+    codename: 'Transformation',
+    summary: 'Lanzamiento oficial de Khor v4.0.0: La gran transformación Headless. Eliminación total de Ant Design y DayJS. El sistema ahora es 100% autónomo, basado en Radix UI y Tailwind CSS v4, logrando un control total sobre el DOM, el rendimiento y la accesibilidad.',
+    highlights: [
+      'Zero External UI Dependencies: Ant Design ha sido completamente reemplazado por componentes de arquitectura pura.',
+      'Agnostic Date Engine: Migración total de DayJS a date-fns + objetos Date nativos.',
+      'Tailwind CSS v4 Native: Aprovechamiento de las nuevas capacidades de la engine de Tailwind para un sistema de tokens ultra-mínimo.',
+      'Stable Molecules & Organisms: Estabilización de componentes complejos (TreeSelect, DatePicker, DataTable) en entornos 100% controlados.',
+    ],
+    changes: [
+      { type: 'breaking', description: 'Eliminación definitiva de ConfigProvider y cualquier rastro de la librería antd en el bundle.' },
+      { type: 'removed', description: 'Dependencias obsoletas removidas: antd, dayjs y plugins asociados.' },
+      { type: 'changed', component: 'AIExportPage', description: 'Guía IA actualizada para generar código libre de referencias legacy.' },
+      { type: 'changed', component: 'HomePage', description: 'Exportador ZIP alineado a la nueva arquitectura v4.0.0.' },
+    ],
+    stats: { added: 5, changed: 20, fixed: 15 },
+  },
+  {
     version: '3.2.1',
     date: '30 de marzo de 2026',
     codename: '100% Token Coverage',
