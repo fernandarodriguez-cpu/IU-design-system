@@ -1,0 +1,12 @@
+{
+  "name": "Khor Design System",
+  "id": "com.khor.designsystem.plugin",
+  "version": "0.5.0",
+  "description": "Khor Design System — Master Sheet Generator v0.5.0",
+  "permissions": [
+    "content:read",
+    "content:write",
+    "library:write"
+  ],
+  "code": "main-v030.js"
+}

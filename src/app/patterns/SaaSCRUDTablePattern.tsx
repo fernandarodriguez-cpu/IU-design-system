@@ -30,33 +30,33 @@ const mockData = [
 
 function SaaSCRUDTableInternal() {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24, fontFamily: t.typography.fontPrimary }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: t.spacing.lg, fontFamily: t.typography.fontPrimary }}>
       {/* Header with breadcrumbs and actions */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <div>
           <KBreadcrumb items={[{ title: 'Dashboard' }, { title: 'Gestión de Equipo' }]} />
-          <h2 style={{ margin: '8px 0 0', fontSize: 28, fontWeight: 800, color: 'var(--foreground)' }}>Empleados</h2>
-          <p style={{ margin: '4px 0 0', fontSize: 14, color: 'var(--muted-foreground)' }}>Lista completa de colaboradores activos en la organización.</p>
+          <h2 style={{ margin: `${t.spacing.sm}px 0 0`, fontSize: t.typography.h1.size, fontWeight: t.typography.fontWeights.extrabold, color: 'var(--foreground)' }}>Empleados</h2>
+          <p style={{ margin: `${t.spacing.xs}px 0 0`, fontSize: t.typography.bodyMd.size, color: 'var(--muted-foreground)' }}>Lista completa de colaboradores activos en la organización.</p>
         </div>
-        <div style={{ display: 'flex', gap: 8 }}>
-          <KButton variant="outline" icon={<Download size={16} />}>Exportar</KButton>
-          <KButton variant="primary" icon={<Plus size={16} />}>Nuevo Empleado</KButton>
+        <div style={{ display: 'flex', gap: t.spacing.sm }}>
+          <KButton variant="outline" icon={<Download size={t.icon.sm} />}>Exportar</KButton>
+          <KButton variant="primary" icon={<Plus size={t.icon.sm} />}>Nuevo Empleado</KButton>
         </div>
       </div>
 
       {/* Stats Summary Panel */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
-        <div style={{ padding: 20, borderRadius: 20, border: '1px solid var(--border)', backgroundColor: 'var(--card)' }}>
-          <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--muted-foreground)', marginBottom: 8 }}>Total Colaboradores</div>
-          <div style={{ fontSize: 24, fontWeight: 800 }}>1,248 <span style={{ fontSize: 13, color: '#4ADE80' }}>+12</span></div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: t.spacing.md }}>
+        <div style={{ padding: t.spacing.lg, borderRadius: t.radius.xl, border: '1px solid var(--border)', backgroundColor: 'var(--card)' }}>
+          <div style={{ fontSize: t.typography.small.size, fontWeight: t.typography.fontWeights.bold, color: 'var(--muted-foreground)', marginBottom: t.spacing.sm }}>Total Colaboradores</div>
+          <div style={{ fontSize: t.typography.h1.size, fontWeight: t.typography.fontWeights.extrabold }}>1,248 <span style={{ fontSize: t.typography.small.size, color: t.colors.feedback.success }}>+12</span></div>
         </div>
-        <div style={{ padding: 20, borderRadius: 20, border: '1px solid var(--border)', backgroundColor: 'var(--card)' }}>
-          <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--muted-foreground)', marginBottom: 8 }}>Tasa de Retención</div>
-          <div style={{ fontSize: 24, fontWeight: 800 }}>94.2% <span style={{ fontSize: 13, color: '#4ADE80' }}>+1.5%</span></div>
+        <div style={{ padding: t.spacing.lg, borderRadius: t.radius.xl, border: '1px solid var(--border)', backgroundColor: 'var(--card)' }}>
+          <div style={{ fontSize: t.typography.small.size, fontWeight: t.typography.fontWeights.bold, color: 'var(--muted-foreground)', marginBottom: t.spacing.sm }}>Tasa de Retención</div>
+          <div style={{ fontSize: t.typography.h1.size, fontWeight: t.typography.fontWeights.extrabold }}>94.2% <span style={{ fontSize: t.typography.small.size, color: t.colors.feedback.success }}>+1.5%</span></div>
         </div>
-        <div style={{ padding: 20, borderRadius: 20, border: '1px solid var(--border)', backgroundColor: 'var(--card)' }}>
-          <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--muted-foreground)', marginBottom: 8 }}>Presupuesto Nómina</div>
-          <div style={{ fontSize: 24, fontWeight: 800 }}>$2.4M <span style={{ fontSize: 13, color: 'var(--muted-foreground)' }}>mensual</span></div>
+        <div style={{ padding: t.spacing.lg, borderRadius: t.radius.xl, border: '1px solid var(--border)', backgroundColor: 'var(--card)' }}>
+          <div style={{ fontSize: t.typography.small.size, fontWeight: t.typography.fontWeights.bold, color: 'var(--muted-foreground)', marginBottom: t.spacing.sm }}>Presupuesto Nómina</div>
+          <div style={{ fontSize: t.typography.h1.size, fontWeight: t.typography.fontWeights.extrabold }}>$2.4M <span style={{ fontSize: t.typography.small.size, color: 'var(--muted-foreground)' }}>mensual</span></div>
         </div>
       </div>
 
@@ -101,9 +101,9 @@ function SaaSCRUDTableInternal() {
             id: 'actions',
             header: '',
             cell: () => (
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 4 }}>
-                <KButton variant="ghost" size="sm" icon={<Edit size={14} />} />
-                <KButton variant="ghost" size="sm" icon={<Trash2 size={14} />} />
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: t.spacing.xs }}>
+                <KButton variant="ghost" size="sm" icon={<Edit size={t.icon.xs} />} />
+                <KButton variant="ghost" size="sm" icon={<Trash2 size={t.icon.xs} />} />
               </div>
             )
           }
@@ -113,7 +113,7 @@ function SaaSCRUDTableInternal() {
         enableColumnToggle={true}
         enableExport={true}
         actions={
-          <KButton variant="secondary" size="sm" icon={<Filter size={14} />}>Filtros Avanzados</KButton>
+          <KButton variant="secondary" size="sm" icon={<Filter size={t.icon.xs} />}>Filtros Avanzados</KButton>
         }
       />
     </div>

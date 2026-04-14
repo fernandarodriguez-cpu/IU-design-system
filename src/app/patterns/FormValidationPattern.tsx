@@ -5,7 +5,10 @@ import { KButton } from '../components/design-system/atoms/KButton/index';
 import { KAlert } from '../components/design-system/atoms/KAlert/index';
 import { KFormField } from '../components/design-system/molecules/KFormField/index';
 import { KSelectField } from '../components/design-system/molecules/KSelectField/index';
+import { khorTokens } from '../theme/khor-theme';
 import { Pattern } from './types';
+
+const t = khorTokens;
 
 function FormValidationComponent() {
   const [form, setForm] = useState({ name: '', email: '', role: '' });
@@ -29,13 +32,13 @@ function FormValidationComponent() {
   };
 
   return (
-    <div style={{ maxWidth: 400, display: 'flex', flexDirection: 'column', gap: 16 }}>
+    <div style={{ maxWidth: t.sizing[64] * 6, display: 'flex', flexDirection: 'column', gap: t.spacing.md }}>
       {submitted && <KAlert type="success" title="Usuario creado exitosamente" showIcon />}
       <KFormField label="Nombre Completo" required error={errors.name}>
         <KInput placeholder="Juan Pérez" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} error={errors.name} />
       </KFormField>
       <KFormField label="Email" required error={errors.email}>
-        <KInput placeholder="juan@empresa.com" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} error={errors.email} prefix={<Mail size={16} />} />
+        <KInput placeholder="juan@empresa.com" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} error={errors.email} prefix={<Mail size={t.icon.sm} />} />
       </KFormField>
       <KFormField label="Rol" required error={errors.role}>
         <KSelectField placeholder="Seleccionar rol" options={[
@@ -44,9 +47,9 @@ function FormValidationComponent() {
           { label: 'Viewer', value: 'viewer' },
         ]} value={form.role} onChange={(v) => setForm({ ...form, role: String(v) })} />
       </KFormField>
-      <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
+      <div style={{ display: 'flex', gap: t.spacing.sm, justifyContent: 'flex-end' }}>
         <KButton variant="ghost" onClick={() => { setForm({ name: '', email: '', role: '' }); setErrors({}); }}>Cancelar</KButton>
-        <KButton variant="primary" icon={<Save size={16} />} onClick={handleSubmit}>Guardar</KButton>
+        <KButton variant="primary" icon={<Save size={t.icon.sm} />} onClick={handleSubmit}>Guardar</KButton>
       </div>
     </div>
   );
@@ -66,7 +69,7 @@ import { KInput, KButton, KAlert } from '@khor/atoms';
   <KInput placeholder="juan@empresa.com"
     value={form.email}
     onChange={(e) => setForm({...form, email: e.target.value})}
-    error={!!errors.email} icon={<Mail size={16} />}
+    error={!!errors.email} icon={<Mail size={t.icon.sm} />}
   />
 </KFormField>`,
 };

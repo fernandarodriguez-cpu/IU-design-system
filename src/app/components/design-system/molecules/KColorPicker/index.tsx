@@ -22,11 +22,11 @@ const presets = [
   khorStaticTokens.colors.error,
   khorStaticTokens.colors.warning,
   khorStaticTokens.colors.info,
-  '#000000',
-  '#666666',
-  '#999999',
-  '#CCCCCC',
-  '#FFFFFF',
+  '#000000', // Black
+  '#4A5568', // Neutral 500
+  '#718096', // Neutral 400
+  '#A0AEC0', // Neutral 300
+  '#FFFFFF', // White
 ];
 
 const sizeClasses = {
@@ -92,7 +92,7 @@ export function KColorPicker({
         </button>
       </KPopoverTrigger>
       
-      <KPopoverContent align="start" className="w-56 p-3 z-[100] bg-khor-surface-page border rounded-xl shadow-xl">
+      <KPopoverContent align="start" className="w-64 p-4 z-[100] bg-khor-surface-page border rounded-xl shadow-xl">
         <div className="flex flex-col gap-4">
           {/* Grid de Presets */}
           <div className="grid grid-cols-6 gap-2">
