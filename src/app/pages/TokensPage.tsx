@@ -63,6 +63,26 @@ const ColorCard = ({ variable, name, hex }: { variable: string; name: string; he
   </div>
 );
 
+const ColorScaleRow = ({ title, baseVariable, steps, hexMap }: { title: string; baseVariable: string; steps: number[]; hexMap?: Record<number, string> }) => (
+  <div className="p-6 border-b border-khor-border-muted last:border-0">
+    <h4 className="text-xs font-bold text-khor-secondary mb-4 uppercase tracking-wider">{title} Scale</h4>
+    <div className="grid grid-cols-2 sm:grid-cols-5 md:grid-cols-10 gap-2">
+      {steps.map(step => (
+        <div key={step} className="flex flex-col gap-2">
+          <div 
+            className="h-12 w-full rounded-lg border border-black/5 shadow-sm"
+            style={{ backgroundColor: `var(${baseVariable}-${step})` }}
+          />
+          <div className="px-1">
+            <span className="text-[9px] font-bold text-khor-secondary block">{step}</span>
+            <span className="text-[8px] text-khor-slate-400 font-mono block uppercase">{hexMap?.[step] || '--'}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
 const ShadowLayerInfo = ({ layer, x, y, blur, spread, color, opacity, inset }: { 
   layer: number; x: number; y: number; blur: number; spread: number; color: string; opacity: string; inset?: boolean 
 }) => (
@@ -136,7 +156,9 @@ export function TokensPage() {
           <div className="sticky top-10 space-y-1">
             <h4 className="text-[10px] font-bold text-khor-slate-400 uppercase tracking-widest px-4 mb-4">Taxonomía Completa</h4>
             {[
-              { icon: Droplets, label: 'Color', id: 'color' },
+              { icon: Droplets, label: 'Color Palette', id: 'color' },
+              { icon: Palette, label: 'Status & Feedback', id: 'status-feedback' },
+              { icon: Zap, label: 'Color Scales', id: 'color-scales' },
               { icon: CaseLower, label: 'Font Family', id: 'font-family' },
               { icon: ArrowUpDown, label: 'Font Size', id: 'font-size' },
               { icon: Bold, label: 'Font Weight', id: 'font-weight' },
@@ -165,22 +187,95 @@ export function TokensPage() {
         {/* Content Area */}
         <div className="lg:col-span-9">
           
-          {/* 1. COLOR */}
           <TokenSection 
             id="color" 
             icon={Droplets} 
-            title="Color Palette" 
+            title="Core Color Palette" 
             description="Escalas semánticas y neutros optimizados para accesibilidad y contraste."
           >
             <div className="p-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
-              <ColorCard name="Primary" variable="--khor-primary" hex="#E04D36" />
-              <ColorCard name="Secondary" variable="--khor-secondary" hex="#051758" />
-              <ColorCard name="Accent" variable="--khor-accent" hex="#FF9500" />
+              <ColorCard name="Primary (Khor Red)" variable="--khor-primary" hex="#E04D36" />
+              <ColorCard name="Secondary (Khor Navy)" variable="--khor-secondary" hex="#051758" />
+              <ColorCard name="Accent (Khor Orange)" variable="--khor-accent" hex="#FF9500" />
               <ColorCard name="White" variable="--khor-feedback-white" hex="#FFFFFF" />
-              <div className="col-span-full pt-6 border-t border-khor-border-muted" />
+              <div className="col-span-full py-4"><h3 className="text-sm font-bold text-khor-secondary">Neutral (Slate) Palette</h3></div>
               {[50, 100, 200, 300, 400, 500, 600, 700, 800, 900].map(n => (
                 <ColorCard key={n} name={`Neutral ${n}`} variable={`--khor-neutral-${n}`} />
               ))}
+              <div className="col-span-full py-4 border-t border-khor-border-muted mt-4"><h3 className="text-sm font-bold text-khor-secondary">Neutral Secondary (Blue-Grey) Palette</h3></div>
+              {[50, 100, 200, 300, 400, 500, 600, 700, 800, 900].map(n => (
+                <ColorCard key={n} name={`Sec. Neutral ${n}`} variable={`--khor-neutral-secondary-${n}`} />
+              ))}
+            </div>
+          </TokenSection>
+
+          {/* 1.1 STATUS & FEEDBACK */}
+          <TokenSection 
+            id="status-feedback" 
+            icon={Palette} 
+            title="Status & Feedback" 
+            description="Colores de estado core y variantes extendidas v10.4."
+          >
+            <div className="p-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+                <ColorCard name="Success" variable="--khor-success" hex="#2E7D32" />
+                <ColorCard name="Error" variable="--khor-error" hex="#D32F2F" />
+                <ColorCard name="Warning" variable="--khor-warning" hex="#FF9500" />
+                <ColorCard name="Info" variable="--khor-info" hex="#051758" />
+              </div>
+
+              <div className="col-span-full mb-6 border-t border-khor-border-muted pt-8">
+                <h3 className="text-md font-bold text-khor-secondary mb-2">Feedback Extendido v10.4</h3>
+                <p className="text-xs text-khor-slate-500 mb-6">Paleta premium para estados complejos y categorización visual avanzada.</p>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6">
+                  <ColorCard name="Processing" variable="--khor-feedback-processing" hex="#0EA5E9" />
+                  <ColorCard name="Volcano" variable="--khor-feedback-volcano" hex="#EA580C" />
+                  <ColorCard name="Gold" variable="--khor-feedback-gold" hex="#EAB308" />
+                  <ColorCard name="Lime" variable="--khor-feedback-lime" hex="#84CC16" />
+                  <ColorCard name="Purple" variable="--khor-feedback-purple" hex="#A855F7" />
+                </div>
+              </div>
+            </div>
+          </TokenSection>
+
+          {/* 1.2 COLOR SCALES */}
+          <TokenSection 
+            id="color-scales" 
+            icon={Zap} 
+            title="Functional Color Scales" 
+            description="Escalas completas de 50 a 900 para diseño de componentes complejos y estados."
+          >
+            <div className="flex flex-col bg-white">
+              <ColorScaleRow 
+                title="Success" 
+                baseVariable="--khor-success" 
+                steps={[50, 100, 200, 300, 400, 500, 600, 700, 800, 900]} 
+                hexMap={{ 50: '#E8F5E9', 100: '#C8E6C9', 200: '#A5D6A7', 300: '#81C784', 400: '#66BB6A', 500: '#4CAF50', 600: '#43A047', 700: '#2E7D32', 800: '#1B5E20', 900: '#0D3E12' }}
+              />
+              <ColorScaleRow 
+                title="Error" 
+                baseVariable="--khor-error" 
+                steps={[50, 100, 200, 300, 400, 500, 600, 700, 800, 900]} 
+                hexMap={{ 50: '#FFEBEE', 100: '#FFCDD2', 200: '#EF9A9A', 300: '#E57373', 400: '#EF5350', 500: '#F44336', 600: '#E53935', 700: '#B71C1C', 800: '#C62828', 900: '#B71C1C' }}
+              />
+              <ColorScaleRow 
+                title="Warning" 
+                baseVariable="--khor-warning" 
+                steps={[50, 100, 200, 300, 400, 500, 600, 700, 800, 900]} 
+                hexMap={{ 50: '#FFF4E5', 100: '#FFECB3', 200: '#FFE082', 300: '#FFD54F', 400: '#FFCA28', 500: '#FFC107', 600: '#FFB300', 700: '#E07800', 800: '#FFA000', 900: '#FF8F00' }}
+              />
+              <ColorScaleRow 
+                title="Info" 
+                baseVariable="--khor-info" 
+                steps={[50, 100, 200, 300, 400, 500, 600, 700, 800, 900]} 
+                hexMap={{ 50: '#E3F2FD', 100: '#BBDEFB', 200: '#90CAF9', 300: '#64B5F6', 400: '#42A5F5', 500: '#2196F3', 600: '#1E88E5', 700: '#1565C0', 800: '#1565C0', 900: '#0D47A1' }}
+              />
+              <ColorScaleRow 
+                title="Teal" 
+                baseVariable="--khor-teal" 
+                steps={[50, 100, 200, 300, 400, 500, 600, 700, 800, 900]} 
+                hexMap={{ 50: '#E0F2F2', 100: '#B2DFDF', 200: '#80CBCB', 300: '#4DB6B6', 400: '#26A6A6', 500: '#009696', 600: '#008989', 700: '#0D7D7D', 800: '#006969', 900: '#004D4D' }}
+              />
             </div>
           </TokenSection>
 
