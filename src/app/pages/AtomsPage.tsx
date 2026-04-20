@@ -32,6 +32,7 @@ import { KQRCode } from '../components/design-system/atoms/KQRCode/index';
 import { KWatermark } from '../components/design-system/atoms/KWatermark/index';
 import { KFlex } from '../components/design-system/atoms/KFlex/index';
 import { KRow, KCol } from '../components/design-system/atoms/KGrid/index';
+import { KIcon } from '../components/design-system/atoms/KIcon/index';
 import { KTooltip } from '../components/design-system/molecules/KTooltip/index';
 import { KPagination } from '../components/design-system/organisms/KPagination/index';
 import {
@@ -61,6 +62,7 @@ function ButtonPlayground() {
   const [showIcon, setShowIcon] = useState(true);
   const [iconPosition, setIconPosition] = useState<'start' | 'end'>('start');
   const [href, setHref] = useState('');
+  const [btnColor, setBtnColor] = useState<any>('default');
   
   const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
   const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
@@ -72,9 +74,15 @@ function ButtonPlayground() {
         <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <div>
-            <label style={ctrl}>Variante</label>
+            <label style={ctrl}>Variante (Basada en AntD)</label>
             <select value={variant} onChange={(e) => setVariant(e.target.value)} style={sel}>
-              {['primary', 'secondary', 'outline', 'ghost', 'danger', 'navy', 'dashed', 'link', 'text'].map((v) => <option key={v} value={v}>{v}</option>)}
+              {['primary', 'secondary', 'outline', 'ghost', 'danger', 'navy', 'dashed', 'link', 'text', 'filled'].map((v) => <option key={v} value={v}>{v}</option>)}
+            </select>
+          </div>
+          <div>
+            <label style={ctrl}>Color (Total Tokenization v10.6)</label>
+            <select value={btnColor} onChange={(e) => setBtnColor(e.target.value)} style={sel}>
+              {['default', 'primary', 'secondary', 'danger', 'processing', 'volcano', 'gold', 'lime', 'purple'].map((v) => <option key={v} value={v}>{v}</option>)}
             </select>
           </div>
           <div>
@@ -141,6 +149,7 @@ function ButtonPlayground() {
       <div style={{ flex: 1, minWidth: 280, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32, backgroundColor: ghost ? khorTokens.colors.brand.navy : khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
         <KButton 
           variant={variant} 
+          color={btnColor === 'default' ? undefined : btnColor}
           size={size} 
           shape={shape} 
           htmlType={htmlType} 
@@ -161,6 +170,49 @@ function ButtonPlayground() {
   );
 }
 
+function IconPlayground() {
+  const [name, setName] = useState<any>('Sparkles');
+  const [size, setSize] = useState<any>('md');
+  const [color, setColor] = useState<any>(khorTokens.colors.brand.primary);
+  
+  const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
+  const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
+
+  return (
+    <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
+      <div style={{ flex: 1, minWidth: 280 }}>
+        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Icon Controls</h4>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div>
+            <label style={ctrl}>Nombre del Icono (Lucide)</label>
+            <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Ej: User, Bell, Home" style={sel} />
+          </div>
+          <div>
+            <label style={ctrl}>Tamaño (Escala Elite)</label>
+            <select value={size} onChange={(e) => setSize(e.target.value)} style={sel}>
+              {['xs', 'sm', 'md', 'lg', 'xl', '2xl'].map(s => <option key={s} value={s}>{s.toUpperCase()}</option>)}
+            </select>
+          </div>
+          <div>
+            <label style={ctrl}>Color</label>
+            <input type="text" value={color} onChange={(e) => setColor(e.target.value)} style={sel} />
+            <div style={{ display: 'flex', gap: 4, marginTop: 8 }}>
+              {['--khor-primary', '--khor-secondary', '--khor-error', '--khor-success'].map(c => (
+                <div key={c} onClick={() => setColor(`var(${c})`)} style={{ width: 20, height: 20, borderRadius: 4, backgroundColor: `var(${c})`, cursor: 'pointer', border: '1px solid rgba(0,0,0,0.1)' }} />
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style={{ flex: 1, minWidth: 280, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
+        <div style={{ padding: 24, backgroundColor: 'white', borderRadius: 12, border: `1px solid ${khorTokens.colors.neutral[200]}`, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+          <KIcon name={name} size={size} color={color} />
+          <KText variant="body-xs" color="muted">{name} - {size}</KText>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function InputPlayground() {
   const [val, setVal] = useState('');
@@ -200,8 +252,12 @@ function InputPlayground() {
             </div>
           </div>
           <div>
-            <label style={ctrl}>Mensaje de Error</label>
-            <input value={error} onChange={(e) => setError(e.target.value)} placeholder="Dejar vacío para sin error" style={sel} />
+            <label style={ctrl}>Estado (v10.6)</label>
+            <select value={error ? 'error' : 'default'} onChange={(e) => setError(e.target.value === 'error' ? 'Error detectado' : '')} style={sel}>
+              <option value="default">Default</option>
+              <option value="error">Error</option>
+              <option value="warning">Warning</option>
+            </select>
           </div>
           <div style={{ display: 'flex', gap: 12 }}>
             <div style={{ flex: 1 }}>
@@ -544,6 +600,12 @@ function AvatarPlayground() {
           <div><label style={ctrl}>Tamaño</label><select value={size} onChange={(e) => setSize(e.target.value)} style={sel}>{['sm','md','lg','xl'].map(s=><option key={s}>{s}</option>)}</select></div>
           <div><label style={ctrl}>Forma (shape)</label><select value={shape} onChange={(e) => setShape(e.target.value)} style={sel}>{['circle','square'].map(s=><option key={s}>{s}</option>)}</select></div>
           <div><label style={ctrl}>Estado de Presencia</label><select value={status} onChange={(e) => setStatus(e.target.value)} style={sel}>{['online','offline','busy','away','none'].map(s=><option key={s}>{s}</option>)}</select></div>
+          <div><label style={ctrl}>Fondo (Preset v10.6)</label>
+            <select value={customColor} onChange={(e) => setCustomColor(e.target.value)} style={sel}>
+              <option value="">Default (Neutral)</option>
+              {['primary', 'secondary', 'accent', 'success', 'warning', 'error', 'info', 'teal', 'processing', 'volcano', 'gold', 'lime', 'purple'].map(c => <option key={c} value={c}>{c}</option>)}
+            </select>
+          </div>
           <div><label style={ctrl}>Gap (auto-size texto): {gap}px</label><input type="range" min={0} max={12} value={gap} onChange={(e) => setGap(Number(e.target.value))} style={{ width: '100%' }} /></div>
           <div><label style={ctrl}>Color personalizado</label><input value={customColor} onChange={(e) => setCustomColor(e.target.value)} placeholder="#E04D36, purple, etc." style={sel}/></div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 4 }}>
@@ -2672,6 +2734,29 @@ export const atoms: Record<string, AtomEntry> = {
       { name: 'children', type: 'ReactNode', description: 'Contenido a scrollear.' },
     ],
     guidelines: ['Usa para contenedores con contenido que excede su tamaño.', 'Evita scrollbars en elementos minúsculos.'],
+  },
+  icon: {
+    id: 'icon',
+    name: 'KIcon',
+    description: 'Átomo base para iconografía. Wrapper de Lucide React que implementa la escala Elite de tamaños (XS a 2XL) y tokens de color sistémicos.',
+    preview: (
+      <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+        <KIcon name="Sparkles" size="xl" color="var(--khor-primary)" />
+        <KIcon name="Zap" size="lg" color="var(--khor-secondary)" />
+        <KIcon name="CheckCircle" size="md" color="var(--khor-success)" />
+      </div>
+    ),
+    playground: <IconPlayground />,
+    code: `import { KIcon } from '@khor/design-system/atoms/index';\n\n<KIcon name="Sparkles" size="md" color="var(--khor-primary)" />`,
+    filename: 'KIcon/index.tsx',
+    props: [
+      { name: 'name', type: 'string', required: true, description: 'Nombre de la propiedad exportada por lucide-react.' },
+      { name: 'size', type: "'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl'", default: "'md'", description: 'Tamaño basado en tokens Elite.' },
+      { name: 'color', type: 'string', description: 'Color CSS o Token.' },
+      { name: 'className', type: 'string', description: 'Clases adicionales.' },
+    ],
+    guidelines: ['Usa iconos para reducir carga cognitiva.', 'Mantén el tamaño consistente en la misma fila.', 'Acompaña siempre de aria-label si no hay texto.'],
+    aiNotes: 'Componente obligatorio para toda iconografía Lucide. NO importar de lucide-react directamente.'
   }
 };
 

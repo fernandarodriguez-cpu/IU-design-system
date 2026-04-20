@@ -43,6 +43,44 @@ const changeTypeConfig: Record<ChangeType, { color: string; bg: string; icon: Re
 
 const changelog: VersionEntry[] = [
   {
+    version: '4.1.1',
+    date: '20 de abril de 2026',
+    codename: 'Elite Refinement',
+    summary: 'Fase de refinamiento final para la arquitectura SaaS. Integración de paletas de datos secuenciales, estados de validación semánticos avanzados y el nuevo sistema de iconografía centralizado basado en Lucide.',
+    highlights: [
+      'DataViz Mastery: Implementación de la paleta Chart Elite de 12 colores optimizada para Recharts.',
+      'Semantic Form States: Tokens específicos para Success, Error y Warning con paridad de branding.',
+      'Iconography System: Creación del átomo KIcon y el Explorador de Iconos para estandarizar el uso de Lucide.',
+      'AI Export Audit: Sincronización del motor de exportación con la taxonomía v4.1.1.'
+    ],
+    changes: [
+      { type: 'added', component: 'KIcon', description: 'Wrapper atómico oficial para lucide-react con escala de tamaños tokenizada (XS-2XL).' },
+      { type: 'added', component: 'IconExplorerPage', description: 'Nueva herramienta interna para búsqueda y visualización de 1,400+ iconos del sistema.' },
+      { type: 'changed', component: 'Chart Palette', description: 'Expansión de la paleta a 12 colores con nombres semánticos (Primary, Secondary, Accent, etc.).' },
+      { type: 'added', component: 'Form Tokens', description: 'Tokens semánticos de validación: --khor-form-error-bg, border, y text.' },
+    ],
+    stats: { added: 3, changed: 1, fixed: 0 },
+  },
+  {
+    version: '4.1.0',
+    date: '10 de abril de 2026',
+    codename: 'Elite SaaS Architecture',
+    summary: 'Evolución inicial hacia una arquitectura Enterprise SaaS. Introducción de tokens de Layout (Breakpoints), escalas de Z-Index y Motion Easings avanzados.',
+    highlights: [
+      'Elite SaaS Architect: Introducción de Layout Breakpoints (sm-2xl) para interfaces responsivas.',
+      'Z-Index Layering: Establecimiento de una escala rigurosa de 7 capas.',
+      'Motion Mastery: Curvas de aceleración estandarizadas (Emphasized, Decelerate).',
+      'Page Recipes: Blueprints de alta fidelidad (KAppShell, KCRUDPage, KDashboardGrid) integrados en AI Guide.'
+    ],
+    changes: [
+      { type: 'added', component: 'Layout Tokens', description: 'Nuevos tokens responsivos (--khor-breakpoint-*) y dimensiones de container/sidebar.' },
+      { type: 'added', component: 'Z-Index Scale', description: 'Sistema de capas unificado (--khor-z-*) para dropdowns y modales.' },
+      { type: 'added', component: 'Motion Tokens', description: 'Escala de duraciones y curvas de easing bezier personalizadas.' },
+      { type: 'changed', component: 'AIExportPage', description: 'Inyección de Page Recipes y sincronización de versión v4.1.0.' },
+    ],
+    stats: { added: 3, changed: 1, fixed: 0 },
+  },
+  {
     version: '4.0.4',
     date: '7 de abril de 2026',
     codename: 'Core Mastery & IA-Ready',

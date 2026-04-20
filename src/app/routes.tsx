@@ -13,25 +13,27 @@ import { AIExportPage } from './pages/AIExportPage';
 import { PatternsPage } from './pages/PatternsPage';
 import { ThemingPage } from './pages/ThemingPage';
 import { ErrorPage } from './pages/ErrorPage';
+import { IconExplorerPage } from './pages/IconExplorerPage';
 
 export const router = createBrowserRouter([
   {
     path: '/',
-    Component: AppShell,
+    element: <AppShell />,
     errorElement: <ErrorPage />,
     children: [
-      { index: true, Component: HomePage },
-      { path: 'tokens', Component: TokensPage },
-      { path: 'atoms/:id', Component: AtomsPage },
-      { path: 'molecules/:id', Component: MoleculesPage },
-      { path: 'organisms/:id?', Component: OrganismsPage },
-      { path: 'guardian', Component: KhorGuardianPage },
-      { path: 'patterns', Component: PatternsPage },
-      { path: 'patterns/:id', Component: PatternsPage },
-      { path: 'theming', Component: ThemingPage },
-      { path: 'changelog', Component: ChangelogPage },
-      { path: 'figma-export', Component: FigmaExportPage },
-      { path: 'ai-export', Component: AIExportPage },
+      { index: true, element: <HomePage /> },
+      { path: 'tokens', element: <TokensPage /> },
+      { path: 'atoms/:id', element: <AtomsPage /> },
+      { path: 'molecules/:id', element: <MoleculesPage /> },
+      { path: 'organisms/:id', element: <OrganismsPage /> },
+      { path: 'patterns', element: <PatternsPage /> },
+      { path: 'patterns/:id', element: <PatternsPage /> },
+      { path: 'theming', element: <ThemingPage /> },
+      { path: 'guardian', element: <KhorGuardianPage /> },
+      { path: 'icons', element: <IconExplorerPage /> },
+      { path: 'figma-export', element: <FigmaExportPage /> },
+      { path: 'ai-export', element: <AIExportPage /> },
+      { path: 'changelog', element: <ChangelogPage /> },
     ],
   },
 ]);

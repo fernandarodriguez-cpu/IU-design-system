@@ -1,6 +1,7 @@
 export { default as KButton } from './KButton';
 export { default as KButtonGroup } from './KButtonGroup';
 export { default as KInput, KInputPassword } from './KInput';
+export * from './KIcon';
 export { default as KSearchInput } from './KSearchInput';
 export { default as KLabel } from './KLabel';
 export { default as KTextArea } from './KTextArea';

@@ -168,6 +168,7 @@ const navigation: NavSection[] = [
     icon: <Sparkles size={18} strokeWidth={2} />,
     items: [
       { label: 'Theming en Vivo', path: '/theming' },
+      { label: 'Explorador de Iconos', path: '/icons' },
       { label: 'Khor Guardian (A11y)', path: '/guardian' },
       { label: 'Exportar a Figma', path: '/figma-export' },
       { label: 'Guía para IA', path: '/ai-export' },
@@ -456,7 +457,7 @@ export function AppShell() {
               backgroundColor: 'var(--khor-success-light)',
               color: 'var(--khor-success)',
             }}>
-              v4.0.4
+              v4.1.1
             </span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>

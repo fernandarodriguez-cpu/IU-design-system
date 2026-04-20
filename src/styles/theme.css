@@ -211,6 +211,95 @@
   --khor-rotate-180: 180deg;
   --khor-rotate-270: 270deg;
 
+  /* ── Motion & Easing (v4.1.0 Standard) ── */
+  --khor-duration-instant: 75ms;
+  --khor-duration-fast: 150ms;
+  --khor-duration-normal: 250ms;
+  --khor-duration-slow: 450ms;
+  --khor-duration-slower: 700ms;
+  --khor-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --khor-easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
+  --khor-easing-decelerate: cubic-bezier(0, 0, 0.2, 1);
+  --khor-easing-accelerate: cubic-bezier(0.4, 0, 1, 1);
+  --khor-easing-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+  /* Elite SaaS Architecture Icons */
+  --khor-icon-xs: 12px;
+  --khor-icon-sm: 16px;
+  --khor-icon-md: 20px;
+  --khor-icon-lg: 24px;
+  --khor-icon-xl: 32px;
+  --khor-icon-2xl: 48px;
+
+  /* Form Validation Semantic Tokens */
+  --khor-form-error-bg: #FFEBEE;
+  --khor-form-error-border: #D32F2F;
+  --khor-form-error-text: #B71C1C;
+  --khor-form-success-bg: #E8F5E9;
+  --khor-form-success-border: #2E7D32;
+  --khor-form-success-text: #1B5E20;
+  --khor-form-warning-bg: #FFF3E0;
+  --khor-form-warning-border: #FF9500;
+  --khor-form-warning-text: #E65100;
+  --khor-form-focus-ring: var(--khor-primary);
+
+  /* Elite Data Visualization Palette */
+  --khor-chart-primary: #E04D36;
+  --khor-chart-secondary: #051758;
+  --khor-chart-accent: #FF9500;
+  --khor-chart-success: #2E7D32;
+  --khor-chart-error: #D32F2F;
+  --khor-chart-info: #1976D2;
+  --khor-chart-teal: #008080;
+  --khor-chart-purple: #9C27B0;
+  --khor-chart-pink: #E91E63;
+  --khor-chart-cyan: #00BCD4;
+  --khor-chart-amber: #FFC107;
+  --khor-chart-gray: #9E9E9E;
+
+  /* ── Z-Index Scale (App Architecture) ── */
+  --khor-z-base: 0;
+  --khor-z-dropdown: 1000;
+  --khor-z-sticky: 1100;
+  --khor-z-overlay: 1200;
+  --khor-z-drawer: 1300;
+  --khor-z-modal: 1400;
+  --khor-z-popover: 1500;
+  --khor-z-tooltip: 1600;
+  --khor-z-toast: 1700;
+
+  /* ── Mobile & Safe Areas ── */
+  --khor-safe-area-top: env(safe-area-inset-top, 0px);
+  --khor-safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  --khor-touch-target-min: 44px;
+  --khor-touch-target-comfortable: 48px;
+  --khor-bottom-nav-h: 64px;
+
+  /* ── Chart Palette (Elite Scale) ── */
+  --khor-chart-1: var(--khor-primary);
+  --khor-chart-2: var(--khor-secondary);
+  --khor-chart-3: var(--khor-accent);
+  --khor-chart-4: var(--khor-success);
+  --khor-chart-5: var(--khor-error);
+  --khor-chart-6: var(--khor-info);
+  --khor-chart-7: var(--khor-teal);
+  --khor-chart-8: var(--khor-feedback-purple);
+  --khor-chart-9: var(--khor-feedback-volcano);
+  --khor-chart-10: var(--khor-feedback-gold);
+  --khor-chart-11: var(--khor-feedback-lime);
+  --khor-chart-12: var(--khor-neutral-500);
+
+  /* ── Form States (Semantic) ── */
+  --khor-form-error-bg: var(--khor-error-50);
+  --khor-form-error-border: var(--khor-error-500);
+  --khor-form-error-text: var(--khor-error-700);
+  --khor-form-success-bg: var(--khor-success-50);
+  --khor-form-success-border: var(--khor-success-500);
+  --khor-form-success-text: var(--khor-success-700);
+  --khor-form-warning-bg: var(--khor-warning-50);
+  --khor-form-warning-border: var(--khor-warning-500);
+  --khor-form-warning-text: var(--khor-warning-700);
+
   /* ── Khor Stroke Width ── */
   --khor-stroke-0: 0px;
   --khor-stroke-1: 1px;

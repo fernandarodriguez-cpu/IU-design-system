@@ -66,37 +66,26 @@ pnpm add @radix-ui/react-popover @radix-ui/react-accordion
 pnpm add @radix-ui/react-tabs @radix-ui/react-select
 pnpm add @radix-ui/react-progress @radix-ui/react-radio-group
 pnpm add lucide-react recharts sonner
-pnpm add tailwindcss @tailwindcss/vite
-\`\`\`
-
-## Arquitectura V4 (Headless)
-Khor v4 ha migrado a una arquitectura 100% agnóstica para eliminar la dependencia de Ant Design y DayJS.
-- **UI Core:** Radix UI Primitives
-- **Styling:** Tailwind CSS v4
-- **Date Engine:** date-fns
-
-
-## Fuentes
-
-\`\`\`css
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
-\`\`\`
+pnpm add tailwindcss @tailwindcss/vite## Arquitectura V4.1.0 (Elite SaaS)
+Khor v4.1.0 ha alcanzado la madurez total, integrando tokens de Layout, Z-Index y Motion para construcción de aplicaciones complejas.
+- **UI Core:** Radix UI Primitives (Headless)
+- **Styling:** Tailwind CSS v4 + Khor Design Tokens
+- **Atomic Engine:** 100% Technical Parity with Figma/Penpot
 
 ## Estructura
 
 \`\`\`
 khor-design-system/
 ├── theme/
-│   └── khor-theme.ts        ← Tokens de diseño
+│   └── khor-theme.ts        ← Tokens de diseño (v4.1.0)
 ├── atoms/
-│   └── index.tsx            ← 30 átomos
+│   └── index.tsx            ← 32 átomos auditados
 ├── molecules/
-│   └── index.tsx            ← 33 moléculas
+│   └── index.tsx            ← 33 moléculas auditadas
 ├── organisms/
-│   └── index.tsx            ← 24 organismos
+│   └── index.tsx            ← 24 organismos auditados
 ├── patterns/
-│   └── index.ts             ← 8 patrones modulares
+│   └── index.ts             ← 11 patrones SaaS de alta fidelidad
 └── README.md
 \`\`\`
 
@@ -106,16 +95,18 @@ khor-design-system/
 import { KButton, KInput, KBadge } from './atoms';
 import { KFormField, KStatCard } from './molecules';
 import { KDataTable, kToast } from './organisms';
-import { DashboardStatsPattern, LoginFormPattern } from './patterns';
+import { SidebarPattern, DashboardStatsPattern } from './patterns';
 \`\`\`
 
-## Colores de Marca
+## Colores de Marca y Feedback
 
 | Token     | Hex       | Uso                         |
 |-----------|-----------|------------------------------|
 | Primary   | #E04D36   | CTAs, acciones principales   |
-| Navy      | #051758   | Sidebar, títulos, navegación |
+| Secondary | #051758   | Sidebar, títulos, navegación |
 | Accent    | #FF9500   | Warnings, destacados         |
+| Success   | #2E7D32   | Estados positivos            |
+| Error     | #D32F2F   | Estados críticos             |
 
 ## Componentes
 
@@ -123,16 +114,14 @@ import { DashboardStatsPattern, LoginFormPattern } from './patterns';
 KAffix, KAlert, KAvatar, KAvatarGroup, KBadge, KButton, KButtonGroup, KCheckbox, KCheckableTag, KCol, KDivider, KFlex, KFloatButton, KImage, KInput, KInputPassword, KInputSearch, KProgress, KQRCode, KRadio, KRate, KRow, KSkeleton, KSlider, KSpace, KSpin, KSwitch, KTag, KTextArea, KTooltip, KTypography, KWatermark
 
 ### Moléculas (33)
-KAccordion, KAnchor, KAutocomplete, KBreadcrumb, KCascader, KColorPicker, KDatePicker, KDateRangePicker, KDescriptions, KDividerExtended, KDropdownMenu, KEmptyState, KFormField, KInputNumber, KList, KMentions, KNavItem, KPopconfirm, KPopover, KResult, KSearchInput, KSegmented, KSelectAdvanced, KSelectField, KStatCard, KStatistic, KSteps, KTimeline, KTimePicker, KTransfer, KTreeSelect, KUserCell, KDividerExtended
+KAccordion, KAnchor, KAutocomplete, KBreadcrumb, KCascader, KColorPicker, KDatePicker, KDateRangePicker, KDescriptions, KDividerExtended, KDropdownMenu, KEmptyState, KFormField, KInputNumber, KList, KMentions, KNavItem, KPopconfirm, KPopover, KResult, KSearchInput, KSegmented, KSelectAdvanced, KSelectField, KStatCard, KStatistic, KSteps, KTimeline, KTimePicker, KTransfer, KTreeSelect, KUserCell
 
 ### Organismos (24)
 KCalendar, KCardSection, KCarousel, KCommandBar, KDataTable, KDrawer, KForm, KFormItem, KFormList, KLoginForm, KModal, KModalConfirm, KNotification, KMessage, KPagination, KSparklineCell, KTabs, kToast, KToastProvider, KTour, KTree, KUpload, kNotification, kMessage
 
-### Templates (4)
-Login, Dashboard, CRUD Table, Formulario Multi-Paso
-
-### Patrones Modulares (8)
-DashboardStatsPattern, FormValidationPattern, FilterableListPattern, LoginFormPattern, PaginatedTablePattern, WizardPattern, SettingsPattern, SidebarPattern
+### Patrones Modulares (11)
+DashboardStatsPattern, FormValidationPattern, FilterableListPattern, LoginFormPattern, PaginatedTablePattern, WizardPattern, SettingsPattern, SidebarPattern, AdvancedFiltersPattern, BillingPattern, SaaSLoginPattern
+bleListPattern, LoginFormPattern, PaginatedTablePattern, WizardPattern, SettingsPattern, SidebarPattern
 `);
 
   // Theme tokens
@@ -284,7 +273,7 @@ export const categories = ['Todos', ...new Set(patterns.map((p) => p.category))]
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'khor-design-system-v4.0.4.zip';
+  a.download = 'khor-design-system-v4.1.0.zip';
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
@@ -328,10 +317,10 @@ export function HomePage() {
         }} />
         <div style={{ position: 'relative', zIndex: 1 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-            <KTag color="volcano">v4.0.4 Stable</KTag>
-            <KTag color="volcano">Core System Mastery</KTag>
-            <KTag color="#FF9500">ADV01: Figma Sync</KTag>
-            <KTag color="volcano">IA Ready</KTag>
+            <KTag color="volcano">v4.1.0 Elite</KTag>
+            <KTag color="volcano">SaaS Architecture</KTag>
+            <KTag color="#FF9500">ADV01: High-Fidelity</KTag>
+            <KTag color="volcano">IA Guide Ready</KTag>
           </div>
           <h1 style={{ margin: '0 0 12px', fontSize: 38, fontWeight: 700, color: '#fff' }}>
             Khor Design System

@@ -858,6 +858,11 @@ function TimelinePlayground() {
     { label: '2023-10-08', children: 'Error en validación bancaria', color: 'error', dot: <AlertTriangle size={12} className="text-white" /> },
     { label: '2023-10-10', children: 'Primer depósito realizado exitosamente', color: 'success' },
     { label: '2023-10-15', children: 'Suscripción Premium activada', color: 'primary' },
+    { label: '2023-10-18', children: 'Procesando KYC', color: 'processing' },
+    { label: '2023-10-20', children: 'Alerta de seguridad detectada', color: 'volcano' },
+    { label: '2023-10-21', children: 'Beneficio Gold activado', color: 'gold' },
+    { label: '2023-10-22', children: 'Estado de salud: Saludable', color: 'lime' },
+    { label: '2023-10-25', children: 'Escalado con IA completado', color: 'purple' },
   ];
 
   const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };

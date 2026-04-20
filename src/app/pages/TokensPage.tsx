@@ -1,6 +1,6 @@
 import React from 'react';
 import { khorTokens } from '../theme/khor-theme';
-import { KTypography, KTag, KBadge } from '../components/design-system/atoms';
+import { KTypography, KTag, KBadge, KIcon } from '../components/design-system/atoms';
 import { KCardSection } from '../components/design-system/organisms';
 import { 
   SquareDashed, Droplets, Expand, CaseLower, ArrowUpDown, Bold, 
@@ -141,8 +141,22 @@ export function TokensPage() {
     <div className="max-w-7xl mx-auto py-16 px-8">
       {/* Header */}
       <div className="mb-20 text-center">
-        <KBadge label="v10.5 Stable" status="success" className="mb-4" />
-        <h1 className="text-5xl font-extrabold text-khor-secondary mb-6 tracking-tight">
+        <div style={{ display: 'flex', alignItems: 'center', gap: khorTokens.spacing.md, justifyContent: 'center' }}>
+          <h3 style={{ margin: 0, fontSize: khorTokens.typography.h4.size, fontWeight: khorTokens.typography.fontWeights.semibold, color: 'var(--foreground)' }}>
+            Khor Design System
+          </h3>
+          <span style={{
+            fontSize: 11,
+            fontWeight: 600,
+            padding: '2px 8px',
+            borderRadius: 999,
+            backgroundColor: 'var(--khor-success-light)',
+            color: 'var(--khor-success)',
+          }}>
+            v4.1.1
+          </span>
+        </div>
+        <h1 className="text-5xl font-extrabold text-khor-secondary mb-6 tracking-tight mt-4">
           Manual de <span className="text-khor-primary">Tokens de Diseño</span>
         </h1>
         <p className="text-xl text-khor-slate-500 max-w-2xl mx-auto">
@@ -156,25 +170,14 @@ export function TokensPage() {
           <div className="sticky top-10 space-y-1">
             <h4 className="text-[10px] font-bold text-khor-slate-400 uppercase tracking-widest px-4 mb-4">Taxonomía Completa</h4>
             {[
-              { icon: Droplets, label: 'Color Palette', id: 'color' },
-              { icon: Palette, label: 'Status & Feedback', id: 'status-feedback' },
-              { icon: Zap, label: 'Color Scales', id: 'color-scales' },
-              { icon: CaseLower, label: 'Font Family', id: 'font-family' },
-              { icon: ArrowUpDown, label: 'Font Size', id: 'font-size' },
-              { icon: Bold, label: 'Font Weight', id: 'font-weight' },
-              { icon: Split, label: 'Letter Spacing', id: 'letter-spacing' },
-              { icon: SquareDashed, label: 'Border Radius', id: 'border-radius' },
-              { icon: Zap, label: 'Stroke Width', id: 'stroke-width' },
-              { icon: BoxSelect, label: 'Shadow', id: 'shadow' },
-              { icon: Percent, label: 'Opacity', id: 'opacity' },
-              { icon: RotateCw, label: 'Rotation', id: 'rotation' },
-              { icon: Grid3X3, label: 'Spacing', id: 'spacing' },
-              { icon: Maximize, label: 'Sizing', id: 'sizing' },
-              { icon: Expand, label: 'Dimensions', id: 'dimensions' },
-              { icon: Hash, label: 'Number', id: 'number' },
-              { icon: Type, label: 'Text Case', id: 'text-case' },
-              { icon: Underline, label: 'Text Decoration', id: 'text-decoration' },
-              { icon: Highlighter, label: 'Typography', id: 'typography' },
+              { id: 'color', label: 'Colors', icon: Droplets },
+              { id: 'status-feedback', label: 'Status', icon: Palette },
+              { id: 'form-states', label: 'Forms', icon: Highlighter },
+              { id: 'font-family', label: 'Typography', icon: CaseLower },
+              { id: 'iconography', label: 'Icons', icon: Eye },
+              { id: 'shadow', label: 'Shadows', icon: BoxSelect },
+              { id: 'motion', label: 'Motion', icon: Zap },
+              { id: 'charts', label: 'Charts', icon: Palette },
             ].map(item => (
               <a key={item.id} href={`#${item.id}`} className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-khor-primary/5 text-khor-slate-600 hover:text-khor-primary transition-all group">
                 <item.icon size={18} className="group-hover:scale-110 transition-transform" />
@@ -238,7 +241,40 @@ export function TokensPage() {
             </div>
           </TokenSection>
 
-          {/* 1.2 COLOR SCALES */}
+          {/* 1.2 FORM VALIDATION (NEW) */}
+          <TokenSection 
+            id="form-states" 
+            icon={Highlighter} 
+            title="Form Validation States" 
+            description="Tokens semánticos optimizados para inputs, borders y backgrounds de validación."
+          >
+            <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+              {[
+                { label: 'Error', state: 'error', bg: '#FFEBEE', border: '#D32F2F', text: '#B71C1C' },
+                { label: 'Success', state: 'success', bg: '#E8F5E9', border: '#2E7D32', text: '#1B5E20' },
+                { label: 'Warning', state: 'warning', bg: '#FFF3E0', border: '#FF9500', text: '#E65100' },
+              ].map(item => (
+                <div key={item.state} style={{ 
+                  backgroundColor: `var(--khor-form-${item.state}-bg)`,
+                  border: `1px solid var(--khor-form-${item.state}-border)`,
+                  padding: 16,
+                  borderRadius: 12
+                }}>
+                  <div style={{ color: `var(--khor-form-${item.state}-text)`, fontWeight: 700, fontSize: 13, display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: `var(--khor-form-${item.state}-border)` }} />
+                    {item.label} State
+                  </div>
+                  <div className="mt-2 space-y-1">
+                    <code className="text-[9px] block text-khor-slate-600">--khor-form-{item.state}-bg</code>
+                    <code className="text-[9px] block text-khor-slate-600">--khor-form-{item.state}-border</code>
+                    <code className="text-[9px] block text-khor-slate-600">--khor-form-{item.state}-text</code>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </TokenSection>
+
+          {/* 1.3 COLOR SCALES */}
           <TokenSection 
             id="color-scales" 
             icon={Zap} 
@@ -377,7 +413,32 @@ export function TokensPage() {
             ))}
           </TokenSection>
 
-          {/* 8. SHADOW */}
+          {/* 8. ICONOGRAPHY (NEW) */}
+          <TokenSection 
+            id="iconography" 
+            icon={Eye} 
+            title="Standardized Iconography Sizes" 
+            description="Escala de tamaños para iconos Lucide optimizados para interfaces SaaS."
+          >
+            <div className="divide-y divide-khor-border-muted">
+              {[
+                { n: 'XS', var: '--khor-icon-xs', val: '12px' },
+                { n: 'SM', var: '--khor-icon-sm', val: '16px' },
+                { n: 'MD', var: '--khor-icon-md', val: '20px' },
+                { n: 'LG', var: '--khor-icon-lg', val: '24px' },
+                { n: 'XL', var: '--khor-icon-xl', val: '32px' },
+                { n: '2XL', var: '--khor-icon-2xl', val: '48px' },
+              ].map(item => (
+                <TokenItem key={item.n} name={item.n} variable={item.var} value={item.val}>
+                   <div className="bg-khor-primary/10 rounded-lg flex items-center justify-center" style={{ width: 48, height: 48 }}>
+                     <KIcon name="Sparkles" size={item.n.toLowerCase() as any} color="var(--khor-primary)" />
+                   </div>
+                </TokenItem>
+              ))}
+            </div>
+          </TokenSection>
+
+          {/* 9. SHADOW */}
           <TokenSection 
             id="shadow" 
             icon={BoxSelect} 
@@ -434,7 +495,7 @@ export function TokensPage() {
             </div>
           </TokenSection>
 
-          {/* 9. OPACITY */}
+          {/* 10. OPACITY */}
           <TokenSection id="opacity" icon={Percent} title="Opacity Scale">
             <div className="p-6 grid grid-cols-5 gap-4">
               {[10, 30, 50, 70, 90].map(o => (
@@ -446,7 +507,7 @@ export function TokensPage() {
             </div>
           </TokenSection>
 
-          {/* 10. ROTATION */}
+          {/* 11. ROTATION */}
           <TokenSection id="rotation" icon={RotateCw} title="Rotation Scale">
             <div className="p-6 grid grid-cols-4 gap-4">
               {[0, 45, 90, 180].map(deg => (
@@ -460,7 +521,7 @@ export function TokensPage() {
             </div>
           </TokenSection>
 
-          {/* 11. SPACING */}
+          {/* 12. SPACING */}
           <TokenSection id="spacing" icon={Grid3X3} title="Spacing Matrix" description="Escala de 4px para márgenes y padding.">
             <div className="grid grid-cols-2 divide-x divide-khor-border-muted">
               {[1, 2, 4, 6, 8, 12].map(s => (
@@ -471,7 +532,7 @@ export function TokensPage() {
             </div>
           </TokenSection>
 
-          {/* 12. SIZING */}
+          {/* 13. SIZING */}
           <TokenSection id="sizing" icon={Maximize} title="Component Sizing">
             {[8, 16, 32, 64].map(size => (
               <TokenItem key={size} name={`Size ${size}`} variable={`--khor-size-${size}`} value={`${size*4}px`}>
@@ -480,19 +541,19 @@ export function TokensPage() {
             ))}
           </TokenSection>
 
-          {/* 13. DIMENSIONS */}
+          {/* 14. DIMENSIONS */}
           <TokenSection id="dimensions" icon={Expand} title="Layout Dimensions">
             <TokenItem name="Full Width" variable="--khor-size-full" value="100%" />
             <TokenItem name="Screen Height" variable="--khor-size-screen-h" value="100vh" />
           </TokenSection>
 
-          {/* 14. NUMBER */}
+          {/* 15. NUMBER */}
           <TokenSection id="number" icon={Hash} title="Unitless Numbers">
             <TokenItem name="Number 1" variable="--khor-number-1" value="1" />
             <TokenItem name="Number 100" variable="--khor-number-100" value="100" />
           </TokenSection>
 
-          {/* 15. TEXT CASE */}
+          {/* 16. TEXT CASE */}
           <TokenSection id="text-case" icon={Type} title="Text Case Attributes">
             <TokenItem name="Uppercase" variable="--khor-text-case-upper" value="UPPERCASE">
               <span className="uppercase text-xs font-bold">TEXT</span>
@@ -502,14 +563,14 @@ export function TokensPage() {
             </TokenItem>
           </TokenSection>
 
-          {/* 16. TEXT DECORATION */}
+          {/* 17. TEXT DECORATION */}
           <TokenSection id="text-decoration" icon={Underline} title="Text Decoration">
             <TokenItem name="Underline" variable="--khor-text-decoration-underline" value="underline">
               <span className="underline text-xs font-bold">Text</span>
             </TokenItem>
           </TokenSection>
 
-          {/* 17. TYPOGRAPHY COMPOSITE */}
+          {/* 18. TYPOGRAPHY COMPOSITE */}
           <TokenSection id="typography" icon={Highlighter} title="Composite Typography" description="Conjuntos predefinidos de tamaño, peso y altura de línea.">
             <div className="p-6 flex flex-col gap-8">
               <div>
@@ -527,6 +588,134 @@ export function TokensPage() {
                   <KTag status="default" label="Regular (400)" />
                   <KTag status="default" label="1.5 LH" />
                 </div>
+              </div>
+            </div>
+          </TokenSection>
+
+          {/* 19. LAYOUT BREAKPOINTS */}
+          <TokenSection 
+            id="layout-breakpoints" 
+            icon={Grid3X3} 
+            title="Layout Breakpoints" 
+            description="Puntos de corte responsivos para aplicaciones adaptables (Mobile First)."
+          >
+            <div className="divide-y divide-khor-border-muted">
+              {[
+                { n: 'sm', var: '--khor-breakpoint-sm', val: '640px' },
+                { n: 'md', var: '--khor-breakpoint-md', val: '768px' },
+                { n: 'lg', var: '--khor-breakpoint-lg', val: '1024px' },
+                { n: 'xl', var: '--khor-breakpoint-xl', val: '1280px' },
+                { n: '2xl', var: '--khor-breakpoint-2xl', val: '1536px' },
+              ].map(item => (
+                <TokenItem key={item.n} name={item.n} variable={item.var} value={item.val}>
+                  <div className="flex items-center justify-center w-full bg-khor-primary/10 rounded-lg p-2">
+                    <span className="text-[10px] font-bold text-khor-primary">{item.n.toUpperCase()}</span>
+                  </div>
+                </TokenItem>
+              ))}
+            </div>
+          </TokenSection>
+
+          {/* 20. Z-INDEX SCALE */}
+          <TokenSection 
+            id="z-index" 
+            icon={Layers} 
+            title="Z-Index Scale" 
+            description="Sistema de capas estandarizado para evitar conflictos de superposición."
+          >
+            <div className="divide-y divide-khor-border-muted">
+              {[
+                { n: 'Dropdown', var: '--khor-z-dropdown', val: '1000' },
+                { n: 'Sticky', var: '--khor-z-sticky', val: '1100' },
+                { n: 'Overlay', var: '--khor-z-overlay', val: '1200' },
+                { n: 'Drawer', var: '--khor-z-drawer', val: '1300' },
+                { n: 'Modal', var: '--khor-z-modal', val: '1400' },
+                { n: 'Toast', var: '--khor-z-toast', val: '1700' },
+              ].map(item => (
+                <TokenItem key={item.n} name={item.n} variable={item.var} value={item.val}>
+                   <div className="relative w-12 h-12">
+                     <div className="absolute inset-0 bg-khor-secondary/10 rounded-lg scale-90 -translate-x-1 translate-y-1" />
+                     <div className="absolute inset-0 bg-khor-secondary/20 rounded-lg scale-95" />
+                     <div className="absolute inset-0 bg-khor-primary rounded-lg border-2 border-white shadow-sm flex items-center justify-center text-[8px] text-white font-bold">
+                       {item.val}
+                     </div>
+                   </div>
+                </TokenItem>
+              ))}
+            </div>
+          </TokenSection>
+
+          {/* 21. MOTION */}
+          <TokenSection 
+            id="motion" 
+            icon={Zap} 
+            title="Motion & Timing" 
+            description="Curvas de aceleración y duraciones para una interfaz viva y profesional."
+          >
+            <div className="p-6">
+              <h4 className="text-xs font-bold text-khor-secondary mb-4 uppercase tracking-wider">Durations</h4>
+              <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 mb-8">
+                {[
+                  { n: 'Instant', v: '75ms' },
+                  { n: 'Fast', v: '150ms' },
+                  { n: 'Normal', v: '250ms' },
+                  { n: 'Slow', v: '450ms' },
+                  { n: 'Slower', v: '700ms' },
+                ].map(d => (
+                  <div key={d.n} className="bg-khor-neutral-100 p-3 rounded-xl border border-khor-border-muted text-center">
+                    <span className="text-[10px] font-bold block">{d.n}</span>
+                    <span className="text-[11px] text-khor-primary font-mono">{d.v}</span>
+                  </div>
+                ))}
+              </div>
+              <h4 className="text-xs font-bold text-khor-secondary mb-4 uppercase tracking-wider">Easings (Bezier Curves)</h4>
+              <div className="space-y-4">
+                 {[
+                   { n: 'Standard', v: 'cubic-bezier(0.4, 0, 0.2, 1)', desc: 'Movimiento natural para UI' },
+                   { n: 'Emphasized', v: 'cubic-bezier(0.2, 0, 0, 1)', desc: 'Entradas dramáticas' },
+                   { n: 'Decelerate', v: 'cubic-bezier(0, 0, 0.2, 1)', desc: 'Frenado suave' },
+                   { n: 'Spring', v: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)', desc: 'Efecto elástico' },
+                 ].map(e => (
+                   <div key={e.n} className="flex items-center gap-4 p-3 bg-white rounded-xl border border-khor-border-muted">
+                     <div className="w-10 h-10 bg-khor-primary/10 rounded-lg flex items-center justify-center text-khor-primary">
+                       <RotateCw size={18} />
+                     </div>
+                     <div>
+                       <span className="text-xs font-bold block">{e.n}</span>
+                       <code className="text-[9px] text-khor-slate-400 block">{e.v}</code>
+                     </div>
+                     <p className="ml-auto text-[10px] text-khor-slate-500 font-medium italic">{e.desc}</p>
+                   </div>
+                 ))}
+              </div>
+            </div>
+          </TokenSection>
+
+          {/* 22. CHARTS */}
+          <TokenSection 
+            id="charts" 
+            icon={Palette} 
+            title="DataViz & Elite Chart Palette" 
+            description="Escala secuencial de 12 colores optimizada para gráficas y visualización de datos de alta densidad."
+          >
+            <div className="p-6">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                {[
+                  { n: 'Primary', var: '--khor-chart-primary', hex: '#E04D36' },
+                  { n: 'Secondary', var: '--khor-chart-secondary', hex: '#051758' },
+                  { n: 'Accent', var: '--khor-chart-accent', hex: '#FF9500' },
+                  { n: 'Success', var: '--khor-chart-success', hex: '#2E7D32' },
+                  { n: 'Error', var: '--khor-chart-error', hex: '#D32F2F' },
+                  { n: 'Info', var: '--khor-chart-info', hex: '#1976D2' },
+                  { n: 'Teal', var: '--khor-chart-teal', hex: '#008080' },
+                  { n: 'Purple', var: '--khor-chart-purple', hex: '#9C27B0' },
+                  { n: 'Pink', var: '--khor-chart-pink', hex: '#E91E63' },
+                  { n: 'Cyan', var: '--khor-chart-cyan', hex: '#00BCD4' },
+                  { n: 'Amber', var: '--khor-chart-amber', hex: '#FFC107' },
+                  { n: 'Gray', var: '--khor-chart-gray', hex: '#9E9E9E' },
+                ].map(c => (
+                  <ColorCard key={c.n} name={c.n} variable={c.var} hex={c.hex} />
+                ))}
               </div>
             </div>
           </TokenSection>

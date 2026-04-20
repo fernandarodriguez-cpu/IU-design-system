@@ -1,6 +1,6 @@
 import { AnchorHTMLAttributes, ButtonHTMLAttributes, CSSProperties, ReactNode } from 'react';
 
-export type KButtonVariant = 'solid' | 'outlined' | 'dashed' | 'filled' | 'text' | 'link' | 'ghost' | 'outline';
+export type KButtonVariant = 'solid' | 'outlined' | 'dashed' | 'filled' | 'text' | 'link' | 'ghost' | 'outline' | 'primary' | 'secondary' | 'danger' | 'navy';
 export type KButtonColor = 'default' | 'primary' | 'secondary' | 'danger' | 'processing' | 'volcano' | 'gold' | 'lime' | 'purple';
 export type KButtonSize = 'sm' | 'md' | 'lg' | 'icon';
 export type KButtonShape = 'default' | 'circle' | 'round';
