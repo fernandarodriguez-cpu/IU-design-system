@@ -200,7 +200,7 @@ export function KDataTable<TData>({
   const virtualizer = useVirtualizer({
     count: rows.length,
     getScrollElement: () => parentRef.current,
-    estimateSize: () => (size === 'small' ? 40 : size === 'large' ? 64 : 52),
+    estimateSize: () => (size === 'small' ? 32 : size === 'large' ? 60 : 44),
     overscan: 10,
     measureElement: (el) => el?.getBoundingClientRect().height ?? 0,
     enabled: virtual || !!scroll?.y,
@@ -234,7 +234,7 @@ export function KDataTable<TData>({
       {Array.from({ length: pageSize || 5 }).map((_, i) => (
         <tr key={i} className="border-b transition-colors">
           {table.getVisibleLeafColumns().map((col, j) => (
-            <td key={j} className="px-4 py-4">
+            <td key={j} className="px-[var(--khor-density-spacing-md)] py-[var(--khor-density-spacing-sm)]">
               <KSkeleton active height={16} width={j === 0 ? "40%" : "80%"} />
             </td>
           ))}
@@ -332,7 +332,7 @@ export function KDataTable<TData>({
                 {hg.headers.map(header => (
                   <th 
                     key={header.id}
-                    className="px-4 py-3 border-b text-left"
+                    className="px-[var(--khor-density-spacing-md)] py-[var(--khor-density-spacing-sm)] border-b text-left"
                     style={{ width: header.getSize() }}
                   >
                     <div className="flex items-center justify-between gap-2 group/th">
@@ -382,10 +382,10 @@ export function KDataTable<TData>({
                         {row.getVisibleCells().map(cell => (
                           <div 
                             key={cell.id} 
-                            className="px-4 py-3 whitespace-nowrap overflow-hidden text-ellipsis flex items-center" 
+                            className="px-[var(--khor-density-spacing-md)] py-[var(--khor-density-spacing-sm)] whitespace-nowrap overflow-hidden text-ellipsis flex items-center" 
                             style={{ 
                               width: cell.column.getSize(),
-                              height: size === 'small' ? '40px' : size === 'large' ? '64px' : '52px' 
+                              height: size === 'small' ? 'var(--khor-density-height-row)' : size === 'large' ? '60px' : '44px' 
                             }}
                           >
                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -415,7 +415,7 @@ export function KDataTable<TData>({
                     onClick={() => onRowClick?.(row.original)}
                   >
                     {row.getVisibleCells().map(cell => (
-                      <td key={cell.id} className="px-4 py-3 align-middle" style={{ width: cell.column.getSize() }}>
+                      <td key={cell.id} className="px-[var(--khor-density-spacing-md)] py-[var(--khor-density-spacing-sm)] align-middle" style={{ width: cell.column.getSize() }}>
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </td>
                     ))}

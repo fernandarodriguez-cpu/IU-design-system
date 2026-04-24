@@ -5,15 +5,7 @@ import { useNavigate } from 'react-router';
 import { cn } from '../../../../../imports/utils';
 import { KModal } from '../KModal';
 
-/* ─── Types ─────────────────────────────────── */
-interface CommandItem {
-  id: string;
-  title: string;
-  category: 'Atomo' | 'Molecula' | 'Organismo' | 'Template' | 'Token';
-  description?: string;
-  keywords?: string[];
-  url?: string;
-}
+import { searchIndex, SearchItem } from '../../../../metadata/search-index';
 
 /* ─── Hook ──────────────────────────────────── */
 export function useCommandBar() {
@@ -33,25 +25,20 @@ export function useCommandBar() {
   return { open, setOpen };
 }
 
-// Mock Data
-const commands: CommandItem[] = [
-  // Atoms
-  { id: 'btn', title: 'KButton', category: 'Atomo', description: 'Botón con variantes y estados.', keywords: ['boton', 'button', 'click'], url: '/atoms/button' },
-  { id: 'inp', title: 'KInput', category: 'Atomo', description: 'Campo de texto básico.', keywords: ['input', 'texto', 'form'], url: '/atoms/input' },
-  // ... more mock data could be here
-];
+// Convert search index to command items
+const commands: SearchItem[] = searchIndex;
 
 /* ─── Component ─────────────────────────────── */
 export function KCommandBar({ open, onClose }: { open: boolean; onClose: () => void }) {
   const navigate = useNavigate();
-  const [recents, setRecents] = useState<CommandItem[]>([]);
+  const [recents, setRecents] = useState<SearchItem[]>([]);
 
   useEffect(() => {
     const saved = localStorage.getItem('khor_command_recents');
     if (saved) setRecents(JSON.parse(saved));
   }, [open]);
 
-  const handleSelect = (item: CommandItem) => {
+  const handleSelect = (item: SearchItem) => {
     if (item.url) navigate(item.url);
     const newRecents = [item, ...recents.filter(r => r.id !== item.id)].slice(0, 5);
     setRecents(newRecents);
@@ -116,7 +103,7 @@ export function KCommandBar({ open, onClose }: { open: boolean; onClose: () => v
   );
 }
 
-function CommandRow({ item, onSelect }: { item: CommandItem; onSelect: () => void }) {
+function CommandRow({ item, onSelect }: { item: SearchItem; onSelect: () => void }) {
   return (
     <Command.Item
       value={`${item.title} ${item.description} ${item.category} ${item.keywords?.join(' ')}`}
@@ -129,7 +116,12 @@ function CommandRow({ item, onSelect }: { item: CommandItem; onSelect: () => voi
       <div className="flex flex-col gap-0.5">
         <div className="flex items-center gap-2">
           <span className="font-medium text-khor-neutral-900">{item.title}</span>
-          <span className="rounded-full bg-khor-slate-100 px-1.5 py-0.5 text-[10px] uppercase font-bold text-khor-neutral-600">
+          <span className={cn(
+            "rounded-full px-1.5 py-0.5 text-[10px] uppercase font-bold",
+            item.category === 'Tool' ? "bg-khor-primary/10 text-khor-primary" : 
+            item.category === 'Pattern' ? "bg-purple-100 text-purple-600" :
+            "bg-khor-slate-100 text-khor-neutral-600"
+          )}>
             {item.category}
           </span>
         </div>

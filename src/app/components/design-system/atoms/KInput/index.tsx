@@ -18,14 +18,14 @@ const inputVariants = cva(
         filled: 'border-transparent bg-khor-slate-100 text-khor-neutral-900 focus-within:bg-khor-slate-50 focus-within:ring-khor-primary/20',
       },
       size: {
-        sm: 'h-8 px-2 text-xs',
-        md: 'h-10 px-3 text-sm',
-        lg: 'h-12 px-4 text-base',
+        sm: 'h-[var(--khor-density-height-sm)] px-2 text-xs',
+        md: 'h-[var(--khor-density-height-input)] px-3 text-sm',
+        lg: 'h-[var(--khor-density-height-lg)] px-4 text-base',
       },
       status: {
-        default: '',
-        error: 'border-khor-error focus-within:ring-khor-error',
-        warning: 'border-khor-warning focus-within:ring-khor-warning',
+        default: 'border-khor-border-default',
+        error: 'border-khor-border-error focus-within:ring-khor-border-error/20',
+        warning: 'border-khor-warning focus-within:ring-khor-warning/20',
       },
       disabled: {
         true: 'bg-khor-slate-100 border-khor-slate-200 opacity-60 cursor-not-allowed select-none pointer-events-none grayscale-[0.5]',

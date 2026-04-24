@@ -153,7 +153,7 @@ export function TokensPage() {
             backgroundColor: 'var(--khor-success-light)',
             color: 'var(--khor-success)',
           }}>
-            v4.1.1
+            v4.2.0
           </span>
         </div>
         <h1 className="text-5xl font-extrabold text-khor-secondary mb-6 tracking-tight mt-4">
@@ -171,6 +171,9 @@ export function TokensPage() {
             <h4 className="text-[10px] font-bold text-khor-slate-400 uppercase tracking-widest px-4 mb-4">Taxonomía Completa</h4>
             {[
               { id: 'color', label: 'Colors', icon: Droplets },
+              { id: 'semantic-layer', label: 'Semantic Tier 2', icon: Layers },
+              { id: 'density', label: 'Density System', icon: Maximize },
+              { id: 'contrast', label: 'Contrast WCAG', icon: Eye },
               { id: 'status-feedback', label: 'Status', icon: Palette },
               { id: 'form-states', label: 'Forms', icon: Highlighter },
               { id: 'font-family', label: 'Typography', icon: CaseLower },
@@ -209,6 +212,122 @@ export function TokensPage() {
               {[50, 100, 200, 300, 400, 500, 600, 700, 800, 900].map(n => (
                 <ColorCard key={n} name={`Sec. Neutral ${n}`} variable={`--khor-neutral-secondary-${n}`} />
               ))}
+            </div>
+          </TokenSection>
+
+          <TokenSection 
+            id="semantic-layer" 
+            icon={Layers} 
+            title="Semantic Tier 2: Application Tokens" 
+            description="Tokens que abstraen la funcionalidad del valor de color, permitiendo temas dinámicos."
+          >
+            <div className="grid grid-cols-1 md:grid-cols-2">
+              <div className="p-6 border-r border-khor-border-muted">
+                <h4 className="text-[10px] font-bold text-khor-slate-400 uppercase tracking-widest mb-4">Action Tokens</h4>
+                <div className="space-y-4">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-lg bg-khor-primary" />
+                    <div>
+                      <span className="text-xs font-bold block text-khor-secondary">--khor-action-primary-default</span>
+                      <code className="text-[9px] text-khor-slate-400">var(--khor-primary)</code>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-lg bg-khor-secondary" />
+                    <div>
+                      <span className="text-xs font-bold block text-khor-secondary">--khor-action-secondary-default</span>
+                      <code className="text-[9px] text-khor-slate-400">var(--khor-secondary)</code>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="p-6">
+                <h4 className="text-[10px] font-bold text-khor-slate-400 uppercase tracking-widest mb-4">Typography & Borders</h4>
+                <div className="space-y-4">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-1 rounded bg-khor-neutral-200" />
+                    <div>
+                      <span className="text-xs font-bold block text-khor-secondary">--khor-border-default</span>
+                      <code className="text-[9px] text-khor-slate-400">var(--khor-neutral-200)</code>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <span className="text-lg font-bold text-khor-secondary">Aa</span>
+                    <div>
+                      <span className="text-xs font-bold block text-khor-secondary">--khor-text-primary</span>
+                      <code className="text-[9px] text-khor-slate-400">var(--khor-secondary)</code>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </TokenSection>
+
+          <TokenSection 
+            id="density" 
+            icon={Maximize} 
+            title="Density System" 
+            description="Control de espaciado y dimensiones basado en el contexto de la interfaz."
+          >
+            <div className="p-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div className="khor-compact p-6 bg-khor-neutral-50 rounded-2xl border border-khor-border-muted relative">
+                  <KTag label="COMPACT" size="xxs" color="primary" className="absolute -top-3 right-4" />
+                  <p className="text-xs text-khor-slate-500 mb-4">Para dashboards y alta densidad de datos.</p>
+                  <div className="flex items-center gap-[var(--khor-density-spacing-sm)]">
+                    <div className="h-[var(--khor-density-height-md)] w-24 bg-khor-primary rounded flex items-center justify-center text-[10px] text-white font-bold">Botón</div>
+                    <div className="h-[var(--khor-density-height-md)] w-24 bg-khor-secondary rounded flex items-center justify-center text-[10px] text-white font-bold">Input</div>
+                  </div>
+                </div>
+                <div className="khor-comfortable p-6 bg-khor-neutral-50 rounded-2xl border border-khor-border-muted relative">
+                  <KTag label="COMFORTABLE" size="xxs" color="info" className="absolute -top-3 right-4" />
+                  <p className="text-xs text-khor-slate-500 mb-4">Para formularios de onboarding y landing pages.</p>
+                  <div className="flex items-center gap-[var(--khor-density-spacing-sm)]">
+                    <div className="h-[var(--khor-density-height-md)] w-24 bg-khor-primary rounded flex items-center justify-center text-[10px] text-white font-bold">Botón</div>
+                    <div className="h-[var(--khor-density-height-md)] w-24 bg-khor-secondary rounded flex items-center justify-center text-[10px] text-white font-bold">Input</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </TokenSection>
+
+          <TokenSection 
+            id="contrast" 
+            icon={Eye} 
+            title="WCAG Contrast Certification" 
+            description="Combinaciones de colores validadas para cumplimiento de accesibilidad internacional."
+          >
+            <div className="p-0 overflow-x-auto">
+              <table className="w-full text-left text-sm border-collapse">
+                <thead>
+                  <tr className="bg-khor-neutral-100 border-b border-khor-border-muted">
+                    <th className="p-4 font-bold text-khor-secondary">Background</th>
+                    <th className="p-4 font-bold text-khor-secondary">Foreground</th>
+                    <th className="p-4 font-bold text-khor-secondary">Ratio</th>
+                    <th className="p-4 font-bold text-khor-secondary">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="border-b border-khor-border-muted">
+                    <td className="p-4 flex items-center gap-3"><div className="w-6 h-6 rounded border bg-white" /> Surface Card</td>
+                    <td className="p-4">Text Primary</td>
+                    <td className="p-4 font-mono font-bold">16.2:1</td>
+                    <td className="p-4"><KBadge status="success" label="AAA" /></td>
+                  </tr>
+                  <tr className="border-b border-khor-border-muted">
+                    <td className="p-4 flex items-center gap-3"><div className="w-6 h-6 rounded border bg-white" /> Surface Card</td>
+                    <td className="p-4">Text Secondary</td>
+                    <td className="p-4 font-mono font-bold">6.8:1</td>
+                    <td className="p-4"><KBadge status="success" label="AA" /></td>
+                  </tr>
+                  <tr className="border-b border-khor-border-muted">
+                    <td className="p-4 flex items-center gap-3"><div className="w-6 h-6 rounded border bg-khor-primary" /> Primary</td>
+                    <td className="p-4">White (OnAction)</td>
+                    <td className="p-4 font-mono font-bold">4.8:1</td>
+                    <td className="p-4"><KBadge status="success" label="AA" /></td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </TokenSection>
 

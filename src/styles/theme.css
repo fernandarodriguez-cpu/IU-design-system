@@ -392,6 +392,12 @@
   --khor-line-height-body: 1.5;
 
   /* ── Density Tokens ── */
+  --khor-density-spacing-xs: 4px;
+  --khor-density-spacing-sm: 8px;
+  --khor-density-spacing-md: 12px;
+  --khor-density-spacing-lg: 16px;
+
+  /* ── Density Heights ── */
   --khor-density-height-sm: 32px;
   --khor-density-height-md: 40px;
   --khor-density-height-lg: 48px;
@@ -433,7 +439,7 @@
   --khor-feedback-lime: #84cc16;
   --khor-feedback-purple: #a855f7;
 
-  /* ── Semantic Action Tokens ── */
+  /* ── Semantic Layer 2: Actions ── */
   --khor-action-primary-default: var(--khor-primary);
   --khor-action-primary-hover: var(--khor-primary-hover);
   --khor-action-primary-active: var(--khor-primary-active);
@@ -441,31 +447,113 @@
   --khor-action-secondary-hover: var(--khor-secondary-hover);
   --khor-action-secondary-active: var(--khor-secondary-active);
   --khor-action-danger-default: var(--khor-error);
-  --khor-action-disabled-bg: var(--khor-neutral-200);
+  --khor-action-danger-hover: var(--khor-error-hover);
+  --khor-action-danger-active: var(--khor-error-active);
+  --khor-action-ghost-hover: rgba(5, 23, 88, 0.05);
+  --khor-action-disabled-bg: var(--khor-neutral-100);
   --khor-action-disabled-text: var(--khor-neutral-400);
 
-  /* ── Semantic Surface Tokens ── */
-  --khor-surface-page: var(--khor-neutral-100);
-  --khor-surface-card: var(--khor-neutral-50);
+  /* ── Semantic Layer 2: Surface & Overlay ── */
+  --khor-surface-page: var(--khor-neutral-50);
+  --khor-surface-card: #ffffff;
+  --khor-surface-raised: #ffffff;
+  --khor-surface-overlay: #ffffff;
+  --khor-overlay-bg: rgba(255, 255, 255, 0.95);
+  --khor-overlay-backdrop: rgba(5, 23, 88, 0.4);
 
-  /* ── Semantic Text Tokens ── */
-  --khor-text-primary: var(--khor-navy);
-  --khor-text-secondary: var(--khor-neutral-500);
+  /* ── Semantic Layer 2: Borders ── */
+  --khor-border-default: var(--khor-neutral-200);
+  --khor-border-muted: var(--khor-neutral-100);
+  --khor-border-strong: var(--khor-neutral-300);
+  --khor-border-hover: var(--khor-neutral-400);
+  --khor-border-focus: var(--khor-primary);
+  --khor-border-error: var(--khor-error);
+  --khor-border-disabled: var(--khor-neutral-100);
+
+  /* ── Semantic Layer 2: Typography ── */
+  --khor-text-primary: var(--khor-secondary);
+  --khor-text-secondary: var(--khor-slate-600);
+  --khor-text-muted: var(--khor-slate-400);
+  --khor-text-disabled: var(--khor-slate-300);
+  --khor-text-on-action: #ffffff;
   --khor-text-link: var(--khor-primary);
+  --khor-text-link-hover: var(--khor-primary-hover);
+
+  /* ── Motion Tokens ── */
+  --khor-duration-instant: 80ms;
+  --khor-duration-fast:    100ms;
+  --khor-duration-normal:  200ms;
+  --khor-duration-slow:    400ms;
+
+  --khor-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --khor-easing-spring:   cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --khor-easing-enter:    cubic-bezier(0, 0, 0.2, 1);
+  --khor-easing-exit:     cubic-bezier(0.4, 0, 1, 1);
 
   /* ── Mapped Tokens (Tailwind Compat) ── */
-  --background: var(--khor-neutral-100);
-  --foreground: var(--khor-navy);
+  --background: var(--khor-surface-page);
+  --foreground: var(--khor-text-primary);
   --primary: var(--khor-primary);
-  --primary-foreground: #FFFFFF;
+  --primary-foreground: var(--khor-text-on-action);
   --border: var(--khor-border-default);
   --radius: var(--khor-radius-md);
+}
+
+/* ═══════════════════════════════════════════════════
+   SISTEMA DE DENSIDAD — Khor v4.3+
+   Uso: agregar className al contenedor raíz.
+   ═══════════════════════════════════════════════════ */
+
+/* DEFAULT — aplicación estándar (ya definida en :root) */
+:root {
+  --khor-density-spacing-xs:    4px;
+  --khor-density-spacing-sm:    8px;
+  --khor-density-spacing-md:    16px;
+  --khor-density-spacing-lg:    24px;
+  --khor-density-height-input:  36px;
+  --khor-density-height-row:    44px;
+  --khor-density-font-body:     14px;
+  --khor-density-font-label:    12px;
+  --khor-density-radius:        8px;
+}
+
+/* COMPACT — dashboards con datos masivos */
+.khor-compact {
+  --khor-density-spacing-xs:    2px;
+  --khor-density-spacing-sm:    4px;
+  --khor-density-spacing-md:    8px;
+  --khor-density-spacing-lg:    12px;
+  --khor-density-height-input:  28px;
+  --khor-density-height-row:    32px;
+  --khor-density-font-body:     12px;
+  --khor-density-font-label:    11px;
+  --khor-density-radius:        6px;
+}
+
+/* COMFORTABLE — onboarding, formularios críticos */
+.khor-comfortable {
+  --khor-density-spacing-xs:    6px;
+  --khor-density-spacing-sm:    12px;
+  --khor-density-spacing-md:    24px;
+  --khor-density-spacing-lg:    40px;
+  --khor-density-height-input:  48px;
+  --khor-density-height-row:    60px;
+  --khor-density-font-body:     16px;
+  --khor-density-font-label:    14px;
+  --khor-density-radius:        10px;
 }
 
 .dark {
   --khor-navy: #8BA3D9;
   --khor-neutral-50: #1A1B2E;
   --khor-neutral-100: #22243A;
+  
+  /* Dark Mode Feedback-Light (Audit v4.2 fix) */
+  --khor-success-light: #1B3A1C;
+  --khor-error-light: #3B1212;
+  --khor-warning-light: #3B2500;
+  --khor-info-light: #0D1F3C;
+
   --khor-avatar-bg: #0A2270;
   --khor-avatar-fg: #FFFFFF;
   --background: var(--khor-neutral-100);
@@ -510,6 +598,7 @@
   --color-khor-success-700: var(--khor-success-700);
   --color-khor-success-800: var(--khor-success-800);
   --color-khor-success-900: var(--khor-success-900);
+  --color-khor-success-light: var(--khor-success-light);
 
   /* Error Scale */
   --color-khor-error: var(--khor-error);
@@ -523,6 +612,7 @@
   --color-khor-error-700: var(--khor-error-700);
   --color-khor-error-800: var(--khor-error-800);
   --color-khor-error-900: var(--khor-error-900);
+  --color-khor-error-light: var(--khor-error-light);
 
   /* Warning Scale */
   --color-khor-warning: var(--khor-warning);
@@ -536,6 +626,7 @@
   --color-khor-warning-700: var(--khor-warning-700);
   --color-khor-warning-800: var(--khor-warning-800);
   --color-khor-warning-900: var(--khor-warning-900);
+  --color-khor-warning-light: var(--khor-warning-light);
 
   /* Info Scale */
   --color-khor-info: var(--khor-info);
@@ -549,6 +640,7 @@
   --color-khor-info-700: var(--khor-info-700);
   --color-khor-info-800: var(--khor-info-800);
   --color-khor-info-900: var(--khor-info-900);
+  --color-khor-info-light: var(--khor-info-light);
 
   /* Teal Scale */
   --color-khor-teal: var(--khor-teal);
@@ -599,9 +691,49 @@
   --color-khor-avatar-fg: var(--khor-avatar-fg);
   --color-khor-surface-page: var(--khor-surface-page);
   --color-khor-surface-card: var(--khor-surface-card);
+  --color-khor-surface-overlay: var(--khor-surface-overlay);
+  --color-khor-overlay-bg: var(--khor-overlay-bg);
+  --color-khor-overlay-backdrop: var(--khor-overlay-backdrop);
   --color-khor-text-primary: var(--khor-text-primary);
   --color-khor-text-secondary: var(--khor-text-secondary);
+  --color-khor-text-muted: var(--khor-text-muted);
+  --color-khor-text-on-action: var(--khor-text-on-action);
   --color-khor-text-link: var(--khor-text-link);
+  --color-khor-text-disabled: var(--khor-text-disabled);
+
+  /* Semantic Action Tokens */
+  --color-khor-action-primary: var(--khor-action-primary-default);
+  --color-khor-action-primary-hover: var(--khor-action-primary-hover);
+  --color-khor-action-danger: var(--khor-action-danger-default);
+  --color-khor-action-danger-hover: var(--khor-action-danger-hover);
+  --color-khor-action-ghost-hover: var(--khor-action-ghost-hover);
+  --color-khor-action-disabled-bg: var(--khor-action-disabled-bg);
+  --color-khor-action-disabled-text: var(--khor-action-disabled-text);
+
+  /* Semantic Border Tokens */
+  --color-khor-border-default: var(--khor-border-default);
+  --color-khor-border-muted: var(--khor-border-muted);
+  --color-khor-border-strong: var(--khor-border-strong);
+  --color-khor-border-focus: var(--khor-border-focus);
+  --color-khor-border-error: var(--khor-border-error);
+  --color-khor-border-disabled: var(--khor-border-disabled);
+
+  /* Motion Tokens */
+  --animate-duration-instant: var(--khor-duration-instant);
+  --animate-duration-fast: var(--khor-duration-fast);
+  --animate-duration-normal: var(--khor-duration-normal);
+  --animate-duration-slow: var(--khor-duration-slow);
+  
+  --ease-standard: var(--khor-easing-standard);
+  --ease-spring: var(--khor-easing-spring);
+  --ease-enter: var(--khor-easing-enter);
+  --ease-exit: var(--khor-easing-exit);
+
+  /* Density Tokens (Sizing) */
+  --spacing-khor-xs: var(--khor-density-spacing-xs);
+  --spacing-khor-sm: var(--khor-density-spacing-sm);
+  --spacing-khor-md: var(--khor-density-spacing-md);
+  --spacing-khor-lg: var(--khor-density-spacing-lg);
 
   /* Register shadows for utilities */
   --shadow-khor-sm: var(--khor-shadow-sm);
@@ -676,6 +808,33 @@
   --height-khor-density-lg: var(--khor-density-height-lg);
   --min-width-khor-button: var(--khor-density-min-width-button);
   --min-width-khor-input: var(--khor-density-min-width-input);
+  --spacing-khor-density-xs: var(--khor-density-spacing-xs);
+  --spacing-khor-density-sm: var(--khor-density-spacing-sm);
+  --spacing-khor-density-md: var(--khor-density-spacing-md);
+  --spacing-khor-density-lg: var(--khor-density-spacing-lg);
+}
+
+/* ── Density Contexts ── */
+.khor-compact {
+  --khor-density-height-sm: 24px;
+  --khor-density-height-md: 32px;
+  --khor-density-height-lg: 40px;
+  --khor-density-spacing-xs: 2px;
+  --khor-density-spacing-sm: 4px;
+  --khor-density-spacing-md: 8px;
+  --khor-density-spacing-lg: 12px;
+  --khor-font-size-body-md: 13px;
+  --khor-font-size-body-sm: 11px;
+}
+
+.khor-comfortable {
+  --khor-density-height-sm: 36px;
+  --khor-density-height-md: 44px;
+  --khor-density-height-lg: 52px;
+  --khor-density-spacing-xs: 6px;
+  --khor-density-spacing-sm: 10px;
+  --khor-density-spacing-md: 16px;
+  --khor-density-spacing-lg: 24px;
 }
 
 @layer base {

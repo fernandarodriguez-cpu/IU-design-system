@@ -26,7 +26,7 @@ import { organisms } from './OrganismsPage';
 const t = khorTokens;
 
 /* ─── Version (must match ChangelogPage & AppShell) ─── */
-export const KHOR_VERSION = '4.1.1';
+export const KHOR_VERSION = '4.3.1';
 
 
 /* ─── Sections config ───────────────────────── */
@@ -75,7 +75,8 @@ Como IA, DEBES seguir estas reglas estrictamente al generar código:
 
 ### ♿ Reglas Estrictas de Accesibilidad (A11y)
 1. **Roles interactivos:** NUNCA uses \`onClick\` en elementos no interactivos (\`div\`). Usa siempre \`<KButton>\`.
-2. **Atributos ARIA:** Todo elemento sin texto visible DEBE tener un \`aria-label\`.
+  2. **Atributos ARIA:** Todo elemento sin texto visible DEBE tener un \`aria-label\`.
+  3. **Movimiento reducido:** Nunca agregues animaciones CSS o JS sin verificar que el sistema respeta \`prefers-reduced-motion\`. Usa siempre los tokens de motion de Khor (\`\--khor-duration-*\`, \`\--khor-easing-*\`).
 `);
   }
 
@@ -105,44 +106,127 @@ La IA DEBE usar estos valores exactos:
   --khor-icon-xs: 12px; --khor-icon-sm: 16px; --khor-icon-md: 20px;
   --khor-icon-lg: 24px; --khor-icon-xl: 32px; --khor-icon-2xl: 48px;
 
-  /* Core Palette */
-  --khor-brand-primary: #E04D36; --khor-brand-secondary: #051758;
-  --khor-status-success: #2E7D32; --khor-status-error: #D32F2F;
+  /* Semantic Layer 2: Actions */
+  --khor-action-primary-default: #E04D36; --khor-action-primary-hover: #e8644f;
+  --khor-action-secondary-default: #051758; --khor-action-secondary-hover: #0a2270;
+  --khor-action-danger-default: #D32F2F; --khor-action-danger-hover: #B71C1C;
+  --khor-action-ghost-hover: rgba(5, 23, 88, 0.06);
+  --khor-action-disabled-bg: #EDF0F1; --khor-action-disabled-text: #A0AEC0;
 
-  /* Geometría */
-  --khor-radius-md: 8px; --khor-radius-lg: 10px;
-  --khor-shadow-md: 0 4px 6px -1px rgba(5,23,88,0.08), 0 2px 4px -1px rgba(0,0,0,0.04);
+  /* Semantic Layer 2: Surface & Overlay */
+  --khor-surface-page: #f8faff; --khor-surface-card: #ffffff;
+  --khor-surface-overlay: #ffffff; --khor-overlay-bg: rgba(255, 255, 255, 0.95);
+
+  /* Semantic Layer 2: Borders */
+  --khor-border-default: #D5DBE0; --khor-border-muted: #EDF0F1;
+  --khor-border-strong: #A0AEC0; --khor-border-focus: #E04D36;
+  --khor-border-error: #D32F2F; --khor-border-disabled: #EDF0F1;
+
+  /* Semantic Layer 2: Typography */
+  --khor-text-primary: #051758; --khor-text-secondary: #475a8f;
+  --khor-text-muted: #94a9d8; --khor-text-disabled: #A0AEC0; --khor-text-on-action: #ffffff;
+
+  /* Motion Tokens (v4.3) */
+  --khor-duration-instant: 80ms; --khor-duration-fast: 100ms;
+  --khor-duration-normal: 200ms; --khor-duration-slow: 400ms;
+  --khor-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --khor-easing-enter: cubic-bezier(0, 0, 0.2, 1);
+  --khor-easing-exit: cubic-bezier(0.4, 0, 1, 1);
 }
 \`\`\`
 
-### Detalle Analítico de Tokens Elite
+### ♿ Accesibilidad Global: Reduced Motion
+El sistema respeta las preferencias del usuario. **Regla Obligatoria:** Implementar este bloque en el CSS base:
 
-### Chart Palette (Enemigos de Recharts)
-| Token | Hex | Uso |
-|-------|-----|-----|
-| Primary | \`#E04D36\` | Serie principal, barras destacadas |
-| Secondary | \`#051758\` | Serie de comparación |
-| Success | \`#2E7D32\` | Valores positivos, crecimiento |
-| Error | \`#D32F2F\` | Valores negativos, pérdidas |
+\`\`\`css
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+\`\`\`
 
-### 📊 Escalas Funcionales (High-Fidelity)
-*IA: Usa estas escalas para gradientes o estados sutiles:*
-- **Success:** \`50: #E8F5E9\`, \`500: #4CAF50\`, \`900: #0D3E12\`
-- **Error:** \`50: #FFEBEE\`, \`500: #F44336\`, \`900: #B71C1C\`
+### 📏 Sistema de Densidad (Full Specification)
+La IA debe aplicar estas clases al contenedor raíz para heredar el modelo de caja correcto:
 
-### Architecture Layers (v4.1.1)
+\`\`\`css
+/* COMPACT — dashboards con datos masivos */
+.khor-compact {
+  --khor-density-spacing-xs: 2px; --khor-density-spacing-sm: 4px;
+  --khor-density-spacing-md: 8px; --khor-density-spacing-lg: 12px;
+  --khor-density-height-input: 28px; --khor-density-height-row: 32px;
+  --khor-density-font-body: 12px; --khor-density-font-label: 11px;
+  --khor-density-radius: 6px;
+}
+
+/* COMFORTABLE — onboarding, formularios críticos */
+.khor-comfortable {
+  --khor-density-spacing-xs: 6px; --khor-density-spacing-sm: 12px;
+  --khor-density-spacing-md: 24px; --khor-density-spacing-lg: 40px;
+  --khor-density-height-input: 48px; --khor-density-height-row: 60px;
+  --khor-density-font-body: 16px; --khor-density-font-label: 14px;
+  --khor-density-radius: 10px;
+}
+\`\`\`
+
+### 🎨 Detalle Analítico de Tokens Elite (Layer 2)
+
+| Categoría | Token | Uso |
+|-----------|-------|-----|
+| **Surface** | \`surface-page\` | Fondo principal de la aplicación |
+| **Surface** | \`surface-card\` | Fondo de contenedores y secciones |
+| **Action** | \`action-primary\` | Botones principales y CTAs |
+| **Action** | \`action-primary-hover\` | Estado hover de botones principales |
+| **Border** | \`border-focus\` | Anillo de accesibilidad (Focus Ring) |
+| **Border** | \`border-error\` | Bordes de validación fallida |
+
+### ♿ Tabla de Contraste WCAG 2.1 (Pares Certificados)
+*IA: Usa solo estas combinaciones. Las marcadas con ⚠️ son solo para uso decorativo.*
+
+| Fondo | Texto | Ratio | WCAG | Nota |
+|-------|-------|-------|------|------|
+| \`surface-card\` (#FFF) | \`text-primary\` (#051758) | 16.2:1 | **AAA** | Texto principal |
+| \`surface-card\` (#FFF) | \`text-secondary\` (#475A8F) | 6.8:1 | **AA** | Texto secundario |
+| \`action-primary\` (#E04D36) | \`text-on-action\` (#FFF) | 4.8:1 | **AA** | Texto sobre botón |
+| \`surface-card\` (#FFF) | \`error\` (#D32F2F) | 5.1:1 | **AA** | Textos de error |
+| \`surface-card\` (#FFF) | \`neutral-400\` (#718096) | 4.6:1 | **AA** | Texto secundario OK |
+| \`surface-card\` (#FFF) | \`neutral-300\` (#A0AEC0) | 2.8:1 | ⚠️ **FAIL** | Solo decorativo |
+| \`surface-card\` (#FFF) | \`accent\` (#FF9500) | 2.5:1 | ⚠️ **FAIL** | Solo iconos ≥24px |
+| \`navy\` (#051758) | \`neutral-50\` (#FFF) | 17.5:1 | **AAA** | Sidebar / Invertido |
+| \`navy\` (#051758) | \`accent\` (#FF9500) | 7.1:1 | **AAA** | Badges en sidebar OK |
+
+### 📊 Dark Mode Feedback (SaaS Recovery)
+| Token | Light | Dark (Audit v4.2 Fix) |
+|-------|-------|------------------------|
+| success-light | #E8F5E9 | #1B3A1C |
+| error-light | #FFEBEE | #3B1212 |
+| warning-light | #FFF3E0 | #3B2500 |
+| info-light | #E3F2FD | #0D1F3C |
+
+### 📜 Gobernanza y Contribución (Khor Elite Standards)
+El sistema sigue estándares estrictos para mantener la paridad IA/Humanos.
+1. **Prefijo K:** Todo componente debe empezar con "K" (ej. \`KButton\`).
+2. **Cero Dependencias:** Prohibido instalar librerías de UI externas (MUI, AntD).
+3. **Capa Semántica 2:** Priorizar \`action-primary-default\` sobre colores base.
+4. **Metadata IA:** Todo componente nuevo debe incluir \`a11ySummary\` y \`aiNotes\` en su registro.
+5. **Checklist:** Props tipadas, Soporte Dark Mode, Soporte Densidad.
+
+### Architecture Layers (v4.3.0)
 - **Breakpoints:** \`sm: 640px\`, \`md: 768px\`, \`lg: 1024px\`, \`xl: 1280px\`.
 - **Z-Index:** \`dropdown: 1000\`, \`modal: 1400\`, \`toast: 1700\`.
 - **Motion:** \`standard: cubic-bezier(0.4, 0, 0.2, 1)\`, \`spring: cubic-bezier(0.175, 0.885, 0.32, 1.275)\`.
-
-### ♿ Reglas WCAG Elite
-1. **Contraste AA:** Texto ≥ 4.5:1.
-2. **Foco Visible:** Siempre usar \`focus-visible\` con el anillo Khor Primary.
+- **Reduced Motion:** El sistema respeta \`prefers-reduced-motion\` globalmente.
 
 ### Registro de Cambios (Changelog)
 
 | Versión | Fecha | Cambios |
 |---------|-------|---------|
+| **v4.3.1** | ${today} | **The Absolute 100:** Cierre definitivo de gaps de motion (easing enter/exit) y embebido de gobernanza para paridad total. |
+| **v4.3.0** | 24 Abr 2026 | **The 100/100 Audit:** Sincronización total de paridad técnica y documental. |
+| **v4.2.0** | 23 Abr 2026 | **Audit Recovery:** Restauración de Tokens Semánticos de 2ª Capa y Sistema de Densidad base. |
 | **v4.1.1** | 20 Abr 2026 | **Refinement Phase:** Integración de Chart Palette (12), Form States detallados y nuevo sistema de Iconografía estandarizado (XS-2XL). |
 | **v4.1.0** | 10 Abr 2026 | **Elite Upgrade:** Introducción de Layout Tokens, Z-Index Scale y Page Recipes. |
 

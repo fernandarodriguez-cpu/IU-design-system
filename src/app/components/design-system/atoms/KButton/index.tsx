@@ -10,15 +10,15 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary: 'bg-khor-primary text-white hover:bg-khor-primary-hover hover:shadow-khor-md after:absolute after:inset-x-0 after:top-0 after:h-px after:bg-white/20 after:pointer-events-none',
-        secondary: 'bg-khor-secondary text-white hover:bg-khor-secondary-hover hover:shadow-khor-md after:absolute after:inset-x-0 after:top-0 after:h-px after:bg-white/20 after:pointer-events-none',
-        outline: 'border-khor-neutral-200 bg-transparent text-khor-neutral-700 hover:bg-khor-neutral-50 hover:border-khor-neutral-300 shadow-none',
-        ghost: 'bg-transparent text-khor-neutral-700 hover:bg-khor-neutral-100 shadow-none',
-        danger: 'bg-khor-error text-white hover:bg-khor-error/90 hover:shadow-khor-md after:absolute after:inset-x-0 after:top-0 after:h-px after:bg-white/20',
-        link: 'bg-transparent text-khor-primary underline-offset-4 hover:underline !p-0 !min-h-0 !h-auto border-none shadow-none active:scale-100',
-        text: 'bg-transparent text-khor-neutral-700 hover:bg-khor-neutral-100 border-none shadow-none',
-        solid: 'bg-khor-primary text-white hover:bg-khor-primary-hover hover:shadow-khor-md after:absolute after:inset-x-0 after:top-0 after:h-px after:bg-white/20',
-        filled: 'bg-khor-neutral-100 text-khor-neutral-900 hover:bg-khor-neutral-200 border-none shadow-none',
+        primary: 'bg-khor-action-primary text-khor-text-on-action hover:bg-khor-action-primary-hover hover:shadow-khor-md after:absolute after:inset-x-0 after:top-0 after:h-px after:bg-white/20 after:pointer-events-none',
+        secondary: 'bg-khor-secondary text-khor-text-on-action hover:bg-khor-secondary-hover hover:shadow-khor-md after:absolute after:inset-x-0 after:top-0 after:h-px after:bg-white/20 after:pointer-events-none',
+        outline: 'border-khor-border-strong bg-transparent text-khor-text-primary hover:bg-khor-surface-page hover:border-khor-border-hover shadow-none',
+        ghost: 'bg-transparent text-khor-text-primary hover:bg-khor-action-ghost-hover shadow-none',
+        danger: 'bg-khor-action-danger text-khor-text-on-action hover:bg-khor-action-danger-hover hover:shadow-khor-md after:absolute after:inset-x-0 after:top-0 after:h-px after:bg-white/20',
+        link: 'bg-transparent text-khor-action-primary underline-offset-4 hover:underline !p-0 !min-h-0 !h-auto border-none shadow-none active:scale-100',
+        text: 'bg-transparent text-khor-text-primary hover:bg-khor-action-ghost-hover border-none shadow-none',
+        solid: 'bg-khor-action-primary text-khor-text-on-action hover:bg-khor-action-primary-hover hover:shadow-khor-md after:absolute after:inset-x-0 after:top-0 after:h-px after:bg-white/20',
+        filled: 'bg-khor-surface-page text-khor-text-primary hover:bg-khor-neutral-200 border-none shadow-none',
       },
       size: {
         sm: 'h-[var(--khor-density-height-sm)] min-w-[var(--khor-density-min-width-button)] px-[var(--khor-space-3)] text-xs',
@@ -28,14 +28,14 @@ const buttonVariants = cva(
       },
       color: {
         default: '',
-        primary: 'bg-khor-primary text-white hover:bg-khor-primary-hover',
-        secondary: 'bg-khor-secondary text-white hover:bg-khor-secondary-hover',
-        danger: 'bg-khor-error text-white hover:bg-khor-error/90',
-        processing: 'bg-khor-feedback-processing text-white hover:opacity-90',
-        volcano: 'bg-khor-feedback-volcano text-white hover:opacity-90',
-        gold: 'bg-khor-feedback-gold text-white hover:opacity-90',
+        primary: 'bg-khor-action-primary text-khor-text-on-action hover:bg-khor-action-primary-hover',
+        secondary: 'bg-khor-secondary text-khor-text-on-action hover:bg-khor-secondary-hover',
+        danger: 'bg-khor-action-danger text-khor-text-on-action hover:bg-khor-action-danger-hover',
+        processing: 'bg-khor-feedback-processing text-khor-text-on-action hover:opacity-90',
+        volcano: 'bg-khor-feedback-volcano text-khor-text-on-action hover:opacity-90',
+        gold: 'bg-khor-feedback-gold text-khor-text-on-action hover:opacity-90',
         lime: 'bg-khor-feedback-lime text-black hover:opacity-90',
-        purple: 'bg-khor-feedback-purple text-white hover:opacity-90',
+        purple: 'bg-khor-feedback-purple text-khor-text-on-action hover:opacity-90',
       },
       shape: {
         default: 'rounded-[var(--khor-radius-md)]',
@@ -51,9 +51,9 @@ const buttonVariants = cva(
     },
     compoundVariants: [
       // Semantic Colors + Outline
-      { variant: 'outline', color: 'primary', className: 'text-khor-primary border-khor-primary/30 hover:bg-khor-primary-light/20' },
+      { variant: 'outline', color: 'primary', className: 'text-khor-action-primary border-khor-action-primary/30 hover:bg-khor-success-light/20' },
       { variant: 'outline', color: 'secondary', className: 'text-khor-secondary border-khor-secondary/30 hover:bg-khor-secondary/5' },
-      { variant: 'outline', color: 'danger', className: 'text-khor-error border-khor-error/30 hover:bg-khor-error-light/20' },
+      { variant: 'outline', color: 'danger', className: 'text-khor-action-danger border-khor-action-danger/30 hover:bg-khor-error-light/20' },
       { variant: 'outline', color: 'volcano', className: 'text-khor-feedback-volcano border-khor-feedback-volcano/30 hover:bg-khor-feedback-volcano/5' },
       
       // Semantic Colors + Link/Text

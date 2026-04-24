@@ -188,6 +188,11 @@ export const khorTokens = {
     lg: 24,
     xl: 40,
     xxl: 48,
+    // Density Tier 2
+    densityXs: 'var(--khor-density-spacing-xs)',
+    densitySm: 'var(--khor-density-spacing-sm)',
+    densityMd: 'var(--khor-density-spacing-md)',
+    densityLg: 'var(--khor-density-spacing-lg)',
   },
   shadows: {
     sm: 'var(--khor-shadow-sm)',
@@ -254,6 +259,22 @@ export const khorTokens = {
       card: 'var(--khor-surface-card)',
       raised: 'var(--khor-surface-raised)',
       overlay: 'var(--khor-surface-overlay)',
+      overlayBg: 'var(--khor-overlay-bg)',
+      overlayBackdrop: 'var(--khor-overlay-backdrop)',
+    },
+    motion: {
+      duration: {
+        instant: 'var(--khor-duration-instant)',
+        fast: 'var(--khor-duration-fast)',
+        normal: 'var(--khor-duration-normal)',
+        slow: 'var(--khor-duration-slow)',
+      },
+      easing: {
+        standard: 'var(--khor-easing-standard)',
+        spring: 'var(--khor-easing-spring)',
+        enter: 'var(--khor-easing-enter)',
+        exit: 'var(--khor-easing-exit)',
+      },
     },
     text: {
       primary: 'var(--khor-text-primary)',
@@ -262,6 +283,7 @@ export const khorTokens = {
       disabled: 'var(--khor-text-disabled)',
       onAction: 'var(--khor-text-on-action)',
       link: 'var(--khor-text-link)',
+      linkHover: 'var(--khor-text-link-hover)',
     },
     border: {
       default: 'var(--khor-border-default)',

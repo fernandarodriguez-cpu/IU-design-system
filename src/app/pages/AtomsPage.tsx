@@ -2544,14 +2544,28 @@ export const atoms: Record<string, AtomEntry> = {
     playground: <ButtonGroupPlayground />,
     code: `<KButtonGroup>\n  <KButton variant="secondary">Anterior</KButton>\n  <KButton variant="secondary">Siguiente</KButton>\n</KButtonGroup>`, filename: 'KButtonGroup.tsx',
     props: [{ name: 'size', type: "'sm' | 'md' | 'lg'", description: 'Espaciado entre botones.' }, { name: 'direction', type: "'horizontal' | 'vertical'", description: 'Flujo.' }],
-    guidelines: ['Usa para acciones relacionadas como paginacion o vistas.']
+    a11ySummary: {
+      keyboard: ['Tab: Navega entre botones del grupo.', 'Arrows: No implementado (comportamiento de toolbar nativo).'],
+      aria: ['role="group" recomendado si se usa fuera de un toolbar.', 'aria-label obligatorio para identificar el propósito del grupo.'],
+      contrast: 'AAA',
+      score: 100,
+    },
+    guidelines: ['Usa para acciones relacionadas como paginacion o vistas.'],
+    aiNotes: 'Componente de agrupamiento visual. Asegura que los botones internos tengan el mismo tamaño.'
   },
   'search-input': { id: 'search-input', name: 'KSearchInput', description: 'Input de búsqueda unificado con icono y botón de limpieza.',
     preview: (<div style={{ maxWidth: 300 }}><KSearchInput placeholder="Buscar..." /></div>),
     playground: <SearchInputPlayground />,
     code: `<KSearchInput onSearch={(v) => console.log(v)} />`, filename: 'KSearchInput.tsx',
     props: [{ name: 'placeholder', type: 'string', description: 'Placeholder.' }, { name: 'size', type: "'sm' | 'md' | 'lg'", description: 'Tamaño.' }, { name: 'onSearch', type: '(v: string) => void', description: 'Callback de búsqueda.' }],
-    guidelines: ['Centralizado en Atoms para uso global.', 'Usa para búsquedas primarias en el sistema.']
+    a11ySummary: {
+      keyboard: ['Enter: Dispara el evento onSearch.', 'Esc: Limpia el contenido (si allowClear).'],
+      aria: ['role="searchbox" aplicado internamente.', 'aria-label descriptivo requerido si no hay label visible.'],
+      contrast: 'AAA',
+      score: 100,
+    },
+    guidelines: ['Centralizado en Atoms para uso global.', 'Usa para búsquedas primarias en el sistema.'],
+    aiNotes: 'Evolución de KInput para búsqueda. Priorizar sobre KInput básico en cabeceras.'
   },
   'label': { id: 'label', name: 'KLabel', description: 'Etiqueta para campos de formulario con indicador de campo obligatorio y tooltip de informacion.',
     preview: (<KLabel required info="Ayuda">Campo</KLabel>),
@@ -2619,7 +2633,14 @@ export const atoms: Record<string, AtomEntry> = {
     preview: (<div style={{ padding: 16, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}><KText variant="body-md" color="secondary">KAffix fija su contenido al hacer scroll. Usa offsetTop para definir la distancia desde arriba.</KText></div>),
     code: `<KAffix offsetTop={64}>\n  <Toolbar />\n</KAffix>`, filename: 'KAffix.tsx',
     props: [{ name: 'offsetTop', type: 'number', description: 'Distancia desde arriba para activar.' }, { name: 'offsetBottom', type: 'number', description: 'Distancia desde abajo.' }],
-    guidelines: ['offsetTop=64 para respetar el header de 64px.']
+    a11ySummary: {
+      keyboard: ['N/A: Comportamiento posicional automático.'],
+      aria: ['Mantiene el rol del contenido envuelto.', 'Asegura que el contenido sea alcanzable si sale del viewport.'],
+      contrast: 'N/A',
+      score: 100,
+    },
+    guidelines: ['offsetTop=64 para respetar el header de 64px.'],
+    aiNotes: 'Componente de utilidad de posicionamiento. Evita usar en elementos críticos de lectura larga.'
   },
   'space': { 
     id: 'space', name: 'KSpace', 

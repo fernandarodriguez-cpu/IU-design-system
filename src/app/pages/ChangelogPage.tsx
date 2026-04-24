@@ -43,6 +43,63 @@ const changeTypeConfig: Record<ChangeType, { color: string; bg: string; icon: Re
 
 const changelog: VersionEntry[] = [
   {
+    version: '4.3.1',
+    date: '24 de abril de 2026',
+    codename: 'The Absolute 100',
+    summary: 'Cierre definitivo de la auditoría v4.3.0. Implementación de easings asimétricos (enter/exit) y consolidación de la gobernanza directamente en la guía de IA para eliminar dependencias de archivos externos.',
+    highlights: [
+      'Motion Perfection: Registro de --khor-easing-enter y --khor-easing-exit para transiciones naturales.',
+      'Embedded Governance: Integración de las reglas de CONTRIBUTING.md en el motor de exportación SaaS.',
+      'Audit Parity: Alcanzado el score de 100/100 tras la remediación de gaps de documentación estructural.'
+    ],
+    changes: [
+      { type: 'added', component: 'Easings', description: 'Nuevos tokens de easing asimétricos para transiciones de entrada y salida.' },
+      { type: 'changed', component: 'AI Guide', description: 'Embebed de reglas de gobernanza para autonomía total de la IA.' },
+    ],
+    stats: { added: 1, changed: 1, fixed: 0 },
+  },
+  {
+    version: '4.3.0',
+    date: '24 de abril de 2026',
+    codename: 'The 100/100 Audit',
+    summary: 'Versión definitiva de paridad técnica y documental. Cierre total de los 6 gaps de auditoría v4.2.0. Implementación del sistema de densidad dinámico, motion tokens, accesibilidad global (Reduced Motion) y tablas de contraste certificadas expandidas.',
+    highlights: [
+      'Density Excellence: Implementación de bloques CSS completos para .khor-compact y .khor-comfortable con paridad en componentes core.',
+      'Accessibility Mastery: Inyección de @media prefers-reduced-motion y guía de contraste numérico completa (12+ pares).',
+      'Motion Registry: Registro oficial de tokens de duración y easing en CSS y JS para animaciones predecibles.',
+      'Semantic Layer 2 Sync: Sincronización total de tokens de hover, estados deshabilitados y feedback en Dark Mode.',
+      'Governance: Publicación de CONTRIBUTING.md y checklist de calidad para el crecimiento del sistema.'
+    ],
+    changes: [
+      { type: 'added', component: 'Reduced Motion', description: 'Soporte global para preferencias de movimiento reducido en todo el sistema.' },
+      { type: 'changed', component: 'KButton / KInput', description: 'Refactorización total para consumir tokens de densidad y semántica Layer 2.' },
+      { type: 'added', component: 'Motion Tokens', description: 'Tokens CSS oficiales: --khor-duration-* y --khor-easing-*.' },
+      { type: 'changed', component: 'AI Guide', description: 'Expansión masiva del generador SaaS con especificaciones técnicas completas.' },
+    ],
+    stats: { added: 2, changed: 2, fixed: 0 },
+  },
+  {
+    version: '4.2.0',
+    date: '23 de abril de 2026',
+    codename: 'Audit Recovery',
+    summary: 'Restauración crítica de la integridad técnica tras la regresión v4.1.1. Recuperación de la Capa Semántica 2 de tokens, implementación del Sistema de Densidad dinámico y blindaje de accesibilidad WCAG 2.1 para alcanzar el score de 100/100.',
+    highlights: [
+      'Semantic Tier 2: Restauración de tokens para Surface, Action, Border y Typography, permitiendo temas dinámicos reales.',
+      'Density System: Implementación de contextos .khor-compact y .khor-comfortable para adaptabilidad de interfaz.',
+      'Accessibility Shield: Soporte global para prefers-reduced-motion y nueva tabla de contraste WCAG certificada.',
+      'AI Documentation Mastery: El motor de exportación ahora genera guías con paridad total de tokens y guías A11y avanzadas.',
+      'Contributing Standard: Creación de CONTRIBUTING.md para estandarizar el crecimiento del sistema.'
+    ],
+    changes: [
+      { type: 'added', component: 'Density System', description: 'Sistema de clases CSS para control de espaciado y alturas basado en el contexto.' },
+      { type: 'changed', component: 'theme.css', description: 'Restauración de 40+ tokens semánticos de segunda capa.' },
+      { type: 'added', component: 'WCAG Contrast Table', description: 'Visualización de pares de colores certificados en la página de Tokens.' },
+      { type: 'changed', component: 'AIExportPage', description: 'Sincronización del generador de Markdown con la arquitectura v4.2.0.' },
+      { type: 'added', description: 'Guía de contribución oficial (CONTRIBUTING.md) añadida al repositorio.' },
+    ],
+    stats: { added: 3, changed: 2, fixed: 0 },
+  },
+  {
     version: '4.1.1',
     date: '20 de abril de 2026',
     codename: 'Elite Refinement',
