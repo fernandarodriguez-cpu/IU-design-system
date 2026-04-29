@@ -3,7 +3,7 @@ import { Column, Table } from '@tanstack/react-table';
 import { Plus, X, Filter, Trash2, Check } from 'lucide-react';
 import { KButton } from '../../../atoms/KButton';
 import { KInput } from '../../../atoms/KInput';
-import { KSelectAdvanced, KSelectAdvancedOption } from '../../../molecules/KSelectAdvanced';
+import { KSelectAdvanced } from '../../../molecules/KSelectAdvanced';
 import { KText } from '../../../atoms/KText';
 import { cn } from '../../../../../../imports/utils';
 
@@ -64,7 +64,7 @@ export function KGridFilterPanel<TData>({ table, onClose }: KGridFilterPanelProp
             <div className="w-12 h-12 rounded-full bg-khor-neutral-100 flex items-center justify-center mb-3">
               <Filter size={20} className="text-khor-neutral-400" />
             </div>
-            <KText variant="bodySm" className="text-khor-text-secondary">No hay filtros activos</KText>
+            <KText variant="small" className="text-khor-text-secondary">No hay filtros activos</KText>
           </div>
         ) : (
           filters.map((filter, index) => (
@@ -76,25 +76,18 @@ export function KGridFilterPanel<TData>({ table, onClose }: KGridFilterPanelProp
                       value={filter.id}
                       onChange={(val) => updateFilter(index, val, filter.value)}
                       placeholder="Columna"
-                    >
-                      {columns.map(col => (
-                        <KSelectAdvancedOption key={col.id} value={col.id}>
-                          {String(col.columnDef.header || col.id)}
-                        </KSelectAdvancedOption>
-                      ))}
-                    </KSelectAdvanced>
+                      options={columns.map(col => ({
+                        value: col.id,
+                        label: String(col.columnDef.header || col.id)
+                      }))}
+                    />
                   </div>
                   <div className="w-1/2">
                     <KSelectAdvanced
                       value="contains" // Simplified for now
                       placeholder="Operador"
-                    >
-                      {OPERATORS.map(op => (
-                        <KSelectAdvancedOption key={op.value} value={op.value}>
-                          {op.label}
-                        </KSelectAdvancedOption>
-                      ))}
-                    </KSelectAdvanced>
+                      options={OPERATORS}
+                    />
                   </div>
                 </div>
                 <KInput 

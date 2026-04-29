@@ -55,7 +55,7 @@ export function KFormWizard({ steps, onComplete, onCancel, className }: KFormWiz
         <div className="mb-6">
           <KText variant="h3" className="text-khor-brand-navy mb-1">{steps[currentStep].title}</KText>
           {steps[currentStep].description && (
-            <KText variant="bodySm" className="text-khor-text-secondary">{steps[currentStep].description}</KText>
+            <KText variant="small" className="text-khor-text-secondary">{steps[currentStep].description}</KText>
           )}
         </div>
         

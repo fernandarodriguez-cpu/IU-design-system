@@ -44,12 +44,16 @@ export function KStatCard({ title, value, change, changeLabel, sparkData, icon, 
         className
       )}
     >
-      <div className="flex justify-between items-center">
-        <KText variant="small" color="secondary" className="font-semibold uppercase tracking-wider opacity-70">{title}</KText>
-        {icon && <span className="text-khor-neutral-400">{icon}</span>}
+      <div className="flex justify-between items-center mb-2">
+        <KText variant="overline" className="text-[9px] font-black text-khor-primary tracking-[0.25em] opacity-100 uppercase">
+          {title}
+        </KText>
+        {icon && <span className="text-khor-neutral-300 group-hover:text-khor-primary transition-colors">{icon}</span>}
       </div>
-      <div className="flex items-baseline gap-3">
-        <span className="text-3xl font-bold text-khor-text-primary leading-none tracking-tight">{value}</span>
+      <div className="flex items-baseline justify-between gap-4 mt-auto">
+        <span className="text-3xl font-black text-khor-secondary dark:text-white leading-none tracking-tightest">
+          {value}
+        </span>
         {change !== undefined && (
           <span className={cn("inline-flex items-center gap-1 text-[13px] font-bold", trendColorClass)}>
             <TrendIcon size={14} strokeWidth={2.5} />

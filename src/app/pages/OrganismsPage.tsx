@@ -8,6 +8,7 @@ import { ComponentDoc } from '../components/docs/ComponentDoc';
 import type { PropDef } from '../components/docs/ComponentDoc';
 import { KDataTable, KDataGrid, KFormWizard } from '../components/design-system/organisms';
 import { KSparklineCell } from '../components/design-system/organisms/KSparklineCell';
+import KSteps from '../components/design-system/molecules/KSteps';
 import { 
   KModal, 
   KModalContent, 
@@ -738,14 +739,14 @@ function FormWizardPlayground() {
           <div className="flex items-center justify-between p-4 bg-khor-neutral-50 rounded-lg">
             <div>
               <KText variant="bodyMd" className="font-bold">Notificaciones Push</KText>
-              <KText variant="bodySm" className="text-khor-text-secondary">Recibe alertas en tiempo real.</KText>
+              <KText variant="small" className="text-khor-text-secondary">Recibe alertas en tiempo real.</KText>
             </div>
             <KSwitch />
           </div>
           <div className="flex items-center justify-between p-4 bg-khor-neutral-50 rounded-lg">
             <div>
               <KText variant="bodyMd" className="font-bold">Modo Desarrollador</KText>
-              <KText variant="bodySm" className="text-khor-text-secondary">Acceso a herramientas avanzadas.</KText>
+              <KText variant="small" className="text-khor-text-secondary">Acceso a herramientas avanzadas.</KText>
             </div>
             <KSwitch />
           </div>
@@ -760,7 +761,7 @@ function FormWizardPlayground() {
         <div className="p-6 bg-khor-primary/5 rounded-xl border border-khor-primary/20 text-center">
           <CheckCircle className="mx-auto mb-3 text-khor-primary" size={40} />
           <KText variant="h4">¡Todo listo para comenzar!</KText>
-          <KText variant="bodySm" className="text-khor-text-secondary mt-2">
+          <KText variant="small" className="text-khor-text-secondary mt-2">
             Al hacer clic en finalizar, tu perfil será actualizado con las nuevas preferencias.
           </KText>
         </div>

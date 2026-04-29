@@ -215,7 +215,7 @@
   --khor-rotate-180: 180deg;
   --khor-rotate-270: 270deg;
 
-  /* ── Motion & Easing (v4.1.0 Standard) ── */
+  /* ── Motion & Easing (v5.0.0-alpha Standard) ── */
   --khor-duration-instant: 75ms;
   --khor-duration-fast: 150ms;
   --khor-duration-normal: 250ms;

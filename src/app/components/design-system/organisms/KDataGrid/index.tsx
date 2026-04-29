@@ -8,7 +8,7 @@ import {
   SortingState,
   ColumnFiltersState,
   ColumnPinningState,
-  ColumnResizingState,
+  ColumnSizingState,
 } from '@tanstack/react-table';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { 
@@ -28,7 +28,7 @@ import { KButton } from '../../atoms/KButton';
 import { KCheckbox } from '../../atoms/KCheckbox';
 import { KText } from '../../atoms/KText';
 import { khorTokens } from '../../../../theme/khor-theme';
-import { KPopoverRoot, KPopoverTrigger, KPopoverContent } from '../../../molecules/KPopover';
+import { KPopoverRoot, KPopoverTrigger, KPopoverContent } from '../../molecules/KPopover';
 import { KGridFilterPanel } from './subcomponents/KGridFilterPanel';
 
 const t = khorTokens;
@@ -45,9 +45,9 @@ const getPinnedStyles = (column: any): React.CSSProperties => {
     width: `${column.getSize()}px`,
     zIndex: isPinned ? 2 : 1,
     boxShadow: isLastLeftPinned 
-      ? 'inset -4px 0 8px -4px rgba(0,0,0,0.12)' 
+      ? 'inset -4px 0 8px -4px var(--khor-border-default)' 
       : isFirstRightPinned 
-        ? 'inset 4px 0 8px -4px rgba(0,0,0,0.12)' 
+        ? 'inset 4px 0 8px -4px var(--khor-border-default)' 
         : undefined,
   };
 };
@@ -119,7 +119,7 @@ export default function KDataGrid<TData>({
         <div className="flex items-center justify-between p-4 border-b border-khor-border-default">
           <div className="flex flex-col gap-1">
             {title && <KText variant="h3" className="text-khor-brand-navy">{title}</KText>}
-            {description && <KText variant="bodySm" className="text-khor-text-secondary">{description}</KText>}
+            {description && <KText variant="small" className="text-khor-text-secondary">{description}</KText>}
           </div>
           <div className="flex items-center gap-2">
             {enableFilters && (
@@ -144,7 +144,7 @@ export default function KDataGrid<TData>({
         <div className="flex items-center justify-between px-4 py-2 bg-khor-primary text-white animate-in slide-in-from-top duration-300">
           <div className="flex items-center gap-3">
             <Check size={16} />
-            <KText variant="bodySm" className="text-white font-bold">
+            <KText variant="small" className="text-white font-bold">
               {Object.keys(rowSelection).length} seleccionados
             </KText>
           </div>
@@ -297,7 +297,7 @@ export default function KDataGrid<TData>({
           <div className="flex flex-col items-center justify-center py-20 px-4">
              <Filter size={48} className="text-khor-neutral-300 mb-4" />
              <KText variant="h4" className="text-khor-text-primary mb-1">No se encontraron resultados</KText>
-             <KText variant="bodySm" className="text-khor-text-secondary text-center max-w-xs">
+             <KText variant="small" className="text-khor-text-secondary text-center max-w-xs">
                Intenta ajustar tus filtros o búsqueda para encontrar lo que buscas.
              </KText>
           </div>

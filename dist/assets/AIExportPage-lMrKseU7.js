@@ -1,65 +1,6 @@
-/**
- * AIExportPage — Genera y descarga un archivo .md completo con todo
- * el sistema de diseno Khor, optimizado como prompt/guia para IAs.
- */
-import React, { useState, useMemo, useRef } from 'react';
-import {
-  Download, Copy, Check, Eye, EyeOff, FileText,
-  Bot, Sparkles, Info, Zap, Settings2,
-  ChevronDown, ChevronRight, MousePointerClick,
-} from 'lucide-react';
-import { KButton } from '../components/design-system/atoms/KButton/index';
-import { KText } from '../components/design-system/atoms/KText/index';
-import { KBadge } from '../components/design-system/atoms/KBadge/index';
-import { KAlert } from '../components/design-system/atoms/KAlert/index';
-import { KSwitch } from '../components/design-system/atoms/KSwitch/index';
-import { KCardSection } from '../components/design-system/organisms/KCardSection/index';
-import { KTabs } from '../components/design-system/organisms/KTabs/index';
-import { kToast } from '../components/design-system/organisms/KToast/index';
-import { useTheme, ThemeConfig } from '../theme/theme-context';
-import { patterns } from '../patterns/index';
-import { atoms } from './AtomsPage';
-import { molecules } from './MoleculesPage';
-import { organisms } from './OrganismsPage';
-import { khorTokens } from '../theme/khor-theme';
-
-const t = khorTokens;
-
-/* ─── Version (must match ChangelogPage & AppShell) ─── */
-export const KHOR_VERSION = '5.0.0-alpha';
-
-
-/* ─── Sections config ───────────────────────── */
-export interface SectionConfig {
-  id: string;
-  label: string;
-  description: string;
-  enabled: boolean;
-}
-
-export const defaultSections: SectionConfig[] = [
-  { id: 'header', label: 'Encabezado y contexto', description: 'Nombre, versión, stack tecnológico y propósito del sistema.', enabled: true },
-  { id: 'tokens', label: 'Design Tokens', description: 'Charts elite, Forms semánticos, Icon scale, Colores, Tipografía, etc.', enabled: true },
-  { id: 'darkmode', label: 'Dark Mode', description: 'Inversión semántica y tokens alternativos para modo oscuro.', enabled: true },
-  { id: 'atoms', label: 'Átomos (30)', description: 'API completa de 30 átomos: Sistema v5.0 optimizado.', enabled: true },
-  { id: 'molecules', label: 'Moléculas (33)', description: 'API completa de 33 moléculas coordinadas con el sistema Elite.', enabled: true },
-  { id: 'organisms', label: 'Organismos (15)', description: 'Componentes complejos coordinados con el sistema Elite.', enabled: true },
-  { id: 'templates', label: 'Templates y Patrones', description: 'Patrones de página: Dashboard Admin, CRUD Elite, Login SaaS, etc.', enabled: true },
-  { id: 'layout', label: 'Layout (AppShell)', description: 'Estructura sidebar + header + canvas con dimensiones Elite.', enabled: true },
-  { id: 'patterns', label: 'Patrones y Convenciones', description: '3-Layer Architecture, Fluid Typography, Naming, A11y.', enabled: true },
-  { id: 'examples', label: 'Ejemplos de Código', description: 'Snippets listos para copiar/pegar de casos de uso comunes.', enabled: true },
-];
-
-/* ─── Markdown Generator ────────────────────── */
-export function generateMarkdown(sections: SectionConfig[], theme: ThemeConfig): string {
-  const enabled = new Set(sections.filter((s) => s.enabled).map((s) => s.id));
-  const parts: string[] = [];
-  const today = new Date().toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' });
-
-  if (enabled.has('header')) {
-    parts.push(`
-# Sistema de Diseño Khor v${KHOR_VERSION}
-Generado el: ${today}
+import{j as e}from"./vendor-ui-DIwXcyFn.js";import{r as h}from"./vendor-react-qxSCTQlm.js";import{u as w,h as B,v as I,b as k,g as P,p as R,i as v}from"./index-DFtbdt_C.js";import{K as z,a as L}from"./AtomsPage-DdVyH3EK.js";import{molecules as U}from"./MoleculesPage-DXOj-7_8.js";import{organisms as M}from"./OrganismsPage-Cs9jMmJG.js";import{al as N,aH as $,aG as S,q as O,Z as G,u as q,C as A,a as F,d as W,e as H,i as V,k as _,aI as X}from"./vendor-icons-C7ulT-u7.js";import"./vendor-charts-DQ39u6k0.js";import"./ComponentDoc-CvuHqVTD.js";import"./CodeBlock-DqkoeIXy.js";import"./index-B4_qytUN.js";import"./es-Cd5y1Rzp.js";const n=B,Z="5.0.0-alpha",J=[{id:"header",label:"Encabezado y contexto",description:"Nombre, versión, stack tecnológico y propósito del sistema.",enabled:!0},{id:"tokens",label:"Design Tokens",description:"Charts elite, Forms semánticos, Icon scale, Colores, Tipografía, etc.",enabled:!0},{id:"darkmode",label:"Dark Mode",description:"Inversión semántica y tokens alternativos para modo oscuro.",enabled:!0},{id:"atoms",label:"Átomos (30)",description:"API completa de 30 átomos: Sistema v5.0 optimizado.",enabled:!0},{id:"molecules",label:"Moléculas (33)",description:"API completa de 33 moléculas coordinadas con el sistema Elite.",enabled:!0},{id:"organisms",label:"Organismos (15)",description:"Componentes complejos coordinados con el sistema Elite.",enabled:!0},{id:"templates",label:"Templates y Patrones",description:"Patrones de página: Dashboard Admin, CRUD Elite, Login SaaS, etc.",enabled:!0},{id:"layout",label:"Layout (AppShell)",description:"Estructura sidebar + header + canvas con dimensiones Elite.",enabled:!0},{id:"patterns",label:"Patrones y Convenciones",description:"3-Layer Architecture, Fluid Typography, Naming, A11y.",enabled:!0},{id:"examples",label:"Ejemplos de Código",description:"Snippets listos para copiar/pegar de casos de uso comunes.",enabled:!0}];function Q(b,a){const l=new Set(b.filter(d=>d.enabled).map(d=>d.id)),i=[],f=new Date().toLocaleDateString("es-MX",{year:"numeric",month:"long",day:"numeric"});l.has("header")&&i.push(`
+# Sistema de Diseño Khor v${Z}
+Generado el: ${f}
 
 Este documento es la única fuente de verdad para el desarrollo en el ecosistema Khor. Úsalo como contexto para que la IA genere código consistente, accesible y alineado con la marca.
 
@@ -76,7 +17,7 @@ Como IA, DEBES seguir estas reglas estrictamente al generar código:
 ### ♿ Reglas Estrictas de Accesibilidad (A11y)
 1. **Roles interactivos:** NUNCA uses \`onClick\` en elementos no interactivos (\`div\`). Usa siempre \`<KButton>\`.
 2. **Atributos ARIA:** Todo elemento sin texto visible DEBE tener un \`aria-label\`.
-3. **Movimiento reducido:** Nunca agregues animaciones CSS o JS sin verificar que el sistema respeta \`prefers-reduced-motion\`. Usa siempre los tokens de motion de Khor (\`\--khor-duration-*\`, \`\--khor-easing-*\`).
+3. **Movimiento reducido:** Nunca agregues animaciones CSS o JS sin verificar que el sistema respeta \`prefers-reduced-motion\`. Usa siempre los tokens de motion de Khor (\`--khor-duration-*\`, \`--khor-easing-*\`).
 
 ### 🏗️ Arquitectura de 3 Capas (World-Class Standard)
 El sistema Khor se organiza en 3 capas de tokens:
@@ -100,11 +41,7 @@ Khor v5.0 usa tipografía fluida basada en \`clamp()\`. NO sobrescribas tamaños
 - \`display-2xl\`, \`display-xl\`: Para títulos de gran impacto (Fluid 48px -> 72px).
 - \`heading-lg\` a \`heading-xs\`: Para jerarquía de contenido (Fluid 24px -> 48px).
 - \`body-xl\`, \`body-lg\`, \`body-md\`, \`body-sm\`: Para lectura estandarizada.
-`);
-  }
-
-  if (enabled.has('tokens')) {
-    parts.push(`
+`),l.has("tokens")&&i.push(`
 ## 🎨 Especificación Técnica de Tokens (Elite SaaS Architecture)
 
 La IA DEBE usar estos valores exactos:
@@ -112,9 +49,9 @@ La IA DEBE usar estos valores exactos:
 \`\`\`css
 :root {
   /* Elite Charts Palette (12 Colores) */
-  --khor-chart-primary: ${theme.primary};   --khor-chart-secondary: ${theme.secondary};
-  --khor-chart-accent: ${theme.accent};    --khor-chart-success: ${theme.success};
-  --khor-chart-error: ${theme.error};     --khor-chart-info: ${theme.info};
+  --khor-chart-primary: ${a.primary};   --khor-chart-secondary: ${a.secondary};
+  --khor-chart-accent: ${a.accent};    --khor-chart-success: ${a.success};
+  --khor-chart-error: ${a.error};     --khor-chart-info: ${a.info};
   --khor-chart-teal: #008080;      --khor-chart-purple: #9C27B0;
   --khor-chart-pink: #E91E63;      --khor-chart-cyan: #00BCD4;
   --khor-chart-amber: #FFC107;     --khor-chart-gray: #9E9E9E;
@@ -127,22 +64,22 @@ La IA DEBE usar estos valores exactos:
   --khor-neutral-800: #252C38;  --khor-neutral-900: #000000;
 
   /* Form Validation Semantic States */
-  --khor-form-error-bg: ${theme.error}15;   --khor-form-error-border: ${theme.error};   --khor-form-error-text: ${theme.error};
-  --khor-form-success-bg: ${theme.success}15; --khor-form-success-border: ${theme.success}; --khor-form-success-text: ${theme.success};
-  --khor-form-warning-bg: ${theme.warning}15; --khor-form-warning-border: ${theme.warning}; --khor-form-warning-text: ${theme.warning};
-  --khor-form-focus-ring: ${theme.primary};
+  --khor-form-error-bg: ${a.error}15;   --khor-form-error-border: ${a.error};   --khor-form-error-text: ${a.error};
+  --khor-form-success-bg: ${a.success}15; --khor-form-success-border: ${a.success}; --khor-form-success-text: ${a.success};
+  --khor-form-warning-bg: ${a.warning}15; --khor-form-warning-border: ${a.warning}; --khor-form-warning-text: ${a.warning};
+  --khor-form-focus-ring: ${a.primary};
 
   /* Semantic Layer 2: Actions */
-  --khor-action-primary-default: ${theme.primary}; --khor-action-primary-hover: #e8644f;
-  --khor-action-secondary-default: ${theme.secondary}; --khor-action-secondary-hover: #0a2270;
-  --khor-action-danger-default: ${theme.error}; --khor-action-danger-hover: #B71C1C;
+  --khor-action-primary-default: ${a.primary}; --khor-action-primary-hover: #e8644f;
+  --khor-action-secondary-default: ${a.secondary}; --khor-action-secondary-hover: #0a2270;
+  --khor-action-danger-default: ${a.error}; --khor-action-danger-hover: #B71C1C;
   --khor-action-ghost-hover: rgba(5, 23, 88, 0.06);
   --khor-action-disabled-bg: #EDF0F1; --khor-action-disabled-text: #A0AEC0;
 
   /* Semantic Layer 2: Surface & Overlay (Interactive Ref) */
   --khor-surface-page: #f8faff; --khor-surface-card: #ffffff;
   --khor-surface-hover: rgba(5, 23, 88, 0.04); --khor-surface-pressed: rgba(5, 23, 88, 0.08);
-  --khor-surface-selected: ${theme.primary}15; --khor-surface-subtle: #F4F6F8;
+  --khor-surface-selected: ${a.primary}15; --khor-surface-subtle: #F4F6F8;
   --khor-surface-overlay: #ffffff; --khor-overlay-bg: rgba(255, 255, 255, 0.95);
 
   /* Layer 3: Contextual Tokens — secciones invertidas */
@@ -157,13 +94,13 @@ La IA DEBE usar estos valores exactos:
 
   /* Semantic Layer 2: Borders */
   --khor-border-default: #D5DBE0; --khor-border-muted: #EDF0F1;
-  --khor-border-strong: #A0AEC0; --khor-border-focus: ${theme.primary};
-  --khor-border-error: ${theme.error}; --khor-border-disabled: #EDF0F1;
-  --khor-focus-ring-color: ${theme.primary}; --khor-focus-ring-width: 2px;
+  --khor-border-strong: #A0AEC0; --khor-border-focus: ${a.primary};
+  --khor-border-error: ${a.error}; --khor-border-disabled: #EDF0F1;
+  --khor-focus-ring-color: ${a.primary}; --khor-focus-ring-width: 2px;
   --khor-focus-ring-offset: 2px; --khor-focus-ring-style: solid;
 
   /* Semantic Layer 2: Typography */
-  --khor-text-primary: ${theme.secondary}; --khor-text-secondary: #475a8f;
+  --khor-text-primary: ${a.secondary}; --khor-text-secondary: #475a8f;
   --khor-text-muted: #94a9d8; --khor-text-disabled: #A0AEC0; --khor-text-on-action: #ffffff;
 
   /* Motion Tokens (v4.3) */
@@ -308,8 +245,8 @@ El sistema sigue estándares estrictos para mantener la paridad IA/Humanos.
 
 | Versión | Fecha | Cambios |
 |---------|-------|---------|
-| **v5.0.0-alpha** | ${today} | **The World-Class Foundation:** Migración total a arquitectura W3C Design Tokens, tipografía fluida, KDataGrid empresarial, Command Palette con acciones, KFormWizard y testing con Playwright. |
-| **v4.4.1** | ${today} | **KQA God Mode:** Sincronización de más de 20 organismos y moléculas con estados explícitos y Layer 3 Contextual Tokens. Nuevo script de auditoría y Patrones Maestros. |
+| **v5.0.0-alpha** | ${f} | **The World-Class Foundation:** Migración total a arquitectura W3C Design Tokens, tipografía fluida, KDataGrid empresarial, Command Palette con acciones, KFormWizard y testing con Playwright. |
+| **v4.4.1** | ${f} | **KQA God Mode:** Sincronización de más de 20 organismos y moléculas con estados explícitos y Layer 3 Contextual Tokens. Nuevo script de auditoría y Patrones Maestros. |
 | **v4.4.0** | 27 Abr 2026 | **Industry Reference:** Inyección de tokens de superficie interactiva, elevación semántica (0-5) y escala de neutros completa (600-800). |
 | **v4.3.1** | 24 Abr 2026 | **The Absolute 100:** Cierre definitivo de gaps de motion (easing enter/exit). |
 | **v4.3.0** | 24 Abr 2026 | **The 100/100 Audit:** Sincronización total de paridad técnica y documental. |
@@ -317,125 +254,37 @@ El sistema sigue estándares estrictos para mantener la paridad IA/Humanos.
 | **v4.1.1** | 20 Abr 2026 | **Refinement Phase:** Integración de Chart Palette (12), Form States detallados y nuevo sistema de Iconografía estandarizado (XS-2XL). |
 | **v5.0.0-alpha** | 10 Abr 2026 | **Elite Upgrade:** Introducción de Layout Tokens, Z-Index Scale y Page Recipes. |
 
----`);
-  }
+---`),l.has("darkmode")&&i.push("\n## Dark Mode\n\nEl sistema soporta modo oscuro via clase `.dark` en `<html>`. Se activa con `useTheme()` del `ThemeProvider`.\n\n### Tokens Oscuros (principales cambios)\n\n| Token | Light | Dark |\n|-------|-------|------|\n| neutral-50 | `#FFFFFF` | `#1A1B2E` |\n| neutral-100 | `#EDF0F1` | `#22243A` |\n| neutral-200 | `#D5DBE0` | `#2E3148` |\n| neutral-300 | `#A0AEC0` | `#4A4E6A` |\n| neutral-400 | `#718096` | `#8B90A8` |\n| neutral-500 | `#4A5568` | `#B0B4C8` |\n| neutral-600 | `#5A6475` | `#9BA3B5` |\n| neutral-700 | `#3D4552` | `#B8BDC8` |\n| neutral-800 | `#252C38` | `#D0D3DA` |\n| neutral-900 | `#000000` | `#E8EAF0` |\n| accent | `#FF9500` | `#FFB340` |\n| navy | `#051758` | `#8BA3D9` |\n| success | `#2E7D32` | `#4CAF50` |\n| error | `#D32F2F` | `#EF5350` |\n\n### Uso del ThemeProvider\n\n```tsx\nimport { ThemeProvider, useTheme } from './theme/theme-context';\n\n// En el root:\n<ThemeProvider>\n  <App />\n</ThemeProvider>\n\n// En cualquier componente:\nconst { mode, toggle, isDark } = useTheme();\n// mode: 'light' | 'dark'\n// toggle(): cambia el modo\n// isDark: boolean\n```\n\n### Recomendacion para componentes custom\n\nUsa `var(--khor-*)` en vez de valores hardcoded para que respondan al cambio de tema:\n```tsx\n// MAL:\nstyle={{ backgroundColor: '#FFFFFF', color: '#000000' }}\n\n// BIEN:\nstyle={{ backgroundColor: 'var(--card)', color: 'var(--foreground)' }}\n```\n\n---");const u=(d,g,y,x)=>{const c=Object.keys(x);let s=`## ${d} (${c.length} componentes)
 
-  if (enabled.has('darkmode')) {
-    parts.push(`
-## Dark Mode
+${g}
+Importar desde: \`${y}\`
 
-El sistema soporta modo oscuro via clase \`.dark\` en \`<html>\`. Se activa con \`useTheme()\` del \`ThemeProvider\`.
+`;return c.forEach(C=>{const r=x[C];s+=`### ${r.name}
+${r.description}
 
-### Tokens Oscuros (principales cambios)
+`,r.aiNotes&&(s+=`> **Directrices IA**: ${r.aiNotes}
 
-| Token | Light | Dark |
-|-------|-------|------|
-| neutral-50 | \`#FFFFFF\` | \`#1A1B2E\` |
-| neutral-100 | \`#EDF0F1\` | \`#22243A\` |
-| neutral-200 | \`#D5DBE0\` | \`#2E3148\` |
-| neutral-300 | \`#A0AEC0\` | \`#4A4E6A\` |
-| neutral-400 | \`#718096\` | \`#8B90A8\` |
-| neutral-500 | \`#4A5568\` | \`#B0B4C8\` |
-| neutral-600 | \`#5A6475\` | \`#9BA3B5\` |
-| neutral-700 | \`#3D4552\` | \`#B8BDC8\` |
-| neutral-800 | \`#252C38\` | \`#D0D3DA\` |
-| neutral-900 | \`#000000\` | \`#E8EAF0\` |
-| accent | \`#FF9500\` | \`#FFB340\` |
-| navy | \`#051758\` | \`#8BA3D9\` |
-| success | \`#2E7D32\` | \`#4CAF50\` |
-| error | \`#D32F2F\` | \`#EF5350\` |
+`),r.a11ySummary&&(s+=`**Accesibilidad (ARIA & Keyboard - Score: ${r.a11ySummary.score}/100)**
+`,s+=`- **Keyboard:** ${r.a11ySummary.keyboard.join(" ")}
+`,s+=`- **ARIA:** ${r.a11ySummary.aria.join(" ")}
+`,s+=`- **Contraste:** ${r.a11ySummary.contrast}
 
-### Uso del ThemeProvider
-
+`),r.props&&r.props.length>0&&(s+=`**Props Principales:**
+`,s+=`| Prop | Tipo | Requerido | Default | Descripcion |
+`,s+=`|------|------|-----------|---------|-------------|
+`,r.props.forEach(p=>{s+=`| \`${p.name}\` | \`${p.type}\` | ${p.required?"Si":"No"} | ${p.default?`\`${p.default}\``:"-"} | ${p.description} |
+`}),s+=`
+`),r.code&&(s+=`**Ejemplo de Uso:**
 \`\`\`tsx
-import { ThemeProvider, useTheme } from './theme/theme-context';
-
-// En el root:
-<ThemeProvider>
-  <App />
-</ThemeProvider>
-
-// En cualquier componente:
-const { mode, toggle, isDark } = useTheme();
-// mode: 'light' | 'dark'
-// toggle(): cambia el modo
-// isDark: boolean
+${r.code}
 \`\`\`
 
-### Recomendacion para componentes custom
+`),r.guidelines&&r.guidelines.length>0&&(s+=`**Guidelines UX:**
+`,r.guidelines.forEach(p=>{s+=`- ${p}
+`}),s+=`
+`),s+=`---
 
-Usa \`var(--khor-*)\` en vez de valores hardcoded para que respondan al cambio de tema:
-\`\`\`tsx
-// MAL:
-style={{ backgroundColor: '#FFFFFF', color: '#000000' }}
-
-// BIEN:
-style={{ backgroundColor: 'var(--card)', color: 'var(--foreground)' }}
-\`\`\`
-
----`);
-  }
-
-  const renderDict = (title: string, desc: string, importPath: string, dict: Record<string, any>) => {
-    const keys = Object.keys(dict);
-    let md = `## ${title} (${keys.length} componentes)\n\n${desc}\nImportar desde: \`${importPath}\`\n\n`;
-    
-    keys.forEach(key => {
-      const comp = dict[key];
-      md += `### ${comp.name}\n${comp.description}\n\n`;
-      
-      if (comp.aiNotes) {
-        md += `> **Directrices IA**: ${comp.aiNotes}\n\n`;
-      }
-
-      if (comp.a11ySummary) {
-        md += `**Accesibilidad (ARIA & Keyboard - Score: ${comp.a11ySummary.score}/100)**\n`;
-        md += `- **Keyboard:** ${comp.a11ySummary.keyboard.join(' ')}\n`;
-        md += `- **ARIA:** ${comp.a11ySummary.aria.join(' ')}\n`;
-        md += `- **Contraste:** ${comp.a11ySummary.contrast}\n\n`;
-      }
-
-      if (comp.props && comp.props.length > 0) {
-        md += `**Props Principales:**\n`;
-        md += `| Prop | Tipo | Requerido | Default | Descripcion |\n`;
-        md += `|------|------|-----------|---------|-------------|\n`;
-        comp.props.forEach((p: any) => {
-          md += `| \`${p.name}\` | \`${p.type}\` | ${p.required ? 'Si' : 'No'} | ${p.default ? `\`${p.default}\`` : '-'} | ${p.description} |\n`;
-        });
-        md += `\n`;
-      }
-
-      if (comp.code) {
-        md += `**Ejemplo de Uso:**\n\`\`\`tsx\n${comp.code}\n\`\`\`\n\n`;
-      }
-
-      if (comp.guidelines && comp.guidelines.length > 0) {
-        md += `**Guidelines UX:**\n`;
-        comp.guidelines.forEach((g: string) => {
-          md += `- ${g}\n`;
-        });
-        md += `\n`;
-      }
-
-      md += `---\n\n`;
-    });
-    return md;
-  };
-
-  if (enabled.has('atoms')) {
-    parts.push(renderDict('Átomos', 'Unidades indivisibles y fundamentales.', "import { KButton } from '@khor/design-system/atoms/index'", atoms));
-  }
-
-  if (enabled.has('molecules')) {
-    parts.push(renderDict('Moléculas', 'Combinaciones de átomos con lógica de forma reutilizable.', "import { KFormField } from '@khor/design-system/molecules/index'", molecules));
-  }
-
-  if (enabled.has('organisms')) {
-    parts.push(renderDict('Organismos', 'Componentes complejos o Layouts masivos con lógicas de portal, focus-traps y alto consumo de hooks.', "import { KDataTable } from '@khor/design-system/organisms/index'", organisms));
-  }
-
-  if (enabled.has('templates')) {
-    parts.push(`
+`}),s};return l.has("atoms")&&i.push(u("Átomos","Unidades indivisibles y fundamentales.","import { KButton } from '@khor/design-system/atoms/index'",L)),l.has("molecules")&&i.push(u("Moléculas","Combinaciones de átomos con lógica de forma reutilizable.","import { KFormField } from '@khor/design-system/molecules/index'",U)),l.has("organisms")&&i.push(u("Organismos","Componentes complejos o Layouts masivos con lógicas de portal, focus-traps y alto consumo de hooks.","import { KDataTable } from '@khor/design-system/organisms/index'",M)),l.has("templates")&&i.push(`
 ## 🏗️ Elite Page Recipes (High-Fidelity Patterns)
 
 La IA debe usar estos "Blueprints" estructurales para construir páginas completas con un solo prompt.
@@ -568,11 +417,7 @@ function LoginPage() {
 - **Espaciado:** Usa clases \`p-khor-*\`, \`m-khor-*\` o \`gap-khor-*\` basadas en la escala de 4px.
 - **Tokens:** Prefiere siempre \`khorTokens\` en JS o las CSS variables directas \`var(--khor-*)\`.
 
----`);
-  }
-
-  if (enabled.has('layout')) {
-    parts.push(`
+---`),l.has("layout")&&i.push(`
 ## Layout — AppShell
 
 Estructura principal de la aplicacion con sidebar fijo, header y area de contenido.
@@ -626,11 +471,7 @@ const router = createBrowserRouter([
 ]);
 \`\`\`
 
----`);
-  }
-
-  if (enabled.has('patterns')) {
-    parts.push(`
+---`),l.has("patterns")&&(i.push(`
 ## Patrones y Convenciones
 
 ### Naming
@@ -700,23 +541,13 @@ import { Plus, Edit, Trash2, Download, Search, ... } from 'lucide-react';
 - NO usar \`React.Fragment\` con props inválidos (key, className) — usar \`<span>\` o \`<div style={{ display: 'contents' }}>\`
 - NO anidar \`<button>\` dentro de \`<button>\`
 - NO hardcodear colores — usar tokens o CSS variables
-`);
-
-    patterns.forEach(p => {
-      parts.push(`
-### Patrón Modular: ${p.title}
-${p.description}
+`),R.forEach(d=>{i.push(`
+### Patrón Modular: ${d.title}
+${d.description}
 \`\`\`tsx
-${p.code}
+${d.code}
 \`\`\`
-`);
-    });
-
-    parts.push(`---`);
-  }
-
-  if (enabled.has('examples')) {
-    parts.push(`
+`)}),i.push("---")),l.has("examples")&&i.push(`
 ## Ejemplos de Codigo
 
 ### Pagina CRUD basica
@@ -874,380 +705,6 @@ Estructura: Ilustración → Título → Descripción → CTA primario.
 \`\`\`
 
 ---
-`);
-  }
-
-  return parts.join('\n');
-}
-
-/* ─── Word count helper ─────────────────────── */
-function wordCount(text: string): number {
-  return text.split(/\s+/).filter(Boolean).length;
-}
-
-/* ─── Component ─────────────────────────────── */
-export function AIExportPage() {
-  const { themeConfig: theme } = useTheme();
-  const [sections, setSections] = useState<SectionConfig[]>(defaultSections);
-  const [copied, setCopied] = useState(false);
-  const [showPreview, setShowPreview] = useState(true);
-  const [expandedPreview, setExpandedPreview] = useState(false);
-  const previewRef = useRef<HTMLPreElement>(null);
-
-  const markdown = useMemo(() => generateMarkdown(sections, theme), [sections, theme]);
-  const words = useMemo(() => wordCount(markdown), [markdown]);
-  const lines = useMemo(() => markdown.split('\n').length, [markdown]);
-  const enabledCount = sections.filter((s) => s.enabled).length;
-
-  const toggleSection = (id: string) => {
-    setSections((prev) =>
-      prev.map((s) => (s.id === id ? { ...s, enabled: !s.enabled } : s))
-    );
-  };
-
-  const handleDownload = () => {
-    const blob = new Blob([markdown], { type: 'text/markdown;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'khor-design-system-ai-guide.md';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    kToast({ type: 'success', title: 'Descarga iniciada', description: 'khor-design-system-ai-guide.md descargado.' });
-  };
-
-  const handleCopy = async () => {
-    // Try clipboard API first, then fallback to execCommand
-    let success = false;
-    try {
-      await navigator.clipboard.writeText(markdown);
-      success = true;
-    } catch {
-      // Fallback: create a hidden textarea, select and copy
-      try {
-        const textarea = document.createElement('textarea');
-        textarea.value = markdown;
-        textarea.style.position = 'fixed';
-        textarea.style.left = '-9999px';
-        textarea.style.top = '-9999px';
-        textarea.style.opacity = '0';
-        document.body.appendChild(textarea);
-        textarea.focus();
-        textarea.select();
-        success = document.execCommand('copy');
-        document.body.removeChild(textarea);
-      } catch {
-        success = false;
-      }
-    }
-
-    if (success) {
-      setCopied(true);
-      kToast({ type: 'success', title: 'Copiado', description: 'Todo el markdown fue copiado al portapapeles.' });
-      setTimeout(() => setCopied(false), 2000);
-    } else {
-      kToast({
-        type: 'warning',
-        title: 'No se pudo copiar automaticamente',
-        description: 'Usa el boton "Seleccionar todo" en la vista previa y copia manualmente con Ctrl+C / Cmd+C.',
-      });
-      // Auto-show preview so user can use "select all"
-      setShowPreview(true);
-      setExpandedPreview(true);
-    }
-  };
-
-  const handleSelectAll = () => {
-    if (previewRef.current) {
-      const range = document.createRange();
-      range.selectNodeContents(previewRef.current);
-      const selection = window.getSelection();
-      if (selection) {
-        selection.removeAllRanges();
-        selection.addRange(range);
-      }
-      kToast({ type: 'info', title: 'Texto seleccionado', description: 'Ahora presiona Ctrl+C (o Cmd+C) para copiar.' });
-    }
-  };
-
-  const selectAll = () => setSections((prev) => prev.map((s) => ({ ...s, enabled: true })));
-  const selectNone = () => setSections((prev) => prev.map((s) => ({ ...s, enabled: false })));
-
-  return (
-    <div style={{ fontFamily: t.typography.fontPrimary }}>
-      {/* Header */}
-      <div style={{ marginBottom: 32 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
-          <div style={{
-            width: 44, height: 44, borderRadius: t.radius.md,
-            background: 'linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-          }}>
-            <Bot size={24} color="#fff" />
-          </div>
-          <div>
-            <h1 style={{ margin: 0, fontSize: 28, color: 'var(--foreground)' }}>
-              Exportar Guia para IA
-            </h1>
-            <p style={{ margin: 0, fontSize: 14, color: 'var(--muted-foreground)' }}>
-              Genera un archivo .md con todo el sistema de diseno para usar como contexto en cualquier IA.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Info Alert */}
-      <KAlert
-        type="info"
-        title="Prompt portatil para IAs generativas"
-        description="Este archivo .md contiene tokens, APIs de componentes, patrones y ejemplos del sistema Khor. Pegalo como contexto en ChatGPT, Claude, Cursor, Figma Make, v0 o cualquier asistente IA para que genere interfaces 100% consistentes con Khor."
-        className="mb-6"
-      />
-
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, marginBottom: 24 }}>
-        {/* Left: Section Toggles */}
-        <div style={{
-          backgroundColor: 'var(--card)',
-          borderRadius: t.radius.lg,
-          padding: 24,
-          border: '1px solid var(--border)',
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-            <h3 style={{ margin: 0, fontSize: 16, color: 'var(--foreground)' }}>
-              <Settings2 size={18} style={{ display: 'inline', marginRight: 8, verticalAlign: 'middle' }} />
-              Secciones a incluir
-            </h3>
-            <div style={{ display: 'flex', gap: 8 }}>
-              <button
-                onClick={selectAll}
-                style={{
-                  background: 'none', border: 'none', cursor: 'pointer',
-                  fontSize: 12, color: t.colors.brand.primary, fontFamily: t.typography.fontPrimary,
-                  textDecoration: 'underline',
-                }}
-              >
-                Todas
-              </button>
-              <button
-                onClick={selectNone}
-                style={{
-                  background: 'none', border: 'none', cursor: 'pointer',
-                  fontSize: 12, color: 'var(--muted-foreground)', fontFamily: t.typography.fontPrimary,
-                  textDecoration: 'underline',
-                }}
-              >
-                Ninguna
-              </button>
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            {sections.map((section) => (
-              <div
-                key={section.id}
-                style={{
-                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                  padding: '10px 12px', borderRadius: t.radius.md,
-                  border: `1px solid ${section.enabled ? 'var(--khor-primary)' + '30' : 'var(--border)'}`,
-                  backgroundColor: section.enabled ? 'rgba(224,77,54,0.03)' : 'transparent',
-                  transition: 'all 0.15s ease',
-                }}
-              >
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: 14, fontWeight: 500, color: 'var(--foreground)' }}>
-                    {section.label}
-                  </div>
-                  <div style={{ fontSize: 12, color: 'var(--muted-foreground)', marginTop: 2 }}>
-                    {section.description}
-                  </div>
-                </div>
-                <KSwitch
-                  checked={section.enabled}
-                  onCheckedChange={() => toggleSection(section.id)}
-                  size="small"
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Right: Stats & Actions */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-          {/* Stats */}
-          <div style={{
-            backgroundColor: 'var(--card)',
-            borderRadius: t.radius.lg,
-            padding: 24,
-            border: '1px solid var(--border)',
-          }}>
-            <h3 style={{ margin: '0 0 16px', fontSize: 16, color: 'var(--foreground)' }}>
-              <FileText size={18} style={{ display: 'inline', marginRight: 8, verticalAlign: 'middle' }} />
-              Resumen del documento
-            </h3>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-              {[
-                { label: 'Secciones', value: `${enabledCount}/${sections.length}`, color: t.colors.brand.primary },
-                { label: 'Palabras', value: words.toLocaleString(), color: t.colors.brand.navy },
-                { label: 'Lineas', value: lines.toLocaleString(), color: t.colors.brand.accent },
-                { label: 'Tamano aprox.', value: `${(new Blob([markdown]).size / 1024).toFixed(1)} KB`, color: t.colors.feedback.success },
-              ].map((stat) => (
-                <div key={stat.label} style={{
-                  padding: 12, borderRadius: t.radius.md,
-                  backgroundColor: `${stat.color}08`, border: `1px solid ${stat.color}15`,
-                }}>
-                  <div style={{ fontSize: 12, color: 'var(--muted-foreground)', marginBottom: 4 }}>{stat.label}</div>
-                  <div style={{ fontSize: 20, fontWeight: 700, color: stat.color }}>{stat.value}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Target audience */}
-          <div style={{
-            backgroundColor: 'var(--card)',
-            borderRadius: t.radius.lg,
-            padding: 24,
-            border: '1px solid var(--border)',
-          }}>
-            <h3 style={{ margin: '0 0 12px', fontSize: 16, color: 'var(--foreground)' }}>
-              <Sparkles size={18} style={{ display: 'inline', marginRight: 8, verticalAlign: 'middle' }} />
-              Compatible con
-            </h3>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-              {[
-                'ChatGPT', 'Claude', 'Figma Make', 'Cursor', 'v0 (Vercel)',
-                'Windsurf', 'GitHub Copilot', 'Gemini', 'Bolt',
-              ].map((ai) => (
-                <span key={ai} style={{
-                  padding: '4px 12px', borderRadius: 999,
-                  fontSize: 12, fontWeight: 500,
-                  backgroundColor: 'var(--khor-neutral-100)',
-                  color: 'var(--foreground)',
-                  border: '1px solid var(--border)',
-                }}>
-                  {ai}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* Actions */}
-          <div style={{
-            backgroundColor: 'var(--card)',
-            borderRadius: t.radius.lg,
-            padding: 24,
-            border: '1px solid var(--border)',
-          }}>
-            <h3 style={{ margin: '0 0 16px', fontSize: 16, color: 'var(--foreground)' }}>
-              <Zap size={18} style={{ display: 'inline', marginRight: 8, verticalAlign: 'middle' }} />
-              Acciones
-            </h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-              <KButton
-                variant="primary"
-                block
-                icon={<Download size={16} />}
-                onClick={handleDownload}
-                disabled={enabledCount === 0}
-              >
-                Descargar .md
-              </KButton>
-              <KButton
-                variant="outline"
-                block
-                icon={copied ? <Check size={16} /> : <Copy size={16} />}
-                onClick={handleCopy}
-                disabled={enabledCount === 0}
-              >
-                {copied ? 'Copiado!' : 'Copiar al portapapeles'}
-              </KButton>
-              <KButton
-                variant="ghost"
-                block
-                icon={showPreview ? <EyeOff size={16} /> : <Eye size={16} />}
-                onClick={() => setShowPreview(!showPreview)}
-                disabled={enabledCount === 0}
-              >
-                {showPreview ? 'Ocultar vista previa' : 'Ver vista previa'}
-              </KButton>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Preview */}
-      {showPreview && (
-        <div style={{
-          backgroundColor: 'var(--card)',
-          borderRadius: t.radius.lg,
-          border: '1px solid var(--border)',
-          overflow: 'hidden',
-        }}>
-          <div style={{
-            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            padding: '12px 20px',
-            borderBottom: '1px solid var(--border)',
-            backgroundColor: 'var(--khor-neutral-100)',
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <FileText size={16} style={{ color: 'var(--muted-foreground)' }} />
-              <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--foreground)' }}>
-                khor-design-system-ai-guide.md
-              </span>
-              <KBadge status="info" label={`${words.toLocaleString()} palabras`} dot={false} />
-            </div>
-            <button
-              onClick={() => setExpandedPreview(!expandedPreview)}
-              style={{
-                background: 'none', border: 'none', cursor: 'pointer',
-                display: 'flex', alignItems: 'center', gap: 4,
-                fontSize: 12, color: 'var(--muted-foreground)',
-                fontFamily: t.typography.fontPrimary,
-              }}
-            >
-              {expandedPreview ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
-              {expandedPreview ? 'Colapsar' : 'Expandir completo'}
-            </button>
-          </div>
-          <pre
-            ref={previewRef}
-            style={{
-              padding: 20,
-              margin: 0,
-              fontSize: 12,
-              lineHeight: 1.6,
-              color: 'var(--foreground)',
-              fontFamily: "'Plus Jakarta Sans', monospace",
-              whiteSpace: 'pre-wrap',
-              wordBreak: 'break-word',
-              maxHeight: expandedPreview ? 'none' : 500,
-              overflow: expandedPreview ? 'visible' : 'auto',
-            }}
-          >
-            {markdown}
-          </pre>
-          <div style={{ padding: '12px 20px', borderTop: '1px solid var(--border)', display: 'flex', gap: 8 }}>
-            <KButton
-              variant="outline"
-              icon={copied ? <Check size={16} /> : <Copy size={16} />}
-              onClick={handleCopy}
-              style={{ flex: 1 }}
-            >
-              {copied ? 'Copiado!' : 'Copiar al portapapeles'}
-            </KButton>
-            <KButton
-              variant="ghost"
-              icon={<MousePointerClick size={16} />}
-              onClick={handleSelectAll}
-              style={{ flex: 1 }}
-            >
-              Seleccionar todo (Ctrl+C)
-            </KButton>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
+`),i.join(`
+`)}function Y(b){return b.split(/\s+/).filter(Boolean).length}function me(){const{themeConfig:b}=w(),[a,l]=h.useState(J),[i,f]=h.useState(!1),[u,d]=h.useState(!0),[g,y]=h.useState(!1),x=h.useRef(null),c=h.useMemo(()=>Q(a,b),[a,b]),s=h.useMemo(()=>Y(c),[c]),C=h.useMemo(()=>c.split(`
+`).length,[c]),r=a.filter(o=>o.enabled).length,p=o=>{l(t=>t.map(m=>m.id===o?{...m,enabled:!m.enabled}:m))},T=()=>{const o=new Blob([c],{type:"text/markdown;charset=utf-8"}),t=URL.createObjectURL(o),m=document.createElement("a");m.href=t,m.download="khor-design-system-ai-guide.md",document.body.appendChild(m),m.click(),document.body.removeChild(m),URL.revokeObjectURL(t),v({type:"success",title:"Descarga iniciada",description:"khor-design-system-ai-guide.md descargado."})},K=async()=>{let o=!1;try{await navigator.clipboard.writeText(c),o=!0}catch{try{const t=document.createElement("textarea");t.value=c,t.style.position="fixed",t.style.left="-9999px",t.style.top="-9999px",t.style.opacity="0",document.body.appendChild(t),t.focus(),t.select(),o=document.execCommand("copy"),document.body.removeChild(t)}catch{o=!1}}o?(f(!0),v({type:"success",title:"Copiado",description:"Todo el markdown fue copiado al portapapeles."}),setTimeout(()=>f(!1),2e3)):(v({type:"warning",title:"No se pudo copiar automaticamente",description:'Usa el boton "Seleccionar todo" en la vista previa y copia manualmente con Ctrl+C / Cmd+C.'}),d(!0),y(!0))},E=()=>{if(x.current){const o=document.createRange();o.selectNodeContents(x.current);const t=window.getSelection();t&&(t.removeAllRanges(),t.addRange(o)),v({type:"info",title:"Texto seleccionado",description:"Ahora presiona Ctrl+C (o Cmd+C) para copiar."})}},D=()=>l(o=>o.map(t=>({...t,enabled:!0}))),j=()=>l(o=>o.map(t=>({...t,enabled:!1})));return e.jsxs("div",{style:{fontFamily:n.typography.fontPrimary},children:[e.jsx("div",{style:{marginBottom:32},children:e.jsxs("div",{style:{display:"flex",alignItems:"center",gap:12,marginBottom:8},children:[e.jsx("div",{style:{width:44,height:44,borderRadius:n.radius.md,background:"linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%)",display:"flex",alignItems:"center",justifyContent:"center"},children:e.jsx(N,{size:24,color:"#fff"})}),e.jsxs("div",{children:[e.jsx("h1",{style:{margin:0,fontSize:28,color:"var(--foreground)"},children:"Exportar Guia para IA"}),e.jsx("p",{style:{margin:0,fontSize:14,color:"var(--muted-foreground)"},children:"Genera un archivo .md con todo el sistema de diseno para usar como contexto en cualquier IA."})]})]})}),e.jsx(z,{type:"info",title:"Prompt portatil para IAs generativas",description:"Este archivo .md contiene tokens, APIs de componentes, patrones y ejemplos del sistema Khor. Pegalo como contexto en ChatGPT, Claude, Cursor, Figma Make, v0 o cualquier asistente IA para que genere interfaces 100% consistentes con Khor.",className:"mb-6"}),e.jsxs("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:24,marginBottom:24},children:[e.jsxs("div",{style:{backgroundColor:"var(--card)",borderRadius:n.radius.lg,padding:24,border:"1px solid var(--border)"},children:[e.jsxs("div",{style:{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:16},children:[e.jsxs("h3",{style:{margin:0,fontSize:16,color:"var(--foreground)"},children:[e.jsx($,{size:18,style:{display:"inline",marginRight:8,verticalAlign:"middle"}}),"Secciones a incluir"]}),e.jsxs("div",{style:{display:"flex",gap:8},children:[e.jsx("button",{onClick:D,style:{background:"none",border:"none",cursor:"pointer",fontSize:12,color:n.colors.brand.primary,fontFamily:n.typography.fontPrimary,textDecoration:"underline"},children:"Todas"}),e.jsx("button",{onClick:j,style:{background:"none",border:"none",cursor:"pointer",fontSize:12,color:"var(--muted-foreground)",fontFamily:n.typography.fontPrimary,textDecoration:"underline"},children:"Ninguna"})]})]}),e.jsx("div",{style:{display:"flex",flexDirection:"column",gap:8},children:a.map(o=>e.jsxs("div",{style:{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"10px 12px",borderRadius:n.radius.md,border:`1px solid ${o.enabled?"var(--khor-primary)30":"var(--border)"}`,backgroundColor:o.enabled?"rgba(224,77,54,0.03)":"transparent",transition:"all 0.15s ease"},children:[e.jsxs("div",{style:{flex:1,minWidth:0},children:[e.jsx("div",{style:{fontSize:14,fontWeight:500,color:"var(--foreground)"},children:o.label}),e.jsx("div",{style:{fontSize:12,color:"var(--muted-foreground)",marginTop:2},children:o.description})]}),e.jsx(I,{checked:o.enabled,onCheckedChange:()=>p(o.id),size:"small"})]},o.id))})]}),e.jsxs("div",{style:{display:"flex",flexDirection:"column",gap:16},children:[e.jsxs("div",{style:{backgroundColor:"var(--card)",borderRadius:n.radius.lg,padding:24,border:"1px solid var(--border)"},children:[e.jsxs("h3",{style:{margin:"0 0 16px",fontSize:16,color:"var(--foreground)"},children:[e.jsx(S,{size:18,style:{display:"inline",marginRight:8,verticalAlign:"middle"}}),"Resumen del documento"]}),e.jsx("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12},children:[{label:"Secciones",value:`${r}/${a.length}`,color:n.colors.brand.primary},{label:"Palabras",value:s.toLocaleString(),color:n.colors.brand.navy},{label:"Lineas",value:C.toLocaleString(),color:n.colors.brand.accent},{label:"Tamano aprox.",value:`${(new Blob([c]).size/1024).toFixed(1)} KB`,color:n.colors.feedback.success}].map(o=>e.jsxs("div",{style:{padding:12,borderRadius:n.radius.md,backgroundColor:`${o.color}08`,border:`1px solid ${o.color}15`},children:[e.jsx("div",{style:{fontSize:12,color:"var(--muted-foreground)",marginBottom:4},children:o.label}),e.jsx("div",{style:{fontSize:20,fontWeight:700,color:o.color},children:o.value})]},o.label))})]}),e.jsxs("div",{style:{backgroundColor:"var(--card)",borderRadius:n.radius.lg,padding:24,border:"1px solid var(--border)"},children:[e.jsxs("h3",{style:{margin:"0 0 12px",fontSize:16,color:"var(--foreground)"},children:[e.jsx(O,{size:18,style:{display:"inline",marginRight:8,verticalAlign:"middle"}}),"Compatible con"]}),e.jsx("div",{style:{display:"flex",flexWrap:"wrap",gap:8},children:["ChatGPT","Claude","Figma Make","Cursor","v0 (Vercel)","Windsurf","GitHub Copilot","Gemini","Bolt"].map(o=>e.jsx("span",{style:{padding:"4px 12px",borderRadius:999,fontSize:12,fontWeight:500,backgroundColor:"var(--khor-neutral-100)",color:"var(--foreground)",border:"1px solid var(--border)"},children:o},o))})]}),e.jsxs("div",{style:{backgroundColor:"var(--card)",borderRadius:n.radius.lg,padding:24,border:"1px solid var(--border)"},children:[e.jsxs("h3",{style:{margin:"0 0 16px",fontSize:16,color:"var(--foreground)"},children:[e.jsx(G,{size:18,style:{display:"inline",marginRight:8,verticalAlign:"middle"}}),"Acciones"]}),e.jsxs("div",{style:{display:"flex",flexDirection:"column",gap:10},children:[e.jsx(k,{variant:"primary",block:!0,icon:e.jsx(q,{size:16}),onClick:T,disabled:r===0,children:"Descargar .md"}),e.jsx(k,{variant:"outline",block:!0,icon:i?e.jsx(A,{size:16}):e.jsx(F,{size:16}),onClick:K,disabled:r===0,children:i?"Copiado!":"Copiar al portapapeles"}),e.jsx(k,{variant:"ghost",block:!0,icon:u?e.jsx(W,{size:16}):e.jsx(H,{size:16}),onClick:()=>d(!u),disabled:r===0,children:u?"Ocultar vista previa":"Ver vista previa"})]})]})]})]}),u&&e.jsxs("div",{style:{backgroundColor:"var(--card)",borderRadius:n.radius.lg,border:"1px solid var(--border)",overflow:"hidden"},children:[e.jsxs("div",{style:{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"12px 20px",borderBottom:"1px solid var(--border)",backgroundColor:"var(--khor-neutral-100)"},children:[e.jsxs("div",{style:{display:"flex",alignItems:"center",gap:8},children:[e.jsx(S,{size:16,style:{color:"var(--muted-foreground)"}}),e.jsx("span",{style:{fontSize:13,fontWeight:500,color:"var(--foreground)"},children:"khor-design-system-ai-guide.md"}),e.jsx(P,{status:"info",label:`${s.toLocaleString()} palabras`,dot:!1})]}),e.jsxs("button",{onClick:()=>y(!g),style:{background:"none",border:"none",cursor:"pointer",display:"flex",alignItems:"center",gap:4,fontSize:12,color:"var(--muted-foreground)",fontFamily:n.typography.fontPrimary},children:[g?e.jsx(V,{size:14}):e.jsx(_,{size:14}),g?"Colapsar":"Expandir completo"]})]}),e.jsx("pre",{ref:x,style:{padding:20,margin:0,fontSize:12,lineHeight:1.6,color:"var(--foreground)",fontFamily:"'Plus Jakarta Sans', monospace",whiteSpace:"pre-wrap",wordBreak:"break-word",maxHeight:g?"none":500,overflow:g?"visible":"auto"},children:c}),e.jsxs("div",{style:{padding:"12px 20px",borderTop:"1px solid var(--border)",display:"flex",gap:8},children:[e.jsx(k,{variant:"outline",icon:i?e.jsx(A,{size:16}):e.jsx(F,{size:16}),onClick:K,style:{flex:1},children:i?"Copiado!":"Copiar al portapapeles"}),e.jsx(k,{variant:"ghost",icon:e.jsx(X,{size:16}),onClick:E,style:{flex:1},children:"Seleccionar todo (Ctrl+C)"})]})]})]})}export{me as AIExportPage,Z as KHOR_VERSION,J as defaultSections,Q as generateMarkdown};

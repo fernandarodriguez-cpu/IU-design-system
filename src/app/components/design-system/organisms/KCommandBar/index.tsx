@@ -69,18 +69,19 @@ export function KCommandBar({ open, onClose }: { open: boolean; onClose: () => v
       open={open} 
       onOpenChange={onClose}
       className={cn(
-        "fixed left-[50%] top-[50%] z-[9999] w-full max-w-2xl translate-x-[-50%] translate-y-[-50%] overflow-hidden rounded-xl border border-khor-slate-200 bg-white shadow-khor-xl font-primary text-khor-neutral-900",
+        "fixed left-[50%] top-[50%] z-[9999] w-full max-w-3xl translate-x-[-50%] translate-y-[-50%] overflow-hidden rounded-2xl border border-khor-slate-200 bg-white shadow-khor-xl font-primary text-khor-neutral-900 transition-all",
+        "focus-within:ring-2 focus-within:ring-khor-primary/20 focus-within:border-khor-primary/50",
         "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]"
       )}
-      overlayClassName="fixed inset-0 z-[9999] bg-khor-brand-navy/60 backdrop-blur-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
+      overlayClassName="fixed inset-0 z-[9999] bg-khor-brand-navy/60 backdrop-blur-xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
     >
-      <div className="flex items-center border-b px-3">
-        <Search className="mr-2 h-5 w-5 shrink-0 opacity-50" />
+      <div className="flex items-center border-b border-khor-slate-100 px-6 py-1">
+        <Search className="mr-3 h-6 w-6 shrink-0 text-khor-primary opacity-70" />
         <Command.Input 
-          className="flex h-14 w-full rounded-md bg-transparent py-3 text-base outline-none disabled:cursor-not-allowed disabled:opacity-50 placeholder:text-khor-neutral-400 text-khor-neutral-900" 
+          className="flex h-16 w-full bg-transparent py-4 text-lg outline-none border-none ring-0 focus:ring-0 placeholder:text-khor-neutral-400 text-khor-neutral-900" 
           placeholder="¿Qué estás buscando? (ej. Componentes, Tokens...)" 
         />
-        <div className="ml-2 flex shrink-0 items-center justify-center rounded-md border border-khor-slate-200 bg-khor-slate-100 px-2 text-xs font-semibold text-khor-neutral-500 shadow-sm">
+        <div className="ml-4 flex shrink-0 items-center justify-center rounded-lg border border-khor-slate-200 bg-khor-slate-50 px-3 py-1 text-[10px] font-black text-khor-neutral-400 shadow-sm uppercase tracking-tighter">
           ESC
         </div>
       </div>
