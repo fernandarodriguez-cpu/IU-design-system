@@ -2,6 +2,29 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo. Khor sigue una metodología de desarrollo por "Olas" (Waves) dentro de fases evolutivas.
 
+## [4.4.1] — 2026-04-27
+### 💎 Ola 19: Khor Quality Audit (KQA) — "God Mode" Maturity
+- **Atomic Refinement**: Actualización de 9 átomos (`KCheckbox`, `KRadio`, `KSwitch`, `KSelect`, `KTag`, `KBadge`, `KAvatar`, `KSlider`, `KProgress`) con soporte total para estados de interacción explícitos.
+- **Molecule Upgrade**: Refactorización de 5 moléculas (`KFormField`, `KStatCard`, `KInput.Search`, `KResult`, `KEmptyState`) a Tailwind nativo y tokens semánticos de Layer 2.
+- **Organism Overhaul**: Sincronización de 5 organismos complejos (`KDataTable`, `KCardSection`, `KModal`, `KDrawer`, `KTabs`) con el motor de densidad y accesibilidad ARIA avanzada.
+- **State-Aware Ecosystem**: Inyección de props `isHovered`, `isFocused`, `isPressed` en todo el sistema para garantizar previsualizaciones perfectas en herramientas de diseño (Figma/Penpot).
+- **Metadata V5.0**: Regeneración del manifiesto universal con 116 componentes auditados y listos para sincronización con el plugin.
+
+## [4.4.0] — 2026-04-27
+### 🚀 Ola 18: Industry Reference Upgrade & Universal Bridge
+- **Elite Pillars**: Implementación de arquitectura de superficies (Layer 2), elevación semántica (0-5) y espaciado optimizado para SaaS.
+- **Universal Manifest**: Creación del "Puente Universal" para Plugins (Figma/Penpot) vía exportación de manifiesto dinámico sincronizado.
+- **State-Aware Components**: Actualización masiva de `KButton` y `KInput` con props de estado explícitos (`isHovered`, `isPressed`, `isActive`, `isFocused`).
+- **Live Theme Sync**: Unificación total del Editor de Temas con la Guía de IA; personalización dinámica de exportaciones según el branding del usuario.
+- **A11y Refresh**: Anillo de enfoque global (`focus-ring`) y soporte nativo para `prefers-reduced-motion`.
+
+## [4.3.0] — 2026-04-24
+### 🎯 Ola 17: The 100/100 Audit — Technical Perfection
+- **Auditoría Claude 100/100**: Cierre total de los 8 gaps técnicos históricos.
+- **Semantic Tokens**: Integración completa de la escala interactiva (Hover/Disabled/Action) en el núcleo CSS.
+- **Density Engine**: Implementación de contextos dinámicos (`.khor-compact` / `.khor-comfortable`).
+- **AI Guide v4.3**: Rediseño del generador de guías con tablas de contraste WCAG y reglas de gobernanza para LLMs.
+
 ## [4.0.5] — 2026-04-10
 ### 🌊 Ola 16: Refinamiento de Feedback e Infraestructura
 - **KNotification**: Consolidación de la arquitectura imperativa. Mejora visual con opacidad dinámica del 95% para apilamiento profesional y base sólida blanca.

@@ -161,6 +161,8 @@
   --khor-space-10: 40px;
   --khor-space-12: 48px;
   --khor-space-16: 64px;
+  --khor-space-20: 80px;
+  --khor-space-24: 96px;
 
   /* ── Khor Radius (Extended) ── */
   --khor-radius-none: 0px;
@@ -169,6 +171,8 @@
   --khor-radius-md: 8px;
   --khor-radius-lg: 12px;
   --khor-radius-xl: 16px;
+  --khor-radius-2xl: 24px;
+  --khor-radius-3xl: 32px;
   --khor-radius-full: 9999px;
 
   /* ── Khor Blur Scale (v10.4.5 Premium) ── */
@@ -373,19 +377,31 @@
   --khor-size-screen-w: 100vw;
   --khor-size-screen-h: 100vh;
 
-  /* ── Khor Typography Scale (v10.4 Responsive) ── */
-  --khor-font-size-display-1: 72px;
-  --khor-font-size-display-2: 56px;
-  --khor-font-size-h1: 40px;
-  --khor-font-size-h2: 32px;
-  --khor-font-size-h3: 24px;
-  --khor-font-size-h4: 20px;
-  --khor-font-size-h5: 16px;
-  --khor-font-size-h6: 14px;
-  --khor-font-size-body-lg: 16px;
-  --khor-font-size-body-md: 14px;
-  --khor-font-size-body-sm: 12px;
-  --khor-font-size-body-xs: 10px;
+  /* ── Khor Typography Scale (v5.0 Fluid/Responsive) ── */
+  --khor-font-size-display-2xl: clamp(4rem, 5vw + 1rem, 4.5rem); /* 64px - 72px */
+  --khor-font-size-display-xl: clamp(3rem, 4vw + 1rem, 3.5rem);  /* 48px - 56px */
+  --khor-font-size-heading-lg: clamp(2rem, 3vw + 1rem, 2.5rem);  /* 32px - 40px */
+  --khor-font-size-heading-md: clamp(1.5rem, 2vw + 1rem, 2rem);  /* 24px - 32px */
+  --khor-font-size-heading-sm: clamp(1.25rem, 1.5vw + 1rem, 1.5rem); /* 20px - 24px */
+  --khor-font-size-heading-xs: 1.125rem; /* 18px */
+  --khor-font-size-body-xl: 1.125rem; /* 18px */
+  --khor-font-size-body-lg: 1rem;     /* 16px */
+  --khor-font-size-body-md: 0.875rem; /* 14px */
+  --khor-font-size-body-sm: 0.75rem;  /* 12px */
+  --khor-font-size-caption: 0.625rem; /* 10px */
+  --khor-font-size-code: 0.875rem;    /* 14px */
+  --khor-font-size-label: 0.75rem;    /* 12px */
+
+  /* Legacy Aliases (DO NOT REMOVE - for backwards compatibility) */
+  --khor-font-size-display-1: var(--khor-font-size-display-2xl);
+  --khor-font-size-display-2: var(--khor-font-size-display-xl);
+  --khor-font-size-h1: var(--khor-font-size-heading-lg);
+  --khor-font-size-h2: var(--khor-font-size-heading-md);
+  --khor-font-size-h3: var(--khor-font-size-heading-sm);
+  --khor-font-size-h4: var(--khor-font-size-heading-xs);
+  --khor-font-size-h5: var(--khor-font-size-body-lg);
+  --khor-font-size-h6: var(--khor-font-size-body-md);
+  --khor-font-size-body-xs: var(--khor-font-size-caption);
 
   --khor-line-height-display: 1.1;
   --khor-line-height-heading: 1.25;
@@ -461,6 +477,23 @@
   --khor-overlay-bg: rgba(255, 255, 255, 0.95);
   --khor-overlay-backdrop: rgba(5, 23, 88, 0.4);
 
+  /* ── Semantic Layer 3: Contextual Tokens (Secciones Invertidas) ── */
+  --khor-context-sidebar-bg:         var(--khor-navy);
+  --khor-context-sidebar-text:       var(--khor-neutral-50);
+  --khor-context-sidebar-text-muted: rgba(255, 255, 255, 0.55);
+  --khor-context-sidebar-border:     rgba(255, 255, 255, 0.08);
+  --khor-context-sidebar-hover:      rgba(255, 255, 255, 0.10);
+  --khor-context-sidebar-active:     rgba(255, 255, 255, 0.15);
+  --khor-context-header-bg:          var(--khor-surface-card);
+  --khor-context-header-border:      var(--khor-border-default);
+
+  /* Interactive Surface Tokens (Industry Ref) */
+  --khor-surface-hover:     rgba(5, 23, 88, 0.04);
+  --khor-surface-pressed:   rgba(5, 23, 88, 0.08);
+  --khor-surface-selected:  rgba(224, 77, 54, 0.08);
+  --khor-surface-dragging:  rgba(224, 77, 54, 0.04);
+  --khor-surface-subtle:    #F4F6F8;
+
   /* ── Semantic Layer 2: Borders ── */
   --khor-border-default: var(--khor-neutral-200);
   --khor-border-muted: var(--khor-neutral-100);
@@ -469,6 +502,20 @@
   --khor-border-focus: var(--khor-primary);
   --khor-border-error: var(--khor-error);
   --khor-border-disabled: var(--khor-neutral-100);
+
+  /* Focus Ring Configurable */
+  --khor-focus-ring-color:  var(--khor-primary);
+  --khor-focus-ring-width:  2px;
+  --khor-focus-ring-offset: 2px;
+  --khor-focus-ring-style:  solid;
+
+  /* ── Component Layer: KDataGrid ── */
+  --khor-grid-header-bg:     var(--khor-neutral-100);
+  --khor-grid-header-text:   var(--khor-text-secondary);
+  --khor-grid-cell-border:   var(--khor-border-default);
+  --khor-grid-row-hover:     var(--khor-surface-hover);
+  --khor-grid-row-selected:  var(--khor-surface-selected);
+  --khor-grid-resizer-color: var(--khor-primary);
 
   /* ── Semantic Layer 2: Typography ── */
   --khor-text-primary: var(--khor-secondary);
@@ -489,6 +536,26 @@
   --khor-easing-spring:   cubic-bezier(0.175, 0.885, 0.32, 1.275);
   --khor-easing-enter:    cubic-bezier(0, 0, 0.2, 1);
   --khor-easing-exit:     cubic-bezier(0.4, 0, 1, 1);
+
+  /* Elevation Tokens (Semantic) */
+  --khor-elevation-0: none;
+  --khor-elevation-1: 0 1px 3px rgba(5, 23, 88, 0.06), 0 1px 2px rgba(5, 23, 88, 0.04);
+  --khor-elevation-2: 0 4px 12px rgba(5, 23, 88, 0.08), 0 2px 4px rgba(5, 23, 88, 0.05);
+  --khor-elevation-3: 0 8px 24px rgba(5, 23, 88, 0.10), 0 4px 8px rgba(5, 23, 88, 0.06);
+  --khor-elevation-4: 0 16px 48px rgba(5, 23, 88, 0.14), 0 8px 16px rgba(5, 23, 88, 0.08);
+  --khor-elevation-5: 0 24px 64px rgba(5, 23, 88, 0.18), 0 12px 24px rgba(5, 23, 88, 0.10);
+
+  /* Semantic Spacing Tokens (Aliases) */
+  --khor-space-component-xs:  var(--khor-space-1);
+  --khor-space-component-sm:  var(--khor-space-2);
+  --khor-space-component-md:  var(--khor-space-3);
+  --khor-space-component-lg:  var(--khor-space-4);
+
+  --khor-space-layout-xs:    var(--khor-space-4);
+  --khor-space-layout-sm:    var(--khor-space-6);
+  --khor-space-layout-md:    var(--khor-space-8);
+  --khor-space-layout-lg:    var(--khor-space-12);
+  --khor-space-layout-xl:    var(--khor-space-16);
 
   /* ── Mapped Tokens (Tailwind Compat) ── */
   --background: var(--khor-surface-page);
@@ -546,20 +613,60 @@
 .dark {
   --khor-navy: #8BA3D9;
   --khor-neutral-50: #1A1B2E;
-  --khor-neutral-100: #22243A;
-  
-  /* Dark Mode Feedback-Light (Audit v4.2 fix) */
-  --khor-success-light: #1B3A1C;
-  --khor-error-light: #3B1212;
-  --khor-warning-light: #3B2500;
   --khor-info-light: #0D1F3C;
+
+  /* Neutrals Overrides */
+  --khor-neutral-50: #1A1B2E;
+  --khor-neutral-100: #22243A;
+  --khor-neutral-200: #2E3148;
+  --khor-neutral-300: #4A4E6A;
+  --khor-neutral-400: #8B90A8;
+  --khor-neutral-500: #B0B4C8;
+  --khor-neutral-600: #9BA3B5;
+  --khor-neutral-700: #B8BDC8;
+  --khor-neutral-800: #D0D3DA;
+  --khor-neutral-900: #E8EAF0;
+
+  /* Interactive Surface Overrides */
+  --khor-surface-page: var(--khor-neutral-50);
+  --khor-surface-card: var(--khor-neutral-100);
+  --khor-surface-raised: var(--khor-neutral-200);
+  --khor-surface-overlay: var(--khor-neutral-900);
+  --khor-overlay-bg: rgba(15, 26, 53, 0.95);
+  --khor-overlay-backdrop: rgba(0, 0, 0, 0.6);
+
+  --khor-surface-hover:    rgba(255, 255, 255, 0.06);
+  --khor-surface-pressed:  rgba(255, 255, 255, 0.10);
+  --khor-surface-selected: rgba(224, 77, 54, 0.15);
+  --khor-surface-dragging: rgba(224, 77, 54, 0.08);
+  --khor-surface-subtle:   rgba(255, 255, 255, 0.04);
+
+  /* ── Semantic Layer 2: Typography ── */
+  --khor-text-primary: var(--khor-neutral-900);
+  --khor-text-secondary: var(--khor-neutral-700);
+  --khor-text-muted: var(--khor-neutral-500);
+  --khor-text-disabled: var(--khor-neutral-400);
+  --khor-text-on-action: var(--khor-neutral-50);
+
+  /* ── Semantic Layer 2: Borders ── */
+  --khor-border-default: var(--khor-neutral-300);
+  --khor-border-hover: var(--khor-neutral-500);
+  --khor-border-disabled: var(--khor-neutral-200);
+  --khor-border-strong: var(--khor-neutral-600);
+
+  /* Component Layer: Grid Dark */
+  --khor-grid-header-bg:    var(--khor-neutral-200);
+  --khor-grid-header-text:  var(--khor-neutral-900);
+  --khor-grid-cell-border:  var(--khor-neutral-300);
+  --khor-grid-row-hover:    rgba(255, 255, 255, 0.04);
+  --khor-grid-row-selected: rgba(224, 77, 54, 0.2);
 
   --khor-avatar-bg: #0A2270;
   --khor-avatar-fg: #FFFFFF;
-  --background: var(--khor-neutral-100);
-  --foreground: var(--khor-navy);
+  --background: var(--khor-surface-page);
+  --foreground: var(--khor-text-primary);
   --primary: var(--khor-primary);
-  --primary-foreground: #FFFFFF;
+  --primary-foreground: var(--khor-text-on-action);
   --border: var(--khor-border-default);
   --radius: var(--khor-radius-md);
 }
@@ -574,6 +681,18 @@
     --khor-font-size-h3: 20px;
     --khor-font-size-h4: 18px;
   }
+}
+
+/* ─── Global Focus Ring (Industry Reference A11y) ─── */
+:focus-visible {
+  outline: var(--khor-focus-ring-width) var(--khor-focus-ring-style) var(--khor-focus-ring-color);
+  outline-offset: var(--khor-focus-ring-offset);
+}
+
+/* Utility for custom components */
+.khor-focus-ring {
+  outline: var(--khor-focus-ring-width) var(--khor-focus-ring-style) var(--khor-focus-ring-color);
+  outline-offset: var(--khor-focus-ring-offset);
 }
 
 @theme inline {
@@ -694,6 +813,13 @@
   --color-khor-surface-overlay: var(--khor-surface-overlay);
   --color-khor-overlay-bg: var(--khor-overlay-bg);
   --color-khor-overlay-backdrop: var(--khor-overlay-backdrop);
+  
+  /* Interactive Surface Utilities */
+  --color-khor-surface-hover: var(--khor-surface-hover);
+  --color-khor-surface-pressed: var(--khor-surface-pressed);
+  --color-khor-surface-selected: var(--khor-surface-selected);
+  --color-khor-surface-dragging: var(--khor-surface-dragging);
+  --color-khor-surface-subtle: var(--khor-surface-subtle);
   --color-khor-text-primary: var(--khor-text-primary);
   --color-khor-text-secondary: var(--khor-text-secondary);
   --color-khor-text-muted: var(--khor-text-muted);
@@ -717,6 +843,7 @@
   --color-khor-border-focus: var(--khor-border-focus);
   --color-khor-border-error: var(--khor-border-error);
   --color-khor-border-disabled: var(--khor-border-disabled);
+  --color-khor-focus-ring: var(--khor-focus-ring-color);
 
   /* Motion Tokens */
   --animate-duration-instant: var(--khor-duration-instant);
@@ -743,6 +870,14 @@
   --shadow-khor-2xl: var(--khor-shadow-2xl);
   --shadow-khor-inner: var(--khor-shadow-inner);
 
+  /* Semantic Elevation Utilities */
+  --shadow-khor-elevation-0: var(--khor-elevation-0);
+  --shadow-khor-elevation-1: var(--khor-elevation-1);
+  --shadow-khor-elevation-2: var(--khor-elevation-2);
+  --shadow-khor-elevation-3: var(--khor-elevation-3);
+  --shadow-khor-elevation-4: var(--khor-elevation-4);
+  --shadow-khor-elevation-5: var(--khor-elevation-5);
+
   /* Radius y Spacing */
   --spacing-khor-1: var(--khor-space-1);
   --spacing-khor-2: var(--khor-space-2);
@@ -750,6 +885,18 @@
   --spacing-khor-4: var(--khor-space-4);
   --spacing-khor-6: var(--khor-space-6);
   --spacing-khor-8: var(--khor-space-8);
+
+  /* Semantic Spacing Utilities */
+  --spacing-khor-component-xs: var(--khor-space-component-xs);
+  --spacing-khor-component-sm: var(--khor-space-component-sm);
+  --spacing-khor-component-md: var(--khor-space-component-md);
+  --spacing-khor-component-lg: var(--khor-space-component-lg);
+  
+  --spacing-khor-layout-xs: var(--khor-space-layout-xs);
+  --spacing-khor-layout-sm: var(--khor-space-layout-sm);
+  --spacing-khor-layout-md: var(--khor-space-layout-md);
+  --spacing-khor-layout-lg: var(--khor-space-layout-lg);
+  --spacing-khor-layout-xl: var(--khor-space-layout-xl);
   --radius-khor-sm: var(--khor-radius-sm);
   --radius-khor-md: var(--khor-radius-md);
   --radius-khor-lg: var(--khor-radius-lg);

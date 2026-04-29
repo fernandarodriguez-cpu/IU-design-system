@@ -6,7 +6,7 @@
 export interface SearchItem {
   id: string;
   title: string;
-  category: 'Atomo' | 'Molecula' | 'Organismo' | 'Pattern' | 'Tool';
+  category: 'Atomo' | 'Molecula' | 'Organismo' | 'Pattern' | 'Tool' | 'Action';
   description: string;
   url: string;
   keywords: string[];
@@ -55,4 +55,9 @@ export const searchIndex: SearchItem[] = [
   { id: 't-ai', title: 'Guía para IA', category: 'Tool', description: 'Prompt generator para agentes autónomos.', url: '/ai-export', keywords: ['tool', 'ai', 'export', 'prompts'] },
   { id: 't-theming', title: 'Live Theming', category: 'Tool', description: 'Editor visual de tokens en tiempo real.', url: '/theming', keywords: ['tool', 'theme', 'tokens', 'colors'] },
   { id: 't-changelog', title: 'Changelog', category: 'Tool', description: 'Historial de versiones y cambios.', url: '/changelog', keywords: ['version', 'history', 'updates'] },
+  
+  // --- Actions ---
+  { id: 'a-dark', title: 'Cambiar a Modo Oscuro', category: 'Action', description: 'Alternar tema de la interfaz.', url: '#action:toggle-dark', keywords: ['dark', 'light', 'tema', 'modo'] },
+  { id: 'a-export', title: 'Exportar Guía de IA', category: 'Action', description: 'Descargar prompt de arquitectura v5.0.', url: '#action:export-ai', keywords: ['ai', 'export', 'download', 'markdown'] },
+  { id: 'a-history', title: 'Limpiar Historial', category: 'Action', description: 'Borrar búsquedas recientes.', url: '#action:clear-history', keywords: ['borrar', 'limpiar', 'historial'] },
 ];

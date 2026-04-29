@@ -112,6 +112,23 @@ function generateFigmaVariablesJSON() {
       },
       Focus: {
         Ring: { $value: resolveHex(t.semantic.focus.ring), $type: 'color' }
+      },
+      Contextual: {
+        Sidebar: {
+          Bg: { $value: resolveHex(t.contextual.sidebar.bg), $type: 'color' },
+          Text: { $value: resolveHex(t.contextual.sidebar.text), $type: 'color' },
+        },
+        Header: {
+          Bg: { $value: resolveHex(t.contextual.header.bg), $type: 'color' },
+          Text: { $value: resolveHex(t.contextual.header.text), $type: 'color' },
+        }
+      }
+    },
+    Component: {
+      Grid: {
+        HeaderBg: { $value: resolveHex(t.component?.grid?.headerBg || '#F5F7F9'), $type: 'color' },
+        HeaderText: { $value: resolveHex(t.component?.grid?.headerText || '#64748B'), $type: 'color' },
+        CellBorder: { $value: resolveHex(t.component?.grid?.cellBorder || '#E2E8F0'), $type: 'color' },
       }
     },
     Token: {
@@ -308,16 +325,16 @@ const TOKEN_RESOLVER: Record<string, string> = {
   'var(--khor-accent-active)': '#e68600',
   
   // Neutral
-  'var(--khor-neutral-50)': '#FFFFFF',
-  'var(--khor-neutral-100)': '#EDF0F1',
-  'var(--khor-neutral-200)': '#D5DBE0',
-  'var(--khor-neutral-300)': '#A0AEC0',
-  'var(--khor-neutral-400)': '#718096',
-  'var(--khor-neutral-500)': '#4A5568',
-  'var(--khor-neutral-600)': '#2D3748',
-  'var(--khor-neutral-700)': '#1A202C',
-  'var(--khor-neutral-800)': '#11141C',
-  'var(--khor-neutral-900)': '#000000',
+  'var(--khor-neutral-50)': '#F9FAFB',
+  'var(--khor-neutral-100)': '#F3F4F6',
+  'var(--khor-neutral-200)': '#E5E7EB',
+  'var(--khor-neutral-300)': '#D1D5DB',
+  'var(--khor-neutral-400)': '#9CA3AF',
+  'var(--khor-neutral-500)': '#6B7280',
+  'var(--khor-neutral-600)': '#4B5563',
+  'var(--khor-neutral-700)': '#374151',
+  'var(--khor-neutral-800)': '#1F2937',
+  'var(--khor-neutral-900)': '#111827',
 
   // Feedback
   'var(--khor-success)': '#2E7D32',

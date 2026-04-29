@@ -10,15 +10,15 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary: 'bg-khor-action-primary text-khor-text-on-action hover:bg-khor-action-primary-hover hover:shadow-khor-md after:absolute after:inset-x-0 after:top-0 after:h-px after:bg-white/20 after:pointer-events-none',
-        secondary: 'bg-khor-secondary text-khor-text-on-action hover:bg-khor-secondary-hover hover:shadow-khor-md after:absolute after:inset-x-0 after:top-0 after:h-px after:bg-white/20 after:pointer-events-none',
-        outline: 'border-khor-border-strong bg-transparent text-khor-text-primary hover:bg-khor-surface-page hover:border-khor-border-hover shadow-none',
-        ghost: 'bg-transparent text-khor-text-primary hover:bg-khor-action-ghost-hover shadow-none',
-        danger: 'bg-khor-action-danger text-khor-text-on-action hover:bg-khor-action-danger-hover hover:shadow-khor-md after:absolute after:inset-x-0 after:top-0 after:h-px after:bg-white/20',
+        primary: 'bg-khor-action-primary text-khor-text-on-action hover:bg-khor-action-primary-hover active:bg-khor-action-primary-active hover:shadow-khor-md after:absolute after:inset-x-0 after:top-0 after:h-px after:bg-white/20 after:pointer-events-none',
+        secondary: 'bg-khor-secondary text-khor-text-on-action hover:bg-khor-secondary-hover active:bg-khor-action-secondary-active hover:shadow-khor-md after:absolute after:inset-x-0 after:top-0 after:h-px after:bg-white/20 after:pointer-events-none',
+        outline: 'border-khor-border-strong bg-transparent text-khor-text-primary hover:bg-khor-surface-hover active:bg-khor-surface-pressed hover:border-khor-border-hover shadow-none',
+        ghost: 'bg-transparent text-khor-text-primary hover:bg-khor-action-ghost-hover active:bg-khor-surface-pressed shadow-none',
+        danger: 'bg-khor-action-danger text-khor-text-on-action hover:bg-khor-action-danger-hover active:bg-khor-action-danger-active hover:shadow-khor-md after:absolute after:inset-x-0 after:top-0 after:h-px after:bg-white/20',
         link: 'bg-transparent text-khor-action-primary underline-offset-4 hover:underline !p-0 !min-h-0 !h-auto border-none shadow-none active:scale-100',
-        text: 'bg-transparent text-khor-text-primary hover:bg-khor-action-ghost-hover border-none shadow-none',
-        solid: 'bg-khor-action-primary text-khor-text-on-action hover:bg-khor-action-primary-hover hover:shadow-khor-md after:absolute after:inset-x-0 after:top-0 after:h-px after:bg-white/20',
-        filled: 'bg-khor-surface-page text-khor-text-primary hover:bg-khor-neutral-200 border-none shadow-none',
+        text: 'bg-transparent text-khor-text-primary hover:bg-khor-action-ghost-hover active:bg-khor-surface-pressed border-none shadow-none',
+        solid: 'bg-khor-action-primary text-khor-text-on-action hover:bg-khor-action-primary-hover active:bg-khor-action-primary-active hover:shadow-khor-md after:absolute after:inset-x-0 after:top-0 after:h-px after:bg-white/20',
+        filled: 'bg-khor-surface-page text-khor-text-primary hover:bg-khor-surface-hover active:bg-khor-surface-pressed border-none shadow-none',
       },
       size: {
         sm: 'h-[var(--khor-density-height-sm)] min-w-[var(--khor-density-min-width-button)] px-[var(--khor-space-3)] text-xs',
@@ -47,6 +47,18 @@ const buttonVariants = cva(
       },
       ghost: {
         true: 'bg-transparent shadow-none',
+      },
+      isHovered: {
+        true: 'bg-khor-surface-hover shadow-khor-md ring-2 ring-khor-action-primary/10',
+      },
+      isPressed: {
+        true: 'bg-khor-surface-pressed scale-[0.97] shadow-none',
+      },
+      isActive: {
+        true: 'ring-2 ring-khor-action-primary ring-offset-2',
+      },
+      danger: {
+        true: '',
       }
     },
     compoundVariants: [
@@ -90,9 +102,10 @@ export const KButton = React.forwardRef<any, KButtonProps>(function KButton(
   { 
     variant, color, kVariant, size = 'md', shape = 'default', 
     htmlType = 'button', type, className,
-    fullWidth, block, loading: rawLoading, icon, iconPosition = 'start', children, disabled,
     href, target, danger: rawDanger, ghost, autoInsertSpace = true,
+    isHovered, isPressed, isActive,
     classNames, styles, onClick,
+    loading: rawLoading, icon, iconPosition = 'start', block, fullWidth, disabled, children,
     ...rest 
   },
   ref,
@@ -138,6 +151,9 @@ export const KButton = React.forwardRef<any, KButtonProps>(function KButton(
     shape, 
     fullWidth: isFullWidth, 
     ghost,
+    isHovered,
+    isPressed,
+    isActive,
     className 
   }));
 

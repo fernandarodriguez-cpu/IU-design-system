@@ -6,7 +6,7 @@ import { toast } from 'sonner';
 import { useParams } from 'react-router';
 import { ComponentDoc } from '../components/docs/ComponentDoc';
 import type { PropDef } from '../components/docs/ComponentDoc';
-import { KDataTable } from '../components/design-system/organisms/KDataTable';
+import { KDataTable, KDataGrid, KFormWizard } from '../components/design-system/organisms';
 import { KSparklineCell } from '../components/design-system/organisms/KSparklineCell';
 import { 
   KModal, 
@@ -57,7 +57,7 @@ import { KFormField } from '../components/design-system/molecules/KFormField';
 import {
   Download, Filter, Plus, RefreshCw, CheckCircle,
   AlertTriangle, XCircle, Info, BarChart3, Users, FileText,
-  Settings, Eye,
+  Settings, Eye, MoreHorizontal,
 } from 'lucide-react';
 import { khorTokens } from '../theme/khor-theme';
 import { KCommandBarPreview } from '../components/design-system/command-bar';
@@ -622,7 +622,256 @@ function CardSectionPlayground() {
   );
 }
 
+function DataGridPlayground() {
+  const [loading, setLoading] = useState(false);
+  const [virtualized, setVirtualized] = useState(true);
+  
+  const columns = [
+    {
+      accessorKey: 'id',
+      header: 'ID',
+      size: 80,
+    },
+    {
+      accessorKey: 'name',
+      header: 'Nombre del Empleado',
+      size: 250,
+      cell: (info: any) => <KUserCell name={info.getValue()} role="Miembro" />,
+    },
+    {
+      accessorKey: 'dept',
+      header: 'Departamento',
+      size: 180,
+    },
+    {
+      accessorKey: 'status',
+      header: 'Estado',
+      size: 120,
+      cell: (info: any) => {
+        const v = info.getValue();
+        return <KBadge status={v as any} label={statusLabels[v] || v} />;
+      },
+    },
+    {
+      accessorKey: 'salary',
+      header: 'Salario Anual',
+      size: 150,
+      cell: (info: any) => (
+        <div className="font-mono text-right">
+          ${info.getValue().toLocaleString()}
+        </div>
+      ),
+    },
+    {
+      id: 'actions',
+      header: 'Acciones',
+      size: 100,
+      cell: () => (
+        <div className="flex gap-1">
+          <KButton size="icon" variant="ghost"><Eye size={14} /></KButton>
+          <KButton size="icon" variant="ghost"><MoreHorizontal size={14} /></KButton>
+        </div>
+      ),
+    }
+  ];
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+      <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+        <KButton 
+          size="sm" 
+          variant={loading ? 'primary' : 'outline'} 
+          onClick={() => {
+            setLoading(true);
+            setTimeout(() => setLoading(false), 2000);
+          }}
+          icon={<RefreshCw size={14} className={loading ? 'animate-spin' : ''} />}
+        >
+          Simular Carga
+        </KButton>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, marginLeft: 'auto' }}>
+          <span>Virtualización:</span>
+          <KButton size="sm" variant={virtualized ? 'primary' : 'outline'} onClick={() => setVirtualized(!virtualized)}>
+            {virtualized ? 'Activada' : 'Desactivada'}
+          </KButton>
+        </div>
+      </div>
+      
+      <KDataGrid
+        title="Gestión de Talento Humano"
+        description="Grilla de alto rendimiento con virtualización nativa para 10,000 registros."
+        columns={columns}
+        data={massiveEmployees}
+        virtualized={virtualized}
+        loading={loading}
+        maxHeight={500}
+        actions={
+          <>
+            <KButton variant="secondary" size="sm" icon={<Filter size={14} />}>Filtros Avanzados</KButton>
+            <KButton variant="primary" size="sm" icon={<Plus size={14} />}>Añadir Empleado</KButton>
+          </>
+        }
+      />
+    </div>
+  );
+}
+
+function FormWizardPlayground() {
+  const steps = [
+    {
+      id: 'profile',
+      title: 'Perfil de Usuario',
+      description: 'Configura la información básica de tu cuenta.',
+      content: (
+        <div className="flex flex-col gap-4">
+          <KFormField label="Nombre Completo" placeholder="Ej. Juan Perez" />
+          <KFormField label="Correo Electrónico" placeholder="juan@khor.com" />
+        </div>
+      )
+    },
+    {
+      id: 'settings',
+      title: 'Preferencias',
+      description: 'Define cómo quieres interactuar con la plataforma.',
+      content: (
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center justify-between p-4 bg-khor-neutral-50 rounded-lg">
+            <div>
+              <KText variant="bodyMd" className="font-bold">Notificaciones Push</KText>
+              <KText variant="bodySm" className="text-khor-text-secondary">Recibe alertas en tiempo real.</KText>
+            </div>
+            <KSwitch />
+          </div>
+          <div className="flex items-center justify-between p-4 bg-khor-neutral-50 rounded-lg">
+            <div>
+              <KText variant="bodyMd" className="font-bold">Modo Desarrollador</KText>
+              <KText variant="bodySm" className="text-khor-text-secondary">Acceso a herramientas avanzadas.</KText>
+            </div>
+            <KSwitch />
+          </div>
+        </div>
+      )
+    },
+    {
+      id: 'review',
+      title: 'Revisión y Envío',
+      description: 'Confirma que los datos sean correctos.',
+      content: (
+        <div className="p-6 bg-khor-primary/5 rounded-xl border border-khor-primary/20 text-center">
+          <CheckCircle className="mx-auto mb-3 text-khor-primary" size={40} />
+          <KText variant="h4">¡Todo listo para comenzar!</KText>
+          <KText variant="bodySm" className="text-khor-text-secondary mt-2">
+            Al hacer clic en finalizar, tu perfil será actualizado con las nuevas preferencias.
+          </KText>
+        </div>
+      )
+    }
+  ];
+
+  return (
+    <div className="max-w-3xl mx-auto">
+      <KFormWizard 
+        steps={steps} 
+        onComplete={() => alert('¡Proceso completado!')}
+        onCancel={() => alert('Cancelado')}
+      />
+    </div>
+  );
+}
+
 export const organisms: Record<string, OrganismEntry> = {
+  'form-wizard': {
+    id: 'form-wizard',
+    name: 'KFormWizard',
+    description: 'Orquestador de formularios multi-paso. Ideal para procesos de onboarding, configuraciones complejas o checkouts.',
+    preview: (
+      <div className="p-4 border border-khor-border-default rounded-lg scale-75 origin-top">
+        <KSteps current={1} items={[{ title: 'Paso 1' }, { title: 'Paso 2' }, { title: 'Paso 3' }]} />
+      </div>
+    ),
+    playground: <FormWizardPlayground />,
+    a11ySummary: {
+      keyboard: [
+        'Tab: Navega entre los controles del wizard.',
+        'Enter/Space: Activa los botones de navegación.',
+      ],
+      aria: [
+        'Uso de KSteps con estados de progreso ARIA.',
+        'Regiones de contenido con anuncios de carga.',
+      ],
+      contrast: 'AAA certificado.',
+      score: 100,
+    },
+    code: `import { KFormWizard } from '@khor/design-system/organisms';
+
+const steps = [
+  { id: '1', title: 'Cuenta', content: <AccountForm /> },
+  { id: '2', title: 'Plan', content: <PlanSelector /> },
+];
+
+<KFormWizard steps={steps} onComplete={handleFinish} />`,
+    filename: 'KFormWizard.tsx',
+    props: [
+      { name: 'steps', type: 'WizardStep[]', required: true, description: 'Colección de pasos del flujo.' },
+      { name: 'onComplete', type: 'function', description: 'Callback al finalizar el último paso.' },
+      { name: 'onCancel', type: 'function', description: 'Callback al cancelar el flujo.' },
+    ],
+  },
+  'data-grid': {
+    id: 'data-grid',
+    name: 'KDataGrid',
+    description: 'Grilla de datos de grado empresarial (Ola 12). Incluye virtualización nativa, redimensionamiento de columnas, ordenamiento multicapa y soporte para edición inline. Optimizada para datasets masivos (100k+ filas).',
+    preview: (
+       <KDataGrid
+         data={mockEmployees}
+         columns={[
+           { accessorKey: 'name', header: 'Nombre', size: 200 },
+           { accessorKey: 'dept', header: 'Depto', size: 150 },
+           { accessorKey: 'salary', header: 'Salario', size: 120 },
+         ]}
+         maxHeight={250}
+       />
+    ),
+    playground: <DataGridPlayground />,
+    a11ySummary: {
+      keyboard: [
+        'Tab: Navega entre controles del toolbar y la grilla.',
+        'Flechas: Navegación tipo celda (Excel-like) en celdas enfocables.',
+        'Enter: Activa el modo de edición si está habilitado.'
+      ],
+      aria: [
+        'Role "grid" para la tabla.',
+        'aria-colcount y aria-rowcount dinámicos.',
+        'aria-sort para reflejar el estado de ordenamiento.'
+      ],
+      contrast: 'AAA certificado bajo Dark Mode v5.0.',
+      score: 100,
+    },
+    code: `import { KDataGrid } from '@khor/design-system/organisms';
+
+const columns = [
+  { accessorKey: 'id', header: 'ID', size: 80 },
+  { accessorKey: 'name', header: 'Nombre', size: 250 },
+  { accessorKey: 'status', header: 'Estado', size: 120 },
+];
+
+<KDataGrid
+  title="Registros de Sistema"
+  data={massiveData}
+  columns={columns}
+  virtualized
+  enableColumnResizing
+  maxHeight={600}
+/>`,
+    filename: 'KDataGrid.tsx',
+    props: [
+      { name: 'data', type: 'TData[]', required: true, description: 'Dataset a visualizar.' },
+      { name: 'columns', type: 'ColumnDef[]', required: true, description: 'Definición de columnas de TanStack Table.' },
+      { name: 'virtualized', type: 'boolean', default: 'false', description: 'Habilita virtualización de filas.' },
+      { name: 'enableColumnResizing', type: 'boolean', default: 'true', description: 'Permite cambiar el ancho de columnas.' },
+      { name: 'maxHeight', type: 'number | string', description: 'Altura máxima del contenedor con scroll.' },
+    ],
+  },
   'data-table': {
     id: 'data-table',
     name: 'KDataTable',

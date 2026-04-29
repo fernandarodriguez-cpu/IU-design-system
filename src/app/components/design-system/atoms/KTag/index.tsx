@@ -75,13 +75,17 @@ export interface KTagProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, '
     root?: string;
     closeIcon?: string;
   };
+  /** Fuerza el estado hover (útil para previews/playgrounds) */
+  isHovered?: boolean;
+  /** Fuerza el estado de foco (útil para previews/playgrounds) */
+  isFocused?: boolean;
 }
 
 /**
  * KTag — Etiqueta pequeña para categorización o estados.
  */
 const KTagInternal = React.forwardRef<HTMLSpanElement, KTagProps>(function KTag(
-  { className, color, status, bordered = true, icon, closable, closeIcon, onClose, children, style, styles, classNames, ...rest }, ref
+  { className, color, status, bordered = true, icon, closable, closeIcon, onClose, isHovered, isFocused, children, style, styles, classNames, ...rest }, ref
 ) {
   const [visible, setVisible] = useState(true);
   
@@ -110,6 +114,8 @@ const KTagInternal = React.forwardRef<HTMLSpanElement, KTagProps>(function KTag(
       ref={ref}
       className={cn(
         tagVariants({ color: isCustomColor ? undefined : finalColor as any, bordered }), 
+        isHovered && "ring-2 ring-khor-primary/20 bg-khor-surface-hover",
+        isFocused && "ring-2 ring-khor-primary ring-offset-1",
         classNames?.root,
         className
       )}
@@ -140,6 +146,10 @@ const KTagInternal = React.forwardRef<HTMLSpanElement, KTagProps>(function KTag(
 export interface KCheckableTagProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, 'onChange'> {
   checked?: boolean;
   onChange?: (checked: boolean) => void;
+  /** Fuerza el estado hover */
+  isHovered?: boolean;
+  /** Fuerza el estado de foco */
+  isFocused?: boolean;
 }
 
 export const KCheckableTag = React.forwardRef<HTMLSpanElement, KCheckableTagProps>(function KCheckableTag(
@@ -148,11 +158,16 @@ export const KCheckableTag = React.forwardRef<HTMLSpanElement, KCheckableTagProp
   return (
     <span
       ref={ref}
+      role="button"
+      tabIndex={rest.onClick || onChange ? 0 : undefined}
       className={cn(
-        'inline-flex items-center rounded-md px-2 py-0.5 text-xs font-semibold font-primary transition-all select-none cursor-pointer border',
+        'inline-flex items-center rounded-md px-2 py-0.5 text-xs font-semibold font-primary transition-all select-none cursor-pointer border outline-none',
+        'focus-visible:ring-2 focus-visible:ring-khor-primary focus-visible:ring-offset-1',
         checked 
           ? 'bg-khor-primary text-white border-khor-primary shadow-sm' 
-          : 'bg-khor-neutral-100 text-khor-neutral-600 border-khor-neutral-200 hover:bg-khor-neutral-200 hover:border-khor-neutral-300',
+          : 'bg-khor-neutral-100 text-khor-neutral-600 border-khor-neutral-200 hover:bg-khor-surface-hover hover:border-khor-border-hover',
+        (isHovered && !checked) && "bg-khor-surface-hover border-khor-border-hover",
+        isFocused && "ring-2 ring-khor-primary ring-offset-1",
         className
       )}
       onClick={() => onChange?.(!checked)}

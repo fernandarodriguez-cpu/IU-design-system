@@ -51,6 +51,10 @@ export interface KAvatarProps {
   children?: React.ReactNode;
   /** onClick handler */
   onClick?: (e: React.MouseEvent) => void;
+  /** Fuerza el estado hover (útil para previews/playgrounds) */
+  isHovered?: boolean;
+  /** Fuerza el estado de foco (útil para previews/playgrounds) */
+  isFocused?: boolean;
 }
 
 const statusColors: Record<string, string> = {
@@ -129,6 +133,8 @@ export const KAvatar = React.forwardRef<HTMLDivElement, KAvatarProps>(({
   style,
   children,
   onClick,
+  isHovered,
+  isFocused,
 }, ref) => {
   // Manejo de tamaños responsivos
   const size = useAvatarBreakpoint(rawSize);
@@ -198,6 +204,8 @@ export const KAvatar = React.forwardRef<HTMLDivElement, KAvatarProps>(({
           "relative flex shrink-0 overflow-hidden font-primary font-semibold select-none items-center justify-center transition-all",
           shape === 'circle' ? "rounded-full" : "rounded-[var(--khor-radius-md)]",
           !hasCustomColor && "bg-khor-avatar-bg text-khor-avatar-fg",
+          "ring-offset-background focus:outline-none focus-visible:ring-[var(--khor-focus-ring-width)] focus-visible:ring-[var(--khor-focus-ring-color)] focus-visible:ring-offset-[var(--khor-focus-ring-offset)]",
+          (isHovered || isFocused) && "ring-2 ring-khor-primary ring-offset-2",
         )}
         style={{
           width: pxSize,
@@ -363,7 +371,7 @@ export const KAvatarGroup = ({
           content={
             <div className="flex flex-col gap-2 p-2 max-h-60 overflow-y-auto">
               {surplusList.map((avatar, idx) => (
-                <div key={idx} className="flex items-center gap-3 px-2 py-1 hover:bg-khor-neutral-50 rounded-md">
+                <div key={idx} className="flex items-center gap-3 px-2 py-1 hover:bg-khor-surface-hover rounded-md transition-colors">
                    {avatar}
                    {React.isValidElement<KAvatarProps>(avatar) && (
                      <span className="text-sm font-medium text-khor-text-primary">

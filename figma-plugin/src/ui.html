@@ -110,10 +110,12 @@
         </div>
         <div class="btn-group">
             <button id="nuke-btn" class="btn-action btn-nuke" title="Borra las colecciones antiguas">🧹 Nuke</button>
-            <button id="sync-btn" class="btn-action btn-sync">🔄 Sync</button>
+            <button id="sync-btn" class="btn-action btn-sync">🔄 Sync Default</button>
+            <button id="import-manifest-btn" class="btn-action" style="background: #7C3AED; color: white;">📦 Import Manifest</button>
             <button id="khorify-btn" class="btn-action" style="background: linear-gradient(135deg, #E04D36, #051758); color: white;">✨ Khor-ify</button>
             <button id="show-extract-btn" class="btn-action btn-extract">🔍 Extraer</button>
         </div>
+        <input type="file" id="manifest-file" style="display: none;" accept=".json">
     </div>
 
     <div id="debug-log"><strong>Debug Log:</strong><br/></div>
@@ -160,6 +162,29 @@
             }
         };
         document.getElementById('sync-btn').onclick = () => parent.postMessage({ pluginMessage: { type: 'sync-tokens' } }, '*');
+        
+        const manifestBtn = document.getElementById('import-manifest-btn');
+        const fileInput = document.getElementById('manifest-file');
+        
+        manifestBtn.onclick = () => fileInput.click();
+        
+        fileInput.onchange = (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    const manifest = JSON.parse(event.target.result);
+                    log("📦 Manifiesto cargado. Enviando a Khor Engine...");
+                    parent.postMessage({ pluginMessage: { type: 'import-manifest', manifest } }, '*');
+                } catch (err) {
+                    log("❌ Error al leer manifiesto: " + err.message);
+                }
+            };
+            reader.readAsText(file);
+        };
+
         document.getElementById('khorify-btn').onclick = () => parent.postMessage({ pluginMessage: { type: 'khorify-selection' } }, '*');
         document.getElementById('show-extract-btn').onclick = () => parent.postMessage({ pluginMessage: { type: 'extract-library' } }, '*');
         document.getElementById('close-extraction').onclick = () => document.getElementById('extraction-view').style.display = 'none';

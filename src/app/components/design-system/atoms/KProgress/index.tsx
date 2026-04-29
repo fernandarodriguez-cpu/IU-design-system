@@ -13,12 +13,14 @@ export interface KProgressProps {
   steps?: number;
   className?: string;
   style?: React.CSSProperties;
+  /** Fuerza el estado hover (útil para previews/playgrounds) */
+  isHovered?: boolean;
 }
 
 const sizeVariants = {
-  sm: "h-1",
-  md: "h-2",
-  lg: "h-4"
+  sm: "h-[var(--khor-density-spacing-xs)]",
+  md: "h-[var(--khor-density-spacing-sm)]",
+  lg: "h-[var(--khor-density-spacing-md)]"
 };
 
 /**
@@ -38,11 +40,18 @@ export const KProgress = React.forwardRef<
   strokeColor,
   steps,
   className,
-  style 
+  style,
+  isHovered
 }, ref) => {
   const percent = Math.min(Math.max(value, 0), max);
   const isComplete = percent === max;
   const hasError = status === 'exception';
+
+  const statusColors = {
+    error: "text-khor-error",
+    success: "text-khor-success",
+    primary: "text-khor-primary"
+  };
 
   if (type === 'circle') {
     const radius = 45;
@@ -50,7 +59,7 @@ export const KProgress = React.forwardRef<
     const offset = circumference - (percent / max) * circumference;
 
     return (
-      <div className={cn("inline-flex items-center gap-3 font-primary", className)} style={style}>
+      <div className={cn("inline-flex items-center gap-3 font-primary transition-transform", isHovered && "scale-105", className)} style={style}>
         <div className={cn("relative", size === 'sm' ? "h-6 w-6" : size === 'lg' ? "h-16 w-16" : "h-10 w-10")}>
           <svg className="h-full w-full -rotate-90" viewBox="0 0 100 100">
             <circle
@@ -65,7 +74,7 @@ export const KProgress = React.forwardRef<
             <circle
               className={cn(
                 "transition-all duration-500 ease-in-out",
-                hasError ? "text-red-500" : isComplete ? "text-emerald-500" : "text-khor-primary"
+                hasError ? "text-khor-error" : isComplete ? "text-khor-success" : "text-khor-primary"
               )}
               strokeWidth="8"
               strokeDasharray={circumference}
@@ -98,7 +107,7 @@ export const KProgress = React.forwardRef<
                   sizeVariants[size],
                   "w-full flex-1 rounded-full transition-all duration-300",
                   isActive 
-                    ? (hasError ? "bg-red-500" : isComplete ? "bg-emerald-500" : "bg-khor-primary")
+                    ? (hasError ? "bg-khor-error" : isComplete ? "bg-khor-success" : "bg-khor-primary")
                     : "bg-khor-neutral-200"
                 )}
                 style={isActive && strokeColor ? { backgroundColor: strokeColor } : {}}
@@ -125,7 +134,7 @@ export const KProgress = React.forwardRef<
         <ProgressPrimitive.Indicator
           className={cn(
             "h-full w-full flex-1 transition-all duration-500 ease-in-out",
-            hasError ? "bg-red-500" : isComplete ? "bg-emerald-500" : "bg-khor-primary"
+            hasError ? "bg-khor-error" : isComplete ? "bg-khor-success" : "bg-khor-primary"
           )}
           style={{ 
             transform: `translateX(-${100 - (percent / max) * 100}%)`,

@@ -53,6 +53,12 @@ export interface KButtonProps extends CombinedAttributes {
     icon?: CSSProperties;
     content?: CSSProperties;
   };
+  /** Fuerza el estado hover (útil para previews/playgrounds) */
+  isHovered?: boolean;
+  /** Fuerza el estado presionado (útil para previews/playgrounds) */
+  isPressed?: boolean;
+  /** Marca el botón como activo/seleccionado (toggle state) */
+  isActive?: boolean;
   /** Handlers */
   onClick?: (e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => void;
 }

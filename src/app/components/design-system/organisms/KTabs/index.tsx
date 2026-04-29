@@ -27,7 +27,7 @@ export const KTabsList = React.forwardRef<
   <TabsPrimitive.List
     ref={ref}
     className={cn(
-      "inline-flex h-11 items-center justify-center rounded-xl bg-khor-slate-100 p-1 text-khor-neutral-500 shadow-inner",
+      "inline-flex h-[var(--khor-density-height-md)] items-center justify-center rounded-xl bg-khor-surface-subtle p-1 text-khor-text-tertiary shadow-inner",
       className
     )}
     {...props}
@@ -37,12 +37,13 @@ KTabsList.displayName = TabsPrimitive.List.displayName;
 
 export const KTabsTrigger = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>
->(({ className, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger> & { isHovered?: boolean }
+>(({ className, isHovered, ...props }, ref) => (
   <TabsPrimitive.Trigger
     ref={ref}
     className={cn(
-      "inline-flex items-center justify-center whitespace-nowrap rounded-lg px-3 py-1.5 text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-khor-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-white data-[state=active]:text-khor-primary data-[state=active]:shadow-khor-sm font-primary",
+      "inline-flex items-center justify-center whitespace-nowrap rounded-lg px-3 py-1.5 text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-khor-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-white data-[state=active]:text-khor-primary data-[state=active]:shadow-khor-sm hover:bg-khor-surface-hover data-[state=active]:hover:bg-white font-primary",
+      isHovered && "bg-khor-surface-hover",
       className
     )}
     {...props}
@@ -57,7 +58,7 @@ export const KTabsContent = React.forwardRef<
   <TabsPrimitive.Content
     ref={ref}
     className={cn(
-      "mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-khor-primary focus-visible:ring-offset-2 font-primary animate-in fade-in-0 zoom-in-95 duration-300",
+      "mt-4 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-khor-primary focus-visible:ring-offset-2 font-primary animate-in fade-in-0 zoom-in-95 duration-300",
       className
     )}
     {...props}
@@ -76,12 +77,13 @@ export const KTabs = React.forwardRef<
   if (items) {
     return (
       <KTabsRoot ref={ref} className={cn("w-full", className)} {...props}>
-        <div className={cn("flex items-center border-b border-khor-slate-100 mb-4", type !== 'line' && "border-none")}>
+        <div className={cn("flex items-center border-b border-khor-border-muted mb-4", type !== 'line' && "border-none")}>
           <KTabsList 
             className={cn(
               centered && "mx-auto",
               type === 'line' && "bg-transparent border-none p-0 h-auto gap-8",
-              type === 'card' && "bg-khor-neutral-50 border border-khor-neutral-200 rounded-t-lg p-0 h-auto"
+              type === 'card' && "bg-khor-surface-subtle border border-khor-border-default rounded-t-lg p-0 h-auto",
+              size === 'sm' ? "h-[var(--khor-density-height-sm)]" : size === 'lg' ? "h-[var(--khor-density-height-lg)]" : "h-[var(--khor-density-height-md)]"
             )}
           >
             {items.map((item) => (
@@ -91,7 +93,9 @@ export const KTabs = React.forwardRef<
                 disabled={item.disabled}
                 className={cn(
                   type === 'line' && "bg-transparent border-b-2 border-transparent rounded-none px-0 py-2 data-[state=active]:bg-transparent data-[state=active]:border-khor-primary data-[state=active]:shadow-none",
-                  type === 'card' && "bg-transparent border-r border-khor-neutral-200 last:border-r-0 rounded-none px-6 py-3 data-[state=active]:bg-white data-[state=active]:shadow-none data-[state=active]:border-b-white -mb-[1px]"
+                  type === 'card' && "bg-transparent border-r border-khor-border-default last:border-r-0 rounded-none px-6 py-3 data-[state=active]:bg-white data-[state=active]:shadow-none data-[state=active]:border-b-white -mb-[1px]",
+                  size === 'sm' && "text-xs px-2 py-1",
+                  size === 'lg' && "text-base px-5 py-2.5"
                 )}
               >
                 <div className="flex items-center gap-2">

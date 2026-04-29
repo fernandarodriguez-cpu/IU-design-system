@@ -24,7 +24,7 @@ const t = khorTokens;
 function SaaSWizardInternal() {
   const [step, setStep] = useState(0);
   const [direction, setDirection] = useState(0); // 1 for next, -1 for prev
-  const [form, setForm] = useState({ name: '', org: '', email: '', plan: 'pro' });
+  const [form, setForm] = useState({ name: '', org: '', email: '', plan: 'pro', environment: 'dev' });
 
   const steps = [
     { title: 'Perfil', description: 'Tu información base' },
@@ -110,7 +110,7 @@ function SaaSWizardInternal() {
                     <motion.div variants={fadeInUp}>
                       <KFormField label="Nombre Completo" required>
                         <KInput 
-                          placeholder="Ej: Daniel Khor" 
+                          placeholder="Ej: Alex Mercer" 
                           prefix={<User size={16} />} 
                           value={form.name} 
                           onChange={(e) => setForm({ ...form, name: e.target.value })} 
@@ -132,7 +132,7 @@ function SaaSWizardInternal() {
                   </KCol>
                 </KRow>
                 <motion.div variants={fadeInUp}>
-                   <KText variant="body-sm" color="secondary" style={{ opacity: 0.7 }}>Este correo se usará para notificaciones de despliegue y auditorías de seguridad.</KText>
+                   <KText variant="small" color="secondary" style={{ opacity: 0.7 }}>Este correo se usará para notificaciones de despliegue y auditorías de seguridad.</KText>
                 </motion.div>
               </motion.div>
             )}

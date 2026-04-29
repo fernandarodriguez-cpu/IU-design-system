@@ -12,79 +12,15 @@ import {
 import { KButton, KInput, KBadge, KSwitch, KProgress, KAlert, KAvatar, KTag, KCheckbox, KSearchInput } from '../components/design-system/atoms/index';
 import { KStatCard, KFormField } from '../components/design-system/molecules/index';
 import { khorTokens } from '../theme/khor-theme';
+import { useTheme, ThemeConfig, defaultTheme } from '../theme/theme-context';
+import { generateMarkdown as generateCompleteGuide, defaultSections } from './AIExportPage';
+import { khorMetadata } from '../../../figma-plugin/src/metadata';
 
 const t = khorTokens;
 const font = t.typography.fontPrimary;
 
 /* ─── Types ─── */
-interface ThemeConfig {
-  // Colors
-  primary: string;
-  secondary: string;    // internamente se mapea a --khor-secondary
-  accent: string;
-  success: string;
-  error: string;
-  warning: string;
-  info: string;
-  // Typography
-  fontHeading: string;
-  fontBody: string;
-  fontMono: string;
-  h1Size: number;
-  h2Size: number;
-  h3Size: number;
-  bodySize: number;
-  smallSize: number;
-  baseLineHeight: number;
-  // Shadows
-  shadowSm: string;
-  shadowMd: string;
-  shadowLg: string;
-  shadowColor: string;
-  // Radius
-  radiusSm: number;
-  radiusMd: number;
-  radiusLg: number;
-  radiusXl: number;
-  // Spacing
-  spaceXs: number;
-  spaceSm: number;
-  spaceMd: number;
-  spaceLg: number;
-  spaceXl: number;
-}
-
-const defaultTheme: ThemeConfig = {
-  primary: '#E04D36',
-  secondary: '#051758',
-  accent: '#FF9500',
-  success: '#2E7D32',
-  error: '#D32F2F',
-  warning: '#E68600',
-  info: '#1976D2',
-  fontHeading: 'Montserrat',
-  fontBody: 'Plus Jakarta Sans',
-  fontMono: 'JetBrains Mono',
-  h1Size: 38,
-  h2Size: 30,
-  h3Size: 24,
-  bodySize: 14,
-  smallSize: 12,
-  baseLineHeight: 1.5,
-  shadowSm: '0 1px 3px 0',
-  shadowMd: '0 4px 12px 0',
-  shadowLg: '0 10px 30px -4px',
-  shadowColor: '#00000018',
-  radiusSm: 6,
-  radiusMd: 8,
-  radiusLg: 10,
-  radiusXl: 14,
-  spaceXs: 4,
-  spaceSm: 8,
-  spaceMd: 16,
-  spaceLg: 24,
-  spaceXl: 40,
-};
+// Moved to theme-context.tsx
 
 /* ─── Presets ─── */
 interface ThemePreset {
@@ -275,35 +211,17 @@ function buildShadow(offset: string, color: string): string {
 
 /* ─── Page Component ─── */
 export function ThemingPage() {
-  const [theme, setTheme] = useState<ThemeConfig>({ ...defaultTheme });
+  const { themeConfig: theme, setThemeConfig: setTheme, resetTheme } = useTheme();
   const [copied, setCopied] = useState<string | null>(null);
   const [activePreview, setActivePreview] = useState<'components' | 'typography' | 'shadows'>('components');
 
   const update = useCallback(<K extends keyof ThemeConfig>(key: K, val: ThemeConfig[K]) => {
-    setTheme((prev) => ({ ...prev, [key]: val }));
-    const root = document.documentElement;
-    const cssMap: Partial<Record<keyof ThemeConfig, string>> = {
-      primary: '--khor-primary', secondary: '--khor-secondary', accent: '--khor-accent',
-      success: '--khor-success', error: '--khor-error', warning: '--khor-warning', info: '--khor-info',
-      radiusSm: '--khor-radius-sm', radiusMd: '--khor-radius-md', radiusLg: '--khor-radius-lg', radiusXl: '--khor-radius-xl',
-    };
-    const cssVar = cssMap[key];
-    if (cssVar) {
-      root.style.setProperty(cssVar, typeof val === 'number' ? `${val}px` : String(val));
-    }
-    // Font updates
-    if (key === 'fontHeading') root.style.setProperty('--font-primary', `'${val}', sans-serif`);
-    if (key === 'fontBody') root.style.setProperty('--font-secondary', `'${val}', sans-serif`);
-  }, []);
+    setTheme({ ...theme, [key]: val });
+  }, [theme, setTheme]);
 
   const applyPreset = (preset: Partial<ThemeConfig>) => {
-    const merged = { ...defaultTheme, ...preset };
-    setTheme(merged);
-    // Apply all to CSS
-    Object.entries(merged).forEach(([k, v]) => update(k as keyof ThemeConfig, v as any));
+    setTheme({ ...defaultTheme, ...preset });
   };
-
-  const resetTheme = () => applyPreset(defaultTheme);
 
   /* ─── Generators ─── */
   const generateCSS = useCallback(() => `:root {
@@ -459,6 +377,14 @@ $khor-space-xl: ${theme.spaceXl}px;`, [theme]);
       xl: { $value: `${theme.spaceXl}px`, $type: 'dimension' },
     },
   }, null, 2), [theme]);
+
+  const generateManifest = useCallback(() => JSON.stringify({
+    version: '1.0.0',
+    generatedAt: new Date().toISOString(),
+    themeConfig: theme,
+    tokens: JSON.parse(generateJSON()),
+    metadata: khorMetadata
+  }, null, 2), [theme, generateJSON]);
  
   const generateMarkdown = useCallback(() => `# 🎨 Khor Design System — Especificación Completa de Tema Personalizado
 
@@ -750,8 +676,11 @@ $khor-space-xl: ${theme.spaceXl}px;`, [theme]);
               <Download size={14} /> JSON (W3C DTCG)
             </button>
             <div style={{ height: 1, backgroundColor: 'var(--border)', margin: '4px 0' }} />
-            <button onClick={() => handleDownload(generateMarkdown(), 'khor-theme-spec.md')} style={{ ...exportBtnStyle, color: t.colors.brand.primary, fontWeight: 600 }}>
-              <FileText size={14} /> Especificación .md para AI / LLMs
+            <button onClick={() => handleDownload(generateCompleteGuide(defaultSections, theme), 'khor-system-guide.md')} style={{ ...exportBtnStyle, color: t.colors.brand.primary, fontWeight: 600 }}>
+              <FileText size={14} /> Guía Completa del Sistema para AI (.md)
+            </button>
+            <button onClick={() => handleDownload(generateManifest(), 'khor-plugin-manifest.json')} style={{ ...exportBtnStyle, color: '#7C3AED', fontWeight: 600 }}>
+              <Sparkles size={14} /> Manifiesto Universal para Plugins (.json)
             </button>
           </SectionCard>
         </div>

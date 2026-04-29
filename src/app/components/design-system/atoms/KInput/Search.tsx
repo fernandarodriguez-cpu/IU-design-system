@@ -44,7 +44,7 @@ export const KInputSearch = React.forwardRef<HTMLInputElement, KInputSearchProps
       disabled={rest.disabled}
       className={cn(
         "rounded-l-none border-l-0",
-        size === 'sm' ? "h-8" : size === 'lg' ? "h-12" : "h-10"
+        size === 'sm' ? "h-[var(--khor-density-height-sm)]" : size === 'lg' ? "h-[var(--khor-density-height-lg)]" : "h-[var(--khor-density-height-md)]"
       )}
     >
       {enterButton === true ? searchIcon : enterButton}

@@ -1,4 +1,6 @@
 export { default as KDataTable } from './KDataTable';
+export { default as KDataGrid } from './KDataGrid';
+export { default as KFormWizard } from './KFormWizard';
 export { KTableDateCell } from './KDataTable/KTableDateCell';
 export { default as KModal } from './KModal';
 export { default as KDrawer } from './KDrawer';

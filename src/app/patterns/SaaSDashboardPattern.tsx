@@ -92,7 +92,7 @@ function SaaSDashboardInternal() {
           }}
         >
           <div>
-            <h2 style={{ margin: 0, fontSize: t.typography.display1.size, fontWeight: t.typography.fontWeights.extrabold, letterSpacing: t.typography.letterSpacing.tight }}>Bienvenido, Dani</h2>
+            <h2 style={{ margin: 0, fontSize: t.typography.display1.size, fontWeight: t.typography.fontWeights.extrabold, letterSpacing: t.typography.letterSpacing.tight }}>Bienvenido, Alex</h2>
             <p style={{ margin: `${t.spacing.xs}px 0 0`, fontSize: t.typography.bodySm.size, color: t.semantic.text.muted }}>Resumen de operaciones tácticas para hoy.</p>
           </div>
           <KFlex align="center" gap={t.spacing.md}>
@@ -100,10 +100,10 @@ function SaaSDashboardInternal() {
             <div style={{ width: 1, height: t.sizing[6], backgroundColor: t.semantic.border.default }} className="k-show-md" />
             <KFlex align="center" gap={t.spacing.sm}>
               <div style={{ textAlign: 'right' }} className="k-show-md">
-                <div style={{ fontSize: t.typography.bodySm.size, fontWeight: t.typography.fontWeights.bold }}>Dani Khor</div>
+                <div style={{ fontSize: t.typography.bodySm.size, fontWeight: t.typography.fontWeights.bold }}>Alex Mercer</div>
                 <div style={{ fontSize: t.typography.bodyXs.size, color: t.semantic.text.muted, textTransform: 'uppercase', letterSpacing: t.typography.letterSpacing.wide }}>Admin Pro</div>
               </div>
-              <KAvatar name="Dani Khor" />
+              <KAvatar name="Alex Mercer" />
             </KFlex>
           </KFlex>
         </KFlex>

@@ -137,10 +137,12 @@ const navigation: NavSection[] = [
       { label: 'KCardSection', path: '/organisms/card-section' },
       { label: 'KCarousel', path: '/organisms/carousel' },
       { label: 'KCommandBar', path: '/organisms/command-bar' },
+      { label: 'KDataGrid', path: '/organisms/data-grid' },
       { label: 'KDataTable', path: '/organisms/data-table' },
       { label: 'KDrawer', path: '/organisms/drawer' },
       { label: 'KForm', path: '/organisms/form' },
       { label: 'KFormList', path: '/organisms/form-list' },
+      { label: 'KFormWizard', path: '/organisms/form-wizard' },
       { label: 'KLoginForm', path: '/organisms/login-form' },
       { label: 'KModal', path: '/organisms/modal' },
       { label: 'KModalConfirm', path: '/organisms/modal-confirm' },
@@ -457,7 +459,7 @@ export function AppShell() {
               backgroundColor: 'var(--khor-success-light)',
               color: 'var(--khor-success)',
             }}>
-              v4.3.1
+              v5.0.0-alpha
             </span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>

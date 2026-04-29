@@ -101,8 +101,12 @@
             <div class="card">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                     <div><div id="status-text" class="status-badge pending">No Sincronizado</div></div>
-                    <button class="btn-secondary" onclick="syncTokens()">Sincronizar</button>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn-secondary" onclick="syncTokens()">Sync Local</button>
+                        <button class="btn-secondary" style="background: #7C3AED; border-color: #7C3AED; color: white;" onclick="document.getElementById('manifest-input').click()">Import Manifest</button>
+                    </div>
                 </div>
+                <input type="file" id="manifest-input" style="display: none;" accept=".json">
                 <div id="sync-stats" style="display: none; font-size: 11px; color: var(--text-dim);">
                     Inyectados <span id="sync-count" style="color:white; font-weight:600;">0</span> tokens en la librería.
                 </div>
@@ -220,11 +224,80 @@
             try {
                 const response = await fetch(KHOR_TOKENS_ENDPOINT + "?v=" + Date.now());
                 const tokens = await response.json();
-                parent.postMessage({ type: "sync-tokens", tokens }, "*");
-            } catch (err) {
-                showToast("Error de conexión local (Vite)");
+                penpot.ui.sendMessage({ 
+      type: "sync-success", 
+      stats: { created, updated, total: created + updated } 
+    });
+  } catch (error) {
+    console.error("Sync Error:", error);
+    penpot.ui.sendMessage({ type: "error", message: "Error de sincronización" });
+  }
+}
+
+function handleImportManifest(manifest: any) {
+  try {
+    console.log("📦 Importando Manifiesto en Penpot...");
+    
+    // 1. Sincronizar Tokens
+    if (manifest.tokens) {
+      const colors = manifest.tokens.colors || {};
+      const localColors = penpot.library.local.colors;
+      let syncStats = { created: 0, updated: 0 };
+
+      for (const [name, data] of Object.entries(colors)) {
+        const hex = (data as any).$value;
+        if (!hex || hex.startsWith('{') || hex === 'transparent') continue;
+
+        const rgba = hexToRGBA(hex);
+        const khorName = `Khor DS / ${name.replace(/-/g, ' / ')}`;
+        const existing = localColors.find(c => c.name === khorName);
+
+        if (existing) {
+          existing.color = rgba;
+          syncStats.updated++;
+        } else {
+          const newColor = penpot.library.local.createColor();
+          newColor.name = khorName;
+          newColor.color = rgba;
+          syncStats.created++;
+        }
+      }
+      
+      penpot.ui.sendMessage({ 
+        type: "sync-success", 
+        stats: { ...syncStats, total: syncStats.created + syncStats.updated } 
+      });
+    }
+
+    // 2. Dinamizar catálogo de componentes (Placeholder para expansión)
+    if (manifest.metadata) {
+      console.log(`Catálogo actualizado: ${manifest.metadata.components?.length} componentes.`);
+    }
+
+  } catch (err) {
+    console.error("Import Error:", err);
+    penpot.ui.sendMessage({ type: "error", message: "Error al importar manifiesto" });
+  }
+}
+(Vite)");
                 btn.innerHTML = "Reintentar"; btn.disabled = false;
             }
+        };
+
+        document.getElementById('manifest-input').onchange = (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    const manifest = JSON.parse(event.target.result);
+                    parent.postMessage({ type: "import-manifest", manifest }, "*");
+                    showToast("Manifiesto importado con éxito");
+                } catch (err) {
+                    showToast("Error al procesar manifest");
+                }
+            };
+            reader.readAsText(file);
         };
 
         window.createComponent = () => {

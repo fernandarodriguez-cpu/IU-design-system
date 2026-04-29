@@ -1,6 +1,6 @@
 export const khorMetadata = {
   "version": "5.0.0",
-  "generatedAt": "2026-04-10T22:04:03.714Z",
+  "generatedAt": "2026-04-27T21:18:40.213Z",
   "components": [
     {
       "name": "KAffix",
@@ -295,6 +295,28 @@ export const khorMetadata = {
           "required": false,
           "description": "",
           "isIcon": false
+        },
+        {
+          "name": "isHovered",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "isFocused",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
         }
       ]
     },
@@ -523,6 +545,17 @@ export const khorMetadata = {
           "type": "KBadgeClassNames",
           "required": false,
           "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "isHovered",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
           "isIcon": false
         }
       ]
@@ -802,6 +835,39 @@ export const khorMetadata = {
           "isIcon": false
         },
         {
+          "name": "isHovered",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "isPressed",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "isActive",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
           "name": "onClick",
           "type": "(e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => void",
           "required": false,
@@ -886,6 +952,28 @@ export const khorMetadata = {
           "required": false,
           "description": "",
           "isIcon": false
+        },
+        {
+          "name": "isHovered",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "isFocused",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
         }
       ]
     },
@@ -960,6 +1048,39 @@ export const khorMetadata = {
           "type": "React.ReactNode",
           "required": false,
           "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "autoFocus",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "isHovered",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "isFocused",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
           "isIcon": false
         }
       ]
@@ -1300,6 +1421,51 @@ export const khorMetadata = {
             "true",
             "false"
           ],
+          "isIcon": false
+        }
+      ]
+    },
+    {
+      "name": "KIcon",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KIcon/index.tsx",
+      "props": [
+        {
+          "name": "name",
+          "type": "KIconName",
+          "required": true,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "size",
+          "type": "'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'",
+          "required": false,
+          "description": "",
+          "options": [
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "xxl"
+          ],
+          "isIcon": false,
+          "defaultValue": "'md'"
+        },
+        {
+          "name": "color",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "isIcon": false,
+          "defaultValue": "'currentColor'"
+        },
+        {
+          "name": "strokeWidth",
+          "type": "number",
+          "required": false,
+          "description": "",
           "isIcon": false
         }
       ]
@@ -1729,6 +1895,28 @@ export const khorMetadata = {
           "required": false,
           "description": "",
           "isIcon": false
+        },
+        {
+          "name": "isFocused",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "isHovered",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
         }
       ]
     },
@@ -1892,6 +2080,17 @@ export const khorMetadata = {
           "type": "React.CSSProperties",
           "required": false,
           "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "isHovered",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
           "isIcon": false
         }
       ]
@@ -2064,6 +2263,28 @@ export const khorMetadata = {
         },
         {
           "name": "autoFocus",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "isHovered",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "isFocused",
           "type": "boolean",
           "required": false,
           "description": "",
@@ -2528,6 +2749,39 @@ export const khorMetadata = {
           "required": false,
           "description": "",
           "isIcon": false
+        },
+        {
+          "name": "isHovered",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "isFocused",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "isPressed",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
         }
       ]
     },
@@ -2716,6 +2970,28 @@ export const khorMetadata = {
           "required": false,
           "description": "",
           "isIcon": false
+        },
+        {
+          "name": "isHovered",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "isFocused",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
         }
       ]
     },
@@ -2802,6 +3078,28 @@ export const khorMetadata = {
           "required": false,
           "description": "",
           "isIcon": false
+        },
+        {
+          "name": "isHovered",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "isFocused",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
         }
       ]
     },
@@ -2826,6 +3124,28 @@ export const khorMetadata = {
           "type": "(checked: boolean) => void",
           "required": false,
           "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "isHovered",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "isFocused",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
           "isIcon": false
         }
       ]
@@ -4258,6 +4578,24 @@ export const khorMetadata = {
           "required": false,
           "description": "",
           "isIcon": false
+        },
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "isHovered",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
         }
       ]
     },
@@ -4310,6 +4648,35 @@ export const khorMetadata = {
           "type": "string",
           "required": false,
           "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "isHovered",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "isFocused",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
           "isIcon": false
         }
       ]
@@ -5058,6 +5425,17 @@ export const khorMetadata = {
           "required": false,
           "description": "",
           "isIcon": false
+        },
+        {
+          "name": "isHovered",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
         }
       ]
     },
@@ -5292,6 +5670,28 @@ export const khorMetadata = {
             "false"
           ],
           "isIcon": false
+        },
+        {
+          "name": "isHovered",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "isFocused",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
         }
       ]
     },
@@ -5511,6 +5911,17 @@ export const khorMetadata = {
           "type": "string",
           "required": false,
           "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "isHovered",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
           "isIcon": false
         }
       ]
@@ -6582,6 +6993,17 @@ export const khorMetadata = {
             "false"
           ],
           "isIcon": false
+        },
+        {
+          "name": "isHovered",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
         }
       ]
     },
@@ -6887,6 +7309,28 @@ export const khorMetadata = {
           "required": false,
           "description": "",
           "isIcon": false
+        },
+        {
+          "name": "isHovered",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "isFocused",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
         }
       ]
     },
@@ -6941,6 +7385,17 @@ export const khorMetadata = {
           "type": "() => void",
           "required": false,
           "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "isHovered",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
           "isIcon": false
         }
       ]

@@ -42,6 +42,8 @@ export interface KBadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   styles?: KBadgeStyles;
   /** Clases semánticas */
   classNames?: KBadgeClassNames;
+  /** Fuerza el estado hover (útil para previews/playgrounds) */
+  isHovered?: boolean;
 }
 
 const statusColorMap: Record<KBadgeStatus, string> = {
@@ -49,7 +51,7 @@ const statusColorMap: Record<KBadgeStatus, string> = {
   error: 'bg-khor-error',
   warning: 'bg-khor-warning',
   info: 'bg-khor-info',
-  default: 'bg-khor-slate-400',
+  default: 'bg-khor-neutral-400',
   primary: 'bg-khor-primary',
   processing: 'bg-khor-processing animate-pulse',
   teal: 'bg-khor-teal',
@@ -191,6 +193,8 @@ export const KBadge = React.forwardRef<HTMLSpanElement, KBadgeProps>(
         {!isHidden && (
           <sup
             style={badgeStyle}
+            aria-hidden={isHidden}
+            aria-label={typeof count === 'number' ? `${count} notifications` : undefined}
             className={cn(
               "absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 flex items-center justify-center z-10 font-primary text-white shadow-khor-sm ring-2 ring-white transition-all",
               isDot 

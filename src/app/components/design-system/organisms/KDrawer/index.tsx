@@ -11,16 +11,16 @@ export const KDrawer = DialogPrimitive.Root;
 
 // Aliases para paridad con la estructura anterior y AntD
 export const KDrawerHeader = ({ className, children, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn("flex flex-col space-y-1.5 px-6 py-4 border-b", className)} {...props}>{children}</div>
+  <div className={cn("flex flex-col space-y-1.5 px-[var(--khor-density-spacing-lg)] py-[var(--khor-density-spacing-md)] border-b border-khor-border-muted", className)} {...props}>{children}</div>
 );
 export const KDrawerTitle = ({ className, children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
-  <h3 className={cn("text-lg font-bold text-khor-neutral-900 leading-tight", className)} {...props}>{children}</h3>
+  <h3 className={cn("text-lg font-bold text-khor-text-primary leading-tight tracking-tight font-primary", className)} {...props}>{children}</h3>
 );
 export const KDrawerDescription = ({ className, children, ...props }: React.HTMLAttributes<HTMLParagraphElement>) => (
-  <p className={cn("text-sm text-khor-neutral-500", className)} {...props}>{children}</p>
+  <p className={cn("text-sm text-khor-text-secondary opacity-70 font-primary", className)} {...props}>{children}</p>
 );
 export const KDrawerFooter = ({ className, children, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn("flex items-center justify-end gap-2 px-6 py-4 border-t", className)} {...props}>{children}</div>
+  <div className={cn("flex items-center justify-end gap-2 px-[var(--khor-density-spacing-lg)] py-[var(--khor-density-spacing-md)] border-t border-khor-border-muted", className)} {...props}>{children}</div>
 );
 
 export interface KDrawerProps extends Omit<React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>, 'title'> {
@@ -30,13 +30,15 @@ export interface KDrawerProps extends Omit<React.ComponentPropsWithoutRef<typeof
   title?: React.ReactNode;
   extra?: React.ReactNode;
   onClose?: () => void;
+  /** Fuerza el estado hover (útil para previews/playgrounds) */
+  isHovered?: boolean;
 }
 
 const placementVariants = {
-  right: "inset-y-0 right-0 h-full border-l border-khor-slate-200 rounded-l-2xl data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-md",
-  left: "inset-y-0 left-0 h-full border-r border-khor-slate-200 rounded-r-2xl data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-md",
-  top: "inset-x-0 top-0 w-full border-b border-khor-slate-200 rounded-b-2xl data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top h-80",
-  bottom: "inset-x-0 bottom-0 w-full border-t border-khor-slate-200 rounded-t-2xl data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom h-80",
+  right: "inset-y-0 right-0 h-full border-l border-khor-border-default rounded-l-2xl data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-md",
+  left: "inset-y-0 left-0 h-full border-r border-khor-border-default rounded-r-2xl data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-md",
+  top: "inset-x-0 top-0 w-full border-b border-khor-border-default rounded-b-2xl data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top h-80",
+  bottom: "inset-x-0 bottom-0 w-full border-t border-khor-border-default rounded-t-2xl data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom h-80",
 };
 
 export const KDrawerOverlay = React.forwardRef<
@@ -57,7 +59,7 @@ KDrawerOverlay.displayName = "KDrawerOverlay";
 export const KDrawerContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   KDrawerProps
->(({ className, children, placement = 'right', title, extra, width, height, onClose, ...props }, ref) => (
+>(({ className, children, placement = 'right', title, extra, width, height, onClose, isHovered, ...props }, ref) => (
   <KDrawerPortal>
     <KDrawerOverlay />
     <DialogPrimitive.Content
@@ -65,6 +67,7 @@ export const KDrawerContent = React.forwardRef<
       className={cn(
         "fixed z-50 bg-white shadow-khor-xl transition ease-in-out data-[state=open]:duration-500 data-[state=closed]:duration-300 font-primary flex flex-col",
         placementVariants[placement],
+        isHovered && "ring-2 ring-khor-primary ring-inset",
         className
       )}
       style={{ 
@@ -75,7 +78,7 @@ export const KDrawerContent = React.forwardRef<
     >
       {/* Header logic para compatibilidad declarativa y manual */}
       {(title || extra) && (
-        <div className="flex items-center justify-between px-6 py-4 border-b shrink-0">
+        <div className="flex items-center justify-between px-[var(--khor-density-spacing-lg)] py-[var(--khor-density-spacing-md)] border-b border-khor-border-muted shrink-0">
           <div className="flex flex-col gap-1">
             {title && (
               typeof title === 'string' ? (
@@ -87,7 +90,7 @@ export const KDrawerContent = React.forwardRef<
           </div>
           <div className="flex items-center gap-4">
              {extra}
-             <DialogPrimitive.Close onClick={onClose} className="p-1.5 rounded-full hover:bg-khor-slate-100 text-khor-neutral-400 transition-colors">
+             <DialogPrimitive.Close onClick={onClose} className="p-1.5 rounded-full hover:bg-khor-surface-hover text-khor-text-tertiary transition-colors outline-none focus-visible:ring-2 focus-visible:ring-khor-primary">
                 <X className="h-5 w-5" />
              </DialogPrimitive.Close>
           </div>
@@ -95,7 +98,7 @@ export const KDrawerContent = React.forwardRef<
       )}
 
       {/* Body */}
-      <div className="flex-1 overflow-y-auto p-6 h-full pb-20">
+      <div className="flex-1 overflow-y-auto p-[var(--khor-density-spacing-lg)] h-full pb-20">
         {children}
       </div>
     </DialogPrimitive.Content>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Command } from 'cmdk';
 import { Check, ChevronsUpDown, X } from 'lucide-react';
 import { KPopoverRoot, KPopoverTrigger, KPopoverContent } from '../KPopover';
+import { cn } from '../../../../../imports/utils';
 
 /* ═══════════════════════════════════════════════
    KSelectAdvanced — Combo Box/Tags (Headless v4)
@@ -25,6 +26,10 @@ export interface KSelectAdvancedProps {
   status?: 'error' | 'warning';
   className?: string;
   allowClear?: boolean;
+  /** Fuerza el estado hover (útil para previews/playgrounds) */
+  isHovered?: boolean;
+  /** Fuerza el estado de foco (útil para previews/playgrounds) */
+  isFocused?: boolean;
 }
 
 export function KSelectAdvanced({
@@ -35,6 +40,8 @@ export function KSelectAdvanced({
   mode = 'single',
   disabled,
   status,
+  isHovered,
+  isFocused,
   className
 }: KSelectAdvancedProps) {
   const [open, setOpen] = useState(false);
@@ -71,10 +78,15 @@ export function KSelectAdvanced({
   };
 
   const statusClasses = status === 'error'
-    ? 'border-khor-feedback-error focus:ring-khor-feedback-error'
+    ? 'border-khor-border-error focus:ring-khor-border-error/20'
     : status === 'warning'
-      ? 'border-khor-feedback-warning focus:ring-khor-feedback-warning'
-      : 'border-khor-slate-200 focus:ring-khor-primary/20 focus:border-khor-primary hover:border-khor-primary-light';
+      ? 'border-khor-warning focus:ring-khor-warning/20'
+      : 'border-khor-slate-200 focus:ring-[var(--khor-focus-ring-color)]/20 focus:border-khor-primary hover:border-khor-primary hover:bg-khor-surface-hover';
+
+  const forcedClasses = cn(
+    isHovered && "border-khor-primary bg-khor-surface-hover",
+    isFocused && "ring-[var(--khor-focus-ring-width)] ring-[var(--khor-focus-ring-color)] ring-offset-[var(--khor-focus-ring-offset)] border-khor-primary"
+  );
 
   return (
     <KPopoverRoot open={open} onOpenChange={disabled ? undefined : setOpen}>
@@ -82,7 +94,14 @@ export function KSelectAdvanced({
         <button
           type="button"
           disabled={disabled}
-          className={`relative min-h-[40px] flex w-full items-center justify-between px-3 py-1.5 border rounded-md shadow-khor-sm transition-all duration-200 outline-none focus:ring-2 font-primary bg-white text-khor-neutral-900 ${statusClasses} ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'} ${className || ''}`}
+          className={cn(
+            "relative flex w-full items-center justify-between px-3 py-1.5 border rounded-md shadow-khor-sm transition-all duration-200 outline-none focus:ring-2 font-primary bg-white text-khor-neutral-900",
+            "min-h-[var(--khor-density-height-input)]", // Density sizing
+            statusClasses,
+            forcedClasses,
+            disabled ? 'opacity-50 cursor-not-allowed bg-khor-neutral-100' : 'cursor-pointer',
+            className
+          )}
         >
           <div className="flex flex-wrap gap-1 w-full truncate text-sm">
             {selectedValues.length === 0 && (
@@ -109,15 +128,15 @@ export function KSelectAdvanced({
           <ChevronsUpDown className="w-4 h-4 text-khor-neutral-400 shrink-0 opacity-50 ml-2" />
         </button>
       </KPopoverTrigger>
-      <KPopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 z-[100] border border-khor-slate-200 rounded-xl shadow-khor-lg bg-white font-primary overflow-hidden">
-        <Command>
+      <KPopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 z-[100] border border-khor-border-default rounded-xl shadow-khor-lg bg-white font-primary overflow-hidden">
+        <Command className="bg-white">
           <Command.Input 
             placeholder="Buscar..." 
             value={search}
             onValueChange={setSearch}
-            className="flex h-10 w-full rounded-md bg-transparent px-3 py-3 text-sm outline-none border-b disabled:cursor-not-allowed disabled:opacity-50 text-khor-neutral-900 placeholder:text-khor-neutral-400"
+            className="flex h-10 w-full rounded-md bg-transparent px-3 py-3 text-sm outline-none border-b border-khor-border-muted disabled:cursor-not-allowed disabled:opacity-50 text-khor-neutral-900 placeholder:text-khor-neutral-400"
           />
-          <Command.List className="max-h-60 overflow-y-auto p-1">
+          <Command.List className="max-h-60 overflow-y-auto p-1 bg-white">
             <Command.Empty className="py-6 text-center text-sm text-khor-neutral-500">
               No se encontraron resultados.
             </Command.Empty>
@@ -130,12 +149,18 @@ export function KSelectAdvanced({
                     value={option.label}
                     disabled={option.disabled}
                     onSelect={() => handleSelect(option.value)}
-                    className={`relative flex cursor-pointer select-none items-center rounded-lg px-2 py-2 text-sm outline-none transition-all aria-selected:bg-khor-slate-100 aria-selected:text-khor-primary text-khor-neutral-700 m-1 ${option.disabled ? 'opacity-50 pointer-events-none' : ''}`}
+                    className={cn(
+                      "relative flex cursor-pointer select-none items-center rounded-lg px-2 py-2 text-sm outline-none transition-all m-1",
+                      "aria-selected:bg-khor-surface-hover aria-selected:text-khor-primary",
+                      isSelected ? "bg-khor-surface-selected text-khor-primary" : "text-khor-neutral-700",
+                      option.disabled ? "opacity-50 pointer-events-none" : ""
+                    )}
                   >
                     <Check
-                      className={`mr-2 h-4 w-4 text-khor-primary transition-opacity ${
+                      className={cn(
+                        "mr-2 h-4 w-4 text-khor-primary transition-opacity",
                         isSelected ? "opacity-100" : "opacity-0"
-                      }`}
+                      )}
                     />
                     {option.label}
                   </Command.Item>

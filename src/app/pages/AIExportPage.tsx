@@ -16,17 +16,17 @@ import { KSwitch } from '../components/design-system/atoms/KSwitch/index';
 import { KCardSection } from '../components/design-system/organisms/KCardSection/index';
 import { KTabs } from '../components/design-system/organisms/KTabs/index';
 import { kToast } from '../components/design-system/organisms/KToast/index';
-import { khorTokens } from '../theme/khor-theme';
+import { useTheme, ThemeConfig } from '../theme/theme-context';
 import { patterns } from '../patterns/index';
 import { atoms } from './AtomsPage';
 import { molecules } from './MoleculesPage';
 import { organisms } from './OrganismsPage';
-
+import { khorTokens } from '../theme/khor-theme';
 
 const t = khorTokens;
 
 /* ─── Version (must match ChangelogPage & AppShell) ─── */
-export const KHOR_VERSION = '4.3.1';
+export const KHOR_VERSION = '5.0.0-alpha';
 
 
 /* ─── Sections config ───────────────────────── */
@@ -40,18 +40,18 @@ export interface SectionConfig {
 export const defaultSections: SectionConfig[] = [
   { id: 'header', label: 'Encabezado y contexto', description: 'Nombre, versión, stack tecnológico y propósito del sistema.', enabled: true },
   { id: 'tokens', label: 'Design Tokens', description: 'Charts elite, Forms semánticos, Icon scale, Colores, Tipografía, etc.', enabled: true },
-  { id: 'darkmode', label: 'Dark Mode', description: 'Tokens alternativos para modo oscuro y CSS variables.', enabled: true },
-  { id: 'atoms', label: 'Átomos (28)', description: 'API completa de 28 átomos: Incluyendo el nuevo KIcon y los 27 previos.', enabled: true },
+  { id: 'darkmode', label: 'Dark Mode', description: 'Inversión semántica y tokens alternativos para modo oscuro.', enabled: true },
+  { id: 'atoms', label: 'Átomos (30)', description: 'API completa de 30 átomos: Sistema v5.0 optimizado.', enabled: true },
   { id: 'molecules', label: 'Moléculas (33)', description: 'API completa de 33 moléculas coordinadas con el sistema Elite.', enabled: true },
   { id: 'organisms', label: 'Organismos (13)', description: 'Componentes complejos coordinados con el sistema Elite.', enabled: true },
   { id: 'templates', label: 'Templates y Patrones', description: 'Patrones de página: Dashboard Admin, CRUD Elite, Login SaaS, etc.', enabled: true },
   { id: 'layout', label: 'Layout (AppShell)', description: 'Estructura sidebar + header + canvas con dimensiones Elite.', enabled: true },
-  { id: 'patterns', label: 'Patrones y Convenciones', description: 'Naming, imports, espaciado, responsive, accesibilidad.', enabled: true },
+  { id: 'patterns', label: 'Patrones y Convenciones', description: '3-Layer Architecture, Fluid Typography, Naming, A11y.', enabled: true },
   { id: 'examples', label: 'Ejemplos de Código', description: 'Snippets listos para copiar/pegar de casos de uso comunes.', enabled: true },
 ];
 
 /* ─── Markdown Generator ────────────────────── */
-export function generateMarkdown(sections: SectionConfig[]): string {
+export function generateMarkdown(sections: SectionConfig[], theme: ThemeConfig): string {
   const enabled = new Set(sections.filter((s) => s.enabled).map((s) => s.id));
   const parts: string[] = [];
   const today = new Date().toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' });
@@ -75,8 +75,31 @@ Como IA, DEBES seguir estas reglas estrictamente al generar código:
 
 ### ♿ Reglas Estrictas de Accesibilidad (A11y)
 1. **Roles interactivos:** NUNCA uses \`onClick\` en elementos no interactivos (\`div\`). Usa siempre \`<KButton>\`.
-  2. **Atributos ARIA:** Todo elemento sin texto visible DEBE tener un \`aria-label\`.
-  3. **Movimiento reducido:** Nunca agregues animaciones CSS o JS sin verificar que el sistema respeta \`prefers-reduced-motion\`. Usa siempre los tokens de motion de Khor (\`\--khor-duration-*\`, \`\--khor-easing-*\`).
+2. **Atributos ARIA:** Todo elemento sin texto visible DEBE tener un \`aria-label\`.
+3. **Movimiento reducido:** Nunca agregues animaciones CSS o JS sin verificar que el sistema respeta \`prefers-reduced-motion\`. Usa siempre los tokens de motion de Khor (\`\--khor-duration-*\`, \`\--khor-easing-*\`).
+
+### 🏗️ Arquitectura de 3 Capas (World-Class Standard)
+El sistema Khor se organiza en 3 capas de tokens:
+1. **Layer 1: Primitives:** Valores base inmutables (ej. \`--khor-primary-500\`, \`--khor-space-4\`).
+2. **Layer 2: Semantics:** Alias basados en intención (\`--khor-text-primary\`, \`--khor-surface-card\`). **ÚSALOS SIEMPRE.**
+3. **Layer 3: Components/Contextual:** Overrides para áreas específicas (\`--khor-context-sidebar-bg\`, \`--khor-grid-header-bg\`).
+
+### 🧠 Semantic Intent Mapping (v5.0 Strategy)
+Como IA, DEBES elegir componentes basados en la **Intención Semántica** del flujo, no solo por estética:
+
+| Intent | Pattern / Component Requerido | Gravedad |
+|--------|------------------------------|----------|
+| \`critical_confirmation\` | \`KModal\` (Confirm) + \`KButton\` (Danger) | Alta |
+| \`data_massive_explorer\` | \`KDataGrid\` (con virtualización activa) | Alta |
+| \`step_by_step_flow\` | \`KFormWizard\` | Media |
+| \`brand_call_to_action\` | \`KButton\` (Primary) + \`KIcon\` (Sparkles) | Baja |
+| \`system_feedback_error\` | \`KMessage\` (Error) o \`KResult\` (500/403) | Alta |
+
+### 🔠 Fluid Typography (Responsive by Design)
+Khor v5.0 usa tipografía fluida basada en \`clamp()\`. NO sobrescribas tamaños de fuente con media queries. Usa los tokens semánticos:
+- \`display-2xl\`, \`display-xl\`: Para títulos de gran impacto (Fluid 48px -> 72px).
+- \`heading-lg\` a \`heading-xs\`: Para jerarquía de contenido (Fluid 24px -> 48px).
+- \`body-xl\`, \`body-lg\`, \`body-md\`, \`body-sm\`: Para lectura estandarizada.
 `);
   }
 
@@ -89,41 +112,58 @@ La IA DEBE usar estos valores exactos:
 \`\`\`css
 :root {
   /* Elite Charts Palette (12 Colores) */
-  --khor-chart-primary: #E04D36;   --khor-chart-secondary: #051758;
-  --khor-chart-accent: #FF9500;    --khor-chart-success: #2E7D32;
-  --khor-chart-error: #D32F2F;     --khor-chart-info: #1976D2;
+  --khor-chart-primary: ${theme.primary};   --khor-chart-secondary: ${theme.secondary};
+  --khor-chart-accent: ${theme.accent};    --khor-chart-success: ${theme.success};
+  --khor-chart-error: ${theme.error};     --khor-chart-info: ${theme.info};
   --khor-chart-teal: #008080;      --khor-chart-purple: #9C27B0;
   --khor-chart-pink: #E91E63;      --khor-chart-cyan: #00BCD4;
   --khor-chart-amber: #FFC107;     --khor-chart-gray: #9E9E9E;
 
-  /* Form Validation Semantic States */
-  --khor-form-error-bg: #FFEBEE;   --khor-form-error-border: #D32F2F;   --khor-form-error-text: #B71C1C;
-  --khor-form-success-bg: #E8F5E9; --khor-form-success-border: #2E7D32; --khor-form-success-text: #1B5E20;
-  --khor-form-warning-bg: #FFF3E0; --khor-form-warning-border: #FF9500; --khor-form-warning-text: #E65100;
-  --khor-form-focus-ring: #E04D36;
+  /* Neutrals (Full Slate-Blue Scale) */
+  --khor-neutral-50: #f8faff;   --khor-neutral-100: #edf0f1;
+  --khor-neutral-200: #d5dbe0;  --khor-neutral-300: #a0aec0;
+  --khor-neutral-400: #718096;  --khor-neutral-500: #4a5568;
+  --khor-neutral-600: #5A6475;  --khor-neutral-700: #3D4552;
+  --khor-neutral-800: #252C38;  --khor-neutral-900: #000000;
 
-  /* Iconography Scale */
-  --khor-icon-xs: 12px; --khor-icon-sm: 16px; --khor-icon-md: 20px;
-  --khor-icon-lg: 24px; --khor-icon-xl: 32px; --khor-icon-2xl: 48px;
+  /* Form Validation Semantic States */
+  --khor-form-error-bg: ${theme.error}15;   --khor-form-error-border: ${theme.error};   --khor-form-error-text: ${theme.error};
+  --khor-form-success-bg: ${theme.success}15; --khor-form-success-border: ${theme.success}; --khor-form-success-text: ${theme.success};
+  --khor-form-warning-bg: ${theme.warning}15; --khor-form-warning-border: ${theme.warning}; --khor-form-warning-text: ${theme.warning};
+  --khor-form-focus-ring: ${theme.primary};
 
   /* Semantic Layer 2: Actions */
-  --khor-action-primary-default: #E04D36; --khor-action-primary-hover: #e8644f;
-  --khor-action-secondary-default: #051758; --khor-action-secondary-hover: #0a2270;
-  --khor-action-danger-default: #D32F2F; --khor-action-danger-hover: #B71C1C;
+  --khor-action-primary-default: ${theme.primary}; --khor-action-primary-hover: #e8644f;
+  --khor-action-secondary-default: ${theme.secondary}; --khor-action-secondary-hover: #0a2270;
+  --khor-action-danger-default: ${theme.error}; --khor-action-danger-hover: #B71C1C;
   --khor-action-ghost-hover: rgba(5, 23, 88, 0.06);
   --khor-action-disabled-bg: #EDF0F1; --khor-action-disabled-text: #A0AEC0;
 
-  /* Semantic Layer 2: Surface & Overlay */
+  /* Semantic Layer 2: Surface & Overlay (Interactive Ref) */
   --khor-surface-page: #f8faff; --khor-surface-card: #ffffff;
+  --khor-surface-hover: rgba(5, 23, 88, 0.04); --khor-surface-pressed: rgba(5, 23, 88, 0.08);
+  --khor-surface-selected: ${theme.primary}15; --khor-surface-subtle: #F4F6F8;
   --khor-surface-overlay: #ffffff; --khor-overlay-bg: rgba(255, 255, 255, 0.95);
+
+  /* Layer 3: Contextual Tokens — secciones invertidas */
+  --khor-context-sidebar-bg:        var(--khor-navy);
+  --khor-context-sidebar-text:      var(--khor-neutral-50);
+  --khor-context-sidebar-text-muted:rgba(255, 255, 255, 0.55);
+  --khor-context-sidebar-border:    rgba(255, 255, 255, 0.08);
+  --khor-context-sidebar-hover:     rgba(255, 255, 255, 0.10);
+  --khor-context-sidebar-active:    rgba(255, 255, 255, 0.15);
+  --khor-context-header-bg:         var(--khor-surface-card);
+  --khor-context-header-border:     var(--khor-border-default);
 
   /* Semantic Layer 2: Borders */
   --khor-border-default: #D5DBE0; --khor-border-muted: #EDF0F1;
-  --khor-border-strong: #A0AEC0; --khor-border-focus: #E04D36;
-  --khor-border-error: #D32F2F; --khor-border-disabled: #EDF0F1;
+  --khor-border-strong: #A0AEC0; --khor-border-focus: ${theme.primary};
+  --khor-border-error: ${theme.error}; --khor-border-disabled: #EDF0F1;
+  --khor-focus-ring-color: ${theme.primary}; --khor-focus-ring-width: 2px;
+  --khor-focus-ring-offset: 2px; --khor-focus-ring-style: solid;
 
   /* Semantic Layer 2: Typography */
-  --khor-text-primary: #051758; --khor-text-secondary: #475a8f;
+  --khor-text-primary: ${theme.secondary}; --khor-text-secondary: #475a8f;
   --khor-text-muted: #94a9d8; --khor-text-disabled: #A0AEC0; --khor-text-on-action: #ffffff;
 
   /* Motion Tokens (v4.3) */
@@ -132,6 +172,21 @@ La IA DEBE usar estos valores exactos:
   --khor-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
   --khor-easing-enter: cubic-bezier(0, 0, 0.2, 1);
   --khor-easing-exit: cubic-bezier(0.4, 0, 1, 1);
+
+  /* Elevation Tokens (Semantic Level 0-5) */
+  --khor-elevation-0: none;
+  --khor-elevation-1: 0 1px 3px rgba(5, 23, 88, 0.06), 0 1px 2px rgba(5, 23, 88, 0.04);
+  --khor-elevation-2: 0 4px 12px rgba(5, 23, 88, 0.08), 0 2px 4px rgba(5, 23, 88, 0.05);
+  --khor-elevation-3: 0 8px 24px rgba(5, 23, 88, 0.10), 0 4px 8px rgba(5, 23, 88, 0.06);
+  --khor-elevation-4: 0 16px 48px rgba(5, 23, 88, 0.14), 0 8px 16px rgba(5, 23, 88, 0.08);
+  --khor-elevation-5: 0 24px 64px rgba(5, 23, 88, 0.18), 0 12px 24px rgba(5, 23, 88, 0.10);
+
+  /* Semantic Spacing Tokens (Aliases) */
+  --khor-space-layout-xs: 16px; --khor-space-layout-sm: 24px;
+  --khor-space-layout-md: 32px; --khor-space-layout-lg: 48px;
+  --khor-space-layout-xl: 64px;
+  --khor-space-component-xs: 4px; --khor-space-component-sm: 8px;
+  --khor-space-component-md: 12px; --khor-space-component-lg: 16px;
 }
 \`\`\`
 
@@ -145,6 +200,18 @@ El sistema respeta las preferencias del usuario. **Regla Obligatoria:** Implemen
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* Alto contraste — WCAG AAA Readiness */
+@media (prefers-contrast: more) {
+  :root {
+    --khor-focus-ring-color: #000000;
+    --khor-focus-ring-width: 3px;
+    --khor-focus-ring-offset: 3px;
+    --khor-border-default: #000000;
+    --khor-text-secondary: #051758;
+    --khor-text-muted: #475a8f;
   }
 }
 \`\`\`
@@ -198,6 +265,12 @@ La IA debe aplicar estas clases al contenedor raíz para heredar el modelo de ca
 | \`navy\` (#051758) | \`neutral-50\` (#FFF) | 17.5:1 | **AAA** | Sidebar / Invertido |
 | \`navy\` (#051758) | \`accent\` (#FF9500) | 7.1:1 | **AAA** | Badges en sidebar OK |
 
+### ♿ Alto Contraste (WCAG AAA Readiness)
+Cuando \`prefers-contrast: more\` está activo, el sistema aplica:
+- \`focus-ring-width\`: 3px
+- \`focus-ring-offset\`: 3px
+- \`text-secondary\` elevado a ratio 7:1+ (AAA)
+
 ### 📊 Dark Mode Feedback (SaaS Recovery)
 | Token | Light | Dark (Audit v4.2 Fix) |
 |-------|-------|------------------------|
@@ -214,6 +287,17 @@ El sistema sigue estándares estrictos para mantener la paridad IA/Humanos.
 4. **Metadata IA:** Todo componente nuevo debe incluir \`a11ySummary\` y \`aiNotes\` en su registro.
 5. **Checklist:** Props tipadas, Soporte Dark Mode, Soporte Densidad.
 
+### Elevación — Guía de uso obligatoria
+
+| Nivel | Token | Componentes |
+|-------|-------|-------------|
+| 0 | \`--khor-elevation-0\` | Elementos inline, sin elevación |
+| 1 | \`--khor-elevation-1\` | KCardSection, KStatCard, KTable |
+| 2 | \`--khor-elevation-2\` | KDropdown, KTooltip, KPopconfirm |
+| 3 | \`--khor-elevation-3\` | KDrawer, KSidesheet, KAffix activo |
+| 4 | \`--khor-elevation-4\` | KModal, KDialog |
+| 5 | \`--khor-elevation-5\` | KToast, KNotification flotante |
+
 ### Architecture Layers (v4.3.0)
 - **Breakpoints:** \`sm: 640px\`, \`md: 768px\`, \`lg: 1024px\`, \`xl: 1280px\`.
 - **Z-Index:** \`dropdown: 1000\`, \`modal: 1400\`, \`toast: 1700\`.
@@ -224,7 +308,9 @@ El sistema sigue estándares estrictos para mantener la paridad IA/Humanos.
 
 | Versión | Fecha | Cambios |
 |---------|-------|---------|
-| **v4.3.1** | ${today} | **The Absolute 100:** Cierre definitivo de gaps de motion (easing enter/exit) y embebido de gobernanza para paridad total. |
+| **v4.4.1** | ${today} | **KQA God Mode:** Sincronización de más de 20 organismos y moléculas con estados explícitos y Layer 3 Contextual Tokens. Nuevo script de auditoría y Patrones Maestros. |
+| **v4.4.0** | 27 Abr 2026 | **Industry Reference:** Inyección de tokens de superficie interactiva, elevación semántica (0-5) y escala de neutros completa (600-800). |
+| **v4.3.1** | 24 Abr 2026 | **The Absolute 100:** Cierre definitivo de gaps de motion (easing enter/exit). |
 | **v4.3.0** | 24 Abr 2026 | **The 100/100 Audit:** Sincronización total de paridad técnica y documental. |
 | **v4.2.0** | 23 Abr 2026 | **Audit Recovery:** Restauración de Tokens Semánticos de 2ª Capa y Sistema de Densidad base. |
 | **v4.1.1** | 20 Abr 2026 | **Refinement Phase:** Integración de Chart Palette (12), Form States detallados y nuevo sistema de Iconografía estandarizado (XS-2XL). |
@@ -249,6 +335,9 @@ El sistema soporta modo oscuro via clase \`.dark\` en \`<html>\`. Se activa con 
 | neutral-300 | \`#A0AEC0\` | \`#4A4E6A\` |
 | neutral-400 | \`#718096\` | \`#8B90A8\` |
 | neutral-500 | \`#4A5568\` | \`#B0B4C8\` |
+| neutral-600 | \`#5A6475\` | \`#9BA3B5\` |
+| neutral-700 | \`#3D4552\` | \`#B8BDC8\` |
+| neutral-800 | \`#252C38\` | \`#D0D3DA\` |
 | neutral-900 | \`#000000\` | \`#E8EAF0\` |
 | accent | \`#FF9500\` | \`#FFB340\` |
 | navy | \`#051758\` | \`#8BA3D9\` |
@@ -752,6 +841,38 @@ function ContactForm() {
   );
 }
 \`\`\`
+### Patrones de Estado — Page-Level Patterns
+
+#### 1. Empty State (Primera vez / Sin resultados)
+Estructura: Ilustración → Título → Descripción → CTA primario.
+\`\`\`tsx
+<KEmpty
+  image={<KIcon name="inbox" size="2xl" color="var(--khor-text-muted)" />}
+  title="No hay registros aún"
+  description="Crea tu primer registro para comenzar a ver datos aquí."
+  extra={<KButton variant="primary">Crear registro</KButton>}
+/>
+\`\`\`
+
+#### 2. Error State (Fallo de carga)
+\`\`\`tsx
+<KResult
+  status="500"
+  title="Error de conexión"
+  subTitle="No pudimos cargar la información. Reintenta en unos momentos."
+  extra={<KButton variant="primary" onClick={() => window.location.reload()}>Reintentar</KButton>}
+/>
+\`\`\`
+
+#### 3. Loading State (Skeleton)
+\`\`\`tsx
+<div className="flex flex-col gap-4">
+  <KSkeleton height={40} width="60%" /> {/* Título */}
+  <KSkeleton height={44} count={5} />    {/* Filas de tabla */}
+</div>
+\`\`\`
+
+---
 `);
   }
 
@@ -765,13 +886,14 @@ function wordCount(text: string): number {
 
 /* ─── Component ─────────────────────────────── */
 export function AIExportPage() {
+  const { themeConfig: theme } = useTheme();
   const [sections, setSections] = useState<SectionConfig[]>(defaultSections);
   const [copied, setCopied] = useState(false);
-  const [showPreview, setShowPreview] = useState(false);
+  const [showPreview, setShowPreview] = useState(true);
   const [expandedPreview, setExpandedPreview] = useState(false);
   const previewRef = useRef<HTMLPreElement>(null);
 
-  const markdown = useMemo(() => generateMarkdown(sections), [sections]);
+  const markdown = useMemo(() => generateMarkdown(sections, theme), [sections, theme]);
   const words = useMemo(() => wordCount(markdown), [markdown]);
   const lines = useMemo(() => markdown.split('\n').length, [markdown]);
   const enabledCount = sections.filter((s) => s.enabled).length;

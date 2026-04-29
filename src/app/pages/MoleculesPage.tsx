@@ -763,8 +763,8 @@ function DescriptionsPlayground() {
   const [size, setSize] = useState<'sm' | 'md' | 'lg'>('md');
 
   const items = [
-    { label: 'Usuario', children: 'Dani Lezcano', span: 2 },
-    { label: 'Email', children: 'dani@khor.com', span: 2 },
+    { label: 'Usuario', children: 'Alex Mercer', span: 2 },
+    { label: 'Email', children: 'alex@khor.com', span: 2 },
     { label: 'Rol', children: 'Admin' },
     { label: 'Estado', children: <KText strong color="primary">Activo</KText> },
     { label: 'Biografía', children: 'Desarrollador enfocado en sistemas de diseño y arquitectura frontend.', span: 4 },
@@ -1010,7 +1010,7 @@ function TimePickerPlayground() {
 function MentionsPlayground() {
   const [val, setVal] = useState('');
   const options = [
-    { value: 'dani', label: 'Dani Lezcano', avatar: 'https://i.pravatar.cc/150?u=dani' },
+    { value: 'alex', label: 'Alex Mercer', avatar: 'https://i.pravatar.cc/150?u=alex' },
     { value: 'juan', label: 'Juan Perez', avatar: 'https://i.pravatar.cc/150?u=juan' },
     { value: 'maria', label: 'Maria Gomez', avatar: 'https://i.pravatar.cc/150?u=maria' },
   ];
@@ -1950,7 +1950,7 @@ import { KInput } from '@khor/design-system/atoms/index';
     playground: <DescriptionsPlayground />,
     stateShowcase: (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 24, width: '100%' }}>
-        <KDescriptions title="Default" items={[{ label: 'Usuario', children: 'Dani' }]} />
+        <KDescriptions title="Default" items={[{ label: 'Usuario', children: 'Alex' }]} />
         <KDescriptions bordered title="Bordered" items={[{ label: 'ID', children: '001' }]} />
       </div>
     ),
@@ -2224,7 +2224,7 @@ import { KInput } from '@khor/design-system/atoms/index';
 
 <KMentions 
   trigger="@" 
-  options={[{ value: 'user1', label: 'Dani' }]} 
+  options={[{ value: 'user1', label: 'Alex' }]} 
 />`,
     filename: 'KMentions.tsx',
     playground: <MentionsPlayground />,

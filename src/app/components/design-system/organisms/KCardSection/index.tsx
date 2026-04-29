@@ -1,7 +1,7 @@
 import React from 'react';
 import { KText } from '../../atoms/KText/index';
 import { khorTokens } from '../../../../theme/khor-theme';
-
+import { cn } from '../../../../../imports/utils';
 const t = khorTokens;
 const font = t.typography.fontPrimary;
 
@@ -13,32 +13,38 @@ export interface KCardSectionProps {
   children: React.ReactNode;
   className?: string;
   noPadding?: boolean;
+  /** Fuerza el estado hover (útil para previews/playgrounds) */
+  isHovered?: boolean;
 }
 
-export function KCardSection({ id, title, subtitle, extra, children, className, noPadding }: KCardSectionProps) {
+export function KCardSection({ id, title, subtitle, extra, children, className, noPadding, isHovered }: KCardSectionProps) {
   return (
     <div
       id={id}
-      className={className}
-      style={{
-        backgroundColor: t.colors.neutral[50], borderRadius: t.radius.lg,
-        boxShadow: t.shadows.sm, border: `1px solid ${t.colors.neutral[200]}`,
-        overflow: 'hidden', fontFamily: font,
-      }}
+      className={cn(
+        "flex flex-col overflow-hidden font-primary transition-all duration-300 shadow-khor-sm border",
+        "bg-khor-surface-card border-khor-border-default rounded-[var(--khor-radius-lg)]",
+        (isHovered) && "shadow-khor-md border-khor-primary translate-y-[-2px]",
+        className
+      )}
     >
       {title && (
-        <div style={{
-          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-          padding: '16px 24px', borderBottom: `1px solid ${t.colors.neutral[200]}`,
-        }}>
+        <div className="flex justify-between items-center px-[var(--khor-density-spacing-lg)] py-[var(--khor-density-spacing-md)] border-b border-khor-border-muted transition-colors">
           <div>
-            <KText variant="body-lg" color="navy">{title}</KText>
-            {subtitle && <KText variant="small" color="secondary">{subtitle}</KText>}
+            <KText variant="body-lg" color="navy" className="font-bold text-khor-text-primary tracking-tight">{title}</KText>
+            {subtitle && <KText variant="small" color="secondary" className="text-xs opacity-70">{subtitle}</KText>}
           </div>
           {extra}
         </div>
       )}
-      <div style={{ padding: noPadding ? 0 : 24 }}>{children}</div>
+      <div 
+        className={cn(
+          "flex-1",
+          noPadding ? "p-0" : "p-[var(--khor-density-spacing-lg)]"
+        )}
+      >
+        {children}
+      </div>
     </div>
   );
 }

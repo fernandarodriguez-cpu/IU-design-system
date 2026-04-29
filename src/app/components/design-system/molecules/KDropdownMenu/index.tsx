@@ -19,7 +19,7 @@ export const KDropdownMenuSubTrigger = React.forwardRef<
   <DropdownMenuPrimitive.SubTrigger
     ref={ref}
     className={cn(
-      "flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none focus:bg-khor-slate-100 data-[state=open]:bg-khor-slate-100 font-primary text-khor-neutral-900",
+      "flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none focus:bg-khor-surface-hover data-[state=open]:bg-khor-surface-hover font-primary text-khor-neutral-900",
       inset && "pl-8",
       className
     )}
@@ -73,7 +73,7 @@ export const KDropdownMenuItem = React.forwardRef<
   <DropdownMenuPrimitive.Item
     ref={ref}
     className={cn(
-      "relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-khor-neutral-100 focus:text-khor-neutral-900 data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      "relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-khor-surface-hover focus:text-khor-neutral-900 data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       inset && "pl-8",
       className
     )}
@@ -119,7 +119,7 @@ export const KDropdownMenuCheckboxItem = React.forwardRef<
   <DropdownMenuPrimitive.CheckboxItem
     ref={ref}
     className={cn(
-      "relative flex cursor-pointer select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none transition-colors focus:bg-khor-neutral-100 focus:text-khor-neutral-900 data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      "relative flex cursor-pointer select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none transition-colors focus:bg-khor-surface-hover focus:text-khor-neutral-900 data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       className
     )}
     {...props}
@@ -175,7 +175,7 @@ export const KDropdownMenu = ({
               <KDropdownMenuItem 
                 key={item.key || idx} 
                 onClick={() => menu.onClick?.({ key: item.key })}
-                className={item.danger ? "text-red-600 focus:bg-red-50 focus:text-red-700" : ""}
+                className={item.danger ? "text-red-600 focus:bg-khor-error-light focus:text-red-700" : ""}
                 disabled={item.disabled}
               >
                 {item.icon && <span className="mr-2">{item.icon}</span>}

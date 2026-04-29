@@ -19,14 +19,14 @@ export const KNavItem = React.forwardRef<HTMLButtonElement, KNavItemProps>(funct
     <button
       ref={ref}
       style={{
-        backgroundColor: active ? t.colors.brand.secondaryHover : 'transparent',
-        color: active ? t.colors.feedback.white : 'rgba(255,255,255,0.7)',
+        backgroundColor: active ? 'var(--khor-surface-selected)' : 'transparent',
+        color: active ? 'var(--khor-text-on-action)' : 'rgba(255,255,255,0.7)',
         fontWeight: active ? t.typography.fontWeights.semibold : t.typography.fontWeights.regular,
       }}
       className={cn(
         "relative flex w-full items-center border-none font-primary text-xs transition-all duration-150 ease-in h-10 cursor-pointer outline-none",
         collapsed ? "justify-center p-2.5" : "justify-start px-4 py-0 gap-2.5",
-        !active && "hover:bg-white/5 hover:text-white/90",
+        !active && "hover:bg-khor-surface-hover hover:text-white/90",
         className
       )}
       {...rest}

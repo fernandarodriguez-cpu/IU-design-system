@@ -30,6 +30,12 @@ const inputVariants = cva(
       disabled: {
         true: 'bg-khor-slate-100 border-khor-slate-200 opacity-60 cursor-not-allowed select-none pointer-events-none grayscale-[0.5]',
         false: '',
+      },
+      isFocused: {
+        true: 'ring-2 ring-khor-primary ring-offset-2 border-khor-primary',
+      },
+      isHovered: {
+        true: 'border-khor-primary/50 bg-khor-slate-50/50 shadow-khor-md',
       }
     },
     defaultVariants: {
@@ -69,6 +75,10 @@ export interface KInputProps extends Omit<React.InputHTMLAttributes<HTMLInputEle
   addonAfter?: React.ReactNode;
   /** Callback llamado al presionar el botón de limpiar */
   onClear?: () => void;
+  /** Fuerza el estado de foco (útil para previews/playgrounds) */
+  isFocused?: boolean;
+  /** Fuerza el estado de hover (útil para previews/playgrounds) */
+  isHovered?: boolean;
 }
 
 /**
@@ -81,6 +91,7 @@ const BaseInput = React.forwardRef<HTMLInputElement, KInputProps>(function KInpu
     allowClear, showCount, maxLength,
     addonBefore, addonAfter,
     onClear,
+    isFocused, isHovered,
     className, style, disabled, value, defaultValue, onChange, ...rest 
   },
   ref,
@@ -153,7 +164,7 @@ const BaseInput = React.forwardRef<HTMLInputElement, KInputProps>(function KInpu
       <div className="flex w-full group">
         {renderAddon(addonBefore, 'before')}
         <div className={cn(
-          inputVariants({ variant, size, status, disabled }),
+          inputVariants({ variant, size, status, disabled, isFocused, isHovered }),
           addonBefore && "rounded-l-none",
           addonAfter && "rounded-r-none"
         )}>

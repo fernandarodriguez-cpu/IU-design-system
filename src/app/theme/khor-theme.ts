@@ -156,8 +156,18 @@ export const khorTokens = {
     small: { size: 'var(--khor-font-size-body-sm)', weight: 'var(--khor-font-weight-medium)', lineHeight: 'var(--khor-line-height-body)' },
     display1: { size: 'var(--khor-font-size-display-1)', weight: 'var(--khor-font-weight-extrabold)', lineHeight: 'var(--khor-line-height-display)' },
     display2: { size: 'var(--khor-font-size-display-2)', weight: 'var(--khor-font-weight-extrabold)', lineHeight: 'var(--khor-line-height-display)' },
-    caption: { size: 'var(--khor-font-size-body-sm)', weight: 'var(--khor-font-weight-regular)', lineHeight: 1.4 },
+    caption: { size: 'var(--khor-font-size-caption)', weight: 'var(--khor-font-weight-regular)', lineHeight: 1.4 },
     overline: { size: 'var(--khor-font-size-body-xs)', weight: 'var(--khor-font-weight-semibold)', lineHeight: 1.2, letterSpacing: 'var(--khor-letter-spacing-wider)' },
+    // New Fluid Aliases
+    display2Xl: { size: 'var(--khor-font-size-display-2xl)', weight: 'var(--khor-font-weight-extrabold)', lineHeight: 'var(--khor-line-height-display)' },
+    displayXl: { size: 'var(--khor-font-size-display-xl)', weight: 'var(--khor-font-weight-extrabold)', lineHeight: 'var(--khor-line-height-display)' },
+    headingLg: { size: 'var(--khor-font-size-heading-lg)', weight: 'var(--khor-font-weight-bold)', lineHeight: 'var(--khor-line-height-heading)' },
+    headingMd: { size: 'var(--khor-font-size-heading-md)', weight: 'var(--khor-font-weight-bold)', lineHeight: 'var(--khor-line-height-heading)' },
+    headingSm: { size: 'var(--khor-font-size-heading-sm)', weight: 'var(--khor-font-weight-semibold)', lineHeight: 'var(--khor-line-height-heading)' },
+    headingXs: { size: 'var(--khor-font-size-heading-xs)', weight: 'var(--khor-font-weight-semibold)', lineHeight: 'var(--khor-line-height-heading)' },
+    bodyXl: { size: 'var(--khor-font-size-body-xl)', weight: 'var(--khor-font-weight-regular)', lineHeight: 'var(--khor-line-height-body)' },
+    code: { size: 'var(--khor-font-size-code)', weight: 'var(--khor-font-weight-regular)', lineHeight: 'var(--khor-line-height-body)' },
+    label: { size: 'var(--khor-font-size-label)', weight: 'var(--khor-font-weight-medium)', lineHeight: 'var(--khor-line-height-body)' },
   },
   sizing: {
     0: 'var(--khor-size-0)',
@@ -193,6 +203,16 @@ export const khorTokens = {
     densitySm: 'var(--khor-density-spacing-sm)',
     densityMd: 'var(--khor-density-spacing-md)',
     densityLg: 'var(--khor-density-spacing-lg)',
+    // Semantic Spacing (Industry Ref)
+    componentXs: 'var(--khor-space-component-xs)',
+    componentSm: 'var(--khor-space-component-sm)',
+    componentMd: 'var(--khor-space-component-md)',
+    componentLg: 'var(--khor-space-component-lg)',
+    layoutXs: 'var(--khor-space-layout-xs)',
+    layoutSm: 'var(--khor-space-layout-sm)',
+    layoutMd: 'var(--khor-space-layout-md)',
+    layoutLg: 'var(--khor-space-layout-lg)',
+    layoutXl: 'var(--khor-space-layout-xl)',
   },
   shadows: {
     sm: 'var(--khor-shadow-sm)',
@@ -201,6 +221,13 @@ export const khorTokens = {
     xl: 'var(--khor-shadow-xl)',
     '2xl': 'var(--khor-shadow-2xl)',
     inner: 'var(--khor-shadow-inner)',
+    // Elevation Scale
+    elevation0: 'var(--khor-elevation-0)',
+    elevation1: 'var(--khor-elevation-1)',
+    elevation2: 'var(--khor-elevation-2)',
+    elevation3: 'var(--khor-elevation-3)',
+    elevation4: 'var(--khor-elevation-4)',
+    elevation5: 'var(--khor-elevation-5)',
   },
   radius: {
     xs: 'var(--khor-radius-xs, 2px)' as unknown as number,
@@ -208,6 +235,8 @@ export const khorTokens = {
     md: 'var(--khor-radius-md, 8px)' as unknown as number,
     lg: 'var(--khor-radius-lg, 10px)' as unknown as number,
     xl: 'var(--khor-radius-xl, 14px)' as unknown as number,
+    '2xl': 'var(--khor-radius-2xl, 24px)' as unknown as number,
+    '3xl': 'var(--khor-radius-3xl, 32px)' as unknown as number,
     full: 'var(--khor-radius-full, 9999px)' as unknown as number,
   },
   layout: {
@@ -261,6 +290,12 @@ export const khorTokens = {
       overlay: 'var(--khor-surface-overlay)',
       overlayBg: 'var(--khor-overlay-bg)',
       overlayBackdrop: 'var(--khor-overlay-backdrop)',
+      // Interactive States
+      hover: 'var(--khor-surface-hover)',
+      pressed: 'var(--khor-surface-pressed)',
+      selected: 'var(--khor-surface-selected)',
+      dragging: 'var(--khor-surface-dragging)',
+      subtle: 'var(--khor-surface-subtle)',
     },
     motion: {
       duration: {
@@ -301,9 +336,25 @@ export const khorTokens = {
       focusRing: 'var(--khor-form-focus-ring)',
     },
     focus: {
-      ring: 'var(--khor-focus-ring)',
+      ring: 'var(--khor-focus-ring-color)',
       ringWidth: 'var(--khor-focus-ring-width)',
       ringOffset: 'var(--khor-focus-ring-offset)',
+      ringStyle: 'var(--khor-focus-ring-style)',
+    },
+    // Contextual Overrides (Layer 3)
+    contextual: {
+      sidebar: {
+        bg: 'var(--khor-context-sidebar-bg)',
+        text: 'var(--khor-context-sidebar-text)',
+        textMuted: 'var(--khor-context-sidebar-text-muted)',
+        border: 'var(--khor-context-sidebar-border)',
+        hover: 'var(--khor-context-sidebar-hover)',
+        active: 'var(--khor-context-sidebar-active)',
+      },
+      header: {
+        bg: 'var(--khor-context-header-bg)',
+        border: 'var(--khor-context-header-border)',
+      }
     },
   },
   motion: {

@@ -39,6 +39,24 @@ export function KCommandBar({ open, onClose }: { open: boolean; onClose: () => v
   }, [open]);
 
   const handleSelect = (item: SearchItem) => {
+    if (item.url.startsWith('#action:')) {
+      const action = item.url.replace('#action:', '');
+      switch (action) {
+        case 'toggle-dark':
+          document.documentElement.classList.toggle('dark');
+          break;
+        case 'export-ai':
+          navigate('/ai-export');
+          break;
+        case 'clear-history':
+          setRecents([]);
+          localStorage.removeItem('khor_command_recents');
+          break;
+      }
+      onClose();
+      return;
+    }
+
     if (item.url) navigate(item.url);
     const newRecents = [item, ...recents.filter(r => r.id !== item.id)].slice(0, 5);
     setRecents(newRecents);
@@ -120,6 +138,7 @@ function CommandRow({ item, onSelect }: { item: SearchItem; onSelect: () => void
             "rounded-full px-1.5 py-0.5 text-[10px] uppercase font-bold",
             item.category === 'Tool' ? "bg-khor-primary/10 text-khor-primary" : 
             item.category === 'Pattern' ? "bg-purple-100 text-purple-600" :
+            item.category === 'Action' ? "bg-amber-100 text-amber-600" :
             "bg-khor-slate-100 text-khor-neutral-600"
           )}>
             {item.category}

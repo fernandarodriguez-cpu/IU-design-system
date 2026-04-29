@@ -43,6 +43,47 @@ const changeTypeConfig: Record<ChangeType, { color: string; bg: string; icon: Re
 
 const changelog: VersionEntry[] = [
   {
+    version: '5.0.0-alpha',
+    date: '28 de abril de 2026',
+    codename: 'The World-Class Foundation',
+    summary: 'Reinvención total de la arquitectura de tokens para cumplir con el estándar W3C Design Tokens (DTCG). Implementación de escalas matemáticas puras para tipografía fluida, espaciado y radios, junto con una arquitectura de 3 capas (Primitive, Semantic, Component).',
+    highlights: [
+      'W3C Design Tokens: Adopción oficial del estándar DTCG ($value, $type) para interoperabilidad total.',
+      'Fluid Typography: Escala tipográfica responsiva basada en clamp() para una legibilidad perfecta en cualquier pantalla.',
+      'Mathematical Spacing: Expansión de la escala de espaciado (1-24) basada en incrementos de 4px.',
+      'Radius System: Nuevos radios 2xl y 3xl para interfaces modernas y contenedores grandes.',
+      'Dark Mode Refactor: Inversión semántica automática mejorada para superficies y bordes.',
+      'Contextual Tokens: Capa 3 de tokens para secciones específicas (Sidebar, Header) con soporte invertido.'
+    ],
+    changes: [
+      { type: 'added', component: 'Tokens', description: 'Nueva arquitectura de 3 capas (Primitive, Semantic, Component) compatible con W3C.' },
+      { type: 'added', component: 'Typography', description: 'Sistema de tipografía fluida (Fluid UI) usando funciones clamp().' },
+      { type: 'changed', component: 'theme.css', description: 'Refactorización masiva para soportar inversión semántica real en Dark Mode.' },
+      { type: 'added', component: 'Figma Export', description: 'Exportación nativa en formato W3C Design Tokens (JSON).' },
+    ],
+    stats: { added: 15, changed: 5, fixed: 0 },
+  },
+  {
+    version: '4.4.0',
+    date: '27 de abril de 2026',
+    codename: 'Industry Reference Upgrade',
+    summary: 'Evolución del sistema hacia estándares de arquitectura de élite (Primer/Material You). Introducción de escalas semánticas de superficie, elevación y espaciado, junto con patrones de página estandarizados.',
+    highlights: [
+      'Interactive Surface Layer: Tokens compartidos para hover, pressed y selected en todo el sistema.',
+      'Semantic Elevation: Nueva escala de niveles 0-5 para jerarquía de profundidad coherente.',
+      'Full Neutral Scale: Inyección de neutros 600, 700 y 800 para evitar hardcoding de grises.',
+      'Semantic Spacing: Alias de layout y componentes para decisiones de espaciado basadas en intención.',
+      'A11y Excellence: Focus rings configurables y soporte nativo para prefers-contrast: more.',
+      'Page-Level Patterns: Documentación de estructuras para Empty, Error y Loading states.'
+    ],
+    changes: [
+      { type: 'added', component: 'Tokens', description: 'Nuevas capas semánticas de superficie, elevación y espaciado.' },
+      { type: 'added', component: 'A11y', description: 'Soporte para modo de alto contraste y anillos de foco configurables.' },
+      { type: 'added', component: 'AI Guide', description: 'Guías de patrones de página (Empty/Error/Loading).' },
+    ],
+    stats: { added: 12, changed: 4, fixed: 0 },
+  },
+  {
     version: '4.3.1',
     date: '24 de abril de 2026',
     codename: 'The Absolute 100',
