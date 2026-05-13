@@ -1,6 +1,6 @@
 /**
  * ╔═══════════════════════════════════════════╗
- * ║  KHOR DESIGN SYSTEM — v5.1.3-alpha        ║
+ * ║  KHOR DESIGN SYSTEM — v5.1.6-alpha        ║
  * ║  Elite SaaS & AI Architecture             ║
  * ╚═══════════════════════════════════════════╝
  */
@@ -42,15 +42,15 @@ export function HomePage() {
     const t = khorTokens;
     const zip = new JSZip();
     const ds = zip.folder('khor-design-system-v5')!;
-    ds.file('README.md', `# Khor Design System v5.1.3-alpha\n...`);
+    ds.file('README.md', `# Khor Design System v5.1.6-alpha\n...`);
     ds.file('KHOR_AI_GUIDE.md', generateMarkdown(defaultSections, themeConfig));
     const blob = await zip.generateAsync({ type: 'blob' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `khor-ds-v5.1.3-alpha.zip`;
+    a.download = `khor-ds-v5.1.6-alpha.zip`;
     a.click();
-    kToast({ type: 'success', title: 'Exportación Exitosa', description: 'Paquete v5.1.3-alpha listo.' });
+    kToast({ type: 'success', title: 'Exportación Exitosa', description: 'Paquete v5.1.6-alpha listo.' });
   };
 
   return (
@@ -63,7 +63,7 @@ export function HomePage() {
 
         <div className="relative z-10">
           <div className="flex flex-wrap gap-3 mb-10">
-            <KTag color="volcano" className="border-white/20 text-white bg-white/10 px-4 py-1 backdrop-blur-xl">v5.1.3-alpha</KTag>
+            <KTag color="volcano" className="border-white/20 text-white bg-white/10 px-4 py-1 backdrop-blur-xl">v5.1.6-alpha</KTag>
             <KTag color="volcano" className="border-white/20 text-white bg-white/10 px-4 py-1 backdrop-blur-xl">Enterprise Stack</KTag>
             <KTag color="processing" className="border-white/20 text-white bg-white/10 px-4 py-1 backdrop-blur-xl">AI Native</KTag>
           </div>

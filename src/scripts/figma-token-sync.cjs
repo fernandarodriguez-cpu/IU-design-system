@@ -5,6 +5,11 @@ const FIGMA_PAT = process.env.FIGMA_PAT;
 const FIGMA_FILE_ID = process.env.FIGMA_FILE_ID || 'eS7sKDiALM60Bulw0NMUHU';
 
 async function syncTokens() {
+  if (!FIGMA_PAT) {
+    // No salimos con error, solo avisamos que usaremos el modo manifiesto
+    console.log('⚠️ FIGMA_PAT no detectado. Se generará solo el manifiesto local.');
+  }
+
   console.log('🎨 Analizando theme.css para extraer tokens complejos...');
   const cssPath = path.join(__dirname, '../styles/theme.css');
   const cssContent = fs.readFileSync(cssPath, 'utf8');
@@ -42,14 +47,11 @@ async function syncTokens() {
   };
 
   const parseValue = (val) => {
-    // Es un color?
     if (val.startsWith('#')) return { type: 'COLOR', value: hexToRgba(val) };
-    // Es un número con unidad (px, rem)?
     if (/^-?[\d.]+(px|rem|em)$/.test(val)) {
       const num = parseFloat(val);
       return { type: 'FLOAT', value: num };
     }
-    // Es un alias?
     const aliasMatch = val.match(/var\(--([\w-]+)\)/);
     if (aliasMatch) {
       return { type: 'ALIAS', name: aliasMatch[1] };
@@ -57,13 +59,12 @@ async function syncTokens() {
     return null;
   };
 
-  // Preparar lista de variables únicas
   const allTokenNames = Array.from(new Set([...Object.keys(lightTokens), ...Object.keys(darkTokens)]));
   const variablesToCreate = [];
 
   for (const name of allTokenNames) {
     const lightVal = lightTokens[name];
-    const darkVal = darkTokens[name] || lightVal; // Fallback al light si no hay override
+    const darkVal = darkTokens[name] || lightVal;
 
     if (!lightVal) continue;
 
@@ -80,77 +81,94 @@ async function syncTokens() {
     }
   }
 
-  console.log(`🚀 Iniciando sincronización de ${variablesToCreate.length} variables en Figma...`);
+  // 1. Generar Manifiesto Local (Workflow para Planes Pro)
+  const collectionName = 'Khor v6.0 System';
+  const manifest = {
+    version: '6.0.0',
+    generatedAt: new Date().toISOString(),
+    collectionName,
+    variables: variablesToCreate
+  };
 
+  const manifestPath = path.join(__dirname, '../../khor-tokens-manifest.json');
+  fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
+  console.log(`\n📄 Manifiesto generado en: ${manifestPath}`);
+  console.log('💡 Tip: En planes Figma Pro, usa el botón "Import Manifest" en el plugin de Khor y selecciona este archivo.');
+
+  // 2. Intentar Sincronización REST (Solo Enterprise)
+  if (!FIGMA_PAT) {
+    console.log('\n👋 Finalizado (Modo Manifiesto).');
+    return;
+  }
+
+  console.log(`\n🚀 Iniciando sincronización REST en archivo ${FIGMA_FILE_ID}...`);
   const headers = { 
     'X-Figma-Token': FIGMA_PAT, 
     'Content-Type': 'application/json' 
   };
 
-  // 1. Crear o buscar colección
-  const collectionName = 'Khor v6.0 System';
-  const collectionResponse = await fetch(`https://api.figma.com/v1/files/${FIGMA_FILE_ID}/variables`, {
-    method: 'POST',
-    headers,
-    body: JSON.stringify({
-      variableCollections: [
-        { action: 'CREATE', name: collectionName, initialModeId: 'Light' }
-      ]
-    })
-  });
-
-  const collectionData = await collectionResponse.json();
-  if (collectionData.error) {
-    console.error('❌ Error en la API:', collectionData.message);
-    return;
-  }
-
-  const collection = collectionData.meta.variableCollections[0];
-  const collectionId = collection.id;
-  const lightModeId = collection.modes[0].modeId;
-
-  // 2. Añadir modo Dark
-  const modeResponse = await fetch(`https://api.figma.com/v1/files/${FIGMA_FILE_ID}/variables`, {
-    method: 'POST',
-    headers,
-    body: JSON.stringify({
-      variableCollections: [
-        { action: 'UPDATE', id: collectionId, addModes: [{ name: 'Dark' }] }
-      ]
-    })
-  });
-  const modeData = await modeResponse.json();
-  const darkModeId = modeData.meta.variableCollections[0].modes.find(m => m.name === 'Dark').modeId;
-
-  console.log(`✅ Colección "${collectionName}" lista (Modes: Light, Dark).`);
-
-  // 3. Crear Variables en batch
-  // Dividimos en grupos de 25 para evitar límites de rate
-  const BATCH_SIZE = 25;
-  for (let i = 0; i < variablesToCreate.length; i += BATCH_SIZE) {
-    const batch = variablesToCreate.slice(i, i + BATCH_SIZE);
-    
-    const variableActions = batch.map(v => ({
-      action: 'CREATE',
-      name: v.name.replace('khor-', '').split('-').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join('/'),
-      resolvedType: v.type,
-      variableCollectionId: collectionId,
-      valuesByMode: {
-        [lightModeId]: v.light,
-        [darkModeId]: v.dark
-      }
-    }));
-
-    await fetch(`https://api.figma.com/v1/files/${FIGMA_FILE_ID}/variables`, {
+  try {
+    // Crear o buscar colección
+    const collectionResponse = await fetch(`https://api.figma.com/v1/files/${FIGMA_FILE_ID}/variables`, {
       method: 'POST',
       headers,
-      body: JSON.stringify({ variables: variableActions })
+      body: JSON.stringify({
+        variableCollections: [
+          { action: 'CREATE', name: collectionName, initialModeId: 'Light' }
+        ]
+      })
     });
 
-    console.log(`📦 Procesado batch ${Math.floor(i/BATCH_SIZE) + 1}...`);
-  }
+    const collectionData = await collectionResponse.json();
+    if (collectionData.error) {
+      console.error('❌ Error API (REST):', collectionData.message);
+      return;
+    }
 
-  console.log('🎉 Sincronización completa. Revisa tu archivo de Figma!');
+    const collection = collectionData.meta.variableCollections[0];
+    const collectionId = collection.id;
+    const lightModeId = collection.modes[0].modeId;
+
+    // Añadir modo Dark
+    const modeResponse = await fetch(`https://api.figma.com/v1/files/${FIGMA_FILE_ID}/variables`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        variableCollections: [
+          { action: 'UPDATE', id: collectionId, addModes: [{ name: 'Dark' }] }
+        ]
+      })
+    });
+    const modeData = await modeResponse.json();
+    const darkModeId = modeData.meta.variableCollections[0].modes.find(m => m.name === 'Dark').modeId;
+
+    console.log(`✅ Colección "${collectionName}" lista en la nube.`);
+
+    const BATCH_SIZE = 25;
+    for (let i = 0; i < variablesToCreate.length; i += BATCH_SIZE) {
+      const batch = variablesToCreate.slice(i, i + BATCH_SIZE);
+      const variableActions = batch.map(v => ({
+        action: 'CREATE',
+        name: v.name.replace('khor-', '').split('-').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join('/'),
+        resolvedType: v.type,
+        variableCollectionId: collectionId,
+        valuesByMode: {
+          [lightModeId]: v.light,
+          [darkModeId]: v.dark
+        }
+      }));
+
+      await fetch(`https://api.figma.com/v1/files/${FIGMA_FILE_ID}/variables`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({ variables: variableActions })
+      });
+      console.log(`📦 Procesado batch ${Math.floor(i/BATCH_SIZE) + 1}...`);
+    }
+    console.log('🎉 Sincronización REST completa.');
+  } catch (e) {
+    console.error('❌ Error durante la sincronización REST:', e.message);
+  }
 }
 
 syncTokens().catch(err => console.error('❌ Error fatal:', err));

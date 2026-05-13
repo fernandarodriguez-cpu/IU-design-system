@@ -1,39 +1,132 @@
-
 <!DOCTYPE html>
 <html>
 <head>
-  <style>
-    body { font-family: 'Inter', sans-serif; margin: 0; padding: 16px; background: #f8faff; color: #051758; }
-    .header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
-    .logo { background: #E04D36; color: white; width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: bold; }
-    .card { background: white; border-radius: 10px; padding: 12px; box-shadow: 0 2px 4px rgba(5,23,88,0.05); margin-bottom: 10px; border: 1px solid #edf0f1; }
-    .label { font-size: 10px; font-weight: 700; text-transform: uppercase; color: #718096; margin-bottom: 8px; display: block; }
-    .btn-group { display: flex; flex-direction: column; gap: 6px; }
-    button { background: #f1f4ff; border: 1px solid #e2eafc; color: #051758; padding: 10px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: space-between; }
-    button:hover { background: #e2eafc; }
-    button.primary { background: #E04D36; color: white; border: none; }
-    #status { font-size: 11px; margin-top: 10px; color: #E04D36; font-weight: bold; text-align: center; }
-  </style>
+    <meta charset="utf-8">
+    <style>
+        :root {
+            --khor-primary: #E04D36;
+            --khor-navy: #051758;
+            --khor-bg: #ffffff;
+            --khor-text: #1a1a1a;
+            --khor-muted: #666666;
+            --khor-border: #e2e8f0;
+            --khor-hover: #f8fafc;
+        }
+        body {
+            font-family: Inter, -apple-system, sans-serif;
+            margin: 0; padding: 20px;
+            background: var(--khor-bg);
+            color: var(--khor-text);
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            border: 1px solid var(--khor-border);
+            margin-bottom: 20px;
+        }
+        h1 { font-size: 16px; margin: 0 0 4px 0; color: var(--khor-navy); }
+        p { font-size: 12px; color: var(--khor-muted); margin: 0 0 16px 0; }
+        
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .btn-primary { background: var(--khor-primary); color: white; }
+        .btn-primary:hover { filter: brightness(1.1); }
+        .btn-secondary { background: var(--khor-navy); color: white; }
+        .btn-outline { background: white; border: 1px solid var(--khor-border); color: var(--khor-text); }
+        .btn-outline:hover { background: var(--khor-hover); }
+
+        #log {
+            font-family: monospace;
+            font-size: 10px;
+            background: #f1f5f9;
+            padding: 12px;
+            border-radius: 8px;
+            max-height: 150px;
+            overflow-y: auto;
+            border: 1px solid var(--khor-border);
+        }
+        .log-entry { margin-bottom: 4px; border-bottom: 1px solid #e2e8f0; padding-bottom: 2px; }
+    </style>
 </head>
 <body>
-  <div class="header"><div class="logo">K</div><h2>KDS Manager Pro</h2></div>
-  <div class="card">
-    <span class="label">Foundations & Sync</span>
-    <div class="btn-group">
-      <button onclick="run('Sync')">🎨 Sincronizar Tokens (462) <span>🔄</span></button>
-      <button onclick="run('Foundations')" class="primary">💎 Poblar Foundations <span>✨</span></button>
+    <div class="card">
+        <h1>Khor Design System</h1>
+        <p>v5.1.5 Alpha — Sync Engine</p>
+        
+        <button id="import-btn" class="btn btn-primary">
+            📦 Importar khor-tokens-manifest.json
+        </button>
+        
+        <button id="nuke-btn" class="btn btn-outline" style="color: #ef4444; border-color: #fecaca;">
+            🧹 Limpiar Colecciones (Nuke)
+        </button>
     </div>
-  </div>
-  <div class="card">
-    <span class="label">Estructura</span>
-    <div class="btn-group">
-      <button onclick="run('Hierarchy')">📂 Crear Jerarquía de Páginas</button>
+
+    <div class="card" style="padding: 16px;">
+        <h2 style="font-size: 12px; margin: 0 0 8px 0; color: var(--khor-muted);">DEBUG LOG</h2>
+        <div id="log"> Esperando acción...</div>
     </div>
-  </div>
-  <div id="status">Sistema Restaurado</div>
-  <script>
-    function run(type) { parent.postMessage({ pluginMessage: { type } }, '*'); }
-    window.onmessage = (e) => { document.getElementById('status').innerText = e.data.pluginMessage; };
-  </script>
+
+    <input type="file" id="file-input" style="display: none;" accept=".json">
+
+    <script>
+        const logEl = document.getElementById('log');
+        const fileInput = document.getElementById('file-input');
+
+        function log(msg, type = 'info') {
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.style.color = type === 'error' ? '#ef4444' : '#051758';
+            entry.innerText = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            logEl.appendChild(entry);
+            logEl.scrollTop = logEl.scrollHeight;
+        }
+
+        document.getElementById('import-btn').onclick = () => fileInput.click();
+        
+        fileInput.onchange = (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            log(`Leyendo archivo: ${file.name}...`);
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    const manifest = JSON.parse(event.target.result);
+                    log("✅ JSON analizado. Enviando a Figma...");
+                    parent.postMessage({ pluginMessage: { type: 'import-manifest', manifest } }, '*');
+                } catch (err) {
+                    log(`❌ Error: ${err.message}`, 'error');
+                }
+            };
+            reader.readAsText(file);
+        };
+
+        document.getElementById('nuke-btn').onclick = () => {
+            if (confirm("¿Seguro que quieres borrar todas las variables de Khor?")) {
+                parent.postMessage({ pluginMessage: { type: 'nuke-tokens' } }, '*');
+            }
+        };
+
+        window.onmessage = (event) => {
+            const msg = event.data.pluginMessage;
+            if (msg.type === 'log') log(msg.message);
+        };
+    </script>
 </body>
 </html>

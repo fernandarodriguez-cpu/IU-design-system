@@ -43,6 +43,41 @@ const changeTypeConfig: Record<ChangeType, { color: string; bg: string; icon: Re
 
 const changelog: VersionEntry[] = [
   {
+    version: '5.1.6-alpha',
+    date: '13 de Mayo, 2026',
+    codename: 'The Clean Canvas',
+    summary: 'Refactorización total del plugin de Figma para una experiencia de sincronización simplificada y coherente con v5.',
+    changes: [
+      { type: 'changed', component: 'Figma Plugin', description: 'Nueva interfaz minimalista centrada en la importación de manifiestos JSON para evitar restricciones de API REST.' },
+      { type: 'changed', component: 'Sync Engine', description: 'Alineación de la estructura de nombres de variables (Khor/Category/Token) con el esquema oficial de KDS v5.' },
+      { type: 'fixed', component: 'Figma Plugin', description: 'Corrección de fallos en el renderizado de la UI del plugin y limpieza de código legado de versiones anteriores.' },
+    ],
+    stats: { added: 0, changed: 2, fixed: 1 },
+  },
+  {
+    version: '5.1.5-alpha',
+    date: '13 de Mayo, 2026',
+    codename: 'The Bridge Builder',
+    summary: 'Implementación del "Manifest Workflow" para democratizar la sincronización de Figma en todos los planes.',
+    changes: [
+      { type: 'added', component: 'Sync Engine', description: 'Generación automática de un archivo "khor-tokens-manifest.json" para importación offline.' },
+      { type: 'added', component: 'Figma Plugin', description: 'Nueva capacidad de "Import Manifest" que permite crear y actualizar variables sin necesidad de la API REST Enterprise.' },
+      { type: 'changed', component: 'Infrastructure', description: 'Reconstrucción del plugin con soporte nativo para el nuevo motor de síntesis de variables.' },
+    ],
+    stats: { added: 2, changed: 1, fixed: 0 },
+  },
+  {
+    version: '5.1.4-alpha',
+    date: '13 de Mayo, 2026',
+    codename: 'The Secure Sync',
+    summary: 'Habilitación de carga nativa de variables de entorno para sincronización de Figma.',
+    changes: [
+      { type: 'added', component: 'Sync Engine', description: 'Uso del flag --env-file para cargar automáticamente el PAT de Figma desde el archivo .env sin dependencias externas.' },
+      { type: 'fixed', component: 'Security', description: 'Añadida validación de existencia de tokens antes de iniciar procesos de red, evitando fallos silenciosos.' },
+    ],
+    stats: { added: 1, changed: 1, fixed: 0 },
+  },
+  {
     version: '5.1.3-alpha',
     date: '13 de Mayo, 2026',
     codename: 'The Ghost in the Script',

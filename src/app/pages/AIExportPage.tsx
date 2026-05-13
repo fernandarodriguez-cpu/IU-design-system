@@ -26,7 +26,7 @@ import { khorTokens } from '../theme/khor-theme';
 const t = khorTokens;
 
 /* ─── Version (must match ChangelogPage & AppShell) ─── */
-export const KHOR_VERSION = '5.1.3-alpha';
+export const KHOR_VERSION = '5.1.6-alpha';
 
 
 /* ─── Sections config ───────────────────────── */
