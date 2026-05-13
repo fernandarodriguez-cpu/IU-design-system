@@ -8,7 +8,8 @@
     "dev": "vite",
     "test:visual": "playwright test",
     "test:visual:update": "playwright test --update-snapshots",
-    "khor-check": "npx tsx src/scripts/khor-check.ts"
+    "khor-check": "npx tsx src/scripts/khor-check.ts",
+    "figma-sync": "node src/scripts/figma-token-sync.cjs"
   },
   "dependencies": {
     "@popperjs/core": "2.11.8",

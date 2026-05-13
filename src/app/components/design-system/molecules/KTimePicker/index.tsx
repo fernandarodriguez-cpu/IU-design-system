@@ -67,7 +67,7 @@ export function KTimePicker({
         >
           <Clock className="w-4 h-4 text-khor-neutral-400 group-hover:text-khor-primary transition-colors" />
           <span className={cn(
-            "flex-1 text-left font-bold tracking-tight",
+            "flex-1 text-start font-bold tracking-tight",
             internalValue ? "text-khor-neutral-900" : "text-khor-neutral-400"
           )}>
             {internalValue}
@@ -83,7 +83,7 @@ export function KTimePicker({
         >
           <div className="flex gap-1 h-64">
             {/* Horas */}
-            <div className="flex flex-col overflow-y-auto pr-1 scrollbar-hide w-16">
+            <div className="flex flex-col overflow-y-auto pe-1 scrollbar-hide w-16">
               <span className="text-[10px] font-bold text-khor-neutral-400 uppercase tracking-widest text-center mb-2">HH</span>
               {hours.map(h => (
                 <button

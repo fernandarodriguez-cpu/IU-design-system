@@ -32,3 +32,4 @@ export { showKNotification as KNotificationLegacy } from './KNotification/index'
 export { default as KTransfer } from './KTransfer/index';
 export { default as KTreeSelect } from './KTreeSelect/index';
 export { default as KDividerExtended } from './KDividerExtended';
+export * from './KTrialBar';

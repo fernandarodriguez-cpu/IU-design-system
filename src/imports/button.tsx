@@ -43,8 +43,8 @@ export const KButton = React.forwardRef<HTMLButtonElement, KButtonProps>(
     };
 
     const baseClasses = [
-      "inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-all disabled:pointer-events-none disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-ring/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background [&_svg]:pointer-events-none [&_svg]:shrink-0 min-h-[44px] min-w-[44px] font-[family-name:var(--font-family-primary,Montserrat,sans-serif)]",
-      "font-primary border", // Se asume font-primary en CSS resolviendo a Montserrat
+      "inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-all disabled:pointer-events-none disabled:opacity-50 outline-none focus-visible:ring-[var(--khor-focus-ring-width,2px)] focus-visible:ring-[var(--khor-focus-ring-color,#E04D36)] focus-visible:ring-offset-[var(--khor-focus-ring-offset,2px)] focus-visible:ring-offset-background [&_svg]:pointer-events-none [&_svg]:shrink-0 min-h-[44px] min-w-[44px] font-[family-name:var(--font-family-primary,Montserrat,sans-serif)]",
+      "font-primary border rounded-[var(--khor-size-radius-md,6px)]", // Usando CTI Alias
       variants[variant],
       sizes[size],
       fullWidth ? 'w-full' : '',

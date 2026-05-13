@@ -44,7 +44,7 @@ export function KDescriptions({
   return (
     <div className={cn("w-full font-primary", className)} style={style}>
       {title && (
-        <h4 className="text-lg font-extrabold text-khor-neutral-900 mb-4 tracking-tight border-l-4 border-khor-primary pl-3">
+        <h4 className="text-lg font-extrabold text-khor-neutral-900 mb-4 tracking-tight border-is-4 border-khor-primary ps-3">
           {title}
         </h4>
       )}
@@ -76,7 +76,7 @@ export function KDescriptions({
               <div className={cn(
                 "bg-khor-neutral-50 text-khor-neutral-400 font-bold uppercase tracking-widest shrink-0",
                 layout === 'vertical' ? "text-[10px] border-b border-khor-neutral-100" : "text-xs flex items-center border-r border-khor-neutral-100",
-                layout === 'horizontal' && !bordered && "bg-transparent border-r-0 pr-2",
+                layout === 'horizontal' && !bordered && "bg-transparent border-e-0 pe-2",
                 paddingMap[size]
               )}>
                 {item.label}{colon && layout === 'horizontal' ? ':' : ''}

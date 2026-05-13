@@ -95,7 +95,7 @@ export function KSelectAdvanced({
           type="button"
           disabled={disabled}
           className={cn(
-            "relative flex w-full items-center justify-between px-3 py-1.5 border rounded-md shadow-khor-sm transition-all duration-200 outline-none focus:ring-2 font-primary bg-white text-khor-neutral-900",
+            "relative flex w-full items-center justify-between px-3 py-1.5 border rounded-md shadow-khor-sm transition-all duration-200 outline-none focus:ring-2 font-primary bg-[var(--khor-input-bg)] text-[var(--khor-input-text)]",
             "min-h-[var(--khor-density-height-input)]", // Density sizing
             statusClasses,
             forcedClasses,
@@ -125,7 +125,7 @@ export function KSelectAdvanced({
               );
             })}
           </div>
-          <ChevronsUpDown className="w-4 h-4 text-khor-neutral-400 shrink-0 opacity-50 ml-2" />
+          <ChevronsUpDown className="w-4 h-4 text-khor-neutral-400 shrink-0 opacity-50 ms-2" />
         </button>
       </KPopoverTrigger>
       <KPopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 z-[100] border border-khor-border-default rounded-xl shadow-khor-lg bg-white font-primary overflow-hidden">
@@ -158,7 +158,7 @@ export function KSelectAdvanced({
                   >
                     <Check
                       className={cn(
-                        "mr-2 h-4 w-4 text-khor-primary transition-opacity",
+                        "me-2 h-4 w-4 text-khor-primary transition-opacity",
                         isSelected ? "opacity-100" : "opacity-0"
                       )}
                     />

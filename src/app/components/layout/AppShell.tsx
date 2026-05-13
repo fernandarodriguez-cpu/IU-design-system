@@ -159,6 +159,8 @@ const navigation: NavSection[] = [
       { label: 'KTour', path: '/organisms/tour' },
       { label: 'KTree', path: '/organisms/tree' },
       { label: 'KUpload', path: '/organisms/upload' },
+      { label: 'KGantt Timeline', path: '/organisms/gantt' },
+      { label: 'KEditor Pro', path: '/organisms/editor' },
     ],
   },
   {
@@ -177,6 +179,7 @@ const navigation: NavSection[] = [
       { label: 'Explorador de Iconos', path: '/icons' },
       { label: 'Khor Guardian (A11y)', path: '/guardian' },
       { label: 'Exportar a Figma', path: '/figma-export' },
+      { label: 'Inspiración Elite', path: '/inspiration' },
       { label: 'Guía para IA', path: '/ai-export' },
       { label: 'Changelog', path: '/changelog' },
     ],
@@ -463,7 +466,7 @@ export function AppShell() {
               backgroundColor: 'var(--khor-success-light)',
               color: 'var(--khor-success)',
             }}>
-              v5.0.0-alpha
+              v5.1.3-alpha
             </span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>

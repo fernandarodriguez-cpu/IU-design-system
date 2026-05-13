@@ -32,20 +32,39 @@ interface ThemePreset {
 
 const presets: ThemePreset[] = [
   {
-    name: 'Khor Default',
-    description: 'Configuración oficial del Design System',
+    name: 'Khor Official',
+    description: 'Configuración estándar del Design System',
     accent_color: '#E04D36',
     config: { ...defaultTheme },
   },
   {
-    name: 'Corporate Blue',
-    description: 'Profesional y corporativo',
-    accent_color: '#1565C0',
+    name: 'AI Modern (Elite)',
+    description: 'Vibrante, con mucho redondeo y glassmorphism',
+    accent_color: '#8B5CF6',
     config: {
-      primary: '#1565C0', secondary: '#0D2137', accent: '#FF8F00',
-      success: '#2E7D32', error: '#C62828', warning: '#EF6C00', info: '#0277BD',
+      primary: '#8B5CF6', secondary: '#1E1B4B', accent: '#34D399',
       fontHeading: 'Inter', fontBody: 'Inter',
-      radiusSm: 4, radiusMd: 6, radiusLg: 8, radiusXl: 12,
+      radiusSm: 8, radiusMd: 12, radiusLg: 20, radiusXl: 32,
+    },
+  },
+  {
+    name: 'Fintech Secure',
+    description: 'Serio, bordes afilados y alta legibilidad',
+    accent_color: '#0284C7',
+    config: {
+      primary: '#0F172A', secondary: '#334155', accent: '#0284C7',
+      fontHeading: 'Plus Jakarta Sans', fontBody: 'Inter',
+      radiusSm: 2, radiusMd: 4, radiusLg: 6, radiusXl: 8,
+    },
+  },
+  {
+    name: 'Healthcare Clean',
+    description: 'Aireado, tonos teal y máxima accesibilidad',
+    accent_color: '#0D9488',
+    config: {
+      primary: '#0D9488', secondary: '#134E4A', accent: '#F59E0B',
+      fontHeading: 'Outfit', fontBody: 'Inter',
+      radiusSm: 12, radiusMd: 16, radiusLg: 24, radiusXl: 32,
     },
   },
   {
@@ -68,30 +87,6 @@ const presets: ThemePreset[] = [
       success: '#059669', error: '#EF4444', warning: '#D97706', info: '#3B82F6',
       fontHeading: 'Space Grotesk', fontBody: 'Inter',
       radiusSm: 4, radiusMd: 8, radiusLg: 12, radiusXl: 16,
-    },
-  },
-  {
-    name: 'Healthcare',
-    description: 'Confiable y accesible',
-    accent_color: '#0891B2',
-    config: {
-      primary: '#0891B2', secondary: '#164E63', accent: '#F97316',
-      success: '#15803D', error: '#B91C1C', warning: '#CA8A04', info: '#0284C7',
-      fontHeading: 'Nunito', fontBody: 'Nunito Sans',
-      radiusSm: 6, radiusMd: 10, radiusLg: 14, radiusXl: 20,
-    },
-  },
-  {
-    name: 'Fintech',
-    description: 'Precision y confianza',
-    accent_color: '#0F766E',
-    config: {
-      primary: '#0F766E', secondary: '#0C1222', accent: '#CA8A04',
-      success: '#16A34A', error: '#DC2626', warning: '#EA580C', info: '#2563EB',
-      fontHeading: 'IBM Plex Sans', fontBody: 'IBM Plex Sans',
-      fontMono: 'IBM Plex Mono',
-      radiusSm: 4, radiusMd: 6, radiusLg: 8, radiusXl: 10,
-      h1Size: 36, bodySize: 15,
     },
   },
 ];

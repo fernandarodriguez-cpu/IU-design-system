@@ -134,7 +134,7 @@ export function KTreeSelect({
             isSelected ? "bg-khor-primary-light/10 text-khor-primary" : "text-khor-neutral-700 hover:bg-khor-neutral-50",
             node.disabled && "opacity-40 cursor-not-allowed grayscale"
           )}
-          style={{ paddingLeft: `${level * 16 + 8}px` }}
+          style={{ paddingInlineStart: `${level * 16 + 8}px` }}
         >
           <div className="w-5 h-5 flex items-center justify-center shrink-0">
             {hasChildren && (
@@ -153,7 +153,7 @@ export function KTreeSelect({
           
           {treeCheckable && (
             <div className={cn(
-              "w-4 h-4 rounded border flex items-center justify-center mr-1.5 shrink-0 transition-all",
+              "w-4 h-4 rounded border flex items-center justify-center me-1.5 shrink-0 transition-all",
               isSelected ? "bg-khor-primary border-khor-primary" : "bg-white border-khor-neutral-300"
             )}>
               {isSelected && <Check className="w-3 h-3 text-white" />}
@@ -180,7 +180,7 @@ export function KTreeSelect({
           type="button"
           disabled={disabled}
           className={cn(
-            "flex min-h-[40px] w-full items-center justify-between px-3 py-2 border rounded-md shadow-sm transition-all outline-none focus:ring-2 focus:ring-khor-primary-light font-primary bg-khor-surface-page text-left",
+            "flex min-h-[40px] w-full items-center justify-between px-3 py-2 border rounded-md shadow-sm transition-all outline-none focus:ring-2 focus:ring-khor-primary-light font-primary bg-khor-surface-page text-start",
             disabled ? "opacity-50 cursor-not-allowed bg-khor-neutral-100" : "cursor-pointer hover:border-khor-primary",
             className
           )}
@@ -191,7 +191,7 @@ export function KTreeSelect({
               ? `${value.length} seleccionados` 
               : selectedLabel || placeholder}
           </span>
-          <div className="flex items-center gap-1 shrink-0 ml-2">
+          <div className="flex items-center gap-1 shrink-0 ms-2">
             {!disabled && (value && (!Array.isArray(value) || value.length > 0)) && (
               <X 
                 className="w-3.5 h-3.5 text-khor-neutral-400 hover:text-khor-neutral-600 transition-colors" 
@@ -206,14 +206,14 @@ export function KTreeSelect({
       <KPopoverContent align="start" className="w-full min-w-[240px] p-2 border rounded-lg shadow-xl bg-khor-surface-page z-[100] max-h-80 overflow-hidden font-primary flex flex-col">
         {showSearch && (
           <div className="relative mb-2 shrink-0">
-            <Search className="absolute left-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-khor-neutral-400" />
+            <Search className="absolute start-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-khor-neutral-400" />
             <input
               type="text"
               autoFocus
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Filtrar árbol..."
-              className="w-full pl-8 pr-3 py-1.5 text-xs bg-khor-neutral-50 border-none rounded-md outline-none focus:ring-1 focus:ring-khor-primary"
+              className="w-full ps-8 pe-3 py-1.5 text-xs bg-khor-neutral-50 border-none rounded-md outline-none focus:ring-1 focus:ring-khor-primary"
             />
           </div>
         )}

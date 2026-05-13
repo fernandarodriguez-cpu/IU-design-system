@@ -22,14 +22,14 @@ export function KCardSection({ id, title, subtitle, extra, children, className, 
     <div
       id={id}
       className={cn(
-        "flex flex-col overflow-hidden font-primary transition-all duration-300 shadow-khor-sm border",
-        "bg-khor-surface-card border-khor-border-default rounded-[var(--khor-radius-lg)]",
+        "flex flex-col overflow-hidden font-primary transition-all duration-300",
+        "bg-[var(--khor-card-bg)] border-[var(--khor-card-border)] shadow-[var(--khor-card-shadow)] rounded-[var(--khor-card-radius)]",
         (isHovered) && "shadow-khor-md border-khor-primary translate-y-[-2px]",
         className
       )}
     >
       {title && (
-        <div className="flex justify-between items-center px-[var(--khor-density-spacing-lg)] py-[var(--khor-density-spacing-md)] border-b border-khor-border-muted transition-colors">
+        <div className="flex justify-between items-center px-[var(--khor-density-spacing-lg)] py-[var(--khor-density-spacing-md)] border-b border-[var(--khor-card-border)] opacity-95 transition-colors">
           <div>
             <KText variant="body-lg" color="navy" className="font-bold text-khor-text-primary tracking-tight">{title}</KText>
             {subtitle && <KText variant="small" color="secondary" className="text-xs opacity-70">{subtitle}</KText>}

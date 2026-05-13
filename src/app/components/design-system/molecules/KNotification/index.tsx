@@ -57,7 +57,7 @@ export function showKNotification({
         {icons[type]}
       </div>
       
-      <div className="flex-1 flex flex-col gap-1 pr-6">
+      <div className="flex-1 flex flex-col gap-1 pe-6">
         <h4 className="text-sm font-black text-khor-neutral-900 leading-tight tracking-tight uppercase">
           {message}
         </h4>
@@ -70,14 +70,14 @@ export function showKNotification({
 
       <button 
         onClick={() => toast.dismiss(t)} 
-        className="absolute top-4 right-4 p-1 text-khor-neutral-300 hover:text-khor-neutral-900 transition-colors rounded-lg hover:bg-white/50"
+        className="absolute top-4 end-4 p-1 text-khor-neutral-300 hover:text-khor-neutral-900 transition-colors rounded-lg hover:bg-white/50"
       >
         <X className="w-4 h-4" />
       </button>
 
       {/* Decorative colored bar */}
       <div className={cn(
-        "absolute left-0 top-0 bottom-0 w-1",
+        "absolute start-0 top-0 bottom-0 w-1",
         type === 'success' ? "bg-khor-success" :
         type === 'error' ? "bg-khor-error" :
         type === 'warning' ? "bg-khor-warning" : "bg-khor-info"

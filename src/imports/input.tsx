@@ -62,7 +62,7 @@ const inputVariants = cva(
 );
 
 const inputWrapperVariants = cva(
-  "group inline-flex items-center gap-2 border rounded-md transition-all w-full",
+  "group inline-flex items-center gap-2 border rounded-[var(--khor-size-radius-md,6px)] transition-all w-full",
   {
     variants: {
       size: {
@@ -90,12 +90,12 @@ const inputWrapperVariants = cva(
       {
         variant: "outlined",
         status: "default",
-        className: "focus-within:border-ring focus-within:ring-ring/50 focus-within:ring-[3px]",
+        className: "focus-within:border-[var(--khor-focus-ring-color)] focus-within:ring-[var(--khor-focus-ring-width)] focus-within:ring-[var(--khor-focus-ring-color)] focus-within:ring-offset-[var(--khor-focus-ring-offset)]",
       },
       {
         variant: "filled",
         status: "default",
-        className: "focus-within:border-primary focus-within:ring-primary/20 focus-within:ring-[3px]",
+        className: "focus-within:border-primary focus-within:ring-[var(--khor-focus-ring-width)] focus-within:ring-primary/20",
       },
       {
         variant: "borderless",
@@ -229,7 +229,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           data-slot="input"
           className={cn(
             inputVariants({ size, variant }),
-            "flex-1 bg-transparent border-0 px-0 focus:ring-0 focus:outline-none min-w-0",
+            "flex-1 bg-transparent border-0 px-0 focus:ring-0 focus:outline-none min-w-0 leading-[var(--khor-line-height-dynamic,1.5)]",
             className
           )}
           disabled={disabled || loading}

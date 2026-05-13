@@ -67,8 +67,8 @@ export const KCol = React.forwardRef<HTMLDivElement, KColProps>(
     }
 
     if (_khorHorizontalGutter > 0) {
-      columnStyle.paddingLeft = _khorHorizontalGutter / 2;
-      columnStyle.paddingRight = _khorHorizontalGutter / 2;
+      columnStyle.paddingInlineStart = _khorHorizontalGutter / 2;
+      columnStyle.paddingInlineEnd = _khorHorizontalGutter / 2;
     }
 
     return (

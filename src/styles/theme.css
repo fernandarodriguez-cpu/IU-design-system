@@ -5,21 +5,18 @@
   --font-primary: 'Montserrat', sans-serif;
   --font-secondary: 'Plus Jakarta Sans', sans-serif;
 
-  /* ── Khor Semantic Scales ── */
-  --khor-primary: #E04D36;
-  --khor-primary-hover: #e8644f;
-  --khor-primary-active: #c9442f;
-
+  /* ── Brand Aliases — Layer 1 ── */
+  --khor-primary:   #E04D36;
   --khor-secondary: #051758;
-  --khor-secondary-hover: #0a2270;
-  --khor-secondary-active: #030f40;
+  --khor-accent:    #FF9500;
 
   /* Legacy aliases for internal UI compatibility */
   --khor-navy: var(--khor-secondary);
-  --khor-navy-hover: var(--khor-secondary-hover);
-  --khor-navy-active: var(--khor-secondary-active);
+  --khor-navy-hover: #0a2270;
+  --khor-navy-active: #030f40;
+  --khor-primary-hover: #e8644f;
+  --khor-primary-active: #c9442f;
   --khor-primary-light: #FDECEA;
-  --khor-accent: #FF9500;
   --khor-accent-hover: #ffaa33;
   --khor-accent-active: #e68600;
 
@@ -136,12 +133,26 @@
   --khor-shadow-2xl: 0 25px 50px -12px rgba(5,23,88,0.25);
   --khor-shadow-inner: inset 0 2px 4px 0 rgba(0,0,0,0.06);
 
-  /* ── Khor Breakpoints (Myna Scale) ── */
-  --khor-breakpoint-sm: 640px;
-  --khor-breakpoint-md: 768px;
-  --khor-breakpoint-lg: 1024px;
-  --khor-breakpoint-xl: 1280px;
   --khor-breakpoint-2xl: 1536px;
+
+  /* ── Universal Focus-Visible Math (W3C A11y) ── */
+  --khor-focus-ring-width:  2px;
+  --khor-focus-ring-offset: 2px;
+  --khor-focus-ring-color:  var(--khor-primary);
+
+  /* ── Layout Grid Anatomy (Adaptive Math) ── */
+  /* sm: Mobile (0-767px) */
+  --khor-layout-grid-margin-sm: 16px;
+  --khor-layout-grid-gutter-sm: 16px;
+  /* md: Tablet (768-1023px) */
+  --khor-layout-grid-margin-md: 24px;
+  --khor-layout-grid-gutter-md: 24px;
+  /* lg: Desktop (1024-1279px) */
+  --khor-layout-grid-margin-lg: 32px;
+  --khor-layout-grid-gutter-lg: 32px;
+  /* xl: Large Desktop (1280px+) */
+  --khor-layout-grid-margin-xl: 40px;
+  --khor-layout-grid-gutter-xl: 32px;
 
   /* ── Khor Containers ── */
   --khor-container-sm: 640px;
@@ -164,15 +175,14 @@
   --khor-space-20: 80px;
   --khor-space-24: 96px;
 
-  /* ── Khor Radius (Extended) ── */
+  /* ── Khor Radius Scale — Layer 1 (W3C Aligned) ── */
   --khor-radius-none: 0px;
-  --khor-radius-xs: 2px;
-  --khor-radius-sm: 4px;
-  --khor-radius-md: 8px;
-  --khor-radius-lg: 12px;
-  --khor-radius-xl: 16px;
-  --khor-radius-2xl: 24px;
-  --khor-radius-3xl: 32px;
+  --khor-radius-xs:   2px;
+  --khor-radius-sm:   4px;
+  --khor-radius-md:   6px;
+  --khor-radius-lg:   8px;
+  --khor-radius-xl:   10px;
+  --khor-radius-2xl:  12px;
   --khor-radius-full: 9999px;
 
   /* ── Khor Blur Scale (v10.4.5 Premium) ── */
@@ -194,6 +204,11 @@
   --khor-backdrop-blur-xl: var(--khor-blur-xl);
   --khor-backdrop-blur-2xl: var(--khor-blur-2xl);
   --khor-backdrop-blur-3xl: var(--khor-blur-3xl);
+  
+  /* ── Glassmorphism (Premium Tier) ── */
+  --khor-surface-glass: rgba(255, 255, 255, 0.7);
+  --khor-glass-border: rgba(255, 255, 255, 0.4);
+  --khor-glass-blur: var(--khor-blur-md);
 
   /* ── Khor Opacity Scale ── */
   --khor-opacity-0: 0;
@@ -208,6 +223,23 @@
   --khor-opacity-90: 0.9;
   --khor-opacity-100: 1;
 
+  /* ── Universal State Layers (W3C DTCG Standard) ── */
+  /* Capas de interacción que se superponen al color base */
+  --khor-state-layer-hover:   0.08;
+  --khor-state-layer-pressed: 0.12;
+  --khor-state-layer-dragged: 0.16;
+  --khor-state-layer-focus:   0.12;
+
+  /* ── W3C CTI Taxonomy Aliases (Standardization Phase) ── */
+  --khor-color-action-primary-default:   var(--khor-primary);
+  --khor-color-action-secondary-default: var(--khor-secondary);
+  --khor-color-action-accent-default:    var(--khor-accent);
+  --khor-size-radius-md:                 var(--khor-radius-md);
+  --khor-size-radius-lg:                 var(--khor-radius-lg);
+  --khor-size-radius-full:               var(--khor-radius-full);
+  --khor-duration-motion-standard:       var(--khor-duration-normal);
+  --khor-easing-motion-standard:         var(--khor-easing-standard);
+
   /* ── Khor Rotation Scale ── */
   --khor-rotate-0: 0deg;
   --khor-rotate-45: 45deg;
@@ -215,17 +247,32 @@
   --khor-rotate-180: 180deg;
   --khor-rotate-270: 270deg;
 
-  /* ── Motion & Easing (v5.0.0-alpha Standard) ── */
-  --khor-duration-instant: 75ms;
-  --khor-duration-fast: 150ms;
-  --khor-duration-normal: 250ms;
-  --khor-duration-slow: 450ms;
-  --khor-duration-slower: 700ms;
-  --khor-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
-  --khor-easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
-  --khor-easing-decelerate: cubic-bezier(0, 0, 0.2, 1);
-  --khor-easing-accelerate: cubic-bezier(0.4, 0, 1, 1);
-  --khor-easing-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  /* ── Motion Choreography — Layer 1 ── */
+  --khor-duration-instant:         50ms;
+  --khor-duration-fast:            100ms;
+  --khor-duration-normal:          200ms;
+  --khor-duration-slow:            300ms;
+  --khor-duration-slower:          500ms;
+  --khor-duration-entrance:        250ms;
+  --khor-duration-exit:            200ms;
+
+  --khor-easing-standard:          cubic-bezier(0.4, 0, 0.2, 1);
+  --khor-easing-decelerate:        cubic-bezier(0, 0, 0.2, 1);
+  --khor-easing-accelerate:        cubic-bezier(0.4, 0, 1, 1);
+  --khor-easing-spring:            cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --khor-easing-bounce:            cubic-bezier(0.34, 1.56, 0.64, 1);
+  --khor-easing-smooth:            cubic-bezier(0.45, 0, 0.55, 1);
+  --khor-easing-emphasized:        cubic-bezier(0.2, 0, 0, 1);
+
+  /* Motion Recipes (Ghost Fix) */
+  --khor-transition-fade:          opacity var(--khor-duration-entrance) var(--khor-easing-decelerate);
+  --khor-transition-color:         color var(--khor-duration-fast) var(--khor-easing-standard), background-color var(--khor-duration-fast) var(--khor-easing-standard), border-color var(--khor-duration-fast) var(--khor-easing-standard);
+  --khor-transition-scale:         transform var(--khor-duration-fast) var(--khor-easing-spring);
+  --khor-transition-slide:         transform var(--khor-duration-entrance) var(--khor-easing-decelerate), opacity var(--khor-duration-entrance) var(--khor-easing-decelerate);
+  --khor-transition-all:           all var(--khor-duration-normal) var(--khor-easing-standard);
+
+  /* ── i18n & RTL Scaling ── */
+  --khor-line-height-dynamic:      1.5;
 
   /* Elite SaaS Architecture Icons */
   --khor-icon-xs: 12px;
@@ -557,6 +604,43 @@
   --khor-space-layout-lg:    var(--khor-space-12);
   --khor-space-layout-xl:    var(--khor-space-16);
 
+  /* ── Component Layer 3: KButton Elite ── */
+  --khor-button-primary-bg:        var(--khor-action-primary-default);
+  --khor-button-primary-text:      var(--khor-text-on-action);
+  --khor-button-primary-border:    transparent;
+  --khor-button-primary-shadow:    var(--khor-shadow-sm);
+  --khor-button-secondary-bg:      var(--khor-action-secondary-default);
+  --khor-button-secondary-text:    var(--khor-text-on-action);
+  --khor-button-ghost-hover:       var(--khor-action-ghost-hover);
+  --khor-button-radius:            var(--khor-radius-md);
+
+  /* ── Component Layer 3: KInput Elite ── */
+  --khor-input-bg:                 var(--khor-surface-card);
+  --khor-input-text:               var(--khor-text-primary);
+  --khor-input-border:             var(--khor-border-default);
+  --khor-input-placeholder:        var(--khor-text-muted);
+  --khor-input-focus-border:       var(--khor-border-focus);
+  --khor-input-focus-ring:         var(--khor-primary);
+  --khor-input-radius:             var(--khor-radius-md);
+
+  /* ── Component Layer 3: KCard Elite ── */
+  --khor-card-bg:                  var(--khor-surface-card);
+  --khor-card-border:              var(--khor-border-default);
+  --khor-card-shadow:              var(--khor-elevation-2);
+  --khor-card-radius:              var(--khor-radius-lg);
+
+  /* ── Fluid Typography — Khor v5.0 (W3C Standard) ── */
+  --khor-type-display-2xl: clamp(3rem, 5vw + 1rem, 4.5rem);    /* 48px → 72px */
+  --khor-type-display-xl:  clamp(2.5rem, 4vw + 0.8rem, 3.75rem); /* 40px → 60px */
+  --khor-type-heading-lg:  clamp(1.5rem, 2.5vw + 0.5rem, 3rem);  /* 24px → 48px */
+  --khor-type-heading-md:  clamp(1.25rem, 2vw + 0.4rem, 2rem);   /* 20px → 32px */
+  --khor-type-heading-sm:  clamp(1.125rem, 1.5vw + 0.3rem, 1.5rem); /* 18px → 24px */
+  --khor-type-heading-xs:  clamp(1rem, 1.2vw + 0.25rem, 1.25rem); /* 16px → 20px */
+  --khor-type-body-xl: clamp(1.125rem, 1.2vw + 0.2rem, 1.375rem); /* 18px → 22px */
+  --khor-type-body-lg: clamp(1rem, 0.8vw + 0.15rem, 1.125rem);    /* 16px → 18px */
+  --khor-type-body-md: 1rem;    /* 16px — fijo */
+  --khor-type-body-sm: 0.875rem; /* 14px — fijo */
+
   /* ── Mapped Tokens (Tailwind Compat) ── */
   --background: var(--khor-surface-page);
   --foreground: var(--khor-text-primary);
@@ -660,6 +744,14 @@
   --khor-grid-cell-border:  var(--khor-neutral-300);
   --khor-grid-row-hover:    rgba(255, 255, 255, 0.04);
   --khor-grid-row-selected: rgba(224, 77, 54, 0.2);
+
+  /* ── Component Layer 3: Dark Overrides ── */
+  --khor-button-primary-bg:        var(--khor-primary);
+  --khor-button-primary-text:      #FFFFFF;
+  --khor-input-bg:                 var(--khor-neutral-200);
+  --khor-input-border:             var(--khor-neutral-300);
+  --khor-card-bg:                  var(--khor-neutral-100);
+  --khor-card-border:              var(--khor-neutral-200);
 
   --khor-avatar-bg: #0A2270;
   --khor-avatar-fg: #FFFFFF;
@@ -989,4 +1081,26 @@
     @apply bg-background text-foreground;
     font-family: var(--font-primary);
   }
+}
+/* ── Internationalization (RTL) Active States ── */
+:lang(ar),
+:lang(he),
+[dir="rtl"] {
+  --khor-line-height-dynamic: 1.8; /* +20% para scripts RTL densos */
+}
+
+/* ── Elite Utilities ── */
+.khor-glass {
+  background: var(--khor-surface-glass);
+  backdrop-filter: blur(var(--khor-glass-blur));
+  -webkit-backdrop-filter: blur(var(--khor-glass-blur));
+  border: 1px solid var(--khor-glass-border);
+  box-shadow: var(--khor-shadow-sm);
+}
+
+.dark .khor-glass {
+  background: rgba(15, 26, 53, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(var(--khor-glass-blur));
+  -webkit-backdrop-filter: blur(var(--khor-glass-blur));
 }

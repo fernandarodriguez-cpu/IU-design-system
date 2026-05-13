@@ -124,7 +124,7 @@ export function KSteps({
 
               {/* Contenido */}
               <div className={cn(
-                "flex flex-col min-w-0 pr-4",
+                "flex flex-col min-w-0 pe-4",
                 direction === 'vertical' ? "pb-8" : (isVerticalLabel ? "pt-4 px-2 items-center" : "pt-1")
               )}>
                 <h4 className={cn(

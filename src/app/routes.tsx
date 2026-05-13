@@ -14,6 +14,9 @@ const FigmaExportPage = lazy(() => import('./pages/FigmaExportPage').then(m => (
 const AIExportPage = lazy(() => import('./pages/AIExportPage').then(m => ({ default: m.AIExportPage })));
 const PatternsPage = lazy(() => import('./pages/PatternsPage').then(m => ({ default: m.PatternsPage })));
 const ThemingPage = lazy(() => import('./pages/ThemingPage').then(m => ({ default: m.ThemingPage })));
+const InspirationPage = lazy(() => import('./pages/InspirationPage').then(m => ({ default: m.InspirationPage })));
+const GanttShowcase = lazy(() => import('./pages/GanttShowcase').then(m => ({ default: m.GanttShowcase })));
+const KEditorShowcase = lazy(() => import('./pages/KEditorShowcase').then(m => ({ default: m.KEditorShowcase })));
 const ErrorPage = lazy(() => import('./pages/ErrorPage').then(m => ({ default: m.ErrorPage })));
 const IconExplorerPage = lazy(() => import('./pages/IconExplorerPage').then(m => ({ default: m.IconExplorerPage })));
 
@@ -99,6 +102,22 @@ export const router = createBrowserRouter([
         ) 
       },
       { 
+        path: 'organisms/gantt', 
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <GanttShowcase />
+          </Suspense>
+        ) 
+      },
+      { 
+        path: 'organisms/editor', 
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <KEditorShowcase />
+          </Suspense>
+        ) 
+      },
+      { 
         path: 'guardian', 
         element: (
           <Suspense fallback={<PageLoader />}>
@@ -127,6 +146,14 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<PageLoader />}>
             <AIExportPage />
+          </Suspense>
+        ) 
+      },
+      { 
+        path: 'inspiration', 
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <InspirationPage />
           </Suspense>
         ) 
       },

@@ -96,8 +96,9 @@ const ShadowLayerInfo = ({ layer, x, y, blur, spread, color, opacity, inset }: {
       <span className="bg-white dark:bg-khor-neutral-800 px-1.5 py-0.5 rounded border border-khor-border-muted">Y: <span className="text-khor-secondary dark:text-white font-bold">{y}</span></span>
       <span className="bg-white dark:bg-khor-neutral-800 px-1.5 py-0.5 rounded border border-khor-border-muted">Blur: <span className="text-khor-secondary dark:text-white font-bold">{blur}</span></span>
       <span className="bg-white dark:bg-khor-neutral-800 px-1.5 py-0.5 rounded border border-khor-border-muted">Spread: <span className="text-khor-secondary dark:text-white font-bold">{spread || 0}</span></span>
+      <span className="bg-white dark:bg-khor-neutral-800 px-1.5 py-0.5 rounded border border-khor-border-muted">Color: <span className="text-khor-secondary dark:text-white font-bold uppercase">{color}</span></span>
       <span className="bg-white dark:bg-khor-neutral-800 px-1.5 py-0.5 rounded border border-khor-border-muted">Opacity: <span className="text-khor-primary font-bold">{opacity}</span></span>
-      {inset && <KTag size="xxs" color="info" label="INSET" className="text-[8px] h-4" />}
+      {inset && <KTag color="info" className="text-[8px] h-4">INSET</KTag>}
     </div>
   </div>
 );
@@ -247,7 +248,7 @@ export function TokensPage() {
             <div className="p-8">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
                 <div className="khor-compact p-6 bg-khor-neutral-50 dark:bg-khor-neutral-800 rounded-2xl border border-khor-border-muted relative">
-                  <KTag label="COMPACT" size="xxs" color="primary" className="absolute -top-3 right-4" />
+                  <KTag color="primary" className="absolute -top-3 right-4">COMPACT</KTag>
                   <p className="text-xs text-khor-slate-500 mb-4">Para dashboards y alta densidad de datos.</p>
                   <div className="flex items-center gap-[var(--khor-density-spacing-sm)]">
                     <div className="h-[var(--khor-density-height-md)] w-24 bg-khor-primary rounded flex items-center justify-center text-[10px] text-white font-bold">Botón</div>
@@ -255,7 +256,7 @@ export function TokensPage() {
                   </div>
                 </div>
                 <div className="khor-comfortable p-6 bg-khor-neutral-50 dark:bg-khor-neutral-800 rounded-2xl border border-khor-border-muted relative">
-                  <KTag label="COMFORTABLE" size="xxs" color="info" className="absolute -top-3 right-4" />
+                  <KTag color="info" className="absolute -top-3 right-4">COMFORTABLE</KTag>
                   <p className="text-xs text-khor-slate-500 mb-4">Para formularios de onboarding y landing pages.</p>
                   <div className="flex items-center gap-[var(--khor-density-spacing-sm)]">
                     <div className="h-[var(--khor-density-height-md)] w-24 bg-khor-primary rounded flex items-center justify-center text-[10px] text-white font-bold">Botón</div>
@@ -332,7 +333,7 @@ export function TokensPage() {
                 </div>
                 <div className="space-y-6">
                    <div>
-                     <KText variant="display1" className="block truncate">Display 1 Fluid</KText>
+                     <KText variant="display-1" className="block truncate">Display 1 Fluid</KText>
                      <code className="text-[10px] text-khor-slate-400 mt-2 block">--khor-font-size-display-1: clamp(2.5rem, 5vw + 1rem, 4.5rem)</code>
                    </div>
                    <div>
@@ -430,6 +431,66 @@ export function TokensPage() {
                   { x: 0, y: 10, blur: 10, spread: -5, opacity: "4%", color: "#000000" }
                 ]} 
               />
+              <ShadowDetailCard 
+                name="Shadow 2XL" 
+                variable="--khor-shadow-2xl" 
+                layers={[
+                  { x: 0, y: 25, blur: 50, spread: -12, opacity: "25%", color: "#051758" }
+                ]} 
+              />
+              <ShadowDetailCard 
+                name="Shadow Inner" 
+                variable="--khor-shadow-inner" 
+                layers={[
+                  { x: 0, y: 2, blur: 4, spread: 0, opacity: "6%", color: "#000000", inset: true }
+                ]} 
+              />
+            </div>
+          </TokenSection>
+
+          <TokenSection 
+            id="layout" 
+            icon={Grid3X3} 
+            title="Layout Guidelines" 
+            description="Grillas de columnas consistentes para el diseño responsivo en múltiples dispositivos."
+          >
+            <div className="p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {[
+                  { name: 'Sm', cols: 12, gutter: 16, margin: 16, icon: Smartphone },
+                  { name: 'Md', cols: 12, gutter: 24, margin: 24, icon: Tablet },
+                  { name: 'Lg', cols: 12, gutter: 32, margin: 32, icon: Monitor },
+                  { name: 'Xl', cols: 12, gutter: 32, margin: 40, icon: Monitor },
+                ].map((spec) => (
+                  <div key={spec.name} className="p-5 bg-white/50 dark:bg-khor-surface-card rounded-2xl border border-khor-border-muted hover:shadow-md transition-all group">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="p-2 bg-khor-primary/10 text-khor-primary rounded-lg group-hover:scale-110 transition-transform">
+                        <spec.icon size={20} />
+                      </div>
+                      <span className="text-xs font-bold text-khor-secondary dark:text-white uppercase px-2 py-1 bg-khor-neutral-100 dark:bg-khor-neutral-800 rounded-md">{spec.name}</span>
+                    </div>
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-center text-xs">
+                        <span className="text-khor-slate-400 font-medium">Columnas</span>
+                        <span className="text-khor-secondary dark:text-white font-bold">{spec.cols}</span>
+                      </div>
+                      <div className="flex justify-between items-center text-xs">
+                        <span className="text-khor-slate-400 font-medium">Gutter</span>
+                        <span className="text-khor-secondary dark:text-white font-bold">{spec.gutter}px</span>
+                      </div>
+                      <div className="flex justify-between items-center text-xs">
+                        <span className="text-khor-slate-400 font-medium">Margin (Offset)</span>
+                        <span className="text-khor-secondary dark:text-white font-bold">{spec.margin}px</span>
+                      </div>
+                    </div>
+                    <div className="mt-4 pt-4 border-t border-khor-border-muted/50 flex gap-1 h-6">
+                      {Array.from({ length: 6 }).map((_, i) => (
+                        <div key={i} className="flex-1 bg-khor-primary/10 rounded-sm" />
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </TokenSection>
 

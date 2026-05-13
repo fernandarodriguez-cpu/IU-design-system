@@ -10,10 +10,10 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary: 'bg-khor-action-primary text-khor-text-on-action hover:bg-khor-action-primary-hover active:bg-khor-action-primary-active hover:shadow-khor-md after:absolute after:inset-x-0 after:top-0 after:h-px after:bg-white/20 after:pointer-events-none',
-        secondary: 'bg-khor-secondary text-khor-text-on-action hover:bg-khor-secondary-hover active:bg-khor-action-secondary-active hover:shadow-khor-md after:absolute after:inset-x-0 after:top-0 after:h-px after:bg-white/20 after:pointer-events-none',
+        primary: 'bg-[var(--khor-button-primary-bg)] text-[var(--khor-button-primary-text)] hover:opacity-90 active:scale-[0.98] hover:shadow-[var(--khor-button-primary-shadow)] border-[var(--khor-button-primary-border)] transition-all rounded-[var(--khor-button-radius)] after:absolute after:inset-x-0 after:top-0 after:h-px after:bg-white/20 after:pointer-events-none',
+        secondary: 'bg-[var(--khor-button-secondary-bg)] text-[var(--khor-button-secondary-text)] hover:opacity-90 active:scale-[0.98] transition-all rounded-[var(--khor-button-radius)] after:absolute after:inset-x-0 after:top-0 after:h-px after:bg-white/20 after:pointer-events-none',
         outline: 'border-khor-border-strong bg-transparent text-khor-text-primary hover:bg-khor-surface-hover active:bg-khor-surface-pressed hover:border-khor-border-hover shadow-none',
-        ghost: 'bg-transparent text-khor-text-primary hover:bg-khor-action-ghost-hover active:bg-khor-surface-pressed shadow-none',
+        ghost: 'bg-transparent text-khor-text-primary hover:bg-[var(--khor-button-ghost-hover)] active:bg-khor-surface-pressed shadow-none',
         danger: 'bg-khor-action-danger text-khor-text-on-action hover:bg-khor-action-danger-hover active:bg-khor-action-danger-active hover:shadow-khor-md after:absolute after:inset-x-0 after:top-0 after:h-px after:bg-white/20',
         link: 'bg-transparent text-khor-action-primary underline-offset-4 hover:underline !p-0 !min-h-0 !h-auto border-none shadow-none active:scale-100',
         text: 'bg-transparent text-khor-text-primary hover:bg-khor-action-ghost-hover active:bg-khor-surface-pressed border-none shadow-none',

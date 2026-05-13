@@ -100,7 +100,7 @@ export function KInputNumber({
         step={step}
         placeholder={placeholder}
         className={cn(
-          "w-full bg-khor-surface-page border border-khor-neutral-200 rounded-md outline-none transition-all pr-12 focus:border-khor-primary focus:ring-2 focus:ring-khor-primary-light font-semibold",
+          "w-full bg-khor-surface-page border border-khor-neutral-200 rounded-md outline-none transition-all pe-12 focus:border-khor-primary focus:ring-2 focus:ring-khor-primary-light font-semibold",
           disabled && "bg-khor-neutral-100 cursor-not-allowed opacity-60",
           sizeClasses[size]
         )}
@@ -108,7 +108,7 @@ export function KInputNumber({
       
       {/* Controles laterales */}
       {!readOnly && !disabled && (
-        <div className="absolute right-[1px] h-[calc(100%-2px)] flex flex-col border-l border-khor-neutral-200 rounded-r-md overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="absolute end-[1px] h-[calc(100%-2px)] flex flex-col border-is border-khor-neutral-200 rounded-e-md overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity">
           <button
             type="button"
             onClick={onIncrement}

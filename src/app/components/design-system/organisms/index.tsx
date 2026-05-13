@@ -25,3 +25,5 @@ export { default as KNotification } from './KNotification';
 export { default as KMessage } from './KMessage';
 export { default as kMessage } from './KMessage';
 export { kToast, KToastProvider } from './KToast';
+export * from './KGantt';
+export * from './KEditor';

@@ -26,7 +26,7 @@ import { khorTokens } from '../theme/khor-theme';
 const t = khorTokens;
 
 /* ─── Version (must match ChangelogPage & AppShell) ─── */
-export const KHOR_VERSION = '5.0.0-alpha';
+export const KHOR_VERSION = '5.1.3-alpha';
 
 
 /* ─── Sections config ───────────────────────── */
@@ -145,41 +145,35 @@ La IA DEBE usar estos valores exactos:
   --khor-surface-selected: ${theme.primary}15; --khor-surface-subtle: #F4F6F8;
   --khor-surface-overlay: #ffffff; --khor-overlay-bg: rgba(255, 255, 255, 0.95);
 
-  /* Layer 3: Contextual Tokens — secciones invertidas */
-  --khor-context-sidebar-bg:        var(--khor-navy);
-  --khor-context-sidebar-text:      var(--khor-neutral-50);
-  --khor-context-sidebar-text-muted:rgba(255, 255, 255, 0.55);
-  --khor-context-sidebar-border:    rgba(255, 255, 255, 0.08);
-  --khor-context-sidebar-hover:     rgba(255, 255, 255, 0.10);
-  --khor-context-sidebar-active:    rgba(255, 255, 255, 0.15);
-  --khor-context-header-bg:         var(--khor-surface-card);
-  --khor-context-header-border:     var(--khor-border-default);
-
   /* Semantic Layer 2: Borders */
   --khor-border-default: #D5DBE0; --khor-border-muted: #EDF0F1;
   --khor-border-strong: #A0AEC0; --khor-border-focus: ${theme.primary};
   --khor-border-error: ${theme.error}; --khor-border-disabled: #EDF0F1;
-  --khor-focus-ring-color: ${theme.primary}; --khor-focus-ring-width: 2px;
-  --khor-focus-ring-offset: 2px; --khor-focus-ring-style: solid;
 
   /* Semantic Layer 2: Typography */
   --khor-text-primary: ${theme.secondary}; --khor-text-secondary: #475a8f;
   --khor-text-muted: #94a9d8; --khor-text-disabled: #A0AEC0; --khor-text-on-action: #ffffff;
 
-  /* Motion Tokens (v4.3) */
+  /* Motion Tokens (Elite Precision) */
   --khor-duration-instant: 80ms; --khor-duration-fast: 100ms;
   --khor-duration-normal: 200ms; --khor-duration-slow: 400ms;
   --khor-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
   --khor-easing-enter: cubic-bezier(0, 0, 0.2, 1);
   --khor-easing-exit: cubic-bezier(0.4, 0, 1, 1);
 
-  /* Elevation Tokens (Semantic Level 0-5) */
-  --khor-elevation-0: none;
-  --khor-elevation-1: 0 1px 3px rgba(5, 23, 88, 0.06), 0 1px 2px rgba(5, 23, 88, 0.04);
-  --khor-elevation-2: 0 4px 12px rgba(5, 23, 88, 0.08), 0 2px 4px rgba(5, 23, 88, 0.05);
-  --khor-elevation-3: 0 8px 24px rgba(5, 23, 88, 0.10), 0 4px 8px rgba(5, 23, 88, 0.06);
-  --khor-elevation-4: 0 16px 48px rgba(5, 23, 88, 0.14), 0 8px 16px rgba(5, 23, 88, 0.08);
-  --khor-elevation-5: 0 24px 64px rgba(5, 23, 88, 0.18), 0 12px 24px rgba(5, 23, 88, 0.10);
+  /* Elevation & Shadows (Multi-Layer Strategy) */
+  --khor-shadow-sm: 0 1px 2px rgba(5,23,88,0.04), 0 1px 1px rgba(0,0,0,0.02);
+  --khor-shadow-md: 0 4px 6px -1px rgba(5,23,88,0.08), 0 2px 4px -1px rgba(0,0,0,0.04);
+  --khor-shadow-lg: 0 10px 15px -3px rgba(5,23,88,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+  --khor-shadow-xl: 0 20px 25px -5px rgba(5,23,88,0.12), 0 10px 10px -5px rgba(0,0,0,0.04);
+  --khor-shadow-2xl: 0 25px 50px -12px rgba(5,23,88,0.25);
+  --khor-shadow-inner: inset 0 2px 4px 0 rgba(0,0,0,0.06);
+
+  /* Layout Grid System (12 Columns) */
+  --khor-grid-sm: cols: 12, gutter: 16px, margin: 16px;
+  --khor-grid-md: cols: 12, gutter: 24px, margin: 24px;
+  --khor-grid-lg: cols: 12, gutter: 32px, margin: 32px;
+  --khor-grid-xl: cols: 12, gutter: 32px, margin: 40px;
 
   /* Semantic Spacing Tokens (Aliases) */
   --khor-space-layout-xs: 16px; --khor-space-layout-sm: 24px;
@@ -187,6 +181,46 @@ La IA DEBE usar estos valores exactos:
   --khor-space-layout-xl: 64px;
   --khor-space-component-xs: 4px; --khor-space-component-sm: 8px;
   --khor-space-component-md: 12px; --khor-space-component-lg: 16px;
+
+  /* 💎 Layer 3: Component Specific Tokens (Elite Precision) */
+  --khor-button-primary-bg:        var(--khor-action-primary-default);
+  --khor-button-primary-text:      var(--khor-text-on-action);
+  --khor-button-primary-shadow:    0 2px 4px rgba(224, 77, 54, 0.2);
+  --khor-button-secondary-bg:      var(--khor-action-secondary-default);
+  --khor-button-secondary-text:    var(--khor-text-on-action);
+  --khor-input-bg:                 var(--khor-surface-card);
+  --khor-input-border:             var(--khor-border-default);
+  --khor-input-focus-border:       var(--khor-border-focus);
+  --khor-input-focus-ring:         var(--khor-primary);
+  --khor-card-bg:                  var(--khor-surface-card);
+  --khor-card-shadow:              var(--khor-elevation-2);
+  --khor-card-radius:              var(--khor-radius-lg);
+
+  /* Layer 3: Contextual Tokens — Secciones Invertidas (Layout Core) */
+  --khor-context-sidebar-bg:        var(--khor-secondary);
+  --khor-context-sidebar-text:      var(--khor-neutral-50);
+  --khor-context-sidebar-text-muted:rgba(255, 255, 255, 0.55);
+  --khor-context-sidebar-border:    rgba(255, 255, 255, 0.08);
+  --khor-context-sidebar-hover:     rgba(255, 255, 255, 0.10);
+  --khor-context-sidebar-active:    rgba(255, 255, 255, 0.15);
+  --khor-context-header-bg:         var(--khor-surface-card);
+  --khor-context-header-border:     var(--khor-border-default);
+  --khor-context-header-text:       var(--khor-text-primary);
+}
+\`\`\`
+
+### 🌑 Dual-Theme Semantic Mapping (Dark Mode Strategy)
+La IA debe invertir los valores semánticos siguiendo este mapeo de "Inversión Inteligente":
+
+| Semantic Token | Light Value (Default) | Dark Value (Adaptive) | Intent |
+|----------------|----------------------|-----------------------|--------|
+| \`--khor-surface-page\` | \`#F8FAFF\` | \`#0F111A\` | Canvas base |
+| \`--khor-surface-card\` | \`#FFFFFF\` | \`#1A1B2E\` | Contenedores |
+| \`--khor-text-primary\` | \`#051758\` | \`#E8EAF0\` | Lectura principal |
+| \`--khor-text-secondary\` | \`#475A8F\` | \`#B0B4C8\` | Texto de apoyo |
+| \`--khor-border-default\` | \`#D5DBE0\` | \`#2E3148\` | Separadores sutiles |
+| \`--khor-surface-hover\` | \`rgba(5,23,88,0.04)\` | \`rgba(255,255,255,0.05)\` | Feedback interactivo |
+
 }
 \`\`\`
 
@@ -239,15 +273,42 @@ La IA debe aplicar estas clases al contenedor raíz para heredar el modelo de ca
 }
 \`\`\`
 
-### 🎨 Detalle Analítico de Tokens Elite (Layer 2)
+### 🌍 Internacionalización (i18n & RTL)
+Khor v5.0 está preparado para mercados globales. La IA debe seguir estas reglas:
+1. **Lógica Direccional:** NUNCA uses \`padding-left\` o \`right\`. Usa SIEMPRE propiedades lógicas: \`padding-inline-start\`, \`margin-inline-end\`.
+2. **Iconografía Espejada:** Iconos de navegación (flechas) DEBEN espejarse en RTL usando \`transform: scaleX(-1)\` si no hay una variante nativa.
+3. **Tipografía:** Para scripts árabes/hebreos, el sistema debe aumentar el \`line-height\` en un 20% automáticamente mediante el token \`--khor-line-height-dynamic\`.
 
-| Categoría | Token | Uso |
-|-----------|-------|-----|
-| **Surface** | \`surface-page\` | Fondo principal de la aplicación |
-| **Surface** | \`surface-card\` | Fondo de contenedores y secciones |
-| **Action** | \`action-primary\` | Botones principales y CTAs |
-| **Action** | \`action-primary-hover\` | Estado hover de botones principales |
-| **Border** | \`border-focus\` | Anillo de accesibilidad (Focus Ring) |
+### 🛡️ Seguridad y Robustez de Datos
+1. **Sanitización Obligatoria:** NUNCA uses \`dangerouslySetInnerHTML\` con datos provenientes de props sin pasar por una capa de sanitización (ej. DOMPurify).
+2. **Escape de Atributos:** Todo \`title\` o \`aria-label\` dinámico debe ser escapado para prevenir inyecciones de strings maliciosos.
+3. **Validación de Tipos:** Usa TypeScript estricto para asegurar que las props de color o URL coincidan con los patrones permitidos por el sistema.
+
+### 📐 Guías de Uso (Do & Don't)
+- **Do:** Usa \`KStatCard\` solo para métricas numéricas con tendencia.
+- **Don't:** No uses \`KButton\` primary para acciones secundarias (ej. "Cancelar").
+- **Do:** Mantén una jerarquía de encabezados (\`h1\` -> \`h2\` -> \`h3\`) sin saltarte niveles.
+- **Don't:** No hardcodees anchos (\`width: 200px\`). Usa el sistema de grid o tokens de espaciado.
+
+### 🏛️ Gobernanza y Evolución (Elite Operations)
+Para asegurar la estabilidad en la era de la IA, Khor sigue un contrato estricto:
+
+1. **Versionado SemVer 2.0.0:**
+   - **MAJOR (x.0.0):** Cambios que rompen la API o eliminan tokens/componentes.
+   - **MINOR (0.x.0):** Nuevos componentes, props opcionales o nuevos tokens.
+   - **PATCH (0.0.x):** Bugfixes estéticos o técnicos que no alteran la API.
+
+2. **Ciclo de Vida del Componente:**
+   - 🧪 **Experimental:** En desarrollo, API sujeta a cambios diarios.
+   - ✅ **Stable:** Listos para producción, API garantizada.
+   - ⚠️ **Deprecated:** En fase de retiro. La IA debe evitar su uso y sugerir el reemplazo documentado.
+
+3. **Política de Deprecación:**
+   Todo elemento deprecado se mantendrá durante un ciclo de **2 versiones menores** antes de su eliminación total en la siguiente versión mayor.
+
+4. **Contrato para Agentes de IA:**
+   Cuando la IA detecta que falta un patrón o componente, NO DEBE inventar estilos. Debe proponer una extensión del sistema basada en los **Design Tokens de Capa 1 y 2** existentes para mantener la coherencia del ADN visual.
+
 | **Border** | \`border-error\` | Bordes de validación fallida |
 
 ### ♿ Tabla de Contraste WCAG 2.1 (Pares Certificados)
@@ -304,10 +365,249 @@ El sistema sigue estándares estrictos para mantener la paridad IA/Humanos.
 - **Motion:** \`standard: cubic-bezier(0.4, 0, 0.2, 1)\`, \`spring: cubic-bezier(0.175, 0.885, 0.32, 1.275)\`.
 - **Reduced Motion:** El sistema respeta \`prefers-reduced-motion\` globalmente.
 
+### 🌍 Internacionalización (i18n) — RTL Native Support
+Khor usa **CSS Logical Properties** en todos sus componentes, garantizando que la UI se espeje automáticamente en idiomas RTL (árabe, hebreo) sin cambios de código.
+
+**Reglas para la IA:**
+1. **NUNCA** uses \`margin-left\`, \`padding-right\`, \`text-align: left\`, \`border-left\`, \`left:\` o \`right:\` en estilos inline o Tailwind.
+2. **SIEMPRE** usa sus equivalentes lógicos:
+   | Físico (❌ Prohibido) | Lógico (✅ Obligatorio) | Tailwind |
+   |----------------------|----------------------|----------|
+   | \`margin-left\` | \`margin-inline-start\` | \`ms-*\` |
+   | \`margin-right\` | \`margin-inline-end\` | \`me-*\` |
+   | \`padding-left\` | \`padding-inline-start\` | \`ps-*\` |
+   | \`padding-right\` | \`padding-inline-end\` | \`pe-*\` |
+   | \`left:\` | \`inset-inline-start\` | \`start-*\` |
+   | \`right:\` | \`inset-inline-end\` | \`end-*\` |
+   | \`border-left\` | \`border-inline-start\` | \`border-is\` |
+   | \`border-right\` | \`border-inline-end\` | \`border-ie\` |
+   | \`text-align: left\` | \`text-align: start\` | \`text-start\` |
+   | \`text-align: right\` | \`text-align: end\` | \`text-end\` |
+3. **Grid offsets** usan \`margin-inline-start\` en \`layout.css\`.
+4. Para activar RTL, añade \`dir="rtl"\` al elemento \`<html>\`. Khor se adapta automáticamente.
+
+### ✍️ UX Writing & Content Strategy — Voice & Tone
+Un sistema de diseño no es solo código; es cómo se comunica. Khor define una voz **Directa, Empática y Técnica**.
+
+**Reglas de Capitalización:**
+- **Sentence case (✅):** "Añadir nuevo usuario", "Guardar cambios". Se usa en TODO el sistema (botones, títulos, labels).
+- **Title Case (❌):** "Añadir Nuevo Usuario". PROHIBIDO.
+- **ALL CAPS (❌):** "GUARDAR". Solo se permite en badges muy específicos o elementos decorativos menores.
+
+**Mensajes de Error (Contrato de redacción):**
+La IA debe generar errores siguiendo esta estructura:
+1. **¿Qué pasó?** (Sin jerga técnica: "No se pudo conectar" vs "Error 500").
+2. **¿Por qué pasó?** (Si es útil: "Tu sesión ha expirado").
+3. **¿Cómo solucionarlo?** (Acción clara: "Inicia sesión de nuevo").
+
+**Empty States:**
+Deben incluir un título claro, una ilustración (o icono \`KIcon\`) y una **acción primaria** para resolver el vacío.
+
+**Formatos Universales:**
+- **Fechas:** \`DD/MM/YYYY\` (o relativo: "hace 2 horas").
+- **Números:** Separador de miles por espacio o punto según locale, coma para decimales.
+- **Moneda:** Símbolo a la izquierda (\`$ 1.200,50\`).
+
+### 🖱️ Interaction States & Accessibility
+Khor utiliza un sistema de estados universales basado en capas semánticas.
+
+**Focus-Visible Math (W3C A11y):**
+- **Anillo:** \`var(--khor-focus-ring-width)\` (2px).
+- **Offset:** \`var(--khor-focus-ring-offset)\` (2px).
+- **Activación:** Solo debe activarse mediante teclado (clase \`focus-visible\`).
+- **Color:** El color del anillo debe contrastar con el fondo. Por defecto es \`var(--khor-primary)\`.
+
+**State Layers (Opacity Multipliers):**
+La IA debe aplicar overlays de opacidad sobre el color base:
+- **Hover:** \`8%\` overlay.
+- **Pressed:** \`12%\` overlay.
+- **Dragged:** \`16%\` overlay.
+
+### 📱 Adaptive Layout & Grid Grammar
+La UI debe mutar físicamente entre breakpoints para optimizar la ergonomía.
+
+**Matemática de la Grilla:**
+| Breakpoint | Margen | Gutter | Comportamiento |
+|------------|--------|--------|----------------|
+| **sm (Mobile)** | 16px | 16px | Edge-to-Edge activo |
+| **md (Tablet)** | 24px | 24px | Contenido centrado |
+| **lg+ (Desktop)** | 32px | 32px | Layout estructurado |
+
+**Adaptive Component Mutation:**
+- **Modales (Desktop):** Se centran en pantalla con overlay.
+- **Modales (Mobile):** Mutan a **Bottom Sheets** (deslizan desde abajo, ocupan el ancho completo).
+- **Tabs (Desktop):** Fila horizontal.
+- **Tabs (Mobile):** Mutan a **Dropdown Select** o scroll horizontal si son pocos items.
+- **Tablas (Mobile):** Mutan a **KCard list** si el ancho no permite visualizar 3 columnas críticas.
+
+### 🖥️ SSR & Framework Readiness (Next.js / Remix / Astro)
+Khor está diseñado para ser compatible con Server-Side Rendering:
+
+**Reglas para la IA:**
+1. **NUNCA** accedas a \`window\`, \`document\` o \`navigator\` fuera de \`useEffect\` o event handlers.
+2. Para hooks que dependen del viewport (ej. \`useBreakpoint\`), siempre inicializa con un valor por defecto seguro (\`'xs'\`).
+3. Si un componente necesita acceso al DOM en el render inicial, usa el patrón:
+   \`\`\`tsx
+   const [mounted, setMounted] = useState(false);
+   useEffect(() => setMounted(true), []);
+   if (!mounted) return <FallbackSkeleton />;
+   \`\`\`
+4. **"use client"** debe colocarse en componentes que usen hooks de React (useState, useEffect, etc.).
+5. Componentes de Khor como \`KWatermark\`, \`KAffix\` y \`KTour\` requieren \`"use client"\` en Next.js App Router.
+
+### 🔒 Security Hardening (XSS / Sanitización)
+Khor implementa políticas estrictas de seguridad para contenido dinámico:
+
+**Reglas para la IA:**
+1. **NUNCA** uses \`dangerouslySetInnerHTML\` sin sanitización previa con DOMPurify.
+2. **SIEMPRE** escapa el contenido del usuario antes de renderizarlo en:
+   - \`KText\` con contenido dinámico
+   - \`KTable\` / \`KDataGrid\` con celdas personalizadas
+   - \`KNotification\` con mensajes del servidor
+   - \`KTooltip\` con contenido variable
+3. **Sanitización recomendada:**
+   \`\`\`tsx
+   import DOMPurify from 'dompurify';
+   const clean = DOMPurify.sanitize(userInput, { ALLOWED_TAGS: ['b', 'i', 'em', 'strong'] });
+   \`\`\`
+4. **Content Security Policy (CSP):** Khor no inyecta estilos inline que violen CSP. Todos los estilos provienen de CSS Variables y Tailwind.
+5. **URLs:** Valida toda URL del usuario con \`new URL()\` antes de usarla en \`href\`, \`src\` o \`action\`.
+
+### 🧪 Testing Strategy (Playwright + Axe-core)
+Khor formaliza una estrategia de testing de 3 niveles:
+
+1. **Unit Tests (Vitest):**
+   - Cada componente debe tener tests para: render default, variantes, estados disabled/loading, y callbacks.
+   - Cobertura mínima: 80% de branches.
+
+2. **Visual Regression (Playwright):**
+   - Screenshots comparativos para cada componente en: Light Mode, Dark Mode, Compact Density y Mobile viewport.
+   - Comando: \`npx playwright test --project=visual\`
+
+3. **Accessibility (Axe-core):**
+   - Cada página y componente se escanea con axe-core para detectar violaciones WCAG 2.1 AA.
+   - Integración en CI: \`npx playwright test --project=a11y\`
+   - Zero tolerance: cualquier violación de nivel "critical" o "serious" bloquea el merge.
+
+**Ejemplo de test a11y:**
+\`\`\`tsx
+import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+
+test('KButton meets WCAG 2.1 AA', async ({ page }) => {
+  await page.goto('/components/atoms/button');
+  const results = await new AxeBuilder({ page }).analyze();
+  expect(results.violations).toEqual([]);
+});
+\`\`\`
+
+### 🎬 Motion Choreography — Recipe Book (Phase 3)
+Khor define un vocabulario formal de movimiento basado en tokens CSS. Todo componente DEBE usar estos tokens, nunca valores de duración o easing hardcodeados.
+
+**Durations:**
+| Token | Valor | Uso |
+|-------|-------|-----|
+| \`--khor-duration-instant\` | 50ms | Micro-feedback (ripples, checkmarks) |
+| \`--khor-duration-fast\` | 100ms | Hover states, color transitions |
+| \`--khor-duration-normal\` | 200ms | Transiciones estándar de UI |
+| \`--khor-duration-slow\` | 300ms | Expansiones de contenido, accordions |
+| \`--khor-duration-slower\` | 500ms | Animaciones de entrada/hero sections |
+| \`--khor-duration-entrance\` | 250ms | Elementos que aparecen (modals, dropdowns) |
+| \`--khor-duration-exit\` | 200ms | Elementos que desaparecen (exit siempre más rápido) |
+
+**Easing Curves:**
+| Token | Curva | Uso |
+|-------|-------|-----|
+| \`--khor-easing-standard\` | cubic-bezier(0.4, 0, 0.2, 1) | Movimiento general, cambios de estado |
+| \`--khor-easing-decelerate\` | cubic-bezier(0, 0, 0.2, 1) | Elementos que entran a escena |
+| \`--khor-easing-accelerate\` | cubic-bezier(0.4, 0, 1, 1) | Elementos que salen de escena |
+| \`--khor-easing-spring\` | cubic-bezier(0.175, 0.885, 0.32, 1.275) | Botones, toggles, microinteracciones |
+| \`--khor-easing-bounce\` | cubic-bezier(0.34, 1.56, 0.64, 1) | Badges, contadores, notificaciones |
+| \`--khor-easing-smooth\` | cubic-bezier(0.45, 0, 0.55, 1) | Scroll suave, transiciones de página |
+
+**Reglas para la IA:**
+1. **Entrada vs Salida:** Los elementos que entran deben usar \`duration-entrance\` + \`easing-decelerate\`. Los que salen deben usar \`duration-exit\` + \`easing-accelerate\`. La salida SIEMPRE es más rápida que la entrada.
+2. **Jerarquía de movimiento:** Los elementos principales se animan primero. Los secundarios siguen con un stagger de 50-100ms.
+3. **Reduced Motion:** Cuando \`prefers-reduced-motion: reduce\` está activo, todas las duraciones pasan a \`0ms\` y las transformaciones se desactivan. Solo se permiten cambios de opacidad.
+4. **Scale interactions:** Botones usan \`active:scale-[0.98]\` para feedback táctil. Nunca excedas \`scale(1.05)\` para hovers.
+
+**Motion Recipes precompuestos:**
+\`\`\`css
+/* Fade In */
+transition: var(--khor-transition-fade);
+
+/* Scale + Fade (botones, cards interactivos) */
+transition: var(--khor-transition-scale), var(--khor-transition-fade);
+
+/* Slide In (drawers, sidesheets) */
+transition: var(--khor-transition-slide);
+
+/* Color change (hover states) */
+transition: var(--khor-transition-color);
+\`\`\`
+
+### 🔡 Fluid Typography — Responsive by Design
+Khor utiliza un sistema de tipografía fluida basado en el estándar W3C DTCG. Los tamaños escalan automáticamente entre 320px y 1440px usando \`clamp()\`.
+
+| Token Semántico | Comportamiento | Escala (Min → Max) |
+|-----------------|----------------|-------------------|
+| \`--khor-type-display-2xl\` | Hero titles | 48px → 72px |
+| \`--khor-type-heading-lg\` | Page titles | 24px → 48px |
+| \`--khor-type-body-xl\` | Lead text | 18px → 22px |
+| \`--khor-type-body-md\` | UI base | 16px (Fixed) |
+| \`--khor-type-body-sm\` | Ancillary text | 14px (Fixed) |
+
+### 🧠 AI Runtime Intelligence (Phase 4)
+Khor expone metadatos semánticos que permiten a los agentes de IA tomar decisiones inteligentes sobre la UI en tiempo de ejecución.
+
+**Tokens de Estado Semántico:**
+| Contexto | Recomendación de UI |
+|----------|-------------------|
+| **Urgency: high** | Usar \`KButton variant="danger"\`, animaciones rápidas (\`duration-fast\`), colores de alerta |
+| **Urgency: low** | Usar \`KButton variant="ghost"\`, transiciones suaves (\`duration-slow\`), colores neutros |
+| **Confidence: high** | Mostrar datos sin disclaimers, usar tipografía \`font-bold\` |
+| **Confidence: low** | Añadir \`KAlert type="warning"\` con disclaimer, usar tipografía normal |
+| **Data density: high** | Activar \`.compact\` density, usar \`KDataGrid\` con filas condensadas |
+| **Data density: low** | Mantener \`.comfortable\` density, usar \`KCardSection\` con espaciado generoso |
+
+**Semantic Layout Compiler — Guía de Prompts:**
+La IA puede generar layouts completos usando esta gramática de intención:
+
+| Intent Prompt | Layout generado |
+|--------------|----------------|
+| "Dashboard ejecutivo con 4 KPIs y tabla" | Hero con 4x \`KStatCard\` + \`KDataGrid\` |
+| "Formulario de onboarding en 3 pasos" | \`KFormWizard\` con 3 \`KCardSection\` |
+| "Página de detalle con sidebar de navegación" | Layout 6/18 con \`KAnchor\` + secciones |
+| "Panel de control con filtros y gráficos" | \`KRow\`/\`KCol\` responsive + \`KSelectField\` + Charts |
+
+### 📊 Data Visualization Architecture
+Khor define reglas estrictas para la presentación de datos analíticos.
+
+**Accesibilidad (A11y):**
+- **Color + Shape:** NUNCA uses solo el color para distinguir series de datos. Usa patrones de relleno (dots, lines) o estilos de línea (solid, dashed, dotted).
+- **Contraste:** Los colores de las gráficas deben cumplir con el ratio \`3:1\` contra el fondo.
+
+**Data-Ink Ratio:**
+- Elimina bordes innecesarios, sombras internas y líneas de grilla pesadas.
+- Prioriza los datos sobre la decoración.
+- Los tooltips deben ser simples, usando \`KText\` con \`font-bold\` para el valor.
+
+### 🤖 Figma MCP Synchronization Protocol
+Este sistema está diseñado para ser la fuente de verdad absoluta para Agentes de IA vía el protocolo **MCP (Model Context Protocol)**.
+
+**Reglas de Sincronización:**
+1. **Source of Truth:** El código React/Tailwind es la fuente de verdad. El Agente debe actualizar Figma para reflejar el código, no al revés.
+2. **Naming Contract:** Las capas en Figma deben coincidir exactamente con el nombre del componente en React (ej. \`KButton\`, \`KDataGrid\`).
+3. **Token Mapping:** El Agente debe usar la herramienta \`use_figma\` para mapear los tokens CTI (\`category-type-item\`) a las variables nativas de Figma.
+4. **Bidireccionalidad:** Solo se permite la escritura en código desde Figma mediante un Pull Request generado por el Agente tras validación humana.
+
 ### Registro de Cambios (Changelog)
 
 | Versión | Fecha | Cambios |
 |---------|-------|---------|
+| **v6.0.0-beta** | ${today} | **The Holistic Standard:** Integración total de UX Writing (Voz y Tono), Taxonomía W3C CTI, State Layers universales, matemática de Focus-Visible y protocolo de sincronización Figma MCP. |
+| **v5.0.0-beta** | ${today} | **Enterprise Hardening:** Layer 3 Component Tokens (KButton, KInput, KCard), RTL/i18n native con CSS Logical Properties, SSR guidelines (Next.js/Remix). |
+| **v5.0.1-alpha** | ${today} | **Shadow & Layout Precision:** Evolución masiva de la fidelidad visual. Sombras multi-capa y sistema de grillas responsivas certificado para todos los breakpoints. |
 | **v5.0.0-alpha** | ${today} | **The World-Class Foundation:** Migración total a arquitectura W3C Design Tokens, tipografía fluida, KDataGrid empresarial, Command Palette con acciones, KFormWizard y testing con Playwright. |
 | **v4.4.1** | ${today} | **KQA God Mode:** Sincronización de más de 20 organismos y moléculas con estados explícitos y Layer 3 Contextual Tokens. Nuevo script de auditoría y Patrones Maestros. |
 | **v4.4.0** | 27 Abr 2026 | **Industry Reference:** Inyección de tokens de superficie interactiva, elevación semántica (0-5) y escala de neutros completa (600-800). |
@@ -315,7 +615,7 @@ El sistema sigue estándares estrictos para mantener la paridad IA/Humanos.
 | **v4.3.0** | 24 Abr 2026 | **The 100/100 Audit:** Sincronización total de paridad técnica y documental. |
 | **v4.2.0** | 23 Abr 2026 | **Audit Recovery:** Restauración de Tokens Semánticos de 2ª Capa y Sistema de Densidad base. |
 | **v4.1.1** | 20 Abr 2026 | **Refinement Phase:** Integración de Chart Palette (12), Form States detallados y nuevo sistema de Iconografía estandarizado (XS-2XL). |
-| **v5.0.0-alpha** | 10 Abr 2026 | **Elite Upgrade:** Introducción de Layout Tokens, Z-Index Scale y Page Recipes. |
+| **v4.1.0** | 10 Abr 2026 | **Elite Upgrade:** Introducción de Layout Tokens, Z-Index Scale y Page Recipes. |
 
 ---`);
   }

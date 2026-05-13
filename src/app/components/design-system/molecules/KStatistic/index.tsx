@@ -132,7 +132,7 @@ export function KStatistic({
         )}>
           {renderValue()}
         </span>
-        {suffix && <span className="text-sm font-semibold text-khor-neutral-500 ml-1">{suffix}</span>}
+        {suffix && <span className="text-sm font-semibold text-khor-neutral-500 ms-1">{suffix}</span>}
       </div>
 
       {trend && trendValue && (

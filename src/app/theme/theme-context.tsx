@@ -42,6 +42,32 @@ export const defaultTheme: ThemeConfig = {
   spaceXs: 4, spaceSm: 8, spaceMd: 16, spaceLg: 24, spaceXl: 40,
 };
 
+export const industryPresets: Record<string, ThemeConfig> = {
+  DEFAULT: defaultTheme,
+  AI_MODERN: {
+    ...defaultTheme,
+    primary: '#8B5CF6', secondary: '#1E1B4B', accent: '#34D399',
+    fontHeading: 'Inter', fontBody: 'Inter',
+    radiusSm: 8, radiusMd: 12, radiusLg: 20, radiusXl: 32,
+    shadowColor: 'rgba(139, 92, 246, 0.15)',
+  },
+  FINTECH_SECURE: {
+    ...defaultTheme,
+    primary: '#0F172A', secondary: '#334155', accent: '#0284C7',
+    fontHeading: 'Plus Jakarta Sans', fontBody: 'Inter',
+    radiusSm: 2, radiusMd: 4, radiusLg: 6, radiusXl: 8,
+    shadowColor: 'rgba(0, 0, 0, 0.12)',
+  },
+  HEALTHCARE_CLEAN: {
+    ...defaultTheme,
+    primary: '#0D9488', secondary: '#134E4A', accent: '#F59E0B',
+    fontHeading: 'Outfit', fontBody: 'Inter',
+    radiusSm: 12, radiusMd: 16, radiusLg: 24, radiusXl: 32,
+    spaceMd: 20, spaceLg: 32,
+    shadowColor: 'rgba(13, 148, 136, 0.1)',
+  }
+};
+
 const ThemeContext = createContext<ThemeContextValue>({
   mode: 'light',
   setMode: () => {},

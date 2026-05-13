@@ -13,9 +13,9 @@ const inputVariants = cva(
   {
     variants: {
       variant: {
-        outlined: 'border-khor-slate-200 bg-white text-khor-neutral-900 shadow-khor-sm focus-within:border-khor-primary focus-within:ring-khor-primary/20',
-        borderless: 'border-transparent bg-transparent text-khor-neutral-900 shadow-none focus-within:ring-0 px-0',
-        filled: 'border-transparent bg-khor-slate-100 text-khor-neutral-900 focus-within:bg-khor-slate-50 focus-within:ring-khor-primary/20',
+        outlined: 'border-[var(--khor-input-border)] bg-[var(--khor-input-bg)] text-[var(--khor-input-text)] shadow-khor-sm focus-within:border-[var(--khor-input-focus-border)] focus-within:ring-[var(--khor-input-focus-ring)]/20',
+        borderless: 'border-transparent bg-transparent text-[var(--khor-input-text)] shadow-none focus-within:ring-0 px-0',
+        filled: 'border-transparent bg-khor-slate-100 text-[var(--khor-input-text)] focus-within:bg-khor-slate-50 focus-within:ring-[var(--khor-input-focus-ring)]/20',
       },
       size: {
         sm: 'h-[var(--khor-density-height-sm)] px-2 text-xs',
@@ -175,7 +175,7 @@ const BaseInput = React.forwardRef<HTMLInputElement, KInputProps>(function KInpu
             value={currentVal}
             onChange={handleChange}
             maxLength={maxLength}
-            className="w-full bg-transparent outline-none placeholder:text-khor-neutral-400 h-full disabled:cursor-not-allowed px-1"
+            className="w-full bg-transparent outline-none placeholder:text-[var(--khor-input-placeholder)] h-full disabled:cursor-not-allowed px-1"
             {...rest}
           />
           <div className="flex items-center gap-2 shrink-0 ml-2">

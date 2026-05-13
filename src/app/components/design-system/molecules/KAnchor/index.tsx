@@ -75,7 +75,7 @@ export function KAnchor({
 
   const renderLinks = (links: KAnchorLink[], depth = 0) => {
     return (
-      <ul className={cn("flex flex-col gap-1", depth > 0 && "pl-4 mt-1 border-l border-khor-neutral-100")}>
+      <ul className={cn("flex flex-col gap-1", depth > 0 && "ps-4 mt-1 border-is border-khor-neutral-100")}>
         {links.map((item) => {
           const isActive = activeLink === item.href;
           return (
@@ -83,7 +83,7 @@ export function KAnchor({
               {isActive && depth === 0 && (
                 <motion.div
                   layoutId="anchor-indicator"
-                  className="absolute left-0 w-0.5 h-full bg-khor-primary rounded-full -ml-[1px]"
+                  className="absolute start-0 w-0.5 h-full bg-khor-primary rounded-full -ms-[1px]"
                   transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 />
               )}
@@ -91,10 +91,10 @@ export function KAnchor({
                 href={item.href}
                 onClick={(e) => handleClick(e, item)}
                 className={cn(
-                  "block py-1 pr-4 text-xs transition-all font-primary",
+                  "block py-1 pe-4 text-xs transition-all font-primary",
                   isActive 
-                    ? "text-khor-primary font-bold pl-4" 
-                    : "text-khor-neutral-500 hover:text-khor-neutral-800 pl-4",
+                    ? "text-khor-primary font-bold ps-4" 
+                    : "text-khor-neutral-500 hover:text-khor-neutral-800 ps-4",
                   depth > 0 && "py-0.5"
                 )}
               >
@@ -110,7 +110,7 @@ export function KAnchor({
 
   return (
     <nav 
-      className={cn("relative border-l border-khor-neutral-100 py-1", className)} 
+      className={cn("relative border-is border-khor-neutral-100 py-1", className)} 
       style={style}
     >
       {renderLinks(items)}

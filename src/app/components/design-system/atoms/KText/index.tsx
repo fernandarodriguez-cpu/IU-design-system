@@ -105,7 +105,7 @@ const ExtraActions = ({ props, textValue, onUpdate }: { props: BaseTypographyPro
   };
 
   return (
-    <span className="inline-flex items-center gap-2 ml-2 pointer-events-auto">
+    <span className="inline-flex items-center gap-2 ms-2 pointer-events-auto">
       {props.copyable && (
         <button 
           onClick={handleCopy}
