@@ -1,7 +1,7 @@
 import React from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { Trash2, Plus } from 'lucide-react';
-import { cn } from '../../../../../imports/utils';
+import { cn } from '@/utils/cn';
 import { KButton } from '../../atoms/KButton';
 
 export interface KFormListField {
@@ -25,6 +25,22 @@ export interface KFormListProps {
  * KFormList — Gestor dinámico de arreglos de campos (Total Headless)
  * Basado en React Hook Form useFieldArray y Tailwind CSS v4.
  * Requiere ser usado dentro de un FormProvider.
+ */
+/**
+ * @figma-mcp-migration
+ * Component: KFormList
+ * 
+ * INSTRUCCIONES PARA AGENTES DE IA (VS Code / MCP):
+ * Para migrar este componente a Figma, NO generar una matriz multiplicando todas las variables.
+ * Utilizar Figma Component Properties V2 con la siguiente estructura:
+ * 
+ * 1. Variants (Estructurales):
+ *    - Definir variantes puramente visuales/estructurales.
+ * 2. Booleans (Encendido/Apagado):
+ *    - Definir encendido/apagado para iconos o estados (isLoading, hasIcon).
+ * 3. Color Variables (No usar variantes para colores semánticos):
+ *    - El relleno/borde debe usar Figma Variables (Khor v6.0 Colors) asignado dinámicamente.
+ *    - El consumidor del UI Kit cambiará el color del layer.
  */
 export function KFormList({
   name,

@@ -1,7 +1,7 @@
 import React from 'react';
 import * as AccordionPrimitive from '@radix-ui/react-accordion';
 import { ChevronDown } from 'lucide-react';
-import { cn } from '../../../../../imports/utils';
+import { cn } from '@/utils/cn';
 
 export interface KAccordionItem {
   key: string;
@@ -31,6 +31,22 @@ export interface KAccordionProps {
 /**
  * KAccordion — Paneles de contenido colapsables (Headless v4)
  * Basado en Radix UI Accordion y Tailwind CSS v4 con animaciones nativas.
+ */
+/**
+ * @figma-mcp-migration
+ * Component: KAccordion
+ * 
+ * INSTRUCCIONES PARA AGENTES DE IA (VS Code / MCP):
+ * Para migrar este componente a Figma, NO generar una matriz multiplicando todas las variables.
+ * Utilizar Figma Component Properties V2 con la siguiente estructura:
+ * 
+ * 1. Variants (Estructurales):
+ *    - Definir variantes puramente visuales/estructurales.
+ * 2. Booleans (Encendido/Apagado):
+ *    - Definir encendido/apagado para iconos o estados (isLoading, hasIcon).
+ * 3. Color Variables (No usar variantes para colores semánticos):
+ *    - El relleno/borde debe usar Figma Variables (Khor v6.0 Colors) asignado dinámicamente.
+ *    - El consumidor del UI Kit cambiará el color del layer.
  */
 export function KAccordion({
   items,

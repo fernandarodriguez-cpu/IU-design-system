@@ -3,7 +3,7 @@ import { Check, ArrowRight, ArrowLeft } from 'lucide-react';
 import { KButton } from '../../atoms/KButton';
 import { KText } from '../../atoms/KText';
 import { KSteps } from '../../molecules/KSteps';
-import { cn } from '../../../../../imports/utils';
+import { cn } from '@/utils/cn';
 
 export interface WizardStep {
   id: string;
@@ -20,6 +20,22 @@ interface KFormWizardProps {
   className?: string;
 }
 
+/**
+ * @figma-mcp-migration
+ * Component: KFormWizard
+ * 
+ * INSTRUCCIONES PARA AGENTES DE IA (VS Code / MCP):
+ * Para migrar este componente a Figma, NO generar una matriz multiplicando todas las variables.
+ * Utilizar Figma Component Properties V2 con la siguiente estructura:
+ * 
+ * 1. Variants (Estructurales):
+ *    - Definir variantes puramente visuales/estructurales.
+ * 2. Booleans (Encendido/Apagado):
+ *    - Definir encendido/apagado para iconos o estados (isLoading, hasIcon).
+ * 3. Color Variables (No usar variantes para colores semánticos):
+ *    - El relleno/borde debe usar Figma Variables (Khor v6.0 Colors) asignado dinámicamente.
+ *    - El consumidor del UI Kit cambiará el color del layer.
+ */
 export function KFormWizard({ steps, onComplete, onCancel, className }: KFormWizardProps) {
   const [currentStep, setCurrentStep] = useState(0);
   

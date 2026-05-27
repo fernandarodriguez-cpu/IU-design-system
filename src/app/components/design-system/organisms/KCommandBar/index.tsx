@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Command } from 'cmdk';
 import { Search, History, Sparkles, ChevronRight, Command as CommandIcon } from 'lucide-react';
 import { useNavigate } from 'react-router';
-import { cn } from '../../../../../imports/utils';
+import { cn } from '@/utils/cn';
 import { KModal } from '../KModal';
 
 import { searchIndex, SearchItem } from '../../../../metadata/search-index';
@@ -29,6 +29,22 @@ export function useCommandBar() {
 const commands: SearchItem[] = searchIndex;
 
 /* ─── Component ─────────────────────────────── */
+/**
+ * @figma-mcp-migration
+ * Component: KCommandBar
+ * 
+ * INSTRUCCIONES PARA AGENTES DE IA (VS Code / MCP):
+ * Para migrar este componente a Figma, NO generar una matriz multiplicando todas las variables.
+ * Utilizar Figma Component Properties V2 con la siguiente estructura:
+ * 
+ * 1. Variants (Estructurales):
+ *    - Definir variantes puramente visuales/estructurales.
+ * 2. Booleans (Encendido/Apagado):
+ *    - Definir encendido/apagado para iconos o estados (isLoading, hasIcon).
+ * 3. Color Variables (No usar variantes para colores semánticos):
+ *    - El relleno/borde debe usar Figma Variables (Khor v6.0 Colors) asignado dinámicamente.
+ *    - El consumidor del UI Kit cambiará el color del layer.
+ */
 export function KCommandBar({ open, onClose }: { open: boolean; onClose: () => void }) {
   const navigate = useNavigate();
   const [recents, setRecents] = useState<SearchItem[]>([]);

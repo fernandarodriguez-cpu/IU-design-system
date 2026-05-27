@@ -1,5 +1,5 @@
 import React from 'react';
-import { cn } from '../../../../../imports/utils';
+import { cn } from '@/utils/cn';
 import { khorTokens } from '../../../../theme/khor-theme';
 
 const t = khorTokens;
@@ -12,6 +12,22 @@ export interface KNavItemProps extends React.ButtonHTMLAttributes<HTMLButtonElem
   collapsed?: boolean;
 }
 
+/**
+ * @figma-mcp-migration
+ * Component: KNavItem
+ * 
+ * INSTRUCCIONES PARA AGENTES DE IA (VS Code / MCP):
+ * Para migrar este componente a Figma, NO generar una matriz multiplicando todas las variables.
+ * Utilizar Figma Component Properties V2 con la siguiente estructura:
+ * 
+ * 1. Variants (Estructurales):
+ *    - Definir variantes puramente visuales/estructurales.
+ * 2. Booleans (Encendido/Apagado):
+ *    - Definir encendido/apagado para iconos o estados (isLoading, hasIcon).
+ * 3. Color Variables (No usar variantes para colores semánticos):
+ *    - El relleno/borde debe usar Figma Variables (Khor v6.0 Colors) asignado dinámicamente.
+ *    - El consumidor del UI Kit cambiará el color del layer.
+ */
 export const KNavItem = React.forwardRef<HTMLButtonElement, KNavItemProps>(function KNavItem(
   { icon, label, active, badge, collapsed, className, ...rest }, ref
 ) {

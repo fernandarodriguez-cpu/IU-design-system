@@ -1,9 +1,8 @@
 export { default as KDataTable } from './KDataTable';
-export { default as KDataGrid } from './KDataGrid';
 export { default as KFormWizard } from './KFormWizard';
 export { KTableDateCell } from './KDataTable/KTableDateCell';
 export { default as KModal } from './KModal';
-export { default as KDrawer } from './KDrawer';
+export { default as KSheet } from './KSheet';
 export { default as KCardSection } from './KCardSection';
 export { default as KTabs } from './KTabs';
 export { default as KUpload, type KUploadFile } from './KUpload';
@@ -15,15 +14,10 @@ export { default as KCommandBar, KCommandBarPreview, useCommandBar } from './KCo
 export { default as KSparklineCell } from './KSparklineCell';
 export { default as KAppLayout } from './KAppLayout';
 export { default as KLoginForm } from './KLoginForm';
-export { default as KModalConfirm } from './KModalConfirm';
 export { default as KFormList, type KFormListField } from './KFormList';
 export { default as KCarousel } from './KCarousel';
 export { default as KCalendar } from './KCalendar';
-export { default as kNotification, type KNotificationType, KNotificationProvider } from './KNotification';
-// Keep legacy alias for KNotification to avoid conflict
-export { default as KNotification } from './KNotification';
-export { default as KMessage } from './KMessage';
-export { default as kMessage } from './KMessage';
 export { kToast, KToastProvider } from './KToast';
 export * from './KGantt';
 export * from './KEditor';
+export * from './KResizable';

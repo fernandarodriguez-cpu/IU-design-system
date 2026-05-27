@@ -43,6 +43,44 @@ const changeTypeConfig: Record<ChangeType, { color: string; bg: string; icon: Re
 
 const changelog: VersionEntry[] = [
   {
+    version: '5.3.0-alpha',
+    date: '18 de Mayo, 2026',
+    codename: 'The Spring Cleaning',
+    summary: 'Purga arquitectónica: eliminación de bloatware AntD, unificación de notificaciones en KToast, consolidación de tablas en KDataTable y renombrado semántico.',
+    highlights: [
+      'Eliminación de 6 componentes heredados de bajo uso (KTransfer, KTreeSelect, KAffix, KMentions, KWatermark, KRate)',
+      'Unificación de 3 APIs de notificación (KNotification, KMessage, KToast) en una sola: kToast',
+      'KDataGrid eliminado — KDataTable es el único componente de datos',
+      'KModalConfirm integrado como sub-API de KModal',
+      'Nuevo componente KResizable para paneles divisibles',
+    ],
+    changes: [
+      { type: 'removed', description: 'Eliminación de KTransfer, KTreeSelect, KAffix, KMentions, KWatermark y KRate — componentes heredados de AntD de bajo uso en SaaS moderno.' },
+      { type: 'removed', component: 'KNotification', description: 'KNotification y KMessage eliminados. Toda la funcionalidad unificada en kToast (Sonner).' },
+      { type: 'removed', component: 'KDataGrid', description: 'KDataGrid eliminado. KDataTable (TanStack Table) es ahora el único componente de datos.' },
+      { type: 'changed', component: 'KModal', componentPath: '/organisms/modal', description: 'KModalConfirm integrado como sub-API: KModal.confirm(), KModal.success(), KModal.error(), KModal.warning(), KModal.info().' },
+      { type: 'changed', component: 'KSheet', componentPath: '/organisms/sheet', description: 'KDrawer renombrado a KSheet, alineado con la nomenclatura estándar de la industria.' },
+      { type: 'added', component: 'KResizable', componentPath: '/organisms/resizable', description: 'Nuevo componente de paneles divisibles (split-panes) para interfaces tipo IDE y dashboards densos.' },
+      { type: 'changed', description: 'Actualización del AI Guide: todas las referencias a componentes eliminados actualizadas a sus reemplazos modernos.' },
+      { type: 'fixed', description: 'TypeScript ignoreDeprecations actualizado a 6.0 para compatibilidad con TS 7.x.' },
+    ],
+    stats: { added: 1, changed: 4, fixed: 1 },
+  },
+  {
+    version: '5.2.0-alpha',
+    date: '15 de Mayo, 2026',
+    codename: 'Agentification & Multi-Mode',
+    summary: 'Sincronización multi-modo en Figma y agentificación de 89 componentes con limpieza de marca.',
+    changes: [
+      { type: 'added', component: 'Figma Sync', description: 'Resolución profunda de alias y evaluación de clamps para anchos responsivos (Desktop XL incluido).' },
+      { type: 'added', component: 'Figma Sync', description: 'Soporte de colecciones múltiples: Khor v6.0 Colors, Dimensions y Density en Figma.' },
+      { type: 'changed', component: 'KButton', description: 'Eliminación de versión redundante simplificada; KButton unificado bajo CVA como única fuente de verdad.' },
+      { type: 'added', component: 'KDS Core', description: 'Inyección de manifiesto @figma-mcp-migration en 89 componentes para guiar su migración automática hacia Figma vía IA.' },
+      { type: 'changed', component: 'Docs', description: 'Eliminación de rastros textuales de frameworks legacy (Radix, AntD) para asentar la identidad autónoma de KDS, con nuevo CREDITS.md oficial.' },
+    ],
+    stats: { added: 3, changed: 2, fixed: 0 },
+  },
+  {
     version: '5.1.6-alpha',
     date: '13 de Mayo, 2026',
     codename: 'The Clean Canvas',

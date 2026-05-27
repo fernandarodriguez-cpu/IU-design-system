@@ -141,6 +141,7 @@ function generate() {
 
   const output = { version: '5.0.0', generatedAt: new Date().toISOString(), components: metadata };
   fs.writeFileSync(path.join(PROJECT_ROOT, 'figma-plugin/src/metadata.ts'), `export const khorMetadata = ${JSON.stringify(output, null, 2)};`);
+  fs.writeFileSync(path.join(PROJECT_ROOT, 'src/app/metadata/khor-schema-v1.json'), JSON.stringify(output, null, 2));
   console.log(`✅ Metadata V5.0 (Deep Scan) generada: ${metadata.length} componentes encontrados.`);
 }
 

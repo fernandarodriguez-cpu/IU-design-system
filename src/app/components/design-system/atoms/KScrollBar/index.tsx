@@ -1,5 +1,5 @@
 import React from 'react';
-import { cn } from '../../../../../imports/utils';
+import { cn } from '@/utils/cn';
 
 export interface KScrollBarProps {
   /** Orientación del scroll */
@@ -19,6 +19,22 @@ export interface KScrollBarProps {
 /**
  * KScrollBar — Átomo para estilización premium de barras de desplazamiento.
  * Centraliza la estética de los scrollbars en el sistema para evitar variaciones nativas feas.
+ */
+/**
+ * @figma-mcp-migration
+ * Component: KScrollBar
+ * 
+ * INSTRUCCIONES PARA AGENTES DE IA (VS Code / MCP):
+ * Para migrar este componente a Figma, NO generar una matriz multiplicando todas las variables.
+ * Utilizar Figma Component Properties V2 con la siguiente estructura:
+ * 
+ * 1. Variants (Estructurales):
+ *    - Definir variantes puramente visuales/estructurales.
+ * 2. Booleans (Encendido/Apagado):
+ *    - Definir encendido/apagado para iconos o estados (isLoading, hasIcon).
+ * 3. Color Variables (No usar variantes para colores semánticos):
+ *    - El relleno/borde debe usar Figma Variables (Khor v6.0 Colors) asignado dinámicamente.
+ *    - El consumidor del UI Kit cambiará el color del layer.
  */
 export const KScrollBar = React.forwardRef<HTMLDivElement, KScrollBarProps>(
   ({ 

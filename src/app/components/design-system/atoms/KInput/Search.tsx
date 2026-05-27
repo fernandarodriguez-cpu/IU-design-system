@@ -2,7 +2,7 @@ import React from 'react';
 import { Search } from 'lucide-react';
 import { KInput, KInputProps } from './index';
 import { KButton } from '../KButton';
-import { cn } from '../../../../../imports/utils';
+import { cn } from '@/utils/cn';
 
 export interface KInputSearchProps extends KInputProps {
   /** Texto del botón de búsqueda o nodo personalizado */

@@ -90,10 +90,10 @@ Como IA, DEBES elegir componentes basados en la **Intención Semántica** del fl
 | Intent | Pattern / Component Requerido | Gravedad |
 |--------|------------------------------|----------|
 | \`critical_confirmation\` | \`KModal\` (Confirm) + \`KButton\` (Danger) | Alta |
-| \`data_massive_explorer\` | \`KDataGrid\` (con virtualización activa) | Alta |
+| \`data_massive_explorer\` | \`KDataTable\` (con virtualización activa) | Alta |
 | \`step_by_step_flow\` | \`KFormWizard\` | Media |
 | \`brand_call_to_action\` | \`KButton\` (Primary) + \`KIcon\` (Sparkles) | Baja |
-| \`system_feedback_error\` | \`KMessage\` (Error) o \`KResult\` (500/403) | Alta |
+| \`system_feedback_error\` | \`kToast\` (Error) o \`KResult\` (500/403) | Alta |
 
 ### 🔠 Fluid Typography (Responsive by Design)
 Khor v5.0 usa tipografía fluida basada en \`clamp()\`. NO sobrescribas tamaños de fuente con media queries. Usa los tokens semánticos:
@@ -355,7 +355,7 @@ El sistema sigue estándares estrictos para mantener la paridad IA/Humanos.
 | 0 | \`--khor-elevation-0\` | Elementos inline, sin elevación |
 | 1 | \`--khor-elevation-1\` | KCardSection, KStatCard, KTable |
 | 2 | \`--khor-elevation-2\` | KDropdown, KTooltip, KPopconfirm |
-| 3 | \`--khor-elevation-3\` | KDrawer, KSidesheet, KAffix activo |
+| 3 | \`--khor-elevation-3\` | KDrawer, KSidesheet, Cabeceras fijas |
 | 4 | \`--khor-elevation-4\` | KModal, KDialog |
 | 5 | \`--khor-elevation-5\` | KToast, KNotification flotante |
 
@@ -453,7 +453,7 @@ Khor está diseñado para ser compatible con Server-Side Rendering:
    if (!mounted) return <FallbackSkeleton />;
    \`\`\`
 4. **"use client"** debe colocarse en componentes que usen hooks de React (useState, useEffect, etc.).
-5. Componentes de Khor como \`KWatermark\`, \`KAffix\` y \`KTour\` requieren \`"use client"\` en Next.js App Router.
+5. Componentes de Khor que interactúan con el DOM (ej. \`KTour\`) requieren \`"use client"\` en Next.js App Router.
 
 ### 🔒 Security Hardening (XSS / Sanitización)
 Khor implementa políticas estrictas de seguridad para contenido dinámico:
@@ -462,8 +462,8 @@ Khor implementa políticas estrictas de seguridad para contenido dinámico:
 1. **NUNCA** uses \`dangerouslySetInnerHTML\` sin sanitización previa con DOMPurify.
 2. **SIEMPRE** escapa el contenido del usuario antes de renderizarlo en:
    - \`KText\` con contenido dinámico
-   - \`KTable\` / \`KDataGrid\` con celdas personalizadas
-   - \`KNotification\` con mensajes del servidor
+   - \`KDataTable\` con celdas personalizadas
+   - \`kToast\` con mensajes del servidor
    - \`KTooltip\` con contenido variable
 3. **Sanitización recomendada:**
    \`\`\`tsx
@@ -567,7 +567,7 @@ Khor expone metadatos semánticos que permiten a los agentes de IA tomar decisio
 | **Urgency: low** | Usar \`KButton variant="ghost"\`, transiciones suaves (\`duration-slow\`), colores neutros |
 | **Confidence: high** | Mostrar datos sin disclaimers, usar tipografía \`font-bold\` |
 | **Confidence: low** | Añadir \`KAlert type="warning"\` con disclaimer, usar tipografía normal |
-| **Data density: high** | Activar \`.compact\` density, usar \`KDataGrid\` con filas condensadas |
+| **Data density: high** | Activar \`.compact\` density, usar \`KDataTable\` con filas condensadas |
 | **Data density: low** | Mantener \`.comfortable\` density, usar \`KCardSection\` con espaciado generoso |
 
 **Semantic Layout Compiler — Guía de Prompts:**
@@ -575,7 +575,7 @@ La IA puede generar layouts completos usando esta gramática de intención:
 
 | Intent Prompt | Layout generado |
 |--------------|----------------|
-| "Dashboard ejecutivo con 4 KPIs y tabla" | Hero con 4x \`KStatCard\` + \`KDataGrid\` |
+| "Dashboard ejecutivo con 4 KPIs y tabla" | Hero con 4x \`KStatCard\` + \`KDataTable\` |
 | "Formulario de onboarding en 3 pasos" | \`KFormWizard\` con 3 \`KCardSection\` |
 | "Página de detalle con sidebar de navegación" | Layout 6/18 con \`KAnchor\` + secciones |
 | "Panel de control con filtros y gráficos" | \`KRow\`/\`KCol\` responsive + \`KSelectField\` + Charts |
@@ -597,7 +597,7 @@ Este sistema está diseñado para ser la fuente de verdad absoluta para Agentes 
 
 **Reglas de Sincronización:**
 1. **Source of Truth:** El código React/Tailwind es la fuente de verdad. El Agente debe actualizar Figma para reflejar el código, no al revés.
-2. **Naming Contract:** Las capas en Figma deben coincidir exactamente con el nombre del componente en React (ej. \`KButton\`, \`KDataGrid\`).
+2. **Naming Contract:** Las capas en Figma deben coincidir exactamente con el nombre del componente en React (ej. \`KButton\`, \`KDataTable\`).
 3. **Token Mapping:** El Agente debe usar la herramienta \`use_figma\` para mapear los tokens CTI (\`category-type-item\`) a las variables nativas de Figma.
 4. **Bidireccionalidad:** Solo se permite la escritura en código desde Figma mediante un Pull Request generado por el Agente tras validación humana.
 
@@ -608,7 +608,7 @@ Este sistema está diseñado para ser la fuente de verdad absoluta para Agentes 
 | **v6.0.0-beta** | ${today} | **The Holistic Standard:** Integración total de UX Writing (Voz y Tono), Taxonomía W3C CTI, State Layers universales, matemática de Focus-Visible y protocolo de sincronización Figma MCP. |
 | **v5.0.0-beta** | ${today} | **Enterprise Hardening:** Layer 3 Component Tokens (KButton, KInput, KCard), RTL/i18n native con CSS Logical Properties, SSR guidelines (Next.js/Remix). |
 | **v5.0.1-alpha** | ${today} | **Shadow & Layout Precision:** Evolución masiva de la fidelidad visual. Sombras multi-capa y sistema de grillas responsivas certificado para todos los breakpoints. |
-| **v5.0.0-alpha** | ${today} | **The World-Class Foundation:** Migración total a arquitectura W3C Design Tokens, tipografía fluida, KDataGrid empresarial, Command Palette con acciones, KFormWizard y testing con Playwright. |
+| **v5.0.0-alpha** | ${today} | **The World-Class Foundation:** Migración total a arquitectura W3C Design Tokens, tipografía fluida, KDataTable empresarial, Command Palette con acciones, KFormWizard y testing con Playwright. |
 | **v4.4.1** | ${today} | **KQA God Mode:** Sincronización de más de 20 organismos y moléculas con estados explícitos y Layer 3 Contextual Tokens. Nuevo script de auditoría y Patrones Maestros. |
 | **v4.4.0** | 27 Abr 2026 | **Industry Reference:** Inyección de tokens de superficie interactiva, elevación semántica (0-5) y escala de neutros completa (600-800). |
 | **v4.3.1** | 24 Abr 2026 | **The Absolute 100:** Cierre definitivo de gaps de motion (easing enter/exit). |
@@ -940,14 +940,14 @@ const router = createBrowserRouter([
 
 ### Imports
 \`\`\`tsx
-// Atomos base (18)
+// Atomos base (17)
 import { KButton, KInput, KBadge, KTag, KAvatar, KSwitch, KCheckbox, KRadio,
          KTooltip, KProgress, KText, KDivider, KAlert, KSkeleton, KSlider,
-         KRate, KSpin, KTextArea } from './components/design-system/atoms/index';
+         KSpin, KTextArea } from './components/design-system/atoms/index';
 
-// Atomos extendidos (9)
+// Atomos extendidos (7)
 import { KButtonGroup, KInputPassword, KInputSearch, KFloatButton,
-         KAffix, KSpace, KImage, KWatermark, KQRCode } from './components/design-system/atoms-extended';
+         KSpace, KImage, KQRCode } from './components/design-system/atoms-extended';
 
 // Moleculas base (12)
 import { KFormField, KSearchInput, KStatCard, KNavItem, KSelectField,
@@ -958,16 +958,16 @@ import { KFormField, KSearchInput, KStatCard, KNavItem, KSelectField,
 import { KInputNumber, KSegmented, KAutocomplete, KDatePicker, KDateRangePicker,
          KSelectAdvanced, KDescriptions, KPopconfirm, KResult, KTimeline } from './components/design-system/molecules-extended';
 
-// Moleculas wave3 (11)
-import { KCascader, KStatistic, KTimePicker, KMentions, KColorPicker,
-         KAnchor, KList, KTransfer, KDividerExtended, KTreeSelect } from './components/design-system/molecules-wave3';
+// Moleculas wave3 (8)
+import { KCascader, KStatistic, KTimePicker, KColorPicker,
+         KAnchor, KList, KDividerExtended } from './components/design-system/molecules-wave3';
 
 // Organismos base (8)
-import { KDataTable, KModal, KDrawer, KCardSection, KTabs,
+import { KDataTable, KModal, KSheet, KCardSection, KTabs,
          KToastProvider, kToast, KSparklineCell } from './components/design-system/organisms/index';
 
 // Organismos extendidos (5)
-import { KUpload, KTree, KTour, KModalConfirm, KFormList } from './components/design-system/organisms-extended';
+import { KUpload, KTree, KTour, KFormList } from './components/design-system/organisms/index';
 
 // Tokens
 import { khorTokens } from './theme/khor-theme';

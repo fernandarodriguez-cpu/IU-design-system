@@ -1,5 +1,5 @@
 import React from 'react';
-import { cn } from '../../../../../imports/utils';
+import { cn } from '@/utils/cn';
 import { Info } from 'lucide-react';
 import { KTooltip } from '../../molecules/KTooltip';
 
@@ -13,6 +13,22 @@ export interface KLabelProps extends React.LabelHTMLAttributes<HTMLLabelElement>
 /**
  * KLabel — Componente para etiquetas de formulario.
  * Soporta indicador de obligatoriedad y tooltip de información.
+ */
+/**
+ * @figma-mcp-migration
+ * Component: KLabel
+ * 
+ * INSTRUCCIONES PARA AGENTES DE IA (VS Code / MCP):
+ * Para migrar este componente a Figma, NO generar una matriz multiplicando todas las variables.
+ * Utilizar Figma Component Properties V2 con la siguiente estructura:
+ * 
+ * 1. Variants (Estructurales):
+ *    - Definir variantes puramente visuales/estructurales.
+ * 2. Booleans (Encendido/Apagado):
+ *    - Definir encendido/apagado para iconos o estados (isLoading, hasIcon).
+ * 3. Color Variables (No usar variantes para colores semánticos):
+ *    - El relleno/borde debe usar Figma Variables (Khor v6.0 Colors) asignado dinámicamente.
+ *    - El consumidor del UI Kit cambiará el color del layer.
  */
 export const KLabel = React.forwardRef<HTMLLabelElement, KLabelProps>(function KLabel(
   { required, info, size = 'md', className, children, ...rest },

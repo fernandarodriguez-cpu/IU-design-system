@@ -17,14 +17,13 @@ export { default as KDivider } from './KDivider';
 export { default as KAlert } from './KAlert';
 export { default as KSkeleton } from './KSkeleton';
 export { default as KSlider } from './KSlider';
-export { default as KRate } from './KRate';
 export { default as KSpin } from './KSpin';
 export { default as KFloatButton } from './KFloatButton';
-export { default as KAffix } from './KAffix';
 export { default as KSpace } from './KSpace';
 export { default as KImage } from './KImage';
-export { default as KWatermark } from './KWatermark';
 export { default as KQRCode } from './KQRCode';
 export { default as KFlex } from './KFlex';
 export { KRow, KCol } from './KGrid';
 export * from './KBentoGrid';
+export { default as KPhoneInput } from './KPhoneInput';
+

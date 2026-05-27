@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from '../../../../../imports/utils';
+import { cn } from '@/utils/cn';
 import type { KButtonProps } from './types';
 export type { KButtonProps };
 import { Loader2 } from 'lucide-react';
@@ -97,7 +97,32 @@ function insertSpace(child: React.ReactNode, needSpace: boolean) {
   }
   return child;
 }
-
+/**
+ * @figma-mcp-migration
+ * Component: KButton
+ * 
+ * INSTRUCCIONES PARA AGENTES DE IA (VS Code / MCP):
+ * Para migrar este componente a Figma, NO generar una matriz multiplicando todas las variables.
+ * Utilizar Figma Component Properties V2 con la siguiente estructura:
+ * 
+ * 1. Variants (Estructurales):
+ *    - variant: [primary, secondary, outline, ghost, danger, link, text, solid, filled]
+ *    - size: [sm, md, lg, icon]
+ *    - shape: [default, circle, round]
+ * 
+ * 2. Booleans (Encendido/Apagado):
+ *    - hasIconLeft: true/false
+ *    - hasIconRight: true/false
+ *    - isLoading: true/false
+ * 
+ * 3. Text Property:
+ *    - label: "Button Text"
+ * 
+ * 4. Color Variables (No usar variantes para colores semánticos):
+ *    - El relleno/borde debe usar Figma Variables (Khor v6.0 Colors) asignado dinámicamente.
+ *    - El prop 'color' (primary, secondary, etc) NO debe ser una Variante física en Figma,
+ *      sino que el consumidor del UI Kit cambiará el color del layer.
+ */
 export const KButton = React.forwardRef<any, KButtonProps>(function KButton(
   { 
     variant, color, kVariant, size = 'md', shape = 'default', 

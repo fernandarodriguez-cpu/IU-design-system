@@ -57,6 +57,9 @@ async function syncVariables() {
         
         if (!v) v = figma.variables.createVariable(varName, collection.id, type);
         v.setValueForMode(lightModeId, finalVal);
+        const darkValue = darkTokens[name] ? darkTokens[name].trim() : lightTokens[name].trim();
+        const parsedDark = parseVal(darkValue);
+        v.setValueForMode(dModeId, parsedDark.v);
         count++;
       } catch (e) { console.error('Error en token:', name, e); }
     }

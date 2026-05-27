@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Command } from 'cmdk';
 import { Search, Loader2, X, Check } from 'lucide-react';
-import { cn } from '../../../../../imports/utils';
+import { cn } from '@/utils/cn';
 
 export interface KAutocompleteOption {
   value: string;
@@ -26,6 +26,22 @@ export interface KAutocompleteProps {
  * KAutocomplete — Input con sugerencias dinámicas (Headless v4)
  * Basado en cmdk para una experiencia de búsqueda ultra rápida y accesible.
  * Reemplaza AntD AutoComplete con una estética premium y 100% agnóstica.
+ */
+/**
+ * @figma-mcp-migration
+ * Component: KAutocomplete
+ * 
+ * INSTRUCCIONES PARA AGENTES DE IA (VS Code / MCP):
+ * Para migrar este componente a Figma, NO generar una matriz multiplicando todas las variables.
+ * Utilizar Figma Component Properties V2 con la siguiente estructura:
+ * 
+ * 1. Variants (Estructurales):
+ *    - Definir variantes puramente visuales/estructurales.
+ * 2. Booleans (Encendido/Apagado):
+ *    - Definir encendido/apagado para iconos o estados (isLoading, hasIcon).
+ * 3. Color Variables (No usar variantes para colores semánticos):
+ *    - El relleno/borde debe usar Figma Variables (Khor v6.0 Colors) asignado dinámicamente.
+ *    - El consumidor del UI Kit cambiará el color del layer.
  */
 export function KAutocomplete({
   value = '',

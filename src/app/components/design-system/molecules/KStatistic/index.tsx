@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { TrendingUp, TrendingDown } from 'lucide-react';
-import { cn } from '../../../../../imports/utils';
+import { cn } from '@/utils/cn';
 import { KSkeleton } from '../../atoms/KSkeleton';
 
 export interface KStatisticProps {
@@ -37,6 +37,22 @@ const formatNumber = (
 
 /**
  * KStatistic — Display estadístico con tendencias y conteo animado (Headless v4)
+ */
+/**
+ * @figma-mcp-migration
+ * Component: KStatistic
+ * 
+ * INSTRUCCIONES PARA AGENTES DE IA (VS Code / MCP):
+ * Para migrar este componente a Figma, NO generar una matriz multiplicando todas las variables.
+ * Utilizar Figma Component Properties V2 con la siguiente estructura:
+ * 
+ * 1. Variants (Estructurales):
+ *    - Definir variantes puramente visuales/estructurales.
+ * 2. Booleans (Encendido/Apagado):
+ *    - Definir encendido/apagado para iconos o estados (isLoading, hasIcon).
+ * 3. Color Variables (No usar variantes para colores semánticos):
+ *    - El relleno/borde debe usar Figma Variables (Khor v6.0 Colors) asignado dinámicamente.
+ *    - El consumidor del UI Kit cambiará el color del layer.
  */
 export function KStatistic({ 
   title, 

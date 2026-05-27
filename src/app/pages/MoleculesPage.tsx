@@ -31,16 +31,15 @@ import { KTooltip } from '../components/design-system/molecules/KTooltip';
 import { KCascader } from '../components/design-system/molecules/KCascader';
 import { KStatistic } from '../components/design-system/molecules/KStatistic';
 import { KTimePicker } from '../components/design-system/molecules/KTimePicker';
-import { KMentions } from '../components/design-system/molecules/KMentions';
 import { KColorPicker } from '../components/design-system/molecules/KColorPicker';
 import { KAnchor } from '../components/design-system/molecules/KAnchor';
 import { KList } from '../components/design-system/molecules/KList';
 import { KDividerExtended } from '../components/design-system/molecules/KDividerExtended';
-import { KTreeSelect } from '../components/design-system/molecules/KTreeSelect';
-import { KTransfer } from '../components/design-system/molecules/KTransfer';
 import { KButton } from '../components/design-system/atoms/KButton';
 import { KInput } from '../components/design-system/atoms/KInput';
 import { KText } from '../components/design-system/atoms/KText';
+import { KContextMenu } from '../components/design-system/molecules/KContextMenu';
+import { KHoverCard } from '../components/design-system/molecules/KHoverCard';
 import { format as formatDate, parse, startOfDay, endOfDay, subDays } from 'date-fns';
 import {
   Users, DollarSign, TrendingUp, Calendar, Home,
@@ -97,6 +96,106 @@ function StatCardPlayground() {
 }
 
 /* ─── Molecule Playgrounds ──────────────────── */
+
+function ContextMenuPlayground() {
+  const [lastAction, setLastAction] = useState<string>('Ninguna');
+
+  const menuItems = [
+    { key: 'edit', label: 'Editar Elemento', icon: <Edit size={14} /> },
+    { key: 'copy', label: 'Copiar Enlace', icon: <Copy size={14} />, shortcut: '⌘C' },
+    {
+      key: 'share',
+      label: 'Compartir',
+      icon: <Share2 size={14} />,
+      children: [
+        { key: 'share-slack', label: 'Enviar por Slack' },
+        { key: 'share-email', label: 'Enviar por Email' }
+      ]
+    },
+    { key: 'divider-1', type: 'divider' as const },
+    { key: 'delete', label: 'Eliminar', icon: <Trash2 size={14} />, danger: true, shortcut: '⌘⌫' }
+  ];
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
+      <KContextMenu items={menuItems} onClick={(key) => setLastAction(key)}>
+        <div style={{
+          width: 320,
+          height: 160,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          border: `2px dashed ${khorTokens.colors.neutral[300]}`,
+          borderRadius: khorTokens.radius.xl,
+          backgroundColor: 'white',
+          color: khorTokens.colors.neutral[500],
+          fontSize: 14,
+          fontWeight: 500,
+          cursor: 'context-menu',
+          userSelect: 'none',
+          boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.05)'
+        }}>
+          Haz click derecho aquí para ver el menú
+        </div>
+      </KContextMenu>
+      <div style={{ fontSize: 13, color: khorTokens.colors.neutral[600], fontFamily: khorTokens.typography.fontPrimary }}>
+        Acción ejecutada: <strong>{lastAction}</strong>
+      </div>
+    </div>
+  );
+}
+
+function HoverCardPlayground() {
+  const cardContent = (
+    <div style={{ display: 'flex', gap: 16, fontFamily: khorTokens.typography.fontPrimary }}>
+      <div style={{
+        width: 48,
+        height: 48,
+        borderRadius: '50%',
+        backgroundColor: khorTokens.colors.brand.primary,
+        color: 'white',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontWeight: 700,
+        fontSize: 16
+      }}>
+        K
+      </div>
+      <div style={{ flex: 1 }}>
+        <h4 style={{ margin: 0, fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy }}>Khor Design System</h4>
+        <p style={{ margin: '4px 0 12px 0', fontSize: 12, color: khorTokens.colors.neutral[500], lineHeight: 1.4 }}>
+          El sistema de diseño oficial de Khor. Construido con Tailwind, Radix UI y tokens semánticos modernos.
+        </p>
+        <div style={{ display: 'flex', gap: 16, fontSize: 11, color: khorTokens.colors.neutral[400] }}>
+          <div><strong>124</strong> Componentes</div>
+          <div><strong>v6.0</strong> Versión</div>
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, padding: 48, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
+      <div style={{ fontSize: 14, color: khorTokens.colors.neutral[600], fontFamily: khorTokens.typography.fontPrimary }}>
+        Pasa el cursor sobre el texto azul:
+      </div>
+      <KHoverCard content={cardContent} align="center" side="top" arrow>
+        <span style={{
+          color: khorTokens.colors.brand.primary,
+          fontWeight: 600,
+          cursor: 'pointer',
+          textDecoration: 'underline',
+          textUnderlineOffset: 4
+        }}>
+          @KhorDesignSystem
+        </span>
+      </KHoverCard>
+    </div>
+  );
+}
+
+/* ─── Component Registry ────────────────────── */
 function FormFieldPlayground() {
   const [label, setLabel] = useState('Nombre Completo');
   const [required, setRequired] = useState(true);
@@ -1007,23 +1106,6 @@ function TimePickerPlayground() {
   );
 }
 
-function MentionsPlayground() {
-  const [val, setVal] = useState('');
-  const options = [
-    { value: 'alex', label: 'Alex Mercer', avatar: 'https://i.pravatar.cc/150?u=alex' },
-    { value: 'juan', label: 'Juan Perez', avatar: 'https://i.pravatar.cc/150?u=juan' },
-    { value: 'maria', label: 'Maria Gomez', avatar: 'https://i.pravatar.cc/150?u=maria' },
-  ];
-
-  return (
-    <div style={{ padding: 48, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-      <KMentions value={val} onChange={setVal} options={options} placeholder="Menciona a alguien con @" />
-      <div style={{ marginTop: 12 }}>
-        <KText variant="small" color="secondary">Vista previa: {val}</KText>
-      </div>
-    </div>
-  );
-}
 
 function ColorPickerPlayground() {
   const [color, setColor] = useState<any>('#E04D36');
@@ -1070,84 +1152,7 @@ function ListPlayground() {
   );
 }
 
-function TransferPlayground() {
-  const [targetKeys, setTargetKeys] = useState<string[]>(['1', '3']);
-  const [oneWay, setOneWay] = useState(false);
-  const data = [
-    { key: '1', title: 'Usuario Admin', description: 'Acceso total al sistema' },
-    { key: '2', title: 'Editor Contenido', description: 'Publicación y edición' },
-    { key: '3', title: 'Analista Datos', description: 'Lectura de reportes' },
-    { key: '4', title: 'Invitado', description: 'Acceso restringido' },
-    { key: '5', title: 'Soporte N1', description: 'Tickets básicos', disabled: true },
-  ];
 
-  return (
-    <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
-      <div style={{ flex: 1, minWidth: 200 }}>
-        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
-        <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={oneWay} onChange={(e) => setOneWay(e.target.checked)} /> Modo One Way</label>
-      </div>
-      <div style={{ flex: 3, minWidth: 500, padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-        <KTransfer 
-          dataSource={data} 
-          targetKeys={targetKeys} 
-          onChange={setTargetKeys as any} 
-          showSearch 
-          oneWay={oneWay}
-          titles={['Disponibles', 'Asignados']}
-        />
-      </div>
-    </div>
-  );
-}
-
-function TreeSelectPlayground() {
-  const [val, setVal] = useState<any>();
-  const [multiple, setMultiple] = useState(false);
-  const [treeCheckable, setTreeCheckable] = useState(false);
-
-  const data = [
-    { title: 'Corporativo', value: 'corp', children: [
-        { title: 'Recursos Humanos', value: 'hr' },
-        { title: 'Tecnología', value: 'tech', children: [
-            { title: 'Frontend', value: 'fe' },
-            { title: 'Backend', value: 'be' },
-        ]},
-    ]},
-    { title: 'Ventas', value: 'sales', children: [
-      { title: 'Directas', value: 'direct' },
-      { title: 'Indirectas', value: 'indirect' },
-    ]},
-  ];
-
-  return (
-    <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
-      <div style={{ flex: 1, minWidth: 200 }}>
-        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={multiple} onChange={(e) => { setMultiple(e.target.checked); setVal(undefined); }} /> Multiple</label>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={treeCheckable} onChange={(e) => { setTreeCheckable(e.target.checked); setVal(undefined); }} /> Tree Checkable</label>
-        </div>
-      </div>
-      <div style={{ flex: 2, minWidth: 300, padding: 48, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-        <div style={{ width: 350 }}>
-          <KTreeSelect 
-            treeData={data} 
-            value={val} 
-            onChange={setVal} 
-            multiple={multiple}
-            treeCheckable={treeCheckable}
-            placeholder="Selecciona departamentos..." 
-            treeDefaultExpandAll 
-          />
-        </div>
-        <KText variant="small" color="secondary">
-          Seleccionados: {Array.isArray(val) ? val.join(', ') : val || '(ninguna)'}
-        </KText>
-      </div>
-    </div>
-  );
-}
 
 export const molecules: Record<string, MoleculeEntry> = {
   'form-field': {
@@ -2216,38 +2221,7 @@ import { KInput } from '@khor/design-system/atoms/index';
     ],
     guidelines: ['Útil para explicar iconos o abreviaturas.', 'Evita tooltips con demasiado texto; mantén el mensaje corto.'],
   },
-  'mentions': {
-    id: 'mentions', name: 'KMentions',
-    description: 'Caja de texto que sugiere opciones de mención al escribir un disparador (ej: @).',
-    preview: (<div><KMentions placeholder="Usa @ para mencionar" options={[{ value: '1', label: 'Admin' }]} /></div>),
-    code: `import { KMentions } from '@khor/design-system/molecules/index';
 
-<KMentions 
-  trigger="@" 
-  options={[{ value: 'user1', label: 'Alex' }]} 
-/>`,
-    filename: 'KMentions.tsx',
-    playground: <MentionsPlayground />,
-    stateShowcase: (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 350 }}>
-        <KMentions placeholder="Escribe @ para usuarios..." options={[{ value: 'admin', label: 'Admin' }]} />
-        <KMentions placeholder="Deshabilitado" disabled options={[]} />
-      </div>
-    ),
-    a11ySummary: {
-      keyboard: ['Pulsar el trigger (@), activa el panel. Up/Down recorren opciones.', 'Enter/Espacio inserta la mención.'],
-      aria: ['Anuncia combinaciones de búsqueda con aria-live.'],
-      contrast: 'AAA en las opciones listadas.',
-      score: 100,
-    },
-    props: [
-      { name: 'options', type: 'KMentionOption[]', required: true, description: 'Lista de posibles menciones.' },
-      { name: 'trigger', type: 'string', default: "'@'", description: 'Carácter que dispara el menú.' },
-      { name: 'placeholder', type: 'string', description: 'Texto de ayuda.' },
-      { name: 'autoSize', type: 'boolean', description: 'Ajuste automático de altura.' },
-    ],
-    guidelines: ['Usa etiquetas con avatares para una mejor UX de mención.', 'Ideal para comentarios, chats o sistemas de feedback.'],
-  },
   'color-picker': {
     id: 'color-picker', name: 'KColorPicker',
     description: 'Selector de color con soporte para formatos HEX, RGB, HSB y paleta de presets.',
@@ -2365,73 +2339,105 @@ import { KInput } from '@khor/design-system/atoms/index';
       score: 100,
     },
     props: [{ name: 'children', type: 'ReactNode', description: 'Texto central.' }, { name: 'dashed', type: 'boolean', description: 'Estilo dashed.' }],
-    guidelines: ['Usa con texto para separar secciones semánticas.'] },
-  'tree-select': {
-    id: 'tree-select', name: 'KTreeSelect',
-    description: 'Selector de árbol jerárquico que permite navegar y seleccionar elementos en estructuras multinivel.',
-    preview: (<div style={{ width: 280 }}><KTreeSelect treeData={[{ title: 'Raíz', value: 'r', children: [{ title: 'Hijo', value: 'h' }] }]} placeholder="Seleccionar..." /></div>),
-    code: `import { KTreeSelect } from '@khor/design-system/molecules/index';
-
-<KTreeSelect 
-  treeData={treeData} 
-  placeholder="Seleccionar área" 
-  onChange={(val) => setVal(val)} 
-/>`,
-    filename: 'KTreeSelect.tsx',
-    playground: <TreeSelectPlayground />,
+    guidelines: ['Usa con texto para separar secciones semánticas.']
+  },
+  'context-menu': {
+    id: 'context-menu',
+    name: 'KContextMenu',
+    description: 'Menú contextual de click derecho premium basado en Radix UI que soporta submenús, shortcuts de teclado, separadores semánticos y estados de peligro.',
+    preview: (
+      <div style={{ display: 'flex', justifyContent: 'center', padding: 24, border: '1px dashed #ccc', borderRadius: 8, userSelect: 'none' }}>
+        <span style={{ fontSize: 13, color: '#666' }}>Click derecho aquí para probar previsualización</span>
+      </div>
+    ),
+    playground: <ContextMenuPlayground />,
+    code: `import { KContextMenu } from '@khor/design-system/molecules/index';\n\nconst menuItems = [\n  { key: 'edit', label: 'Editar Elemento', icon: <Edit size={14} /> },\n  { key: 'copy', label: 'Copiar Enlace', icon: <Copy size={14} />, shortcut: '⌘C' },\n  { key: 'divider-1', type: 'divider' },\n  { key: 'delete', label: 'Eliminar', icon: <Trash2 size={14} />, danger: true }\n];\n\n<KContextMenu items={menuItems} onClick={(key) => console.log(key)}>\n  <div className="w-80 h-40 border border-dashed rounded-xl flex items-center justify-center cursor-context-menu">\n    Haz click derecho aquí\n  </div>\n</KContextMenu>`,
+    filename: 'KContextMenu/index.tsx',
+    props: [
+      { name: 'items', type: 'KContextMenuItemDef[]', required: true, description: 'Estructura jerárquica del menú de opciones.' },
+      { name: 'onClick', type: '(key: string) => void', description: 'Callback gatillado al seleccionar una opción no deshabilitada.' },
+      { name: 'children', type: 'ReactElement', required: true, description: 'Elemento que disparará el click derecho.' },
+    ],
+    guidelines: [
+      'Usa atajos estándar de teclado (shortcuts) en aplicaciones web de escritorio.',
+      'Diferencia visualmente las acciones peligrosas (como eliminar) usando la propiedad danger.',
+      'No anides submenús con más de 2 niveles de profundidad para evitar frustración.'
+    ],
     stateShowcase: (
-      <div style={{ display: 'flex', gap: 16, flexDirection: 'column', maxWidth: 300 }}>
-        <KTreeSelect treeData={[{ title: 'Rama 1', value: '1', children: [{ title: 'Hoja A', value: 'A' }] }]} placeholder="Base" />
-        <KTreeSelect treeData={[]} placeholder="Discapacitado" disabled />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8, padding: 12 }}>
+        <div style={{ fontSize: 12, fontWeight: 600, color: '#333' }}>Estados Visuales de los Ítems:</div>
+        <div style={{ padding: 8, display: 'flex', alignItems: 'center', gap: 8, borderRadius: 6, backgroundColor: '#f5f5f5', fontSize: 13 }}>Normal: Opción de Menú</div>
+        <div style={{ padding: 8, display: 'flex', alignItems: 'center', gap: 8, borderRadius: 6, backgroundColor: khorTokens.colors.brand.primary + '11', color: khorTokens.colors.brand.primary, fontSize: 13, fontWeight: 500 }}>Hover/Foco: Opción de Menú</div>
+        <div style={{ padding: 8, display: 'flex', alignItems: 'center', gap: 8, borderRadius: 6, backgroundColor: '#f5f5f5', opacity: 0.5, fontSize: 13, cursor: 'not-allowed' }}>Deshabilitado: Opción de Menú</div>
+        <div style={{ padding: 8, display: 'flex', alignItems: 'center', gap: 8, borderRadius: 6, backgroundColor: '#f5f5f5', color: khorTokens.colors.feedback.error, fontSize: 13 }}>Peligro (Danger): Opción de Menú</div>
       </div>
     ),
     a11ySummary: {
-      keyboard: ['Flechas Arriba/Abajo: Navega items.', 'Flecha Derecha: Expande nodo padre.', 'Flecha Izquierda: Contrae nodo.'],
-      aria: ['Se convierte en role="tree" y emite estados usando aria-expanded, aria-selected.'],
-      contrast: 'AAA sobre paneles desplegables.',
-      score: 100,
-    },
-    props: [
-      { name: 'treeData', type: 'DataNode[]', required: true, description: 'Estructura jerárquica de datos.' },
-      { name: 'value', type: 'string', description: 'Valor seleccionado.' },
-      { name: 'placeholder', type: 'string', description: 'Texto de ayuda.' },
-      { name: 'treeDefaultExpandAll', type: 'boolean', description: 'Expande todos los nodos por defecto.' },
-    ],
-    guidelines: ['Usa para clasificaciones complejas como organigramas o categorías anidadas.', 'Mantén la profundidad razonable (3-4 niveles máx) para asegurar legibilidad.'],
+      keyboard: [
+        'Shift+F10 / Click derecho: Abre el menú contextual en el elemento gatillo.',
+        'Arrows Up/Down: Navegan entre las opciones del menú.',
+        'Arrow Right: Abre el submenú de la opción activa.',
+        'Arrow Left / Escape: Cierra el submenú o el menú completo.',
+        'Enter / Space: Activa la opción seleccionada.'
+      ],
+      aria: [
+        'role="menu" y role="menuitem" gestionados nativamente por Radix UI.',
+        'aria-haspopup="true" en el disparador.',
+        'aria-expanded refleja de manera sincrónica el estado de visibilidad del menú.'
+      ],
+      contrast: 'Fondos con blur y bordes contrastantes que cumplen las normas WCAG de legibilidad.',
+      score: 100
+    }
   },
-  'transfer': {
-    id: 'transfer', name: 'KTransfer',
-    description: 'Componente de doble lista para mover elementos entre una columna de origen y una de destino.',
-    preview: (<div><KTransfer dataSource={[{ key: '1', title: 'Item 1' }]} targetKeys={[]} /></div>),
-    code: `import { KTransfer } from '@khor/design-system/molecules/index';
-
-<KTransfer 
-  dataSource={data} 
-  targetKeys={targetKeys} 
-  onChange={(nextKeys) => setTargetKeys(nextKeys)} 
-  showSearch 
-/>`,
-    filename: 'KTransfer.tsx',
-    playground: <TransferPlayground />,
+  'hover-card': {
+    id: 'hover-card',
+    name: 'KHoverCard',
+    description: 'Tarjeta flotante interactiva de vista previa rápida basada en Radix UI. Ideal para perfiles de usuario, vistas rápidas de productos o información enriquecida.',
+    preview: (
+      <div style={{ display: 'flex', justifyContent: 'center', padding: 12 }}>
+        <span style={{ fontSize: 13, color: khorTokens.colors.brand.primary, textDecoration: 'underline' }}>Pasa el mouse sobre mí</span>
+      </div>
+    ),
+    playground: <HoverCardPlayground />,
+    code: `import { KHoverCard } from '@khor/design-system/molecules/index';\n\nconst CardContent = () => (\n  <div className="flex gap-4">\n    <div className="w-12 h-12 rounded-full bg-primary" />\n    <div>\n      <h4 className="font-semibold text-sm">Khor Design System</h4>\n      <p className="text-xs text-muted">Construido con Tailwind y Radix.</p>\n    </div>\n  </div>\n);\n\n<KHoverCard content={<CardContent />} align="center" side="top" arrow>\n  <span className="text-primary underline cursor-pointer">@KhorDesignSystem</span>\n</KHoverCard>`,
+    filename: 'KHoverCard/index.tsx',
+    props: [
+      { name: 'children', type: 'ReactNode', required: true, description: 'Gatillo visual que activa la tarjeta al pasar el cursor.' },
+      { name: 'content', type: 'ReactNode', required: true, description: 'Contenido que se mostrará dentro de la tarjeta flotante.' },
+      { name: 'align', type: "'start' | 'center' | 'end'", default: "'center'", description: 'Alineación de la tarjeta con respecto al gatillo.' },
+      { name: 'side', type: "'top' | 'right' | 'bottom' | 'left'", default: "'top'", description: 'Lado donde aparecerá la tarjeta.' },
+      { name: 'sideOffset', type: 'number', default: '6', description: 'Distancia de separación en píxeles.' },
+      { name: 'arrow', type: 'boolean', default: 'false', description: 'Muestra una flecha indicadora que apunta al gatillo.' },
+      { name: 'openDelay', type: 'number', default: '300', description: 'Tiempo de espera en ms para abrir.' },
+      { name: 'closeDelay', type: 'number', default: '200', description: 'Tiempo de espera en ms para cerrar.' },
+    ],
+    guidelines: [
+      'Configura un openDelay prudente (300-500ms) para evitar aperturas no deseadas al mover el puntero.',
+      'Asegúrate de que la tarjeta contenga información complementaria y no crítica para completar la tarea del usuario.',
+      'Habilita la propiedad arrow para mejorar la dirección visual y la conexión con el elemento disparador.'
+    ],
     stateShowcase: (
-      <div style={{ width: '100%', overflowX: 'auto', padding: 16 }}>
-        <KTransfer dataSource={[{ key: '1', title: 'Item Base' }]} targetKeys={[]} showSearch />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8, padding: 12 }}>
+        <div style={{ fontSize: 12, fontWeight: 600, color: '#333' }}>Estados:</div>
+        <div style={{ padding: 16, border: '1px solid #eee', borderRadius: 8, backgroundColor: 'white', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}>
+          <div style={{ fontSize: 13, fontWeight: 600 }}>Tarjeta Flotante Abierta</div>
+          <div style={{ fontSize: 11, color: '#666', marginTop: 4 }}>Entrada animada suave con micro-desplazamiento.</div>
+        </div>
       </div>
     ),
     a11ySummary: {
-      keyboard: ['Tab: Entra al panel.', 'Arrows: Selecciona items internos.', 'Space: Toggle elemento.', 'Tab hacia los botones de flecha o enter para transferir.'],
-      aria: ['Aria-live configurado para la caja de estado y notificar transferencias dinámicamente.'],
-      contrast: 'AAA sobre botones primarios in-between matrices.',
-      score: 100,
-    },
-    props: [
-      { name: 'dataSource', type: 'KTransferItem[]', required: true, description: 'Elementos disponibles y seleccionados.' },
-      { name: 'targetKeys', type: 'string[]', required: true, description: 'Keys de los elementos en la columna derecha.' },
-      { name: 'onChange', type: '(nextKeys) => void', description: 'Callback al mover elementos.' },
-      { name: 'showSearch', type: 'boolean', default: 'false', description: 'Habilita caja de búsqueda en columnas.' },
-    ],
-    guidelines: ['Ideal para asignación de roles, permisos o selección múltiple con orden relevante.', 'Usa "showSearch" si la lista supera los 10 elementos.'],
-  },
+      keyboard: [
+        'Hover / Foco: Activa la visualización de la tarjeta.',
+        'Escape: Cierra de forma inmediata la tarjeta abierta sin perder el foco en el elemento principal.'
+      ],
+      aria: [
+        'role="tooltip" o descriptores semánticos acordes al contenido inyectado.',
+        'Soporte completo para lectores de pantalla mediante descriptores dinámicos en el trigger.'
+      ],
+      contrast: 'Bordes nítidos y sombras definidas que aíslan el contenido del fondo.',
+      score: 100
+    }
+  }
 };
 
 export function MoleculesPage() {

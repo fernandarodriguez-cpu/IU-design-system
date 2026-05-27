@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { Command } from 'cmdk';
 import { Check, ChevronsUpDown, X } from 'lucide-react';
 import { KPopoverRoot, KPopoverTrigger, KPopoverContent } from '../KPopover';
-import { cn } from '../../../../../imports/utils';
+import { cn } from '@/utils/cn';
 
 /* ═══════════════════════════════════════════════
    KSelectAdvanced — Combo Box/Tags (Headless v4)
    Reemplaza a Select de AntD (mode=multiple/tags)
-   Usando: Radix Popover + cmdk
+   Usando: Khor Engine Popover + cmdk
    ═══════════════════════════════════════════════ */
 
 export interface KSelectAdvancedOption {
@@ -32,6 +32,22 @@ export interface KSelectAdvancedProps {
   isFocused?: boolean;
 }
 
+/**
+ * @figma-mcp-migration
+ * Component: KSelectAdvanced
+ * 
+ * INSTRUCCIONES PARA AGENTES DE IA (VS Code / MCP):
+ * Para migrar este componente a Figma, NO generar una matriz multiplicando todas las variables.
+ * Utilizar Figma Component Properties V2 con la siguiente estructura:
+ * 
+ * 1. Variants (Estructurales):
+ *    - Definir variantes puramente visuales/estructurales.
+ * 2. Booleans (Encendido/Apagado):
+ *    - Definir encendido/apagado para iconos o estados (isLoading, hasIcon).
+ * 3. Color Variables (No usar variantes para colores semánticos):
+ *    - El relleno/borde debe usar Figma Variables (Khor v6.0 Colors) asignado dinámicamente.
+ *    - El consumidor del UI Kit cambiará el color del layer.
+ */
 export function KSelectAdvanced({
   options,
   value,
@@ -128,7 +144,7 @@ export function KSelectAdvanced({
           <ChevronsUpDown className="w-4 h-4 text-khor-neutral-400 shrink-0 opacity-50 ms-2" />
         </button>
       </KPopoverTrigger>
-      <KPopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 z-[100] border border-khor-border-default rounded-xl shadow-khor-lg bg-white font-primary overflow-hidden">
+      <KPopoverContent className="w-[var(--Khor Engine-popover-trigger-width)] p-0 z-[100] border border-khor-border-default rounded-xl shadow-khor-lg bg-white font-primary overflow-hidden">
         <Command className="bg-white">
           <Command.Input 
             placeholder="Buscar..." 

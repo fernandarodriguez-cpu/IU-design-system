@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { cn } from '../../../../../imports/utils';
+import { cn } from '@/utils/cn';
 
 export interface KInputOTPProps {
   /** Número de slots. Default: 6 */

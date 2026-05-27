@@ -13,8 +13,24 @@ import {
 } from 'lucide-react';
 import { KButton, KText, KBadge } from '../../atoms';
 import { KEditorProps } from './types';
-import { cn } from '../../../../../imports/utils';
+import { cn } from '@/utils/cn';
 
+/**
+ * @figma-mcp-migration
+ * Component: KEditor
+ * 
+ * INSTRUCCIONES PARA AGENTES DE IA (VS Code / MCP):
+ * Para migrar este componente a Figma, NO generar una matriz multiplicando todas las variables.
+ * Utilizar Figma Component Properties V2 con la siguiente estructura:
+ * 
+ * 1. Variants (Estructurales):
+ *    - Definir variantes puramente visuales/estructurales.
+ * 2. Booleans (Encendido/Apagado):
+ *    - Definir encendido/apagado para iconos o estados (isLoading, hasIcon).
+ * 3. Color Variables (No usar variantes para colores semánticos):
+ *    - El relleno/borde debe usar Figma Variables (Khor v6.0 Colors) asignado dinámicamente.
+ *    - El consumidor del UI Kit cambiará el color del layer.
+ */
 export const KEditor: React.FC<KEditorProps> = ({
   initialValue = '',
   placeholder = 'Empieza a escribir algo asombroso...',

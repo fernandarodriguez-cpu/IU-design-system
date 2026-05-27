@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
-import { cn } from '../../../../../imports/utils';
+import { cn } from '@/utils/cn';
 import { User } from 'lucide-react';
 import { KPopover } from '../../molecules/KPopover';
 
@@ -113,6 +113,22 @@ function useAvatarBreakpoint(size: KAvatarProps['size']) {
 /**
  * KAvatar — Avatar circular o cuadrado con imagen, icono, iniciales autoajustables
  * y estado de presencia. Basado en Radix UI Avatar con paridad AntD completa.
+ */
+/**
+ * @figma-mcp-migration
+ * Component: KAvatar
+ * 
+ * INSTRUCCIONES PARA AGENTES DE IA (VS Code / MCP):
+ * Para migrar este componente a Figma, NO generar una matriz multiplicando todas las variables.
+ * Utilizar Figma Component Properties V2 con la siguiente estructura:
+ * 
+ * 1. Variants (Estructurales):
+ *    - Definir variantes puramente visuales/estructurales.
+ * 2. Booleans (Encendido/Apagado):
+ *    - Definir encendido/apagado para iconos o estados (isLoading, hasIcon).
+ * 3. Color Variables (No usar variantes para colores semánticos):
+ *    - El relleno/borde debe usar Figma Variables (Khor v6.0 Colors) asignado dinámicamente.
+ *    - El consumidor del UI Kit cambiará el color del layer.
  */
 export const KAvatar = React.forwardRef<HTMLDivElement, KAvatarProps>(({
   src,
