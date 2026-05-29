@@ -41,8 +41,12 @@
 .k-col-24 { flex: 0 0 100%; max-width: 100%; }
 
 /* XS offsets */
-.k-col-offset-1 { margin-left: 4.16666667%; }
-/* ... (simplified for space, will add critical ones) */
+.k-col-offset-1 { margin-inline-start: 4.16666667%; }
+.k-col-offset-2 { margin-inline-start: 8.33333333%; }
+.k-col-offset-4 { margin-inline-start: 16.66666667%; }
+.k-col-offset-6 { margin-inline-start: 25%; }
+.k-col-offset-8 { margin-inline-start: 33.33333333%; }
+.k-col-offset-12 { margin-inline-start: 50%; }
 
 /* Small Devices (sm ≥ 576px) */
 @media (min-width: 576px) {

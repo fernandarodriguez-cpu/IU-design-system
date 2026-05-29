@@ -1,7 +1,7 @@
 import React from 'react';
 import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
 import { Circle } from 'lucide-react';
-import { cn } from '../../../../../imports/utils';
+import { cn } from '@/utils/cn';
 
 export interface KRadioGroupOptions {
   label: React.ReactNode;
@@ -22,6 +22,10 @@ export interface KRadioGroupProps extends Omit<React.ComponentPropsWithoutRef<ty
 export interface KRadioProps extends React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item> {
   children?: React.ReactNode;
   autoFocus?: boolean;
+  /** Fuerza el estado hover (útil para previews/playgrounds) */
+  isHovered?: boolean;
+  /** Fuerza el estado de foco (útil para previews/playgrounds) */
+  isFocused?: boolean;
 }
 
 export interface KRadioButtonProps extends KRadioProps {}
@@ -77,7 +81,7 @@ const InternalRadioGroup = React.forwardRef<React.ElementRef<typeof RadioGroupPr
 });
 
 const InternalRadio = React.forwardRef<React.ElementRef<typeof RadioGroupPrimitive.Item>, KRadioProps>(function Radio(
-  { className, children, autoFocus, disabled, ...rest }, ref
+  { className, children, autoFocus, disabled, isHovered, isFocused, ...rest }, ref
 ) {
   const group = React.useContext(RadioGroupContext);
   const isDisabled = disabled || group?.disabled;
@@ -97,11 +101,14 @@ const InternalRadio = React.forwardRef<React.ElementRef<typeof RadioGroupPrimiti
         ref={ref}
         disabled={isDisabled}
         className={cn(
-          "aspect-square h-4 w-4 rounded-full border border-khor-slate-200 bg-white shadow-khor-sm transition-all duration-200",
-          "ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-khor-primary/20 focus-visible:ring-offset-1",
+          "aspect-square rounded-full border border-khor-slate-200 bg-white shadow-khor-sm transition-all duration-200",
+          "h-[var(--khor-density-spacing-md)] w-[var(--khor-density-spacing-md)]", // Density sizing
+          "ring-offset-background focus:outline-none focus-visible:ring-[var(--khor-focus-ring-width)] focus-visible:ring-[var(--khor-focus-ring-color)] focus-visible:ring-offset-[var(--khor-focus-ring-offset)]",
           "disabled:cursor-not-allowed disabled:opacity-50",
           "data-[state=checked]:border-khor-primary data-[state=checked]:text-khor-primary data-[state=checked]:shadow-none",
-          "hover:border-khor-primary hover:bg-khor-primary-light/5",
+          "hover:border-khor-primary hover:bg-khor-surface-hover",
+          isHovered && "border-khor-primary bg-khor-surface-hover",
+          isFocused && "ring-2 ring-khor-primary ring-offset-1 border-khor-primary",
           className
         )}
         {...rest}
@@ -120,19 +127,19 @@ const InternalRadio = React.forwardRef<React.ElementRef<typeof RadioGroupPrimiti
 });
 
 const KRadioButton = React.forwardRef<React.ElementRef<typeof RadioGroupPrimitive.Item>, KRadioButtonProps>(function RadioButton(
-  { className, children, disabled, autoFocus, ...rest }, ref
+  { className, children, disabled, autoFocus, isHovered, isFocused, ...rest }, ref
 ) {
   const group = React.useContext(RadioGroupContext) || { optionType: 'button', buttonStyle: 'outline', size: 'md', disabled: false };
   const isDisabled = disabled || group.disabled;
   const isSolid = group.buttonStyle === 'solid';
 
   const sizeClasses = {
-    sm: "px-3 py-1 text-xs h-7",
-    small: "px-3 py-1 text-xs h-7",
-    md: "px-4 py-2 text-sm h-9",
-    middle: "px-4 py-2 text-sm h-9",
-    lg: "px-5 py-3 text-base h-11",
-    large: "px-5 py-3 text-base h-11",
+    sm: "px-3 py-1 text-xs h-[var(--khor-density-height-sm)]",
+    small: "px-3 py-1 text-xs h-[var(--khor-density-height-sm)]",
+    md: "px-4 py-2 text-sm h-[var(--khor-density-height-md)]",
+    middle: "px-4 py-2 text-sm h-[var(--khor-density-height-md)]",
+    lg: "px-5 py-3 text-base h-[var(--khor-density-height-lg)]",
+    large: "px-5 py-3 text-base h-[var(--khor-density-height-lg)]",
   }[group.size || 'md'];
 
   React.useEffect(() => {
@@ -147,12 +154,14 @@ const KRadioButton = React.forwardRef<React.ElementRef<typeof RadioGroupPrimitiv
       disabled={isDisabled}
       className={cn(
         "inline-flex items-center justify-center font-primary transition-all duration-200 border outline-none",
-        "focus-visible:ring-2 focus-visible:ring-khor-primary/20 focus-visible:ring-offset-0 focus-visible:z-20",
+        "focus-visible:ring-[var(--khor-focus-ring-width)] focus-visible:ring-[var(--khor-focus-ring-color)] focus-visible:ring-offset-0 focus-visible:z-20",
         "disabled:pointer-events-none disabled:opacity-50 disabled:bg-khor-slate-100 disabled:text-khor-neutral-400 disabled:border-khor-slate-200",
         "first:rounded-l-md last:rounded-r-md relative font-medium",
         isSolid 
           ? "border-khor-slate-200 bg-khor-slate-100 text-khor-neutral-600 hover:text-khor-primary data-[state=checked]:bg-khor-primary data-[state=checked]:border-khor-primary data-[state=checked]:text-white data-[state=checked]:z-10"
           : "border-khor-slate-200 bg-white text-khor-neutral-600 hover:text-khor-primary data-[state=checked]:border-khor-primary data-[state=checked]:text-khor-primary data-[state=checked]:z-10",
+        isHovered && "border-khor-primary text-khor-primary z-20",
+        isFocused && "ring-2 ring-khor-primary z-20",
         sizeClasses,
         className
       )}
@@ -168,6 +177,22 @@ type KRadioComponent = typeof InternalRadio & {
   Button: typeof KRadioButton;
 };
 
+/**
+ * @figma-mcp-migration
+ * Component: KRadio
+ * 
+ * INSTRUCCIONES PARA AGENTES DE IA (VS Code / MCP):
+ * Para migrar este componente a Figma, NO generar una matriz multiplicando todas las variables.
+ * Utilizar Figma Component Properties V2 con la siguiente estructura:
+ * 
+ * 1. Variants (Estructurales):
+ *    - Definir variantes puramente visuales/estructurales.
+ * 2. Booleans (Encendido/Apagado):
+ *    - Definir encendido/apagado para iconos o estados (isLoading, hasIcon).
+ * 3. Color Variables (No usar variantes para colores semánticos):
+ *    - El relleno/borde debe usar Figma Variables (Khor v6.0 Colors) asignado dinámicamente.
+ *    - El consumidor del UI Kit cambiará el color del layer.
+ */
 export const KRadio = InternalRadio as KRadioComponent;
 KRadio.Group = InternalRadioGroup;
 KRadio.Button = KRadioButton;

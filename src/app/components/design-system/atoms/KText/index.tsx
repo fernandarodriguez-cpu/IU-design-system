@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { Copy, Check, Edit2, ExternalLink } from 'lucide-react';
-import { cn } from '../../../../../imports/utils';
+import { cn } from '@/utils/cn';
 
 // --- Types ---
 
@@ -105,7 +105,7 @@ const ExtraActions = ({ props, textValue, onUpdate }: { props: BaseTypographyPro
   };
 
   return (
-    <span className="inline-flex items-center gap-2 ml-2 pointer-events-auto">
+    <span className="inline-flex items-center gap-2 ms-2 pointer-events-auto">
       {props.copyable && (
         <button 
           onClick={handleCopy}
@@ -157,6 +157,22 @@ const ExtraActions = ({ props, textValue, onUpdate }: { props: BaseTypographyPro
 
 // --- Sub-components ---
 
+/**
+ * @figma-mcp-migration
+ * Component: KTitle
+ * 
+ * INSTRUCCIONES PARA AGENTES DE IA (VS Code / MCP):
+ * Para migrar este componente a Figma, NO generar una matriz multiplicando todas las variables.
+ * Utilizar Figma Component Properties V2 con la siguiente estructura:
+ * 
+ * 1. Variants (Estructurales):
+ *    - Definir variantes puramente visuales/estructurales.
+ * 2. Booleans (Encendido/Apagado):
+ *    - Definir encendido/apagado para iconos o estados (isLoading, hasIcon).
+ * 3. Color Variables (No usar variantes para colores semánticos):
+ *    - El relleno/borde debe usar Figma Variables (Khor v6.0 Colors) asignado dinámicamente.
+ *    - El consumidor del UI Kit cambiará el color del layer.
+ */
 export const KTitle = React.forwardRef<HTMLHeadingElement, BaseTypographyProps & { level?: 1 | 2 | 3 | 4 | 5 }>(
   ({ level = 1, children, className, ...props }, ref) => {
     const Component = `h${level}` as any;

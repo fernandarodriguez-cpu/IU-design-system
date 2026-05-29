@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Plus, Minus } from 'lucide-react';
-import { cn } from '../../../../../imports/utils';
+import { cn } from '@/utils/cn';
 
 export interface KInputNumberProps {
   value?: number;
@@ -31,6 +31,22 @@ const sizeClasses = {
 /**
  * KInputNumber — Input numérico con controles integrados (Headless v4)
  * Reemplaza AntD InputNumber con un input nativo controlado y botones de Lucide.
+ */
+/**
+ * @figma-mcp-migration
+ * Component: KInputNumber
+ * 
+ * INSTRUCCIONES PARA AGENTES DE IA (VS Code / MCP):
+ * Para migrar este componente a Figma, NO generar una matriz multiplicando todas las variables.
+ * Utilizar Figma Component Properties V2 con la siguiente estructura:
+ * 
+ * 1. Variants (Estructurales):
+ *    - Definir variantes puramente visuales/estructurales.
+ * 2. Booleans (Encendido/Apagado):
+ *    - Definir encendido/apagado para iconos o estados (isLoading, hasIcon).
+ * 3. Color Variables (No usar variantes para colores semánticos):
+ *    - El relleno/borde debe usar Figma Variables (Khor v6.0 Colors) asignado dinámicamente.
+ *    - El consumidor del UI Kit cambiará el color del layer.
  */
 export function KInputNumber({
   value,
@@ -100,7 +116,7 @@ export function KInputNumber({
         step={step}
         placeholder={placeholder}
         className={cn(
-          "w-full bg-khor-surface-page border border-khor-neutral-200 rounded-md outline-none transition-all pr-12 focus:border-khor-primary focus:ring-2 focus:ring-khor-primary-light font-semibold",
+          "w-full bg-khor-surface-page border border-khor-neutral-200 rounded-md outline-none transition-all pe-12 focus:border-khor-primary focus:ring-2 focus:ring-khor-primary-light font-semibold",
           disabled && "bg-khor-neutral-100 cursor-not-allowed opacity-60",
           sizeClasses[size]
         )}
@@ -108,7 +124,7 @@ export function KInputNumber({
       
       {/* Controles laterales */}
       {!readOnly && !disabled && (
-        <div className="absolute right-[1px] h-[calc(100%-2px)] flex flex-col border-l border-khor-neutral-200 rounded-r-md overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="absolute end-[1px] h-[calc(100%-2px)] flex flex-col border-is border-khor-neutral-200 rounded-e-md overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity">
           <button
             type="button"
             onClick={onIncrement}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { cn } from '../../../../../imports/utils';
+import { cn } from '@/utils/cn';
 
 export type KBadgeStatus = 'success' | 'error' | 'warning' | 'info' | 'default' | 'primary' | 'processing' | 'teal';
 
@@ -42,6 +42,8 @@ export interface KBadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   styles?: KBadgeStyles;
   /** Clases semánticas */
   classNames?: KBadgeClassNames;
+  /** Fuerza el estado hover (útil para previews/playgrounds) */
+  isHovered?: boolean;
 }
 
 const statusColorMap: Record<KBadgeStatus, string> = {
@@ -49,7 +51,7 @@ const statusColorMap: Record<KBadgeStatus, string> = {
   error: 'bg-khor-error',
   warning: 'bg-khor-warning',
   info: 'bg-khor-info',
-  default: 'bg-khor-slate-400',
+  default: 'bg-khor-neutral-400',
   primary: 'bg-khor-primary',
   processing: 'bg-khor-processing animate-pulse',
   teal: 'bg-khor-teal',
@@ -120,6 +122,22 @@ interface KBadgeComponent extends React.ForwardRefExoticComponent<KBadgeProps & 
   Ribbon: typeof KBadgeRibbon;
 }
 
+/**
+ * @figma-mcp-migration
+ * Component: KBadge
+ * 
+ * INSTRUCCIONES PARA AGENTES DE IA (VS Code / MCP):
+ * Para migrar este componente a Figma, NO generar una matriz multiplicando todas las variables.
+ * Utilizar Figma Component Properties V2 con la siguiente estructura:
+ * 
+ * 1. Variants (Estructurales):
+ *    - Definir variantes puramente visuales/estructurales.
+ * 2. Booleans (Encendido/Apagado):
+ *    - Definir encendido/apagado para iconos o estados (isLoading, hasIcon).
+ * 3. Color Variables (No usar variantes para colores semánticos):
+ *    - El relleno/borde debe usar Figma Variables (Khor v6.0 Colors) asignado dinámicamente.
+ *    - El consumidor del UI Kit cambiará el color del layer.
+ */
 export const KBadge = React.forwardRef<HTMLSpanElement, KBadgeProps>(
   ({ 
     className, style, label, text, status, 
@@ -191,6 +209,8 @@ export const KBadge = React.forwardRef<HTMLSpanElement, KBadgeProps>(
         {!isHidden && (
           <sup
             style={badgeStyle}
+            aria-hidden={isHidden}
+            aria-label={typeof count === 'number' ? `${count} notifications` : undefined}
             className={cn(
               "absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 flex items-center justify-center z-10 font-primary text-white shadow-khor-sm ring-2 ring-white transition-all",
               isDot 

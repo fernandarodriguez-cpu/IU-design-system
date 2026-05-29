@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
 import { Check, Minus } from 'lucide-react';
-import { cn } from '../../../../../imports/utils';
+import { cn } from '@/utils/cn';
 
 // --- Types ---
 
@@ -22,6 +22,10 @@ export interface KCheckboxProps extends React.ComponentPropsWithoutRef<typeof Ch
     input?: string;
     label?: string;
   };
+  /** Fuerza el estado hover (útil para previews/playgrounds) */
+  isHovered?: boolean;
+  /** Fuerza el estado de foco (útil para previews/playgrounds) */
+  isFocused?: boolean;
 }
 
 export interface KCheckboxGroupProps {
@@ -41,6 +45,11 @@ export interface KCheckboxGroupProps {
   style?: React.CSSProperties;
   className?: string;
   children?: React.ReactNode;
+  autoFocus?: boolean;
+  /** Fuerza el estado hover (útil para previews/playgrounds) */
+  isHovered?: boolean;
+  /** Fuerza el estado de foco (útil para previews/playgrounds) */
+  isFocused?: boolean;
 }
 
 // --- Context for Group ---
@@ -54,7 +63,7 @@ const CheckboxGroupContext = createContext<{
 // --- Individual Component ---
 
 const KCheckboxInternal = React.forwardRef<React.ElementRef<typeof CheckboxPrimitive.Root>, KCheckboxProps>(function KCheckbox(
-  { className, label, children, status = 'default', checked, onCheckedChange, disabled, styles, classNames, ...rest }, ref
+  { className, label, children, status = 'default', checked, onCheckedChange, disabled, isHovered, isFocused, styles, classNames, ...rest }, ref
 ) {
   const groupContext = useContext(CheckboxGroupContext);
   const content = label || children;
@@ -86,13 +95,17 @@ const KCheckboxInternal = React.forwardRef<React.ElementRef<typeof CheckboxPrimi
         onCheckedChange={handleToggle}
         disabled={finalDisabled}
         className={cn(
-          "peer shrink-0 p-0 h-4 w-4 rounded-sm border transition-all duration-200 select-none overflow-hidden flex items-center justify-center shadow-khor-sm",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-khor-primary/20 focus-visible:ring-offset-1 focus-visible:border-khor-primary",
+          "peer shrink-0 p-0 rounded-sm border transition-all duration-200 select-none overflow-hidden flex items-center justify-center shadow-khor-sm",
+          "h-[var(--khor-density-spacing-md)] w-[var(--khor-density-spacing-md)]", // Density sizing
+          "focus-visible:outline-none focus-visible:ring-[var(--khor-focus-ring-width)] focus-visible:ring-[var(--khor-focus-ring-color)] focus-visible:ring-offset-[var(--khor-focus-ring-offset)] focus-visible:border-khor-primary",
           "disabled:cursor-not-allowed",
           // States and Border Colors
-          status === 'default' && "border-khor-slate-200 bg-white hover:border-khor-primary",
-          status === 'error' && "border-khor-error bg-khor-error/5 shadow-none",
+          status === 'default' && "border-khor-slate-200 bg-white hover:border-khor-primary hover:bg-khor-surface-hover",
+          status === 'error' && "border-khor-border-error bg-khor-error/5 shadow-none",
           status === 'warning' && "border-khor-warning bg-khor-warning/5 shadow-none",
+          // Forced States
+          isHovered && "border-khor-primary bg-khor-surface-hover",
+          isFocused && "ring-[var(--khor-focus-ring-width)] ring-[var(--khor-focus-ring-color)] ring-offset-[var(--khor-focus-ring-offset)] border-khor-primary",
           // Checked logic
           "data-[state=checked]:bg-khor-primary data-[state=checked]:border-khor-primary data-[state=checked]:text-white data-[state=checked]:shadow-none",
           "data-[state=indeterminate]:bg-khor-primary data-[state=indeterminate]:border-khor-primary data-[state=indeterminate]:text-white data-[state=indeterminate]:shadow-none",
@@ -188,6 +201,22 @@ type CompoundedComponent = typeof KCheckboxInternal & {
   Group: typeof KCheckboxGroup;
 };
 
+/**
+ * @figma-mcp-migration
+ * Component: KCheckbox
+ * 
+ * INSTRUCCIONES PARA AGENTES DE IA (VS Code / MCP):
+ * Para migrar este componente a Figma, NO generar una matriz multiplicando todas las variables.
+ * Utilizar Figma Component Properties V2 con la siguiente estructura:
+ * 
+ * 1. Variants (Estructurales):
+ *    - Definir variantes puramente visuales/estructurales.
+ * 2. Booleans (Encendido/Apagado):
+ *    - Definir encendido/apagado para iconos o estados (isLoading, hasIcon).
+ * 3. Color Variables (No usar variantes para colores semánticos):
+ *    - El relleno/borde debe usar Figma Variables (Khor v6.0 Colors) asignado dinámicamente.
+ *    - El consumidor del UI Kit cambiará el color del layer.
+ */
 export const KCheckbox = KCheckboxInternal as CompoundedComponent;
 KCheckbox.Group = KCheckboxGroup;
 

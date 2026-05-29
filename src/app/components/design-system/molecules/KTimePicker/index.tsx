@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import * as Popover from '@radix-ui/react-popover';
 import { Clock, Check } from 'lucide-react';
 import { format, parse, isAfter } from 'date-fns';
-import { cn } from '../../../../../imports/utils';
+import { cn } from '@/utils/cn';
 import { KButton } from '../../atoms/KButton';
 
 export interface KTimePickerProps {
@@ -21,6 +21,22 @@ export interface KTimePickerProps {
 
 /**
  * KTimePicker — Selector de hora (Headless v4)
+ */
+/**
+ * @figma-mcp-migration
+ * Component: KTimePicker
+ * 
+ * INSTRUCCIONES PARA AGENTES DE IA (VS Code / MCP):
+ * Para migrar este componente a Figma, NO generar una matriz multiplicando todas las variables.
+ * Utilizar Figma Component Properties V2 con la siguiente estructura:
+ * 
+ * 1. Variants (Estructurales):
+ *    - Definir variantes puramente visuales/estructurales.
+ * 2. Booleans (Encendido/Apagado):
+ *    - Definir encendido/apagado para iconos o estados (isLoading, hasIcon).
+ * 3. Color Variables (No usar variantes para colores semánticos):
+ *    - El relleno/borde debe usar Figma Variables (Khor v6.0 Colors) asignado dinámicamente.
+ *    - El consumidor del UI Kit cambiará el color del layer.
  */
 export function KTimePicker({
   value,
@@ -67,7 +83,7 @@ export function KTimePicker({
         >
           <Clock className="w-4 h-4 text-khor-neutral-400 group-hover:text-khor-primary transition-colors" />
           <span className={cn(
-            "flex-1 text-left font-bold tracking-tight",
+            "flex-1 text-start font-bold tracking-tight",
             internalValue ? "text-khor-neutral-900" : "text-khor-neutral-400"
           )}>
             {internalValue}
@@ -83,7 +99,7 @@ export function KTimePicker({
         >
           <div className="flex gap-1 h-64">
             {/* Horas */}
-            <div className="flex flex-col overflow-y-auto pr-1 scrollbar-hide w-16">
+            <div className="flex flex-col overflow-y-auto pe-1 scrollbar-hide w-16">
               <span className="text-[10px] font-bold text-khor-neutral-400 uppercase tracking-widest text-center mb-2">HH</span>
               {hours.map(h => (
                 <button

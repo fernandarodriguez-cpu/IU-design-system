@@ -1,5 +1,5 @@
 import React from 'react';
-import { cn } from '../../../../../imports/utils';
+import { cn } from '@/utils/cn';
 
 export type KSpaceSize = 'sm' | 'md' | 'lg' | number;
 export type KSpaceAlign = 'start' | 'end' | 'center' | 'baseline';
@@ -24,6 +24,22 @@ const sizeMap: Record<string, string> = {
 /**
  * KSpace — Utilidad de espaciado (Headless v4)
  * Reemplaza AntD Space con una estructura pura de flexbox y Tailwind.
+ */
+/**
+ * @figma-mcp-migration
+ * Component: KSpace
+ * 
+ * INSTRUCCIONES PARA AGENTES DE IA (VS Code / MCP):
+ * Para migrar este componente a Figma, NO generar una matriz multiplicando todas las variables.
+ * Utilizar Figma Component Properties V2 con la siguiente estructura:
+ * 
+ * 1. Variants (Estructurales):
+ *    - Definir variantes puramente visuales/estructurales.
+ * 2. Booleans (Encendido/Apagado):
+ *    - Definir encendido/apagado para iconos o estados (isLoading, hasIcon).
+ * 3. Color Variables (No usar variantes para colores semánticos):
+ *    - El relleno/borde debe usar Figma Variables (Khor v6.0 Colors) asignado dinámicamente.
+ *    - El consumidor del UI Kit cambiará el color del layer.
  */
 export function KSpace({
   direction = 'horizontal',

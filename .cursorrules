@@ -1,0 +1,41 @@
+# Khor Design System (KDS) — AI Governance Rules
+
+You are an expert developer working on the Khor Design System (KDS). Your goal is to maintain the highest fidelity, performance, and accessibility standards. Follow these rules strictly:
+
+## 1. Core Principles
+- **Design Tokens First:** Never use hardcoded values (colors, spacing, shadows). Always use `khorTokens` from `@/theme/khor-theme` or CSS variables prefixed with `--khor-`.
+- **Khor Atoms over HTML:** Never use native HTML elements if a KDS Atom exists. 
+    - Use `<KButton>` instead of `<button>`.
+    - Use `<KText>` instead of `<p>`, `<span>`, `<h1>`.
+    - Use `<KInput>` instead of `<input>`.
+- **Three-Layer Architecture:**
+    1. **Primitive:** Raw values (colors, spacing).
+    2. **Semantic:** Usage-based tokens (action-primary, surface-card).
+    3. **Component:** Component-specific overrides.
+
+## 2. Component Guidelines
+- **KButton:** Always use the `variant` prop (`primary`, `secondary`, `outline`, `ghost`, `danger`). Never style buttons manually.
+- **KText:** Use the `variant` prop for hierarchy (`display-1`, `display-2`, `h1`, `h2`, `h3`, `h4`, `h5`, `h6`, `body-lg`, `body-md`, `small`, `caption`, `overline`). 
+    - **IMPORTANT:** Never use `body-sm`. Use `small` instead.
+- **Date Formatting:** When using `date-fns`, always use `dd` (lowercase) for days and `yyyy` (lowercase) for years to avoid RangeErrors.
+    - **IMPORTANT:** If the format string contains literal text (like "Semana" or "de"), it MUST be escaped with single quotes: e.g., `"'Semana' w"`.
+- **Glassmorphism:** Use the `.khor-glass` class for high-fidelity SaaS effects.
+- **Accessibility:** Every interactive component must have an `aria-label` or equivalent. Ensure 44px minimum touch targets using `var(--khor-touch-target-min)`.
+
+## 3. Theming & Dark Mode
+- Respect the `useTheme` hook for dynamic logic.
+- For CSS, always use `@custom-variant dark` or `.dark` class nesting.
+- Ensure all components support both Light and Dark modes.
+
+## 4. Coding Style
+- Use TypeScript for everything.
+- Prefer functional components with hooks.
+- Use Lucide-react for iconography.
+- Maintain the "Elite SaaS" aesthetic: vibrant but professional, high-fidelity shadows, fluid typography.
+
+## 5. Metadata & AI Readiness
+- Every new component must be registered in the central registry (e.g., `khor-counts.json` or component manifests).
+- Documentation pages should include `aiNotes` to help other agents understand the component's intent.
+
+---
+*Remember: KDS is "Agent-First". Write code that is clean, self-documenting, and technically superior.*

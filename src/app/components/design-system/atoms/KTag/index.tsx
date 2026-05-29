@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from '../../../../../imports/utils';
+import { cn } from '@/utils/cn';
 import { X } from 'lucide-react';
 
 export type KTagColor = 
@@ -75,13 +75,17 @@ export interface KTagProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, '
     root?: string;
     closeIcon?: string;
   };
+  /** Fuerza el estado hover (útil para previews/playgrounds) */
+  isHovered?: boolean;
+  /** Fuerza el estado de foco (útil para previews/playgrounds) */
+  isFocused?: boolean;
 }
 
 /**
  * KTag — Etiqueta pequeña para categorización o estados.
  */
 const KTagInternal = React.forwardRef<HTMLSpanElement, KTagProps>(function KTag(
-  { className, color, status, bordered = true, icon, closable, closeIcon, onClose, children, style, styles, classNames, ...rest }, ref
+  { className, color, status, bordered = true, icon, closable, closeIcon, onClose, isHovered, isFocused, children, style, styles, classNames, ...rest }, ref
 ) {
   const [visible, setVisible] = useState(true);
   
@@ -110,6 +114,8 @@ const KTagInternal = React.forwardRef<HTMLSpanElement, KTagProps>(function KTag(
       ref={ref}
       className={cn(
         tagVariants({ color: isCustomColor ? undefined : finalColor as any, bordered }), 
+        isHovered && "ring-2 ring-khor-primary/20 bg-khor-surface-hover",
+        isFocused && "ring-2 ring-khor-primary ring-offset-1",
         classNames?.root,
         className
       )}
@@ -140,19 +146,44 @@ const KTagInternal = React.forwardRef<HTMLSpanElement, KTagProps>(function KTag(
 export interface KCheckableTagProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, 'onChange'> {
   checked?: boolean;
   onChange?: (checked: boolean) => void;
+  /** Fuerza el estado hover */
+  isHovered?: boolean;
+  /** Fuerza el estado de foco */
+  isFocused?: boolean;
 }
 
+/**
+ * @figma-mcp-migration
+ * Component: KCheckableTag
+ * 
+ * INSTRUCCIONES PARA AGENTES DE IA (VS Code / MCP):
+ * Para migrar este componente a Figma, NO generar una matriz multiplicando todas las variables.
+ * Utilizar Figma Component Properties V2 con la siguiente estructura:
+ * 
+ * 1. Variants (Estructurales):
+ *    - Definir variantes puramente visuales/estructurales.
+ * 2. Booleans (Encendido/Apagado):
+ *    - Definir encendido/apagado para iconos o estados (isLoading, hasIcon).
+ * 3. Color Variables (No usar variantes para colores semánticos):
+ *    - El relleno/borde debe usar Figma Variables (Khor v6.0 Colors) asignado dinámicamente.
+ *    - El consumidor del UI Kit cambiará el color del layer.
+ */
 export const KCheckableTag = React.forwardRef<HTMLSpanElement, KCheckableTagProps>(function KCheckableTag(
   { className, checked = false, onChange, children, style, ...rest }, ref
 ) {
   return (
     <span
       ref={ref}
+      role="button"
+      tabIndex={rest.onClick || onChange ? 0 : undefined}
       className={cn(
-        'inline-flex items-center rounded-md px-2 py-0.5 text-xs font-semibold font-primary transition-all select-none cursor-pointer border',
+        'inline-flex items-center rounded-md px-2 py-0.5 text-xs font-semibold font-primary transition-all select-none cursor-pointer border outline-none',
+        'focus-visible:ring-2 focus-visible:ring-khor-primary focus-visible:ring-offset-1',
         checked 
           ? 'bg-khor-primary text-white border-khor-primary shadow-sm' 
-          : 'bg-khor-neutral-100 text-khor-neutral-600 border-khor-neutral-200 hover:bg-khor-neutral-200 hover:border-khor-neutral-300',
+          : 'bg-khor-neutral-100 text-khor-neutral-600 border-khor-neutral-200 hover:bg-khor-surface-hover hover:border-khor-border-hover',
+        (isHovered && !checked) && "bg-khor-surface-hover border-khor-border-hover",
+        isFocused && "ring-2 ring-khor-primary ring-offset-1",
         className
       )}
       onClick={() => onChange?.(!checked)}

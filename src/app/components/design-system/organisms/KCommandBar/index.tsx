@@ -2,18 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Command } from 'cmdk';
 import { Search, History, Sparkles, ChevronRight, Command as CommandIcon } from 'lucide-react';
 import { useNavigate } from 'react-router';
-import { cn } from '../../../../../imports/utils';
+import { cn } from '@/utils/cn';
 import { KModal } from '../KModal';
 
-/* ─── Types ─────────────────────────────────── */
-interface CommandItem {
-  id: string;
-  title: string;
-  category: 'Atomo' | 'Molecula' | 'Organismo' | 'Template' | 'Token';
-  description?: string;
-  keywords?: string[];
-  url?: string;
-}
+import { searchIndex, SearchItem } from '../../../../metadata/search-index';
 
 /* ─── Hook ──────────────────────────────────── */
 export function useCommandBar() {
@@ -33,25 +25,54 @@ export function useCommandBar() {
   return { open, setOpen };
 }
 
-// Mock Data
-const commands: CommandItem[] = [
-  // Atoms
-  { id: 'btn', title: 'KButton', category: 'Atomo', description: 'Botón con variantes y estados.', keywords: ['boton', 'button', 'click'], url: '/atoms/button' },
-  { id: 'inp', title: 'KInput', category: 'Atomo', description: 'Campo de texto básico.', keywords: ['input', 'texto', 'form'], url: '/atoms/input' },
-  // ... more mock data could be here
-];
+// Convert search index to command items
+const commands: SearchItem[] = searchIndex;
 
 /* ─── Component ─────────────────────────────── */
+/**
+ * @figma-mcp-migration
+ * Component: KCommandBar
+ * 
+ * INSTRUCCIONES PARA AGENTES DE IA (VS Code / MCP):
+ * Para migrar este componente a Figma, NO generar una matriz multiplicando todas las variables.
+ * Utilizar Figma Component Properties V2 con la siguiente estructura:
+ * 
+ * 1. Variants (Estructurales):
+ *    - Definir variantes puramente visuales/estructurales.
+ * 2. Booleans (Encendido/Apagado):
+ *    - Definir encendido/apagado para iconos o estados (isLoading, hasIcon).
+ * 3. Color Variables (No usar variantes para colores semánticos):
+ *    - El relleno/borde debe usar Figma Variables (Khor v6.0 Colors) asignado dinámicamente.
+ *    - El consumidor del UI Kit cambiará el color del layer.
+ */
 export function KCommandBar({ open, onClose }: { open: boolean; onClose: () => void }) {
   const navigate = useNavigate();
-  const [recents, setRecents] = useState<CommandItem[]>([]);
+  const [recents, setRecents] = useState<SearchItem[]>([]);
 
   useEffect(() => {
     const saved = localStorage.getItem('khor_command_recents');
     if (saved) setRecents(JSON.parse(saved));
   }, [open]);
 
-  const handleSelect = (item: CommandItem) => {
+  const handleSelect = (item: SearchItem) => {
+    if (item.url.startsWith('#action:')) {
+      const action = item.url.replace('#action:', '');
+      switch (action) {
+        case 'toggle-dark':
+          document.documentElement.classList.toggle('dark');
+          break;
+        case 'export-ai':
+          navigate('/ai-export');
+          break;
+        case 'clear-history':
+          setRecents([]);
+          localStorage.removeItem('khor_command_recents');
+          break;
+      }
+      onClose();
+      return;
+    }
+
     if (item.url) navigate(item.url);
     const newRecents = [item, ...recents.filter(r => r.id !== item.id)].slice(0, 5);
     setRecents(newRecents);
@@ -64,18 +85,19 @@ export function KCommandBar({ open, onClose }: { open: boolean; onClose: () => v
       open={open} 
       onOpenChange={onClose}
       className={cn(
-        "fixed left-[50%] top-[50%] z-[9999] w-full max-w-2xl translate-x-[-50%] translate-y-[-50%] overflow-hidden rounded-xl border border-khor-slate-200 bg-white shadow-khor-xl font-primary text-khor-neutral-900",
+        "fixed left-[50%] top-[50%] z-[9999] w-full max-w-3xl translate-x-[-50%] translate-y-[-50%] overflow-hidden rounded-2xl border border-khor-slate-200 bg-white shadow-khor-xl font-primary text-khor-neutral-900 transition-all",
+        "focus-within:ring-2 focus-within:ring-khor-primary/20 focus-within:border-khor-primary/50",
         "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]"
       )}
-      overlayClassName="fixed inset-0 z-[9999] bg-khor-brand-navy/60 backdrop-blur-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
+      overlayClassName="fixed inset-0 z-[9999] bg-khor-brand-navy/60 backdrop-blur-xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
     >
-      <div className="flex items-center border-b px-3">
-        <Search className="mr-2 h-5 w-5 shrink-0 opacity-50" />
+      <div className="flex items-center border-b border-khor-slate-100 px-6 py-1">
+        <Search className="mr-3 h-6 w-6 shrink-0 text-khor-primary opacity-70" />
         <Command.Input 
-          className="flex h-14 w-full rounded-md bg-transparent py-3 text-base outline-none disabled:cursor-not-allowed disabled:opacity-50 placeholder:text-khor-neutral-400 text-khor-neutral-900" 
+          className="flex h-16 w-full bg-transparent py-4 text-lg outline-none border-none ring-0 focus:ring-0 placeholder:text-khor-neutral-400 text-khor-neutral-900" 
           placeholder="¿Qué estás buscando? (ej. Componentes, Tokens...)" 
         />
-        <div className="ml-2 flex shrink-0 items-center justify-center rounded-md border border-khor-slate-200 bg-khor-slate-100 px-2 text-xs font-semibold text-khor-neutral-500 shadow-sm">
+        <div className="ml-4 flex shrink-0 items-center justify-center rounded-lg border border-khor-slate-200 bg-khor-slate-50 px-3 py-1 text-[10px] font-black text-khor-neutral-400 shadow-sm uppercase tracking-tighter">
           ESC
         </div>
       </div>
@@ -116,7 +138,7 @@ export function KCommandBar({ open, onClose }: { open: boolean; onClose: () => v
   );
 }
 
-function CommandRow({ item, onSelect }: { item: CommandItem; onSelect: () => void }) {
+function CommandRow({ item, onSelect }: { item: SearchItem; onSelect: () => void }) {
   return (
     <Command.Item
       value={`${item.title} ${item.description} ${item.category} ${item.keywords?.join(' ')}`}
@@ -129,7 +151,13 @@ function CommandRow({ item, onSelect }: { item: CommandItem; onSelect: () => voi
       <div className="flex flex-col gap-0.5">
         <div className="flex items-center gap-2">
           <span className="font-medium text-khor-neutral-900">{item.title}</span>
-          <span className="rounded-full bg-khor-slate-100 px-1.5 py-0.5 text-[10px] uppercase font-bold text-khor-neutral-600">
+          <span className={cn(
+            "rounded-full px-1.5 py-0.5 text-[10px] uppercase font-bold",
+            item.category === 'Tool' ? "bg-khor-primary/10 text-khor-primary" : 
+            item.category === 'Pattern' ? "bg-purple-100 text-purple-600" :
+            item.category === 'Action' ? "bg-amber-100 text-amber-600" :
+            "bg-khor-slate-100 text-khor-neutral-600"
+          )}>
             {item.category}
           </span>
         </div>

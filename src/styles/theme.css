@@ -5,21 +5,18 @@
   --font-primary: 'Montserrat', sans-serif;
   --font-secondary: 'Plus Jakarta Sans', sans-serif;
 
-  /* ── Khor Semantic Scales ── */
-  --khor-primary: #E04D36;
-  --khor-primary-hover: #e8644f;
-  --khor-primary-active: #c9442f;
-
+  /* ── Brand Aliases — Layer 1 ── */
+  --khor-primary:   #E04D36;
   --khor-secondary: #051758;
-  --khor-secondary-hover: #0a2270;
-  --khor-secondary-active: #030f40;
+  --khor-accent:    #FF9500;
 
   /* Legacy aliases for internal UI compatibility */
   --khor-navy: var(--khor-secondary);
-  --khor-navy-hover: var(--khor-secondary-hover);
-  --khor-navy-active: var(--khor-secondary-active);
+  --khor-navy-hover: #0a2270;
+  --khor-navy-active: #030f40;
+  --khor-primary-hover: #e8644f;
+  --khor-primary-active: #c9442f;
   --khor-primary-light: #FDECEA;
-  --khor-accent: #FF9500;
   --khor-accent-hover: #ffaa33;
   --khor-accent-active: #e68600;
 
@@ -136,12 +133,26 @@
   --khor-shadow-2xl: 0 25px 50px -12px rgba(5,23,88,0.25);
   --khor-shadow-inner: inset 0 2px 4px 0 rgba(0,0,0,0.06);
 
-  /* ── Khor Breakpoints (Myna Scale) ── */
-  --khor-breakpoint-sm: 640px;
-  --khor-breakpoint-md: 768px;
-  --khor-breakpoint-lg: 1024px;
-  --khor-breakpoint-xl: 1280px;
   --khor-breakpoint-2xl: 1536px;
+
+  /* ── Universal Focus-Visible Math (W3C A11y) ── */
+  --khor-focus-ring-width:  2px;
+  --khor-focus-ring-offset: 2px;
+  --khor-focus-ring-color:  var(--khor-primary);
+
+  /* ── Layout Grid Anatomy (Adaptive Math) ── */
+  /* sm: Mobile (0-767px) */
+  --khor-layout-grid-margin-sm: 16px;
+  --khor-layout-grid-gutter-sm: 16px;
+  /* md: Tablet (768-1023px) */
+  --khor-layout-grid-margin-md: 24px;
+  --khor-layout-grid-gutter-md: 24px;
+  /* lg: Desktop (1024-1279px) */
+  --khor-layout-grid-margin-lg: 32px;
+  --khor-layout-grid-gutter-lg: 32px;
+  /* xl: Large Desktop (1280px+) */
+  --khor-layout-grid-margin-xl: 40px;
+  --khor-layout-grid-gutter-xl: 32px;
 
   /* ── Khor Containers ── */
   --khor-container-sm: 640px;
@@ -161,14 +172,17 @@
   --khor-space-10: 40px;
   --khor-space-12: 48px;
   --khor-space-16: 64px;
+  --khor-space-20: 80px;
+  --khor-space-24: 96px;
 
-  /* ── Khor Radius (Extended) ── */
+  /* ── Khor Radius Scale — Layer 1 (W3C Aligned) ── */
   --khor-radius-none: 0px;
-  --khor-radius-xs: 2px;
-  --khor-radius-sm: 4px;
-  --khor-radius-md: 8px;
-  --khor-radius-lg: 12px;
-  --khor-radius-xl: 16px;
+  --khor-radius-xs:   2px;
+  --khor-radius-sm:   4px;
+  --khor-radius-md:   6px;
+  --khor-radius-lg:   8px;
+  --khor-radius-xl:   10px;
+  --khor-radius-2xl:  12px;
   --khor-radius-full: 9999px;
 
   /* ── Khor Blur Scale (v10.4.5 Premium) ── */
@@ -190,6 +204,11 @@
   --khor-backdrop-blur-xl: var(--khor-blur-xl);
   --khor-backdrop-blur-2xl: var(--khor-blur-2xl);
   --khor-backdrop-blur-3xl: var(--khor-blur-3xl);
+  
+  /* ── Glassmorphism (Premium Tier) ── */
+  --khor-surface-glass: rgba(255, 255, 255, 0.7);
+  --khor-glass-border: rgba(255, 255, 255, 0.4);
+  --khor-glass-blur: var(--khor-blur-md);
 
   /* ── Khor Opacity Scale ── */
   --khor-opacity-0: 0;
@@ -204,12 +223,133 @@
   --khor-opacity-90: 0.9;
   --khor-opacity-100: 1;
 
+  /* ── Universal State Layers (W3C DTCG Standard) ── */
+  /* Capas de interacción que se superponen al color base */
+  --khor-state-layer-hover:   0.08;
+  --khor-state-layer-pressed: 0.12;
+  --khor-state-layer-dragged: 0.16;
+  --khor-state-layer-focus:   0.12;
+
+  /* ── W3C CTI Taxonomy Aliases (Standardization Phase) ── */
+  --khor-color-action-primary-default:   var(--khor-primary);
+  --khor-color-action-secondary-default: var(--khor-secondary);
+  --khor-color-action-accent-default:    var(--khor-accent);
+  --khor-size-radius-md:                 var(--khor-radius-md);
+  --khor-size-radius-lg:                 var(--khor-radius-lg);
+  --khor-size-radius-full:               var(--khor-radius-full);
+  --khor-duration-motion-standard:       var(--khor-duration-normal);
+  --khor-easing-motion-standard:         var(--khor-easing-standard);
+
   /* ── Khor Rotation Scale ── */
   --khor-rotate-0: 0deg;
   --khor-rotate-45: 45deg;
   --khor-rotate-90: 90deg;
   --khor-rotate-180: 180deg;
   --khor-rotate-270: 270deg;
+
+  /* ── Motion Choreography — Layer 1 ── */
+  --khor-duration-instant:         50ms;
+  --khor-duration-fast:            100ms;
+  --khor-duration-normal:          200ms;
+  --khor-duration-slow:            300ms;
+  --khor-duration-slower:          500ms;
+  --khor-duration-entrance:        250ms;
+  --khor-duration-exit:            200ms;
+
+  --khor-easing-standard:          cubic-bezier(0.4, 0, 0.2, 1);
+  --khor-easing-decelerate:        cubic-bezier(0, 0, 0.2, 1);
+  --khor-easing-accelerate:        cubic-bezier(0.4, 0, 1, 1);
+  --khor-easing-spring:            cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --khor-easing-bounce:            cubic-bezier(0.34, 1.56, 0.64, 1);
+  --khor-easing-smooth:            cubic-bezier(0.45, 0, 0.55, 1);
+  --khor-easing-emphasized:        cubic-bezier(0.2, 0, 0, 1);
+
+  /* Motion Recipes (Ghost Fix) */
+  --khor-transition-fade:          opacity var(--khor-duration-entrance) var(--khor-easing-decelerate);
+  --khor-transition-color:         color var(--khor-duration-fast) var(--khor-easing-standard), background-color var(--khor-duration-fast) var(--khor-easing-standard), border-color var(--khor-duration-fast) var(--khor-easing-standard);
+  --khor-transition-scale:         transform var(--khor-duration-fast) var(--khor-easing-spring);
+  --khor-transition-slide:         transform var(--khor-duration-entrance) var(--khor-easing-decelerate), opacity var(--khor-duration-entrance) var(--khor-easing-decelerate);
+  --khor-transition-all:           all var(--khor-duration-normal) var(--khor-easing-standard);
+
+  /* ── i18n & RTL Scaling ── */
+  --khor-line-height-dynamic:      1.5;
+
+  /* Elite SaaS Architecture Icons */
+  --khor-icon-xs: 12px;
+  --khor-icon-sm: 16px;
+  --khor-icon-md: 20px;
+  --khor-icon-lg: 24px;
+  --khor-icon-xl: 32px;
+  --khor-icon-2xl: 48px;
+
+  /* Form Validation Semantic Tokens */
+  --khor-form-error-bg: #FFEBEE;
+  --khor-form-error-border: #D32F2F;
+  --khor-form-error-text: #B71C1C;
+  --khor-form-success-bg: #E8F5E9;
+  --khor-form-success-border: #2E7D32;
+  --khor-form-success-text: #1B5E20;
+  --khor-form-warning-bg: #FFF3E0;
+  --khor-form-warning-border: #FF9500;
+  --khor-form-warning-text: #E65100;
+  --khor-form-focus-ring: var(--khor-primary);
+
+  /* Elite Data Visualization Palette */
+  --khor-chart-primary: #E04D36;
+  --khor-chart-secondary: #051758;
+  --khor-chart-accent: #FF9500;
+  --khor-chart-success: #2E7D32;
+  --khor-chart-error: #D32F2F;
+  --khor-chart-info: #1976D2;
+  --khor-chart-teal: #008080;
+  --khor-chart-purple: #9C27B0;
+  --khor-chart-pink: #E91E63;
+  --khor-chart-cyan: #00BCD4;
+  --khor-chart-amber: #FFC107;
+  --khor-chart-gray: #9E9E9E;
+
+  /* ── Z-Index Scale (App Architecture) ── */
+  --khor-z-base: 0;
+  --khor-z-dropdown: 1000;
+  --khor-z-sticky: 1100;
+  --khor-z-overlay: 1200;
+  --khor-z-drawer: 1300;
+  --khor-z-modal: 1400;
+  --khor-z-popover: 1500;
+  --khor-z-tooltip: 1600;
+  --khor-z-toast: 1700;
+
+  /* ── Mobile & Safe Areas ── */
+  --khor-safe-area-top: env(safe-area-inset-top, 0px);
+  --khor-safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  --khor-touch-target-min: 44px;
+  --khor-touch-target-comfortable: 48px;
+  --khor-bottom-nav-h: 64px;
+
+  /* ── Chart Palette (Elite Scale) ── */
+  --khor-chart-1: var(--khor-primary);
+  --khor-chart-2: var(--khor-secondary);
+  --khor-chart-3: var(--khor-accent);
+  --khor-chart-4: var(--khor-success);
+  --khor-chart-5: var(--khor-error);
+  --khor-chart-6: var(--khor-info);
+  --khor-chart-7: var(--khor-teal);
+  --khor-chart-8: var(--khor-feedback-purple);
+  --khor-chart-9: var(--khor-feedback-volcano);
+  --khor-chart-10: var(--khor-feedback-gold);
+  --khor-chart-11: var(--khor-feedback-lime);
+  --khor-chart-12: var(--khor-neutral-500);
+
+  /* ── Form States (Semantic) ── */
+  --khor-form-error-bg: var(--khor-error-50);
+  --khor-form-error-border: var(--khor-error-500);
+  --khor-form-error-text: var(--khor-error-700);
+  --khor-form-success-bg: var(--khor-success-50);
+  --khor-form-success-border: var(--khor-success-500);
+  --khor-form-success-text: var(--khor-success-700);
+  --khor-form-warning-bg: var(--khor-warning-50);
+  --khor-form-warning-border: var(--khor-warning-500);
+  --khor-form-warning-text: var(--khor-warning-700);
 
   /* ── Khor Stroke Width ── */
   --khor-stroke-0: 0px;
@@ -284,25 +424,43 @@
   --khor-size-screen-w: 100vw;
   --khor-size-screen-h: 100vh;
 
-  /* ── Khor Typography Scale (v10.4 Responsive) ── */
-  --khor-font-size-display-1: 72px;
-  --khor-font-size-display-2: 56px;
-  --khor-font-size-h1: 40px;
-  --khor-font-size-h2: 32px;
-  --khor-font-size-h3: 24px;
-  --khor-font-size-h4: 20px;
-  --khor-font-size-h5: 16px;
-  --khor-font-size-h6: 14px;
-  --khor-font-size-body-lg: 16px;
-  --khor-font-size-body-md: 14px;
-  --khor-font-size-body-sm: 12px;
-  --khor-font-size-body-xs: 10px;
+  /* ── Khor Typography Scale (v5.0 Fluid/Responsive) ── */
+  --khor-font-size-display-2xl: clamp(4rem, 5vw + 1rem, 4.5rem); /* 64px - 72px */
+  --khor-font-size-display-xl: clamp(3rem, 4vw + 1rem, 3.5rem);  /* 48px - 56px */
+  --khor-font-size-heading-lg: clamp(2rem, 3vw + 1rem, 2.5rem);  /* 32px - 40px */
+  --khor-font-size-heading-md: clamp(1.5rem, 2vw + 1rem, 2rem);  /* 24px - 32px */
+  --khor-font-size-heading-sm: clamp(1.25rem, 1.5vw + 1rem, 1.5rem); /* 20px - 24px */
+  --khor-font-size-heading-xs: 1.125rem; /* 18px */
+  --khor-font-size-body-xl: 1.125rem; /* 18px */
+  --khor-font-size-body-lg: 1rem;     /* 16px */
+  --khor-font-size-body-md: 0.875rem; /* 14px */
+  --khor-font-size-body-sm: 0.75rem;  /* 12px */
+  --khor-font-size-caption: 0.625rem; /* 10px */
+  --khor-font-size-code: 0.875rem;    /* 14px */
+  --khor-font-size-label: 0.75rem;    /* 12px */
+
+  /* Legacy Aliases (DO NOT REMOVE - for backwards compatibility) */
+  --khor-font-size-display-1: var(--khor-font-size-display-2xl);
+  --khor-font-size-display-2: var(--khor-font-size-display-xl);
+  --khor-font-size-h1: var(--khor-font-size-heading-lg);
+  --khor-font-size-h2: var(--khor-font-size-heading-md);
+  --khor-font-size-h3: var(--khor-font-size-heading-sm);
+  --khor-font-size-h4: var(--khor-font-size-heading-xs);
+  --khor-font-size-h5: var(--khor-font-size-body-lg);
+  --khor-font-size-h6: var(--khor-font-size-body-md);
+  --khor-font-size-body-xs: var(--khor-font-size-caption);
 
   --khor-line-height-display: 1.1;
   --khor-line-height-heading: 1.25;
   --khor-line-height-body: 1.5;
 
   /* ── Density Tokens ── */
+  --khor-density-spacing-xs: 4px;
+  --khor-density-spacing-sm: 8px;
+  --khor-density-spacing-md: 12px;
+  --khor-density-spacing-lg: 16px;
+
+  /* ── Density Heights ── */
   --khor-density-height-sm: 32px;
   --khor-density-height-md: 40px;
   --khor-density-height-lg: 48px;
@@ -344,7 +502,7 @@
   --khor-feedback-lime: #84cc16;
   --khor-feedback-purple: #a855f7;
 
-  /* ── Semantic Action Tokens ── */
+  /* ── Semantic Layer 2: Actions ── */
   --khor-action-primary-default: var(--khor-primary);
   --khor-action-primary-hover: var(--khor-primary-hover);
   --khor-action-primary-active: var(--khor-primary-active);
@@ -352,37 +510,255 @@
   --khor-action-secondary-hover: var(--khor-secondary-hover);
   --khor-action-secondary-active: var(--khor-secondary-active);
   --khor-action-danger-default: var(--khor-error);
-  --khor-action-disabled-bg: var(--khor-neutral-200);
+  --khor-action-danger-hover: var(--khor-error-hover);
+  --khor-action-danger-active: var(--khor-error-active);
+  --khor-action-ghost-hover: rgba(5, 23, 88, 0.05);
+  --khor-action-disabled-bg: var(--khor-neutral-100);
   --khor-action-disabled-text: var(--khor-neutral-400);
 
-  /* ── Semantic Surface Tokens ── */
-  --khor-surface-page: var(--khor-neutral-100);
-  --khor-surface-card: var(--khor-neutral-50);
+  /* ── Semantic Layer 2: Surface & Overlay ── */
+  --khor-surface-page: var(--khor-neutral-50);
+  --khor-surface-card: #ffffff;
+  --khor-surface-raised: #ffffff;
+  --khor-surface-overlay: #ffffff;
+  --khor-overlay-bg: rgba(255, 255, 255, 0.95);
+  --khor-overlay-backdrop: rgba(5, 23, 88, 0.4);
 
-  /* ── Semantic Text Tokens ── */
-  --khor-text-primary: var(--khor-navy);
-  --khor-text-secondary: var(--khor-neutral-500);
+  /* ── Semantic Layer 3: Contextual Tokens (Secciones Invertidas) ── */
+  --khor-context-sidebar-bg:         var(--khor-navy);
+  --khor-context-sidebar-text:       var(--khor-neutral-50);
+  --khor-context-sidebar-text-muted: rgba(255, 255, 255, 0.55);
+  --khor-context-sidebar-border:     rgba(255, 255, 255, 0.08);
+  --khor-context-sidebar-hover:      rgba(255, 255, 255, 0.10);
+  --khor-context-sidebar-active:     rgba(255, 255, 255, 0.15);
+  --khor-context-header-bg:          var(--khor-surface-card);
+  --khor-context-header-border:      var(--khor-border-default);
+
+  /* Interactive Surface Tokens (Industry Ref) */
+  --khor-surface-hover:     rgba(5, 23, 88, 0.04);
+  --khor-surface-pressed:   rgba(5, 23, 88, 0.08);
+  --khor-surface-selected:  rgba(224, 77, 54, 0.08);
+  --khor-surface-dragging:  rgba(224, 77, 54, 0.04);
+  --khor-surface-subtle:    #F4F6F8;
+
+  /* ── Semantic Layer 2: Borders ── */
+  --khor-border-default: var(--khor-neutral-200);
+  --khor-border-muted: var(--khor-neutral-100);
+  --khor-border-strong: var(--khor-neutral-300);
+  --khor-border-hover: var(--khor-neutral-400);
+  --khor-border-focus: var(--khor-primary);
+  --khor-border-error: var(--khor-error);
+  --khor-border-disabled: var(--khor-neutral-100);
+
+  /* Focus Ring Configurable */
+  --khor-focus-ring-color:  var(--khor-primary);
+  --khor-focus-ring-width:  2px;
+  --khor-focus-ring-offset: 2px;
+  --khor-focus-ring-style:  solid;
+
+  /* ── Component Layer: KDataGrid ── */
+  --khor-grid-header-bg:     var(--khor-neutral-100);
+  --khor-grid-header-text:   var(--khor-text-secondary);
+  --khor-grid-cell-border:   var(--khor-border-default);
+  --khor-grid-row-hover:     var(--khor-surface-hover);
+  --khor-grid-row-selected:  var(--khor-surface-selected);
+  --khor-grid-resizer-color: var(--khor-primary);
+
+  /* ── Semantic Layer 2: Typography ── */
+  --khor-text-primary: var(--khor-secondary);
+  --khor-text-secondary: var(--khor-slate-600);
+  --khor-text-muted: var(--khor-slate-400);
+  --khor-text-disabled: var(--khor-slate-300);
+  --khor-text-on-action: #ffffff;
   --khor-text-link: var(--khor-primary);
+  --khor-text-link-hover: var(--khor-primary-hover);
+
+  /* ── Motion Tokens ── */
+  --khor-duration-instant: 80ms;
+  --khor-duration-fast:    100ms;
+  --khor-duration-normal:  200ms;
+  --khor-duration-slow:    400ms;
+
+  --khor-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --khor-easing-spring:   cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --khor-easing-enter:    cubic-bezier(0, 0, 0.2, 1);
+  --khor-easing-exit:     cubic-bezier(0.4, 0, 1, 1);
+
+  /* Elevation Tokens (Semantic) */
+  --khor-elevation-0: none;
+  --khor-elevation-1: 0 1px 3px rgba(5, 23, 88, 0.06), 0 1px 2px rgba(5, 23, 88, 0.04);
+  --khor-elevation-2: 0 4px 12px rgba(5, 23, 88, 0.08), 0 2px 4px rgba(5, 23, 88, 0.05);
+  --khor-elevation-3: 0 8px 24px rgba(5, 23, 88, 0.10), 0 4px 8px rgba(5, 23, 88, 0.06);
+  --khor-elevation-4: 0 16px 48px rgba(5, 23, 88, 0.14), 0 8px 16px rgba(5, 23, 88, 0.08);
+  --khor-elevation-5: 0 24px 64px rgba(5, 23, 88, 0.18), 0 12px 24px rgba(5, 23, 88, 0.10);
+
+  /* Semantic Spacing Tokens (Aliases) */
+  --khor-space-component-xs:  var(--khor-space-1);
+  --khor-space-component-sm:  var(--khor-space-2);
+  --khor-space-component-md:  var(--khor-space-3);
+  --khor-space-component-lg:  var(--khor-space-4);
+
+  --khor-space-layout-xs:    var(--khor-space-4);
+  --khor-space-layout-sm:    var(--khor-space-6);
+  --khor-space-layout-md:    var(--khor-space-8);
+  --khor-space-layout-lg:    var(--khor-space-12);
+  --khor-space-layout-xl:    var(--khor-space-16);
+
+  /* ── Component Layer 3: KButton Elite ── */
+  --khor-button-primary-bg:        var(--khor-action-primary-default);
+  --khor-button-primary-text:      var(--khor-text-on-action);
+  --khor-button-primary-border:    transparent;
+  --khor-button-primary-shadow:    var(--khor-shadow-sm);
+  --khor-button-secondary-bg:      var(--khor-action-secondary-default);
+  --khor-button-secondary-text:    var(--khor-text-on-action);
+  --khor-button-ghost-hover:       var(--khor-action-ghost-hover);
+  --khor-button-radius:            var(--khor-radius-md);
+
+  /* ── Component Layer 3: KInput Elite ── */
+  --khor-input-bg:                 var(--khor-surface-card);
+  --khor-input-text:               var(--khor-text-primary);
+  --khor-input-border:             var(--khor-border-default);
+  --khor-input-placeholder:        var(--khor-text-muted);
+  --khor-input-focus-border:       var(--khor-border-focus);
+  --khor-input-focus-ring:         var(--khor-primary);
+  --khor-input-radius:             var(--khor-radius-md);
+
+  /* ── Component Layer 3: KCard Elite ── */
+  --khor-card-bg:                  var(--khor-surface-card);
+  --khor-card-border:              var(--khor-border-default);
+  --khor-card-shadow:              var(--khor-elevation-2);
+  --khor-card-radius:              var(--khor-radius-lg);
+
+  /* ── Fluid Typography — Khor v5.0 (W3C Standard) ── */
+  --khor-type-display-2xl: clamp(3rem, 5vw + 1rem, 4.5rem);    /* 48px → 72px */
+  --khor-type-display-xl:  clamp(2.5rem, 4vw + 0.8rem, 3.75rem); /* 40px → 60px */
+  --khor-type-heading-lg:  clamp(1.5rem, 2.5vw + 0.5rem, 3rem);  /* 24px → 48px */
+  --khor-type-heading-md:  clamp(1.25rem, 2vw + 0.4rem, 2rem);   /* 20px → 32px */
+  --khor-type-heading-sm:  clamp(1.125rem, 1.5vw + 0.3rem, 1.5rem); /* 18px → 24px */
+  --khor-type-heading-xs:  clamp(1rem, 1.2vw + 0.25rem, 1.25rem); /* 16px → 20px */
+  --khor-type-body-xl: clamp(1.125rem, 1.2vw + 0.2rem, 1.375rem); /* 18px → 22px */
+  --khor-type-body-lg: clamp(1rem, 0.8vw + 0.15rem, 1.125rem);    /* 16px → 18px */
+  --khor-type-body-md: 1rem;    /* 16px — fijo */
+  --khor-type-body-sm: 0.875rem; /* 14px — fijo */
 
   /* ── Mapped Tokens (Tailwind Compat) ── */
-  --background: var(--khor-neutral-100);
-  --foreground: var(--khor-navy);
+  --background: var(--khor-surface-page);
+  --foreground: var(--khor-text-primary);
   --primary: var(--khor-primary);
-  --primary-foreground: #FFFFFF;
+  --primary-foreground: var(--khor-text-on-action);
   --border: var(--khor-border-default);
   --radius: var(--khor-radius-md);
+}
+
+/* ═══════════════════════════════════════════════════
+   SISTEMA DE DENSIDAD — Khor v4.3+
+   Uso: agregar className al contenedor raíz.
+   ═══════════════════════════════════════════════════ */
+
+/* DEFAULT — aplicación estándar (ya definida en :root) */
+:root {
+  --khor-density-spacing-xs:    4px;
+  --khor-density-spacing-sm:    8px;
+  --khor-density-spacing-md:    16px;
+  --khor-density-spacing-lg:    24px;
+  --khor-density-height-input:  36px;
+  --khor-density-height-row:    44px;
+  --khor-density-font-body:     14px;
+  --khor-density-font-label:    12px;
+  --khor-density-radius:        8px;
+}
+
+/* COMPACT — dashboards con datos masivos */
+.khor-compact {
+  --khor-density-spacing-xs:    2px;
+  --khor-density-spacing-sm:    4px;
+  --khor-density-spacing-md:    8px;
+  --khor-density-spacing-lg:    12px;
+  --khor-density-height-input:  28px;
+  --khor-density-height-row:    32px;
+  --khor-density-font-body:     12px;
+  --khor-density-font-label:    11px;
+  --khor-density-radius:        6px;
+}
+
+/* COMFORTABLE — onboarding, formularios críticos */
+.khor-comfortable {
+  --khor-density-spacing-xs:    6px;
+  --khor-density-spacing-sm:    12px;
+  --khor-density-spacing-md:    24px;
+  --khor-density-spacing-lg:    40px;
+  --khor-density-height-input:  48px;
+  --khor-density-height-row:    60px;
+  --khor-density-font-body:     16px;
+  --khor-density-font-label:    14px;
+  --khor-density-radius:        10px;
 }
 
 .dark {
   --khor-navy: #8BA3D9;
   --khor-neutral-50: #1A1B2E;
+  --khor-info-light: #0D1F3C;
+
+  /* Neutrals Overrides */
+  --khor-neutral-50: #1A1B2E;
   --khor-neutral-100: #22243A;
+  --khor-neutral-200: #2E3148;
+  --khor-neutral-300: #4A4E6A;
+  --khor-neutral-400: #8B90A8;
+  --khor-neutral-500: #B0B4C8;
+  --khor-neutral-600: #9BA3B5;
+  --khor-neutral-700: #B8BDC8;
+  --khor-neutral-800: #D0D3DA;
+  --khor-neutral-900: #E8EAF0;
+
+  /* Interactive Surface Overrides */
+  --khor-surface-page: var(--khor-neutral-50);
+  --khor-surface-card: var(--khor-neutral-100);
+  --khor-surface-raised: var(--khor-neutral-200);
+  --khor-surface-overlay: var(--khor-neutral-900);
+  --khor-overlay-bg: rgba(15, 26, 53, 0.95);
+  --khor-overlay-backdrop: rgba(0, 0, 0, 0.6);
+
+  --khor-surface-hover:    rgba(255, 255, 255, 0.06);
+  --khor-surface-pressed:  rgba(255, 255, 255, 0.10);
+  --khor-surface-selected: rgba(224, 77, 54, 0.15);
+  --khor-surface-dragging: rgba(224, 77, 54, 0.08);
+  --khor-surface-subtle:   rgba(255, 255, 255, 0.04);
+
+  /* ── Semantic Layer 2: Typography ── */
+  --khor-text-primary: var(--khor-neutral-900);
+  --khor-text-secondary: var(--khor-neutral-700);
+  --khor-text-muted: var(--khor-neutral-500);
+  --khor-text-disabled: var(--khor-neutral-400);
+  --khor-text-on-action: var(--khor-neutral-50);
+
+  /* ── Semantic Layer 2: Borders ── */
+  --khor-border-default: var(--khor-neutral-300);
+  --khor-border-hover: var(--khor-neutral-500);
+  --khor-border-disabled: var(--khor-neutral-200);
+  --khor-border-strong: var(--khor-neutral-600);
+
+  /* Component Layer: Grid Dark */
+  --khor-grid-header-bg:    var(--khor-neutral-200);
+  --khor-grid-header-text:  var(--khor-neutral-900);
+  --khor-grid-cell-border:  var(--khor-neutral-300);
+  --khor-grid-row-hover:    rgba(255, 255, 255, 0.04);
+  --khor-grid-row-selected: rgba(224, 77, 54, 0.2);
+
+  /* ── Component Layer 3: Dark Overrides ── */
+  --khor-button-primary-bg:        var(--khor-primary);
+  --khor-button-primary-text:      #FFFFFF;
+  --khor-input-bg:                 var(--khor-neutral-200);
+  --khor-input-border:             var(--khor-neutral-300);
+  --khor-card-bg:                  var(--khor-neutral-100);
+  --khor-card-border:              var(--khor-neutral-200);
+
   --khor-avatar-bg: #0A2270;
   --khor-avatar-fg: #FFFFFF;
-  --background: var(--khor-neutral-100);
-  --foreground: var(--khor-navy);
+  --background: var(--khor-surface-page);
+  --foreground: var(--khor-text-primary);
   --primary: var(--khor-primary);
-  --primary-foreground: #FFFFFF;
+  --primary-foreground: var(--khor-text-on-action);
   --border: var(--khor-border-default);
   --radius: var(--khor-radius-md);
 }
@@ -397,6 +773,18 @@
     --khor-font-size-h3: 20px;
     --khor-font-size-h4: 18px;
   }
+}
+
+/* ─── Global Focus Ring (Industry Reference A11y) ─── */
+:focus-visible {
+  outline: var(--khor-focus-ring-width) var(--khor-focus-ring-style) var(--khor-focus-ring-color);
+  outline-offset: var(--khor-focus-ring-offset);
+}
+
+/* Utility for custom components */
+.khor-focus-ring {
+  outline: var(--khor-focus-ring-width) var(--khor-focus-ring-style) var(--khor-focus-ring-color);
+  outline-offset: var(--khor-focus-ring-offset);
 }
 
 @theme inline {
@@ -421,6 +809,7 @@
   --color-khor-success-700: var(--khor-success-700);
   --color-khor-success-800: var(--khor-success-800);
   --color-khor-success-900: var(--khor-success-900);
+  --color-khor-success-light: var(--khor-success-light);
 
   /* Error Scale */
   --color-khor-error: var(--khor-error);
@@ -434,6 +823,7 @@
   --color-khor-error-700: var(--khor-error-700);
   --color-khor-error-800: var(--khor-error-800);
   --color-khor-error-900: var(--khor-error-900);
+  --color-khor-error-light: var(--khor-error-light);
 
   /* Warning Scale */
   --color-khor-warning: var(--khor-warning);
@@ -447,6 +837,7 @@
   --color-khor-warning-700: var(--khor-warning-700);
   --color-khor-warning-800: var(--khor-warning-800);
   --color-khor-warning-900: var(--khor-warning-900);
+  --color-khor-warning-light: var(--khor-warning-light);
 
   /* Info Scale */
   --color-khor-info: var(--khor-info);
@@ -460,6 +851,7 @@
   --color-khor-info-700: var(--khor-info-700);
   --color-khor-info-800: var(--khor-info-800);
   --color-khor-info-900: var(--khor-info-900);
+  --color-khor-info-light: var(--khor-info-light);
 
   /* Teal Scale */
   --color-khor-teal: var(--khor-teal);
@@ -510,9 +902,57 @@
   --color-khor-avatar-fg: var(--khor-avatar-fg);
   --color-khor-surface-page: var(--khor-surface-page);
   --color-khor-surface-card: var(--khor-surface-card);
+  --color-khor-surface-overlay: var(--khor-surface-overlay);
+  --color-khor-overlay-bg: var(--khor-overlay-bg);
+  --color-khor-overlay-backdrop: var(--khor-overlay-backdrop);
+  
+  /* Interactive Surface Utilities */
+  --color-khor-surface-hover: var(--khor-surface-hover);
+  --color-khor-surface-pressed: var(--khor-surface-pressed);
+  --color-khor-surface-selected: var(--khor-surface-selected);
+  --color-khor-surface-dragging: var(--khor-surface-dragging);
+  --color-khor-surface-subtle: var(--khor-surface-subtle);
   --color-khor-text-primary: var(--khor-text-primary);
   --color-khor-text-secondary: var(--khor-text-secondary);
+  --color-khor-text-muted: var(--khor-text-muted);
+  --color-khor-text-on-action: var(--khor-text-on-action);
   --color-khor-text-link: var(--khor-text-link);
+  --color-khor-text-disabled: var(--khor-text-disabled);
+
+  /* Semantic Action Tokens */
+  --color-khor-action-primary: var(--khor-action-primary-default);
+  --color-khor-action-primary-hover: var(--khor-action-primary-hover);
+  --color-khor-action-danger: var(--khor-action-danger-default);
+  --color-khor-action-danger-hover: var(--khor-action-danger-hover);
+  --color-khor-action-ghost-hover: var(--khor-action-ghost-hover);
+  --color-khor-action-disabled-bg: var(--khor-action-disabled-bg);
+  --color-khor-action-disabled-text: var(--khor-action-disabled-text);
+
+  /* Semantic Border Tokens */
+  --color-khor-border-default: var(--khor-border-default);
+  --color-khor-border-muted: var(--khor-border-muted);
+  --color-khor-border-strong: var(--khor-border-strong);
+  --color-khor-border-focus: var(--khor-border-focus);
+  --color-khor-border-error: var(--khor-border-error);
+  --color-khor-border-disabled: var(--khor-border-disabled);
+  --color-khor-focus-ring: var(--khor-focus-ring-color);
+
+  /* Motion Tokens */
+  --animate-duration-instant: var(--khor-duration-instant);
+  --animate-duration-fast: var(--khor-duration-fast);
+  --animate-duration-normal: var(--khor-duration-normal);
+  --animate-duration-slow: var(--khor-duration-slow);
+  
+  --ease-standard: var(--khor-easing-standard);
+  --ease-spring: var(--khor-easing-spring);
+  --ease-enter: var(--khor-easing-enter);
+  --ease-exit: var(--khor-easing-exit);
+
+  /* Density Tokens (Sizing) */
+  --spacing-khor-xs: var(--khor-density-spacing-xs);
+  --spacing-khor-sm: var(--khor-density-spacing-sm);
+  --spacing-khor-md: var(--khor-density-spacing-md);
+  --spacing-khor-lg: var(--khor-density-spacing-lg);
 
   /* Register shadows for utilities */
   --shadow-khor-sm: var(--khor-shadow-sm);
@@ -522,6 +962,14 @@
   --shadow-khor-2xl: var(--khor-shadow-2xl);
   --shadow-khor-inner: var(--khor-shadow-inner);
 
+  /* Semantic Elevation Utilities */
+  --shadow-khor-elevation-0: var(--khor-elevation-0);
+  --shadow-khor-elevation-1: var(--khor-elevation-1);
+  --shadow-khor-elevation-2: var(--khor-elevation-2);
+  --shadow-khor-elevation-3: var(--khor-elevation-3);
+  --shadow-khor-elevation-4: var(--khor-elevation-4);
+  --shadow-khor-elevation-5: var(--khor-elevation-5);
+
   /* Radius y Spacing */
   --spacing-khor-1: var(--khor-space-1);
   --spacing-khor-2: var(--khor-space-2);
@@ -529,6 +977,18 @@
   --spacing-khor-4: var(--khor-space-4);
   --spacing-khor-6: var(--khor-space-6);
   --spacing-khor-8: var(--khor-space-8);
+
+  /* Semantic Spacing Utilities */
+  --spacing-khor-component-xs: var(--khor-space-component-xs);
+  --spacing-khor-component-sm: var(--khor-space-component-sm);
+  --spacing-khor-component-md: var(--khor-space-component-md);
+  --spacing-khor-component-lg: var(--khor-space-component-lg);
+  
+  --spacing-khor-layout-xs: var(--khor-space-layout-xs);
+  --spacing-khor-layout-sm: var(--khor-space-layout-sm);
+  --spacing-khor-layout-md: var(--khor-space-layout-md);
+  --spacing-khor-layout-lg: var(--khor-space-layout-lg);
+  --spacing-khor-layout-xl: var(--khor-space-layout-xl);
   --radius-khor-sm: var(--khor-radius-sm);
   --radius-khor-md: var(--khor-radius-md);
   --radius-khor-lg: var(--khor-radius-lg);
@@ -587,6 +1047,33 @@
   --height-khor-density-lg: var(--khor-density-height-lg);
   --min-width-khor-button: var(--khor-density-min-width-button);
   --min-width-khor-input: var(--khor-density-min-width-input);
+  --spacing-khor-density-xs: var(--khor-density-spacing-xs);
+  --spacing-khor-density-sm: var(--khor-density-spacing-sm);
+  --spacing-khor-density-md: var(--khor-density-spacing-md);
+  --spacing-khor-density-lg: var(--khor-density-spacing-lg);
+}
+
+/* ── Density Contexts ── */
+.khor-compact {
+  --khor-density-height-sm: 24px;
+  --khor-density-height-md: 32px;
+  --khor-density-height-lg: 40px;
+  --khor-density-spacing-xs: 2px;
+  --khor-density-spacing-sm: 4px;
+  --khor-density-spacing-md: 8px;
+  --khor-density-spacing-lg: 12px;
+  --khor-font-size-body-md: 13px;
+  --khor-font-size-body-sm: 11px;
+}
+
+.khor-comfortable {
+  --khor-density-height-sm: 36px;
+  --khor-density-height-md: 44px;
+  --khor-density-height-lg: 52px;
+  --khor-density-spacing-xs: 6px;
+  --khor-density-spacing-sm: 10px;
+  --khor-density-spacing-md: 16px;
+  --khor-density-spacing-lg: 24px;
 }
 
 @layer base {
@@ -594,4 +1081,26 @@
     @apply bg-background text-foreground;
     font-family: var(--font-primary);
   }
+}
+/* ── Internationalization (RTL) Active States ── */
+:lang(ar),
+:lang(he),
+[dir="rtl"] {
+  --khor-line-height-dynamic: 1.8; /* +20% para scripts RTL densos */
+}
+
+/* ── Elite Utilities ── */
+.khor-glass {
+  background: var(--khor-surface-glass);
+  backdrop-filter: blur(var(--khor-glass-blur));
+  -webkit-backdrop-filter: blur(var(--khor-glass-blur));
+  border: 1px solid var(--khor-glass-border);
+  box-shadow: var(--khor-shadow-sm);
+}
+
+.dark .khor-glass {
+  background: rgba(15, 26, 53, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(var(--khor-glass-blur));
+  -webkit-backdrop-filter: blur(var(--khor-glass-blur));
 }

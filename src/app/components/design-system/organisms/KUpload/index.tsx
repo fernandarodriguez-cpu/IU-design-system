@@ -1,6 +1,6 @@
 import React, { useState, useRef, useCallback } from 'react';
 import { Upload as UploadIcon, File as FileIcon, Image as ImageIcon, X, Paperclip, Trash2, Plus, Eye } from 'lucide-react';
-import { cn } from '../../../../../imports/utils';
+import { cn } from '@/utils/cn';
 import { KProgress } from '../../atoms/KProgress';
 import { KText } from '../../atoms/KText/index';
 
@@ -34,6 +34,22 @@ export interface KUploadProps {
 /**
  * KUpload — Gestor de subida de archivos (Headless v4)
  * Soporta listType="picture-card", "picture" y "text". Gestión de previsualización y drag & drop.
+ */
+/**
+ * @figma-mcp-migration
+ * Component: KUpload
+ * 
+ * INSTRUCCIONES PARA AGENTES DE IA (VS Code / MCP):
+ * Para migrar este componente a Figma, NO generar una matriz multiplicando todas las variables.
+ * Utilizar Figma Component Properties V2 con la siguiente estructura:
+ * 
+ * 1. Variants (Estructurales):
+ *    - Definir variantes puramente visuales/estructurales.
+ * 2. Booleans (Encendido/Apagado):
+ *    - Definir encendido/apagado para iconos o estados (isLoading, hasIcon).
+ * 3. Color Variables (No usar variantes para colores semánticos):
+ *    - El relleno/borde debe usar Figma Variables (Khor v6.0 Colors) asignado dinámicamente.
+ *    - El consumidor del UI Kit cambiará el color del layer.
  */
 export function KUpload({
   value = [],

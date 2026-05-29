@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'motion/react';
-import { cn } from '../../../../../imports/utils';
+import { cn } from '@/utils/cn';
 
 export interface KAnchorLink {
   key: string;
@@ -21,6 +21,22 @@ export interface KAnchorProps {
 
 /**
  * KAnchor — Navegación interna por scroll (Headless v4)
+ */
+/**
+ * @figma-mcp-migration
+ * Component: KAnchor
+ * 
+ * INSTRUCCIONES PARA AGENTES DE IA (VS Code / MCP):
+ * Para migrar este componente a Figma, NO generar una matriz multiplicando todas las variables.
+ * Utilizar Figma Component Properties V2 con la siguiente estructura:
+ * 
+ * 1. Variants (Estructurales):
+ *    - Definir variantes puramente visuales/estructurales.
+ * 2. Booleans (Encendido/Apagado):
+ *    - Definir encendido/apagado para iconos o estados (isLoading, hasIcon).
+ * 3. Color Variables (No usar variantes para colores semánticos):
+ *    - El relleno/borde debe usar Figma Variables (Khor v6.0 Colors) asignado dinámicamente.
+ *    - El consumidor del UI Kit cambiará el color del layer.
  */
 export function KAnchor({
   items,
@@ -75,7 +91,7 @@ export function KAnchor({
 
   const renderLinks = (links: KAnchorLink[], depth = 0) => {
     return (
-      <ul className={cn("flex flex-col gap-1", depth > 0 && "pl-4 mt-1 border-l border-khor-neutral-100")}>
+      <ul className={cn("flex flex-col gap-1", depth > 0 && "ps-4 mt-1 border-is border-khor-neutral-100")}>
         {links.map((item) => {
           const isActive = activeLink === item.href;
           return (
@@ -83,7 +99,7 @@ export function KAnchor({
               {isActive && depth === 0 && (
                 <motion.div
                   layoutId="anchor-indicator"
-                  className="absolute left-0 w-0.5 h-full bg-khor-primary rounded-full -ml-[1px]"
+                  className="absolute start-0 w-0.5 h-full bg-khor-primary rounded-full -ms-[1px]"
                   transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 />
               )}
@@ -91,10 +107,10 @@ export function KAnchor({
                 href={item.href}
                 onClick={(e) => handleClick(e, item)}
                 className={cn(
-                  "block py-1 pr-4 text-xs transition-all font-primary",
+                  "block py-1 pe-4 text-xs transition-all font-primary",
                   isActive 
-                    ? "text-khor-primary font-bold pl-4" 
-                    : "text-khor-neutral-500 hover:text-khor-neutral-800 pl-4",
+                    ? "text-khor-primary font-bold ps-4" 
+                    : "text-khor-neutral-500 hover:text-khor-neutral-800 ps-4",
                   depth > 0 && "py-0.5"
                 )}
               >
@@ -110,7 +126,7 @@ export function KAnchor({
 
   return (
     <nav 
-      className={cn("relative border-l border-khor-neutral-100 py-1", className)} 
+      className={cn("relative border-is border-khor-neutral-100 py-1", className)} 
       style={style}
     >
       {renderLinks(items)}

@@ -20,8 +20,8 @@ function OnboardingInternal() {
   return (
     <div style={{ 
       display: 'grid', 
-      gridTemplateColumns: `minmax(${t.sizing[64] * 4.68}px, ${t.sizing[64] * 6.25}px) 1fr`, 
-      minHeight: t.sizing[64] * 9.375,
+      gridTemplateColumns: `minmax(260px, 320px) 1fr`, 
+      minHeight: 600,
       backgroundColor: t.semantic.surface.card,
       borderRadius: t.spacing.lg,
       overflow: 'hidden',
@@ -81,13 +81,13 @@ function OnboardingInternal() {
           {step === 3 && (
             <div style={{ animation: 'fadeIn 0.3s ease-out', textAlign: 'center', paddingTop: t.spacing.xl }}>
               <div style={{ width: t.sizing[20], height: t.sizing[20], borderRadius: t.radius.full, backgroundColor: `${t.colors.feedback.success}10`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: `0 auto ${t.spacing.lg}px` }}><Rocket size={t.icon.lg} style={{ color: t.colors.feedback.success }} /></div>
-              <h2 style={{ fontSize: t.typography.display1.size, fontWeight: t.typography.fontWeights.extrabold, color: t.semantic.text.primary, marginBottom: t.spacing.xs }}>¡Todo listo, Dani!</h2>
+              <h2 style={{ fontSize: t.typography.display1.size, fontWeight: t.typography.fontWeights.extrabold, color: t.semantic.text.primary, marginBottom: t.spacing.xs }}>¡Todo listo, Alex!</h2>
               <p style={{ color: t.semantic.text.muted, marginBottom: t.spacing.xl, maxWidth: t.layout.sidebarWidth * 1.5, margin: '0 auto' }}>Tu espacio de trabajo ha sido creado. Hemos enviado las invitaciones a tu equipo.</p>
               <div style={{ backgroundColor: t.semantic.surface.raised, padding: t.spacing.lg, borderRadius: t.radius.lg, maxWidth: t.layout.sidebarWidth * 1.5, margin: `${t.spacing.xl}px auto`, border: `1px solid ${t.semantic.border.default}` }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: t.spacing.md, textAlign: 'left' }}>
-                  <KAvatar size="lg" name="Dani Khor" />
+                  <KAvatar size="lg" name="Alex Mercer" />
                   <div>
-                    <div style={{ fontWeight: t.typography.fontWeights.bold, fontSize: t.typography.bodyMd.size }}>Dani Khor</div>
+                    <div style={{ fontWeight: t.typography.fontWeights.bold, fontSize: t.typography.bodyMd.size }}>Alex Mercer</div>
                     <div style={{ fontSize: t.typography.bodySm.size, color: t.semantic.text.muted }}>Administrador • Plan Pro</div>
                   </div>
                 </div>

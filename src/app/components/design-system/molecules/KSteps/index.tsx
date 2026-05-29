@@ -1,6 +1,6 @@
 import React from 'react';
 import { Check, AlertCircle } from 'lucide-react';
-import { cn } from '../../../../../imports/utils';
+import { cn } from '@/utils/cn';
 
 export interface KStepItem {
   title: React.ReactNode;
@@ -24,6 +24,22 @@ export interface KStepsProps {
 
 /**
  * KSteps — Indicador de progreso multi-paso (Total Headless)
+ */
+/**
+ * @figma-mcp-migration
+ * Component: KSteps
+ * 
+ * INSTRUCCIONES PARA AGENTES DE IA (VS Code / MCP):
+ * Para migrar este componente a Figma, NO generar una matriz multiplicando todas las variables.
+ * Utilizar Figma Component Properties V2 con la siguiente estructura:
+ * 
+ * 1. Variants (Estructurales):
+ *    - Definir variantes puramente visuales/estructurales.
+ * 2. Booleans (Encendido/Apagado):
+ *    - Definir encendido/apagado para iconos o estados (isLoading, hasIcon).
+ * 3. Color Variables (No usar variantes para colores semánticos):
+ *    - El relleno/borde debe usar Figma Variables (Khor v6.0 Colors) asignado dinámicamente.
+ *    - El consumidor del UI Kit cambiará el color del layer.
  */
 export function KSteps({
   current = 0,
@@ -124,7 +140,7 @@ export function KSteps({
 
               {/* Contenido */}
               <div className={cn(
-                "flex flex-col min-w-0 pr-4",
+                "flex flex-col min-w-0 pe-4",
                 direction === 'vertical' ? "pb-8" : (isVerticalLabel ? "pt-4 px-2 items-center" : "pt-1")
               )}>
                 <h4 className={cn(

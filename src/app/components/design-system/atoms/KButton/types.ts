@@ -1,6 +1,6 @@
 import { AnchorHTMLAttributes, ButtonHTMLAttributes, CSSProperties, ReactNode } from 'react';
 
-export type KButtonVariant = 'solid' | 'outlined' | 'dashed' | 'filled' | 'text' | 'link' | 'ghost' | 'outline';
+export type KButtonVariant = 'solid' | 'outlined' | 'dashed' | 'filled' | 'text' | 'link' | 'ghost' | 'outline' | 'primary' | 'secondary' | 'danger' | 'navy';
 export type KButtonColor = 'default' | 'primary' | 'secondary' | 'danger' | 'processing' | 'volcano' | 'gold' | 'lime' | 'purple';
 export type KButtonSize = 'sm' | 'md' | 'lg' | 'icon';
 export type KButtonShape = 'default' | 'circle' | 'round';
@@ -53,6 +53,12 @@ export interface KButtonProps extends CombinedAttributes {
     icon?: CSSProperties;
     content?: CSSProperties;
   };
+  /** Fuerza el estado hover (útil para previews/playgrounds) */
+  isHovered?: boolean;
+  /** Fuerza el estado presionado (útil para previews/playgrounds) */
+  isPressed?: boolean;
+  /** Marca el botón como activo/seleccionado (toggle state) */
+  isActive?: boolean;
   /** Handlers */
   onClick?: (e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => void;
 }

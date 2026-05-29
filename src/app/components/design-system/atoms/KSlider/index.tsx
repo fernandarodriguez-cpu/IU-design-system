@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import * as SliderPrimitive from '@radix-ui/react-slider';
-import { cn } from '../../../../../imports/utils';
+import { cn } from '@/utils/cn';
 import { KTooltip } from '../../molecules/KTooltip/index';
 
 export interface KSliderTooltipProps {
@@ -28,8 +28,30 @@ export interface KSliderProps {
   reverse?: boolean;
   tooltip?: KSliderTooltipProps | boolean;
   marks?: Record<number, React.ReactNode | { style?: React.CSSProperties; label: React.ReactNode }>;
+  /** Fuerza el estado hover */
+  isHovered?: boolean;
+  /** Fuerza el estado de foco */
+  isFocused?: boolean;
+  /** Fuerza el estado de presión/arrastre */
+  isPressed?: boolean;
 }
 
+/**
+ * @figma-mcp-migration
+ * Component: KSlider
+ * 
+ * INSTRUCCIONES PARA AGENTES DE IA (VS Code / MCP):
+ * Para migrar este componente a Figma, NO generar una matriz multiplicando todas las variables.
+ * Utilizar Figma Component Properties V2 con la siguiente estructura:
+ * 
+ * 1. Variants (Estructurales):
+ *    - Definir variantes puramente visuales/estructurales.
+ * 2. Booleans (Encendido/Apagado):
+ *    - Definir encendido/apagado para iconos o estados (isLoading, hasIcon).
+ * 3. Color Variables (No usar variantes para colores semánticos):
+ *    - El relleno/borde debe usar Figma Variables (Khor v6.0 Colors) asignado dinámicamente.
+ *    - El consumidor del UI Kit cambiará el color del layer.
+ */
 export const KSlider = React.forwardRef<React.ElementRef<typeof SliderPrimitive.Root>, KSliderProps>(
   function KSlider({
     value,
@@ -48,6 +70,9 @@ export const KSlider = React.forwardRef<React.ElementRef<typeof SliderPrimitive.
     reverse = false,
     tooltip,
     marks,
+    isHovered,
+    isFocused,
+    isPressed,
     ...rest
   }, ref) {
     // Manejo de valores controlados y no controlados
@@ -109,12 +134,12 @@ export const KSlider = React.forwardRef<React.ElementRef<typeof SliderPrimitive.
               >
                 {/* Visual Tick */}
                 <span className={cn(
-                  "absolute block bg-khor-neutral-300",
+                  "absolute block",
                   vertical ? "h-1 w-[6px] right-[-6px]" : "w-1 h-[6px] top-[-6px]",
-                  isActive ? "bg-khor-primary" : ""
+                  isActive ? "bg-khor-interactive-primary" : "bg-khor-neutral-300"
                 )} />
                 {/* Content */}
-                <span className={cn("text-xs font-primary", isActive ? "text-khor-neutral-900 font-medium" : "text-khor-neutral-500")}
+                <span className={cn("text-xs font-primary", isActive ? "text-khor-text-primary font-medium" : "text-khor-text-tertiary")}
                       style={customStyle}>
                   {content}
                 </span>
@@ -129,7 +154,11 @@ export const KSlider = React.forwardRef<React.ElementRef<typeof SliderPrimitive.
       <div className={cn("flex font-primary", vertical ? "flex-col items-center h-full w-fit gap-2" : "items-center w-full gap-4", className)} style={style}>
         <SliderPrimitive.Root
           ref={ref}
-          className={cn("relative flex items-center select-none touch-none", vertical ? "flex-col w-5 h-full" : "w-full h-5")}
+          className={cn(
+            "relative flex items-center select-none touch-none", 
+            vertical ? "flex-col w-5 h-full" : "w-full h-5",
+            isHovered && "scale-[1.01]"
+          )}
           value={arrayValue}
           max={max}
           min={min}
@@ -142,8 +171,8 @@ export const KSlider = React.forwardRef<React.ElementRef<typeof SliderPrimitive.
           onValueCommit={handleValueCommit}
           {...rest}
         >
-          <SliderPrimitive.Track className={cn("bg-khor-neutral-200 relative rounded-full transition-colors", vertical ? "w-[6px] grow" : "grow h-[6px]")}>
-            <SliderPrimitive.Range className={cn("absolute bg-khor-primary rounded-full shadow-sm transition-all", vertical ? "w-full" : "h-full")} />
+          <SliderPrimitive.Track className={cn("bg-khor-neutral-200 relative rounded-full transition-colors", vertical ? "w-[var(--khor-density-spacing-sm)] grow" : "grow h-[var(--khor-density-spacing-sm)]")}>
+            <SliderPrimitive.Range className={cn("absolute bg-khor-interactive-primary rounded-full shadow-sm transition-all", vertical ? "w-full" : "h-full")} />
           </SliderPrimitive.Track>
           
           {arrayValue.map((val, i) => {
@@ -154,11 +183,14 @@ export const KSlider = React.forwardRef<React.ElementRef<typeof SliderPrimitive.
               <SliderPrimitive.Thumb
                 key={i}
                 className={cn(
-                  "block w-4 h-4 bg-white border-2 border-khor-primary rounded-full transition-transform focus:outline-none focus:ring-4 focus:ring-khor-primary-light/50 cursor-grab active:cursor-grabbing",
+                  "block w-[calc(var(--khor-density-spacing-md)+2px)] h-[calc(var(--khor-density-spacing-md)+2px)] bg-khor-surface-primary border-2 border-khor-interactive-primary rounded-full transition-all outline-none cursor-grab active:cursor-grabbing shadow-khor-sm",
+                  "focus-visible:ring-[var(--khor-focus-ring-width)] focus-visible:ring-[var(--khor-focus-ring-color)] focus-visible:ring-offset-1",
                   disabled && "opacity-50 cursor-not-allowed",
-                  !disabled && "hover:scale-110",
+                  !disabled && "hover:scale-110 hover:shadow-khor-md",
+                  (isPressed || isHovered) && "scale-110 shadow-khor-md",
+                  isFocused && "ring-2 ring-khor-interactive-primary ring-offset-1"
                 )}
-                aria-label="Volume"
+                aria-label="Value"
               />
             );
 

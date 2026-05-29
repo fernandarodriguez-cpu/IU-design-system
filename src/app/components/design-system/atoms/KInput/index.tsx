@@ -1,6 +1,6 @@
 import React, { useState, useRef, useImperativeHandle } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from '../../../../../imports/utils';
+import { cn } from '@/utils/cn';
 import { Eye, EyeOff, XCircle } from 'lucide-react';
 
 // Sub-components
@@ -13,23 +13,29 @@ const inputVariants = cva(
   {
     variants: {
       variant: {
-        outlined: 'border-khor-slate-200 bg-white text-khor-neutral-900 shadow-khor-sm focus-within:border-khor-primary focus-within:ring-khor-primary/20',
-        borderless: 'border-transparent bg-transparent text-khor-neutral-900 shadow-none focus-within:ring-0 px-0',
-        filled: 'border-transparent bg-khor-slate-100 text-khor-neutral-900 focus-within:bg-khor-slate-50 focus-within:ring-khor-primary/20',
+        outlined: 'border-[var(--khor-input-border)] bg-[var(--khor-input-bg)] text-[var(--khor-input-text)] shadow-khor-sm focus-within:border-[var(--khor-input-focus-border)] focus-within:ring-[var(--khor-input-focus-ring)]/20',
+        borderless: 'border-transparent bg-transparent text-[var(--khor-input-text)] shadow-none focus-within:ring-0 px-0',
+        filled: 'border-transparent bg-khor-slate-100 text-[var(--khor-input-text)] focus-within:bg-khor-slate-50 focus-within:ring-[var(--khor-input-focus-ring)]/20',
       },
       size: {
-        sm: 'h-8 px-2 text-xs',
-        md: 'h-10 px-3 text-sm',
-        lg: 'h-12 px-4 text-base',
+        sm: 'h-[var(--khor-density-height-sm)] px-2 text-xs',
+        md: 'h-[var(--khor-density-height-input)] px-3 text-sm',
+        lg: 'h-[var(--khor-density-height-lg)] px-4 text-base',
       },
       status: {
-        default: '',
-        error: 'border-khor-error focus-within:ring-khor-error',
-        warning: 'border-khor-warning focus-within:ring-khor-warning',
+        default: 'border-khor-border-default',
+        error: 'border-khor-border-error focus-within:ring-khor-border-error/20',
+        warning: 'border-khor-warning focus-within:ring-khor-warning/20',
       },
       disabled: {
         true: 'bg-khor-slate-100 border-khor-slate-200 opacity-60 cursor-not-allowed select-none pointer-events-none grayscale-[0.5]',
         false: '',
+      },
+      isFocused: {
+        true: 'ring-2 ring-khor-primary ring-offset-2 border-khor-primary',
+      },
+      isHovered: {
+        true: 'border-khor-primary/50 bg-khor-slate-50/50 shadow-khor-md',
       }
     },
     defaultVariants: {
@@ -69,6 +75,10 @@ export interface KInputProps extends Omit<React.InputHTMLAttributes<HTMLInputEle
   addonAfter?: React.ReactNode;
   /** Callback llamado al presionar el botón de limpiar */
   onClear?: () => void;
+  /** Fuerza el estado de foco (útil para previews/playgrounds) */
+  isFocused?: boolean;
+  /** Fuerza el estado de hover (útil para previews/playgrounds) */
+  isHovered?: boolean;
 }
 
 /**
@@ -81,6 +91,7 @@ const BaseInput = React.forwardRef<HTMLInputElement, KInputProps>(function KInpu
     allowClear, showCount, maxLength,
     addonBefore, addonAfter,
     onClear,
+    isFocused, isHovered,
     className, style, disabled, value, defaultValue, onChange, ...rest 
   },
   ref,
@@ -153,7 +164,7 @@ const BaseInput = React.forwardRef<HTMLInputElement, KInputProps>(function KInpu
       <div className="flex w-full group">
         {renderAddon(addonBefore, 'before')}
         <div className={cn(
-          inputVariants({ variant, size, status, disabled }),
+          inputVariants({ variant, size, status, disabled, isFocused, isHovered }),
           addonBefore && "rounded-l-none",
           addonAfter && "rounded-r-none"
         )}>
@@ -164,7 +175,7 @@ const BaseInput = React.forwardRef<HTMLInputElement, KInputProps>(function KInpu
             value={currentVal}
             onChange={handleChange}
             maxLength={maxLength}
-            className="w-full bg-transparent outline-none placeholder:text-khor-neutral-400 h-full disabled:cursor-not-allowed px-1"
+            className="w-full bg-transparent outline-none placeholder:text-[var(--khor-input-placeholder)] h-full disabled:cursor-not-allowed px-1"
             {...rest}
           />
           <div className="flex items-center gap-2 shrink-0 ml-2">
@@ -211,6 +222,22 @@ export interface KInputPasswordProps extends KInputProps {
 
 /**
  * KInputPassword — Variante de input para contraseñas con toggle de visibilidad.
+ */
+/**
+ * @figma-mcp-migration
+ * Component: KInputPassword
+ * 
+ * INSTRUCCIONES PARA AGENTES DE IA (VS Code / MCP):
+ * Para migrar este componente a Figma, NO generar una matriz multiplicando todas las variables.
+ * Utilizar Figma Component Properties V2 con la siguiente estructura:
+ * 
+ * 1. Variants (Estructurales):
+ *    - Definir variantes puramente visuales/estructurales.
+ * 2. Booleans (Encendido/Apagado):
+ *    - Definir encendido/apagado para iconos o estados (isLoading, hasIcon).
+ * 3. Color Variables (No usar variantes para colores semánticos):
+ *    - El relleno/borde debe usar Figma Variables (Khor v6.0 Colors) asignado dinámicamente.
+ *    - El consumidor del UI Kit cambiará el color del layer.
  */
 export const KInputPassword = React.forwardRef<HTMLInputElement, KInputPasswordProps>(function KInputPassword(
   { prefix, suffix, visibilityToggle = true, iconRender, ...rest },

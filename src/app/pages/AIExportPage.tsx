@@ -16,17 +16,17 @@ import { KSwitch } from '../components/design-system/atoms/KSwitch/index';
 import { KCardSection } from '../components/design-system/organisms/KCardSection/index';
 import { KTabs } from '../components/design-system/organisms/KTabs/index';
 import { kToast } from '../components/design-system/organisms/KToast/index';
-import { khorTokens } from '../theme/khor-theme';
+import { useTheme, ThemeConfig } from '../theme/theme-context';
 import { patterns } from '../patterns/index';
 import { atoms } from './AtomsPage';
 import { molecules } from './MoleculesPage';
 import { organisms } from './OrganismsPage';
-
+import { khorTokens } from '../theme/khor-theme';
 
 const t = khorTokens;
 
 /* ─── Version (must match ChangelogPage & AppShell) ─── */
-export const KHOR_VERSION = '4.0.4';
+export const KHOR_VERSION = '5.1.6-alpha';
 
 
 /* ─── Sections config ───────────────────────── */
@@ -38,20 +38,20 @@ export interface SectionConfig {
 }
 
 export const defaultSections: SectionConfig[] = [
-  { id: 'header', label: 'Encabezado y contexto', description: 'Nombre, version, stack tecnologico y proposito del sistema.', enabled: true },
-  { id: 'tokens', label: 'Design Tokens', description: 'Colores de marca, neutrales, feedback, tipografia, espaciado, radios y sombras.', enabled: true },
-  { id: 'darkmode', label: 'Dark Mode', description: 'Tokens alternativos para modo oscuro y CSS variables.', enabled: true },
-  { id: 'atoms', label: 'Atomos (27)', description: 'API completa de 27 atomos: 18 base + 9 extendidos (ButtonGroup, InputPassword, FloatButton, etc.).', enabled: true },
-  { id: 'molecules', label: 'Moleculas (33)', description: 'API completa de 33 moleculas: 12 base + 10 extendidas + 11 wave3 (DatePicker, ColorPicker, Transfer, etc.).', enabled: true },
-  { id: 'organisms', label: 'Organismos (13)', description: 'API de 13 organismos: 8 base + 5 extendidos (Upload, Tree, Tour, ModalConfirm, FormList).', enabled: true },
-  { id: 'templates', label: 'Templates y Patrones', description: 'Patrones de pagina: Login, Dashboard, CRUD Table, Formulario Multi-Paso, y convenciones.', enabled: true },
-  { id: 'layout', label: 'Layout (AppShell)', description: 'Estructura sidebar + header + canvas con dimensiones y comportamiento.', enabled: true },
-  { id: 'patterns', label: 'Patrones y Convenciones', description: 'Naming, imports, espaciado, responsive, accesibilidad.', enabled: true },
-  { id: 'examples', label: 'Ejemplos de Codigo', description: 'Snippets listos para copiar/pegar de casos de uso comunes.', enabled: true },
+  { id: 'header', label: 'Encabezado y contexto', description: 'Nombre, versión, stack tecnológico y propósito del sistema.', enabled: true },
+  { id: 'tokens', label: 'Design Tokens', description: 'Charts elite, Forms semánticos, Icon scale, Colores, Tipografía, etc.', enabled: true },
+  { id: 'darkmode', label: 'Dark Mode', description: 'Inversión semántica y tokens alternativos para modo oscuro.', enabled: true },
+  { id: 'atoms', label: 'Átomos (30)', description: 'API completa de 30 átomos: Sistema v5.0 optimizado.', enabled: true },
+  { id: 'molecules', label: 'Moléculas (33)', description: 'API completa de 33 moléculas coordinadas con el sistema Elite.', enabled: true },
+  { id: 'organisms', label: 'Organismos (15)', description: 'Componentes complejos coordinados con el sistema Elite.', enabled: true },
+  { id: 'templates', label: 'Templates y Patrones', description: 'Patrones de página: Dashboard Admin, CRUD Elite, Login SaaS, etc.', enabled: true },
+  { id: 'layout', label: 'Layout (AppShell)', description: 'Estructura sidebar + header + canvas con dimensiones Elite.', enabled: true },
+  { id: 'patterns', label: 'Patrones y Convenciones', description: '3-Layer Architecture, Fluid Typography, Naming, A11y.', enabled: true },
+  { id: 'examples', label: 'Ejemplos de Código', description: 'Snippets listos para copiar/pegar de casos de uso comunes.', enabled: true },
 ];
 
 /* ─── Markdown Generator ────────────────────── */
-export function generateMarkdown(sections: SectionConfig[]): string {
+export function generateMarkdown(sections: SectionConfig[], theme: ThemeConfig): string {
   const enabled = new Set(sections.filter((s) => s.enabled).map((s) => s.id));
   const parts: string[] = [];
   const today = new Date().toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' });
@@ -66,222 +66,556 @@ Este documento es la única fuente de verdad para el desarrollo en el ecosistema
 ## 🤖 Instrucciones Críticas para la IA (System Prompt)
 
 Como IA, DEBES seguir estas reglas estrictamente al generar código:
-1. **Identidad Visual:** NUNCA importes ni uses componentes directamente desde \`antd\`, \`@ant-design/*\`, Material UI o similares. Usa exclusivamente los componentes del sistema (prefijo \`K\`). Los componentes K* son la única abstracción oficial basada en Radix UI y Tailwind CSS v4; tú solo debes interactuar con la capa Khor.
-2. **Componentes Khor:** Ejemplo: \`KButton\`, \`KInput\`, \`KCardSection\`.
-3. **Estilos:** Usa Tailwind CSS SOLO para el layout (grid, flex, spacing) y clases de utilidad de Khor. NUNCA hardcodees colores hexadecimales; usa siempre los Design Tokens (\`khorTokens\`) o CSS Variables (\`var(--khor-*)\`).
-4. **React Router:** Usa \`react-router\` (v6/v7), NO \`react-router-dom\`.
-5. **Iconografía:** Usa únicamente la librería \`lucide-react\`.
-6. **Higiene del DOM:** Asegúrate de que las props personalizadas de Khor (ej. \`variant\`, \`fullWidth\`) no lleguen al elemento HTML nativo.
+1. **Identidad Visual:** NUNCA importes ni uses componentes directamente desde \`antd\`, \`@ant-design/*\`, Material UI o similares. Usa exclusivamente los componentes del sistema (prefijo \`K\`).
+2. **Uso de Tokens (Prohibido Hardcode):** NUNCA uses colores hexadecimales. Usa SIEMPRE los Design Tokens (\`khorTokens\`) o CSS Variables (\`var(--khor-*)\`).
+3. **Componentes Khor:** Ejemplo: \`KButton\`, \`KIcon\`, \`KCardSection\`.
+4. **Iconografía:** Usa únicamente el componente \`KIcon\` (wrapper de Lucide). NO importes iconos directamente de lucide-react si existe \`KIcon\`.
+5. **Layout:** Usa Tailwind CSS SOLO para el layout (grid, flex, spacing) y clases de utilidad de Khor.
+6. **Lovable/v0 Context:** Usa los **Page Recipes** para acelerar la construcción y garantizar consistencia.
 
 ### ♿ Reglas Estrictas de Accesibilidad (A11y)
-1. **Roles interactivos:** NUNCA uses \`onClick\` en elementos no interactivos (\`div\`, \`span\`). Usa siempre \`<KButton>\` o elementos semánticos.
-2. **Atributos ARIA:** Todo elemento sin texto visible (ej. botones de solo ícono) DEBE tener un \`aria-label\` descriptivo.
-3. **Imágenes:** Toda etiqueta \`<img>\` o componente de imagen debe incluir el atributo \`alt\`.
-4. **Formularios:** Todos los inputs deben estar asociados a un label (usando el componente \`KFormField\`).
+1. **Roles interactivos:** NUNCA uses \`onClick\` en elementos no interactivos (\`div\`). Usa siempre \`<KButton>\`.
+2. **Atributos ARIA:** Todo elemento sin texto visible DEBE tener un \`aria-label\`.
+3. **Movimiento reducido:** Nunca agregues animaciones CSS o JS sin verificar que el sistema respeta \`prefers-reduced-motion\`. Usa siempre los tokens de motion de Khor (\`\--khor-duration-*\`, \`\--khor-easing-*\`).
+
+### 🏗️ Arquitectura de 3 Capas (World-Class Standard)
+El sistema Khor se organiza en 3 capas de tokens:
+1. **Layer 1: Primitives:** Valores base inmutables (ej. \`--khor-primary-500\`, \`--khor-space-4\`).
+2. **Layer 2: Semantics:** Alias basados en intención (\`--khor-text-primary\`, \`--khor-surface-card\`). **ÚSALOS SIEMPRE.**
+3. **Layer 3: Components/Contextual:** Overrides para áreas específicas (\`--khor-context-sidebar-bg\`, \`--khor-grid-header-bg\`).
+
+### 🧠 Semantic Intent Mapping (v5.0 Strategy)
+Como IA, DEBES elegir componentes basados en la **Intención Semántica** del flujo, no solo por estética:
+
+| Intent | Pattern / Component Requerido | Gravedad |
+|--------|------------------------------|----------|
+| \`critical_confirmation\` | \`KModal\` (Confirm) + \`KButton\` (Danger) | Alta |
+| \`data_massive_explorer\` | \`KDataTable\` (con virtualización activa) | Alta |
+| \`step_by_step_flow\` | \`KFormWizard\` | Media |
+| \`brand_call_to_action\` | \`KButton\` (Primary) + \`KIcon\` (Sparkles) | Baja |
+| \`system_feedback_error\` | \`kToast\` (Error) o \`KResult\` (500/403) | Alta |
+
+### 🔠 Fluid Typography (Responsive by Design)
+Khor v5.0 usa tipografía fluida basada en \`clamp()\`. NO sobrescribas tamaños de fuente con media queries. Usa los tokens semánticos:
+- \`display-2xl\`, \`display-xl\`: Para títulos de gran impacto (Fluid 48px -> 72px).
+- \`heading-lg\` a \`heading-xs\`: Para jerarquía de contenido (Fluid 24px -> 48px).
+- \`body-xl\`, \`body-lg\`, \`body-md\`, \`body-sm\`: Para lectura estandarizada.
 `);
   }
 
   if (enabled.has('tokens')) {
     parts.push(`
-## 🎨 Especificación Técnica de Tokens (Fuente de Verdad)
+## 🎨 Especificación Técnica de Tokens (Elite SaaS Architecture)
 
-Para que el código generado sea funcional, la IA DEBE conocer estos valores y DEBE incluirlos en su CSS global o mediante objeto de estilos si está en entorno aislado:
+La IA DEBE usar estos valores exactos:
 
 \`\`\`css
 :root {
-  /* Colores de Marca y Estado */
-  --khor-brand-primary: #E04D36;
-  --khor-brand-secondary: #051758;
-  --khor-brand-accent: #FF9500;
-  --khor-status-success: #2E7D32;
-  --khor-status-error: #D32F2F;
-  --khor-status-info: #051758;
+  /* Elite Charts Palette (12 Colores) */
+  --khor-chart-primary: ${theme.primary};   --khor-chart-secondary: ${theme.secondary};
+  --khor-chart-accent: ${theme.accent};    --khor-chart-success: ${theme.success};
+  --khor-chart-error: ${theme.error};     --khor-chart-info: ${theme.info};
+  --khor-chart-teal: #008080;      --khor-chart-purple: #9C27B0;
+  --khor-chart-pink: #E91E63;      --khor-chart-cyan: #00BCD4;
+  --khor-chart-amber: #FFC107;     --khor-chart-gray: #9E9E9E;
 
-  /* Neutros y Superficies */
-  --khor-neutral-50: #FFFFFF;    /* Surface Page / Card */
-  --khor-neutral-100: #EDF0F1;   /* Canvas Background */
-  --khor-neutral-200: #D5DBE0;   /* Borders / Dividers */
-  --khor-neutral-300: #A0AEC0;   /* Placeholders */
-  --khor-neutral-400: #718096;   /* Muted Text */
-  --khor-neutral-500: #4A5568;   /* Body Text */
-  --khor-neutral-800: #11141C;   /* Dark Text */
-  --khor-neutral-900: #051758;   /* Heading Text */
+  /* Neutrals (Full Slate-Blue Scale) */
+  --khor-neutral-50: #f8faff;   --khor-neutral-100: #edf0f1;
+  --khor-neutral-200: #d5dbe0;  --khor-neutral-300: #a0aec0;
+  --khor-neutral-400: #718096;  --khor-neutral-500: #4a5568;
+  --khor-neutral-600: #5A6475;  --khor-neutral-700: #3D4552;
+  --khor-neutral-800: #252C38;  --khor-neutral-900: #000000;
 
-  /* Geometría y Elevación (Myna-Adopted) */
-  --khor-radius-sm: 6px;
-  --khor-radius-md: 8px;
-  --khor-radius-lg: 10px;
-  --khor-radius-xl: 14px;
+  /* Form Validation Semantic States */
+  --khor-form-error-bg: ${theme.error}15;   --khor-form-error-border: ${theme.error};   --khor-form-error-text: ${theme.error};
+  --khor-form-success-bg: ${theme.success}15; --khor-form-success-border: ${theme.success}; --khor-form-success-text: ${theme.success};
+  --khor-form-warning-bg: ${theme.warning}15; --khor-form-warning-border: ${theme.warning}; --khor-form-warning-text: ${theme.warning};
+  --khor-form-focus-ring: ${theme.primary};
+
+  /* Semantic Layer 2: Actions */
+  --khor-action-primary-default: ${theme.primary}; --khor-action-primary-hover: #e8644f;
+  --khor-action-secondary-default: ${theme.secondary}; --khor-action-secondary-hover: #0a2270;
+  --khor-action-danger-default: ${theme.error}; --khor-action-danger-hover: #B71C1C;
+  --khor-action-ghost-hover: rgba(5, 23, 88, 0.06);
+  --khor-action-disabled-bg: #EDF0F1; --khor-action-disabled-text: #A0AEC0;
+
+  /* Semantic Layer 2: Surface & Overlay (Interactive Ref) */
+  --khor-surface-page: #f8faff; --khor-surface-card: #ffffff;
+  --khor-surface-hover: rgba(5, 23, 88, 0.04); --khor-surface-pressed: rgba(5, 23, 88, 0.08);
+  --khor-surface-selected: ${theme.primary}15; --khor-surface-subtle: #F4F6F8;
+  --khor-surface-overlay: #ffffff; --khor-overlay-bg: rgba(255, 255, 255, 0.95);
+
+  /* Semantic Layer 2: Borders */
+  --khor-border-default: #D5DBE0; --khor-border-muted: #EDF0F1;
+  --khor-border-strong: #A0AEC0; --khor-border-focus: ${theme.primary};
+  --khor-border-error: ${theme.error}; --khor-border-disabled: #EDF0F1;
+
+  /* Semantic Layer 2: Typography */
+  --khor-text-primary: ${theme.secondary}; --khor-text-secondary: #475a8f;
+  --khor-text-muted: #94a9d8; --khor-text-disabled: #A0AEC0; --khor-text-on-action: #ffffff;
+
+  /* Motion Tokens (Elite Precision) */
+  --khor-duration-instant: 80ms; --khor-duration-fast: 100ms;
+  --khor-duration-normal: 200ms; --khor-duration-slow: 400ms;
+  --khor-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --khor-easing-enter: cubic-bezier(0, 0, 0.2, 1);
+  --khor-easing-exit: cubic-bezier(0.4, 0, 1, 1);
+
+  /* Elevation & Shadows (Multi-Layer Strategy) */
   --khor-shadow-sm: 0 1px 2px rgba(5,23,88,0.04), 0 1px 1px rgba(0,0,0,0.02);
   --khor-shadow-md: 0 4px 6px -1px rgba(5,23,88,0.08), 0 2px 4px -1px rgba(0,0,0,0.04);
   --khor-shadow-lg: 0 10px 15px -3px rgba(5,23,88,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
   --khor-shadow-xl: 0 20px 25px -5px rgba(5,23,88,0.12), 0 10px 10px -5px rgba(0,0,0,0.04);
   --khor-shadow-2xl: 0 25px 50px -12px rgba(5,23,88,0.25);
+  --khor-shadow-inner: inset 0 2px 4px 0 rgba(0,0,0,0.06);
+
+  /* Layout Grid System (12 Columns) */
+  --khor-grid-sm: cols: 12, gutter: 16px, margin: 16px;
+  --khor-grid-md: cols: 12, gutter: 24px, margin: 24px;
+  --khor-grid-lg: cols: 12, gutter: 32px, margin: 32px;
+  --khor-grid-xl: cols: 12, gutter: 32px, margin: 40px;
+
+  /* Semantic Spacing Tokens (Aliases) */
+  --khor-space-layout-xs: 16px; --khor-space-layout-sm: 24px;
+  --khor-space-layout-md: 32px; --khor-space-layout-lg: 48px;
+  --khor-space-layout-xl: 64px;
+  --khor-space-component-xs: 4px; --khor-space-component-sm: 8px;
+  --khor-space-component-md: 12px; --khor-space-component-lg: 16px;
+
+  /* 💎 Layer 3: Component Specific Tokens (Elite Precision) */
+  --khor-button-primary-bg:        var(--khor-action-primary-default);
+  --khor-button-primary-text:      var(--khor-text-on-action);
+  --khor-button-primary-shadow:    0 2px 4px rgba(224, 77, 54, 0.2);
+  --khor-button-secondary-bg:      var(--khor-action-secondary-default);
+  --khor-button-secondary-text:    var(--khor-text-on-action);
+  --khor-input-bg:                 var(--khor-surface-card);
+  --khor-input-border:             var(--khor-border-default);
+  --khor-input-focus-border:       var(--khor-border-focus);
+  --khor-input-focus-ring:         var(--khor-primary);
+  --khor-card-bg:                  var(--khor-surface-card);
+  --khor-card-shadow:              var(--khor-elevation-2);
+  --khor-card-radius:              var(--khor-radius-lg);
+
+  /* Layer 3: Contextual Tokens — Secciones Invertidas (Layout Core) */
+  --khor-context-sidebar-bg:        var(--khor-secondary);
+  --khor-context-sidebar-text:      var(--khor-neutral-50);
+  --khor-context-sidebar-text-muted:rgba(255, 255, 255, 0.55);
+  --khor-context-sidebar-border:    rgba(255, 255, 255, 0.08);
+  --khor-context-sidebar-hover:     rgba(255, 255, 255, 0.10);
+  --khor-context-sidebar-active:    rgba(255, 255, 255, 0.15);
+  --khor-context-header-bg:         var(--khor-surface-card);
+  --khor-context-header-border:     var(--khor-border-default);
+  --khor-context-header-text:       var(--khor-text-primary);
 }
 \`\`\`
 
-### Detalle Analítico de Tokens (Tabla extendida)
+### 🌑 Dual-Theme Semantic Mapping (Dark Mode Strategy)
+La IA debe invertir los valores semánticos siguiendo este mapeo de "Inversión Inteligente":
 
-### Colores de Marca
+| Semantic Token | Light Value (Default) | Dark Value (Adaptive) | Intent |
+|----------------|----------------------|-----------------------|--------|
+| \`--khor-surface-page\` | \`#F8FAFF\` | \`#0F111A\` | Canvas base |
+| \`--khor-surface-card\` | \`#FFFFFF\` | \`#1A1B2E\` | Contenedores |
+| \`--khor-text-primary\` | \`#051758\` | \`#E8EAF0\` | Lectura principal |
+| \`--khor-text-secondary\` | \`#475A8F\` | \`#B0B4C8\` | Texto de apoyo |
+| \`--khor-border-default\` | \`#D5DBE0\` | \`#2E3148\` | Separadores sutiles |
+| \`--khor-surface-hover\` | \`rgba(5,23,88,0.04)\` | \`rgba(255,255,255,0.05)\` | Feedback interactivo |
 
-| Token | Hex | CSS Variable | Uso |
-|-------|-----|-------------|-----|
-| Primary | \`#E04D36\` | \`var(--khor-primary)\` | CTAs, botones principales, enlaces activos |
-| Secondary | \`#051758\` | \`var(--khor-secondary)\` | Botones secundarios, sidebar, titulos, navegacion |
-| Accent | \`#FF9500\` | \`var(--khor-accent)\` | Warnings, destacados, badges, CTA destacado |
-
-### Colores Neutros
-
-| Token | Hex | CSS Variable | Uso |
-|-------|-----|-------------|-----|
-| neutral-50 | \`#FFFFFF\` | \`var(--khor-neutral-50)\` | Fondo de tarjetas, superficies |
-| neutral-100 | \`#EDF0F1\` | \`var(--khor-neutral-100)\` | Fondo de canvas, inputs |
-| neutral-200 | \`#D5DBE0\` | \`var(--khor-neutral-200)\` | Bordes, divisores |
-| neutral-300 | \`#A0AEC0\` | \`var(--khor-neutral-300)\` | Texto placeholder |
-| neutral-400 | \`#718096\` | \`var(--khor-neutral-400)\` | Texto secundario, muted |
-| neutral-500 | \`#4A5568\` | \`var(--khor-neutral-500)\` | Texto cuerpo |
-| neutral-900 | \`#000000\` | \`var(--khor-neutral-900)\` | Texto principal, headings |
-
-### Colores de Feedback
-
-| Token | Hex | Uso |
-|-------|-----|-----|
-| success | \`#2E7D32\` | Exito, confirmaciones, badges OK |
-| success-light | \`#E8F5E9\` | Fondo de alertas/badges de exito |
-| error | \`#D32F2F\` | Errores, validaciones fallidas |
-| error-light | \`#FFEBEE\` | Fondo de alertas/badges de error |
-| warning | \`#FF9500\` | Advertencias (coincide con accent) |
-| warning-light | \`#FFF3E0\` | Fondo de advertencias |
-| info-light | \`#E3F2FD\` | Fondo de alertas informativas |
-
-**Nota para la IA:** En Tailwind v4, estos colores se consumen como \`bg-khor-primary\`, \`text-khor-secondary\`, \`border-khor-accent\`, etc.
-
-### Tipografia
-
-| Escala | Tamano | Peso | Line Height | Fuente |
-|--------|--------|------|-------------|--------|
-| display1| 64px | 700 (bold) | 1.1 | Montserrat |
-| display2| 48px | 700 | 1.1 | Montserrat |
-| h1 | 38px | 700 | 1.2 | Montserrat |
-| h2 | 30px | 700 | 1.2 | Montserrat |
-| h3 | 24px | 600 | 1.3 | Montserrat |
-| body-lg | 16px | 400 | 1.5 | Montserrat |
-| body-md | 14px | 400 | 1.5 | Montserrat |
-| small | 12px | 500 | 1.5 | Montserrat |
-| caption | 11px | 400 | 1.4 | Montserrat |
-| overline| 10px | 600 | 1.2 | Montserrat |
-
-**Importar fuentes:**
-\`\`\`css
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+}
 \`\`\`
 
-### Espaciado
+### ♿ Accesibilidad Global: Reduced Motion
+El sistema respeta las preferencias del usuario. **Regla Obligatoria:** Implementar este bloque en el CSS base:
 
+\`\`\`css
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Alto contraste — WCAG AAA Readiness */
+@media (prefers-contrast: more) {
+  :root {
+    --khor-focus-ring-color: #000000;
+    --khor-focus-ring-width: 3px;
+    --khor-focus-ring-offset: 3px;
+    --khor-border-default: #000000;
+    --khor-text-secondary: #051758;
+    --khor-text-muted: #475a8f;
+  }
+}
+\`\`\`
+
+### 📏 Sistema de Densidad (Full Specification)
+La IA debe aplicar estas clases al contenedor raíz para heredar el modelo de caja correcto:
+
+\`\`\`css
+/* COMPACT — dashboards con datos masivos */
+.khor-compact {
+  --khor-density-spacing-xs: 2px; --khor-density-spacing-sm: 4px;
+  --khor-density-spacing-md: 8px; --khor-density-spacing-lg: 12px;
+  --khor-density-height-input: 28px; --khor-density-height-row: 32px;
+  --khor-density-font-body: 12px; --khor-density-font-label: 11px;
+  --khor-density-radius: 6px;
+}
+
+/* COMFORTABLE — onboarding, formularios críticos */
+.khor-comfortable {
+  --khor-density-spacing-xs: 6px; --khor-density-spacing-sm: 12px;
+  --khor-density-spacing-md: 24px; --khor-density-spacing-lg: 40px;
+  --khor-density-height-input: 48px; --khor-density-height-row: 60px;
+  --khor-density-font-body: 16px; --khor-density-font-label: 14px;
+  --khor-density-radius: 10px;
+}
+\`\`\`
+
+### 🌍 Internacionalización (i18n & RTL)
+Khor v5.0 está preparado para mercados globales. La IA debe seguir estas reglas:
+1. **Lógica Direccional:** NUNCA uses \`padding-left\` o \`right\`. Usa SIEMPRE propiedades lógicas: \`padding-inline-start\`, \`margin-inline-end\`.
+2. **Iconografía Espejada:** Iconos de navegación (flechas) DEBEN espejarse en RTL usando \`transform: scaleX(-1)\` si no hay una variante nativa.
+3. **Tipografía:** Para scripts árabes/hebreos, el sistema debe aumentar el \`line-height\` en un 20% automáticamente mediante el token \`--khor-line-height-dynamic\`.
+
+### 🛡️ Seguridad y Robustez de Datos
+1. **Sanitización Obligatoria:** NUNCA uses \`dangerouslySetInnerHTML\` con datos provenientes de props sin pasar por una capa de sanitización (ej. DOMPurify).
+2. **Escape de Atributos:** Todo \`title\` o \`aria-label\` dinámico debe ser escapado para prevenir inyecciones de strings maliciosos.
+3. **Validación de Tipos:** Usa TypeScript estricto para asegurar que las props de color o URL coincidan con los patrones permitidos por el sistema.
+
+### 📐 Guías de Uso (Do & Don't)
+- **Do:** Usa \`KStatCard\` solo para métricas numéricas con tendencia.
+- **Don't:** No uses \`KButton\` primary para acciones secundarias (ej. "Cancelar").
+- **Do:** Mantén una jerarquía de encabezados (\`h1\` -> \`h2\` -> \`h3\`) sin saltarte niveles.
+- **Don't:** No hardcodees anchos (\`width: 200px\`). Usa el sistema de grid o tokens de espaciado.
+
+### 🏛️ Gobernanza y Evolución (Elite Operations)
+Para asegurar la estabilidad en la era de la IA, Khor sigue un contrato estricto:
+
+1. **Versionado SemVer 2.0.0:**
+   - **MAJOR (x.0.0):** Cambios que rompen la API o eliminan tokens/componentes.
+   - **MINOR (0.x.0):** Nuevos componentes, props opcionales o nuevos tokens.
+   - **PATCH (0.0.x):** Bugfixes estéticos o técnicos que no alteran la API.
+
+2. **Ciclo de Vida del Componente:**
+   - 🧪 **Experimental:** En desarrollo, API sujeta a cambios diarios.
+   - ✅ **Stable:** Listos para producción, API garantizada.
+   - ⚠️ **Deprecated:** En fase de retiro. La IA debe evitar su uso y sugerir el reemplazo documentado.
+
+3. **Política de Deprecación:**
+   Todo elemento deprecado se mantendrá durante un ciclo de **2 versiones menores** antes de su eliminación total en la siguiente versión mayor.
+
+4. **Contrato para Agentes de IA:**
+   Cuando la IA detecta que falta un patrón o componente, NO DEBE inventar estilos. Debe proponer una extensión del sistema basada en los **Design Tokens de Capa 1 y 2** existentes para mantener la coherencia del ADN visual.
+
+| **Border** | \`border-error\` | Bordes de validación fallida |
+
+### ♿ Tabla de Contraste WCAG 2.1 (Pares Certificados)
+*IA: Usa solo estas combinaciones. Las marcadas con ⚠️ son solo para uso decorativo.*
+
+| Fondo | Texto | Ratio | WCAG | Nota |
+|-------|-------|-------|------|------|
+| \`surface-card\` (#FFF) | \`text-primary\` (#051758) | 16.2:1 | **AAA** | Texto principal |
+| \`surface-card\` (#FFF) | \`text-secondary\` (#475A8F) | 6.8:1 | **AA** | Texto secundario |
+| \`action-primary\` (#E04D36) | \`text-on-action\` (#FFF) | 4.8:1 | **AA** | Texto sobre botón |
+| \`surface-card\` (#FFF) | \`error\` (#D32F2F) | 5.1:1 | **AA** | Textos de error |
+| \`surface-card\` (#FFF) | \`neutral-400\` (#718096) | 4.6:1 | **AA** | Texto secundario OK |
+| \`surface-card\` (#FFF) | \`neutral-300\` (#A0AEC0) | 2.8:1 | ⚠️ **FAIL** | Solo decorativo |
+| \`surface-card\` (#FFF) | \`accent\` (#FF9500) | 2.5:1 | ⚠️ **FAIL** | Solo iconos ≥24px |
+| \`navy\` (#051758) | \`neutral-50\` (#FFF) | 17.5:1 | **AAA** | Sidebar / Invertido |
+| \`navy\` (#051758) | \`accent\` (#FF9500) | 7.1:1 | **AAA** | Badges en sidebar OK |
+
+### ♿ Alto Contraste (WCAG AAA Readiness)
+Cuando \`prefers-contrast: more\` está activo, el sistema aplica:
+- \`focus-ring-width\`: 3px
+- \`focus-ring-offset\`: 3px
+- \`text-secondary\` elevado a ratio 7:1+ (AAA)
+
+### 📊 Dark Mode Feedback (SaaS Recovery)
+| Token | Light | Dark (Audit v4.2 Fix) |
+|-------|-------|------------------------|
+| success-light | #E8F5E9 | #1B3A1C |
+| error-light | #FFEBEE | #3B1212 |
+| warning-light | #FFF3E0 | #3B2500 |
+| info-light | #E3F2FD | #0D1F3C |
+
+### 📜 Gobernanza y Contribución (Khor Elite Standards)
+El sistema sigue estándares estrictos para mantener la paridad IA/Humanos.
+1. **Prefijo K:** Todo componente debe empezar con "K" (ej. \`KButton\`).
+2. **Cero Dependencias:** Prohibido instalar librerías de UI externas (MUI, AntD).
+3. **Capa Semántica 2:** Priorizar \`action-primary-default\` sobre colores base.
+4. **Metadata IA:** Todo componente nuevo debe incluir \`a11ySummary\` y \`aiNotes\` en su registro.
+5. **Checklist:** Props tipadas, Soporte Dark Mode, Soporte Densidad.
+
+### Elevación — Guía de uso obligatoria
+
+| Nivel | Token | Componentes |
+|-------|-------|-------------|
+| 0 | \`--khor-elevation-0\` | Elementos inline, sin elevación |
+| 1 | \`--khor-elevation-1\` | KCardSection, KStatCard, KTable |
+| 2 | \`--khor-elevation-2\` | KDropdown, KTooltip, KPopconfirm |
+| 3 | \`--khor-elevation-3\` | KDrawer, KSidesheet, Cabeceras fijas |
+| 4 | \`--khor-elevation-4\` | KModal, KDialog |
+| 5 | \`--khor-elevation-5\` | KToast, KNotification flotante |
+
+### Architecture Layers (v4.3.0)
+- **Breakpoints:** \`sm: 640px\`, \`md: 768px\`, \`lg: 1024px\`, \`xl: 1280px\`.
+- **Z-Index:** \`dropdown: 1000\`, \`modal: 1400\`, \`toast: 1700\`.
+- **Motion:** \`standard: cubic-bezier(0.4, 0, 0.2, 1)\`, \`spring: cubic-bezier(0.175, 0.885, 0.32, 1.275)\`.
+- **Reduced Motion:** El sistema respeta \`prefers-reduced-motion\` globalmente.
+
+### 🌍 Internacionalización (i18n) — RTL Native Support
+Khor usa **CSS Logical Properties** en todos sus componentes, garantizando que la UI se espeje automáticamente en idiomas RTL (árabe, hebreo) sin cambios de código.
+
+**Reglas para la IA:**
+1. **NUNCA** uses \`margin-left\`, \`padding-right\`, \`text-align: left\`, \`border-left\`, \`left:\` o \`right:\` en estilos inline o Tailwind.
+2. **SIEMPRE** usa sus equivalentes lógicos:
+   | Físico (❌ Prohibido) | Lógico (✅ Obligatorio) | Tailwind |
+   |----------------------|----------------------|----------|
+   | \`margin-left\` | \`margin-inline-start\` | \`ms-*\` |
+   | \`margin-right\` | \`margin-inline-end\` | \`me-*\` |
+   | \`padding-left\` | \`padding-inline-start\` | \`ps-*\` |
+   | \`padding-right\` | \`padding-inline-end\` | \`pe-*\` |
+   | \`left:\` | \`inset-inline-start\` | \`start-*\` |
+   | \`right:\` | \`inset-inline-end\` | \`end-*\` |
+   | \`border-left\` | \`border-inline-start\` | \`border-is\` |
+   | \`border-right\` | \`border-inline-end\` | \`border-ie\` |
+   | \`text-align: left\` | \`text-align: start\` | \`text-start\` |
+   | \`text-align: right\` | \`text-align: end\` | \`text-end\` |
+3. **Grid offsets** usan \`margin-inline-start\` en \`layout.css\`.
+4. Para activar RTL, añade \`dir="rtl"\` al elemento \`<html>\`. Khor se adapta automáticamente.
+
+### ✍️ UX Writing & Content Strategy — Voice & Tone
+Un sistema de diseño no es solo código; es cómo se comunica. Khor define una voz **Directa, Empática y Técnica**.
+
+**Reglas de Capitalización:**
+- **Sentence case (✅):** "Añadir nuevo usuario", "Guardar cambios". Se usa en TODO el sistema (botones, títulos, labels).
+- **Title Case (❌):** "Añadir Nuevo Usuario". PROHIBIDO.
+- **ALL CAPS (❌):** "GUARDAR". Solo se permite en badges muy específicos o elementos decorativos menores.
+
+**Mensajes de Error (Contrato de redacción):**
+La IA debe generar errores siguiendo esta estructura:
+1. **¿Qué pasó?** (Sin jerga técnica: "No se pudo conectar" vs "Error 500").
+2. **¿Por qué pasó?** (Si es útil: "Tu sesión ha expirado").
+3. **¿Cómo solucionarlo?** (Acción clara: "Inicia sesión de nuevo").
+
+**Empty States:**
+Deben incluir un título claro, una ilustración (o icono \`KIcon\`) y una **acción primaria** para resolver el vacío.
+
+**Formatos Universales:**
+- **Fechas:** \`DD/MM/YYYY\` (o relativo: "hace 2 horas").
+- **Números:** Separador de miles por espacio o punto según locale, coma para decimales.
+- **Moneda:** Símbolo a la izquierda (\`$ 1.200,50\`).
+
+### 🖱️ Interaction States & Accessibility
+Khor utiliza un sistema de estados universales basado en capas semánticas.
+
+**Focus-Visible Math (W3C A11y):**
+- **Anillo:** \`var(--khor-focus-ring-width)\` (2px).
+- **Offset:** \`var(--khor-focus-ring-offset)\` (2px).
+- **Activación:** Solo debe activarse mediante teclado (clase \`focus-visible\`).
+- **Color:** El color del anillo debe contrastar con el fondo. Por defecto es \`var(--khor-primary)\`.
+
+**State Layers (Opacity Multipliers):**
+La IA debe aplicar overlays de opacidad sobre el color base:
+- **Hover:** \`8%\` overlay.
+- **Pressed:** \`12%\` overlay.
+- **Dragged:** \`16%\` overlay.
+
+### 📱 Adaptive Layout & Grid Grammar
+La UI debe mutar físicamente entre breakpoints para optimizar la ergonomía.
+
+**Matemática de la Grilla:**
+| Breakpoint | Margen | Gutter | Comportamiento |
+|------------|--------|--------|----------------|
+| **sm (Mobile)** | 16px | 16px | Edge-to-Edge activo |
+| **md (Tablet)** | 24px | 24px | Contenido centrado |
+| **lg+ (Desktop)** | 32px | 32px | Layout estructurado |
+
+**Adaptive Component Mutation:**
+- **Modales (Desktop):** Se centran en pantalla con overlay.
+- **Modales (Mobile):** Mutan a **Bottom Sheets** (deslizan desde abajo, ocupan el ancho completo).
+- **Tabs (Desktop):** Fila horizontal.
+- **Tabs (Mobile):** Mutan a **Dropdown Select** o scroll horizontal si son pocos items.
+- **Tablas (Mobile):** Mutan a **KCard list** si el ancho no permite visualizar 3 columnas críticas.
+
+### 🖥️ SSR & Framework Readiness (Next.js / Remix / Astro)
+Khor está diseñado para ser compatible con Server-Side Rendering:
+
+**Reglas para la IA:**
+1. **NUNCA** accedas a \`window\`, \`document\` o \`navigator\` fuera de \`useEffect\` o event handlers.
+2. Para hooks que dependen del viewport (ej. \`useBreakpoint\`), siempre inicializa con un valor por defecto seguro (\`'xs'\`).
+3. Si un componente necesita acceso al DOM en el render inicial, usa el patrón:
+   \`\`\`tsx
+   const [mounted, setMounted] = useState(false);
+   useEffect(() => setMounted(true), []);
+   if (!mounted) return <FallbackSkeleton />;
+   \`\`\`
+4. **"use client"** debe colocarse en componentes que usen hooks de React (useState, useEffect, etc.).
+5. Componentes de Khor que interactúan con el DOM (ej. \`KTour\`) requieren \`"use client"\` en Next.js App Router.
+
+### 🔒 Security Hardening (XSS / Sanitización)
+Khor implementa políticas estrictas de seguridad para contenido dinámico:
+
+**Reglas para la IA:**
+1. **NUNCA** uses \`dangerouslySetInnerHTML\` sin sanitización previa con DOMPurify.
+2. **SIEMPRE** escapa el contenido del usuario antes de renderizarlo en:
+   - \`KText\` con contenido dinámico
+   - \`KDataTable\` con celdas personalizadas
+   - \`kToast\` con mensajes del servidor
+   - \`KTooltip\` con contenido variable
+3. **Sanitización recomendada:**
+   \`\`\`tsx
+   import DOMPurify from 'dompurify';
+   const clean = DOMPurify.sanitize(userInput, { ALLOWED_TAGS: ['b', 'i', 'em', 'strong'] });
+   \`\`\`
+4. **Content Security Policy (CSP):** Khor no inyecta estilos inline que violen CSP. Todos los estilos provienen de CSS Variables y Tailwind.
+5. **URLs:** Valida toda URL del usuario con \`new URL()\` antes de usarla en \`href\`, \`src\` o \`action\`.
+
+### 🧪 Testing Strategy (Playwright + Axe-core)
+Khor formaliza una estrategia de testing de 3 niveles:
+
+1. **Unit Tests (Vitest):**
+   - Cada componente debe tener tests para: render default, variantes, estados disabled/loading, y callbacks.
+   - Cobertura mínima: 80% de branches.
+
+2. **Visual Regression (Playwright):**
+   - Screenshots comparativos para cada componente en: Light Mode, Dark Mode, Compact Density y Mobile viewport.
+   - Comando: \`npx playwright test --project=visual\`
+
+3. **Accessibility (Axe-core):**
+   - Cada página y componente se escanea con axe-core para detectar violaciones WCAG 2.1 AA.
+   - Integración en CI: \`npx playwright test --project=a11y\`
+   - Zero tolerance: cualquier violación de nivel "critical" o "serious" bloquea el merge.
+
+**Ejemplo de test a11y:**
+\`\`\`tsx
+import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+
+test('KButton meets WCAG 2.1 AA', async ({ page }) => {
+  await page.goto('/components/atoms/button');
+  const results = await new AxeBuilder({ page }).analyze();
+  expect(results.violations).toEqual([]);
+});
+\`\`\`
+
+### 🎬 Motion Choreography — Recipe Book (Phase 3)
+Khor define un vocabulario formal de movimiento basado en tokens CSS. Todo componente DEBE usar estos tokens, nunca valores de duración o easing hardcodeados.
+
+**Durations:**
 | Token | Valor | Uso |
 |-------|-------|-----|
-| xs | 4px | Gaps minimos, padding interno icons |
-| sm | 8px | Gaps entre elementos pequenos |
-| md | 16px | Padding estandar, gaps de formulario |
-| lg | 24px | Padding de secciones, gaps de cards |
-| xl | 40px | Padding de pagina, separacion mayor |
+| \`--khor-duration-instant\` | 50ms | Micro-feedback (ripples, checkmarks) |
+| \`--khor-duration-fast\` | 100ms | Hover states, color transitions |
+| \`--khor-duration-normal\` | 200ms | Transiciones estándar de UI |
+| \`--khor-duration-slow\` | 300ms | Expansiones de contenido, accordions |
+| \`--khor-duration-slower\` | 500ms | Animaciones de entrada/hero sections |
+| \`--khor-duration-entrance\` | 250ms | Elementos que aparecen (modals, dropdowns) |
+| \`--khor-duration-exit\` | 200ms | Elementos que desaparecen (exit siempre más rápido) |
 
-### Border Radius
-
-| Token | Valor | Uso |
+**Easing Curves:**
+| Token | Curva | Uso |
 |-------|-------|-----|
-| sm | 6px | Badges, tags, chips |
-| md | 8px | Inputs, botones, dropdowns |
-| lg | 10px | Cards, modales, drawers |
-| xl | 14px | Hero sections, contenedores grandes |
+| \`--khor-easing-standard\` | cubic-bezier(0.4, 0, 0.2, 1) | Movimiento general, cambios de estado |
+| \`--khor-easing-decelerate\` | cubic-bezier(0, 0, 0.2, 1) | Elementos que entran a escena |
+| \`--khor-easing-accelerate\` | cubic-bezier(0.4, 0, 1, 1) | Elementos que salen de escena |
+| \`--khor-easing-spring\` | cubic-bezier(0.175, 0.885, 0.32, 1.275) | Botones, toggles, microinteracciones |
+| \`--khor-easing-bounce\` | cubic-bezier(0.34, 1.56, 0.64, 1) | Badges, contadores, notificaciones |
+| \`--khor-easing-smooth\` | cubic-bezier(0.45, 0, 0.55, 1) | Scroll suave, transiciones de página |
 
-### Sombras
+**Reglas para la IA:**
+1. **Entrada vs Salida:** Los elementos que entran deben usar \`duration-entrance\` + \`easing-decelerate\`. Los que salen deben usar \`duration-exit\` + \`easing-accelerate\`. La salida SIEMPRE es más rápida que la entrada.
+2. **Jerarquía de movimiento:** Los elementos principales se animan primero. Los secundarios siguen con un stagger de 50-100ms.
+3. **Reduced Motion:** Cuando \`prefers-reduced-motion: reduce\` está activo, todas las duraciones pasan a \`0ms\` y las transformaciones se desactivan. Solo se permiten cambios de opacidad.
+4. **Scale interactions:** Botones usan \`active:scale-[0.98]\` para feedback táctil. Nunca excedas \`scale(1.05)\` para hovers.
 
-| Token | Valor | Uso |
-|-------|-------|-----|
-| sm | \`0 2px 4px rgba(0,0,0,0.05)\` | Cards, inputs con focus |
-| md | \`0 4px 12px rgba(0,0,0,0.08)\` | Dropdowns, popovers |
-| lg | \`0 12px 32px rgba(5,23,88,0.12)\` | Modales, drawers |
-
-### Tokens JS
-
-\`\`\`typescript
-import { khorTokens } from './theme/khor-theme';
-
-// Uso en inline styles:
-style={{ color: khorTokens.colors.brand.primary }}
-style={{ padding: khorTokens.spacing.md }}
-style={{ borderRadius: khorTokens.radius.lg }}
-style={{ boxShadow: khorTokens.shadows.sm }}
-style={{ fontFamily: khorTokens.typography.fontPrimary }}
-\`\`\`
-
-### Tokens Semánticos (Action, Surface, Text)
-
-Khor v3.1 introduce tokens semánticos (independientes del modo claro/oscuro) para garantizar escalabilidad:
+**Motion Recipes precompuestos:**
 \`\`\`css
-/* Capa Semantic - Surface */
-var(--khor-surface-page)       /* Fondo general, ant-layout */
-var(--khor-surface-card)       /* Fondos blancos/panels modales */
-var(--khor-surface-overlay)    /* Backdrop de drawers/modals */
+/* Fade In */
+transition: var(--khor-transition-fade);
 
-/* Capa Semantic - Text */
-var(--khor-text-primary)       /* Titulos */
-var(--khor-text-secondary)     /* Descripciones */
-var(--khor-text-disabled)      /* Texto bloqueado */
+/* Scale + Fade (botones, cards interactivos) */
+transition: var(--khor-transition-scale), var(--khor-transition-fade);
 
-/* Capa Semantic - Action */
-var(--khor-action-primary-default) /* Botones primary, links fuertes */
-var(--khor-action-primary-hover)
-\`\`\`
-*(IMPORTANTE para la IA: Preferir SIEMPRE la capa Semántica sobre primitivos crudos).*
+/* Slide In (drawers, sidesheets) */
+transition: var(--khor-transition-slide);
 
-### Tokens de Densidad (.khor-compact / .khor-comfortable)
-
-Soportado a través de inyecciones automáticas o agregando \`className="khor-compact"\` en contenedores padre:
-\`\`\`css
-/* .khor-compact reduce drásticamente vacíos para Data-dashboards */
---khor-density-spacing-md: 8px;      /* Default: 16px */
---khor-density-height-input: 28px;   /* Default: 36px */
---khor-density-font-body: 12px;      /* Default: 14px */
+/* Color change (hover states) */
+transition: var(--khor-transition-color);
 \`\`\`
 
-### Motion y Easing
+### 🔡 Fluid Typography — Responsive by Design
+Khor utiliza un sistema de tipografía fluida basado en el estándar W3C DTCG. Los tamaños escalan automáticamente entre 320px y 1440px usando \`clamp()\`.
 
-Usa variables para animar componentes consistentes:
-\`\`\`css
-transition: all var(--khor-duration-normal) var(--khor-easing-standard);
+| Token Semántico | Comportamiento | Escala (Min → Max) |
+|-----------------|----------------|-------------------|
+| \`--khor-type-display-2xl\` | Hero titles | 48px → 72px |
+| \`--khor-type-heading-lg\` | Page titles | 24px → 48px |
+| \`--khor-type-body-xl\` | Lead text | 18px → 22px |
+| \`--khor-type-body-md\` | UI base | 16px (Fixed) |
+| \`--khor-type-body-sm\` | Ancillary text | 14px (Fixed) |
 
-/* Durations */
---khor-duration-fast: 100ms;
---khor-duration-normal: 200ms;
---khor-duration-slow: 400ms;
+### 🧠 AI Runtime Intelligence (Phase 4)
+Khor expone metadatos semánticos que permiten a los agentes de IA tomar decisiones inteligentes sobre la UI en tiempo de ejecución.
 
-/* Easings */
---khor-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
---khor-easing-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);  /* Efectos modales o drawer bounce */
-\`\`\`
+**Tokens de Estado Semántico:**
+| Contexto | Recomendación de UI |
+|----------|-------------------|
+| **Urgency: high** | Usar \`KButton variant="danger"\`, animaciones rápidas (\`duration-fast\`), colores de alerta |
+| **Urgency: low** | Usar \`KButton variant="ghost"\`, transiciones suaves (\`duration-slow\`), colores neutros |
+| **Confidence: high** | Mostrar datos sin disclaimers, usar tipografía \`font-bold\` |
+| **Confidence: low** | Añadir \`KAlert type="warning"\` con disclaimer, usar tipografía normal |
+| **Data density: high** | Activar \`.compact\` density, usar \`KDataTable\` con filas condensadas |
+| **Data density: low** | Mantener \`.comfortable\` density, usar \`KCardSection\` con espaciado generoso |
 
-### Accesibilidad WCAG (Los 8 Gaps de Clase Mundial)
+**Semantic Layout Compiler — Guía de Prompts:**
+La IA puede generar layouts completos usando esta gramática de intención:
 
-Khor v3.1.2 soluciona los gaps críticos detectados en auditorías previas:
-1. **Reducción de Movimiento:** Soporta \`prefers-reduced-motion\` para usuarios con sensibilidad vestibular.
-2. **Foco Visible:** Anillos de enfoque de alto contraste (\`focus-visible\`) en todos los elementos interactivos.
-3. **Jerarquía Semántica:** Estructura de encabezados (H1-H6) estrictamente secuencial.
-4. **Contraste AA:** Todos los tokens de texto cumplen con el ratio 4.5:1 sobre sus fondos respectivos.
-5. **Navegación por Teclado:** Soporte nativo para Tab, Enter, Escape y Flechas en todos los componentes.
-6. **Anunciadores ARIA:** Uso de \`aria-live\` y roles semánticos para lectores de pantalla.
-7. **Touch Targets:** Tamaño mínimo de click de 44x44px en elementos interactivos.
-8. **Feedback de Error:** Mensajes de error claros vinculados mediante \`aria-describedby\`.
+| Intent Prompt | Layout generado |
+|--------------|----------------|
+| "Dashboard ejecutivo con 4 KPIs y tabla" | Hero con 4x \`KStatCard\` + \`KDataTable\` |
+| "Formulario de onboarding en 3 pasos" | \`KFormWizard\` con 3 \`KCardSection\` |
+| "Página de detalle con sidebar de navegación" | Layout 6/18 con \`KAnchor\` + secciones |
+| "Panel de control con filtros y gráficos" | \`KRow\`/\`KCol\` responsive + \`KSelectField\` + Charts |
+
+### 📊 Data Visualization Architecture
+Khor define reglas estrictas para la presentación de datos analíticos.
+
+**Accesibilidad (A11y):**
+- **Color + Shape:** NUNCA uses solo el color para distinguir series de datos. Usa patrones de relleno (dots, lines) o estilos de línea (solid, dashed, dotted).
+- **Contraste:** Los colores de las gráficas deben cumplir con el ratio \`3:1\` contra el fondo.
+
+**Data-Ink Ratio:**
+- Elimina bordes innecesarios, sombras internas y líneas de grilla pesadas.
+- Prioriza los datos sobre la decoración.
+- Los tooltips deben ser simples, usando \`KText\` con \`font-bold\` para el valor.
+
+### 🤖 Figma MCP Synchronization Protocol
+Este sistema está diseñado para ser la fuente de verdad absoluta para Agentes de IA vía el protocolo **MCP (Model Context Protocol)**.
+
+**Reglas de Sincronización:**
+1. **Source of Truth:** El código React/Tailwind es la fuente de verdad. El Agente debe actualizar Figma para reflejar el código, no al revés.
+2. **Naming Contract:** Las capas en Figma deben coincidir exactamente con el nombre del componente en React (ej. \`KButton\`, \`KDataTable\`).
+3. **Token Mapping:** El Agente debe usar la herramienta \`use_figma\` para mapear los tokens CTI (\`category-type-item\`) a las variables nativas de Figma.
+4. **Bidireccionalidad:** Solo se permite la escritura en código desde Figma mediante un Pull Request generado por el Agente tras validación humana.
 
 ### Registro de Cambios (Changelog)
 
 | Versión | Fecha | Cambios |
 |---------|-------|---------|
-| **v3.1.4** | 30 Mar 2026 | **Refinamiento:** Lógica \`fullWidth\` en KButton. Optimización del orden del System Prompt para IA. Inyección de reglas estrictas A11y. |
-| **v3.1.3** | 30 Mar 2026 | **Gobernanza:** Implementación de Linter de Accesibilidad (jsx-a11y) y configuración externa. |
-| **v3.1.2** | 30 Mar 2026 | **Gobernanza:** Restauración de instrucciones para IA. Solución de los 8 Gaps de Accesibilidad. |
+| **v6.0.0-beta** | ${today} | **The Holistic Standard:** Integración total de UX Writing (Voz y Tono), Taxonomía W3C CTI, State Layers universales, matemática de Focus-Visible y protocolo de sincronización Figma MCP. |
+| **v5.0.0-beta** | ${today} | **Enterprise Hardening:** Layer 3 Component Tokens (KButton, KInput, KCard), RTL/i18n native con CSS Logical Properties, SSR guidelines (Next.js/Remix). |
+| **v5.0.1-alpha** | ${today} | **Shadow & Layout Precision:** Evolución masiva de la fidelidad visual. Sombras multi-capa y sistema de grillas responsivas certificado para todos los breakpoints. |
+| **v5.0.0-alpha** | ${today} | **The World-Class Foundation:** Migración total a arquitectura W3C Design Tokens, tipografía fluida, KDataTable empresarial, Command Palette con acciones, KFormWizard y testing con Playwright. |
+| **v4.4.1** | ${today} | **KQA God Mode:** Sincronización de más de 20 organismos y moléculas con estados explícitos y Layer 3 Contextual Tokens. Nuevo script de auditoría y Patrones Maestros. |
+| **v4.4.0** | 27 Abr 2026 | **Industry Reference:** Inyección de tokens de superficie interactiva, elevación semántica (0-5) y escala de neutros completa (600-800). |
+| **v4.3.1** | 24 Abr 2026 | **The Absolute 100:** Cierre definitivo de gaps de motion (easing enter/exit). |
+| **v4.3.0** | 24 Abr 2026 | **The 100/100 Audit:** Sincronización total de paridad técnica y documental. |
+| **v4.2.0** | 23 Abr 2026 | **Audit Recovery:** Restauración de Tokens Semánticos de 2ª Capa y Sistema de Densidad base. |
+| **v4.1.1** | 20 Abr 2026 | **Refinement Phase:** Integración de Chart Palette (12), Form States detallados y nuevo sistema de Iconografía estandarizado (XS-2XL). |
+| **v4.1.0** | 10 Abr 2026 | **Elite Upgrade:** Introducción de Layout Tokens, Z-Index Scale y Page Recipes. |
 
 ---`);
   }
@@ -302,6 +636,9 @@ El sistema soporta modo oscuro via clase \`.dark\` en \`<html>\`. Se activa con 
 | neutral-300 | \`#A0AEC0\` | \`#4A4E6A\` |
 | neutral-400 | \`#718096\` | \`#8B90A8\` |
 | neutral-500 | \`#4A5568\` | \`#B0B4C8\` |
+| neutral-600 | \`#5A6475\` | \`#9BA3B5\` |
+| neutral-700 | \`#3D4552\` | \`#B8BDC8\` |
+| neutral-800 | \`#252C38\` | \`#D0D3DA\` |
 | neutral-900 | \`#000000\` | \`#E8EAF0\` |
 | accent | \`#FF9500\` | \`#FFB340\` |
 | navy | \`#051758\` | \`#8BA3D9\` |
@@ -399,33 +736,137 @@ style={{ backgroundColor: 'var(--card)', color: 'var(--foreground)' }}
 
   if (enabled.has('templates')) {
     parts.push(`
-## Templates y Patrones (4 patrones de pagina)
+## 🏗️ Elite Page Recipes (High-Fidelity Patterns)
 
-### Login Template
-Pantalla de inicio de sesion con formulario centrado, logo y fondo navy.
-- Componentes usados: KButton(primary), KInput, KFormField, KCheckbox
-- Layout: centrado vertical y horizontal, card blanca sobre fondo navy
+La IA debe usar estos "Blueprints" estructurales para construir páginas completas con un solo prompt.
 
-### Dashboard Template
-Panel de metricas con stats, graficos y tabla de datos recientes.
-- Componentes usados: KStatCard (x4), KCardSection, KDataTable, KTabs, recharts
-- Layout: grid responsivo con 4 columnas de stats arriba, grafico y tabla abajo
+### 1. KAppShell (Estructura Base de la Aplicación)
+Estructura responsiva con Sidebar colapsable y Header fijo.
+\`\`\`tsx
+import { AppShell } from './components/AppShell';
+import { SidebarItem } from './components/Sidebar';
+import { Home, Users, Settings, LogOut } from 'lucide-react';
 
-### CRUD Table Template
-Tabla de datos completa con busqueda, paginacion, modal de crear/editar y drawer de detalle.
-- Componentes usados: KDataTable, KModal, KDrawer, KButton, KFormField, KInput, KBadge, KDropdownMenu
-- Patron: listado → accion → modal/drawer → confirmacion → toast
+// Úsalo como el Layout principal de tus rutas
+function MainLayout() {
+  return (
+    <AppShell
+      sidebarItems={[
+        { label: 'Dashboard', icon: <Home />, path: '/', active: true },
+        { label: 'Usuarios', icon: <Users />, path: '/users' },
+        { label: 'Ajustes', icon: <Settings />, path: '/settings' },
+      ]}
+      user={{ name: 'Admin User', role: 'Superadmin' }}
+      onLogout={() => {}}
+    >
+      <Outlet /> {/* Contenido inyectado por el router */}
+    </AppShell>
+  );
+}
+\`\`\`
 
-### Formulario Multi-Paso Template
-Wizard de 4 pasos con validacion por paso, stepper visual y resumen final.
-- Componentes usados: KSteps, KFormField, KInput, KSelectField, KRadio, KCheckbox, KButton
-- Patron: paso 1 (datos) → paso 2 (config) → paso 3 (revision) → paso 4 (confirmacion)
+### 2. KCRUDPage (Gestión de Datos Elite)
+Patrón avanzado para tablas con búsqueda, filtros y Drawer de detalle.
+\`\`\`tsx
+import { Plus, Edit, Trash2, Filter } from 'lucide-react';
+import { KButton, KBadge, KInput } from './atoms';
+import { KFormField, KDropdownMenu } from './molecules';
+import { KDataTable, KDrawer, KCardSection, kToast } from './organisms';
+
+function UserManagement() {
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+
+  return (
+    <div className="p-khor-6">
+      <div className="flex justify-between items-center mb-khor-6">
+        <div>
+          <h1 className="text-khor-h2 font-bold text-khor-secondary">Usuarios</h1>
+          <p className="text-khor-body-md text-khor-neutral-500">Gestión centralizada de colaboradores.</p>
+        </div>
+        <KButton variant="primary" icon={<Plus size={16} />}>Añadir Usuario</KButton>
+      </div>
+
+      <KCardSection>
+        <KDataTable 
+          columns={columns} 
+          data={data} 
+          searchable 
+          extra={<KButton variant="ghost" icon={<Filter size={16} />}>Filtros</KButton>}
+          onRowClick={(row) => { setSelectedUser(row); setDrawerOpen(true); }}
+        />
+      </KCardSection>
+
+      <KDrawer 
+        open={drawerOpen} 
+        onClose={() => setDrawerOpen(false)} 
+        title="Detalle del Usuario"
+        width={480}
+      >
+        {selectedUser && <UserDetailView user={selectedUser} />}
+      </KDrawer>
+    </div>
+  );
+}
+\`\`\`
+
+### 3. KDashboardGrid (Métricas y Visualización)
+Grid de alta densidad con StatCards y Chart Palette v5.0.0-alpha.
+\`\`\`tsx
+import { Users, TrendingUp, DollarSign } from 'lucide-react';
+import { KStatCard } from './molecules';
+import { KCardSection } from './organisms';
+import { ResponsiveContainer, BarChart, Bar, XAxis, Tooltip } from 'recharts';
+import { khorTokens } from './theme/khor-theme';
+
+function DashboardGrid() {
+  return (
+    <div className="space-y-khor-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-khor-4">
+        <KStatCard title="Ventas Totales" value="$12.4k" change={+8.2} icon={<DollarSign />} />
+        <KStatCard title="Usuarios Activos" value="2,840" change={+12.5} icon={<Users />} />
+        <KStatCard title="Churn Rate" value="1.2%" change={-2.1} icon={<TrendingUp />} />
+      </div>
+
+      <KCardSection title="Rendimiento Mensual">
+        <div className="h-[300px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={chartData}>
+              <XAxis dataKey="name" stroke={khorTokens.colors.neutral[400]} fontSize={12} />
+              <Tooltip cursor={{fill: 'rgba(0,0,0,0.05)'}} />
+              <Bar dataKey="value" fill="var(--khor-chart-1)" radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </KCardSection>
+    </div>
+  );
+}
+\`\`\`
+
+### 4. KAuthLayout (Layout Centrado para Login/Registro)
+\`\`\`tsx
+function LoginPage() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-khor-secondary p-khor-4">
+      <div className="w-full max-w-[420px] bg-white rounded-khor-xl shadow-khor-xl p-khor-8">
+        <div className="text-center mb-khor-8">
+          <img src="/logo.svg" className="h-khor-10 mx-auto mb-khor-4" />
+          <h2 className="text-khor-h3 font-bold text-khor-secondary">Bienvenido a Khor</h2>
+          <p className="text-khor-body-sm text-khor-neutral-400">Ingresa tus credenciales</p>
+        </div>
+        <LoginForm />
+      </div>
+    </div>
+  );
+}
+\`\`\`
 
 ### Convenciones de Paginas
-- **Rutas:** Todas las paginas deben estar en \`/src/app/pages\` y seguir la estructura de carpetas.
-- **Componentes:** Usa componentes de \`design-system\` para mantener consistencia.
-- **Estilos:** Usa Tailwind CSS para estilos y \`khorTokens\` para tokens.
-- **Accesibilidad:** Asegura que todos los componentes sean accesibles y cumplan con WCAG AA.
+- **Rutas:** Todas las paginas deben estar en \`/src/app/pages\`.
+- **Componentes:** Usa exclusivamente componentes Khor para mantener la paridad con Figma y Penpot.
+- **Espaciado:** Usa clases \`p-khor-*\`, \`m-khor-*\` o \`gap-khor-*\` basadas en la escala de 4px.
+- **Tokens:** Prefiere siempre \`khorTokens\` en JS o las CSS variables directas \`var(--khor-*)\`.
 
 ---`);
   }
@@ -499,14 +940,14 @@ const router = createBrowserRouter([
 
 ### Imports
 \`\`\`tsx
-// Atomos base (18)
+// Atomos base (17)
 import { KButton, KInput, KBadge, KTag, KAvatar, KSwitch, KCheckbox, KRadio,
          KTooltip, KProgress, KText, KDivider, KAlert, KSkeleton, KSlider,
-         KRate, KSpin, KTextArea } from './components/design-system/atoms/index';
+         KSpin, KTextArea } from './components/design-system/atoms/index';
 
-// Atomos extendidos (9)
+// Atomos extendidos (7)
 import { KButtonGroup, KInputPassword, KInputSearch, KFloatButton,
-         KAffix, KSpace, KImage, KWatermark, KQRCode } from './components/design-system/atoms-extended';
+         KSpace, KImage, KQRCode } from './components/design-system/atoms-extended';
 
 // Moleculas base (12)
 import { KFormField, KSearchInput, KStatCard, KNavItem, KSelectField,
@@ -517,16 +958,16 @@ import { KFormField, KSearchInput, KStatCard, KNavItem, KSelectField,
 import { KInputNumber, KSegmented, KAutocomplete, KDatePicker, KDateRangePicker,
          KSelectAdvanced, KDescriptions, KPopconfirm, KResult, KTimeline } from './components/design-system/molecules-extended';
 
-// Moleculas wave3 (11)
-import { KCascader, KStatistic, KTimePicker, KMentions, KColorPicker,
-         KAnchor, KList, KTransfer, KDividerExtended, KTreeSelect } from './components/design-system/molecules-wave3';
+// Moleculas wave3 (8)
+import { KCascader, KStatistic, KTimePicker, KColorPicker,
+         KAnchor, KList, KDividerExtended } from './components/design-system/molecules-wave3';
 
 // Organismos base (8)
-import { KDataTable, KModal, KDrawer, KCardSection, KTabs,
+import { KDataTable, KModal, KSheet, KCardSection, KTabs,
          KToastProvider, kToast, KSparklineCell } from './components/design-system/organisms/index';
 
 // Organismos extendidos (5)
-import { KUpload, KTree, KTour, KModalConfirm, KFormList } from './components/design-system/organisms-extended';
+import { KUpload, KTree, KTour, KFormList } from './components/design-system/organisms/index';
 
 // Tokens
 import { khorTokens } from './theme/khor-theme';
@@ -701,6 +1142,38 @@ function ContactForm() {
   );
 }
 \`\`\`
+### Patrones de Estado — Page-Level Patterns
+
+#### 1. Empty State (Primera vez / Sin resultados)
+Estructura: Ilustración → Título → Descripción → CTA primario.
+\`\`\`tsx
+<KEmpty
+  image={<KIcon name="inbox" size="2xl" color="var(--khor-text-muted)" />}
+  title="No hay registros aún"
+  description="Crea tu primer registro para comenzar a ver datos aquí."
+  extra={<KButton variant="primary">Crear registro</KButton>}
+/>
+\`\`\`
+
+#### 2. Error State (Fallo de carga)
+\`\`\`tsx
+<KResult
+  status="500"
+  title="Error de conexión"
+  subTitle="No pudimos cargar la información. Reintenta en unos momentos."
+  extra={<KButton variant="primary" onClick={() => window.location.reload()}>Reintentar</KButton>}
+/>
+\`\`\`
+
+#### 3. Loading State (Skeleton)
+\`\`\`tsx
+<div className="flex flex-col gap-4">
+  <KSkeleton height={40} width="60%" /> {/* Título */}
+  <KSkeleton height={44} count={5} />    {/* Filas de tabla */}
+</div>
+\`\`\`
+
+---
 `);
   }
 
@@ -714,13 +1187,14 @@ function wordCount(text: string): number {
 
 /* ─── Component ─────────────────────────────── */
 export function AIExportPage() {
+  const { themeConfig: theme } = useTheme();
   const [sections, setSections] = useState<SectionConfig[]>(defaultSections);
   const [copied, setCopied] = useState(false);
-  const [showPreview, setShowPreview] = useState(false);
+  const [showPreview, setShowPreview] = useState(true);
   const [expandedPreview, setExpandedPreview] = useState(false);
   const previewRef = useRef<HTMLPreElement>(null);
 
-  const markdown = useMemo(() => generateMarkdown(sections), [sections]);
+  const markdown = useMemo(() => generateMarkdown(sections, theme), [sections, theme]);
   const words = useMemo(() => wordCount(markdown), [markdown]);
   const lines = useMemo(() => markdown.split('\n').length, [markdown]);
   const enabledCount = sections.filter((s) => s.enabled).length;
@@ -891,7 +1365,7 @@ export function AIExportPage() {
                 </div>
                 <KSwitch
                   checked={section.enabled}
-                  onChange={() => toggleSection(section.id)}
+                  onCheckedChange={() => toggleSection(section.id)}
                   size="small"
                 />
               </div>

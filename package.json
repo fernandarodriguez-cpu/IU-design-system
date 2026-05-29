@@ -1,13 +1,15 @@
 {
-  "name": "@figma/my-make-file",
+  "name": "@khor/design-system",
   "private": true,
-  "version": "4.0.5",
+  "version": "5.0.0-alpha",
   "type": "module",
   "scripts": {
     "build": "vite build",
     "dev": "vite",
-    "sync-figma": "anima-storybook sync"
-
+    "test:visual": "playwright test",
+    "test:visual:update": "playwright test --update-snapshots",
+    "khor-check": "npx tsx src/scripts/khor-check.ts",
+    "figma-sync": "node --env-file=.env src/scripts/figma-token-sync.cjs"
   },
   "dependencies": {
     "@popperjs/core": "2.11.8",
@@ -68,9 +70,8 @@
     "vaul": "1.1.2"
   },
   "devDependencies": {
-    "@chromatic-com/storybook": "^5.1.1",
     "@eslint/js": "^10.0.1",
-
+    "@playwright/test": "^1.59.1",
     "@tailwindcss/vite": "4.1.12",
     "@types/node": "^25.4.0",
     "@types/react": "^18.3.12",
@@ -80,17 +81,14 @@
     "@vitejs/plugin-react": "4.7.0",
     "@vitest/browser-playwright": "^4.0.18",
     "@vitest/coverage-v8": "^4.0.18",
-    "anima-storybook-cli": "^0.13.1",
     "eslint": "^9.39.4",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
-
     "globals": "^17.4.0",
     "playwright": "^1.58.2",
     "prop-types": "^15.8.1",
-
     "tailwindcss": "4.1.12",
     "typescript": "^6.0.2",
     "typescript-eslint": "^8.57.2",

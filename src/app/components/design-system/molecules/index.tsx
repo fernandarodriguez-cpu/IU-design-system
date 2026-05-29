@@ -24,11 +24,13 @@ export { default as KTimeline } from './KTimeline';
 export { default as KCascader } from './KCascader/index';
 export { default as KStatistic } from './KStatistic/index';
 export { default as KTimePicker } from './KTimePicker/index';
-export { default as KMentions } from './KMentions/index';
 export { default as KColorPicker } from './KColorPicker/index';
 export { default as KAnchor } from './KAnchor/index';
 export { default as KList } from './KList/index';
-export { showKNotification as KNotificationLegacy } from './KNotification/index';
-export { default as KTransfer } from './KTransfer/index';
-export { default as KTreeSelect } from './KTreeSelect/index';
 export { default as KDividerExtended } from './KDividerExtended';
+export * from './KTrialBar';
+export * from './KContextMenu';
+export { default as KContextMenu } from './KContextMenu';
+export * from './KHoverCard';
+export { default as KHoverCard } from './KHoverCard';
+

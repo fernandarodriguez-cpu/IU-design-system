@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronRight, Check, X } from 'lucide-react';
 import { KPopoverRoot, KPopoverTrigger, KPopoverContent } from '../KPopover';
-import { cn } from '../../../../../imports/utils';
+import { cn } from '@/utils/cn';
 
 export interface KCascaderOption {
   value: string | number;
@@ -24,7 +24,23 @@ export interface KCascaderProps {
 
 /**
  * KCascader — Selector jerárquico multinivel (Headless v4)
- * Implementación pura con Radix Popover y Tailwind.
+ * Implementación pura con Khor Engine Popover y Tailwind.
+ */
+/**
+ * @figma-mcp-migration
+ * Component: KCascader
+ * 
+ * INSTRUCCIONES PARA AGENTES DE IA (VS Code / MCP):
+ * Para migrar este componente a Figma, NO generar una matriz multiplicando todas las variables.
+ * Utilizar Figma Component Properties V2 con la siguiente estructura:
+ * 
+ * 1. Variants (Estructurales):
+ *    - Definir variantes puramente visuales/estructurales.
+ * 2. Booleans (Encendido/Apagado):
+ *    - Definir encendido/apagado para iconos o estados (isLoading, hasIcon).
+ * 3. Color Variables (No usar variantes para colores semánticos):
+ *    - El relleno/borde debe usar Figma Variables (Khor v6.0 Colors) asignado dinámicamente.
+ *    - El consumidor del UI Kit cambiará el color del layer.
  */
 export function KCascader({ 
   options, 

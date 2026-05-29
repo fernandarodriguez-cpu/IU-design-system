@@ -7,6 +7,7 @@ import { ComponentDoc } from '../components/docs/ComponentDoc';
 import type { PropDef } from '../components/docs/ComponentDoc';
 import { KButton } from '../components/design-system/atoms/KButton/index';
 import { KInput } from '../components/design-system/atoms/KInput/index';
+import { KPhoneInput } from '../components/design-system/atoms/KPhoneInput/index';
 import { KBadge } from '../components/design-system/atoms/KBadge/index';
 import { KTag } from '../components/design-system/atoms/KTag/index';
 import { KAvatar, KAvatarGroup } from '../components/design-system/atoms/KAvatar/index';
@@ -20,7 +21,6 @@ import { KDivider } from '../components/design-system/atoms/KDivider/index';
 import { KAlert } from '../components/design-system/atoms/KAlert/index';
 import { KSkeleton } from '../components/design-system/atoms/KSkeleton/index';
 import { KSlider } from '../components/design-system/atoms/KSlider/index';
-import { KRate } from '../components/design-system/atoms/KRate/index';
 import { KSpin } from '../components/design-system/atoms/KSpin/index';
 import { KScrollBar } from '../components/design-system/atoms/KScrollBar/index';
 import { KButtonGroup } from '../components/design-system/atoms/KButtonGroup/index';
@@ -29,9 +29,9 @@ import { KFloatButton } from '../components/design-system/atoms/KFloatButton/ind
 import { KImage } from '../components/design-system/atoms/KImage/index';
 import { KSpace } from '../components/design-system/atoms/KSpace/index';
 import { KQRCode } from '../components/design-system/atoms/KQRCode/index';
-import { KWatermark } from '../components/design-system/atoms/KWatermark/index';
 import { KFlex } from '../components/design-system/atoms/KFlex/index';
 import { KRow, KCol } from '../components/design-system/atoms/KGrid/index';
+import { KIcon } from '../components/design-system/atoms/KIcon/index';
 import { KTooltip } from '../components/design-system/molecules/KTooltip/index';
 import { KPagination } from '../components/design-system/organisms/KPagination/index';
 import {
@@ -61,6 +61,7 @@ function ButtonPlayground() {
   const [showIcon, setShowIcon] = useState(true);
   const [iconPosition, setIconPosition] = useState<'start' | 'end'>('start');
   const [href, setHref] = useState('');
+  const [btnColor, setBtnColor] = useState<any>('default');
   
   const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
   const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
@@ -72,9 +73,15 @@ function ButtonPlayground() {
         <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <div>
-            <label style={ctrl}>Variante</label>
+            <label style={ctrl}>Variante (Basada en AntD)</label>
             <select value={variant} onChange={(e) => setVariant(e.target.value)} style={sel}>
-              {['primary', 'secondary', 'outline', 'ghost', 'danger', 'navy', 'dashed', 'link', 'text'].map((v) => <option key={v} value={v}>{v}</option>)}
+              {['primary', 'secondary', 'outline', 'ghost', 'danger', 'navy', 'dashed', 'link', 'text', 'filled'].map((v) => <option key={v} value={v}>{v}</option>)}
+            </select>
+          </div>
+          <div>
+            <label style={ctrl}>Color (Total Tokenization v10.6)</label>
+            <select value={btnColor} onChange={(e) => setBtnColor(e.target.value)} style={sel}>
+              {['default', 'primary', 'secondary', 'danger', 'processing', 'volcano', 'gold', 'lime', 'purple'].map((v) => <option key={v} value={v}>{v}</option>)}
             </select>
           </div>
           <div>
@@ -141,6 +148,7 @@ function ButtonPlayground() {
       <div style={{ flex: 1, minWidth: 280, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32, backgroundColor: ghost ? khorTokens.colors.brand.navy : khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
         <KButton 
           variant={variant} 
+          color={btnColor === 'default' ? undefined : btnColor}
           size={size} 
           shape={shape} 
           htmlType={htmlType} 
@@ -161,6 +169,49 @@ function ButtonPlayground() {
   );
 }
 
+function IconPlayground() {
+  const [name, setName] = useState<any>('Sparkles');
+  const [size, setSize] = useState<any>('md');
+  const [color, setColor] = useState<any>(khorTokens.colors.brand.primary);
+  
+  const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
+  const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
+
+  return (
+    <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
+      <div style={{ flex: 1, minWidth: 280 }}>
+        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Icon Controls</h4>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div>
+            <label style={ctrl}>Nombre del Icono (Lucide)</label>
+            <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Ej: User, Bell, Home" style={sel} />
+          </div>
+          <div>
+            <label style={ctrl}>Tamaño (Escala Elite)</label>
+            <select value={size} onChange={(e) => setSize(e.target.value)} style={sel}>
+              {['xs', 'sm', 'md', 'lg', 'xl', '2xl'].map(s => <option key={s} value={s}>{s.toUpperCase()}</option>)}
+            </select>
+          </div>
+          <div>
+            <label style={ctrl}>Color</label>
+            <input type="text" value={color} onChange={(e) => setColor(e.target.value)} style={sel} />
+            <div style={{ display: 'flex', gap: 4, marginTop: 8 }}>
+              {['--khor-primary', '--khor-secondary', '--khor-error', '--khor-success'].map(c => (
+                <div key={c} onClick={() => setColor(`var(${c})`)} style={{ width: 20, height: 20, borderRadius: 4, backgroundColor: `var(${c})`, cursor: 'pointer', border: '1px solid rgba(0,0,0,0.1)' }} />
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style={{ flex: 1, minWidth: 280, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
+        <div style={{ padding: 24, backgroundColor: 'white', borderRadius: 12, border: `1px solid ${khorTokens.colors.neutral[200]}`, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+          <KIcon name={name} size={size} color={color} />
+          <KText variant="body-xs" color="muted">{name} - {size}</KText>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function InputPlayground() {
   const [val, setVal] = useState('');
@@ -200,8 +251,12 @@ function InputPlayground() {
             </div>
           </div>
           <div>
-            <label style={ctrl}>Mensaje de Error</label>
-            <input value={error} onChange={(e) => setError(e.target.value)} placeholder="Dejar vacío para sin error" style={sel} />
+            <label style={ctrl}>Estado (v10.6)</label>
+            <select value={error ? 'error' : 'default'} onChange={(e) => setError(e.target.value === 'error' ? 'Error detectado' : '')} style={sel}>
+              <option value="default">Default</option>
+              <option value="error">Error</option>
+              <option value="warning">Warning</option>
+            </select>
           </div>
           <div style={{ display: 'flex', gap: 12 }}>
             <div style={{ flex: 1 }}>
@@ -544,6 +599,12 @@ function AvatarPlayground() {
           <div><label style={ctrl}>Tamaño</label><select value={size} onChange={(e) => setSize(e.target.value)} style={sel}>{['sm','md','lg','xl'].map(s=><option key={s}>{s}</option>)}</select></div>
           <div><label style={ctrl}>Forma (shape)</label><select value={shape} onChange={(e) => setShape(e.target.value)} style={sel}>{['circle','square'].map(s=><option key={s}>{s}</option>)}</select></div>
           <div><label style={ctrl}>Estado de Presencia</label><select value={status} onChange={(e) => setStatus(e.target.value)} style={sel}>{['online','offline','busy','away','none'].map(s=><option key={s}>{s}</option>)}</select></div>
+          <div><label style={ctrl}>Fondo (Preset v10.6)</label>
+            <select value={customColor} onChange={(e) => setCustomColor(e.target.value)} style={sel}>
+              <option value="">Default (Neutral)</option>
+              {['primary', 'secondary', 'accent', 'success', 'warning', 'error', 'info', 'teal', 'processing', 'volcano', 'gold', 'lime', 'purple'].map(c => <option key={c} value={c}>{c}</option>)}
+            </select>
+          </div>
           <div><label style={ctrl}>Gap (auto-size texto): {gap}px</label><input type="range" min={0} max={12} value={gap} onChange={(e) => setGap(Number(e.target.value))} style={{ width: '100%' }} /></div>
           <div><label style={ctrl}>Color personalizado</label><input value={customColor} onChange={(e) => setCustomColor(e.target.value)} placeholder="#E04D36, purple, etc." style={sel}/></div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 4 }}>
@@ -1080,47 +1141,7 @@ function SliderPlayground() {
   );
 }
 
-function RatePlayground() {
-  const [value, setValue] = useState(3);
-  const [count, setCount] = useState(5);
-  const [disabled, setDisabled] = useState(false);
-  const [allowHalf, setAllowHalf] = useState(false);
-  const [useTooltips, setUseTooltips] = useState(false);
-  const [customChar, setCustomChar] = useState(false);
 
-  const desc = ['Terrible', 'Malo', 'Normal', 'Bueno', 'Excelente'];
-
-  const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
-  return (
-    <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
-      <div style={{ flex: 1, minWidth: 240 }}>
-        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <div><label style={ctrl}>Estrellas: {count}</label><input type="range" min={3} max={10} value={count} onChange={(e) => setCount(Number(e.target.value))} style={{ width: '100%' }} /></div>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
-            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={disabled} onChange={(e) => setDisabled(e.target.checked)} /> Disabled</label>
-            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={allowHalf} onChange={(e) => setAllowHalf(e.target.checked)} /> Allow Half</label>
-            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={useTooltips} onChange={(e) => setUseTooltips(e.target.checked)} /> Tooltips</label>
-            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={customChar} onChange={(e) => setCustomChar(e.target.checked)} /> Custom Icon</label>
-          </div>
-          <p style={{ fontSize: 12, color: khorTokens.colors.neutral[400], margin: 0 }}>Valor: {value}</p>
-        </div>
-      </div>
-      <div style={{ flex: 1, minWidth: 280, display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'center', justifyContent: 'center', padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-        <KRate 
-          value={value} 
-          onChange={setValue} 
-          count={count} 
-          disabled={disabled} 
-          allowHalf={allowHalf} 
-          tooltips={useTooltips ? desc : undefined}
-          character={customChar ? ({ index }) => (index % 2 === 0 ? <Heart size={20} /> : <ThumbsUp size={20} />) : undefined}
-        />
-        {useTooltips && value > 0 && <span style={{ fontSize: 14 }}>{desc[Math.ceil(value) - 1]}</span>}
-      </div>
-    </div>
-  );
-}
 
 function TextAreaPlayground() {
   const [val, setVal] = useState('');
@@ -1370,6 +1391,72 @@ function UnifiedInputPlayground() {
         <h3 style={{ fontSize: 18, fontWeight: 700, color: khorTokens.colors.brand.navy, marginBottom: 24, borderBottom: `2px solid ${khorTokens.colors.neutral[100]}`, paddingBottom: 8 }}>OTP Variant</h3>
         <OTPPlayground />
       </section>
+    </div>
+  );
+}
+
+function PhoneInputPlayground() {
+  const [val, setVal] = useState('+52 5512345678');
+  const [size, setSize] = useState<'sm' | 'md' | 'lg'>('md');
+  const [status, setStatus] = useState<'default' | 'error' | 'warning'>('default');
+  const [disabled, setDisabled] = useState(false);
+  const [block, setBlock] = useState(false);
+  const [helperText, setHelperText] = useState('Ingresa un número válido de 10 dígitos.');
+
+  const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
+  const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
+  const checkStyle = { display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' };
+
+  return (
+    <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
+      <div style={{ flex: 1, minWidth: 280 }}>
+        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div>
+            <label style={ctrl}>Tamaño</label>
+            <select value={size} onChange={(e) => setSize(e.target.value as any)} style={sel}>
+              {['sm', 'md', 'lg'].map((s) => <option key={s} value={s}>{s}</option>)}
+            </select>
+          </div>
+          <div>
+            <label style={ctrl}>Estado</label>
+            <select value={status} onChange={(e) => setStatus(e.target.value as any)} style={sel}>
+              {['default', 'error', 'warning'].map((s) => <option key={s} value={s}>{s}</option>)}
+            </select>
+          </div>
+          <div>
+            <label style={ctrl}>Texto de Ayuda / Error</label>
+            <input
+              type="text"
+              value={helperText}
+              onChange={(e) => setHelperText(e.target.value)}
+              style={sel}
+            />
+          </div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 4 }}>
+            <label style={checkStyle}>
+              <input type="checkbox" checked={disabled} onChange={(e) => setDisabled(e.target.checked)} /> Desactivado
+            </label>
+            <label style={checkStyle}>
+              <input type="checkbox" checked={block} onChange={(e) => setBlock(e.target.checked)} /> Ancho completo (block)
+            </label>
+          </div>
+        </div>
+      </div>
+      <div style={{ flex: 1, minWidth: 280, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
+        <KPhoneInput
+          value={val}
+          onChange={setVal}
+          size={size}
+          status={status}
+          disabled={disabled}
+          block={block}
+          helperText={helperText}
+        />
+        <div style={{ marginTop: 16, fontSize: 12, color: khorTokens.colors.neutral[500], fontFamily: 'monospace' }}>
+          Valor emitido: "{val}"
+        </div>
+      </div>
     </div>
   );
 }
@@ -2308,46 +2395,7 @@ export const atoms: Record<string, AtomEntry> = {
     ],
     guidelines: ['Usa para valores continuos como volumen, brillo, porcentaje.', 'Para valores discretos con pocas opciones, usa KRadio variant="button".'],
   },
-  rate: {
-    id: 'rate',
-    name: 'KRate',
-    description: 'Componente de calificación con estrellas. Permite al usuario seleccionar una puntuación de 1 a N.',
-    preview: (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-        <KRate defaultValue={3} />
-        <KRate defaultValue={4} count={5} />
-        <KRate defaultValue={2} disabled />
-      </div>
-    ),
-    playground: <RatePlayground />,
-    stateShowcase: (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-        <div><KText variant="small" color="muted">Standard</KText><KRate defaultValue={3} /></div>
-        <div><KText variant="small" color="muted">Half Stars / Disabled</KText><KRate defaultValue={2.5} disabled allowHalf /></div>
-      </div>
-    ),
-    a11ySummary: {
-      keyboard: ['Left/Right: Mueve foco individual entre estrellas.', 'Enter/Space: Confirma calificación.'],
-      aria: ['Construido internamente como radiogroup o slider bidireccional.', 'aria-label global del contenedor recomendado.'],
-      contrast: 'AAA en estado seleccionado (Accent: Naranja Khor).',
-      score: 90,
-    },
-    code: `import { KRate } from '@khor/design-system/atoms/index';
 
-<KRate value={rating} onChange={setRating} />
-<KRate defaultValue={4} count={10} />
-<KRate defaultValue={3} disabled />`,
-    filename: 'KRate.tsx',
-    props: [
-      { name: 'value', type: 'number', description: 'Valor controlado.' },
-      { name: 'defaultValue', type: 'number', default: '0', description: 'Valor inicial.' },
-      { name: 'count', type: 'number', default: '5', description: 'Número de estrellas.' },
-      { name: 'onChange', type: '(value: number) => void', description: 'Callback al seleccionar.' },
-      { name: 'disabled', type: 'boolean', description: 'Solo lectura.' },
-      { name: 'allowHalf', type: 'boolean', default: 'false', description: 'Permite medias estrellas.' },
-    ],
-    guidelines: ['Usa para evaluaciones, feedback de satisfacción.', 'El color accent (naranja) se usa por convención para estrellas.'],
-  },
   spin: {
     id: 'spin',
     name: 'KSpin',
@@ -2482,14 +2530,28 @@ export const atoms: Record<string, AtomEntry> = {
     playground: <ButtonGroupPlayground />,
     code: `<KButtonGroup>\n  <KButton variant="secondary">Anterior</KButton>\n  <KButton variant="secondary">Siguiente</KButton>\n</KButtonGroup>`, filename: 'KButtonGroup.tsx',
     props: [{ name: 'size', type: "'sm' | 'md' | 'lg'", description: 'Espaciado entre botones.' }, { name: 'direction', type: "'horizontal' | 'vertical'", description: 'Flujo.' }],
-    guidelines: ['Usa para acciones relacionadas como paginacion o vistas.']
+    a11ySummary: {
+      keyboard: ['Tab: Navega entre botones del grupo.', 'Arrows: No implementado (comportamiento de toolbar nativo).'],
+      aria: ['role="group" recomendado si se usa fuera de un toolbar.', 'aria-label obligatorio para identificar el propósito del grupo.'],
+      contrast: 'AAA',
+      score: 100,
+    },
+    guidelines: ['Usa para acciones relacionadas como paginacion o vistas.'],
+    aiNotes: 'Componente de agrupamiento visual. Asegura que los botones internos tengan el mismo tamaño.'
   },
   'search-input': { id: 'search-input', name: 'KSearchInput', description: 'Input de búsqueda unificado con icono y botón de limpieza.',
     preview: (<div style={{ maxWidth: 300 }}><KSearchInput placeholder="Buscar..." /></div>),
     playground: <SearchInputPlayground />,
     code: `<KSearchInput onSearch={(v) => console.log(v)} />`, filename: 'KSearchInput.tsx',
     props: [{ name: 'placeholder', type: 'string', description: 'Placeholder.' }, { name: 'size', type: "'sm' | 'md' | 'lg'", description: 'Tamaño.' }, { name: 'onSearch', type: '(v: string) => void', description: 'Callback de búsqueda.' }],
-    guidelines: ['Centralizado en Atoms para uso global.', 'Usa para búsquedas primarias en el sistema.']
+    a11ySummary: {
+      keyboard: ['Enter: Dispara el evento onSearch.', 'Esc: Limpia el contenido (si allowClear).'],
+      aria: ['role="searchbox" aplicado internamente.', 'aria-label descriptivo requerido si no hay label visible.'],
+      contrast: 'AAA',
+      score: 100,
+    },
+    guidelines: ['Centralizado en Atoms para uso global.', 'Usa para búsquedas primarias en el sistema.'],
+    aiNotes: 'Evolución de KInput para búsqueda. Priorizar sobre KInput básico en cabeceras.'
   },
   'label': { id: 'label', name: 'KLabel', description: 'Etiqueta para campos de formulario con indicador de campo obligatorio y tooltip de informacion.',
     preview: (<KLabel required info="Ayuda">Campo</KLabel>),
@@ -2553,12 +2615,7 @@ export const atoms: Record<string, AtomEntry> = {
     },
     guidelines: ['Usa preview para imágenes que necesitan verse en grande.']
   },
-  'affix': { id: 'affix', name: 'KAffix', description: 'Envuelve contenido para fijarlo al viewport al hacer scroll. Útil para toolbars o filtros.',
-    preview: (<div style={{ padding: 16, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}><KText variant="body-md" color="secondary">KAffix fija su contenido al hacer scroll. Usa offsetTop para definir la distancia desde arriba.</KText></div>),
-    code: `<KAffix offsetTop={64}>\n  <Toolbar />\n</KAffix>`, filename: 'KAffix.tsx',
-    props: [{ name: 'offsetTop', type: 'number', description: 'Distancia desde arriba para activar.' }, { name: 'offsetBottom', type: 'number', description: 'Distancia desde abajo.' }],
-    guidelines: ['offsetTop=64 para respetar el header de 64px.']
-  },
+
   'space': { 
     id: 'space', name: 'KSpace', 
     description: 'Componente de layout para espaciar elementos con gap consistente. Soporta dirección, wrap, splitters y tamaños personalizados.',
@@ -2587,12 +2644,7 @@ export const atoms: Record<string, AtomEntry> = {
     props: [{ name: 'value', type: 'string', required: true, description: 'Texto o URL a codificar.' }, { name: 'size', type: 'number', default: '128', description: 'Tamaño en px.' }, { name: 'color', type: 'string', description: 'Color de los módulos.' }],
     guidelines: ['Nota: patrón visual representativo. Para QR reales, integra una librería como qrcode.']
   },
-  'watermark': { id: 'watermark', name: 'KWatermark', description: 'Overlay de marca de agua sobre cualquier contenido. Útil para documentos confidenciales o previews.',
-    preview: (<KWatermark text="CONFIDENCIAL"><div style={{ padding: 32, backgroundColor: khorTokens.colors.neutral[50], borderRadius: khorTokens.radius.lg, minHeight: 120 }}><KText variant="body-md">Este contenido tiene marca de agua.</KText></div></KWatermark>),
-    code: `<KWatermark text="BORRADOR">\n  <DocumentPreview />\n</KWatermark>`, filename: 'KWatermark.tsx',
-    props: [{ name: 'text', type: 'string', required: true, description: 'Texto de la marca de agua.' }, { name: 'fontSize', type: 'number', default: '14', description: 'Tamaño de fuente.' }, { name: 'rotate', type: 'number', default: '-22', description: 'Ángulo de rotación.' }],
-    guidelines: ['Usa para documentos confidenciales o borradores.']
-  },
+
   'flex': {
     id: 'flex', name: 'KFlex',
     description: 'Contenedor Flex moderno para alinear y distribuir elementos fácilmente.',
@@ -2672,6 +2724,77 @@ export const atoms: Record<string, AtomEntry> = {
       { name: 'children', type: 'ReactNode', description: 'Contenido a scrollear.' },
     ],
     guidelines: ['Usa para contenedores con contenido que excede su tamaño.', 'Evita scrollbars en elementos minúsculos.'],
+  },
+  icon: {
+    id: 'icon',
+    name: 'KIcon',
+    description: 'Átomo base para iconografía. Wrapper de Lucide React que implementa la escala Elite de tamaños (XS a 2XL) y tokens de color sistémicos.',
+    preview: (
+      <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+        <KIcon name="Sparkles" size="xl" color="var(--khor-primary)" />
+        <KIcon name="Zap" size="lg" color="var(--khor-secondary)" />
+        <KIcon name="CheckCircle" size="md" color="var(--khor-success)" />
+      </div>
+    ),
+    playground: <IconPlayground />,
+    code: `import { KIcon } from '@khor/design-system/atoms/index';\n\n<KIcon name="Sparkles" size="md" color="var(--khor-primary)" />`,
+    filename: 'KIcon/index.tsx',
+    props: [
+      { name: 'name', type: 'string', required: true, description: 'Nombre de la propiedad exportada por lucide-react.' },
+      { name: 'size', type: "'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl'", default: "'md'", description: 'Tamaño basado en tokens Elite.' },
+      { name: 'color', type: 'string', description: 'Color CSS o Token.' },
+      { name: 'className', type: 'string', description: 'Clases adicionales.' },
+    ],
+    guidelines: ['Usa iconos para reducir carga cognitiva.', 'Mantén el tamaño consistente en la misma fila.', 'Acompaña siempre de aria-label si no hay texto.'],
+    aiNotes: 'Componente obligatorio para toda iconografía Lucide. NO importar de lucide-react directamente.'
+  },
+  'phone-input': {
+    id: 'phone-input',
+    name: 'KPhoneInput',
+    description: 'Selector de país avanzado (con banderas emoji para alta compatibilidad) + formateo inteligente de prefijo y máscara de teléfono.',
+    preview: (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <KPhoneInput defaultCountry="MX" placeholder="Número de México" />
+        <KPhoneInput defaultCountry="US" placeholder="Número de USA" />
+      </div>
+    ),
+    playground: <PhoneInputPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>Default</span><KPhoneInput /></div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>Hover</span><KPhoneInput isHovered /></div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>Focused</span><KPhoneInput isFocused /></div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>Error</span><KPhoneInput status="error" helperText="Teléfono no válido" /></div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>Disabled</span><KPhoneInput disabled /></div>
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['Tab: Mueve el foco entre el selector de país y el campo de entrada.', 'Search: Permite filtrar los países escribiendo en la barra de búsqueda del selector.', 'Enter/Space: Abre/cierra el menú selector de países.'],
+      aria: ['aria-haspopup="dialog" en el selector de país.', 'role="combobox" para la lista de selección de países.', 'aria-expanded para controlar el estado del dropdown.'],
+      contrast: 'Banderas emoji de alto contraste, textos y bordes cumplen con WCAG AA.',
+      score: 100,
+    },
+    code: `import { KPhoneInput } from '@khor/design-system/atoms/index';
+
+// Selector de teléfono con validación y formateo de país
+<KPhoneInput
+  defaultCountry="MX"
+  placeholder="Ingresa tu teléfono"
+  size="md"
+  onChange={(val) => console.log('Teléfono:', val)}
+/>`,
+    filename: 'KPhoneInput/index.tsx',
+    props: [
+      { name: 'value', type: 'string', description: 'Valor del input.' },
+      { name: 'onChange', type: '(value: string) => void', description: 'Callback al cambiar el número, retorna el valor con prefijo de marcado.' },
+      { name: 'defaultCountry', type: 'string', default: "'MX'", description: 'Código de país inicial de dos letras (ej: MX, US, ES).' },
+      { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Variaciones de altura.' },
+      { name: 'status', type: "'error' | 'warning' | 'default'", default: "'default'", description: 'Estado de validación.' },
+      { name: 'helperText', type: 'string', description: 'Mensaje de validación o ayuda debajo del input.' },
+      { name: 'block', type: 'boolean', default: 'false', description: 'Si el input debe ocupar el 100% del contenedor.' },
+      { name: 'disabled', type: 'boolean', default: 'false', description: 'Inhabilita la interacción.' },
+    ],
+    guidelines: ['Siempre define un país por defecto para acelerar la entrada.', 'Usa block={true} en formularios móviles.', 'Brinda helperText claro en caso de error.'],
   }
 };
 

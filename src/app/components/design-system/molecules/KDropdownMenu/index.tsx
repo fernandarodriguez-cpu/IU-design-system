@@ -1,8 +1,24 @@
 import React from 'react';
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
 import { ChevronRight } from 'lucide-react';
-import { cn } from '../../../../../imports/utils';
+import { cn } from '@/utils/cn';
 
+/**
+ * @figma-mcp-migration
+ * Component: KDropdownMenuRoot
+ * 
+ * INSTRUCCIONES PARA AGENTES DE IA (VS Code / MCP):
+ * Para migrar este componente a Figma, NO generar una matriz multiplicando todas las variables.
+ * Utilizar Figma Component Properties V2 con la siguiente estructura:
+ * 
+ * 1. Variants (Estructurales):
+ *    - Definir variantes puramente visuales/estructurales.
+ * 2. Booleans (Encendido/Apagado):
+ *    - Definir encendido/apagado para iconos o estados (isLoading, hasIcon).
+ * 3. Color Variables (No usar variantes para colores semánticos):
+ *    - El relleno/borde debe usar Figma Variables (Khor v6.0 Colors) asignado dinámicamente.
+ *    - El consumidor del UI Kit cambiará el color del layer.
+ */
 export const KDropdownMenuRoot = DropdownMenuPrimitive.Root;
 export const KDropdownMenuTrigger = DropdownMenuPrimitive.Trigger;
 export const KDropdownMenuGroup = DropdownMenuPrimitive.Group;
@@ -19,14 +35,14 @@ export const KDropdownMenuSubTrigger = React.forwardRef<
   <DropdownMenuPrimitive.SubTrigger
     ref={ref}
     className={cn(
-      "flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none focus:bg-khor-slate-100 data-[state=open]:bg-khor-slate-100 font-primary text-khor-neutral-900",
-      inset && "pl-8",
+      "flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none focus:bg-khor-surface-hover data-[state=open]:bg-khor-surface-hover font-primary text-khor-neutral-900",
+      inset && "ps-8",
       className
     )}
     {...props}
   >
     {children}
-    <ChevronRight className="ml-auto h-4 w-4" />
+    <ChevronRight className="ms-auto h-4 w-4" />
   </DropdownMenuPrimitive.SubTrigger>
 ));
 KDropdownMenuSubTrigger.displayName = DropdownMenuPrimitive.SubTrigger.displayName;
@@ -73,8 +89,8 @@ export const KDropdownMenuItem = React.forwardRef<
   <DropdownMenuPrimitive.Item
     ref={ref}
     className={cn(
-      "relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-khor-neutral-100 focus:text-khor-neutral-900 data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-      inset && "pl-8",
+      "relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-khor-surface-hover focus:text-khor-neutral-900 data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      inset && "ps-8",
       className
     )}
     {...props}
@@ -92,7 +108,7 @@ export const KDropdownMenuLabel = React.forwardRef<
     ref={ref}
     className={cn(
       "px-2 py-1.5 text-sm font-semibold text-khor-neutral-500",
-      inset && "pl-8",
+      inset && "ps-8",
       className
     )}
     {...props}
@@ -119,12 +135,12 @@ export const KDropdownMenuCheckboxItem = React.forwardRef<
   <DropdownMenuPrimitive.CheckboxItem
     ref={ref}
     className={cn(
-      "relative flex cursor-pointer select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none transition-colors focus:bg-khor-neutral-100 focus:text-khor-neutral-900 data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      "relative flex cursor-pointer select-none items-center rounded-sm py-1.5 ps-8 pe-2 text-sm outline-none transition-colors focus:bg-khor-surface-hover focus:text-khor-neutral-900 data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       className
     )}
     {...props}
   >
-    <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+    <span className="absolute start-2 flex h-3.5 w-3.5 items-center justify-center">
       <DropdownMenuPrimitive.ItemIndicator>
         <div className="w-2 h-2 bg-khor-primary rounded-sm" />
       </DropdownMenuPrimitive.ItemIndicator>
@@ -175,10 +191,10 @@ export const KDropdownMenu = ({
               <KDropdownMenuItem 
                 key={item.key || idx} 
                 onClick={() => menu.onClick?.({ key: item.key })}
-                className={item.danger ? "text-red-600 focus:bg-red-50 focus:text-red-700" : ""}
+                className={item.danger ? "text-red-600 focus:bg-khor-error-light focus:text-red-700" : ""}
                 disabled={item.disabled}
               >
-                {item.icon && <span className="mr-2">{item.icon}</span>}
+                {item.icon && <span className="me-2">{item.icon}</span>}
                 {item.label}
               </KDropdownMenuItem>
             );

@@ -356,7 +356,7 @@ export function KhorGuardianPage() {
       {/* Unified Footer */}
       <div style={{ marginTop: 64, padding: '32px 0', borderTop: `1px solid var(--border)`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 13, color: 'var(--muted-foreground)', fontWeight: 500 }}>
-          <Shield size={16} style={{ color: t.colors.brand.primary }} /> Khor Guardian v4.0.4 Alpha • Visual Systems Intelligence
+          <Shield size={16} style={{ color: t.colors.brand.primary }} /> Khor Guardian v5.0.0-alpha Elite • Visual Systems Intelligence
         </div>
         <div style={{ display: 'flex', gap: 24 }}>
           <button style={{ background: 'none', border: 'none', fontSize: 13, fontWeight: 600, color: 'var(--muted-foreground)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}>

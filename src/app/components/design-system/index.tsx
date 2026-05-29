@@ -4,7 +4,7 @@
  * ╚═══════════════════════════════════════════╝
  * 
  * Este archivo centraliza todas las exportaciones del sistema de diseño
- * migrado a una estructura modular basada en Ant Design 5.
+ * migrado a una estructura modular basada en Khor DS 5.
  */
 
 export * from './atoms';

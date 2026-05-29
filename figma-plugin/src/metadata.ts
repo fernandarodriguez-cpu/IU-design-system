@@ -1,42 +1,7 @@
 export const khorMetadata = {
   "version": "5.0.0",
-  "generatedAt": "2026-04-10T22:04:03.714Z",
+  "generatedAt": "2026-05-18T21:01:06.911Z",
   "components": [
-    {
-      "name": "KAffix",
-      "category": "atom",
-      "path": "/src/app/components/design-system/atoms/KAffix/index.tsx",
-      "props": [
-        {
-          "name": "offsetTop",
-          "type": "number",
-          "required": false,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "offsetBottom",
-          "type": "number",
-          "required": false,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "children",
-          "type": "React.ReactNode",
-          "required": true,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "className",
-          "type": "string",
-          "required": false,
-          "description": "",
-          "isIcon": false
-        }
-      ]
-    },
     {
       "name": "KAlert",
       "category": "atom",
@@ -295,6 +260,28 @@ export const khorMetadata = {
           "required": false,
           "description": "",
           "isIcon": false
+        },
+        {
+          "name": "isHovered",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "isFocused",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
         }
       ]
     },
@@ -524,6 +511,17 @@ export const khorMetadata = {
           "required": false,
           "description": "",
           "isIcon": false
+        },
+        {
+          "name": "isHovered",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
         }
       ]
     },
@@ -592,6 +590,94 @@ export const khorMetadata = {
           "required": true,
           "description": "",
           "isIcon": false
+        }
+      ]
+    },
+    {
+      "name": "KBentoGrid",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KBentoGrid/index.tsx",
+      "props": [
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "required": true,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "isIcon": false,
+          "defaultValue": "''"
+        },
+        {
+          "name": "columns",
+          "type": "number",
+          "required": false,
+          "description": "",
+          "isIcon": false,
+          "defaultValue": "4"
+        },
+        {
+          "name": "gap",
+          "type": "number",
+          "required": false,
+          "description": "",
+          "isIcon": false,
+          "defaultValue": "24"
+        }
+      ]
+    },
+    {
+      "name": "KBentoItem",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KBentoGrid/index.tsx",
+      "props": [
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "required": true,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "isIcon": false,
+          "defaultValue": "''"
+        },
+        {
+          "name": "colSpan",
+          "type": "number",
+          "required": false,
+          "description": "",
+          "isIcon": false,
+          "defaultValue": "1"
+        },
+        {
+          "name": "rowSpan",
+          "type": "number",
+          "required": false,
+          "description": "",
+          "isIcon": false,
+          "defaultValue": "1"
+        },
+        {
+          "name": "glass",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false,
+          "defaultValue": "false"
         }
       ]
     },
@@ -802,6 +888,39 @@ export const khorMetadata = {
           "isIcon": false
         },
         {
+          "name": "isHovered",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "isPressed",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "isActive",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
           "name": "onClick",
           "type": "(e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => void",
           "required": false,
@@ -886,6 +1005,28 @@ export const khorMetadata = {
           "required": false,
           "description": "",
           "isIcon": false
+        },
+        {
+          "name": "isHovered",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "isFocused",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
         }
       ]
     },
@@ -960,6 +1101,39 @@ export const khorMetadata = {
           "type": "React.ReactNode",
           "required": false,
           "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "autoFocus",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "isHovered",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "isFocused",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
           "isIcon": false
         }
       ]
@@ -1300,6 +1474,51 @@ export const khorMetadata = {
             "true",
             "false"
           ],
+          "isIcon": false
+        }
+      ]
+    },
+    {
+      "name": "KIcon",
+      "category": "atom",
+      "path": "/src/app/components/design-system/atoms/KIcon/index.tsx",
+      "props": [
+        {
+          "name": "name",
+          "type": "KIconName",
+          "required": true,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "size",
+          "type": "'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'",
+          "required": false,
+          "description": "",
+          "options": [
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "xxl"
+          ],
+          "isIcon": false,
+          "defaultValue": "'md'"
+        },
+        {
+          "name": "color",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "isIcon": false,
+          "defaultValue": "'currentColor'"
+        },
+        {
+          "name": "strokeWidth",
+          "type": "number",
+          "required": false,
+          "description": "",
           "isIcon": false
         }
       ]
@@ -1729,6 +1948,28 @@ export const khorMetadata = {
           "required": false,
           "description": "",
           "isIcon": false
+        },
+        {
+          "name": "isFocused",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "isHovered",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
         }
       ]
     },
@@ -1892,6 +2133,17 @@ export const khorMetadata = {
           "type": "React.CSSProperties",
           "required": false,
           "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "isHovered",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
           "isIcon": false
         }
       ]
@@ -2072,44 +2324,9 @@ export const khorMetadata = {
             "false"
           ],
           "isIcon": false
-        }
-      ]
-    },
-    {
-      "name": "KRate",
-      "category": "atom",
-      "path": "/src/app/components/design-system/atoms/KRate/index.tsx",
-      "props": [
-        {
-          "name": "count",
-          "type": "number",
-          "required": false,
-          "description": "",
-          "isIcon": false
         },
         {
-          "name": "value",
-          "type": "number",
-          "required": false,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "defaultValue",
-          "type": "number",
-          "required": false,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "onChange",
-          "type": "(value: number) => void",
-          "required": false,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "disabled",
+          "name": "isHovered",
           "type": "boolean",
           "required": false,
           "description": "",
@@ -2120,7 +2337,7 @@ export const khorMetadata = {
           "isIcon": false
         },
         {
-          "name": "allowHalf",
+          "name": "isFocused",
           "type": "boolean",
           "required": false,
           "description": "",
@@ -2128,34 +2345,6 @@ export const khorMetadata = {
             "true",
             "false"
           ],
-          "isIcon": false
-        },
-        {
-          "name": "character",
-          "type": "React.ReactNode | ((props: { index: number }) => React.ReactNode)",
-          "required": false,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "tooltips",
-          "type": "string[]",
-          "required": false,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "className",
-          "type": "string",
-          "required": false,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "style",
-          "type": "React.CSSProperties",
-          "required": false,
-          "description": "",
           "isIcon": false
         }
       ]
@@ -2528,6 +2717,39 @@ export const khorMetadata = {
           "required": false,
           "description": "",
           "isIcon": false
+        },
+        {
+          "name": "isHovered",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "isFocused",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "isPressed",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
         }
       ]
     },
@@ -2716,6 +2938,28 @@ export const khorMetadata = {
           "required": false,
           "description": "",
           "isIcon": false
+        },
+        {
+          "name": "isHovered",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "isFocused",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
         }
       ]
     },
@@ -2802,6 +3046,28 @@ export const khorMetadata = {
           "required": false,
           "description": "",
           "isIcon": false
+        },
+        {
+          "name": "isHovered",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "isFocused",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
         }
       ]
     },
@@ -2826,6 +3092,28 @@ export const khorMetadata = {
           "type": "(checked: boolean) => void",
           "required": false,
           "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "isHovered",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "isFocused",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
           "isIcon": false
         }
       ]
@@ -2986,62 +3274,6 @@ export const khorMetadata = {
         {
           "name": "style",
           "type": "React.CSSProperties",
-          "required": false,
-          "description": "",
-          "isIcon": false
-        }
-      ]
-    },
-    {
-      "name": "KWatermark",
-      "category": "atom",
-      "path": "/src/app/components/design-system/atoms/KWatermark/index.tsx",
-      "props": [
-        {
-          "name": "text",
-          "type": "string",
-          "required": true,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "fontSize",
-          "type": "number",
-          "required": false,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "color",
-          "type": "string",
-          "required": false,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "rotate",
-          "type": "number",
-          "required": false,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "gap",
-          "type": "number",
-          "required": false,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "children",
-          "type": "React.ReactNode",
-          "required": true,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "className",
-          "type": "string",
           "required": false,
           "description": "",
           "isIcon": false
@@ -4258,6 +4490,24 @@ export const khorMetadata = {
           "required": false,
           "description": "",
           "isIcon": false
+        },
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "isHovered",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
         }
       ]
     },
@@ -4310,6 +4560,35 @@ export const khorMetadata = {
           "type": "string",
           "required": false,
           "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "isHovered",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "isFocused",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
           "isIcon": false
         }
       ]
@@ -4584,101 +4863,6 @@ export const khorMetadata = {
         {
           "name": "emptyText",
           "type": "string",
-          "required": false,
-          "description": "",
-          "isIcon": false
-        }
-      ]
-    },
-    {
-      "name": "KMentionOption",
-      "category": "molecule",
-      "path": "/src/app/components/design-system/molecules/KMentions/index.tsx",
-      "props": [
-        {
-          "name": "value",
-          "type": "string",
-          "required": true,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "label",
-          "type": "string",
-          "required": true,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "avatar",
-          "type": "string",
-          "required": false,
-          "description": "",
-          "isIcon": false
-        }
-      ]
-    },
-    {
-      "name": "KMentions",
-      "category": "molecule",
-      "path": "/src/app/components/design-system/molecules/KMentions/index.tsx",
-      "props": [
-        {
-          "name": "value",
-          "type": "string",
-          "required": false,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "onChange",
-          "type": "(value: string) => void",
-          "required": false,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "options",
-          "type": "KMentionOption[]",
-          "required": true,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "placeholder",
-          "type": "string",
-          "required": false,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "trigger",
-          "type": "string",
-          "required": false,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "disabled",
-          "type": "boolean",
-          "required": false,
-          "description": "",
-          "options": [
-            "true",
-            "false"
-          ],
-          "isIcon": false
-        },
-        {
-          "name": "className",
-          "type": "string",
-          "required": false,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "style",
-          "type": "React.CSSProperties",
           "required": false,
           "description": "",
           "isIcon": false
@@ -5058,6 +5242,17 @@ export const khorMetadata = {
           "required": false,
           "description": "",
           "isIcon": false
+        },
+        {
+          "name": "isHovered",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
         }
       ]
     },
@@ -5292,6 +5487,28 @@ export const khorMetadata = {
             "false"
           ],
           "isIcon": false
+        },
+        {
+          "name": "isHovered",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "isFocused",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
         }
       ]
     },
@@ -5511,6 +5728,17 @@ export const khorMetadata = {
           "type": "string",
           "required": false,
           "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "isHovered",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
           "isIcon": false
         }
       ]
@@ -6032,115 +6260,38 @@ export const khorMetadata = {
       ]
     },
     {
-      "name": "KTransferItem",
+      "name": "KTrialBar",
       "category": "molecule",
-      "path": "/src/app/components/design-system/molecules/KTransfer/index.tsx",
+      "path": "/src/app/components/design-system/molecules/KTrialBar/index.tsx",
       "props": [
         {
-          "name": "key",
-          "type": "string",
+          "name": "daysLeft",
+          "type": "number",
           "required": true,
           "description": "",
           "isIcon": false
         },
         {
-          "name": "title",
+          "name": "totalDays",
+          "type": "number",
+          "required": false,
+          "description": "",
+          "isIcon": false,
+          "defaultValue": "14"
+        },
+        {
+          "name": "planName",
           "type": "string",
-          "required": true,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "description",
-          "type": "string",
           "required": false,
           "description": "",
-          "isIcon": false
+          "isIcon": false,
+          "defaultValue": "'Free Trial'"
         },
         {
-          "name": "disabled",
-          "type": "boolean",
+          "name": "onUpgrade",
+          "type": "() => void",
           "required": false,
           "description": "",
-          "options": [
-            "true",
-            "false"
-          ],
-          "isIcon": false
-        }
-      ]
-    },
-    {
-      "name": "KTransfer",
-      "category": "molecule",
-      "path": "/src/app/components/design-system/molecules/KTransfer/index.tsx",
-      "props": [
-        {
-          "name": "dataSource",
-          "type": "KTransferItem[]",
-          "required": true,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "targetKeys",
-          "type": "string[]",
-          "required": false,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "onChange",
-          "type": "(targetKeys: string[], direction: 'left' | 'right', moveKeys: string[]) => void",
-          "required": false,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "onSelectChange",
-          "type": "(sourceSelectedKeys: string[], targetSelectedKeys: string[]) => void",
-          "required": false,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "titles",
-          "type": "[React.ReactNode, React.ReactNode]",
-          "required": false,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "showSearch",
-          "type": "boolean",
-          "required": false,
-          "description": "",
-          "options": [
-            "true",
-            "false"
-          ],
-          "isIcon": false
-        },
-        {
-          "name": "oneWay",
-          "type": "boolean",
-          "required": false,
-          "description": "",
-          "options": [
-            "true",
-            "false"
-          ],
-          "isIcon": false
-        },
-        {
-          "name": "disabled",
-          "type": "boolean",
-          "required": false,
-          "description": "",
-          "options": [
-            "true",
-            "false"
-          ],
           "isIcon": false
         },
         {
@@ -6148,164 +6299,8 @@ export const khorMetadata = {
           "type": "string",
           "required": false,
           "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "style",
-          "type": "React.CSSProperties",
-          "required": false,
-          "description": "",
-          "isIcon": false
-        }
-      ]
-    },
-    {
-      "name": "KTreeNode",
-      "category": "molecule",
-      "path": "/src/app/components/design-system/molecules/KTreeSelect/index.tsx",
-      "props": [
-        {
-          "name": "value",
-          "type": "string | number",
-          "required": true,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "label",
-          "type": "string",
-          "required": false,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "title",
-          "type": "React.ReactNode",
-          "required": false,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "children",
-          "type": "KTreeNode[]",
-          "required": false,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "disabled",
-          "type": "boolean",
-          "required": false,
-          "description": "",
-          "options": [
-            "true",
-            "false"
-          ],
-          "isIcon": false
-        }
-      ]
-    },
-    {
-      "name": "KTreeSelect",
-      "category": "molecule",
-      "path": "/src/app/components/design-system/molecules/KTreeSelect/index.tsx",
-      "props": [
-        {
-          "name": "treeData",
-          "type": "KTreeNode[]",
-          "required": true,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "value",
-          "type": "string | number | (string | number)[]",
-          "required": false,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "onChange",
-          "type": "(value: any, label: any) => void",
-          "required": false,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "placeholder",
-          "type": "string",
-          "required": false,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "disabled",
-          "type": "boolean",
-          "required": false,
-          "description": "",
-          "options": [
-            "true",
-            "false"
-          ],
-          "isIcon": false
-        },
-        {
-          "name": "multiple",
-          "type": "boolean",
-          "required": false,
-          "description": "",
-          "options": [
-            "true",
-            "false"
-          ],
-          "isIcon": false
-        },
-        {
-          "name": "treeCheckable",
-          "type": "boolean",
-          "required": false,
-          "description": "",
-          "options": [
-            "true",
-            "false"
-          ],
-          "isIcon": false
-        },
-        {
-          "name": "className",
-          "type": "string",
-          "required": false,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "style",
-          "type": "React.CSSProperties",
-          "required": false,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "showSearch",
-          "type": "boolean",
-          "required": false,
-          "description": "",
-          "options": [
-            "true",
-            "false"
-          ],
-          "isIcon": false
-        },
-        {
-          "name": "treeDefaultExpandAll",
-          "type": "boolean",
-          "required": false,
-          "description": "",
-          "options": [
-            "true",
-            "false"
-          ],
-          "isIcon": false
+          "isIcon": false,
+          "defaultValue": "''"
         }
       ]
     },
@@ -6574,6 +6569,17 @@ export const khorMetadata = {
         },
         {
           "name": "noPadding",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "isHovered",
           "type": "boolean",
           "required": false,
           "description": "",
@@ -6887,60 +6893,134 @@ export const khorMetadata = {
           "required": false,
           "description": "",
           "isIcon": false
-        }
-      ]
-    },
-    {
-      "name": "KDrawer",
-      "category": "organism",
-      "path": "/src/app/components/design-system/organisms/KDrawer/index.tsx",
-      "props": [
+        },
         {
-          "name": "placement",
-          "type": "'top' | 'right' | 'bottom' | 'left'",
+          "name": "isHovered",
+          "type": "boolean",
           "required": false,
           "description": "",
           "options": [
-            "top",
-            "right",
-            "bottom",
-            "left"
+            "true",
+            "false"
           ],
           "isIcon": false
         },
         {
-          "name": "width",
-          "type": "string | number",
+          "name": "isFocused",
+          "type": "boolean",
           "required": false,
           "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
           "isIcon": false
         },
         {
-          "name": "height",
-          "type": "string | number",
+          "name": "hasError",
+          "type": "boolean",
           "required": false,
           "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
           "isIcon": false
         },
         {
-          "name": "title",
+          "name": "emptyContent",
           "type": "React.ReactNode",
           "required": false,
           "description": "",
           "isIcon": false
         },
         {
-          "name": "extra",
+          "name": "errorContent",
           "type": "React.ReactNode",
+          "required": false,
+          "description": "",
+          "isIcon": false
+        }
+      ]
+    },
+    {
+      "name": "KEditor",
+      "category": "organism",
+      "path": "/src/app/components/design-system/organisms/KEditor/types.ts",
+      "props": [
+        {
+          "name": "initialValue",
+          "type": "string",
           "required": false,
           "description": "",
           "isIcon": false
         },
         {
-          "name": "onClose",
-          "type": "() => void",
+          "name": "placeholder",
+          "type": "string",
           "required": false,
           "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "onChange",
+          "type": "(value: string) => void",
+          "required": false,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "minHeight",
+          "type": "number | string",
+          "required": false,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "maxHeight",
+          "type": "number | string",
+          "required": false,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "readonly",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "toolbarPosition",
+          "type": "'top' | 'bottom'",
+          "required": false,
+          "description": "",
+          "options": [
+            "top",
+            "bottom"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "showToolbar",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
           "isIcon": false
         }
       ]
@@ -7150,6 +7230,281 @@ export const khorMetadata = {
       ]
     },
     {
+      "name": "KFormWizard",
+      "category": "organism",
+      "path": "/src/app/components/design-system/organisms/KFormWizard/index.tsx",
+      "props": [
+        {
+          "name": "steps",
+          "type": "WizardStep[]",
+          "required": true,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "onComplete",
+          "type": "(data: any) => void",
+          "required": false,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "onCancel",
+          "type": "() => void",
+          "required": false,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "isIcon": false
+        }
+      ]
+    },
+    {
+      "name": "KGantt",
+      "category": "organism",
+      "path": "/src/app/components/design-system/organisms/KGantt/index.tsx",
+      "props": [
+        {
+          "name": "tasks",
+          "type": "KGanttTask[]",
+          "required": true,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "startDate",
+          "type": "Date",
+          "required": false,
+          "description": "",
+          "isIcon": false,
+          "defaultValue": "startOfDay(new Date())"
+        },
+        {
+          "name": "endDate",
+          "type": "Date",
+          "required": false,
+          "description": "",
+          "isIcon": false,
+          "defaultValue": "endOfDay(new Date())"
+        },
+        {
+          "name": "initialZoom",
+          "type": "KGanttZoomLevel",
+          "required": false,
+          "description": "",
+          "isIcon": false,
+          "defaultValue": "'hours'"
+        },
+        {
+          "name": "initialInterval",
+          "type": "number",
+          "required": false,
+          "description": "",
+          "isIcon": false,
+          "defaultValue": "15"
+        },
+        {
+          "name": "config",
+          "type": "Partial<KGanttConfig>",
+          "required": false,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "onTaskChange",
+          "type": "(taskId: string, updates: Partial<KGanttTask>) => void",
+          "required": false,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "isIcon": false,
+          "defaultValue": "''"
+        }
+      ]
+    },
+    {
+      "name": "KGanttTask",
+      "category": "organism",
+      "path": "/src/app/components/design-system/organisms/KGantt/types.ts",
+      "props": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "required": true,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "subtitle",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "avatar",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "start",
+          "type": "Date",
+          "required": true,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "end",
+          "type": "Date",
+          "required": true,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "progress",
+          "type": "number",
+          "required": false,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "color",
+          "type": "'primary' | 'secondary' | 'accent' | 'success' | 'error' | 'warning' | 'info' | string",
+          "required": false,
+          "description": "",
+          "options": [
+            "primary",
+            "secondary",
+            "accent",
+            "success",
+            "error",
+            "warning",
+            "info"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "tags",
+          "type": "string[]",
+          "required": false,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "dependencies",
+          "type": "string[]",
+          "required": false,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "dependency",
+          "type": "string",
+          "required": false,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "data",
+          "type": "any",
+          "required": false,
+          "description": "",
+          "isIcon": false
+        }
+      ]
+    },
+    {
+      "name": "KGanttConfig",
+      "category": "organism",
+      "path": "/src/app/components/design-system/organisms/KGantt/types.ts",
+      "props": [
+        {
+          "name": "rowHeight",
+          "type": "number",
+          "required": true,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "sidebarWidth",
+          "type": "number",
+          "required": true,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "intervalMinutes",
+          "type": "number",
+          "required": true,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "showProgress",
+          "type": "boolean",
+          "required": true,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "showDependencies",
+          "type": "boolean",
+          "required": true,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "enableDrag",
+          "type": "boolean",
+          "required": true,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "enableResize",
+          "type": "boolean",
+          "required": true,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        }
+      ]
+    },
+    {
       "name": "KLoginForm",
       "category": "organism",
       "path": "/src/app/components/design-system/organisms/KLoginForm/index.tsx",
@@ -7175,65 +7530,9 @@ export const khorMetadata = {
       ]
     },
     {
-      "name": "KMessageOptions",
-      "category": "organism",
-      "path": "/src/app/components/design-system/organisms/KMessage/index.tsx",
-      "props": [
-        {
-          "name": "type",
-          "type": "KMessageType",
-          "required": false,
-          "description": "",
-          "options": [
-            "success",
-            "error",
-            "warning",
-            "info",
-            "loading"
-          ],
-          "isIcon": false
-        },
-        {
-          "name": "content",
-          "type": "React.ReactNode",
-          "required": true,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "duration",
-          "type": "number",
-          "required": false,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "icon",
-          "type": "React.ReactNode",
-          "required": false,
-          "description": "",
-          "isIcon": true
-        },
-        {
-          "name": "onClose",
-          "type": "() => void",
-          "required": false,
-          "description": "",
-          "isIcon": false
-        },
-        {
-          "name": "className",
-          "type": "string",
-          "required": false,
-          "description": "",
-          "isIcon": false
-        }
-      ]
-    },
-    {
       "name": "KModalConfirm",
       "category": "organism",
-      "path": "/src/app/components/design-system/organisms/KModalConfirm/index.tsx",
+      "path": "/src/app/components/design-system/organisms/KModal/index.tsx",
       "props": [
         {
           "name": "open",
@@ -7389,6 +7688,72 @@ export const khorMetadata = {
         },
         {
           "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        }
+      ]
+    },
+    {
+      "name": "KSheet",
+      "category": "organism",
+      "path": "/src/app/components/design-system/organisms/KSheet/index.tsx",
+      "props": [
+        {
+          "name": "placement",
+          "type": "'top' | 'right' | 'bottom' | 'left'",
+          "required": false,
+          "description": "",
+          "options": [
+            "top",
+            "right",
+            "bottom",
+            "left"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "width",
+          "type": "string | number",
+          "required": false,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "height",
+          "type": "string | number",
+          "required": false,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "title",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "extra",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "onClose",
+          "type": "() => void",
+          "required": false,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "isHovered",
           "type": "boolean",
           "required": false,
           "description": "",
@@ -7691,6 +8056,74 @@ export const khorMetadata = {
           "required": false,
           "description": "",
           "isIcon": false
+        }
+      ]
+    },
+    {
+      "name": "KTreeNode",
+      "category": "organism",
+      "path": "/src/app/components/design-system/organisms/KTree/index.tsx",
+      "props": [
+        {
+          "name": "key",
+          "type": "string | number",
+          "required": true,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "title",
+          "type": "React.ReactNode",
+          "required": true,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "children",
+          "type": "KTreeNode[]",
+          "required": false,
+          "description": "",
+          "isIcon": false
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "selectable",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "checkable",
+          "type": "boolean",
+          "required": false,
+          "description": "",
+          "options": [
+            "true",
+            "false"
+          ],
+          "isIcon": false
+        },
+        {
+          "name": "icon",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": "",
+          "isIcon": true
         }
       ]
     },

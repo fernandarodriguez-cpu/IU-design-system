@@ -20,7 +20,7 @@ import {
   ChevronRight, ChevronsLeft, ChevronsRight, Filter, ChevronRight as ExpandIcon,
   Search, X
 } from 'lucide-react';
-import { cn } from '../../../../../imports/utils';
+import { cn } from '@/utils/cn';
 import { KCheckbox } from '../../atoms/KCheckbox/index';
 import { KSearchInput } from '../../atoms/KSearchInput/index';
 import { KButton } from '../../atoms/KButton';
@@ -35,6 +35,8 @@ import {
 } from '../../molecules/KDropdownMenu/index';
 import { KSelectAdvanced, KSelectAdvancedOption } from '../../molecules/KSelectAdvanced/index';
 import { KPopoverRoot, KPopoverTrigger, KPopoverContent } from '../../molecules/KPopover/index';
+import { KEmptyState } from '../../molecules/KEmptyState/index';
+import { KResult } from '../../molecules/KResult/index';
 
 /* ─── Types ──────────────────────────────────────── */
 export interface KDataTableProps<TData> {
@@ -71,8 +73,34 @@ export interface KDataTableProps<TData> {
   size?: 'small' | 'middle' | 'large';
   onSelectionChange?: (selectedRows: TData[]) => void;
   className?: string;
+  /** Fuerza el estado hover (útil para previews/playgrounds) */
+  isHovered?: boolean;
+  /** Fuerza el estado de foco (útil para previews/playgrounds) */
+  isFocused?: boolean;
+  /** Activa el estado de error de la tabla */
+  hasError?: boolean;
+  /** Contenido personalizado para el estado vacío. Por defecto usa KEmptyState. */
+  emptyContent?: React.ReactNode;
+  /** Contenido personalizado para el estado de error. Por defecto usa KResult. */
+  errorContent?: React.ReactNode;
 }
 
+/**
+ * @figma-mcp-migration
+ * Component: KDataTable
+ * 
+ * INSTRUCCIONES PARA AGENTES DE IA (VS Code / MCP):
+ * Para migrar este componente a Figma, NO generar una matriz multiplicando todas las variables.
+ * Utilizar Figma Component Properties V2 con la siguiente estructura:
+ * 
+ * 1. Variants (Estructurales):
+ *    - Definir variantes puramente visuales/estructurales.
+ * 2. Booleans (Encendido/Apagado):
+ *    - Definir encendido/apagado para iconos o estados (isLoading, hasIcon).
+ * 3. Color Variables (No usar variantes para colores semánticos):
+ *    - El relleno/borde debe usar Figma Variables (Khor v6.0 Colors) asignado dinámicamente.
+ *    - El consumidor del UI Kit cambiará el color del layer.
+ */
 export function KDataTable<TData>({
   data,
   columns,
@@ -95,6 +123,11 @@ export function KDataTable<TData>({
   size = 'middle',
   onSelectionChange,
   className,
+  isHovered,
+  isFocused,
+  hasError = false,
+  emptyContent,
+  errorContent,
 }: KDataTableProps<TData>) {
   
   // ─── Table States ───
@@ -200,7 +233,7 @@ export function KDataTable<TData>({
   const virtualizer = useVirtualizer({
     count: rows.length,
     getScrollElement: () => parentRef.current,
-    estimateSize: () => (size === 'small' ? 40 : size === 'large' ? 64 : 52),
+    estimateSize: () => (size === 'small' ? 32 : size === 'large' ? 60 : 44),
     overscan: 10,
     measureElement: (el) => el?.getBoundingClientRect().height ?? 0,
     enabled: virtual || !!scroll?.y,
@@ -234,7 +267,7 @@ export function KDataTable<TData>({
       {Array.from({ length: pageSize || 5 }).map((_, i) => (
         <tr key={i} className="border-b transition-colors">
           {table.getVisibleLeafColumns().map((col, j) => (
-            <td key={j} className="px-4 py-4">
+            <td key={j} className="px-[var(--khor-density-spacing-md)] py-[var(--khor-density-spacing-sm)]">
               <KSkeleton active height={16} width={j === 0 ? "40%" : "80%"} />
             </td>
           ))}
@@ -324,20 +357,24 @@ export function KDataTable<TData>({
       >
         <table className={cn("w-full border-collapse", scroll?.x ? "min-w-fit" : "min-w-full")}>
           <thead className={cn(
-            "text-khor-neutral-500 font-bold bg-khor-slate-50 shadow-sm z-20 border-b",
-            (stickyHeader || scroll?.y || virtual) ? "sticky top-0" : ""
+            "text-khor-text-secondary font-bold bg-khor-surface-page shadow-sm z-20 border-b transition-colors",
+            (stickyHeader || scroll?.y || virtual) ? "sticky top-0" : "",
+            isFocused && "ring-2 ring-khor-primary ring-inset"
           )}>
             {table.getHeaderGroups().map(hg => (
               <tr key={hg.id}>
                 {hg.headers.map(header => (
                   <th 
                     key={header.id}
-                    className="px-4 py-3 border-b text-left"
+                    scope="col"
+                    className="px-[var(--khor-density-spacing-md)] py-[var(--khor-density-spacing-sm)] border-b text-left transition-colors"
                     style={{ width: header.getSize() }}
                   >
                     <div className="flex items-center justify-between gap-2 group/th">
                       <div 
-                         className={cn("flex items-center gap-1.5 flex-1", header.column.getCanSort() ? "cursor-pointer" : "")}
+                         role={header.column.getCanSort() ? "button" : undefined}
+                         aria-label={header.column.getCanSort() ? `Sort by ${header.id}` : undefined}
+                         className={cn("flex items-center gap-1.5 flex-1", header.column.getCanSort() ? "cursor-pointer hover:text-khor-primary" : "")}
                          onClick={header.column.getToggleSortingHandler()}
                       >
                          {flexRender(header.column.columnDef.header, header.getContext())}
@@ -357,10 +394,32 @@ export function KDataTable<TData>({
           </thead>
 
           <tbody style={{ height: (virtual || !!scroll?.y) ? `${totalHeight}px` : 'auto', position: 'relative' }}>
-            {loading ? (
+            {hasError ? (
+              <tr>
+                <td colSpan={100} className="py-12">
+                  {errorContent || (
+                    <KResult 
+                      status="error" 
+                      title="Error al cargar datos" 
+                      subTitle="Ocurrió un problema al intentar recuperar la información. Por favor, intenta de nuevo."
+                    />
+                  )}
+                </td>
+              </tr>
+            ) : loading ? (
               <TableSkeleton />
             ) : rows.length === 0 ? (
-              <tr><td colSpan={100} className="py-20 text-center text-khor-neutral-400 font-medium">No se encontraron resultados</td></tr>
+              <tr>
+                <td colSpan={100} className="py-12">
+                  {emptyContent || (
+                    <KEmptyState 
+                      title="No hay datos" 
+                      description="No se encontraron resultados para los filtros actuales."
+                      icon={<Search className="w-12 h-12 text-khor-text-tertiary opacity-50" />}
+                    />
+                  )}
+                </td>
+              </tr>
             ) : (virtual || !!scroll?.y) ? (
               // Virtualized Rows
               virtualRows.map(virtualRow => {
@@ -371,8 +430,10 @@ export function KDataTable<TData>({
                     data-index={virtualRow.index}
                     ref={virtualizer.measureElement}
                     className={cn(
-                        "absolute left-0 w-full hover:bg-khor-neutral-50 transition-colors border-b",
-                        row.getIsSelected() ? "bg-khor-primary-light/30" : ""
+                        "absolute left-0 w-full transition-colors border-b",
+                        "hover:bg-khor-surface-hover",
+                        row.getIsSelected() ? "bg-khor-surface-selected" : "",
+                        isHovered && "bg-khor-surface-hover"
                     )}
                     style={{ transform: `translateY(${virtualRow.start}px)` }}
                     onClick={() => onRowClick?.(row.original)}
@@ -382,10 +443,10 @@ export function KDataTable<TData>({
                         {row.getVisibleCells().map(cell => (
                           <div 
                             key={cell.id} 
-                            className="px-4 py-3 whitespace-nowrap overflow-hidden text-ellipsis flex items-center" 
+                            className="px-[var(--khor-density-spacing-md)] py-[var(--khor-density-spacing-sm)] whitespace-nowrap overflow-hidden text-ellipsis flex items-center" 
                             style={{ 
                               width: cell.column.getSize(),
-                              height: size === 'small' ? '40px' : size === 'large' ? '64px' : '52px' 
+                              height: size === 'small' ? 'var(--khor-density-height-sm)' : size === 'large' ? 'var(--khor-density-height-lg)' : 'var(--khor-density-height-md)' 
                             }}
                           >
                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -394,7 +455,7 @@ export function KDataTable<TData>({
                       </div>
                       
                       {row.getIsExpanded() && rowExpansion?.expandedRowRender && (
-                        <div className="p-4 bg-khor-neutral-50/50 border-t w-full">
+                        <div className="p-4 bg-khor-surface-subtle border-t w-full">
                            {rowExpansion.expandedRowRender(row.original)}
                         </div>
                       )}
@@ -408,20 +469,22 @@ export function KDataTable<TData>({
                 <React.Fragment key={row.id}>
                   <tr 
                     className={cn(
-                      "hover:bg-khor-neutral-50 transition-colors border-b",
+                      "transition-colors border-b",
+                      "hover:bg-khor-surface-hover",
                       onRowClick ? "cursor-pointer" : "",
-                      row.getIsSelected() ? "bg-khor-primary-light/30" : ""
+                      row.getIsSelected() ? "bg-khor-surface-selected" : "",
+                      isHovered && "bg-khor-surface-hover"
                     )}
                     onClick={() => onRowClick?.(row.original)}
                   >
                     {row.getVisibleCells().map(cell => (
-                      <td key={cell.id} className="px-4 py-3 align-middle" style={{ width: cell.column.getSize() }}>
+                      <td key={cell.id} className="px-[var(--khor-density-spacing-md)] py-[var(--khor-density-spacing-sm)] align-middle" style={{ width: cell.column.getSize() }}>
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </td>
                     ))}
                   </tr>
                   {row.getIsExpanded() && rowExpansion?.expandedRowRender && (
-                    <tr className="bg-khor-neutral-50/50 border-b">
+                    <tr className="bg-khor-surface-subtle border-b">
                       <td colSpan={100} className="p-6">
                         {rowExpansion.expandedRowRender(row.original)}
                       </td>
@@ -437,14 +500,14 @@ export function KDataTable<TData>({
       {/* PAGINATION */}
       {pagination && !virtual && (
         <div className="flex items-center justify-between p-3 border-t bg-khor-surface-page">
-          <div className="text-xs text-khor-neutral-400 font-medium">
+          <div className="text-xs text-khor-text-tertiary font-medium">
              {table.getFilteredSelectedRowModel().rows.length} de {table.getFilteredRowModel().rows.length} filas seleccionadas
           </div>
           <div className="flex items-center gap-4">
              <div className="flex items-center gap-2">
-                <span className="text-xs text-khor-neutral-400">Filas:</span>
+                <span className="text-xs text-khor-text-tertiary">Filas:</span>
                 <KSelectAdvanced 
-                  className="!min-h-[32px] w-20 text-xs"
+                  className="!min-h-[var(--khor-density-height-sm)] w-20 text-xs"
                   options={pageSizes.map(ps => ({ label: String(ps), value: String(ps) }))}
                   value={String(table.getState().pagination.pageSize)}
                   onChange={val => table.setPageSize(Number(val))}
@@ -452,7 +515,7 @@ export function KDataTable<TData>({
              </div>
              <div className="flex items-center gap-1">
                 <KButton variant="outline" size="sm" shape="circle" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}><ChevronLeft size={16}/></KButton>
-                <div className="px-3 text-xs font-bold text-khor-neutral-600">
+                <div className="px-3 text-xs font-bold text-khor-text-secondary">
                    {table.getState().pagination.pageIndex + 1} / {table.getPageCount()}
                 </div>
                 <KButton variant="outline" size="sm" shape="circle" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}><ChevronRight size={16}/></KButton>

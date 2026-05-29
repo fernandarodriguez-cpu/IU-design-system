@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
-import { cn } from '../../../../../imports/utils';
+import { cn } from '@/utils/cn';
 import { User } from 'lucide-react';
 import { KPopover } from '../../molecules/KPopover';
 
@@ -51,6 +51,10 @@ export interface KAvatarProps {
   children?: React.ReactNode;
   /** onClick handler */
   onClick?: (e: React.MouseEvent) => void;
+  /** Fuerza el estado hover (útil para previews/playgrounds) */
+  isHovered?: boolean;
+  /** Fuerza el estado de foco (útil para previews/playgrounds) */
+  isFocused?: boolean;
 }
 
 const statusColors: Record<string, string> = {
@@ -110,6 +114,22 @@ function useAvatarBreakpoint(size: KAvatarProps['size']) {
  * KAvatar — Avatar circular o cuadrado con imagen, icono, iniciales autoajustables
  * y estado de presencia. Basado en Radix UI Avatar con paridad AntD completa.
  */
+/**
+ * @figma-mcp-migration
+ * Component: KAvatar
+ * 
+ * INSTRUCCIONES PARA AGENTES DE IA (VS Code / MCP):
+ * Para migrar este componente a Figma, NO generar una matriz multiplicando todas las variables.
+ * Utilizar Figma Component Properties V2 con la siguiente estructura:
+ * 
+ * 1. Variants (Estructurales):
+ *    - Definir variantes puramente visuales/estructurales.
+ * 2. Booleans (Encendido/Apagado):
+ *    - Definir encendido/apagado para iconos o estados (isLoading, hasIcon).
+ * 3. Color Variables (No usar variantes para colores semánticos):
+ *    - El relleno/borde debe usar Figma Variables (Khor v6.0 Colors) asignado dinámicamente.
+ *    - El consumidor del UI Kit cambiará el color del layer.
+ */
 export const KAvatar = React.forwardRef<HTMLDivElement, KAvatarProps>(({
   src,
   alt,
@@ -129,6 +149,8 @@ export const KAvatar = React.forwardRef<HTMLDivElement, KAvatarProps>(({
   style,
   children,
   onClick,
+  isHovered,
+  isFocused,
 }, ref) => {
   // Manejo de tamaños responsivos
   const size = useAvatarBreakpoint(rawSize);
@@ -198,6 +220,8 @@ export const KAvatar = React.forwardRef<HTMLDivElement, KAvatarProps>(({
           "relative flex shrink-0 overflow-hidden font-primary font-semibold select-none items-center justify-center transition-all",
           shape === 'circle' ? "rounded-full" : "rounded-[var(--khor-radius-md)]",
           !hasCustomColor && "bg-khor-avatar-bg text-khor-avatar-fg",
+          "ring-offset-background focus:outline-none focus-visible:ring-[var(--khor-focus-ring-width)] focus-visible:ring-[var(--khor-focus-ring-color)] focus-visible:ring-offset-[var(--khor-focus-ring-offset)]",
+          (isHovered || isFocused) && "ring-2 ring-khor-primary ring-offset-2",
         )}
         style={{
           width: pxSize,
@@ -363,7 +387,7 @@ export const KAvatarGroup = ({
           content={
             <div className="flex flex-col gap-2 p-2 max-h-60 overflow-y-auto">
               {surplusList.map((avatar, idx) => (
-                <div key={idx} className="flex items-center gap-3 px-2 py-1 hover:bg-khor-neutral-50 rounded-md">
+                <div key={idx} className="flex items-center gap-3 px-2 py-1 hover:bg-khor-surface-hover rounded-md transition-colors">
                    {avatar}
                    {React.isValidElement<KAvatarProps>(avatar) && (
                      <span className="text-sm font-medium text-khor-text-primary">

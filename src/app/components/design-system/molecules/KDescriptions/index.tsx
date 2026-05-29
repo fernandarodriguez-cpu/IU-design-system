@@ -1,5 +1,5 @@
 import React from 'react';
-import { cn } from '../../../../../imports/utils';
+import { cn } from '@/utils/cn';
 
 export interface KDescriptionItem {
   label: React.ReactNode;
@@ -23,6 +23,22 @@ export interface KDescriptionsProps {
  * KDescriptions — Visualizador de datos clave-valor (Headless v4)
  * Reemplaza AntD Descriptions con un grid nativo altamente personalizable.
  */
+/**
+ * @figma-mcp-migration
+ * Component: KDescriptions
+ * 
+ * INSTRUCCIONES PARA AGENTES DE IA (VS Code / MCP):
+ * Para migrar este componente a Figma, NO generar una matriz multiplicando todas las variables.
+ * Utilizar Figma Component Properties V2 con la siguiente estructura:
+ * 
+ * 1. Variants (Estructurales):
+ *    - Definir variantes puramente visuales/estructurales.
+ * 2. Booleans (Encendido/Apagado):
+ *    - Definir encendido/apagado para iconos o estados (isLoading, hasIcon).
+ * 3. Color Variables (No usar variantes para colores semánticos):
+ *    - El relleno/borde debe usar Figma Variables (Khor v6.0 Colors) asignado dinámicamente.
+ *    - El consumidor del UI Kit cambiará el color del layer.
+ */
 export function KDescriptions({
   title,
   items,
@@ -44,7 +60,7 @@ export function KDescriptions({
   return (
     <div className={cn("w-full font-primary", className)} style={style}>
       {title && (
-        <h4 className="text-lg font-extrabold text-khor-neutral-900 mb-4 tracking-tight border-l-4 border-khor-primary pl-3">
+        <h4 className="text-lg font-extrabold text-khor-neutral-900 mb-4 tracking-tight border-is-4 border-khor-primary ps-3">
           {title}
         </h4>
       )}
@@ -76,7 +92,7 @@ export function KDescriptions({
               <div className={cn(
                 "bg-khor-neutral-50 text-khor-neutral-400 font-bold uppercase tracking-widest shrink-0",
                 layout === 'vertical' ? "text-[10px] border-b border-khor-neutral-100" : "text-xs flex items-center border-r border-khor-neutral-100",
-                layout === 'horizontal' && !bordered && "bg-transparent border-r-0 pr-2",
+                layout === 'horizontal' && !bordered && "bg-transparent border-e-0 pe-2",
                 paddingMap[size]
               )}>
                 {item.label}{colon && layout === 'horizontal' ? ':' : ''}

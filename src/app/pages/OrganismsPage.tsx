@@ -2,12 +2,13 @@
  * OrganismsPage — Documentacion de organismos del sistema Khor
  */
 import React, { useState } from 'react';
-import { toast } from 'sonner';
+
 import { useParams } from 'react-router';
 import { ComponentDoc } from '../components/docs/ComponentDoc';
 import type { PropDef } from '../components/docs/ComponentDoc';
-import { KDataTable } from '../components/design-system/organisms/KDataTable';
+import { KDataTable, KFormWizard, KResizablePanelGroup, KResizablePanel, KResizableHandle } from '../components/design-system/organisms';
 import { KSparklineCell } from '../components/design-system/organisms/KSparklineCell';
+import KSteps from '../components/design-system/molecules/KSteps';
 import { 
   KModal, 
   KModalContent, 
@@ -17,13 +18,13 @@ import {
   KModalFooter 
 } from '../components/design-system/organisms/KModal';
 import { 
-  KDrawer, 
-  KDrawerContent, 
-  KDrawerHeader, 
-  KDrawerTitle, 
-  KDrawerDescription, 
-  KDrawerFooter 
-} from '../components/design-system/organisms/KDrawer';
+  KSheet, 
+  KSheetContent, 
+  KSheetHeader, 
+  KSheetTitle, 
+  KSheetDescription, 
+  KSheetFooter 
+} from '../components/design-system/organisms/KSheet';
 import { KCardSection } from '../components/design-system/organisms/KCardSection';
 import { 
   KTabs, 
@@ -37,14 +38,14 @@ import type { KUploadFile } from '../components/design-system/organisms/KUpload'
 import { KTree } from '../components/design-system/organisms/KTree';
 import type { KTreeNode } from '../components/design-system/organisms/KTree';
 import { KTour } from '../components/design-system/organisms/KTour';
-import { KModalConfirm } from '../components/design-system/organisms/KModalConfirm';
+import { KModalConfirm } from '../components/design-system/organisms/KModal';
 import { KFormList } from '../components/design-system/organisms/KFormList';
 import type { KFormListField } from '../components/design-system/organisms/KFormList';
 import { KCarousel } from '../components/design-system/organisms/KCarousel';
 import { KCalendar } from '../components/design-system/organisms/KCalendar';
 import { KForm } from '../components/design-system/organisms/KForm';
-import { kNotification } from '../components/design-system/organisms/KNotification';
-import { kMessage } from '../components/design-system/organisms/KMessage';
+
+
 import { KPagination } from '../components/design-system/organisms/KPagination';
 import { KLoginForm } from '../components/design-system/organisms/KLoginForm';
 import { KCommandBar } from '../components/design-system/organisms/KCommandBar';
@@ -57,7 +58,7 @@ import { KFormField } from '../components/design-system/molecules/KFormField';
 import {
   Download, Filter, Plus, RefreshCw, CheckCircle,
   AlertTriangle, XCircle, Info, BarChart3, Users, FileText,
-  Settings, Eye,
+  Settings, Eye, MoreHorizontal,
 } from 'lucide-react';
 import { khorTokens } from '../theme/khor-theme';
 import { KCommandBarPreview } from '../components/design-system/command-bar';
@@ -65,7 +66,7 @@ import {
   Trash2, FolderOpen, Folder, File,
   ChevronRight as ExpandIcon
 } from 'lucide-react';
-import { cn } from '../../imports/utils';
+import { cn } from '@/utils/cn';
 
 /* ─── Mock Data ─────────────────────────────── */
 const mockEmployees = [
@@ -249,11 +250,11 @@ function DrawerDemo() {
   return (
     <>
       <KButton variant="primary" onClick={() => setOpen(true)}>Abrir Drawer</KButton>
-      <KDrawer open={open} onOpenChange={setOpen}>
-        <KDrawerContent>
-          <KDrawerHeader>
-            <KDrawerTitle>Detalle de Empleado</KDrawerTitle>
-          </KDrawerHeader>
+      <KSheet open={open} onOpenChange={setOpen}>
+        <KSheetContent>
+          <KSheetHeader>
+            <KSheetTitle>Detalle de Empleado</KSheetTitle>
+          </KSheetHeader>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16, padding: '24px 0' }}>
             <KFormField label="Nombre">
               <KInput defaultValue="Maria Garcia" />
@@ -265,12 +266,12 @@ function DrawerDemo() {
               <KInput defaultValue="maria@khor.com" />
             </KFormField>
           </div>
-          <KDrawerFooter>
+          <KSheetFooter>
             <KButton variant="secondary" onClick={() => setOpen(false)}>Cerrar</KButton>
             <KButton variant="primary" onClick={() => setOpen(false)}>Guardar</KButton>
-          </KDrawerFooter>
-        </KDrawerContent>
-      </KDrawer>
+          </KSheetFooter>
+        </KSheetContent>
+      </KSheet>
     </>
   );
 }
@@ -415,22 +416,22 @@ function DrawerPlayground() {
           <p style={{ margin: '4px 0 0', fontSize: 12, color: khorTokens.colors.neutral[300] }}>Título: {title}</p>
         </div>
       </div>
-      <KDrawer open={open} onOpenChange={setOpen}>
-        <KDrawerContent>
-          <KDrawerHeader>
-            <KDrawerTitle>{title}</KDrawerTitle>
-            <KDrawerDescription>Panel lateral expansible para detalles y edición.</KDrawerDescription>
-          </KDrawerHeader>
+      <KSheet open={open} onOpenChange={setOpen}>
+        <KSheetContent>
+          <KSheetHeader>
+            <KSheetTitle>{title}</KSheetTitle>
+            <KSheetDescription>Panel lateral expansible para detalles y edición.</KSheetDescription>
+          </KSheetHeader>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16, padding: '24px 0' }}>
             <KFormField label="Nombre"><KInput defaultValue="Maria Garcia" /></KFormField>
             <KFormField label="Departamento"><KInput defaultValue="Recursos Humanos" /></KFormField>
             <KFormField label="Email"><KInput defaultValue="maria@khor.com" /></KFormField>
           </div>
-          <KDrawerFooter>
+          <KSheetFooter>
             <KButton variant="secondary" onClick={() => setOpen(false)}>Cerrar</KButton>
-          </KDrawerFooter>
-        </KDrawerContent>
-      </KDrawer>
+          </KSheetFooter>
+        </KSheetContent>
+      </KSheet>
     </div>
   );
 }
@@ -487,65 +488,7 @@ function ToastPlayground() {
   );
 }
 
-function NotificationPlayground() {
-  const [type, setType] = useState<'success' | 'error' | 'warning' | 'info'>('success');
-  const [msg, setMsg] = useState('Título de la Notificación');
-  const [desc, setDesc] = useState('Descripción detallada del evento del sistema.');
-  const [opacity, setOpacity] = useState(0.95);
-  const [duration, setDuration] = useState(5000);
-  
-  const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
-  const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%', backgroundColor: 'white' };
 
-  return (
-    <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
-      <div style={{ flex: 1, minWidth: 260 }}>
-        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Parámetros de Sistema</h4>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <div>
-            <label style={ctrl}>Tipo de Estado</label>
-            <select value={type} onChange={(e) => setType(e.target.value as any)} style={sel}>
-              <option value="success">Success (Urgencia Baja)</option>
-              <option value="error">Error (Urgencia Alta)</option>
-              <option value="warning">Warning (Prevención)</option>
-              <option value="info">Info (Noticia)</option>
-            </select>
-          </div>
-          <div><label style={ctrl}>Cuerpo (Message)</label><input value={msg} onChange={(e) => setMsg(e.target.value)} style={sel} /></div>
-          <div><label style={ctrl}>Detalle (Description)</label><textarea value={desc} onChange={(e) => setDesc(e.target.value)} style={{ ...sel, minHeight: 60, resize: 'vertical' }} /></div>
-          
-          <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <label style={ctrl}>Opacidad (Apilamiento)</label>
-              <span style={{ fontSize: 11, fontWeight: 700, color: khorTokens.colors.brand.primary }}>{(opacity * 100).toFixed(0)}%</span>
-            </div>
-            <input 
-              type="range" 
-              min="0.5" 
-              max="1" 
-              step="0.01" 
-              value={opacity} 
-              onChange={(e) => setOpacity(parseFloat(e.target.value))} 
-              style={{ width: '100%', accentColor: khorTokens.colors.brand.primary }}
-            />
-          </div>
-
-          <KButton variant="primary" onClick={() => kNotification({ type, message: msg, description: desc, opacity, duration })}>
-            Disparar Notificación
-          </KButton>
-          <p style={{ fontSize: 11, color: khorTokens.colors.neutral[400], marginTop: 4 }}>
-            * Dispara varias para probar el efecto de transparencia al apilar.
-          </p>
-        </div>
-      </div>
-      <div style={{ flex: 2, minWidth: 300, padding: 24, backgroundColor: khorTokens.colors.neutral[50], border: `1px dashed ${khorTokens.colors.neutral[200]}`, borderRadius: khorTokens.radius.lg, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-         <div style={{ textAlign: 'center', color: khorTokens.colors.neutral[400] }}>
-            <p>Las notificaciones aparecen en el portal global configurado (top-right).</p>
-         </div>
-      </div>
-    </div>
-  );
-}
 
 function TabsPlayground() {
   const [activeTab, setActiveTab] = useState('1');
@@ -622,7 +565,165 @@ function CardSectionPlayground() {
   );
 }
 
+function FormWizardPlayground() {
+  const steps = [
+    {
+      id: 'profile',
+      title: 'Perfil de Usuario',
+      description: 'Configura la información básica de tu cuenta.',
+      content: (
+        <div className="flex flex-col gap-4">
+          <KFormField label="Nombre Completo" placeholder="Ej. Juan Perez" />
+          <KFormField label="Correo Electrónico" placeholder="juan@khor.com" />
+        </div>
+      )
+    },
+    {
+      id: 'settings',
+      title: 'Preferencias',
+      description: 'Define cómo quieres interactuar con la plataforma.',
+      content: (
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center justify-between p-4 bg-khor-neutral-50 rounded-lg">
+            <div>
+              <KText variant="bodyMd" className="font-bold">Notificaciones Push</KText>
+              <KText variant="small" className="text-khor-text-secondary">Recibe alertas en tiempo real.</KText>
+            </div>
+            <KSwitch />
+          </div>
+          <div className="flex items-center justify-between p-4 bg-khor-neutral-50 rounded-lg">
+            <div>
+              <KText variant="bodyMd" className="font-bold">Modo Desarrollador</KText>
+              <KText variant="small" className="text-khor-text-secondary">Acceso a herramientas avanzadas.</KText>
+            </div>
+            <KSwitch />
+          </div>
+        </div>
+      )
+    },
+    {
+      id: 'review',
+      title: 'Revisión y Envío',
+      description: 'Confirma que los datos sean correctos.',
+      content: (
+        <div className="p-6 bg-khor-primary/5 rounded-xl border border-khor-primary/20 text-center">
+          <CheckCircle className="mx-auto mb-3 text-khor-primary" size={40} />
+          <KText variant="h4">¡Todo listo para comenzar!</KText>
+          <KText variant="small" className="text-khor-text-secondary mt-2">
+            Al hacer clic en finalizar, tu perfil será actualizado con las nuevas preferencias.
+          </KText>
+        </div>
+      )
+    }
+  ];
+
+  return (
+    <div className="max-w-3xl mx-auto">
+      <KFormWizard 
+        steps={steps} 
+        onComplete={() => alert('¡Proceso completado!')}
+        onCancel={() => alert('Cancelado')}
+      />
+    </div>
+  );
+}
+
 export const organisms: Record<string, OrganismEntry> = {
+  'form-wizard': {
+    id: 'form-wizard',
+    name: 'KFormWizard',
+    description: 'Orquestador de formularios multi-paso. Ideal para procesos de onboarding, configuraciones complejas o checkouts.',
+    preview: (
+      <div className="p-4 border border-khor-border-default rounded-lg scale-75 origin-top">
+        <KSteps current={1} items={[{ title: 'Paso 1' }, { title: 'Paso 2' }, { title: 'Paso 3' }]} />
+      </div>
+    ),
+    playground: <FormWizardPlayground />,
+    a11ySummary: {
+      keyboard: [
+        'Tab: Navega entre los controles del wizard.',
+        'Enter/Space: Activa los botones de navegación.',
+      ],
+      aria: [
+        'Uso de KSteps con estados de progreso ARIA.',
+        'Regiones de contenido con anuncios de carga.',
+      ],
+      contrast: 'AAA certificado.',
+      score: 100,
+    },
+    code: `import { KFormWizard } from '@khor/design-system/organisms';
+
+const steps = [
+  { id: '1', title: 'Cuenta', content: <AccountForm /> },
+  { id: '2', title: 'Plan', content: <PlanSelector /> },
+];
+
+<KFormWizard steps={steps} onComplete={handleFinish} />`,
+    filename: 'KFormWizard.tsx',
+    props: [
+      { name: 'steps', type: 'WizardStep[]', required: true, description: 'Colección de pasos del flujo.' },
+      { name: 'onComplete', type: 'function', description: 'Callback al finalizar el último paso.' },
+      { name: 'onCancel', type: 'function', description: 'Callback al cancelar el flujo.' },
+    ],
+  },
+  'resizable': {
+    id: 'resizable',
+    name: 'KResizable',
+    description: 'Componente contenedor de paneles redimensionables. Permite crear layouts flexibles para dashboards e interfaces divididas.',
+    preview: (
+      <div className="border border-khor-border-default rounded-xl overflow-hidden h-32 scale-90 origin-top">
+        <KResizablePanelGroup direction="horizontal">
+          <KResizablePanel defaultSize={30} className="bg-khor-neutral-50 flex items-center justify-center p-4">
+            <span className="text-xs font-semibold text-khor-text-tertiary">Sidebar</span>
+          </KResizablePanel>
+          <KResizableHandle withHandle />
+          <KResizablePanel className="flex items-center justify-center p-4">
+            <span className="text-xs font-semibold text-khor-text-tertiary">Main Content</span>
+          </KResizablePanel>
+        </KResizablePanelGroup>
+      </div>
+    ),
+    playground: (
+      <div className="border border-khor-border-default rounded-2xl overflow-hidden h-64">
+        <KResizablePanelGroup direction="horizontal">
+          <KResizablePanel defaultSize={25} className="bg-khor-neutral-50 flex items-center justify-center p-4">
+            <span className="text-xs font-semibold text-khor-text-tertiary">Panel A (25%)</span>
+          </KResizablePanel>
+          <KResizableHandle withHandle />
+          <KResizablePanel defaultSize={50} className="flex items-center justify-center p-4">
+            <span className="text-xs font-semibold text-khor-text-tertiary">Panel Central (50%)</span>
+          </KResizablePanel>
+          <KResizableHandle withHandle />
+          <KResizablePanel defaultSize={25} className="bg-khor-neutral-50 flex items-center justify-center p-4">
+            <span className="text-xs font-semibold text-khor-text-tertiary">Panel B (25%)</span>
+          </KResizablePanel>
+        </KResizablePanelGroup>
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: [
+        'Flechas: Permiten mover el handle de redimensionamiento.',
+        'Tab: Enfoca los handles disponibles.',
+      ],
+      aria: [
+        'Uso de roles y atributos estándar de resizable-panels.',
+      ],
+      contrast: 'AAA certificado.',
+      score: 100,
+    },
+    code: `import { KResizablePanelGroup, KResizablePanel, KResizableHandle } from '@khor/design-system/organisms';
+
+<KResizablePanelGroup direction="horizontal">
+  <KResizablePanel defaultSize={20}>Sidebar</KResizablePanel>
+  <KResizableHandle withHandle />
+  <KResizablePanel defaultSize={80}>Content</KResizablePanel>
+</KResizablePanelGroup>`,
+    filename: 'KResizable.tsx',
+    props: [
+      { name: 'direction', type: "'horizontal' | 'vertical'", required: true, description: 'Dirección del redimensionamiento.' },
+      { name: 'withHandle', type: 'boolean', description: 'Muestra un tirador visual (grip) en el handle.' },
+    ],
+  },
   'data-table': {
     id: 'data-table',
     name: 'KDataTable',
@@ -821,7 +922,7 @@ const [open, setOpen] = useState(false);
   },
   drawer: {
     id: 'drawer',
-    name: 'KDrawer',
+    name: 'KSheet',
     description: 'Panel lateral deslizable para detalles, formularios o inspectores. Aparece desde el lado derecho por defecto.',
     preview: <DrawerDemo />,
     playground: <DrawerPlayground />,
@@ -836,9 +937,9 @@ const [open, setOpen] = useState(false);
       contrast: 'AAA sobre el panel lateral descolorando el contenido principal.',
       score: 100,
     },
-    code: `import { KDrawer } from '@khor/design-system/organisms/index';
+    code: `import { KSheet } from '@khor/design-system/organisms/index';
 
-<KDrawer
+<KSheet
   open={open}
   onClose={() => setOpen(false)}
   title="Detalle de Empleado"
@@ -848,8 +949,8 @@ const [open, setOpen] = useState(false);
   <KFormField label="Nombre">
     <KInput value={name} onChange={...} />
   </KFormField>
-</KDrawer>`,
-    filename: 'KDrawer.tsx',
+</KSheet>`,
+    filename: 'KSheet.tsx',
     props: [
       { name: 'open', type: 'boolean', required: true, description: 'Controla la visibilidad.' },
       { name: 'onClose', type: '() => void', required: true, description: 'Callback al cerrar.' },
@@ -1409,83 +1510,7 @@ const methods = KForm.useForm({ defaultValues: { username: '' } });
     ],
     guidelines: ['Usa KForm.Item para envolver cada campo.', 'Define rules en KForm.Field para validación automática.'],
   },
-  notification: {
-    id: 'notification',
-    name: 'KNotification',
-    description: 'Notificaciones emergentes imperativas que aparecen en las esquinas de la pantalla. Ideales para avisos de larga duración o que requieren más contexto.',
-    preview: (
-      <div style={{ display: 'flex', gap: 12, flexWrap: 'nowrap' }}>
-        <KButton variant="primary" icon={<CheckCircle size={16} />} onClick={() => kNotification.success({ message: 'Proceso completado', description: 'Los cambios se han guardado correctamente.' })}>Success</KButton>
-        <KButton variant="danger" icon={<XCircle size={16} />} onClick={() => kNotification.error({ message: 'Error de red', description: 'No se pudo conectar con el servidor.' })}>Error</KButton>
-        <KButton variant="secondary" icon={<AlertTriangle size={16} />} onClick={() => kNotification.warning({ message: 'Alerta de Seguridad', description: 'Se ha detectado un acceso inusual.' })}>Warning</KButton>
-      </div>
-    ),
-    playground: <NotificationPlayground />,
-    code: `import { kNotification } from '@khor/design-system/organisms/index';
 
-kNotification.success({
-  message: 'Certificación Guardada',
-  description: 'El documento ha sido procesado y archivado.',
-  opacity: 0.95, // Control de transparencia opcional
-});`,
-    filename: 'KNotification.tsx',
-    stateShowcase: (
-      <div style={{ padding: 16 }}>
-        <KText color="secondary">KNotification es de acción global (Sistema) y soporta niveles de opacidad para mejorar el apilamiento visual.</KText>
-      </div>
-    ),
-    a11ySummary: {
-      keyboard: ['Las notificaciones no atrapan el foco a menos que contengan acciones explícitas.'],
-      aria: ['Role "alert" o "status" inyectado dinámicamente en el DOM.'],
-      contrast: 'AAA sobre la superficie modal del sistema.',
-      score: 100,
-    },
-    props: [
-      { name: 'message', type: 'ReactNode', required: true, description: 'Cuerpo principal (título) del aviso.' },
-      { name: 'description', type: 'ReactNode', description: 'Contenido adicional detallado.' },
-      { name: 'type', type: "'success'|'error'|'warning'|'info'", default: "'info'", description: 'Tipo semántico del estado.' },
-      { name: 'opacity', type: 'number', default: '0.95', description: 'Nivel de opacidad (0 a 1) para el efecto de apilamiento.' },
-      { name: 'duration', type: 'number', default: '5000', description: 'Milisegundos antes de cerrar.' },
-    ],
-    guidelines: ['Usa para avisos que no deben desaparecer tan pronto como un Toast.', 'Soporta iconos y estilos semánticos.'],
-  },
-  message: {
-    id: 'message',
-    name: 'KMessage',
-    description: 'Mensajes de feedback globales que aparecen centrados en la parte superior. Muy ligeros y automáticos.',
-    preview: (
-      <div style={{ display: 'flex', gap: 12 }}>
-        <KButton onClick={() => kMessage.success('Enlace copiado')}>Success</KButton>
-        <KButton onClick={() => {
-          const id = kMessage.loading('Actualizando registro...');
-          setTimeout(() => toast.dismiss(id), 2000);
-        }}>Loading</KButton>
-      </div>
-    ),
-    code: `import { kMessage } from '@khor/design-system/organisms/index';
-
-kMessage.success('Acción completada');
-kMessage.warning('El archivo es demasiado grande');
-const hide = kMessage.loading('Subiendo...', 0);
-// hide() cierra el mensaje`,
-    filename: 'KMessage.tsx',
-    stateShowcase: (
-      <div style={{ padding: 16 }}>
-        <KText color="secondary">Mensajes en overlay superior automáticos y ligeros.</KText>
-      </div>
-    ),
-    a11ySummary: {
-      keyboard: ['Interacción pasiva: No interrumpe la navegación del teclado.'],
-      aria: ['Aria-live polite para mensajes informativos comunes.'],
-      contrast: 'AAA sobre el fondo centrado.',
-      score: 100,
-    },
-    props: [
-      { name: 'content', type: 'ReactNode', required: true, description: 'Contenido del mensaje.' },
-      { name: 'duration', type: 'number', default: '3', description: 'Segundos antes de cerrar.' },
-    ],
-    guidelines: ['Usa para feedbacks inmediatos y breves (copiar, descargar, guardar).'],
-  },
   pagination: {
     id: 'pagination',
     name: 'KPagination',
