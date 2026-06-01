@@ -920,8 +920,8 @@ const [open, setOpen] = useState(false);
     ],
     guidelines: ['Usa para confirmaciones y formularios cortos.', 'Footer siempre con Cancelar (secondary) + Accion (primary).'],
   },
-  drawer: {
-    id: 'drawer',
+  sheet: {
+    id: 'sheet',
     name: 'KSheet',
     description: 'Panel lateral deslizable para detalles, formularios o inspectores. Aparece desde el lado derecho por defecto.',
     preview: <DrawerDemo />,

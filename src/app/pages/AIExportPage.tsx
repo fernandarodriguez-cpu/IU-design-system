@@ -97,9 +97,9 @@ Como IA, DEBES elegir componentes basados en la **Intención Semántica** del fl
 
 ### 🔠 Fluid Typography (Responsive by Design)
 Khor v5.0 usa tipografía fluida basada en \`clamp()\`. NO sobrescribas tamaños de fuente con media queries. Usa los tokens semánticos:
-- \`display-2xl\`, \`display-xl\`: Para títulos de gran impacto (Fluid 48px -> 72px).
-- \`heading-lg\` a \`heading-xs\`: Para jerarquía de contenido (Fluid 24px -> 48px).
-- \`body-xl\`, \`body-lg\`, \`body-md\`, \`body-sm\`: Para lectura estandarizada.
+- \`--khor-type-display-2xl\`, \`--khor-type-display-xl\`: Para títulos de gran impacto (Fluid 48px -> 72px).
+- \`--khor-type-heading-lg\` a \`--khor-type-heading-xs\`: Para jerarquía de contenido (Fluid 24px -> 48px).
+- \`--khor-type-body-xl\`, \`--khor-type-body-lg\`, \`--khor-type-body-md\`, \`--khor-type-body-sm\`: Para lectura estandarizada.
 `);
   }
 
@@ -111,6 +111,12 @@ La IA DEBE usar estos valores exactos:
 
 \`\`\`css
 :root {
+  /* Layer 1: Primitives - Radios Base */
+  --khor-radius-sm: 4px;
+  --khor-radius-md: 6px;
+  --khor-radius-lg: 8px;
+  --khor-radius-xl: 12px;
+
   /* Elite Charts Palette (12 Colores) */
   --khor-chart-primary: ${theme.primary};   --khor-chart-secondary: ${theme.secondary};
   --khor-chart-accent: ${theme.accent};    --khor-chart-success: ${theme.success};
@@ -169,11 +175,12 @@ La IA DEBE usar estos valores exactos:
   --khor-shadow-2xl: 0 25px 50px -12px rgba(5,23,88,0.25);
   --khor-shadow-inner: inset 0 2px 4px 0 rgba(0,0,0,0.06);
 
-  /* Layout Grid System (12 Columns) */
-  --khor-grid-sm: cols: 12, gutter: 16px, margin: 16px;
-  --khor-grid-md: cols: 12, gutter: 24px, margin: 24px;
-  --khor-grid-lg: cols: 12, gutter: 32px, margin: 32px;
-  --khor-grid-xl: cols: 12, gutter: 32px, margin: 40px;
+  /* Layout Grid System (Corregido a Sintaxis CSS Estándar) */
+  --khor-grid-cols: 12;
+  --khor-grid-gutter-sm: 16px; --khor-grid-margin-sm: 16px;
+  --khor-grid-gutter-md: 24px; --khor-grid-margin-md: 24px;
+  --khor-grid-gutter-lg: 32px; --khor-grid-margin-lg: 32px;
+  --khor-grid-gutter-xl: 32px; --khor-grid-margin-xl: 40px;
 
   /* Semantic Spacing Tokens (Aliases) */
   --khor-space-layout-xs: 16px; --khor-space-layout-sm: 24px;
@@ -182,7 +189,7 @@ La IA DEBE usar estos valores exactos:
   --khor-space-component-xs: 4px; --khor-space-component-sm: 8px;
   --khor-space-component-md: 12px; --khor-space-component-lg: 16px;
 
-  /* 💎 Layer 3: Component Specific Tokens (Elite Precision) */
+  /* 💎 Layer 3: Component Specific Tokens (Corregido de Huérfanos) */
   --khor-button-primary-bg:        var(--khor-action-primary-default);
   --khor-button-primary-text:      var(--khor-text-on-action);
   --khor-button-primary-shadow:    0 2px 4px rgba(224, 77, 54, 0.2);
@@ -191,13 +198,13 @@ La IA DEBE usar estos valores exactos:
   --khor-input-bg:                 var(--khor-surface-card);
   --khor-input-border:             var(--khor-border-default);
   --khor-input-focus-border:       var(--khor-border-focus);
-  --khor-input-focus-ring:         var(--khor-primary);
+  --khor-input-focus-ring:         var(--khor-form-focus-ring);
   --khor-card-bg:                  var(--khor-surface-card);
-  --khor-card-shadow:              var(--khor-elevation-2);
+  --khor-card-shadow:              var(--khor-shadow-md);
   --khor-card-radius:              var(--khor-radius-lg);
 
-  /* Layer 3: Contextual Tokens — Secciones Invertidas (Layout Core) */
-  --khor-context-sidebar-bg:        var(--khor-secondary);
+  /* Layer 3: Contextual Tokens — Secciones Invertidas (Corregido de Huérfanos) */
+  --khor-context-sidebar-bg:        var(--khor-chart-secondary);
   --khor-context-sidebar-text:      var(--khor-neutral-50);
   --khor-context-sidebar-text-muted:rgba(255, 255, 255, 0.55);
   --khor-context-sidebar-border:    rgba(255, 255, 255, 0.08);

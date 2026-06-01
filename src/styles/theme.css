@@ -141,6 +141,7 @@
   --khor-focus-ring-color:  var(--khor-primary);
 
   /* ── Layout Grid Anatomy (Adaptive Math) ── */
+  --khor-grid-cols: 12;
   /* sm: Mobile (0-767px) */
   --khor-layout-grid-margin-sm: 16px;
   --khor-layout-grid-gutter-sm: 16px;
@@ -620,13 +621,13 @@
   --khor-input-border:             var(--khor-border-default);
   --khor-input-placeholder:        var(--khor-text-muted);
   --khor-input-focus-border:       var(--khor-border-focus);
-  --khor-input-focus-ring:         var(--khor-primary);
+  --khor-input-focus-ring:         var(--khor-form-focus-ring);
   --khor-input-radius:             var(--khor-radius-md);
 
   /* ── Component Layer 3: KCard Elite ── */
   --khor-card-bg:                  var(--khor-surface-card);
   --khor-card-border:              var(--khor-border-default);
-  --khor-card-shadow:              var(--khor-elevation-2);
+  --khor-card-shadow:              var(--khor-shadow-md);
   --khor-card-radius:              var(--khor-radius-lg);
 
   /* ── Fluid Typography — Khor v5.0 (W3C Standard) ── */
@@ -1051,6 +1052,9 @@
   --spacing-khor-density-sm: var(--khor-density-spacing-sm);
   --spacing-khor-density-md: var(--khor-density-spacing-md);
   --spacing-khor-density-lg: var(--khor-density-spacing-lg);
+
+  /* Grid Utilities */
+  --grid-template-columns-khor: repeat(var(--khor-grid-cols), minmax(0, 1fr));
 }
 
 /* ── Density Contexts ── */
