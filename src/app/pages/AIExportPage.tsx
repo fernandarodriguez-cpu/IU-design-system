@@ -26,7 +26,7 @@ import { khorTokens } from '../theme/khor-theme';
 const t = khorTokens;
 
 /* ─── Version (must match ChangelogPage & AppShell) ─── */
-export const KHOR_VERSION = '5.1.6-alpha';
+export const KHOR_VERSION = '6.0.0-beta';
 
 
 /* ─── Sections config ───────────────────────── */
@@ -66,7 +66,7 @@ Este documento es la única fuente de verdad para el desarrollo en el ecosistema
 ## 🤖 Instrucciones Críticas para la IA (System Prompt)
 
 Como IA, DEBES seguir estas reglas estrictamente al generar código:
-1. **Identidad Visual:** NUNCA importes ni uses componentes directamente desde \`antd\`, \`@ant-design/*\`, Material UI o similares. Usa exclusivamente los componentes del sistema (prefijo \`K\`).
+1. **Identidad Visual y Core Engine:** Khor usa **Radix UI** para comportamiento/accesibilidad y **Tailwind CSS + CSS Variables** para la estética, emulando al 100% la API de Ant Design v5. **NUNCA importes ni instales componentes de \`antd\`, \`@ant-design/*\`, Material UI o similares**. Usa exclusivamente los componentes del sistema (prefijo \`K\`).
 2. **Uso de Tokens (Prohibido Hardcode):** NUNCA uses colores hexadecimales. Usa SIEMPRE los Design Tokens (\`khorTokens\`) o CSS Variables (\`var(--khor-*)\`).
 3. **Componentes Khor:** Ejemplo: \`KButton\`, \`KIcon\`, \`KCardSection\`.
 4. **Iconografía:** Usa únicamente el componente \`KIcon\` (wrapper de Lucide). NO importes iconos directamente de lucide-react si existe \`KIcon\`.
@@ -129,7 +129,7 @@ La IA DEBE usar estos valores exactos:
   --khor-neutral-50: #f8faff;   --khor-neutral-100: #edf0f1;
   --khor-neutral-200: #d5dbe0;  --khor-neutral-300: #a0aec0;
   --khor-neutral-400: #718096;  --khor-neutral-500: #4a5568;
-  --khor-neutral-600: #5A6475;  --khor-neutral-700: #3D4552;
+  --khor-neutral-600: #3E4856;  --khor-neutral-700: #3D4552;
   --khor-neutral-800: #252C38;  --khor-neutral-900: #000000;
 
   /* Form Validation Semantic States */
@@ -159,13 +159,18 @@ La IA DEBE usar estos valores exactos:
   /* Semantic Layer 2: Typography */
   --khor-text-primary: ${theme.secondary}; --khor-text-secondary: #475a8f;
   --khor-text-muted: #94a9d8; --khor-text-disabled: #A0AEC0; --khor-text-on-action: #ffffff;
+  --khor-line-height-dynamic: 1.6;
 
   /* Motion Tokens (Elite Precision) */
-  --khor-duration-instant: 80ms; --khor-duration-fast: 100ms;
-  --khor-duration-normal: 200ms; --khor-duration-slow: 400ms;
+  --khor-duration-instant: 50ms; --khor-duration-fast: 150ms;
+  --khor-duration-normal: 250ms; --khor-duration-slow: 450ms;
   --khor-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
   --khor-easing-enter: cubic-bezier(0, 0, 0.2, 1);
   --khor-easing-exit: cubic-bezier(0.4, 0, 1, 1);
+  --khor-transition-fade: opacity var(--khor-duration-normal) var(--khor-easing-standard);
+  --khor-transition-scale: transform var(--khor-duration-normal) var(--khor-easing-standard);
+  --khor-transition-slide: transform var(--khor-duration-normal) var(--khor-easing-standard);
+  --khor-transition-color: color var(--khor-duration-normal) var(--khor-easing-standard), background-color var(--khor-duration-normal) var(--khor-easing-standard), border-color var(--khor-duration-normal) var(--khor-easing-standard);
 
   /* Elevation & Shadows (Multi-Layer Strategy) */
   --khor-shadow-sm: 0 1px 2px rgba(5,23,88,0.04), 0 1px 1px rgba(0,0,0,0.02);
@@ -174,6 +179,12 @@ La IA DEBE usar estos valores exactos:
   --khor-shadow-xl: 0 20px 25px -5px rgba(5,23,88,0.12), 0 10px 10px -5px rgba(0,0,0,0.04);
   --khor-shadow-2xl: 0 25px 50px -12px rgba(5,23,88,0.25);
   --khor-shadow-inner: inset 0 2px 4px 0 rgba(0,0,0,0.06);
+  --khor-elevation-0: none;
+  --khor-elevation-1: var(--khor-shadow-sm);
+  --khor-elevation-2: var(--khor-shadow-md);
+  --khor-elevation-3: var(--khor-shadow-lg);
+  --khor-elevation-4: var(--khor-shadow-xl);
+  --khor-elevation-5: var(--khor-shadow-2xl);
 
   /* Layout Grid System (Corregido a Sintaxis CSS Estándar) */
   --khor-grid-cols: 12;
@@ -213,7 +224,19 @@ La IA DEBE usar estos valores exactos:
   --khor-context-header-bg:         var(--khor-surface-card);
   --khor-context-header-border:     var(--khor-border-default);
   --khor-context-header-text:       var(--khor-text-primary);
+
+  /* Chart Array Mapping (AI-Fallback Compatibility) */
+  --khor-chart-1: var(--khor-chart-primary);
+  --khor-chart-2: var(--khor-chart-secondary);
+  --khor-chart-3: var(--khor-chart-accent);
+  --khor-chart-4: var(--khor-chart-success);
 }
+\`\`\`
+
+### 🧩 khorTokens (Objeto JS Estricto)
+Como referencia estructural, aquí tienes la definición de \`khorTokens\`. Úsala para referenciar variables en inline styles si Tailwind no es posible:
+\`\`\`json
+\${JSON.stringify(khorTokens, null, 2)}
 \`\`\`
 
 ### 🌑 Dual-Theme Semantic Mapping (Dark Mode Strategy)
@@ -228,7 +251,6 @@ La IA debe invertir los valores semánticos siguiendo este mapeo de "Inversión 
 | \`--khor-border-default\` | \`#D5DBE0\` | \`#2E3148\` | Separadores sutiles |
 | \`--khor-surface-hover\` | \`rgba(5,23,88,0.04)\` | \`rgba(255,255,255,0.05)\` | Feedback interactivo |
 
-}
 \`\`\`
 
 ### ♿ Accesibilidad Global: Reduced Motion
@@ -315,8 +337,6 @@ Para asegurar la estabilidad en la era de la IA, Khor sigue un contrato estricto
 
 4. **Contrato para Agentes de IA:**
    Cuando la IA detecta que falta un patrón o componente, NO DEBE inventar estilos. Debe proponer una extensión del sistema basada en los **Design Tokens de Capa 1 y 2** existentes para mantener la coherencia del ADN visual.
-
-| **Border** | \`border-error\` | Bordes de validación fallida |
 
 ### ♿ Tabla de Contraste WCAG 2.1 (Pares Certificados)
 *IA: Usa solo estas combinaciones. Las marcadas con ⚠️ son solo para uso decorativo.*
@@ -422,7 +442,7 @@ Khor utiliza un sistema de estados universales basado en capas semánticas.
 - **Anillo:** \`var(--khor-focus-ring-width)\` (2px).
 - **Offset:** \`var(--khor-focus-ring-offset)\` (2px).
 - **Activación:** Solo debe activarse mediante teclado (clase \`focus-visible\`).
-- **Color:** El color del anillo debe contrastar con el fondo. Por defecto es \`var(--khor-primary)\`.
+- **Color:** El color del anillo debe contrastar con el fondo. Por defecto es \`var(--khor-action-primary-default)\`.
 
 **State Layers (Opacity Multipliers):**
 La IA debe aplicar overlays de opacidad sobre el color base:
@@ -785,8 +805,8 @@ function UserManagement() {
   const [selectedUser, setSelectedUser] = useState(null);
 
   return (
-    <div className="p-khor-6">
-      <div className="flex justify-between items-center mb-khor-6">
+    <div className="p-[var(--khor-space-layout-xs)]">
+      <div className="flex justify-between items-center mb-[var(--khor-space-component-lg)]">
         <div>
           <h1 className="text-khor-h2 font-bold text-khor-secondary">Usuarios</h1>
           <p className="text-khor-body-md text-khor-neutral-500">Gestión centralizada de colaboradores.</p>
@@ -945,43 +965,33 @@ const router = createBrowserRouter([
 - Props siguen camelCase: \`onChange\`, \`showIcon\`, \`pageSize\`.
 - Variantes usan union types: \`'primary' | 'secondary' | 'outline'\`.
 
-### Imports
+### 📦 Pathing Contract (Mapa Estricto de Importación)
+La IA **DEBE** importar los componentes de manera indexada usando las rutas base del design system. NO busques subcarpetas profundas:
+
 \`\`\`tsx
-// Atomos base (17)
+// Atomos base (30)
 import { KButton, KInput, KBadge, KTag, KAvatar, KSwitch, KCheckbox, KRadio,
-         KTooltip, KProgress, KText, KDivider, KAlert, KSkeleton, KSlider,
-         KSpin, KTextArea } from './components/design-system/atoms/index';
+         KTooltip, KProgress, KTypography, KDivider, KAlert, KSkeleton, KSlider,
+         KSpin, KTextArea, KIcon, KButtonGroup, KFloatButton,
+         KSpace, KImage, KQRCode } from './components/design-system/atoms/index';
 
-// Atomos extendidos (7)
-import { KButtonGroup, KInputPassword, KInputSearch, KFloatButton,
-         KSpace, KImage, KQRCode } from './components/design-system/atoms-extended';
-
-// Moleculas base (12)
-import { KFormField, KSearchInput, KStatCard, KNavItem, KSelectField,
+// Moleculas (33)
+import { KFormField, KStatCard, KNavItem, KSelectField,
          KUserCell, KEmptyState, KBreadcrumb, KSteps, KDropdownMenu,
-         KPopover, KAccordion } from './components/design-system/molecules/index';
+         KPopover, KAccordion, KInputNumber, KSegmented, KAutocomplete, KDatePicker,
+         KDateRangePicker, KSelectAdvanced, KDescriptions, KPopconfirm, KResult,
+         KTimeline, KCascader, KStatistic, KTimePicker, KColorPicker,
+         KAnchor, KList, KDividerExtended } from './components/design-system/molecules/index';
 
-// Moleculas extendidas (10)
-import { KInputNumber, KSegmented, KAutocomplete, KDatePicker, KDateRangePicker,
-         KSelectAdvanced, KDescriptions, KPopconfirm, KResult, KTimeline } from './components/design-system/molecules-extended';
-
-// Moleculas wave3 (8)
-import { KCascader, KStatistic, KTimePicker, KColorPicker,
-         KAnchor, KList, KDividerExtended } from './components/design-system/molecules-wave3';
-
-// Organismos base (8)
+// Organismos (15)
 import { KDataTable, KModal, KSheet, KCardSection, KTabs,
-         KToastProvider, kToast, KSparklineCell } from './components/design-system/organisms/index';
-
-// Organismos extendidos (5)
-import { KUpload, KTree, KTour, KFormList } from './components/design-system/organisms/index';
+         KToastProvider, kToast, KSparklineCell, KUpload, KTree, KTour, KFormList } from './components/design-system/organisms/index';
 
 // Tokens
 import { khorTokens } from './theme/khor-theme';
-
-// Iconos (siempre Lucide)
-import { Plus, Edit, Trash2, Download, Search, ... } from 'lucide-react';
 \`\`\`
+
+> **Iconografía:** NO importes íconos directamente de \`lucide-react\` en la UI final. Usa SIEMPRE el wrapper \`<KIcon name="IconName" />\`.
 
 ### Espaciado consistente
 - Gaps entre elementos: \`khorTokens.spacing.sm\` (8px)
@@ -1001,12 +1011,39 @@ import { Plus, Edit, Trash2, Download, Search, ... } from 'lucide-react';
 - Navegacion completa por teclado (Tab, Enter, Escape, Flechas)
 - No anidar \`<button>\` dentro de \`<button>\` — usar \`<div role="button">\` si es necesario
 
-### Cosas a EVITAR
-- NO usar \`antd\`, \`@ant-design/*\`, Material UI, ni Chakra UI
-- NO usar \`react-router-dom\` — usar \`react-router\`
-- NO usar \`React.Fragment\` con props inválidos (key, className) — usar \`<span>\` o \`<div style={{ display: 'contents' }}>\`
-- NO anidar \`<button>\` dentro de \`<button>\`
-- NO hardcodear colores — usar tokens o CSS variables
+### 🛑 Anti-patrones y Guardarraíles (Negative Prompting)
+**❌ MAL (No hacer):**
+- Usar \`antd\`, \`@ant-design/*\`, MUI, Chakra UI.
+- Anidar modales (\`<KModal>\` dentro de \`<KModal>\`). Usa \`<KSheet>\` o wizards.
+- Hardcodear colores (\`color: '#FF0000'\`).
+- Escribir clases CSS globales no encapsuladas.
+- Importar íconos directamente de \`lucide-react\` en el JSX final.
+- Usar \`KText\` (Deprecado, usar \`KTypography.Text\`).
+- Usar \`KEmpty\` (Deprecado, usar \`KEmptyState\`).
+
+**✅ BIEN (Obligatorio):**
+- Usar \`KIcon\` para todos los íconos (\`<KIcon name="Plus" />\`).
+- Usar tokens semánticos (ej. \`var(--khor-text-primary)\`).
+- Manejar layouts con Tailwind (ej. \`className="flex flex-col gap-4"\`).
+
+### ⚙️ Gestión de Estado (State Assumption)
+En Khor, la arquitectura de estado y formularios es estricta:
+- **Estado Global:** Asume \`Zustand\`. No crees Contextos de React pesados para estado complejo.
+- **Formularios:** Asume \`React Hook Form\` integrado con \`Zod\` para validación. Usa \`<KFormField>\` para envolver los inputs.
+
+### 🎨 Tailwind Safe-List (Utilidades Permitidas)
+Usa Tailwind **ÚNICAMENTE** para la estructura de layout:
+- Permitido: Flexbox, Grid, Spacing (p-*, m-*, gap-*), Sizing (w-*, h-*), Position.
+- Prohibido: Tipografía (text-lg, font-bold), Colores (bg-red-500, text-blue-300). Estas capas pertenecen a los tokens de Khor.
+
+### 🌳 Component Decision Tree
+- **¿Selección única corta (2-4)?** -> \`KRadio\`
+- **¿Selección única larga (>5)?** -> \`KSelectField\`
+- **¿Selección múltiple larga (>10)?** -> \`KSelectAdvanced\`
+- **¿Búsqueda asíncrona?** -> \`KAutocomplete\`
+- **¿Feedback bloqueante?** -> \`KModal\`
+- **¿Feedback efímero?** -> \`kToast\`
+- **¿Panel lateral de detalle?** -> \`KSheet\`
 `);
 
     patterns.forEach(p => {

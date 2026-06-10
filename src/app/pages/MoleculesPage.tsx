@@ -2225,11 +2225,11 @@ import { KInput } from '@khor/design-system/atoms/index';
   'color-picker': {
     id: 'color-picker', name: 'KColorPicker',
     description: 'Selector de color con soporte para formatos HEX, RGB, HSB y paleta de presets.',
-    preview: (<div style={{ display: 'flex', gap: 16 }}><KColorPicker value="#E04D36" /><KColorPicker value="#051758" /></div>),
+    preview: (<div style={{ display: 'flex', gap: 16 }}><KColorPicker value="var(--khor-chart-primary)" /><KColorPicker value="#051758" /></div>),
     code: `import { KColorPicker } from '@khor/design-system/molecules/index';
 
 <KColorPicker 
-  value="#E04D36" 
+  value="var(--khor-chart-primary)" 
   onChange={(color) => console.log(color)} 
   showText 
 />`,
@@ -2237,8 +2237,8 @@ import { KInput } from '@khor/design-system/atoms/index';
     playground: <ColorPickerPlayground />,
     stateShowcase: (
       <div style={{ display: 'flex', gap: 16 }}>
-        <KColorPicker value="#E04D36" />
-        <KColorPicker showText value="#E04D36" />
+        <KColorPicker value="var(--khor-chart-primary)" />
+        <KColorPicker showText value="var(--khor-chart-primary)" />
         <KColorPicker disabled value="#ccc" />
       </div>
     ),

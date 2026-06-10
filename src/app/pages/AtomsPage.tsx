@@ -2177,7 +2177,7 @@ export const atoms: Record<string, AtomEntry> = {
 
 <KProgress value={75} />
 <KProgress value={100} status="success" />
-<KProgress value={30} strokeColor="#FF9500" />`,
+<KProgress value={30} strokeColor="var(--khor-chart-accent)" />`,
     filename: 'KProgress.tsx',
     props: [
       { name: 'value', type: 'number', required: true, description: 'Porcentaje de progreso (0-100).' },
@@ -2539,10 +2539,10 @@ export const atoms: Record<string, AtomEntry> = {
     guidelines: ['Usa para acciones relacionadas como paginacion o vistas.'],
     aiNotes: 'Componente de agrupamiento visual. Asegura que los botones internos tengan el mismo tamaño.'
   },
-  'search-input': { id: 'search-input', name: 'KSearchInput', description: 'Input de búsqueda unificado con icono y botón de limpieza.',
+  'search-input': { id: 'search-input', name: 'KInput.Search', description: 'Input de búsqueda unificado con icono y botón de limpieza.',
     preview: (<div style={{ maxWidth: 300 }}><KSearchInput placeholder="Buscar..." /></div>),
     playground: <SearchInputPlayground />,
-    code: `<KSearchInput onSearch={(v) => console.log(v)} />`, filename: 'KSearchInput.tsx',
+    code: `<KInput.Search onSearch={(v) => console.log(v)} />`, filename: 'KInput/Search.tsx',
     props: [{ name: 'placeholder', type: 'string', description: 'Placeholder.' }, { name: 'size', type: "'sm' | 'md' | 'lg'", description: 'Tamaño.' }, { name: 'onSearch', type: '(v: string) => void', description: 'Callback de búsqueda.' }],
     a11ySummary: {
       keyboard: ['Enter: Dispara el evento onSearch.', 'Esc: Limpia el contenido (si allowClear).'],
@@ -2560,10 +2560,10 @@ export const atoms: Record<string, AtomEntry> = {
     props: [{ name: 'children', type: 'ReactNode', required: true, description: 'Texto.' }, { name: 'required', type: 'boolean', description: 'Muestra asterisco.' }, { name: 'info', type: 'string', description: 'Texto del icono de informacion.' }],
     guidelines: ['Usa siempre para mejorar la accesibilidad de los inputs.']
   },
-  'input-password': { id: 'input-password', name: 'KInputPassword', description: 'Input de contraseña con toggle de visibilidad (ojo abierto/cerrado).',
+  'input-password': { id: 'input-password', name: 'KInput.Password', description: 'Input de contraseña con toggle de visibilidad (ojo abierto/cerrado).',
     preview: (<div style={{ maxWidth: 300 }}><KInputPassword placeholder="Ingresa tu contraseña" /></div>),
     playground: <PasswordPlayground />,
-    code: `<KInputPassword value={pass} onChange={setPass} />`, filename: 'KInputPassword.tsx',
+    code: `<KInput.Password value={pass} onChange={setPass} />`, filename: 'KInput/Password.tsx',
     props: [{ name: 'value', type: 'string', description: 'Valor.' }, { name: 'onChange', type: '(v) => void', description: 'Callback.' }, { name: 'error', type: 'string', description: 'Error.' }],
     stateShowcase: (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
