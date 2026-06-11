@@ -2225,7 +2225,7 @@ import { KInput } from '@khor/design-system/atoms/index';
   'color-picker': {
     id: 'color-picker', name: 'KColorPicker',
     description: 'Selector de color con soporte para formatos HEX, RGB, HSB y paleta de presets.',
-    preview: (<div style={{ display: 'flex', gap: 16 }}><KColorPicker value="var(--khor-chart-primary)" /><KColorPicker value="#051758" /></div>),
+    preview: (<div style={{ display: 'flex', gap: 16 }}>        <KColorPicker value="var(--khor-chart-primary)" /><KColorPicker value={khorTokens.colors.brand.navy} /></div>),
     code: `import { KColorPicker } from '@khor/design-system/molecules/index';
 
 <KColorPicker 
@@ -2239,7 +2239,7 @@ import { KInput } from '@khor/design-system/atoms/index';
       <div style={{ display: 'flex', gap: 16 }}>
         <KColorPicker value="var(--khor-chart-primary)" />
         <KColorPicker showText value="var(--khor-chart-primary)" />
-        <KColorPicker disabled value="#ccc" />
+        <KColorPicker disabled value={khorTokens.colors.neutral[300]} />
       </div>
     ),
     a11ySummary: {
@@ -2346,8 +2346,8 @@ import { KInput } from '@khor/design-system/atoms/index';
     name: 'KContextMenu',
     description: 'Menú contextual de click derecho premium basado en Radix UI que soporta submenús, shortcuts de teclado, separadores semánticos y estados de peligro.',
     preview: (
-      <div style={{ display: 'flex', justifyContent: 'center', padding: 24, border: '1px dashed #ccc', borderRadius: 8, userSelect: 'none' }}>
-        <span style={{ fontSize: 13, color: '#666' }}>Click derecho aquí para probar previsualización</span>
+      <div style={{ display: 'flex', justifyContent: 'center', padding: 24, border: `1px dashed ${khorTokens.colors.neutral[300]}`, borderRadius: 8, userSelect: 'none' }}>
+        <span style={{ fontSize: 13, color: khorTokens.colors.neutral[500] }}>Click derecho aquí para probar previsualización</span>
       </div>
     ),
     playground: <ContextMenuPlayground />,
@@ -2365,11 +2365,11 @@ import { KInput } from '@khor/design-system/atoms/index';
     ],
     stateShowcase: (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8, padding: 12 }}>
-        <div style={{ fontSize: 12, fontWeight: 600, color: '#333' }}>Estados Visuales de los Ítems:</div>
-        <div style={{ padding: 8, display: 'flex', alignItems: 'center', gap: 8, borderRadius: 6, backgroundColor: '#f5f5f5', fontSize: 13 }}>Normal: Opción de Menú</div>
+        <div style={{ fontSize: 12, fontWeight: 600, color: khorTokens.colors.neutral[800] }}>Estados Visuales de los Ítems:</div>
+        <div style={{ padding: 8, display: 'flex', alignItems: 'center', gap: 8, borderRadius: 6, backgroundColor: khorTokens.colors.neutral[100], fontSize: 13 }}>Normal: Opción de Menú</div>
         <div style={{ padding: 8, display: 'flex', alignItems: 'center', gap: 8, borderRadius: 6, backgroundColor: khorTokens.colors.brand.primary + '11', color: khorTokens.colors.brand.primary, fontSize: 13, fontWeight: 500 }}>Hover/Foco: Opción de Menú</div>
-        <div style={{ padding: 8, display: 'flex', alignItems: 'center', gap: 8, borderRadius: 6, backgroundColor: '#f5f5f5', opacity: 0.5, fontSize: 13, cursor: 'not-allowed' }}>Deshabilitado: Opción de Menú</div>
-        <div style={{ padding: 8, display: 'flex', alignItems: 'center', gap: 8, borderRadius: 6, backgroundColor: '#f5f5f5', color: khorTokens.colors.feedback.error, fontSize: 13 }}>Peligro (Danger): Opción de Menú</div>
+        <div style={{ padding: 8, display: 'flex', alignItems: 'center', gap: 8, borderRadius: 6, backgroundColor: khorTokens.colors.neutral[100], opacity: 0.5, fontSize: 13, cursor: 'not-allowed' }}>Deshabilitado: Opción de Menú</div>
+        <div style={{ padding: 8, display: 'flex', alignItems: 'center', gap: 8, borderRadius: 6, backgroundColor: khorTokens.colors.neutral[100], color: khorTokens.colors.feedback.error, fontSize: 13 }}>Peligro (Danger): Opción de Menú</div>
       </div>
     ),
     a11ySummary: {
@@ -2418,10 +2418,10 @@ import { KInput } from '@khor/design-system/atoms/index';
     ],
     stateShowcase: (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8, padding: 12 }}>
-        <div style={{ fontSize: 12, fontWeight: 600, color: '#333' }}>Estados:</div>
-        <div style={{ padding: 16, border: '1px solid #eee', borderRadius: 8, backgroundColor: 'white', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}>
+        <div style={{ fontSize: 12, fontWeight: 600, color: khorTokens.colors.neutral[800] }}>Estados:</div>
+        <div style={{ padding: 16, border: `1px solid ${khorTokens.colors.neutral[200]}`, borderRadius: 8, backgroundColor: 'white', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}>
           <div style={{ fontSize: 13, fontWeight: 600 }}>Tarjeta Flotante Abierta</div>
-          <div style={{ fontSize: 11, color: '#666', marginTop: 4 }}>Entrada animada suave con micro-desplazamiento.</div>
+          <div style={{ fontSize: 11, color: khorTokens.colors.neutral[500], marginTop: 4 }}>Entrada animada suave con micro-desplazamiento.</div>
         </div>
       </div>
     ),

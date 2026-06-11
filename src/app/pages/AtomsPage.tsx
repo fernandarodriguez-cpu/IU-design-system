@@ -1664,10 +1664,10 @@ export const atoms: Record<string, AtomEntry> = {
     description: 'Notificador de estados o contadores sobre elementos. Incluye variante Ribbon para cintas en esquinas. Paridad 100% con Ant Design v5.',
     preview: (
       <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-        <KBadge count={5}><div style={{ width: 32, height: 32, background: '#eee', borderRadius: 4 }} /></KBadge>
-        <KBadge dot><div style={{ width: 32, height: 32, background: '#eee', borderRadius: 4 }} /></KBadge>
+        <KBadge count={5}><div style={{ width: 32, height: 32, background: khorTokens.colors.neutral[200], borderRadius: 4 }} /></KBadge>
+        <KBadge dot><div style={{ width: 32, height: 32, background: khorTokens.colors.neutral[200], borderRadius: 4 }} /></KBadge>
         <KBadge status="success" text="Activo" />
-        <KBadge.Ribbon text="Nuevo"><div style={{ width: 100, height: 40, background: '#eee', borderRadius: 4 }} /></KBadge.Ribbon>
+        <KBadge.Ribbon text="Nuevo"><div style={{ width: 100, height: 40, background: khorTokens.colors.neutral[200], borderRadius: 4 }} /></KBadge.Ribbon>
       </div>
     ),
     playground: <BadgePlayground />,
@@ -1677,7 +1677,7 @@ export const atoms: Record<string, AtomEntry> = {
         <KBadge status="error" text="Error" />
         <KBadge status="warning" text="Warning" />
         <KBadge status="processing" text="Processing" />
-        <KBadge count={100} overflowCount={99}><div style={{ width: 40, height: 40, background: '#f5f5f5', borderRadius: 8 }} /></KBadge>
+        <KBadge count={100} overflowCount={99}><div style={{ width: 40, height: 40, background: khorTokens.colors.neutral[100], borderRadius: 8 }} /></KBadge>
       </div>
     ),
     a11ySummary: {
@@ -2639,7 +2639,7 @@ export const atoms: Record<string, AtomEntry> = {
     guidelines: ['Usa size="middle" (16px) por defecto para la mayoría de layouts.', 'El split con KDivider vertical es ideal para barras de herramientas.'],
   },
   'qrcode': { id: 'qrcode', name: 'KQRCode', description: 'Generador visual de código QR a partir de texto o URL. Usa canvas para renderizado.',
-    preview: (<div style={{ display: 'flex', gap: 16 }}><KQRCode value="https://khor.app" size={100} /><KQRCode value="https://khor.app/empleados" size={80} color="#051758" /></div>),
+    preview: (<div style={{ display: 'flex', gap: 16 }}><KQRCode value="https://khor.app" size={100} /><KQRCode value="https://khor.app/empleados" size={80} color={khorTokens.colors.brand.navy} /></div>),
     code: `<KQRCode value="https://khor.app" size={128} />`, filename: 'KQRCode.tsx',
     props: [{ name: 'value', type: 'string', required: true, description: 'Texto o URL a codificar.' }, { name: 'size', type: 'number', default: '128', description: 'Tamaño en px.' }, { name: 'color', type: 'string', description: 'Color de los módulos.' }],
     guidelines: ['Nota: patrón visual representativo. Para QR reales, integra una librería como qrcode.']

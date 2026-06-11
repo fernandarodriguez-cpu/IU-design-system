@@ -2,6 +2,13 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo. Khor sigue una metodología de desarrollo por "Olas" (Waves) dentro de fases evolutivas.
 
+## [6.0.0-beta] — 2026-06-11
+### 🧹 Ola 23: AI Guide Hardening — Token Purge & Elite Standards
+- **KText deprecado en guía IA**: Reemplazadas todas las referencias de `KText` por `KTypography.Text` en el markdown generado por `AIExportPage.tsx`, eliminando recomendaciones del componente deprecado.
+- **Tokenización de colores hardcodeados**: Sustitución de 11+ valores hex hardcodeados (`#eee`, `#f5f5f5`, `#ccc`, `#666`, `#333`, `#051758`, gradient purple/pink) por tokens semánticos de Khor (`khorTokens.colors.neutral`, `khorTokens.colors.brand`, `var(--khor-chart-*)`) en playgrounds y previews de `AtomsPage.tsx`, `MoleculesPage.tsx` y `AIExportPage.tsx`.
+- **Escala neutral corregida**: Actualización de la paleta neutral (50-900) en el generador de guía IA para coincidir con la escala Slate-Blue de `theme.css`.
+- **Verificación de integridad**: Build de producción verificado sin errores.
+
 ## [5.3.0-alpha] — 2026-05-18
 ### 🧹 Ola 21: The Spring Cleaning — Independencia Arquitectónica
 - **Eliminación de Bloatware AntD**: Purga de 6 componentes heredados de bajo uso (`KTransfer`, `KTreeSelect`, `KAffix`, `KMentions`, `KWatermark`, `KRate`) reduciendo la superficie del sistema y el peso del bundle.

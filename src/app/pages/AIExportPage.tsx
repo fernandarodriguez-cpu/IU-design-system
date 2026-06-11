@@ -126,11 +126,11 @@ La IA DEBE usar estos valores exactos:
   --khor-chart-amber: #FFC107;     --khor-chart-gray: #9E9E9E;
 
   /* Neutrals (Full Slate-Blue Scale) */
-  --khor-neutral-50: #f8faff;   --khor-neutral-100: #edf0f1;
-  --khor-neutral-200: #d5dbe0;  --khor-neutral-300: #a0aec0;
-  --khor-neutral-400: #718096;  --khor-neutral-500: #4a5568;
-  --khor-neutral-600: #3E4856;  --khor-neutral-700: #3D4552;
-  --khor-neutral-800: #252C38;  --khor-neutral-900: #000000;
+  --khor-neutral-50: #f8faff;   --khor-neutral-100: #f1f4ff;
+  --khor-neutral-200: #e2eafc;  --khor-neutral-300: #cbd8f1;
+  --khor-neutral-400: #94a9d8;  --khor-neutral-500: #647bb1;
+  --khor-neutral-600: #475a8f;  --khor-neutral-700: #33446b;
+  --khor-neutral-800: #1e2a4a;  --khor-neutral-900: #0f1a35;
 
   /* Form Validation Semantic States */
   --khor-form-error-bg: ${theme.error}15;   --khor-form-error-border: ${theme.error};   --khor-form-error-text: ${theme.error};
@@ -488,7 +488,7 @@ Khor implementa políticas estrictas de seguridad para contenido dinámico:
 **Reglas para la IA:**
 1. **NUNCA** uses \`dangerouslySetInnerHTML\` sin sanitización previa con DOMPurify.
 2. **SIEMPRE** escapa el contenido del usuario antes de renderizarlo en:
-   - \`KText\` con contenido dinámico
+   - \`KTypography.Text\` con contenido dinámico
    - \`KDataTable\` con celdas personalizadas
    - \`kToast\` con mensajes del servidor
    - \`KTooltip\` con contenido variable
@@ -617,7 +617,7 @@ Khor define reglas estrictas para la presentación de datos analíticos.
 **Data-Ink Ratio:**
 - Elimina bordes innecesarios, sombras internas y líneas de grilla pesadas.
 - Prioriza los datos sobre la decoración.
-- Los tooltips deben ser simples, usando \`KText\` con \`font-bold\` para el valor.
+- Los tooltips deben ser simples, usando \`KTypography.Text\` con \`font-bold\` para el valor.
 
 ### 🤖 Figma MCP Synchronization Protocol
 Este sistema está diseñado para ser la fuente de verdad absoluta para Agentes de IA vía el protocolo **MCP (Model Context Protocol)**.
@@ -657,16 +657,16 @@ El sistema soporta modo oscuro via clase \`.dark\` en \`<html>\`. Se activa con 
 
 | Token | Light | Dark |
 |-------|-------|------|
-| neutral-50 | \`#FFFFFF\` | \`#1A1B2E\` |
-| neutral-100 | \`#EDF0F1\` | \`#22243A\` |
-| neutral-200 | \`#D5DBE0\` | \`#2E3148\` |
-| neutral-300 | \`#A0AEC0\` | \`#4A4E6A\` |
-| neutral-400 | \`#718096\` | \`#8B90A8\` |
-| neutral-500 | \`#4A5568\` | \`#B0B4C8\` |
-| neutral-600 | \`#5A6475\` | \`#9BA3B5\` |
-| neutral-700 | \`#3D4552\` | \`#B8BDC8\` |
-| neutral-800 | \`#252C38\` | \`#D0D3DA\` |
-| neutral-900 | \`#000000\` | \`#E8EAF0\` |
+| neutral-50 | \`#f8faff\` | \`#1A1B2E\` |
+| neutral-100 | \`#f1f4ff\` | \`#22243A\` |
+| neutral-200 | \`#e2eafc\` | \`#2E3148\` |
+| neutral-300 | \`#cbd8f1\` | \`#4A4E6A\` |
+| neutral-400 | \`#94a9d8\` | \`#8B90A8\` |
+| neutral-500 | \`#647bb1\` | \`#B0B4C8\` |
+| neutral-600 | \`#475a8f\` | \`#9BA3B5\` |
+| neutral-700 | \`#33446b\` | \`#B8BDC8\` |
+| neutral-800 | \`#1e2a4a\` | \`#D0D3DA\` |
+| neutral-900 | \`#0f1a35\` | \`#E8EAF0\` |
 | accent | \`#FF9500\` | \`#FFB340\` |
 | navy | \`#051758\` | \`#8BA3D9\` |
 | success | \`#2E7D32\` | \`#4CAF50\` |
@@ -772,6 +772,7 @@ Estructura responsiva con Sidebar colapsable y Header fijo.
 \`\`\`tsx
 import { AppShell } from './components/AppShell';
 import { SidebarItem } from './components/Sidebar';
+// Iconos: en producción usa <KIcon name="Home" /> etc.
 import { Home, Users, Settings, LogOut } from 'lucide-react';
 
 // Úsalo como el Layout principal de tus rutas
@@ -795,6 +796,7 @@ function MainLayout() {
 ### 2. KCRUDPage (Gestión de Datos Elite)
 Patrón avanzado para tablas con búsqueda, filtros y Drawer de detalle.
 \`\`\`tsx
+// Iconos: en producción usa <KIcon name="Plus" /> etc.
 import { Plus, Edit, Trash2, Filter } from 'lucide-react';
 import { KButton, KBadge, KInput } from './atoms';
 import { KFormField, KDropdownMenu } from './molecules';
@@ -840,6 +842,7 @@ function UserManagement() {
 ### 3. KDashboardGrid (Métricas y Visualización)
 Grid de alta densidad con StatCards y Chart Palette v5.0.0-alpha.
 \`\`\`tsx
+// Iconos: en producción usa <KIcon name="Users" /> etc.
 import { Users, TrendingUp, DollarSign } from 'lucide-react';
 import { KStatCard } from './molecules';
 import { KCardSection } from './organisms';
@@ -1066,6 +1069,7 @@ ${p.code}
 ### Pagina CRUD basica
 \`\`\`tsx
 import { useState } from 'react';
+// Iconos: en producción usa <KIcon name="Plus" /> etc.
 import { Plus, Edit, Trash2, MoreHorizontal } from 'lucide-react';
 import { KButton, KBadge, KInput } from './atoms';
 import { KFormField, KDropdownMenu } from './molecules';
@@ -1119,6 +1123,7 @@ function UsersPage() {
 
 ### Dashboard con metricas
 \`\`\`tsx
+// Iconos: en producción usa <KIcon name="Users" /> etc.
 import { Users, DollarSign, TrendingUp, Activity } from 'lucide-react';
 import { KStatCard } from './molecules';
 import { KCardSection, KTabs } from './organisms';
@@ -1191,8 +1196,8 @@ function ContactForm() {
 #### 1. Empty State (Primera vez / Sin resultados)
 Estructura: Ilustración → Título → Descripción → CTA primario.
 \`\`\`tsx
-<KEmpty
-  image={<KIcon name="inbox" size="2xl" color="var(--khor-text-muted)" />}
+<KEmptyState
+  icon={<KIcon name="Inbox" size="2xl" color="var(--khor-text-muted)" />}
   title="No hay registros aún"
   description="Crea tu primer registro para comenzar a ver datos aquí."
   extra={<KButton variant="primary">Crear registro</KButton>}
@@ -1326,7 +1331,7 @@ export function AIExportPage() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
           <div style={{
             width: 44, height: 44, borderRadius: t.radius.md,
-            background: 'linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%)',
+            background: 'linear-gradient(135deg, var(--khor-chart-purple) 0%, var(--khor-chart-pink) 100%)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
             <Bot size={24} color="#fff" />
