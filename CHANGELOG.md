@@ -2,6 +2,18 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo. Khor sigue una metodología de desarrollo por "Olas" (Waves) dentro de fases evolutivas.
 
+## [6.2.0] — 2026-06-11
+### 🧩 Ola 25: Registry Patterns & Auto-Counts
+- 📦 **Versión bump**: `6.1.0` → `6.2.0` (MINOR: registry/data isolation, auto-generate counts).
+- **Registry types**: Nuevo `src/app/registry/registry-types.ts` con interfaces `AtomData`, `MoleculeData`, `OrganismData` (solo datos, sin JSX).
+- **Data-only exports**: `atomsData`, `moleculesData`, `organismsData` exportados desde `AtomsPage.tsx`, `MoleculesPage.tsx`, `OrganismsPage.tsx` vía destructuring que omite fields JSX (`preview`, `playground`, `stateShowcase`).
+- **AIExportPage migrado**: Importa de `atomsData` en vez de `atoms` — el generador de markdown ya no arrastra JSX ni imports de componentes React.
+- **Auto-generate counts**: Nuevo `scripts/generate-counts.mjs` que escupe `khor-counts.json` desde `Object.keys()` de cada página. Se ejecuta automáticamente en `npm run build`.
+- **Counts dinámicos en UI**: Labels de secciones (`Átomos (N)`, `Moléculas (N)`) se computan en runtime, no más hardcode.
+- **Version centralizada**: `AIExportPage.tsx` ahora importa `KHOR_VERSION` desde `src/app/version/version.ts`.
+- **CSS Block generado desde tokens**: `generateCssBlock()` en `khor-theme.ts` reemplaza el CSS de 200+ líneas hardcodeado en `AIExportPage.tsx`. Acepta `theme?: ThemeConfig` opcional — cuando se pasa (desde ThemingPage), los colores y radios reflejan el tema activo. La guía exportada ahora es completamente dinámica al tema.
+- **YAML Front Matter en guías modulares**: Cada archivo `.md` individual incluye cabecera `---` con `system`, `module`, `dependencies`, `context_rule` para auto-documentación de contexto.
+
 ## [6.1.0] — 2026-06-11
 ### 🧹 Ola 24: Multi-Guía LLM & Architecture Hardening
 - 📦 **Versión bump**: `6.0.0` → `6.1.0` (MINOR: nueva feature de multi-guía, sin breaking changes).

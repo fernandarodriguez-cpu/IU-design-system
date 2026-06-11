@@ -437,3 +437,220 @@ export const khorStaticTokens = {
     fontSecondary: "'Plus Jakarta Sans', sans-serif",
   }
 } as const;
+
+/* ─── CSS Variables Block Generator ────────── */
+export function generateCssBlock(theme?: {
+  primary?: string; secondary?: string; accent?: string;
+  success?: string; error?: string; warning?: string; info?: string;
+  radiusSm?: number; radiusMd?: number; radiusLg?: number; radiusXl?: number;
+}): string {
+  const c = { ...khorStaticTokens.colors };
+  const r = { ...khorStaticTokens.radius };
+  if (theme) {
+    if (theme.primary) c.primary = theme.primary;
+    if (theme.secondary) { c.secondary = theme.secondary; c.navy = theme.secondary; }
+    if (theme.accent) c.accent = theme.accent;
+    if (theme.success) c.success = theme.success;
+    if (theme.error) c.error = theme.error;
+    if (theme.warning) c.warning = theme.warning;
+    if (theme.info) c.info = theme.info;
+    if (theme.radiusSm != null) r.sm = theme.radiusSm;
+    if (theme.radiusMd != null) r.md = theme.radiusMd;
+    if (theme.radiusLg != null) r.lg = theme.radiusLg;
+    if (theme.radiusXl != null) r.xl = theme.radiusXl;
+  }
+  return `:root {
+  /* Layer 1: Primitives - Radios Base */
+  --khor-radius-xs: 2px;
+  --khor-radius-sm: ${r.sm}px;
+  --khor-radius-md: ${r.md}px;
+  --khor-radius-lg: ${r.lg}px;
+  --khor-radius-xl: ${r.xl}px;
+  --khor-radius-2xl: 24px;
+  --khor-radius-3xl: 32px;
+  --khor-radius-full: 9999px;
+
+  /* Elite Charts Palette (12 Colores) */
+  --khor-chart-primary: ${c.primary};   --khor-chart-secondary: ${c.secondary};
+  --khor-chart-accent: ${c.accent};    --khor-chart-success: ${c.success};
+  --khor-chart-error: ${c.error};     --khor-chart-info: ${c.info};
+  --khor-chart-teal: #008080;      --khor-chart-purple: #9C27B0;
+  --khor-chart-pink: #E91E63;      --khor-chart-cyan: #00BCD4;
+  --khor-chart-amber: #FFC107;     --khor-chart-gray: #9E9E9E;
+
+  /* Neutrals (Full Slate-Blue Scale) */
+  --khor-neutral-50: #f8faff;   --khor-neutral-100: #f1f4ff;
+  --khor-neutral-200: #e2eafc;  --khor-neutral-300: #cbd8f1;
+  --khor-neutral-400: #94a9d8;  --khor-neutral-500: #647bb1;
+  --khor-neutral-600: #475a8f;  --khor-neutral-700: #33446b;
+  --khor-neutral-800: #1e2a4a;  --khor-neutral-900: #0f1a35;
+  --khor-neutral-secondary-50: #f8faff;  --khor-neutral-secondary-100: #f1f4ff;
+  --khor-neutral-secondary-200: #e2eafc; --khor-neutral-secondary-300: #cbd8f1;
+  --khor-neutral-secondary-400: #94a9d8; --khor-neutral-secondary-500: #647bb1;
+  --khor-neutral-secondary-600: #475a8f; --khor-neutral-secondary-700: #33446b;
+  --khor-neutral-secondary-800: #1e2a4a; --khor-neutral-secondary-900: #0f1a35;
+
+  /* Form Validation Semantic States */
+  --khor-form-error-bg: ${c.error}15;   --khor-form-error-border: ${c.error};   --khor-form-error-text: ${c.error};
+  --khor-form-success-bg: ${c.success}15; --khor-form-success-border: ${c.success}; --khor-form-success-text: ${c.success};
+  --khor-form-warning-bg: ${c.warning}15; --khor-form-warning-border: ${c.warning}; --khor-form-warning-text: ${c.warning};
+  --khor-form-focus-ring: ${c.primary};
+
+  /* Semantic Layer 2: Actions */
+  --khor-action-primary-default: ${c.primary}; --khor-action-primary-hover: ${c.primaryHover};
+  --khor-action-secondary-default: ${c.secondary}; --khor-action-secondary-hover: ${c.secondaryHover};
+  --khor-action-danger-default: ${c.error}; --khor-action-danger-hover: #B71C1C;
+  --khor-action-ghost-hover: rgba(5, 23, 88, 0.06);
+  --khor-action-disabled-bg: #EDF0F1; --khor-action-disabled-text: #A0AEC0;
+  --khor-action-primary-active: #c73a2a;
+
+  /* Brand Color Aliases */
+  --khor-primary: var(--khor-action-primary-default);
+  --khor-primary-hover: var(--khor-action-primary-hover);
+  --khor-primary-active: var(--khor-action-primary-active);
+  --khor-secondary: var(--khor-action-secondary-default);
+  --khor-secondary-hover: var(--khor-action-secondary-hover);
+  --khor-secondary-active: #0d2a8a;
+  --khor-accent: ${c.accent};
+  --khor-accent-hover: #e68600;
+  --khor-accent-active: #cc7800;
+  --khor-navy: ${c.navy};
+  --khor-navy-hover: ${c.secondaryHover};
+  --khor-navy-active: #040f3a;
+  --khor-success: ${c.success};
+  --khor-error: #D32F2F;
+  --khor-warning: ${c.warning};
+  --khor-info: ${c.info};
+  --khor-teal: ${c.teal};
+
+  /* Semantic Layer 2: Surface & Overlay */
+  --khor-surface-page: #f8faff; --khor-surface-card: #ffffff;
+  --khor-surface-hover: rgba(5, 23, 88, 0.04); --khor-surface-pressed: rgba(5, 23, 88, 0.08);
+  --khor-surface-selected: ${c.primary}15; --khor-surface-subtle: #F4F6F8;
+  --khor-surface-overlay: #ffffff; --khor-surface-raised: #ffffff;
+  --khor-surface-dragging: rgba(5, 23, 88, 0.12);
+  --khor-overlay-bg: rgba(255, 255, 255, 0.95); --khor-overlay-backdrop: rgba(0, 0, 0, 0.45);
+
+  /* Semantic Layer 2: Borders */
+  --khor-border-default: #D5DBE0; --khor-border-muted: #EDF0F1;
+  --khor-border-strong: #A0AEC0; --khor-border-hover: #A0AEC0;
+  --khor-border-focus: ${c.primary}; --khor-border-error: ${c.error};
+  --khor-border-disabled: #EDF0F1;
+
+  /* Focus Ring */
+  --khor-focus-ring-color: ${c.primary}; --khor-focus-ring-width: 2px;
+  --khor-focus-ring-offset: 2px; --khor-focus-ring-style: solid;
+
+  /* Semantic Layer 2: Typography */
+  --khor-text-primary: ${c.secondary}; --khor-text-secondary: #475a8f;
+  --khor-text-muted: #94a9d8; --khor-text-disabled: #A0AEC0; --khor-text-on-action: #ffffff;
+  --khor-text-link: ${c.primary}; --khor-text-link-hover: ${c.primaryHover};
+
+  /* Typography Base Sizing */
+  --khor-font-size-h1: 32px; --khor-font-size-h2: 28px;
+  --khor-font-size-h3: 24px; --khor-font-size-h4: 20px;
+  --khor-font-size-h5: 18px; --khor-font-size-h6: 16px;
+  --khor-font-size-body-lg: 16px; --khor-font-size-body-md: 14px;
+  --khor-font-size-body-sm: 13px; --khor-font-size-body-xs: 12px;
+  --khor-font-size-display-1: 48px; --khor-font-size-display-2: 40px;
+  --khor-font-size-display-2xl: 72px; --khor-font-size-display-xl: 56px;
+  --khor-font-size-heading-lg: 48px; --khor-font-size-heading-md: 40px;
+  --khor-font-size-heading-sm: 32px; --khor-font-size-heading-xs: 24px;
+  --khor-font-size-body-xl: 18px; --khor-font-size-code: 13px;
+  --khor-font-size-label: 14px; --khor-font-size-caption: 12px;
+  --khor-font-weight-light: 300; --khor-font-weight-regular: 400;
+  --khor-font-weight-medium: 500; --khor-font-weight-semibold: 600;
+  --khor-font-weight-bold: 700; --khor-font-weight-extrabold: 800;
+  --khor-line-height-display: 1.1; --khor-line-height-heading: 1.25;
+  --khor-line-height-body: 1.5; --khor-line-height-dynamic: 1.6;
+  --khor-letter-spacing-tighter: -0.02em; --khor-letter-spacing-tight: -0.01em;
+  --khor-letter-spacing-normal: 0em; --khor-letter-spacing-wide: 0.02em;
+  --khor-letter-spacing-wider: 0.05em;
+
+  /* Motion Tokens */
+  --khor-duration-instant: 50ms; --khor-duration-fast: 150ms;
+  --khor-duration-normal: 250ms; --khor-duration-slow: 450ms;
+  --khor-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --khor-easing-enter: cubic-bezier(0, 0, 0.2, 1);
+  --khor-easing-exit: cubic-bezier(0.4, 0, 1, 1);
+  --khor-easing-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --khor-transition-fade: opacity var(--khor-duration-normal) var(--khor-easing-standard);
+  --khor-transition-scale: transform var(--khor-duration-normal) var(--khor-easing-standard);
+  --khor-transition-slide: transform var(--khor-duration-normal) var(--khor-easing-standard);
+  --khor-transition-color: color var(--khor-duration-normal) var(--khor-easing-standard), background-color var(--khor-duration-normal) var(--khor-easing-standard), border-color var(--khor-duration-normal) var(--khor-easing-standard);
+
+  /* Elevation & Shadows */
+  --khor-shadow-sm: 0 1px 2px rgba(5,23,88,0.04), 0 1px 1px rgba(0,0,0,0.02);
+  --khor-shadow-md: 0 4px 6px -1px rgba(5,23,88,0.08), 0 2px 4px -1px rgba(0,0,0,0.04);
+  --khor-shadow-lg: 0 10px 15px -3px rgba(5,23,88,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+  --khor-shadow-xl: 0 20px 25px -5px rgba(5,23,88,0.12), 0 10px 10px -5px rgba(0,0,0,0.04);
+  --khor-shadow-2xl: 0 25px 50px -12px rgba(5,23,88,0.25);
+  --khor-shadow-inner: inset 0 2px 4px 0 rgba(0,0,0,0.06);
+  --khor-elevation-0: none;
+  --khor-elevation-1: var(--khor-shadow-sm);
+  --khor-elevation-2: var(--khor-shadow-md);
+  --khor-elevation-3: var(--khor-shadow-lg);
+  --khor-elevation-4: var(--khor-shadow-xl);
+  --khor-elevation-5: var(--khor-shadow-2xl);
+
+  /* Layout Grid System */
+  --khor-grid-cols: 12;
+  --khor-grid-gutter-sm: 16px; --khor-grid-margin-sm: 16px;
+  --khor-grid-gutter-md: 24px; --khor-grid-margin-md: 24px;
+  --khor-grid-gutter-lg: 32px; --khor-grid-margin-lg: 32px;
+  --khor-grid-gutter-xl: 32px; --khor-grid-margin-xl: 40px;
+
+  /* Semantic Spacing Tokens */
+  --khor-space-layout-xs: 16px; --khor-space-layout-sm: 24px;
+  --khor-space-layout-md: 32px; --khor-space-layout-lg: 48px;
+  --khor-space-layout-xl: 64px;
+  --khor-space-component-xs: 4px; --khor-space-component-sm: 8px;
+  --khor-space-component-md: 12px; --khor-space-component-lg: 16px;
+  --khor-density-spacing-xs: 4px; --khor-density-spacing-sm: 8px;
+  --khor-density-spacing-md: 16px; --khor-density-spacing-lg: 24px;
+
+  /* Sizing Scale */
+  --khor-size-0: 0px; --khor-size-1: 4px; --khor-size-2: 8px;
+  --khor-size-3: 12px; --khor-size-4: 16px; --khor-size-5: 20px;
+  --khor-size-6: 24px; --khor-size-8: 32px; --khor-size-10: 40px;
+  --khor-size-12: 48px; --khor-size-16: 64px; --khor-size-20: 80px;
+  --khor-size-24: 96px; --khor-size-32: 128px; --khor-size-40: 160px;
+  --khor-size-48: 192px; --khor-size-56: 224px; --khor-size-64: 256px;
+  --khor-size-full: 100%;
+
+  /* Icon Sizing */
+  --khor-icon-xs: 12px; --khor-icon-sm: 14px; --khor-icon-md: 16px;
+  --khor-icon-lg: 20px; --khor-icon-xl: 24px; --khor-icon-2xl: 32px;
+
+  /* Layer 3: Component Specific Tokens */
+  --khor-button-primary-bg:        var(--khor-action-primary-default);
+  --khor-button-primary-text:      var(--khor-text-on-action);
+  --khor-button-primary-shadow:    0 2px 4px rgba(224, 77, 54, 0.2);
+  --khor-button-secondary-bg:      var(--khor-action-secondary-default);
+  --khor-button-secondary-text:    var(--khor-text-on-action);
+  --khor-input-bg:                 var(--khor-surface-card);
+  --khor-input-border:             var(--khor-border-default);
+  --khor-input-focus-border:       var(--khor-border-focus);
+  --khor-input-focus-ring:         var(--khor-form-focus-ring);
+  --khor-card-bg:                  var(--khor-surface-card);
+  --khor-card-shadow:              var(--khor-shadow-md);
+  --khor-card-radius:              var(--khor-radius-lg);
+
+  /* Layer 3: Contextual Tokens */
+  --khor-context-sidebar-bg:        var(--khor-chart-secondary);
+  --khor-context-sidebar-text:      var(--khor-neutral-50);
+  --khor-context-sidebar-text-muted:rgba(255, 255, 255, 0.55);
+  --khor-context-sidebar-border:    rgba(255, 255, 255, 0.08);
+  --khor-context-sidebar-hover:     rgba(255, 255, 255, 0.10);
+  --khor-context-sidebar-active:    rgba(255, 255, 255, 0.15);
+  --khor-context-header-bg:         var(--khor-surface-card);
+  --khor-context-header-border:     var(--khor-border-default);
+  --khor-context-header-text:       var(--khor-text-primary);
+
+  /* Chart Array Mapping */
+  --khor-chart-1: var(--khor-chart-primary);
+  --khor-chart-2: var(--khor-chart-secondary);
+  --khor-chart-3: var(--khor-chart-accent);
+  --khor-chart-4: var(--khor-chart-success);
+}`;
+}

@@ -61,6 +61,7 @@ import {
   Settings, Eye, MoreHorizontal,
 } from 'lucide-react';
 import { khorTokens } from '../theme/khor-theme';
+import type { OrganismData } from '../registry/registry-types';
 import { KCommandBarPreview } from '../components/design-system/command-bar';
 import { 
   Trash2, FolderOpen, Folder, File,
@@ -1574,6 +1575,12 @@ const methods = KForm.useForm({ defaultValues: { username: '' } });
     guidelines: ['Centra el formulario en un contenedor de ancho máximo (ej. 400px).'],
   },
 };
+
+export const organismsData: Record<string, OrganismData> = {};
+Object.keys(organisms).forEach(key => {
+  const { preview, playground, stateShowcase, ...data } = organisms[key];
+  organismsData[key] = data;
+});
 
 export function OrganismsPage() {
   const { id } = useParams<{ id: string }>();

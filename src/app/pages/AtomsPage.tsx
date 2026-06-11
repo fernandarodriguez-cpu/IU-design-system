@@ -40,6 +40,7 @@ import {
   CheckCircle,
 } from 'lucide-react';
 import { khorTokens } from '../theme/khor-theme';
+import type { AtomData } from '../registry/registry-types';
 
 // Unified Input Aliases for internal page consistency
 const KTextArea = KInput.TextArea;
@@ -2798,6 +2799,12 @@ export const atoms: Record<string, AtomEntry> = {
     guidelines: ['Siempre define un país por defecto para acelerar la entrada.', 'Usa block={true} en formularios móviles.', 'Brinda helperText claro en caso de error.'],
   }
 };
+
+export const atomsData: Record<string, AtomData> = {};
+Object.keys(atoms).forEach(key => {
+  const { preview, playground, stateShowcase, ...data } = atoms[key];
+  atomsData[key] = data;
+});
 
 export function AtomsPage() {
   const { id } = useParams<{ id: string }>();

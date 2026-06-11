@@ -1,11 +1,12 @@
 {
   "name": "@khor/design-system",
   "private": true,
-  "version": "6.1.0",
+  "version": "6.2.0",
   "type": "module",
   "scripts": {
-    "build": "vite build",
+    "build": "npm run generate-counts && vite build",
     "dev": "vite",
+    "generate-counts": "node scripts/generate-counts.mjs",
     "test:visual": "playwright test",
     "test:visual:update": "playwright test --update-snapshots",
     "khor-check": "npx tsx src/scripts/khor-check.ts",

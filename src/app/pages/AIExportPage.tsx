@@ -19,15 +19,13 @@ import { KTabs } from '../components/design-system/organisms/KTabs/index';
 import { kToast } from '../components/design-system/organisms/KToast/index';
 import { useTheme, ThemeConfig } from '../theme/theme-context';
 import { patterns } from '../patterns/index';
-import { atoms } from './AtomsPage';
-import { molecules } from './MoleculesPage';
-import { organisms } from './OrganismsPage';
-import { khorTokens } from '../theme/khor-theme';
+import { atomsData as atoms } from './AtomsPage';
+import { moleculesData as molecules } from './MoleculesPage';
+import { organismsData as organisms } from './OrganismsPage';
+import { khorTokens, generateCssBlock } from '../theme/khor-theme';
+import { KHOR_VERSION } from '../version/version';
 
 const t = khorTokens;
-
-/* ─── Version (must match ChangelogPage & AppShell) ─── */
-export const KHOR_VERSION = '6.0.0';
 
 
 /* ─── Sections config ───────────────────────── */
@@ -38,25 +36,56 @@ export interface SectionConfig {
   enabled: boolean;
 }
 
+const atomCount = Object.keys(atoms).length;
+const moleculeCount = Object.keys(molecules).length;
+const organismCount = Object.keys(organisms).length;
+const totalCount = atomCount + moleculeCount + organismCount + 11 + 6;
+
 export const defaultSections: SectionConfig[] = [
   { id: 'header', label: 'Encabezado y contexto', description: 'Nombre, versión, stack tecnológico y propósito del sistema.', enabled: true },
-  { id: 'index', label: 'Índice de Componentes', description: 'Catálogo compacto con los 81 componentes del sistema.', enabled: true },
+  { id: 'index', label: 'Índice de Componentes', description: `Catálogo compacto con los ${totalCount} componentes del sistema.`, enabled: true },
   { id: 'tokens', label: 'Design Tokens', description: 'Charts elite, Forms semánticos, Icon scale, Colores, Tipografía, etc.', enabled: true },
   { id: 'darkmode', label: 'Dark Mode', description: 'Inversión semántica y tokens alternativos para modo oscuro.', enabled: true },
-  { id: 'atoms', label: 'Átomos (30)', description: 'API completa de 30 átomos: Sistema v5.0 optimizado.', enabled: true },
-  { id: 'molecules', label: 'Moléculas (31)', description: 'API completa de 31 moléculas coordinadas con el sistema Elite.', enabled: true },
-  { id: 'organisms', label: 'Organismos (20)', description: 'Componentes complejos coordinados con el sistema Elite.', enabled: true },
+  { id: 'atoms', label: `Átomos (${atomCount})`, description: `API completa de ${atomCount} átomos: Sistema v5.0 optimizado.`, enabled: true },
+  { id: 'molecules', label: `Moléculas (${moleculeCount})`, description: `API completa de ${moleculeCount} moléculas coordinadas con el sistema Elite.`, enabled: true },
+  { id: 'organisms', label: `Organismos (${organismCount})`, description: `Componentes complejos coordinados con el sistema Elite.`, enabled: true },
   { id: 'templates', label: 'Templates y Patrones', description: 'Patrones de página: Dashboard Admin, CRUD Elite, Login SaaS, etc.', enabled: true },
   { id: 'layout', label: 'Layout (AppShell)', description: 'Estructura sidebar + header + canvas con dimensiones Elite.', enabled: true },
   { id: 'patterns', label: 'Patrones y Convenciones', description: '3-Layer Architecture, Fluid Typography, Naming, A11y.', enabled: true },
   { id: 'examples', label: 'Ejemplos de Código', description: 'Snippets listos para copiar/pegar de casos de uso comunes.', enabled: true },
 ];
 
+/* ─── Front Matter for standalone guides ──── */
+const FRONT_MATTER: Record<string, { module: string; dependencies: string[]; context_rule: string }> = {
+  tokens: { module: 'Design Tokens', dependencies: [], context_rule: 'Este archivo define todos los Design Tokens del sistema Khor (colores, tipografía, espaciado, motion, radius, shadows). Es la fuente única de verdad para valores base y semánticos.' },
+  atoms: { module: 'Átomos Core', dependencies: ['khor-guia-tokens.md'], context_rule: 'Contiene los componentes anatómicos base. Para colores, espaciados y tipografía, hereda estrictamente las variables declaradas en khor-guia-tokens.md.' },
+  molecules: { module: 'Moléculas Compuestas', dependencies: ['khor-guia-tokens.md', 'khor-guia-atomos.md'], context_rule: 'Componentes compuestos. Cada molécula está construida combinando átomos de khor-guia-atomos.md bajo las reglas estéticas de khor-guia-tokens.md.' },
+  organisms: { module: 'Organismos Complejos', dependencies: ['khor-guia-tokens.md', 'khor-guia-atomos.md', 'khor-guia-moleculas.md'], context_rule: 'Componentes complejos y contextuales. Construidos sobre moléculas y átomos, con lógica de negocio integral del ecosistema Khor.' },
+};
+
+function buildFrontMatter(layerFilter: string[]): string {
+  const primaryLayer = layerFilter.find(id => FRONT_MATTER[id]);
+  if (!primaryLayer) return '';
+  const fm = FRONT_MATTER[primaryLayer];
+  return `---
+system: Sistema de Diseño Khor v${KHOR_VERSION}
+module: ${fm.module}
+dependencies: ${JSON.stringify(fm.dependencies)}
+context_rule: ${fm.context_rule}
+---
+
+`;
+}
+
 /* ─── Markdown Generator ────────────────────── */
 export function generateMarkdown(sections: SectionConfig[], theme: ThemeConfig, layerFilter?: string[]): string {
   const active = layerFilter ? new Set(layerFilter) : new Set(sections.filter((s) => s.enabled).map((s) => s.id));
   const parts: string[] = [];
   const today = new Date().toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' });
+
+  if (layerFilter) {
+    parts.push(buildFrontMatter(layerFilter));
+  }
 
   if (active.has('header')) {
     parts.push(`
@@ -138,200 +167,7 @@ Como IA, DEBES elegir componentes basados en la **Intención Semántica** del fl
 La IA DEBE usar estos valores exactos:
 
 \`\`\`css
-:root {
-  /* Layer 1: Primitives - Radios Base */
-  --khor-radius-xs: 2px;
-  --khor-radius-sm: 6px;
-  --khor-radius-md: 8px;
-  --khor-radius-lg: 10px;
-  --khor-radius-xl: 14px;
-  --khor-radius-2xl: 24px;
-  --khor-radius-3xl: 32px;
-  --khor-radius-full: 9999px;
-
-  /* Elite Charts Palette (12 Colores) */
-  --khor-chart-primary: ${theme.primary};   --khor-chart-secondary: ${theme.secondary};
-  --khor-chart-accent: ${theme.accent};    --khor-chart-success: ${theme.success};
-  --khor-chart-error: ${theme.error};     --khor-chart-info: ${theme.info};
-  --khor-chart-teal: #008080;      --khor-chart-purple: #9C27B0;
-  --khor-chart-pink: #E91E63;      --khor-chart-cyan: #00BCD4;
-  --khor-chart-amber: #FFC107;     --khor-chart-gray: #9E9E9E;
-
-  /* Neutrals (Full Slate-Blue Scale) */
-  --khor-neutral-50: #f8faff;   --khor-neutral-100: #f1f4ff;
-  --khor-neutral-200: #e2eafc;  --khor-neutral-300: #cbd8f1;
-  --khor-neutral-400: #94a9d8;  --khor-neutral-500: #647bb1;
-  --khor-neutral-600: #475a8f;  --khor-neutral-700: #33446b;
-  --khor-neutral-800: #1e2a4a;  --khor-neutral-900: #0f1a35;
-  --khor-neutral-secondary-50: #f8faff;  --khor-neutral-secondary-100: #f1f4ff;
-  --khor-neutral-secondary-200: #e2eafc; --khor-neutral-secondary-300: #cbd8f1;
-  --khor-neutral-secondary-400: #94a9d8; --khor-neutral-secondary-500: #647bb1;
-  --khor-neutral-secondary-600: #475a8f; --khor-neutral-secondary-700: #33446b;
-  --khor-neutral-secondary-800: #1e2a4a; --khor-neutral-secondary-900: #0f1a35;
-
-  /* Form Validation Semantic States */
-  --khor-form-error-bg: ${theme.error}15;   --khor-form-error-border: ${theme.error};   --khor-form-error-text: ${theme.error};
-  --khor-form-success-bg: ${theme.success}15; --khor-form-success-border: ${theme.success}; --khor-form-success-text: ${theme.success};
-  --khor-form-warning-bg: ${theme.warning}15; --khor-form-warning-border: ${theme.warning}; --khor-form-warning-text: ${theme.warning};
-  --khor-form-focus-ring: ${theme.primary};
-
-  /* Semantic Layer 2: Actions */
-  --khor-action-primary-default: ${theme.primary}; --khor-action-primary-hover: #e8644f;
-  --khor-action-secondary-default: ${theme.secondary}; --khor-action-secondary-hover: #0a2270;
-  --khor-action-danger-default: ${theme.error}; --khor-action-danger-hover: #B71C1C;
-  --khor-action-ghost-hover: rgba(5, 23, 88, 0.06);
-  --khor-action-disabled-bg: #EDF0F1; --khor-action-disabled-text: #A0AEC0;
-  --khor-action-primary-active: #c73a2a;
-
-  /* Brand Color Aliases (referenciados por khorTokens — same as action/semantic values) */
-  --khor-primary: var(--khor-action-primary-default);
-  --khor-primary-hover: var(--khor-action-primary-hover);
-  --khor-primary-active: var(--khor-action-primary-active);
-  --khor-secondary: var(--khor-action-secondary-default);
-  --khor-secondary-hover: var(--khor-action-secondary-hover);
-  --khor-secondary-active: #0d2a8a;
-  --khor-accent: #FF9500;
-  --khor-accent-hover: #e68600;
-  --khor-accent-active: #cc7800;
-  --khor-navy: #051758;
-  --khor-navy-hover: #0a2270;
-  --khor-navy-active: #040f3a;
-  --khor-success: #2E7D32;
-  --khor-error: #D32F2F;
-  --khor-warning: #E07800;
-  --khor-info: #1565C0;
-  --khor-teal: #0D7D7D;
-
-  /* Semantic Layer 2: Surface & Overlay (Interactive Ref) */
-  --khor-surface-page: #f8faff; --khor-surface-card: #ffffff;
-  --khor-surface-hover: rgba(5, 23, 88, 0.04); --khor-surface-pressed: rgba(5, 23, 88, 0.08);
-  --khor-surface-selected: ${theme.primary}15; --khor-surface-subtle: #F4F6F8;
-  --khor-surface-overlay: #ffffff; --khor-surface-raised: #ffffff;
-  --khor-surface-dragging: rgba(5, 23, 88, 0.12);
-  --khor-overlay-bg: rgba(255, 255, 255, 0.95); --khor-overlay-backdrop: rgba(0, 0, 0, 0.45);
-
-  /* Semantic Layer 2: Borders */
-  --khor-border-default: #D5DBE0; --khor-border-muted: #EDF0F1;
-  --khor-border-strong: #A0AEC0; --khor-border-hover: #A0AEC0;
-  --khor-border-focus: ${theme.primary}; --khor-border-error: ${theme.error};
-  --khor-border-disabled: #EDF0F1;
-
-  /* Focus Ring (referenciado por khorTokens.semantic.focus) */
-  --khor-focus-ring-color: ${theme.primary}; --khor-focus-ring-width: 2px;
-  --khor-focus-ring-offset: 2px; --khor-focus-ring-style: solid;
-
-  /* Semantic Layer 2: Typography */
-  --khor-text-primary: ${theme.secondary}; --khor-text-secondary: #475a8f;
-  --khor-text-muted: #94a9d8; --khor-text-disabled: #A0AEC0; --khor-text-on-action: #ffffff;
-  --khor-text-link: ${theme.primary}; --khor-text-link-hover: #e8644f;
-
-  /* Typography Base Sizing (referenciado por khorTokens.typography) */
-  --khor-font-size-h1: 32px; --khor-font-size-h2: 28px;
-  --khor-font-size-h3: 24px; --khor-font-size-h4: 20px;
-  --khor-font-size-h5: 18px; --khor-font-size-h6: 16px;
-  --khor-font-size-body-lg: 16px; --khor-font-size-body-md: 14px;
-  --khor-font-size-body-sm: 13px; --khor-font-size-body-xs: 12px;
-  --khor-font-size-display-1: 48px; --khor-font-size-display-2: 40px;
-  --khor-font-size-display-2xl: 72px; --khor-font-size-display-xl: 56px;
-  --khor-font-size-heading-lg: 48px; --khor-font-size-heading-md: 40px;
-  --khor-font-size-heading-sm: 32px; --khor-font-size-heading-xs: 24px;
-  --khor-font-size-body-xl: 18px; --khor-font-size-code: 13px;
-  --khor-font-size-label: 14px; --khor-font-size-caption: 12px;
-  --khor-font-weight-light: 300; --khor-font-weight-regular: 400;
-  --khor-font-weight-medium: 500; --khor-font-weight-semibold: 600;
-  --khor-font-weight-bold: 700; --khor-font-weight-extrabold: 800;
-  --khor-line-height-display: 1.1; --khor-line-height-heading: 1.25;
-  --khor-line-height-body: 1.5; --khor-line-height-dynamic: 1.6;
-  --khor-letter-spacing-tighter: -0.02em; --khor-letter-spacing-tight: -0.01em;
-  --khor-letter-spacing-normal: 0em; --khor-letter-spacing-wide: 0.02em;
-  --khor-letter-spacing-wider: 0.05em;
-
-  /* Motion Tokens (Elite Precision) */
-  --khor-duration-instant: 50ms; --khor-duration-fast: 150ms;
-  --khor-duration-normal: 250ms; --khor-duration-slow: 450ms;
-  --khor-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
-  --khor-easing-enter: cubic-bezier(0, 0, 0.2, 1);
-  --khor-easing-exit: cubic-bezier(0.4, 0, 1, 1);
-  --khor-easing-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  --khor-transition-fade: opacity var(--khor-duration-normal) var(--khor-easing-standard);
-  --khor-transition-scale: transform var(--khor-duration-normal) var(--khor-easing-standard);
-  --khor-transition-slide: transform var(--khor-duration-normal) var(--khor-easing-standard);
-  --khor-transition-color: color var(--khor-duration-normal) var(--khor-easing-standard), background-color var(--khor-duration-normal) var(--khor-easing-standard), border-color var(--khor-duration-normal) var(--khor-easing-standard);
-
-  /* Elevation & Shadows (Multi-Layer Strategy) */
-  --khor-shadow-sm: 0 1px 2px rgba(5,23,88,0.04), 0 1px 1px rgba(0,0,0,0.02);
-  --khor-shadow-md: 0 4px 6px -1px rgba(5,23,88,0.08), 0 2px 4px -1px rgba(0,0,0,0.04);
-  --khor-shadow-lg: 0 10px 15px -3px rgba(5,23,88,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
-  --khor-shadow-xl: 0 20px 25px -5px rgba(5,23,88,0.12), 0 10px 10px -5px rgba(0,0,0,0.04);
-  --khor-shadow-2xl: 0 25px 50px -12px rgba(5,23,88,0.25);
-  --khor-shadow-inner: inset 0 2px 4px 0 rgba(0,0,0,0.06);
-  --khor-elevation-0: none;
-  --khor-elevation-1: var(--khor-shadow-sm);
-  --khor-elevation-2: var(--khor-shadow-md);
-  --khor-elevation-3: var(--khor-shadow-lg);
-  --khor-elevation-4: var(--khor-shadow-xl);
-  --khor-elevation-5: var(--khor-shadow-2xl);
-
-  /* Layout Grid System (Corregido a Sintaxis CSS Estándar) */
-  --khor-grid-cols: 12;
-  --khor-grid-gutter-sm: 16px; --khor-grid-margin-sm: 16px;
-  --khor-grid-gutter-md: 24px; --khor-grid-margin-md: 24px;
-  --khor-grid-gutter-lg: 32px; --khor-grid-margin-lg: 32px;
-  --khor-grid-gutter-xl: 32px; --khor-grid-margin-xl: 40px;
-
-  /* Semantic Spacing Tokens (Aliases) */
-  --khor-space-layout-xs: 16px; --khor-space-layout-sm: 24px;
-  --khor-space-layout-md: 32px; --khor-space-layout-lg: 48px;
-  --khor-space-layout-xl: 64px;
-  --khor-space-component-xs: 4px; --khor-space-component-sm: 8px;
-  --khor-space-component-md: 12px; --khor-space-component-lg: 16px;
-  --khor-density-spacing-xs: 4px; --khor-density-spacing-sm: 8px;
-  --khor-density-spacing-md: 16px; --khor-density-spacing-lg: 24px;
-
-  /* Sizing Scale (referenciado por khorTokens.sizing) */
-  --khor-size-0: 0px; --khor-size-1: 4px; --khor-size-2: 8px;
-  --khor-size-3: 12px; --khor-size-4: 16px; --khor-size-5: 20px;
-  --khor-size-6: 24px; --khor-size-8: 32px; --khor-size-10: 40px;
-  --khor-size-12: 48px; --khor-size-16: 64px; --khor-size-20: 80px;
-  --khor-size-24: 96px; --khor-size-32: 128px; --khor-size-40: 160px;
-  --khor-size-48: 192px; --khor-size-56: 224px; --khor-size-64: 256px;
-  --khor-size-full: 100%;
-
-  /* Icon Sizing (referenciado por khorTokens.icon) */
-  --khor-icon-xs: 12px; --khor-icon-sm: 14px; --khor-icon-md: 16px;
-  --khor-icon-lg: 20px; --khor-icon-xl: 24px; --khor-icon-2xl: 32px;
-
-  /* 💎 Layer 3: Component Specific Tokens (Corregido de Huérfanos) */
-  --khor-button-primary-bg:        var(--khor-action-primary-default);
-  --khor-button-primary-text:      var(--khor-text-on-action);
-  --khor-button-primary-shadow:    0 2px 4px rgba(224, 77, 54, 0.2);
-  --khor-button-secondary-bg:      var(--khor-action-secondary-default);
-  --khor-button-secondary-text:    var(--khor-text-on-action);
-  --khor-input-bg:                 var(--khor-surface-card);
-  --khor-input-border:             var(--khor-border-default);
-  --khor-input-focus-border:       var(--khor-border-focus);
-  --khor-input-focus-ring:         var(--khor-form-focus-ring);
-  --khor-card-bg:                  var(--khor-surface-card);
-  --khor-card-shadow:              var(--khor-shadow-md);
-  --khor-card-radius:              var(--khor-radius-lg);
-
-  /* Layer 3: Contextual Tokens — Secciones Invertidas (Corregido de Huérfanos) */
-  --khor-context-sidebar-bg:        var(--khor-chart-secondary);
-  --khor-context-sidebar-text:      var(--khor-neutral-50);
-  --khor-context-sidebar-text-muted:rgba(255, 255, 255, 0.55);
-  --khor-context-sidebar-border:    rgba(255, 255, 255, 0.08);
-  --khor-context-sidebar-hover:     rgba(255, 255, 255, 0.10);
-  --khor-context-sidebar-active:    rgba(255, 255, 255, 0.15);
-  --khor-context-header-bg:         var(--khor-surface-card);
-  --khor-context-header-border:     var(--khor-border-default);
-  --khor-context-header-text:       var(--khor-text-primary);
-
-  /* Chart Array Mapping (AI-Fallback Compatibility) */
-  --khor-chart-1: var(--khor-chart-primary);
-  --khor-chart-2: var(--khor-chart-secondary);
-  --khor-chart-3: var(--khor-chart-accent);
-  --khor-chart-4: var(--khor-chart-success);
-}
+${generateCssBlock(theme)}
 \`\`\`
 
 ### 🧩 khorTokens (Objeto JS Estricto)

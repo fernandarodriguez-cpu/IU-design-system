@@ -48,6 +48,7 @@ import {
   CheckCircle, Clock, AlertTriangle, GitCommit, Tag, Bell,
 } from 'lucide-react';
 import { khorTokens } from '../theme/khor-theme';
+import type { MoleculeData } from '../registry/registry-types';
 
 export interface MoleculeEntry {
   id: string;
@@ -2439,6 +2440,12 @@ import { KInput } from '@khor/design-system/atoms/index';
     }
   }
 };
+
+export const moleculesData: Record<string, MoleculeData> = {};
+Object.keys(molecules).forEach(key => {
+  const { preview, playground, stateShowcase, ...data } = molecules[key];
+  moleculesData[key] = data;
+});
 
 export function MoleculesPage() {
   const { id } = useParams<{ id: string }>();
