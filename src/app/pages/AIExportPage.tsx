@@ -26,7 +26,7 @@ import { khorTokens } from '../theme/khor-theme';
 const t = khorTokens;
 
 /* ─── Version (must match ChangelogPage & AppShell) ─── */
-export const KHOR_VERSION = '6.0.0-beta';
+export const KHOR_VERSION = '6.0.0';
 
 
 /* ─── Sections config ───────────────────────── */
@@ -39,6 +39,7 @@ export interface SectionConfig {
 
 export const defaultSections: SectionConfig[] = [
   { id: 'header', label: 'Encabezado y contexto', description: 'Nombre, versión, stack tecnológico y propósito del sistema.', enabled: true },
+  { id: 'index', label: 'Índice de Componentes', description: 'Catálogo compacto con los 81 componentes del sistema.', enabled: true },
   { id: 'tokens', label: 'Design Tokens', description: 'Charts elite, Forms semánticos, Icon scale, Colores, Tipografía, etc.', enabled: true },
   { id: 'darkmode', label: 'Dark Mode', description: 'Inversión semántica y tokens alternativos para modo oscuro.', enabled: true },
   { id: 'atoms', label: 'Átomos (30)', description: 'API completa de 30 átomos: Sistema v5.0 optimizado.', enabled: true },
@@ -95,6 +96,38 @@ Como IA, DEBES elegir componentes basados en la **Intención Semántica** del fl
 | \`brand_call_to_action\` | \`KButton\` (Primary) + \`KIcon\` (Sparkles) | Baja |
 | \`system_feedback_error\` | \`kToast\` (Error) o \`KResult\` (500/403) | Alta |
 `);
+  }
+
+  /* ─── Component Index (compacto, para visibilidad en context windows pequeños) ─── */
+  const renderComponentIndex = (): string => {
+    const total = Object.keys(atoms).length + Object.keys(molecules).length + Object.keys(organisms).length;
+    let idx = `## 📋 Catálogo de Componentes (${total} en total)\n\n`;
+    idx += `*Este índice compacto permite a la IA ver el inventario completo incluso si el contexto se trunca en las secciones detalladas.*\n\n`;
+
+    const renderLayerTable = (dict: Record<string, any>) => {
+      let rows = '';
+      Object.keys(dict).forEach(key => {
+        const c = dict[key];
+        rows += `| \`${c.name}\` | ${c.description} |\n`;
+      });
+      return rows;
+    };
+
+    idx += `### Átomos (${Object.keys(atoms).length})\n`;
+    idx += `| Componente | Descripción |\n|-----------|-------------|\n`;
+    idx += renderLayerTable(atoms);
+    idx += `\n### Moléculas (${Object.keys(molecules).length})\n`;
+    idx += `| Componente | Descripción |\n|-----------|-------------|\n`;
+    idx += renderLayerTable(molecules);
+    idx += `\n### Organismos (${Object.keys(organisms).length})\n`;
+    idx += `| Componente | Descripción |\n|-----------|-------------|\n`;
+    idx += renderLayerTable(organisms);
+    idx += `\n---\n`;
+    return idx;
+  };
+
+  if (enabled.has('index')) {
+    parts.push(renderComponentIndex());
   }
 
   if (enabled.has('tokens')) {
@@ -684,7 +717,7 @@ Este sistema está diseñado para ser la fuente de verdad absoluta para Agentes 
 
 | Versión | Fecha | Cambios |
 |---------|-------|---------|
-| **v6.0.0-beta** | ${today} | **The Holistic Standard:** Integración total de UX Writing (Voz y Tono), Taxonomía W3C CTI, State Layers universales, matemática de Focus-Visible y protocolo de sincronización Figma MCP. |
+| **v6.0.0** | ${today} | **The Holistic Standard:** Integración total de UX Writing (Voz y Tono), Taxonomía W3C CTI, State Layers universales, matemática de Focus-Visible y protocolo de sincronización Figma MCP. |
 | **v5.0.0-beta** | ${today} | **Enterprise Hardening:** Layer 3 Component Tokens (KButton, KInput, KCard), RTL/i18n native con CSS Logical Properties, SSR guidelines (Next.js/Remix). |
 | **v5.0.1-alpha** | ${today} | **Shadow & Layout Precision:** Evolución masiva de la fidelidad visual. Sombras multi-capa y sistema de grillas responsivas certificado para todos los breakpoints. |
 | **v5.0.0-alpha** | ${today} | **The World-Class Foundation:** Migración total a arquitectura W3C Design Tokens, tipografía fluida, KDataTable empresarial, Command Palette con acciones, KFormWizard y testing con Playwright. |

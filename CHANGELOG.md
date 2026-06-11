@@ -2,8 +2,10 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo. Khor sigue una metodología de desarrollo por "Olas" (Waves) dentro de fases evolutivas.
 
-## [6.0.0-beta] — 2026-06-11
+## [6.0.0] — 2026-06-11
 ### 🧹 Ola 23: AI Guide Hardening — Token Purge & Elite Standards
+- 📦 **Versión promovida a stable**: `6.0.0-beta` → `6.0.0`. El sistema alcanza madurez de producción tras 3 rondas de auditoría y saneamiento completo.
+- **Índice de componentes en guía IA**: Nueva sección `📋 Catálogo de Componentes` al inicio del markdown con tabla compacta de los 81 componentes (30 átomos, 31 moléculas, 20 organismos). Garantiza que la IA vea el inventario completo incluso si el contexto se trunca en secciones detalladas.
 - **KText deprecado en guía IA**: Reemplazadas todas las referencias de `KText` por `KTypography.Text` en el markdown generado por `AIExportPage.tsx`, eliminando recomendaciones del componente deprecado.
 - **Tokenización de colores hardcodeados**: Sustitución de 11+ valores hex hardcodeados (`#eee`, `#f5f5f5`, `#ccc`, `#666`, `#333`, `#051758`, gradient purple/pink) por tokens semánticos de Khor (`khorTokens.colors.neutral`, `khorTokens.colors.brand`, `var(--khor-chart-*)`) en playgrounds y previews de `AtomsPage.tsx`, `MoleculesPage.tsx` y `AIExportPage.tsx`.
 - **Escala neutral corregida**: Actualización de la paleta neutral (50-900) en el generador de guía IA para coincidir con la escala Slate-Blue de `theme.css`.
