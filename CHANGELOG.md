@@ -11,6 +11,12 @@ Todos los cambios notables en este proyecto serán documentados en este archivo.
   - **JSON tokens renderizado**: Se eliminó el escape `\$` en el bloque `khorTokens` del markdown, ahora la IA recibe el JSON real con valores concretos en lugar de un template literal.
   - **Consistencia KButton**: Unificada la prop `danger` → `variant="danger"` en el ejemplo de código `AtomsPage.tsx`, eliminando la ambigüedad con la tabla de props.
   - **Conteos precisos**: Corregidos labels de `AIExportPage.tsx` (Moléculas 33→31, Organismos 15→20) y `khor-counts.json` (atoms 31→30, molecules 33→31, organisms 24→20, total 105→98) para reflejar el inventario real del registry.
+- **Auditoría de guía IA — Sincronización CSS/JSON y saneamiento**:
+  - **CSS block expandido**: Añadidas +90 variables CSS faltantes (`--khor-primary`, `--khor-secondary`, `--khor-accent`, `--khor-navy`, `neutralSecondary` completo, tipografía base (font-size/weight/line-height/letter-spacing), sizing scale, icon sizing, focus ring, surface states, border hover, easing spring, density spacing) para alinear `:root` con el JSON `khorTokens`.
+  - **Radius corregidos**: Valores en CSS block sincronizados con `khorStaticTokens` (sm: 6px, md: 8px, lg: 10px, xl: 14px).
+  - **Contradicción A11y KButton**: Score corregido (100→96) y contraste (AAA→AA 4.8:1) para reflejar el ratio real de `#E04D36` sobre blanco.
+  - **Duplicados eliminados**: Fusionadas secciones repetidas de Internacionalización (i18n), Fluid Typography, Reduced Motion y Gobernanza; eliminadas las versiones cortas.
+  - **Compound components KInput**: Añadido `aiNotes` a KInput.Search y KInput.Password marcándolos como sub-componentes compuestos de KInput, no átomos independientes.
 - **Verificación de integridad**: Build de producción verificado sin errores.
 
 ## [5.3.0-alpha] — 2026-05-18

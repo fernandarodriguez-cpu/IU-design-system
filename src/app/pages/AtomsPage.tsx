@@ -1532,8 +1532,8 @@ export const atoms: Record<string, AtomEntry> = {
     a11ySummary: {
       keyboard: ['Tab: Navega al componente y lanza focus ring.', 'Enter/Space: Dispara evento onClick.'],
       aria: ['role="button"', 'aria-disabled="true" y tabIndex={-1} cuando desactivado.', 'aria-busy="true" global durante loading.'],
-      contrast: 'AAA sobre blanco',
-      score: 100,
+      contrast: 'AA sobre blanco (ratio 4.8:1 — primary sobre white no alcanza AAA de 7:1)',
+      score: 96,
     },
     code: `import { KButton } from '@khor/design-system/atoms/index';
 
@@ -2551,7 +2551,7 @@ export const atoms: Record<string, AtomEntry> = {
       score: 100,
     },
     guidelines: ['Centralizado en Atoms para uso global.', 'Usa para búsquedas primarias en el sistema.'],
-    aiNotes: 'Evolución de KInput para búsqueda. Priorizar sobre KInput básico en cabeceras.'
+    aiNotes: 'Compound sub-component de KInput. NO documentar como átomo independiente — ver props en KInput.'
   },
   'label': { id: 'label', name: 'KLabel', description: 'Etiqueta para campos de formulario con indicador de campo obligatorio y tooltip de informacion.',
     preview: (<KLabel required info="Ayuda">Campo</KLabel>),
@@ -2577,7 +2577,8 @@ export const atoms: Record<string, AtomEntry> = {
       contrast: 'AAA',
       score: 100,
     },
-    guidelines: ['Siempre incluye el toggle de visibilidad.']
+    guidelines: ['Siempre incluye el toggle de visibilidad.'],
+    aiNotes: 'Compound sub-component de KInput. NO documentar como átomo independiente — ver props en KInput.'
   },
   'float-button': { id: 'float-button', name: 'KFloatButton', description: 'Botón flotante (FAB) fijo en la esquina de la pantalla. Ideal para acciones principales.',
     preview: (<div style={{ position: 'relative', height: 80, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}><KText variant="small" color="muted" className="p-4">El botón flotante aparece fijo en la esquina inferior derecha.</KText></div>),

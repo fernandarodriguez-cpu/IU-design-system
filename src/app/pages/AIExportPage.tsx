@@ -94,12 +94,6 @@ Como IA, DEBES elegir componentes basados en la **Intención Semántica** del fl
 | \`step_by_step_flow\` | \`KFormWizard\` | Media |
 | \`brand_call_to_action\` | \`KButton\` (Primary) + \`KIcon\` (Sparkles) | Baja |
 | \`system_feedback_error\` | \`kToast\` (Error) o \`KResult\` (500/403) | Alta |
-
-### 🔠 Fluid Typography (Responsive by Design)
-Khor v5.0 usa tipografía fluida basada en \`clamp()\`. NO sobrescribas tamaños de fuente con media queries. Usa los tokens semánticos:
-- \`--khor-type-display-2xl\`, \`--khor-type-display-xl\`: Para títulos de gran impacto (Fluid 48px -> 72px).
-- \`--khor-type-heading-lg\` a \`--khor-type-heading-xs\`: Para jerarquía de contenido (Fluid 24px -> 48px).
-- \`--khor-type-body-xl\`, \`--khor-type-body-lg\`, \`--khor-type-body-md\`, \`--khor-type-body-sm\`: Para lectura estandarizada.
 `);
   }
 
@@ -112,10 +106,14 @@ La IA DEBE usar estos valores exactos:
 \`\`\`css
 :root {
   /* Layer 1: Primitives - Radios Base */
-  --khor-radius-sm: 4px;
-  --khor-radius-md: 6px;
-  --khor-radius-lg: 8px;
-  --khor-radius-xl: 12px;
+  --khor-radius-xs: 2px;
+  --khor-radius-sm: 6px;
+  --khor-radius-md: 8px;
+  --khor-radius-lg: 10px;
+  --khor-radius-xl: 14px;
+  --khor-radius-2xl: 24px;
+  --khor-radius-3xl: 32px;
+  --khor-radius-full: 9999px;
 
   /* Elite Charts Palette (12 Colores) */
   --khor-chart-primary: ${theme.primary};   --khor-chart-secondary: ${theme.secondary};
@@ -131,6 +129,11 @@ La IA DEBE usar estos valores exactos:
   --khor-neutral-400: #94a9d8;  --khor-neutral-500: #647bb1;
   --khor-neutral-600: #475a8f;  --khor-neutral-700: #33446b;
   --khor-neutral-800: #1e2a4a;  --khor-neutral-900: #0f1a35;
+  --khor-neutral-secondary-50: #f8faff;  --khor-neutral-secondary-100: #f1f4ff;
+  --khor-neutral-secondary-200: #e2eafc; --khor-neutral-secondary-300: #cbd8f1;
+  --khor-neutral-secondary-400: #94a9d8; --khor-neutral-secondary-500: #647bb1;
+  --khor-neutral-secondary-600: #475a8f; --khor-neutral-secondary-700: #33446b;
+  --khor-neutral-secondary-800: #1e2a4a; --khor-neutral-secondary-900: #0f1a35;
 
   /* Form Validation Semantic States */
   --khor-form-error-bg: ${theme.error}15;   --khor-form-error-border: ${theme.error};   --khor-form-error-text: ${theme.error};
@@ -144,22 +147,70 @@ La IA DEBE usar estos valores exactos:
   --khor-action-danger-default: ${theme.error}; --khor-action-danger-hover: #B71C1C;
   --khor-action-ghost-hover: rgba(5, 23, 88, 0.06);
   --khor-action-disabled-bg: #EDF0F1; --khor-action-disabled-text: #A0AEC0;
+  --khor-action-primary-active: #c73a2a;
+
+  /* Brand Color Aliases (referenciados por khorTokens — same as action/semantic values) */
+  --khor-primary: var(--khor-action-primary-default);
+  --khor-primary-hover: var(--khor-action-primary-hover);
+  --khor-primary-active: var(--khor-action-primary-active);
+  --khor-secondary: var(--khor-action-secondary-default);
+  --khor-secondary-hover: var(--khor-action-secondary-hover);
+  --khor-secondary-active: #0d2a8a;
+  --khor-accent: #FF9500;
+  --khor-accent-hover: #e68600;
+  --khor-accent-active: #cc7800;
+  --khor-navy: #051758;
+  --khor-navy-hover: #0a2270;
+  --khor-navy-active: #040f3a;
+  --khor-success: #2E7D32;
+  --khor-error: #D32F2F;
+  --khor-warning: #E07800;
+  --khor-info: #1565C0;
+  --khor-teal: #0D7D7D;
 
   /* Semantic Layer 2: Surface & Overlay (Interactive Ref) */
   --khor-surface-page: #f8faff; --khor-surface-card: #ffffff;
   --khor-surface-hover: rgba(5, 23, 88, 0.04); --khor-surface-pressed: rgba(5, 23, 88, 0.08);
   --khor-surface-selected: ${theme.primary}15; --khor-surface-subtle: #F4F6F8;
-  --khor-surface-overlay: #ffffff; --khor-overlay-bg: rgba(255, 255, 255, 0.95);
+  --khor-surface-overlay: #ffffff; --khor-surface-raised: #ffffff;
+  --khor-surface-dragging: rgba(5, 23, 88, 0.12);
+  --khor-overlay-bg: rgba(255, 255, 255, 0.95); --khor-overlay-backdrop: rgba(0, 0, 0, 0.45);
 
   /* Semantic Layer 2: Borders */
   --khor-border-default: #D5DBE0; --khor-border-muted: #EDF0F1;
-  --khor-border-strong: #A0AEC0; --khor-border-focus: ${theme.primary};
-  --khor-border-error: ${theme.error}; --khor-border-disabled: #EDF0F1;
+  --khor-border-strong: #A0AEC0; --khor-border-hover: #A0AEC0;
+  --khor-border-focus: ${theme.primary}; --khor-border-error: ${theme.error};
+  --khor-border-disabled: #EDF0F1;
+
+  /* Focus Ring (referenciado por khorTokens.semantic.focus) */
+  --khor-focus-ring-color: ${theme.primary}; --khor-focus-ring-width: 2px;
+  --khor-focus-ring-offset: 2px; --khor-focus-ring-style: solid;
 
   /* Semantic Layer 2: Typography */
   --khor-text-primary: ${theme.secondary}; --khor-text-secondary: #475a8f;
   --khor-text-muted: #94a9d8; --khor-text-disabled: #A0AEC0; --khor-text-on-action: #ffffff;
-  --khor-line-height-dynamic: 1.6;
+  --khor-text-link: ${theme.primary}; --khor-text-link-hover: #e8644f;
+
+  /* Typography Base Sizing (referenciado por khorTokens.typography) */
+  --khor-font-size-h1: 32px; --khor-font-size-h2: 28px;
+  --khor-font-size-h3: 24px; --khor-font-size-h4: 20px;
+  --khor-font-size-h5: 18px; --khor-font-size-h6: 16px;
+  --khor-font-size-body-lg: 16px; --khor-font-size-body-md: 14px;
+  --khor-font-size-body-sm: 13px; --khor-font-size-body-xs: 12px;
+  --khor-font-size-display-1: 48px; --khor-font-size-display-2: 40px;
+  --khor-font-size-display-2xl: 72px; --khor-font-size-display-xl: 56px;
+  --khor-font-size-heading-lg: 48px; --khor-font-size-heading-md: 40px;
+  --khor-font-size-heading-sm: 32px; --khor-font-size-heading-xs: 24px;
+  --khor-font-size-body-xl: 18px; --khor-font-size-code: 13px;
+  --khor-font-size-label: 14px; --khor-font-size-caption: 12px;
+  --khor-font-weight-light: 300; --khor-font-weight-regular: 400;
+  --khor-font-weight-medium: 500; --khor-font-weight-semibold: 600;
+  --khor-font-weight-bold: 700; --khor-font-weight-extrabold: 800;
+  --khor-line-height-display: 1.1; --khor-line-height-heading: 1.25;
+  --khor-line-height-body: 1.5; --khor-line-height-dynamic: 1.6;
+  --khor-letter-spacing-tighter: -0.02em; --khor-letter-spacing-tight: -0.01em;
+  --khor-letter-spacing-normal: 0em; --khor-letter-spacing-wide: 0.02em;
+  --khor-letter-spacing-wider: 0.05em;
 
   /* Motion Tokens (Elite Precision) */
   --khor-duration-instant: 50ms; --khor-duration-fast: 150ms;
@@ -167,6 +218,7 @@ La IA DEBE usar estos valores exactos:
   --khor-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
   --khor-easing-enter: cubic-bezier(0, 0, 0.2, 1);
   --khor-easing-exit: cubic-bezier(0.4, 0, 1, 1);
+  --khor-easing-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
   --khor-transition-fade: opacity var(--khor-duration-normal) var(--khor-easing-standard);
   --khor-transition-scale: transform var(--khor-duration-normal) var(--khor-easing-standard);
   --khor-transition-slide: transform var(--khor-duration-normal) var(--khor-easing-standard);
@@ -199,6 +251,21 @@ La IA DEBE usar estos valores exactos:
   --khor-space-layout-xl: 64px;
   --khor-space-component-xs: 4px; --khor-space-component-sm: 8px;
   --khor-space-component-md: 12px; --khor-space-component-lg: 16px;
+  --khor-density-spacing-xs: 4px; --khor-density-spacing-sm: 8px;
+  --khor-density-spacing-md: 16px; --khor-density-spacing-lg: 24px;
+
+  /* Sizing Scale (referenciado por khorTokens.sizing) */
+  --khor-size-0: 0px; --khor-size-1: 4px; --khor-size-2: 8px;
+  --khor-size-3: 12px; --khor-size-4: 16px; --khor-size-5: 20px;
+  --khor-size-6: 24px; --khor-size-8: 32px; --khor-size-10: 40px;
+  --khor-size-12: 48px; --khor-size-16: 64px; --khor-size-20: 80px;
+  --khor-size-24: 96px; --khor-size-32: 128px; --khor-size-40: 160px;
+  --khor-size-48: 192px; --khor-size-56: 224px; --khor-size-64: 256px;
+  --khor-size-full: 100%;
+
+  /* Icon Sizing (referenciado por khorTokens.icon) */
+  --khor-icon-xs: 12px; --khor-icon-sm: 14px; --khor-icon-md: 16px;
+  --khor-icon-lg: 20px; --khor-icon-xl: 24px; --khor-icon-2xl: 32px;
 
   /* 💎 Layer 3: Component Specific Tokens (Corregido de Huérfanos) */
   --khor-button-primary-bg:        var(--khor-action-primary-default);
@@ -302,12 +369,6 @@ La IA debe aplicar estas clases al contenedor raíz para heredar el modelo de ca
 }
 \`\`\`
 
-### 🌍 Internacionalización (i18n & RTL)
-Khor v5.0 está preparado para mercados globales. La IA debe seguir estas reglas:
-1. **Lógica Direccional:** NUNCA uses \`padding-left\` o \`right\`. Usa SIEMPRE propiedades lógicas: \`padding-inline-start\`, \`margin-inline-end\`.
-2. **Iconografía Espejada:** Iconos de navegación (flechas) DEBEN espejarse en RTL usando \`transform: scaleX(-1)\` si no hay una variante nativa.
-3. **Tipografía:** Para scripts árabes/hebreos, el sistema debe aumentar el \`line-height\` en un 20% automáticamente mediante el token \`--khor-line-height-dynamic\`.
-
 ### 🛡️ Seguridad y Robustez de Datos
 1. **Sanitización Obligatoria:** NUNCA uses \`dangerouslySetInnerHTML\` con datos provenientes de props sin pasar por una capa de sanitización (ej. DOMPurify).
 2. **Escape de Atributos:** Todo \`title\` o \`aria-label\` dinámico debe ser escapado para prevenir inyecciones de strings maliciosos.
@@ -367,13 +428,6 @@ Cuando \`prefers-contrast: more\` está activo, el sistema aplica:
 | warning-light | #FFF3E0 | #3B2500 |
 | info-light | #E3F2FD | #0D1F3C |
 
-### 📜 Gobernanza y Contribución (Khor Elite Standards)
-El sistema sigue estándares estrictos para mantener la paridad IA/Humanos.
-1. **Prefijo K:** Todo componente debe empezar con "K" (ej. \`KButton\`).
-2. **Cero Dependencias:** Prohibido instalar librerías de UI externas (MUI, AntD).
-3. **Capa Semántica 2:** Priorizar \`action-primary-default\` sobre colores base.
-4. **Metadata IA:** Todo componente nuevo debe incluir \`a11ySummary\` y \`aiNotes\` en su registro.
-5. **Checklist:** Props tipadas, Soporte Dark Mode, Soporte Densidad.
 
 ### Elevación — Guía de uso obligatoria
 
@@ -390,8 +444,6 @@ El sistema sigue estándares estrictos para mantener la paridad IA/Humanos.
 - **Breakpoints:** \`sm: 640px\`, \`md: 768px\`, \`lg: 1024px\`, \`xl: 1280px\`.
 - **Z-Index:** \`dropdown: 1000\`, \`modal: 1400\`, \`toast: 1700\`.
 - **Motion:** \`standard: cubic-bezier(0.4, 0, 0.2, 1)\`, \`spring: cubic-bezier(0.175, 0.885, 0.32, 1.275)\`.
-- **Reduced Motion:** El sistema respeta \`prefers-reduced-motion\` globalmente.
-
 ### 🌍 Internacionalización (i18n) — RTL Native Support
 Khor usa **CSS Logical Properties** en todos sus componentes, garantizando que la UI se espeje automáticamente en idiomas RTL (árabe, hebreo) sin cambios de código.
 
