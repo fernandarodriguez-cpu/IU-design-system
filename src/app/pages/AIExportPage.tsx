@@ -13,6 +13,7 @@ import { KText } from '../components/design-system/atoms/KText/index';
 import { KBadge } from '../components/design-system/atoms/KBadge/index';
 import { KAlert } from '../components/design-system/atoms/KAlert/index';
 import { KSwitch } from '../components/design-system/atoms/KSwitch/index';
+import JSZip from 'jszip';
 import { KCardSection } from '../components/design-system/organisms/KCardSection/index';
 import { KTabs } from '../components/design-system/organisms/KTabs/index';
 import { kToast } from '../components/design-system/organisms/KToast/index';
@@ -1425,6 +1426,29 @@ export function AIExportPage() {
     kToast({ type: 'success', title: `Descargado: ${layer.label}`, description: layer.filename });
   };
 
+  const handleDownloadAllLayers = async () => {
+    const zip = new JSZip();
+    const full = generateMarkdown(sections, theme);
+
+    for (const l of layerConfigs) {
+      if (l.id === 'full') continue;
+      const content = generateMarkdown(sections, theme, l.sectionIds);
+      zip.file(l.filename, content);
+    }
+    zip.file('khor-guia-completa.md', full);
+
+    const blob = await zip.generateAsync({ type: 'blob' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'khor-guias-completas.zip';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    kToast({ type: 'success', title: 'ZIP generado', description: '5 guías individuales empaquetadas en khor-guias-completas.zip' });
+  };
+
   const handleSelectAll = () => {
     if (previewRef.current) {
       const range = document.createRange();
@@ -1627,6 +1651,17 @@ export function AIExportPage() {
                   {layer.icon} {layer.label} — {layer.filename}
                 </KButton>
               ))}
+              <div style={{ height: 1, backgroundColor: 'var(--border)', margin: '4px 0' }} />
+              <KButton
+                variant="navy"
+                block
+                icon={<Download size={16} />}
+                onClick={handleDownloadAllLayers}
+                disabled={enabledCount === 0}
+                style={{ justifyContent: 'flex-start' }}
+              >
+                📦 Descargar todo (ZIP) — khor-guias-completas.zip
+              </KButton>
               <KButton
                 variant="ghost"
                 block

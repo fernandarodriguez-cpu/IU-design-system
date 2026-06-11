@@ -6,6 +6,7 @@ Todos los cambios notables en este proyecto serán documentados en este archivo.
 ### 🧹 Ola 24: Multi-Guía LLM & Architecture Hardening
 - 📦 **Versión bump**: `6.0.0` → `6.1.0` (MINOR: nueva feature de multi-guía, sin breaking changes).
 - **Multi-guía para LLMs**: `AIExportPage.tsx` ahora permite descargar archivos `.md` individuales por capa (átomos, moléculas, organismos, tokens) además de la guía completa. Cada archivo cabe en context windows pequeños (~25-35KB), resolviendo el truncamiento que impedía a los LLMs ver todos los componentes.
+- **Descarga ZIP completa**: Nuevo botón "Descargar todo (ZIP)" que empaqueta las 5 guías individuales en `khor-guias-completas.zip` usando JSZip. El usuario elige si descarga solo una capa o todo el conjunto.
 - **Índice de componentes**: Nueva sección `📋 Catálogo de Componentes` con tabla compacta de los 81 componentes al inicio del markdown.
 - **Version centralizada**: `KHOR_VERSION` movido a `src/app/version/version.ts` como fuente única. `package.json` sincronizado a `6.1.0`.
 - **Fix KButton `danger` prop**: Preview en `AtomsPage.tsx` unificado a `variant="danger"` (era `<KButton danger>`), consistente con el code example y la tabla de props.
