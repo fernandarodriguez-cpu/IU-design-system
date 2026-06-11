@@ -7,6 +7,10 @@ Todos los cambios notables en este proyecto serán documentados en este archivo.
 - **KText deprecado en guía IA**: Reemplazadas todas las referencias de `KText` por `KTypography.Text` en el markdown generado por `AIExportPage.tsx`, eliminando recomendaciones del componente deprecado.
 - **Tokenización de colores hardcodeados**: Sustitución de 11+ valores hex hardcodeados (`#eee`, `#f5f5f5`, `#ccc`, `#666`, `#333`, `#051758`, gradient purple/pink) por tokens semánticos de Khor (`khorTokens.colors.neutral`, `khorTokens.colors.brand`, `var(--khor-chart-*)`) en playgrounds y previews de `AtomsPage.tsx`, `MoleculesPage.tsx` y `AIExportPage.tsx`.
 - **Escala neutral corregida**: Actualización de la paleta neutral (50-900) en el generador de guía IA para coincidir con la escala Slate-Blue de `theme.css`.
+- **Auditoría de guía IA — Correcciones post-review**:
+  - **JSON tokens renderizado**: Se eliminó el escape `\$` en el bloque `khorTokens` del markdown, ahora la IA recibe el JSON real con valores concretos en lugar de un template literal.
+  - **Consistencia KButton**: Unificada la prop `danger` → `variant="danger"` en el ejemplo de código `AtomsPage.tsx`, eliminando la ambigüedad con la tabla de props.
+  - **Conteos precisos**: Corregidos labels de `AIExportPage.tsx` (Moléculas 33→31, Organismos 15→20) y `khor-counts.json` (atoms 31→30, molecules 33→31, organisms 24→20, total 105→98) para reflejar el inventario real del registry.
 - **Verificación de integridad**: Build de producción verificado sin errores.
 
 ## [5.3.0-alpha] — 2026-05-18

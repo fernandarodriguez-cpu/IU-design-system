@@ -1544,7 +1544,7 @@ export const atoms: Record<string, AtomEntry> = {
   Guardar
 </KButton>
 
-<KButton danger size="sm" icon={<Trash2 size={16} />}>
+<KButton variant="danger" size="sm" icon={<Trash2 size={16} />}>
   Eliminar
 </KButton>
 

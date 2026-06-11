@@ -42,8 +42,8 @@ export const defaultSections: SectionConfig[] = [
   { id: 'tokens', label: 'Design Tokens', description: 'Charts elite, Forms semánticos, Icon scale, Colores, Tipografía, etc.', enabled: true },
   { id: 'darkmode', label: 'Dark Mode', description: 'Inversión semántica y tokens alternativos para modo oscuro.', enabled: true },
   { id: 'atoms', label: 'Átomos (30)', description: 'API completa de 30 átomos: Sistema v5.0 optimizado.', enabled: true },
-  { id: 'molecules', label: 'Moléculas (33)', description: 'API completa de 33 moléculas coordinadas con el sistema Elite.', enabled: true },
-  { id: 'organisms', label: 'Organismos (15)', description: 'Componentes complejos coordinados con el sistema Elite.', enabled: true },
+  { id: 'molecules', label: 'Moléculas (31)', description: 'API completa de 31 moléculas coordinadas con el sistema Elite.', enabled: true },
+  { id: 'organisms', label: 'Organismos (20)', description: 'Componentes complejos coordinados con el sistema Elite.', enabled: true },
   { id: 'templates', label: 'Templates y Patrones', description: 'Patrones de página: Dashboard Admin, CRUD Elite, Login SaaS, etc.', enabled: true },
   { id: 'layout', label: 'Layout (AppShell)', description: 'Estructura sidebar + header + canvas con dimensiones Elite.', enabled: true },
   { id: 'patterns', label: 'Patrones y Convenciones', description: '3-Layer Architecture, Fluid Typography, Naming, A11y.', enabled: true },
@@ -236,7 +236,7 @@ La IA DEBE usar estos valores exactos:
 ### 🧩 khorTokens (Objeto JS Estricto)
 Como referencia estructural, aquí tienes la definición de \`khorTokens\`. Úsala para referenciar variables en inline styles si Tailwind no es posible:
 \`\`\`json
-\${JSON.stringify(khorTokens, null, 2)}
+${JSON.stringify(khorTokens, null, 2)}
 \`\`\`
 
 ### 🌑 Dual-Theme Semantic Mapping (Dark Mode Strategy)
