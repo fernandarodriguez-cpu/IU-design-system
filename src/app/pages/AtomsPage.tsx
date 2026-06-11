@@ -32,7 +32,6 @@ import { KQRCode } from '../components/design-system/atoms/KQRCode/index';
 import { KFlex } from '../components/design-system/atoms/KFlex/index';
 import { KRow, KCol } from '../components/design-system/atoms/KGrid/index';
 import { KIcon } from '../components/design-system/atoms/KIcon/index';
-import { KTooltip } from '../components/design-system/molecules/KTooltip/index';
 import { KPagination } from '../components/design-system/organisms/KPagination/index';
 import {
   Plus, Save, Trash2, Download, Mail, Lock, User,
@@ -44,8 +43,6 @@ import type { AtomData } from '../registry/registry-types';
 
 // Unified Input Aliases for internal page consistency
 const KTextArea = KInput.TextArea;
-const KSearchInput = KInput.Search;
-const KInputPassword = KInput.Password;
 const KInputOTP = KInput.OTP;
 
 /* ─── Playground Wrappers ───────────────────── */
@@ -1238,29 +1235,6 @@ function SpinPlayground() {
   );
 }
 
-function TooltipPlayground() {
-  const [placement, setPlacement] = useState<any>('top');
-  const [title, setTitle] = useState('Tooltip de ejemplo');
-  const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
-  const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
-  return (
-    <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
-      <div style={{ flex: 1, minWidth: 240 }}>
-        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <div><label style={ctrl}>Posicion</label><select value={placement} onChange={(e) => setPlacement(e.target.value)} style={sel}>{['top','bottom','left','right'].map(p=><option key={p}>{p}</option>)}</select></div>
-          <div><label style={ctrl}>Texto</label><input value={title} onChange={(e) => setTitle(e.target.value)} style={sel}/></div>
-        </div>
-      </div>
-      <div style={{ flex: 1, minWidth: 240, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-        <KTooltip title={title} placement={placement}>
-          <KButton variant="secondary" icon={<Info size={16} />}>Hover aqui</KButton>
-        </KTooltip>
-      </div>
-    </div>
-  );
-}
-
 function DividerPlayground() {
   return (
     <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
@@ -1343,28 +1317,6 @@ function FlexPlayground() {
           <div style={{ width: 80, height: 80, backgroundColor: khorTokens.colors.brand.navy, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 8 }}>2</div>
           <div style={{ width: 70, height: 70, backgroundColor: khorTokens.colors.brand.accent, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 8 }}>3</div>
         </KFlex>
-      </div>
-    </div>
-  );
-}
-
-function PasswordPlayground() {
-  const [disabled, setDisabled] = useState(false);
-  const [size, setSize] = useState<any>('md');
-  const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
-  const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
-
-  return (
-    <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
-      <div style={{ flex: 1, minWidth: 240 }}>
-        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <div><label style={ctrl}>Tamaño</label><select value={size} onChange={(e) => setSize(e.target.value)} style={sel}>{['sm','md','lg'].map(s=><option key={s}>{s}</option>)}</select></div>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={disabled} onChange={(e) => setDisabled(e.target.checked)} /> Disabled</label>
-        </div>
-      </div>
-      <div style={{ flex: 1, minWidth: 280, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-        <KInputPassword placeholder="Ingresa tu contraseña" size={size} disabled={disabled} prefix={<Lock size={16} />} block />
       </div>
     </div>
   );
@@ -1556,7 +1508,7 @@ export const atoms: Record<string, AtomEntry> = {
 <KButton variant="outline" disabled>
   Desactivado
 </KButton>`,
-    filename: 'KButton.tsx',
+    filename: 'KButton/index.tsx',
     props: [
       { name: 'variant', type: "'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'navy'", default: "'primary'", description: 'Variante visual del botón.' },
       { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Tamaño del botón.' },
@@ -1638,7 +1590,7 @@ export const atoms: Record<string, AtomEntry> = {
 
 // 5. OTP (Compound)
 <KInput.OTP length={6} onComplete={v => alert(v)} />`,
-    filename: 'KInput.tsx',
+    filename: 'KInput/index.tsx',
     props: [
       { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Tamaño del componente.' },
       { name: 'variant', type: "'outlined' | 'borderless' | 'filled'", default: "'outlined'", description: 'Variante visual.' },
@@ -1701,7 +1653,7 @@ export const atoms: Record<string, AtomEntry> = {
 <KBadge.Ribbon text="VIP" color="gold">
   <Card>Contenido</Card>
 </KBadge.Ribbon>`,
-    filename: 'KBadge.tsx',
+    filename: 'KBadge/index.tsx',
     props: [
       { name: 'status', type: "'success' | 'error' | 'warning' | 'info' | 'default' | 'processing'", description: 'Estado semántico predefinido.' },
       { name: 'text', type: 'ReactNode', description: 'Texto junto al punto (en standalone mode).' },
@@ -1776,7 +1728,7 @@ export const atoms: Record<string, AtomEntry> = {
 <KTag icon={<Star size={12} />} color="gold" bordered={false}>
   Premium
 </KTag>`,
-    filename: 'KTag.tsx',
+    filename: 'KTag/index.tsx',
     props: [
       { name: 'color', type: 'KTagColor | string', description: 'Presets de AntD (magenta, volcano, gold, etc.) o color CSS.' },
       { name: 'closable', type: 'boolean', description: 'Muestra un botón de cierre.' },
@@ -1906,7 +1858,7 @@ export const atoms: Record<string, AtomEntry> = {
 
 // onError: prevenir fallback
 <KAvatar src="/maybe-broken.jpg" onError={() => { console.log('Error!'); return false; }} />`,
-    filename: 'KAvatar.tsx',
+    filename: 'KAvatar/index.tsx',
     props: [
       { name: 'src', type: 'string', description: 'URL de imagen del avatar.' },
       { name: 'alt', type: 'string', description: 'Texto alternativo para la imagen (accesibilidad). Si se omite, usa name.' },
@@ -1932,6 +1884,7 @@ export const atoms: Record<string, AtomEntry> = {
       'KAvatarGroup con max muestra los primeros N avatares y un indicador "+X" con los sobrantes.',
       'Siempre incluir alt cuando se usa src para cumplir con accesibilidad WCAG.',
     ],
+    aiNotes: 'KAvatar para fotos de perfil con iniciales de fallback, indicador online/offline y badge de notificación.',
   },
   switch: {
     id: 'switch',
@@ -1971,7 +1924,7 @@ export const atoms: Record<string, AtomEntry> = {
   checkedChildren="ON"
   unCheckedChildren="OFF"
 />`,
-    filename: 'KSwitch.tsx',
+    filename: 'KSwitch/index.tsx',
     props: [
       { name: 'checked', type: 'boolean', description: 'Estado actual.' },
       { name: 'onCheckedChange', type: '(checked: boolean) => void', description: 'Callback al cambiar.' },
@@ -1979,6 +1932,7 @@ export const atoms: Record<string, AtomEntry> = {
       { name: 'checkedChildren / unCheckedChildren', type: 'ReactNode', description: 'Texto o iconos dentro del track.' },
     ],
     guidelines: ['Siempre incluye una etiqueta descriptiva.', 'Usa para preferencias binarias, no para acciones transaccionales.'],
+    aiNotes: 'KSwitch para toggle booleano. Usar en lugar de checkbox para cambios que aplican inmediatamente.',
   },
 
   checkbox: {
@@ -2024,7 +1978,7 @@ export const atoms: Record<string, AtomEntry> = {
   defaultValue={['apple']} 
   onChange={(values) => console.log(values)} 
 />`,
-    filename: 'KCheckbox.tsx',
+    filename: 'KCheckbox/index.tsx',
     props: [
       { name: 'checked', type: "boolean | 'indeterminate'", description: 'Estado de la casilla.' },
       { name: 'label', type: 'ReactNode', description: 'Texto descriptivo adjunto.' },
@@ -2087,7 +2041,7 @@ export const atoms: Record<string, AtomEntry> = {
 
 // Variante de botones
 <KRadio.Group optionType="button" options={...} />`,
-    filename: 'KRadio.tsx',
+    filename: 'KRadio/index.tsx',
     props: [
       { name: 'options', type: '{ label: string; value: string | number; disabled?: boolean }[] | string[]', required: true, description: 'Array de opciones del grupo de radio.' },
       { name: 'value', type: 'string', description: 'Valor actualmente seleccionado (controlado).' },
@@ -2099,52 +2053,7 @@ export const atoms: Record<string, AtomEntry> = {
       { name: 'disabled', type: 'boolean', default: 'false', description: 'Deshabilita todas las opciones del grupo.' },
     ],
     guidelines: ['Máximo 5-6 opciones. Para más opciones, usa KSelectField.', 'optionType="button" ideal para filtros y toggles de vista.', 'KRadio.Button puede usarse standalone para casos personalizados dentro de un Group.'],
-  },
-  tooltip: {
-    id: 'tooltip',
-    name: 'KTooltip',
-    description: 'Informacion contextual al pasar el cursor. Usa la elevacion media (shadow md).',
-    preview: (
-      <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-        <KTooltip title="Guardar cambios" placement="top">
-          <KButton variant="primary" icon={<Save size={16} />}>Hover aqui</KButton>
-        </KTooltip>
-        <KTooltip title="Informacion adicional" placement="right">
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, color: khorTokens.colors.brand.navy, cursor: 'help' }}>
-            <Info size={16} /> Mas info
-          </span>
-        </KTooltip>
-      </div>
-    ),
-    code: `import { KTooltip } from '@khor/design-system/atoms/index';
-
-<KTooltip title="Guardar cambios" placement="top">
-  <KButton variant="primary">Guardar</KButton>
-</KTooltip>`,
-    filename: 'KTooltip.tsx',
-    props: [
-      { name: 'title', type: 'string', required: true, description: 'Texto del tooltip.' },
-      { name: 'placement', type: "'top' | 'bottom' | 'left' | 'right'", default: "'top'", description: 'Posicion.' },
-      { name: 'children', type: 'ReactNode', required: true, description: 'Elemento que activa el tooltip.' },
-    ],
-    playground: <TooltipPlayground />,
-    stateShowcase: (
-      <div style={{ display: 'flex', gap: 16, padding: '16px 0', alignItems: 'center', overflowX: 'auto' }}>
-        <div style={{ padding: 12 }}>
-          <KTooltip title="Posición Arriba" placement="top" open><KButton variant="outline">Arriba (Forzado)</KButton></KTooltip>
-        </div>
-        <div style={{ padding: 12 }}>
-          <KTooltip title="Posición Abajo" placement="bottom" open><KButton variant="outline">Abajo (Forzado)</KButton></KTooltip>
-        </div>
-      </div>
-    ),
-    a11ySummary: {
-      keyboard: ['Tab: Al recibir el foco por teclado, Tooltip se expande auto.'],
-      aria: ['role="tooltip" asignado.', 'Se enlaza dinámicamente con aria-describedby al elemento desencadenador.'],
-      contrast: 'AAA sobre UI oscura',
-      score: 100,
-    },
-    guidelines: ['Maximo 60 caracteres por tooltip.', 'No uses para informacion critica — esa debe ser visible siempre.'],
+    aiNotes: 'KRadio para selección única. Agrupar con KRadio.Group. Paridad total AntD v5.',
   },
   progress: {
     id: 'progress',
@@ -2179,7 +2088,7 @@ export const atoms: Record<string, AtomEntry> = {
 <KProgress value={75} />
 <KProgress value={100} status="success" />
 <KProgress value={30} strokeColor="var(--khor-chart-accent)" />`,
-    filename: 'KProgress.tsx',
+    filename: 'KProgress/index.tsx',
     props: [
       { name: 'value', type: 'number', required: true, description: 'Porcentaje de progreso (0-100).' },
       { name: 'max', type: 'number', default: '100', description: 'Valor maximo.' },
@@ -2188,6 +2097,7 @@ export const atoms: Record<string, AtomEntry> = {
       { name: 'strokeColor', type: 'string', description: 'Color personalizado de la barra.' },
     ],
     guidelines: ['Usa status="success" cuando llega a 100%.', 'strokeColor por defecto es el Rojo Khor primary.'],
+    aiNotes: 'KProgress para indicadores de progreso. Soporta barra, círculo y dashboard.',
   },
   typography: {
     id: 'typography',
@@ -2239,7 +2149,7 @@ export const atoms: Record<string, AtomEntry> = {
 <KTypography.Link href="https://khor.com" target="_blank">
   Documentación
 </KTypography.Link>`,
-    filename: 'KTypography.tsx',
+    filename: 'KTypography/index.tsx',
     props: [
       { name: 'KTypography.Title', type: 'Sub-component', description: 'Heading con prop level (1-5).' },
       { name: 'copyable', type: 'boolean | object', description: 'Permite copiar el texto al portapapeles.' },
@@ -2288,7 +2198,7 @@ export const atoms: Record<string, AtomEntry> = {
 <KAlert type="error" title="Error" description="No se pudo procesar la solicitud." />
 <KAlert type="warning" title="Atención" description="Faltan campos obligatorios." />
 <KAlert type="info" title="Info" description="Nueva actualización disponible." />`,
-    filename: 'KAlert.tsx',
+    filename: 'KAlert/index.tsx',
     props: [
       { name: 'type', type: "'success' | 'error' | 'warning' | 'info'", default: "'info'", description: 'Tipo semántico de la alerta.' },
       { name: 'title', type: 'string', required: true, description: 'Título de la alerta.' },
@@ -2346,7 +2256,7 @@ export const atoms: Record<string, AtomEntry> = {
 <KSkeleton lines={3} />
 <KSkeleton circle height={48} />
 <KSkeleton width={200} height={40} />`,
-    filename: 'KSkeleton.tsx',
+    filename: 'KSkeleton/index.tsx',
     props: [
       { name: 'width', type: "number | string", default: "'100%'", description: 'Ancho del skeleton.' },
       { name: 'height', type: "number | string", default: '16', description: 'Alto del skeleton.' },
@@ -2354,6 +2264,7 @@ export const atoms: Record<string, AtomEntry> = {
       { name: 'lines', type: 'number', description: 'Número de líneas de texto (la última es más corta).' },
     ],
     guidelines: ['Usa para indicar carga de contenido, no para carga de página completa (usa KSpin para eso).'],
+    aiNotes: 'KSkeleton para estados de carga. Combinar con KSpin para carga asíncrona.',
   },
   slider: {
     id: 'slider',
@@ -2383,7 +2294,7 @@ export const atoms: Record<string, AtomEntry> = {
 
 <KSlider value={[volume]} onValueChange={(v) => setVolume(v[0])} min={0} max={100} step={1} />
 <KSlider defaultValue={[50]} disabled />`,
-    filename: 'KSlider.tsx',
+    filename: 'KSlider/index.tsx',
     props: [
       { name: 'value', type: 'number[]', description: 'Valor controlado (array de numeros).' },
       { name: 'defaultValue', type: 'number[]', default: '[50]', description: 'Valor inicial.' },
@@ -2395,6 +2306,7 @@ export const atoms: Record<string, AtomEntry> = {
       { name: 'showValue', type: 'boolean', default: 'true', description: 'Muestra el valor actual.' },
     ],
     guidelines: ['Usa para valores continuos como volumen, brillo, porcentaje.', 'Para valores discretos con pocas opciones, usa KRadio variant="button".'],
+    aiNotes: 'KSlider para entrada de rango numérico basado en Radix UI Slider. Soporta rangos duales y marcas.',
   },
 
   spin: {
@@ -2428,12 +2340,13 @@ export const atoms: Record<string, AtomEntry> = {
 <KSpin size="md" />
 <KSpin size="lg" />
 <KSpin size="sm" color="#051758" />`,
-    filename: 'KSpin.tsx',
+    filename: 'KSpin/index.tsx',
     props: [
       { name: 'size', type: "'sm' | 'md' | 'lg' | 'xl'", default: "'md'", description: 'Tamaño del spinner.' },
       { name: 'color', type: 'string', default: 'khor.primary', description: 'Color del spinner.' },
     ],
     guidelines: ['Usa para carga de secciones o páginas completas.', 'Para carga de contenido específico, usa KSkeleton.'],
+    aiNotes: 'KSpin para spinner de carga. Envuelve children para overlay de loading.',
   },
   divider: {
     id: 'divider',
@@ -2455,7 +2368,7 @@ export const atoms: Record<string, AtomEntry> = {
   <KDivider />
   <p>Contenido B</p>
 </div>`,
-    filename: 'KDivider.tsx',
+    filename: 'KDivider/index.tsx',
     props: [
       { name: 'className', type: 'string', description: 'Clase CSS adicional.' },
     ],
@@ -2474,62 +2387,13 @@ export const atoms: Record<string, AtomEntry> = {
       score: 100,
     },
     guidelines: ['Usa para separar secciones dentro de cards o formularios.', 'No abuses de dividers — el espaciado y agrupacion son mas efectivos.'],
-  },
-  textarea: {
-    id: 'textarea',
-    name: 'KTextArea',
-    description: 'Area de texto multilinea con soporte para contador de caracteres, longitud maxima, estados de error y redimensionamiento vertical.',
-    preview: (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 400 }}>
-        <KTextArea placeholder="Escribe una descripcion..." rows={3} maxLength={200} />
-        <KTextArea placeholder="Con error" error="Este campo es obligatorio" rows={2} />
-        <KTextArea placeholder="Desactivado" disabled rows={2} />
-      </div>
-    ),
-    playground: <TextAreaPlayground />,
-    stateShowcase: (
-      <div style={{ display: 'flex', gap: 16, overflowX: 'auto', paddingBottom: 8 }}>
-        <div style={{ minWidth: 150 }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500], display: 'block', marginBottom: 8 }}>Default</span><KTextArea placeholder="Texto..." rows={2} /></div>
-        <div style={{ minWidth: 150 }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500], display: 'block', marginBottom: 8 }}>Focus</span><div style={{ outline: `2px solid ${khorTokens.colors.brand.primary}`, outlineOffset: 0, borderRadius: khorTokens.radius.md }}><KTextArea placeholder="Texto..." rows={2} /></div></div>
-        <div style={{ minWidth: 150 }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500], display: 'block', marginBottom: 8 }}>Disabled</span><KTextArea placeholder="No disponible" disabled rows={2} /></div>
-        <div style={{ minWidth: 150 }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500], display: 'block', marginBottom: 8 }}>Error</span><KTextArea value="Pellentesque" error="Excede máximo" rows={2} /></div>
-      </div>
-    ),
-    a11ySummary: {
-      keyboard: ['Tab: Navega adentro/fuera.', 'Enter: Salto de línea.'],
-      aria: ['aria-invalid se enciende automáticamente.', 'aria-describedby apunta al texto de error.'],
-      contrast: 'AA textos grises, AAA texto negro',
-      score: 95,
-    },
-    code: `import { KTextArea } from '@khor/design-system/atoms/index';
-
-<KTextArea
-  placeholder="Descripcion..."
-  rows={4}
-  maxLength={500}
-/>
-
-<KTextArea
-  placeholder="Campo obligatorio"
-  error="Este campo es obligatorio"
-/>`,
-    filename: 'KTextArea.tsx',
-    props: [
-      { name: 'placeholder', type: 'string', description: 'Texto placeholder.' },
-      { name: 'rows', type: 'number', default: '4', description: 'Numero de filas visibles.' },
-      { name: 'disabled', type: 'boolean', default: 'false', description: 'Desactiva el textarea.' },
-      { name: 'value', type: 'string', description: 'Valor controlado.' },
-      { name: 'onChange', type: '(e) => void', description: 'Callback al cambiar.' },
-      { name: 'error', type: 'string', description: 'Mensaje de error.' },
-      { name: 'maxLength', type: 'number', description: 'Longitud maxima de caracteres.' },
-    ],
-    guidelines: ['Usa showCount con maxLength para campos con limite de caracteres.', 'rows=3-4 para campos cortos, 6+ para descripciones largas.'],
+    aiNotes: 'KDivider para separación visual. Soporta orientación vertical y texto en línea.',
   },
   /* ═══ ÁTOMOS EXTENDIDOS (Wave 3) ═══ */
   'button-group': { id: 'button-group', name: 'KButtonGroup', description: 'Agrupa botones relacionados en una fila unificada con bordes compartidos o espaciado controlado.',
     preview: (<KButtonGroup><KButton variant="secondary" size="sm">Anterior</KButton><KButton variant="secondary" size="sm">Siguiente</KButton></KButtonGroup>),
     playground: <ButtonGroupPlayground />,
-    code: `<KButtonGroup>\n  <KButton variant="secondary">Anterior</KButton>\n  <KButton variant="secondary">Siguiente</KButton>\n</KButtonGroup>`, filename: 'KButtonGroup.tsx',
+    code: `<KButtonGroup>\n  <KButton variant="secondary">Anterior</KButton>\n  <KButton variant="secondary">Siguiente</KButton>\n</KButtonGroup>`, filename: 'KButtonGroup/index.tsx',
     props: [{ name: 'size', type: "'sm' | 'md' | 'lg'", description: 'Espaciado entre botones.' }, { name: 'direction', type: "'horizontal' | 'vertical'", description: 'Flujo.' }],
     a11ySummary: {
       keyboard: ['Tab: Navega entre botones del grupo.', 'Arrows: No implementado (comportamiento de toolbar nativo).'],
@@ -2540,50 +2404,23 @@ export const atoms: Record<string, AtomEntry> = {
     guidelines: ['Usa para acciones relacionadas como paginacion o vistas.'],
     aiNotes: 'Componente de agrupamiento visual. Asegura que los botones internos tengan el mismo tamaño.'
   },
-  'search-input': { id: 'search-input', name: 'KInput.Search', description: 'Input de búsqueda unificado con icono y botón de limpieza.',
-    preview: (<div style={{ maxWidth: 300 }}><KSearchInput placeholder="Buscar..." /></div>),
-    playground: <SearchInputPlayground />,
-    code: `<KInput.Search onSearch={(v) => console.log(v)} />`, filename: 'KInput/Search.tsx',
-    props: [{ name: 'placeholder', type: 'string', description: 'Placeholder.' }, { name: 'size', type: "'sm' | 'md' | 'lg'", description: 'Tamaño.' }, { name: 'onSearch', type: '(v: string) => void', description: 'Callback de búsqueda.' }],
-    a11ySummary: {
-      keyboard: ['Enter: Dispara el evento onSearch.', 'Esc: Limpia el contenido (si allowClear).'],
-      aria: ['role="searchbox" aplicado internamente.', 'aria-label descriptivo requerido si no hay label visible.'],
-      contrast: 'AAA',
-      score: 100,
-    },
-    guidelines: ['Centralizado en Atoms para uso global.', 'Usa para búsquedas primarias en el sistema.'],
-    aiNotes: 'Compound sub-component de KInput. NO documentar como átomo independiente — ver props en KInput.'
-  },
   'label': { id: 'label', name: 'KLabel', description: 'Etiqueta para campos de formulario con indicador de campo obligatorio y tooltip de informacion.',
     preview: (<KLabel required info="Ayuda">Campo</KLabel>),
     playground: <LabelPlayground />,
-    code: `<KLabel required info="Ingresa un correo institucional">Email</KLabel>`, filename: 'KLabel.tsx',
+    code: `<KLabel required info="Ingresa un correo institucional">Email</KLabel>`, filename: 'KLabel/index.tsx',
     props: [{ name: 'children', type: 'ReactNode', required: true, description: 'Texto.' }, { name: 'required', type: 'boolean', description: 'Muestra asterisco.' }, { name: 'info', type: 'string', description: 'Texto del icono de informacion.' }],
-    guidelines: ['Usa siempre para mejorar la accesibilidad de los inputs.']
-  },
-  'input-password': { id: 'input-password', name: 'KInput.Password', description: 'Input de contraseña con toggle de visibilidad (ojo abierto/cerrado).',
-    preview: (<div style={{ maxWidth: 300 }}><KInputPassword placeholder="Ingresa tu contraseña" /></div>),
-    playground: <PasswordPlayground />,
-    code: `<KInput.Password value={pass} onChange={setPass} />`, filename: 'KInput/Password.tsx',
-    props: [{ name: 'value', type: 'string', description: 'Valor.' }, { name: 'onChange', type: '(v) => void', description: 'Callback.' }, { name: 'error', type: 'string', description: 'Error.' }],
-    stateShowcase: (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-        <KInputPassword placeholder="Password..." />
-        <KInputPassword placeholder="Obligatorio" error="Mínimo 8 caracteres" />
-      </div>
-    ),
     a11ySummary: {
-      keyboard: ['Space/Enter: Alterna visibilidad en el botón del ojo.'],
-      aria: ['aria-pressed o title refleja visualmente el estado de revelación.'],
-      contrast: 'AAA',
+      keyboard: ['Tab: Navega al input asociado.'],
+      aria: ['for/id conecta label con input.', 'aria-required se hereda del campo asociado.'],
+      contrast: 'AAA en texto del label sobre fondo blanco.',
       score: 100,
     },
-    guidelines: ['Siempre incluye el toggle de visibilidad.'],
-    aiNotes: 'Compound sub-component de KInput. NO documentar como átomo independiente — ver props en KInput.'
+    guidelines: ['Usa siempre para mejorar la accesibilidad de los inputs.'],
+    aiNotes: 'KLabel para etiquetar inputs. Siempre asociar a un input mediante htmlFor.',
   },
   'float-button': { id: 'float-button', name: 'KFloatButton', description: 'Botón flotante (FAB) fijo en la esquina de la pantalla. Ideal para acciones principales.',
     preview: (<div style={{ position: 'relative', height: 80, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}><KText variant="small" color="muted" className="p-4">El botón flotante aparece fijo en la esquina inferior derecha.</KText></div>),
-    code: `<KFloatButton icon={<Plus />} onClick={handleAdd} tooltip="Nuevo empleado" />`, filename: 'KFloatButton.tsx',
+    code: `<KFloatButton icon={<Plus />} onClick={handleAdd} tooltip="Nuevo empleado" />`, filename: 'KFloatButton/index.tsx',
     props: [{ name: 'icon', type: 'ReactNode', description: 'Ícono.' }, { name: 'onClick', type: '() => void', description: 'Callback.' }, { name: 'type', type: "'primary'|'default'", description: 'Estilo.' }],
     stateShowcase: (
       <div style={{ position: 'relative', height: 100, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
@@ -2597,11 +2434,12 @@ export const atoms: Record<string, AtomEntry> = {
       contrast: 'AAA sobre UI general',
       score: 100,
     },
-    guidelines: ['Solo un FAB por pantalla. Usa para la acción más importante.']
+    guidelines: ['Solo un FAB por pantalla. Usa para la acción más importante.'],
+    aiNotes: 'KFloatButton para acción flotante FAB. Limitar a 1-2 por página.',
   },
   'image': { id: 'image', name: 'KImage', description: 'Imagen con preview lightbox al hacer clic, fallback para errores de carga y bordes redondeados.',
     preview: (<KImage src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=200&h=150&fit=crop" width={200} height={150} alt="Equipo" />),
-    code: `<KImage src="/photo.jpg" width={200} height={150} preview />`, filename: 'KImage.tsx',
+    code: `<KImage src="/photo.jpg" width={200} height={150} preview />`, filename: 'KImage/index.tsx',
     props: [{ name: 'src', type: 'string', required: true, description: 'URL.' }, { name: 'preview', type: 'boolean', default: 'true', description: 'Lightbox.' }, { name: 'fallback', type: 'string', description: 'Fallback.' }],
     stateShowcase: (
       <div style={{ display: 'flex', gap: 16, alignItems: 'flex-end' }}>
@@ -2615,7 +2453,8 @@ export const atoms: Record<string, AtomEntry> = {
       contrast: 'Decorative',
       score: 100,
     },
-    guidelines: ['Usa preview para imágenes que necesitan verse en grande.']
+    guidelines: ['Usa preview para imágenes que necesitan verse en grande.'],
+    aiNotes: 'KImage para visualización de imágenes con preview y fallback.',
   },
 
   'space': { 
@@ -2630,7 +2469,7 @@ export const atoms: Record<string, AtomEntry> = {
     ),
     playground: <SpacePlayground />,
     code: `import { KSpace, KDivider } from '@khor/design-system/atoms/index';\n\n<KSpace direction="horizontal" size="md" wrap split={<KDivider />}>\n  <KButton>A</KButton>\n  <KButton>B</KButton>\n</KSpace>`, 
-    filename: 'KSpace.tsx',
+    filename: 'KSpace/index.tsx',
     props: [
       { name: 'direction', type: "'horizontal' | 'vertical'", default: "'horizontal'", description: 'Dirección del flujo.' },
       { name: 'size', type: "number | 'sm' | 'md' | 'lg' | [number, number]", default: "'md'", description: 'Espacio entre elementos.' },
@@ -2638,13 +2477,27 @@ export const atoms: Record<string, AtomEntry> = {
       { name: 'wrap', type: 'boolean', default: 'false', description: 'Permite salto de línea.' },
       { name: 'split', type: 'ReactNode', description: 'Elemento separador entre items.' },
     ],
+    a11ySummary: {
+      keyboard: ['Navegación determinada por los hijos. KSpace no añade interactividad.'],
+      aria: ['No requiere roles ARIA adicionales.'],
+      contrast: 'N/A — componente de layout puro.',
+      score: 100,
+    },
     guidelines: ['Usa size="middle" (16px) por defecto para la mayoría de layouts.', 'El split con KDivider vertical es ideal para barras de herramientas.'],
+    aiNotes: 'KSpace para layouts con gap consistente. Preferir sobre div con gap manual.',
   },
   'qrcode': { id: 'qrcode', name: 'KQRCode', description: 'Generador visual de código QR a partir de texto o URL. Usa canvas para renderizado.',
     preview: (<div style={{ display: 'flex', gap: 16 }}><KQRCode value="https://khor.app" size={100} /><KQRCode value="https://khor.app/empleados" size={80} color={khorTokens.colors.brand.navy} /></div>),
-    code: `<KQRCode value="https://khor.app" size={128} />`, filename: 'KQRCode.tsx',
+    code: `<KQRCode value="https://khor.app" size={128} />`, filename: 'KQRCode/index.tsx',
     props: [{ name: 'value', type: 'string', required: true, description: 'Texto o URL a codificar.' }, { name: 'size', type: 'number', default: '128', description: 'Tamaño en px.' }, { name: 'color', type: 'string', description: 'Color de los módulos.' }],
-    guidelines: ['Nota: patrón visual representativo. Para QR reales, integra una librería como qrcode.']
+    a11ySummary: {
+      keyboard: ['No interactivo — es un canvas estático.'],
+      aria: ['aria-label recomendado con el valor codificado.', 'role="img" para que lectores de pantalla lo identifiquen.'],
+      contrast: 'AA minimo entre módulos y fondo.',
+      score: 90,
+    },
+    guidelines: ['Nota: patrón visual representativo. Para QR reales, integra una librería como qrcode.'],
+    aiNotes: 'KQRCode para generar QR. Usar solo con value válido.',
   },
 
   'flex': {
@@ -2660,7 +2513,7 @@ export const atoms: Record<string, AtomEntry> = {
       </KFlex>
     ),
     code: `<KFlex gap="md" align="center" justify="space-between">\n  <div>Item 1</div>\n  <div>Item 2</div>\n</KFlex>`,
-    filename: 'KFlex.tsx',
+    filename: 'KFlex/index.tsx',
     props: [
       { name: 'vertical', type: 'boolean', default: 'false', description: 'Dirección vertical (column).' },
       { name: 'wrap', type: 'boolean | string', description: 'Propiedad flex-wrap.' },
@@ -2668,7 +2521,14 @@ export const atoms: Record<string, AtomEntry> = {
       { name: 'align', type: 'string', description: 'align-items.' },
       { name: 'gap', type: "string | number | [number, number]", description: 'Espaciado entre items.' },
     ],
-    guidelines: ['Uso preferente sobre KSpace para layouts complejos o distribuciones no estándar.']
+    a11ySummary: {
+      keyboard: ['Navegación determinada por los hijos. KFlex no añade interactividad.'],
+      aria: ['No requiere roles ARIA adicionales.'],
+      contrast: 'N/A — componente de layout puro.',
+      score: 100,
+    },
+    guidelines: ['Uso preferente sobre KSpace para layouts complejos o distribuciones no estándar.'],
+    aiNotes: 'KFlex para layouts flexbox. Preferir sobre KSpace para layouts complejos con alineación específica.',
   },
   'grid': {
     id: 'grid', name: 'KGrid (Row/Col)',
@@ -2692,7 +2552,15 @@ export const atoms: Record<string, AtomEntry> = {
       { name: 'xs, sm, md, lg, xl, xxl', type: 'number | object', description: 'Ancho responsivo para KCol (Proximamente).' },
       { name: 'offset', type: 'number', description: 'Número de columnas a desplazar hacia la derecha.' },
     ],
+    a11ySummary: {
+      keyboard: ['Navegación determinada por el contenido. KGrid no añade interactividad.'],
+      aria: ['role="row" y role="gridcell" se aplican automáticamente.', 'aria-colspan para columnas que abarcan múltiples slots.'],
+      contrast: 'N/A — componente de layout puro.',
+      score: 100,
+    },
     guidelines: ['Usa gutters múltiplos de 8 (ej. 16, 24).', 'Ideal para dashboards y formularios multi-columna.']
+  ,
+    aiNotes: 'KGrid (Row/Col) sistema de rejilla 24 columnas responsiva. Paridad AntD v5.',
   },
   scrollbar: {
     id: 'scrollbar',
@@ -2718,14 +2586,21 @@ export const atoms: Record<string, AtomEntry> = {
 >
   {/* contenido largo */}
 </KScrollBar>`,
-    filename: 'KScrollBar.tsx',
+    filename: 'KScrollBar/index.tsx',
     props: [
       { name: 'orientation', type: "'vertical' | 'horizontal' | 'both'", default: "'vertical'", description: 'Orientación del scroll.' },
       { name: 'size', type: "'small' | 'middle' | 'large'", default: "'middle'", description: 'Grosor de la barra.' },
       { name: 'autoHide', type: 'boolean', default: 'true', description: 'Esconde la barra si no hay hover.' },
       { name: 'children', type: 'ReactNode', description: 'Contenido a scrollear.' },
     ],
+    a11ySummary: {
+      keyboard: ['Flechas arriba/abajo para scroll vertical.', 'PageUp/PageDown para saltos grandes.', 'Home/End para ir al inicio/fin.'],
+      aria: ['role="scrollbar" con aria-valuenow, aria-valuemin, aria-valuemax.', 'aria-orientation para indicar dirección.'],
+      contrast: 'AA — barra visible solo en hover con contraste suficiente.',
+      score: 95,
+    },
     guidelines: ['Usa para contenedores con contenido que excede su tamaño.', 'Evita scrollbars en elementos minúsculos.'],
+    aiNotes: 'KScrollBar para scrollbars customizados premium. Usar en contenedores con overflow.',
   },
   icon: {
     id: 'icon',
@@ -2747,6 +2622,12 @@ export const atoms: Record<string, AtomEntry> = {
       { name: 'color', type: 'string', description: 'Color CSS o Token.' },
       { name: 'className', type: 'string', description: 'Clases adicionales.' },
     ],
+    a11ySummary: {
+      keyboard: ['No interactivo por sí mismo. Si se usa como botón, debe tener role="button" y tabIndex.'],
+      aria: ['aria-hidden="true" para iconos decorativos.', 'aria-label descriptivo si el icono es informativo o funcional.'],
+      contrast: 'AA mínimo para iconos informativos contra el fondo.',
+      score: 95,
+    },
     guidelines: ['Usa iconos para reducir carga cognitiva.', 'Mantén el tamaño consistente en la misma fila.', 'Acompaña siempre de aria-label si no hay texto.'],
     aiNotes: 'Componente obligatorio para toda iconografía Lucide. NO importar de lucide-react directamente.'
   },
@@ -2797,6 +2678,7 @@ export const atoms: Record<string, AtomEntry> = {
       { name: 'disabled', type: 'boolean', default: 'false', description: 'Inhabilita la interacción.' },
     ],
     guidelines: ['Siempre define un país por defecto para acelerar la entrada.', 'Usa block={true} en formularios móviles.', 'Brinda helperText claro en caso de error.'],
+    aiNotes: 'KPhoneInput para entrada de teléfono con selector de país y formateo automático.',
   }
 };
 

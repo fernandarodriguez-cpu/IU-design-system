@@ -1208,7 +1208,7 @@ import { KInput } from '@khor/design-system/atoms/index';
 >
   <KInput placeholder="Buscar..." />
 </KFormField>`,
-    filename: 'KFormField.tsx',
+    filename: 'KFormField/index.tsx',
     props: [
       { name: 'label', type: 'string', required: true, description: 'Etiqueta del campo.' },
       { name: 'required', type: 'boolean', default: 'false', description: 'Muestra asterisco rojo de campo obligatorio.' },
@@ -1258,7 +1258,7 @@ import { KInput } from '@khor/design-system/atoms/index';
   sparkData={[40, 45, 42, 50, 48, 55, 60]}
   icon={<Users size={20} />}
 />`,
-    filename: 'KStatCard.tsx',
+    filename: 'KStatCard/index.tsx',
     props: [
       { name: 'title', type: 'string', required: true, description: 'Titulo de la metrica.' },
       { name: 'value', type: 'string | number', required: true, description: 'Valor principal de la metrica.' },
@@ -1316,7 +1316,7 @@ import { KInput } from '@khor/design-system/atoms/index';
   badge={24}
   onClick={() => navigate('/empleados')}
 />`,
-    filename: 'KNavItem.tsx',
+    filename: 'KNavItem/index.tsx',
     props: [
       { name: 'icon', type: 'ReactNode', description: 'Icono Lucide (18px recomendado).' },
       { name: 'label', type: 'string', required: true, description: 'Texto del item.' },
@@ -1326,6 +1326,7 @@ import { KInput } from '@khor/design-system/atoms/index';
       { name: 'collapsed', type: 'boolean', default: 'false', description: 'Modo colapsado (solo icono).' },
     ],
     guidelines: ['Solo un item activo a la vez.', 'Iconos a 18px con stroke 2px.', 'Badge solo para conteos de notificacion relevantes.'],
+    aiNotes: 'KNavItem para items de navegación en menús y barras laterales. Paridad AntD v5.',
   },
   'select-field': {
     id: 'select-field',
@@ -1378,7 +1379,7 @@ import { KInput } from '@khor/design-system/atoms/index';
   onChange={setDept}
   required
 />`,
-    filename: 'KSelectField.tsx',
+    filename: 'KSelectField/index.tsx',
     props: [
       { name: 'label', type: 'string', description: 'Etiqueta del campo.' },
       { name: 'placeholder', type: 'string', description: 'Texto placeholder.' },
@@ -1394,6 +1395,7 @@ import { KInput } from '@khor/design-system/atoms/index';
       { name: 'mode', type: '"multiple" | "tags"', description: 'Modo de seleccion.' },
     ],
     guidelines: ['Para hasta 7 opciones. Si hay mas, considera un select con busqueda.'],
+    aiNotes: 'KSelectField combina KLabel + KSelect + error. Usar en formularios con validación.',
   },
   'user-cell': {
     id: 'user-cell',
@@ -1429,7 +1431,7 @@ import { KInput } from '@khor/design-system/atoms/index';
   avatar="/avatar.jpg"
   status="online"
 />`,
-    filename: 'KUserCell.tsx',
+    filename: 'KUserCell/index.tsx',
     props: [
       { name: 'name', type: 'string', required: true, description: 'Nombre del usuario.' },
       { name: 'email', type: 'string', description: 'Correo electronico.' },
@@ -1440,6 +1442,7 @@ import { KInput } from '@khor/design-system/atoms/index';
       { name: 'onClick', type: '() => void', description: 'Callback al hacer click.' },
     ],
     guidelines: ['Usa dentro de tablas en la columna de usuario.', 'Si no hay avatar, se generan iniciales automaticamente.'],
+    aiNotes: 'KUserCell para visualización de usuario con avatar, nombre y metadata.',
   },
   'empty-state': {
     id: 'empty-state',
@@ -1472,20 +1475,23 @@ import { KInput } from '@khor/design-system/atoms/index';
   icon={<Inbox size={48} />}
   title="No hay empleados registrados"
   description="Agrega tu primer empleado para comenzar."
-  action={
-    <KButton variant="primary" icon={<Users size={16} />}>
-      Agregar Empleado
-    </KButton>
-  }
+  actionLabel="Agregar Empleado"
+  onAction={() => handleAddEmployee()}
 />`,
-    filename: 'KEmptyState.tsx',
+    filename: 'KEmptyState/index.tsx',
     props: [
       { name: 'icon', type: 'ReactNode', description: 'Icono grande (48px recomendado).' },
       { name: 'title', type: 'string', required: true, description: 'Titulo del estado vacio.' },
       { name: 'description', type: 'string', description: 'Descripcion con contexto.' },
-      { name: 'action', type: 'ReactNode', description: 'Boton de accion principal.' },
+      { name: 'actionLabel', type: 'string', description: 'Texto del boton de accion principal.' },
+      { name: 'onAction', type: '() => void', description: 'Callback del boton de accion.' },
+      { name: 'actions', type: 'ReactNode', description: 'Acciones personalizadas (reemplaza actionLabel/onAction).' },
+      { name: 'image', type: 'string', description: 'URL de imagen alternativa al icono.' },
+      { name: 'variant', type: "'default' | 'simple'", default: "'default'", description: 'Variante visual.' },
+      { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Tamaño del estado.' },
     ],
     guidelines: ['Siempre incluye una accion que resuelva el estado vacio.', 'El icono debe ser de 48px con color neutral.300.'],
+    aiNotes: 'KEmptyState para estados vacíos con imagen, mensaje y acciones.',
   },
   breadcrumb: {
     id: 'breadcrumb',
@@ -1514,12 +1520,13 @@ import { KInput } from '@khor/design-system/atoms/index';
   ]}
   separator=">"
 />`,
-    filename: 'KBreadcrumb.tsx',
+    filename: 'KBreadcrumb/index.tsx',
     props: [
       { name: 'items', type: 'BreadcrumbItemType[]', required: true, description: 'Arreglo de items ({ title, href, icon, menu, onClick }).' },
       { name: 'separator', type: 'ReactNode', description: 'Separador custom (default: /).' },
     ],
     guidelines: ['El último item es la página actual y no tiene onClick.', 'Máximo 4-5 niveles de profundidad.'],
+    aiNotes: 'KBreadcrumb para migas de pan. Paridad total AntD v5.',
   },
   steps: {
     id: 'steps',
@@ -1561,7 +1568,7 @@ import { KInput } from '@khor/design-system/atoms/index';
     { title: 'Confirmar' },
   ]}
 />`,
-    filename: 'KSteps.tsx',
+    filename: 'KSteps/index.tsx',
     props: [
       { name: 'items', type: 'KStepItem[]', required: true, description: 'Array de pasos con title y description opcional.' },
       { name: 'current', type: 'number', required: true, description: 'Índice del paso actual (base 0).' },
@@ -1619,7 +1626,7 @@ import { KInput } from '@khor/design-system/atoms/index';
 >
   <KButton>Acciones</KButton>
 </KDropdownMenu>`,
-    filename: 'KDropdownMenu.tsx',
+    filename: 'KDropdownMenu/index.tsx',
     props: [
       { name: 'menu', type: 'MenuProps', required: true, description: 'Configuracion del menu ({ items, onClick }).' },
       { name: 'trigger', type: '("click" | "hover" | "contextMenu")[]', default: "['hover']", description: 'Eventos que activan el menu.' },
@@ -1628,6 +1635,7 @@ import { KInput } from '@khor/design-system/atoms/index';
       { name: 'disabled', type: 'boolean', description: 'Desactivar dropdown.' },
     ],
     guidelines: ['Usa para acciones secundarias agrupadas.', 'El disparador suele ser un KButton de tipo ghost o secondary.'],
+    aiNotes: 'KDropdownMenu para menús desplegables. Paridad total AntD v5.',
   },
   popover: {
     id: 'popover',
@@ -1672,7 +1680,7 @@ import { KInput } from '@khor/design-system/atoms/index';
 >
   <KButton>Abrir Popover</KButton>
 </KPopover>`,
-    filename: 'KPopover.tsx',
+    filename: 'KPopover/index.tsx',
     props: [
       { name: 'content', type: 'ReactNode', required: true, description: 'Contenido del popover.' },
       { name: 'title', type: 'ReactNode', description: 'Título opcional.' },
@@ -1681,6 +1689,7 @@ import { KInput } from '@khor/design-system/atoms/index';
       { name: 'arrow', type: 'boolean | object', description: 'Mostrar flecha.' },
     ],
     guidelines: ['Usa para contenido interactivo. Para texto simple, usa KTooltip.'],
+    aiNotes: 'KPopover para contenido emergente contextual. Paridad total AntD v5.',
   },
   accordion: {
     id: 'accordion',
@@ -1726,7 +1735,7 @@ import { KInput } from '@khor/design-system/atoms/index';
   ]}
   defaultActiveKey={['1']}
 />`,
-    filename: 'KAccordion.tsx',
+    filename: 'KAccordion/index.tsx',
     props: [
       { name: 'items', type: 'CollapseProps["items"]', required: true, description: 'Array de secciones con key, label y children.' },
       { name: 'accordion', type: 'boolean', default: 'false', description: 'Modo acordeón (solo una abierta a la vez).' },
@@ -1735,6 +1744,7 @@ import { KInput } from '@khor/design-system/atoms/index';
       { name: 'onChange', type: '(key: string | string[]) => void', description: 'Callback al cambiar.' },
     ],
     guidelines: ['Usa single para FAQs y multiple para configuraciones.', 'El título debe ser descriptivo del contenido.'],
+    aiNotes: 'KAccordion para paneles colapsables. Paridad total AntD v5.',
   },
   /* ═══ MOLÉCULAS EXTENDIDAS (v2.0 Nexus) ═══ */
   'input-number': {
@@ -1742,7 +1752,7 @@ import { KInput } from '@khor/design-system/atoms/index';
     description: 'Input numerico con controles +/- integrados, limites min/max, paso configurable y precision decimal.',
     preview: (<div style={{ display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'flex-start' }}><KInputNumber value={42} min={0} max={100} /><KInputNumber value={3.14} step={0.01} precision={2} size="lg" /><KInputNumber value={10} disabled /></div>),
     code: `import { KInputNumber } from '@khor/molecules-extended';\n\n<KInputNumber value={qty} onChange={setQty} min={0} max={100} />`,
-    filename: 'KInputNumber.tsx',
+    filename: 'KInputNumber/index.tsx',
     playground: <InputNumberPlayground />,
     stateShowcase: (
       <div style={{ display: 'flex', gap: 16, alignItems: 'center', flexWrap: 'wrap' }}>
@@ -1769,13 +1779,14 @@ import { KInput } from '@khor/design-system/atoms/index';
       { name: 'disabled', type: 'boolean', description: 'Desactivar.' },
     ],
     guidelines: ['Usa precision para valores monetarios.', 'Define min/max para evitar valores invalidos.'],
+    aiNotes: 'KInputNumber para entrada numérica con controles incrementales. Paridad AntD v5.',
   },
   'segmented': {
     id: 'segmented', name: 'KSegmented',
     description: 'Control segmentado tipo iOS para alternar entre opciones mutuamente excluyentes.',
     preview: (<div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}><KSegmented options={['Diario', 'Semanal', 'Mensual']} value="Semanal" /><KSegmented options={[{ label: 'Lista', value: 'list' }, { label: 'Tabla', value: 'table' }]} value="list" /></div>),
     code: `import { KSegmented } from '@khor/molecules-extended';\n\n<KSegmented options={['Diario','Semanal','Mensual']} value={period} onChange={setPeriod} />`,
-    filename: 'KSegmented.tsx',
+    filename: 'KSegmented/index.tsx',
     playground: <SegmentedPlayground />,
     stateShowcase: (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 300 }}>
@@ -1798,6 +1809,7 @@ import { KInput } from '@khor/design-system/atoms/index';
       { name: 'disabled', type: 'boolean', description: 'Desactivar todo el control.' },
     ],
     guidelines: ['Usa para 2-5 opciones.', 'Soporta iconos junto al label.'],
+    aiNotes: 'KSegmented para selector segmentado. Paridad total AntD v5.',
   },
   'autocomplete': {
     id: 'autocomplete', name: 'KAutocomplete',
@@ -1811,7 +1823,7 @@ import { KInput } from '@khor/design-system/atoms/index';
   onSelect={(opt) => console.log(opt)} 
   allowClear 
 />`,
-    filename: 'KAutocomplete.tsx',
+    filename: 'KAutocomplete/index.tsx',
     playground: <AutocompletePlayground />,
     stateShowcase: (
       <div style={{ display: 'flex', gap: 16, flexDirection: 'column', maxWidth: 350 }}>
@@ -1834,6 +1846,7 @@ import { KInput } from '@khor/design-system/atoms/index';
       { name: 'placeholder', type: 'string', description: 'Texto de ayuda.' },
     ],
     guidelines: ['Usa para listas largas donde el usuario necesita filtrar.', 'La descripción ayuda a diferenciar opciones similares.'],
+    aiNotes: 'KAutocomplete para autocompletado con sugerencias. Paridad total AntD v5.',
   },
   'date-picker': {
     id: 'date-picker', name: 'KDatePicker',
@@ -1846,7 +1859,7 @@ import { KInput } from '@khor/design-system/atoms/index';
   onChange={setDate} 
   picker="date" 
 />`,
-    filename: 'KDatePicker.tsx',
+    filename: 'KDatePicker/index.tsx',
     playground: <DatePickerPlayground />,
     stateShowcase: (
       <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
@@ -1870,6 +1883,7 @@ import { KInput } from '@khor/design-system/atoms/index';
       { name: 'showTime', type: 'boolean', description: 'Habilitar selector de hora.' },
     ],
     guidelines: ['Formato español configurado por defecto.', 'Usa minDate/maxDate para restringir el rango seleccionable.'],
+    aiNotes: 'KDatePicker para selección de fecha individual. Paridad total AntD v5.',
   },
   'date-range': {
     id: 'date-range', name: 'KDateRangePicker',
@@ -1882,7 +1896,7 @@ import { KInput } from '@khor/design-system/atoms/index';
   onChange={setRange} 
   presets={customPresets} 
 />`,
-    filename: 'KDateRangePicker.tsx',
+    filename: 'KDatePicker/index.tsx',
     playground: <DatePickerPlayground />,
     stateShowcase: (
       <div style={{ display: 'flex', gap: 16, flexDirection: 'column' }}>
@@ -1903,6 +1917,7 @@ import { KInput } from '@khor/design-system/atoms/index';
       { name: 'placeholder', type: '[string, string]', description: 'Textos de ayuda.' },
     ],
     guidelines: ['Incluye presets para rangos comunes (Hoy, Últimos 7 días, etc).', 'Ideal para filtros de fechas en tablas y dashboards.'],
+    aiNotes: 'KDateRangePicker para rango de fechas. Exportado desde KDatePicker.',
   },
   'select-advanced': {
     id: 'select-advanced', name: 'KSelectAdvanced',
@@ -1916,7 +1931,7 @@ import { KInput } from '@khor/design-system/atoms/index';
   maxTagCount={2} 
   allowClear 
 />`,
-    filename: 'KSelectAdvanced.tsx',
+    filename: 'KSelectAdvanced/index.tsx',
     playground: <SelectAdvancedPlayground />,
     stateShowcase: (
       <div style={{ display: 'flex', gap: 16, flexDirection: 'column' }}>
@@ -1939,6 +1954,7 @@ import { KInput } from '@khor/design-system/atoms/index';
       { name: 'status', type: "'error' | 'warning'", description: 'Estado de validación.' },
     ],
     guidelines: ['Usa "multiple" para selección de una lista fija.', 'Usa "tags" para permitir al usuario ingresar nuevos valores.'],
+    aiNotes: 'KSelectAdvanced para selección con búsqueda y múltiples opciones.',
   },
   'descriptions': {
     id: 'descriptions', name: 'KDescriptions',
@@ -1952,7 +1968,7 @@ import { KInput } from '@khor/design-system/atoms/index';
   bordered 
   column={2} 
 />`,
-    filename: 'KDescriptions.tsx',
+    filename: 'KDescriptions/index.tsx',
     playground: <DescriptionsPlayground />,
     stateShowcase: (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 24, width: '100%' }}>
@@ -1974,6 +1990,7 @@ import { KInput } from '@khor/design-system/atoms/index';
       { name: 'size', type: "'default' | 'middle' | 'small'", default: "'default'", description: 'Tamaño de la lista.' },
     ],
     guidelines: ['Usa "span" en los items para que ocupen múltiples columnas.', 'El modo "bordered" es ideal para vistas de tipo formulario o ficha técnica.'],
+    aiNotes: 'KDescriptions para mostrar pares clave-valor en formato tabla. Paridad AntD v5.',
   },
   'popconfirm': {
     id: 'popconfirm', name: 'KPopconfirm',
@@ -1987,7 +2004,7 @@ import { KInput } from '@khor/design-system/atoms/index';
 >
   <KButton>Eliminar</KButton>
 </KPopconfirm>`,
-    filename: 'KPopconfirm.tsx',
+    filename: 'KPopconfirm/index.tsx',
     playground: <PopconfirmPlayground />,
     stateShowcase: (
       <div style={{ display: 'flex', gap: 16 }}>
@@ -2011,6 +2028,7 @@ import { KInput } from '@khor/design-system/atoms/index';
       { name: 'placement', type: 'string', default: "'top'", description: 'Ubicación del popover.' },
     ],
     guidelines: ['Usa para acciones destructivas que no requieren un Modal completo.', 'Mantén los mensajes cortos y directos.'],
+    aiNotes: 'KPopconfirm para confirmación contextual antes de acción destructiva. Paridad AntD v5.',
   },
   'result': {
     id: 'result', name: 'KResult',
@@ -2023,7 +2041,7 @@ import { KInput } from '@khor/design-system/atoms/index';
   title="Completado" 
   subTitle="Acción realizada con éxito" 
 />`,
-    filename: 'KResult.tsx',
+    filename: 'KResult/index.tsx',
     playground: <ResultPlayground />,
     stateShowcase: (
       <div style={{ display: 'flex', gap: 24, overflowX: 'auto', padding: 8 }}>
@@ -2046,6 +2064,7 @@ import { KInput } from '@khor/design-system/atoms/index';
       { name: 'icon', type: 'ReactNode', description: 'Icono personalizado.' },
     ],
     guidelines: ['Usa para feedbacks de página completa.', 'Define acciones claras en la propiedad "extra" para guiar al usuario.'],
+    aiNotes: 'KResult para páginas de resultado (éxito, error, 404, etc.). Paridad AntD v5.',
   },
   'timeline': {
     id: 'timeline', name: 'KTimeline',
@@ -2057,7 +2076,7 @@ import { KInput } from '@khor/design-system/atoms/index';
   items={[{ children: 'Creado' }, { children: 'Aprobado' }]} 
   mode="alternate" 
 />`,
-    filename: 'KTimeline.tsx',
+    filename: 'KTimeline/index.tsx',
     playground: <TimelinePlayground />,
     stateShowcase: (
       <div style={{ padding: 16 }}>
@@ -2077,6 +2096,7 @@ import { KInput } from '@khor/design-system/atoms/index';
       { name: 'reverse', type: 'boolean', description: 'Invierte el orden cronológico.' },
     ],
     guidelines: ['Usa "label" para mostrar fechas u horas junto a los hitos.', 'El modo "alternate" es ideal para narrativas o logs de actividad.'],
+    aiNotes: 'KTimeline para líneas de tiempo verticales. Paridad total AntD v5.',
   },
   /* ═══ WAVE 3 — Componentes finales ═══ */
   'cascader': {
@@ -2090,7 +2110,7 @@ import { KInput } from '@khor/design-system/atoms/index';
   onChange={(val) => console.log(val)} 
   allowClear 
 />`,
-    filename: 'KCascader.tsx',
+    filename: 'KCascader/index.tsx',
     playground: <CascaderPlayground />,
     stateShowcase: (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 300 }}>
@@ -2112,6 +2132,7 @@ import { KInput } from '@khor/design-system/atoms/index';
       { name: 'placeholder', type: 'string', description: 'Texto de ayuda.' },
     ],
     guidelines: ['Ideal para estructuras de más de 2 niveles jerárquicos.', 'Usa "allowClear" si la selección no es obligatoria.'],
+    aiNotes: 'KCascader para selección jerárquica anidada. Paridad total AntD v5.',
   },
   'statistic': {
     id: 'statistic', name: 'KStatistic',
@@ -2126,7 +2147,7 @@ import { KInput } from '@khor/design-system/atoms/index';
   trend="up" 
   trendValue="15%" 
 />`,
-    filename: 'KStatistic.tsx',
+    filename: 'KStatistic/index.tsx',
     playground: <StatisticPlayground />,
     stateShowcase: (
       <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
@@ -2151,6 +2172,7 @@ import { KInput } from '@khor/design-system/atoms/index';
       { name: 'trendValue', type: 'string | number', description: 'Porcentaje o valor de cambio.' },
     ],
     guidelines: ['Usa para dashboards o KPIs importantes.', 'Combina con prefijos como "$" o "MXN" para contextos financieros.'],
+    aiNotes: 'KStatistic para mostrar métricas y cifras destacadas. Paridad AntD v5.',
   },
   'time-picker': {
     id: 'time-picker', name: 'KTimePicker',
@@ -2163,7 +2185,7 @@ import { KInput } from '@khor/design-system/atoms/index';
   use12Hours={false}
   onChange={(time) => console.log(time)} 
 />`,
-    filename: 'KTimePicker.tsx',
+    filename: 'KTimePicker/index.tsx',
     playground: <TimePickerPlayground />,
     stateShowcase: (
       <div style={{ display: 'flex', gap: 16 }}>
@@ -2185,6 +2207,7 @@ import { KInput } from '@khor/design-system/atoms/index';
       { name: 'allowClear', type: 'boolean', default: 'true', description: 'Permite limpiar la selección.' },
     ],
     guidelines: ['Ideal para agendar citas o definir horarios operativos.', 'Usa "use12Hours" si el contexto cultural lo requiere.'],
+    aiNotes: 'KTimePicker para selección de hora. Paridad total AntD v5.',
   },
   'tooltip': {
     id: 'tooltip', name: 'KTooltip',
@@ -2200,7 +2223,7 @@ import { KInput } from '@khor/design-system/atoms/index';
 <KTooltip title="Ayuda para el usuario">
   <KButton icon={<Info size={16} />} />
 </KTooltip>`,
-    filename: 'KTooltip.tsx',
+    filename: 'KTooltip/index.tsx',
     playground: <TooltipPlayground />,
     stateShowcase: (
       <div style={{ display: 'flex', gap: 16, padding: '32px 16px' }}>
@@ -2221,6 +2244,7 @@ import { KInput } from '@khor/design-system/atoms/index';
       { name: 'color', type: 'string', description: 'Color de fondo personalizado.' },
     ],
     guidelines: ['Útil para explicar iconos o abreviaturas.', 'Evita tooltips con demasiado texto; mantén el mensaje corto.'],
+    aiNotes: 'KTooltip para información contextual al hacer hover. NOTA: es molécula, no átomo.',
   },
 
   'color-picker': {
@@ -2234,7 +2258,7 @@ import { KInput } from '@khor/design-system/atoms/index';
   onChange={(color) => console.log(color)} 
   showText 
 />`,
-    filename: 'KColorPicker.tsx',
+    filename: 'KColorPicker/index.tsx',
     playground: <ColorPickerPlayground />,
     stateShowcase: (
       <div style={{ display: 'flex', gap: 16 }}>
@@ -2256,6 +2280,7 @@ import { KInput } from '@khor/design-system/atoms/index';
       { name: 'presets', type: 'Presets[]', description: 'Paleta de colores sugeridos.' },
     ],
     guidelines: ['Usa para configuraciones de marca o personalización de UI.', 'Prefiere formatos HEX para mayor compatibilidad.'],
+    aiNotes: 'KColorPicker para selección de color. Paridad total AntD v5.',
   },
   'anchor': {
     id: 'anchor', name: 'KAnchor',
@@ -2269,7 +2294,7 @@ import { KInput } from '@khor/design-system/atoms/index';
     { key: '2', href: '#usage', title: 'Uso' }
   ]} 
 />`,
-    filename: 'KAnchor.tsx',
+    filename: 'KAnchor/index.tsx',
     playground: <AnchorPlayground />,
     stateShowcase: (
       <div style={{ display: 'flex', padding: 16 }}>
@@ -2288,6 +2313,7 @@ import { KInput } from '@khor/design-system/atoms/index';
       { name: 'affix', type: 'boolean', default: 'true', description: 'Fija el menú en pantalla.' },
     ],
     guidelines: ['Ideal para páginas largas de documentación o reportes.', 'Asegura que los IDs de destino existan en el DOM.'],
+    aiNotes: 'KAnchor para navegación por anclas en página. Paridad total AntD v5.',
   },
   'list': {
     id: 'list', name: 'KList',
@@ -2302,7 +2328,7 @@ import { KInput } from '@khor/design-system/atoms/index';
   ]} 
   bordered 
 />`,
-    filename: 'KList.tsx',
+    filename: 'KList/index.tsx',
     playground: <ListPlayground />,
     stateShowcase: (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -2323,10 +2349,11 @@ import { KInput } from '@khor/design-system/atoms/index';
       { name: 'footer', type: 'ReactNode', description: 'Pie de la lista.' },
     ],
     guidelines: ['Usa para mostrar información estructurada repetitiva.', 'Combina con avatares para facilitar el reconocimiento visual.'],
+    aiNotes: 'KList para listas con metadatos, avatar y acciones. Paridad total AntD v5.',
   },
   'divider-extended': { id: 'divider-extended', name: 'KDividerExtended', description: 'Divisor con soporte para texto central y estilo dashed.',
     preview: (<div><KDividerExtended /><KDividerExtended>O continúa con</KDividerExtended><KDividerExtended dashed /></div>),
-    code: `<KDividerExtended>O continúa con</KDividerExtended>`, filename: 'KDividerExtended.tsx',
+    code: `<KDividerExtended>O continúa con</KDividerExtended>`, filename: 'KDividerExtended/index.tsx',
     stateShowcase: (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
         <KDividerExtended />
@@ -2341,6 +2368,8 @@ import { KInput } from '@khor/design-system/atoms/index';
     },
     props: [{ name: 'children', type: 'ReactNode', description: 'Texto central.' }, { name: 'dashed', type: 'boolean', description: 'Estilo dashed.' }],
     guidelines: ['Usa con texto para separar secciones semánticas.']
+  ,
+    aiNotes: 'KDividerExtended con funcionalidad expandida respecto a KDivider átomo.',
   },
   'context-menu': {
     id: 'context-menu',
@@ -2389,6 +2418,8 @@ import { KInput } from '@khor/design-system/atoms/index';
       contrast: 'Fondos con blur y bordes contrastantes que cumplen las normas WCAG de legibilidad.',
       score: 100
     }
+  ,
+    aiNotes: 'KContextMenu para menú contextual al hacer clic derecho. Paridad AntD v5.',
   },
   'hover-card': {
     id: 'hover-card',
@@ -2438,6 +2469,8 @@ import { KInput } from '@khor/design-system/atoms/index';
       contrast: 'Bordes nítidos y sombras definidas que aíslan el contenido del fondo.',
       score: 100
     }
+  ,
+    aiNotes: 'KHoverCard para tarjeta informativa al hacer hover. Paridad AntD v5.',
   }
 };
 

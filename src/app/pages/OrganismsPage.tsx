@@ -660,12 +660,14 @@ const steps = [
 ];
 
 <KFormWizard steps={steps} onComplete={handleFinish} />`,
-    filename: 'KFormWizard.tsx',
+    filename: 'KFormWizard/index.tsx',
     props: [
       { name: 'steps', type: 'WizardStep[]', required: true, description: 'Colección de pasos del flujo.' },
       { name: 'onComplete', type: 'function', description: 'Callback al finalizar el último paso.' },
       { name: 'onCancel', type: 'function', description: 'Callback al cancelar el flujo.' },
     ],
+    aiNotes: 'KFormWizard para formularios multi-paso con navegación entre pasos.',
+    guidelines: ['Usa para flujos de 3-5 pasos.', 'Cada paso debe tener título descriptivo.', 'Habilita onCancel si el flujo es cancelable.'],
   },
   'resizable': {
     id: 'resizable',
@@ -719,11 +721,13 @@ const steps = [
   <KResizableHandle withHandle />
   <KResizablePanel defaultSize={80}>Content</KResizablePanel>
 </KResizablePanelGroup>`,
-    filename: 'KResizable.tsx',
+    filename: 'KResizable/index.tsx',
     props: [
       { name: 'direction', type: "'horizontal' | 'vertical'", required: true, description: 'Dirección del redimensionamiento.' },
       { name: 'withHandle', type: 'boolean', description: 'Muestra un tirador visual (grip) en el handle.' },
     ],
+    aiNotes: 'KResizable para paneles redimensionables. Paridad total react-resizable.',
+    guidelines: ['Usa direction="horizontal" para layouts de sidebar + contenido.', 'withHandle mejora la experiencia de usuario al mostrar el tirador visual.'],
   },
   'data-table': {
     id: 'data-table',
@@ -760,27 +764,25 @@ const steps = [
       score: 100,
     },
     code: `import { KDataTable, KSparklineCell } from '@khor/design-system/organisms/index';
+import { KUserCell } from '@khor/design-system/molecules/index';
+import { KBadge } from '@khor/design-system/atoms/index';
 
 const columns = [
   {
-    key: 'name',
-    title: 'Empleado',
-    dataIndex: 'name',
-    sortable: true,
-    render: (v) => <KUserCell name={v} />,
+    accessorKey: 'name',
+    header: 'Empleado',
+    cell: ({ getValue }) => <KUserCell name={getValue()} />,
   },
-  { key: 'dept', title: 'Departamento', dataIndex: 'dept', sortable: true },
+  { accessorKey: 'dept', header: 'Departamento' },
   {
-    key: 'status',
-    title: 'Estado',
-    dataIndex: 'status',
-    render: (v) => <KBadge status={v} label={statusLabels[v]} />,
+    accessorKey: 'status',
+    header: 'Estado',
+    cell: ({ getValue }) => <KBadge status={getValue()} label={statusLabels[getValue()]} />,
   },
   {
-    key: 'trend',
-    title: 'Tendencia',
-    dataIndex: 'trend',
-    render: (v) => <KSparklineCell data={v} />,
+    accessorKey: 'trend',
+    header: 'Tendencia',
+    cell: ({ getValue }) => <KSparklineCell data={getValue()} />,
   },
 ];
 
@@ -791,7 +793,7 @@ const columns = [
   actions={<KButton variant="primary" size="sm">Nuevo</KButton>}
   onRowClick={(record) => openDetail(record)}
 />`,
-    filename: 'KDataTable.tsx',
+    filename: 'KDataTable/index.tsx',
     props: [
       { name: 'data', type: 'T[]', required: true, description: 'Array de datos.' },
       { name: 'columns', type: 'ColumnDef[]', required: true, description: 'Definición de columnas.' },
@@ -847,7 +849,7 @@ const columns = [
     />
   ),
 }`,
-    filename: 'KSparklineCell.tsx',
+    filename: 'KSparklineCell/index.tsx',
     stateShowcase: (
       <div style={{ display: 'flex', gap: 24, padding: 16 }}>
         <KSparklineCell data={[10, 50, 20]} color="green" width={60} height={20} />
@@ -871,6 +873,7 @@ const columns = [
       'Usa colores de feedback: verde para crecimiento, rojo para decrecimiento.',
       'Mantel el tamano pequeno (80-100px) para no dominar la tabla.',
     ],
+    aiNotes: 'KSparklineCell para gráficos sparkline en tablas y tarjetas.',
   },
   modal: {
     id: 'modal',
@@ -895,7 +898,7 @@ const [open, setOpen] = useState(false);
 
 <KModal
   open={open}
-  onClose={() => setOpen(false)}
+  onOpenChange={(next) => setOpen(next)}
   title="Confirmar Accion"
   footer={
     <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
@@ -910,16 +913,17 @@ const [open, setOpen] = useState(false);
 >
   <p>Contenido del modal...</p>
 </KModal>`,
-    filename: 'KModal.tsx',
+    filename: 'KModal/index.tsx',
     props: [
       { name: 'open', type: 'boolean', required: true, description: 'Controla la visibilidad.' },
-      { name: 'onClose', type: '() => void', required: true, description: 'Callback al cerrar.' },
+      { name: 'onOpenChange', type: '(open: boolean) => void', required: true, description: 'Callback al cambiar visibilidad.' },
       { name: 'title', type: 'string', required: true, description: 'Titulo del modal.' },
       { name: 'children', type: 'ReactNode', required: true, description: 'Contenido del modal.' },
       { name: 'footer', type: 'ReactNode', description: 'Botones de accion del footer.' },
       { name: 'width', type: 'number', default: '520', description: 'Ancho en pixeles.' },
     ],
     guidelines: ['Usa para confirmaciones y formularios cortos.', 'Footer siempre con Cancelar (secondary) + Accion (primary).'],
+    aiNotes: 'KModal para diálogos modales. Paridad total AntD v5. Usar onOpenChange no onClose.',
   },
   sheet: {
     id: 'sheet',
@@ -942,7 +946,7 @@ const [open, setOpen] = useState(false);
 
 <KSheet
   open={open}
-  onClose={() => setOpen(false)}
+  onOpenChange={(next) => setOpen(next)}
   title="Detalle de Empleado"
   width={400}
   footer={...}
@@ -951,10 +955,10 @@ const [open, setOpen] = useState(false);
     <KInput value={name} onChange={...} />
   </KFormField>
 </KSheet>`,
-    filename: 'KSheet.tsx',
+    filename: 'KSheet/index.tsx',
     props: [
       { name: 'open', type: 'boolean', required: true, description: 'Controla la visibilidad.' },
-      { name: 'onClose', type: '() => void', required: true, description: 'Callback al cerrar.' },
+      { name: 'onOpenChange', type: '(open: boolean) => void', required: true, description: 'Callback al cambiar visibilidad.' },
       { name: 'title', type: 'string', required: true, description: 'Titulo del drawer.' },
       { name: 'children', type: 'ReactNode', required: true, description: 'Contenido.' },
       { name: 'width', type: 'number', default: '400', description: 'Ancho.' },
@@ -962,6 +966,7 @@ const [open, setOpen] = useState(false);
       { name: 'footer', type: 'ReactNode', description: 'Footer con acciones.' },
     ],
     guidelines: ['Usa para formularios largos o detalle de registros.', 'Width de 400-600px dependiendo del contenido.'],
+    aiNotes: 'KSheet para panel lateral deslizable. Paridad total AntD v5.',
   },
   'card-section': {
     id: 'card-section',
@@ -1005,7 +1010,7 @@ const [open, setOpen] = useState(false);
 >
   {/* Contenido */}
 </KCardSection>`,
-    filename: 'KCardSection.tsx',
+    filename: 'KCardSection/index.tsx',
     props: [
       { name: 'title', type: 'string', description: 'Titulo de la seccion.' },
       { name: 'subtitle', type: 'string', description: 'Subtitulo.' },
@@ -1014,6 +1019,7 @@ const [open, setOpen] = useState(false);
       { name: 'noPadding', type: 'boolean', default: 'false', description: 'Remueve el padding del body.' },
     ],
     guidelines: ['Usa para agrupar campos relacionados en formularios o vistas de detalle.'],
+    aiNotes: 'KCardSection para secciones agrupadas con encabezado y acciones.',
   },
   tabs: {
     id: 'tabs',
@@ -1080,13 +1086,14 @@ const [open, setOpen] = useState(false);
   <KTabsContent value="general">Contenido Gral</KTabsContent>
   <KTabsContent value="docs">Contenido Docs</KTabsContent>
 </KTabs>`,
-    filename: 'KTabs.tsx',
+    filename: 'KTabs/index.tsx',
     props: [
       { name: 'defaultValue', type: 'string', description: 'Tab activo por defecto.' },
       { name: 'onValueChange', type: '(key: string) => void', description: 'Callback al cambiar de tab.' },
       { name: 'children', type: 'ReactNode', required: true, description: 'Sub-componentes KTabsList, KTabsTrigger y KTabsContent.' },
     ],
     guidelines: ['Maximo 5-6 tabs. Para mas, usa navegacion por menu.', 'Incluye icono Lucide para mejorar legibilidad.'],
+    aiNotes: 'KTabs para navegación por pestañas. Paridad total AntD v5.',
   },
   'toast-manager': {
     id: 'toast-manager',
@@ -1134,7 +1141,7 @@ kToast({
   type: 'info',
   title: 'Actualizacion disponible',
 });`,
-    filename: 'KToastManager.tsx',
+    filename: 'KToastManager/index.tsx',
     props: [
       { name: 'type', type: "'success' | 'error' | 'warning' | 'info'", default: "'info'", description: 'Tipo semantico de la notificacion.' },
       { name: 'title', type: 'string', required: true, description: 'Titulo del toast.' },
@@ -1183,7 +1190,7 @@ const { open, setOpen } = useCommandBar();
 // - Historial de últimas 5 búsquedas (localStorage)
 // - Agrupación por categoría (Átomo, Molécula, Organismo, Template)
 // - Cierre con Escape o click fuera`,
-    filename: 'KCommandBar.tsx',
+    filename: 'KCommandBar/index.tsx',
     props: [
       { name: 'open', type: 'boolean', required: true, description: 'Controla la visibilidad del Command Bar.' },
       { name: 'onClose', type: '() => void', required: true, description: 'Callback al cerrar.' },
@@ -1223,7 +1230,7 @@ const { open, setOpen } = useCommandBar();
   onChange={setFiles}
   onUpload={async (file) => { /* upload logic */ }}
 />`,
-    filename: 'KUpload.tsx',
+    filename: 'KUpload/index.tsx',
     props: [
       { name: 'multiple', type: 'boolean', description: 'Permitir multiples archivos.' },
       { name: 'accept', type: 'string', description: 'Tipos de archivo aceptados.' },
@@ -1235,6 +1242,7 @@ const { open, setOpen } = useCommandBar();
       { name: 'listType', type: "'text' | 'picture'", default: "'text'", description: 'Tipo de lista.' },
     ],
     guidelines: ['Define maxSize para evitar uploads excesivos.', 'Usa onUpload para integracion con API.'],
+    aiNotes: 'KUpload para arrastrar y soltar archivos. Paridad total AntD v5.',
   },
   tree: {
     id: 'tree',
@@ -1270,7 +1278,7 @@ const { open, setOpen } = useCommandBar();
   showLine
   onSelect={(keys) => setSelected(keys)}
 />`,
-    filename: 'KTree.tsx',
+    filename: 'KTree/index.tsx',
     props: [
       { name: 'data', type: 'KTreeNode[]', required: true, description: 'Nodos con key, title y children.' },
       { name: 'checkable', type: 'boolean', description: 'Mostrar checkboxes.' },
@@ -1280,6 +1288,7 @@ const { open, setOpen } = useCommandBar();
       { name: 'onCheck', type: '(keys) => void', description: 'Al checkear nodo.' },
     ],
     guidelines: ['Usa showLine para jerarquias profundas.', 'V4 maneja expansion de forma interna por defecto.'],
+    aiNotes: 'KTree para visualización jerárquica. Paridad total AntD v5.',
   },
   tour: {
     id: 'tour',
@@ -1315,7 +1324,7 @@ const { open, setOpen } = useCommandBar();
     { title: 'Sidebar', description: 'Navega entre secciones.', target: '#sidebar' },
   ]}
 />`,
-    filename: 'KTour.tsx',
+    filename: 'KTour/index.tsx',
     props: [
       { name: 'steps', type: 'KTourStep[]', required: true, description: 'Pasos con title, description, target y placement.' },
       { name: 'open', type: 'boolean', description: 'Activar el tour.' },
@@ -1323,6 +1332,7 @@ const { open, setOpen } = useCommandBar();
       { name: 'onFinish', type: '() => void', description: 'Al completar todos los pasos.' },
     ],
     guidelines: ['Usa targets con selectores CSS únicos.', 'Máximo 5-7 pasos por tour para evitar fatiga.'],
+    aiNotes: 'KTour para recorridos guiados paso a paso. Paridad total AntD v5.',
   },
   'modal-confirm': {
     id: 'modal-confirm',
@@ -1346,7 +1356,7 @@ const { open, setOpen } = useCommandBar();
   content="Esta acción no se puede deshacer."
   onOk={async () => { await deleteAction(); }}
 />`,
-    filename: 'KModalConfirm.tsx',
+    filename: 'KModalConfirm/index.tsx',
     a11ySummary: {
       keyboard: ['Escape: Cierra el diálogo.', 'Focus trap mientras está abierto.'],
       aria: ['role="alertdialog" para notificar severidad.'],
@@ -1359,6 +1369,7 @@ const { open, setOpen } = useCommandBar();
       { name: 'onOk', type: '() => void | Promise', description: 'Callback al aceptar.' },
     ],
     guidelines: ['Usa para acciones que requieren validación explícita del usuario.'],
+    aiNotes: 'KModalConfirm para confirmaciones modales destructivas o importantes.',
   },
   'form-list': {
     id: 'form-list',
@@ -1392,13 +1403,14 @@ const { open, setOpen } = useCommandBar();
     )}
   />
 </KForm>`,
-    filename: 'KFormList.tsx',
+    filename: 'KFormList/index.tsx',
     props: [
       { name: 'name', type: 'string', required: true, description: 'Nombre del campo array.' },
       { name: 'renderItem', type: '(field, index, ops) => ReactNode', required: true, description: 'Render de cada fila.' },
       { name: 'addText', type: 'string', default: "'Agregar campo'", description: 'Texto del botón agregar.' },
     ],
     guidelines: ['Usa maxItems para evitar formularios demasiado largos.', 'renderItem recibe operaciones add/remove.'],
+    aiNotes: 'KFormList para formularios con campos dinámicos repetibles.',
   },
   carousel: {
     id: 'carousel',
@@ -1421,7 +1433,7 @@ const { open, setOpen } = useCommandBar();
   <div>Slide 1</div>
   <div>Slide 2</div>
 </KCarousel>`,
-    filename: 'KCarousel.tsx',
+    filename: 'KCarousel/index.tsx',
     a11ySummary: {
       keyboard: ['Flechas: Navega entre slides.', 'Space/Enter sobre dots: Salta a slide.'],
       aria: ['Role="region" con aria-roledescription="carousel".'],
@@ -1434,6 +1446,7 @@ const { open, setOpen } = useCommandBar();
       { name: 'effect', type: "'scroll' | 'fade'", default: "'scroll'", description: 'Efecto de transición.' },
     ],
     guidelines: ['Usa autoplay solo cuando sea necesario para no distraer.', 'Max 5 slides recomendados.'],
+    aiNotes: 'KCarousel para presentaciones de contenido deslizante. Paridad AntD v5.',
   },
   calendar: {
     id: 'calendar',
@@ -1450,7 +1463,7 @@ const { open, setOpen } = useCommandBar();
   onChange={(date) => console.log(date)}
   onPanelChange={(date, mode) => console.log(mode)}
 />`,
-    filename: 'KCalendar.tsx',
+    filename: 'KCalendar/index.tsx',
     stateShowcase: (
       <div style={{ padding: 16 }}>
         <KCalendar />
@@ -1470,6 +1483,7 @@ const { open, setOpen } = useCommandBar();
       { name: 'monthCellRender', type: '(date) => ReactNode', description: 'Renderizado custom de celda de mes.' },
     ],
     guidelines: ['Ideal para agendar citas, eventos y calendarios editoriales.'],
+    aiNotes: 'KCalendar para calendario completo con selección de fecha. Paridad AntD v5.',
   },
   form: {
     id: 'form',
@@ -1492,7 +1506,7 @@ const methods = KForm.useForm({ defaultValues: { username: '' } });
   </KForm.Item>
   <KButton variant="primary" htmlType="submit">Enviar</KButton>
 </KForm>`,
-    filename: 'KForm.tsx',
+    filename: 'KForm/index.tsx',
     stateShowcase: (
       <div style={{ padding: 16 }}>
         <KText color="secondary">El formulario depende íntegramente de sus children y del proveedor de contexto.</KText>
@@ -1510,6 +1524,7 @@ const methods = KForm.useForm({ defaultValues: { username: '' } });
       { name: 'methods', type: 'UseFormReturn', description: 'Instancia de react-hook-form (KForm.useForm).' },
     ],
     guidelines: ['Usa KForm.Item para envolver cada campo.', 'Define rules en KForm.Field para validación automática.'],
+    aiNotes: 'KForm para formularios con validación. Paridad total AntD v5. Usar KFormField para campos.',
   },
 
   pagination: {
@@ -1525,7 +1540,7 @@ const methods = KForm.useForm({ defaultValues: { username: '' } });
   onChange={(page, size) => console.log(page, size)}
   showSizeChanger
 />`,
-    filename: 'KPagination.tsx',
+    filename: 'KPagination/index.tsx',
     stateShowcase: (
       <div style={{ padding: 16, display: 'flex', flexDirection: 'column', gap: 16 }}>
         <KPagination total={50} />
@@ -1544,6 +1559,7 @@ const methods = KForm.useForm({ defaultValues: { username: '' } });
       { name: 'onChange', type: '(page, size) => void', description: 'Callback al cambiar.' },
     ],
     guidelines: ['Usa debajo de listas o grillas de cards que no usen KDataTable.'],
+    aiNotes: 'KPagination para navegación entre páginas. Paridad total AntD v5.',
   },
   'login-form': {
     id: 'login-form',
@@ -1556,7 +1572,7 @@ const methods = KForm.useForm({ defaultValues: { username: '' } });
   onFinish={(values) => login(values)} 
   loading={isLoggingIn} 
 />`,
-    filename: 'KLoginForm.tsx',
+    filename: 'KLoginForm/index.tsx',
     stateShowcase: (
       <div style={{ padding: 16 }}>
          <KLoginForm onFinish={() => {}} />
@@ -1573,6 +1589,7 @@ const methods = KForm.useForm({ defaultValues: { username: '' } });
       { name: 'loading', type: 'boolean', description: 'Muestra estado de carga en el botón.' },
     ],
     guidelines: ['Centra el formulario en un contenedor de ancho máximo (ej. 400px).'],
+    aiNotes: 'KLoginForm para formulario de inicio de sesión completo con validación.'
   },
 };
 
