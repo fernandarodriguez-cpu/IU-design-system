@@ -1496,7 +1496,7 @@ export const atoms: Record<string, AtomEntry> = {
             <KButton variant="secondary">Secundario</KButton>
             <KButton variant="outline">Outline</KButton>
             <KButton variant="ghost">Ghost</KButton>
-            <KButton danger icon={<Trash2 size={16} />}>Peligro</KButton>
+            <KButton variant="danger" icon={<Trash2 size={16} />}>Peligro</KButton>
             <KButton variant="navy">Navy</KButton>
           </div>
         </div>

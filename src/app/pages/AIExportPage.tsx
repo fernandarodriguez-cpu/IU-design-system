@@ -52,12 +52,12 @@ export const defaultSections: SectionConfig[] = [
 ];
 
 /* ─── Markdown Generator ────────────────────── */
-export function generateMarkdown(sections: SectionConfig[], theme: ThemeConfig): string {
-  const enabled = new Set(sections.filter((s) => s.enabled).map((s) => s.id));
+export function generateMarkdown(sections: SectionConfig[], theme: ThemeConfig, layerFilter?: string[]): string {
+  const active = layerFilter ? new Set(layerFilter) : new Set(sections.filter((s) => s.enabled).map((s) => s.id));
   const parts: string[] = [];
   const today = new Date().toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' });
 
-  if (enabled.has('header')) {
+  if (active.has('header')) {
     parts.push(`
 # Sistema de Diseño Khor v${KHOR_VERSION}
 Generado el: ${today}
@@ -126,11 +126,11 @@ Como IA, DEBES elegir componentes basados en la **Intención Semántica** del fl
     return idx;
   };
 
-  if (enabled.has('index')) {
+  if (active.has('index')) {
     parts.push(renderComponentIndex());
   }
 
-  if (enabled.has('tokens')) {
+  if (active.has('tokens')) {
     parts.push(`
 ## 🎨 Especificación Técnica de Tokens (Elite SaaS Architecture)
 
@@ -732,7 +732,7 @@ Este sistema está diseñado para ser la fuente de verdad absoluta para Agentes 
 ---`);
   }
 
-  if (enabled.has('darkmode')) {
+  if (active.has('darkmode')) {
     parts.push(`
 ## Dark Mode
 
@@ -834,19 +834,19 @@ style={{ backgroundColor: 'var(--card)', color: 'var(--foreground)' }}
     return md;
   };
 
-  if (enabled.has('atoms')) {
+  if (active.has('atoms')) {
     parts.push(renderDict('Átomos', 'Unidades indivisibles y fundamentales.', "import { KButton } from '@khor/design-system/atoms/index'", atoms));
   }
 
-  if (enabled.has('molecules')) {
+  if (active.has('molecules')) {
     parts.push(renderDict('Moléculas', 'Combinaciones de átomos con lógica de forma reutilizable.', "import { KFormField } from '@khor/design-system/molecules/index'", molecules));
   }
 
-  if (enabled.has('organisms')) {
+  if (active.has('organisms')) {
     parts.push(renderDict('Organismos', 'Componentes complejos o Layouts masivos con lógicas de portal, focus-traps y alto consumo de hooks.', "import { KDataTable } from '@khor/design-system/organisms/index'", organisms));
   }
 
-  if (enabled.has('templates')) {
+  if (active.has('templates')) {
     parts.push(`
 ## 🏗️ Elite Page Recipes (High-Fidelity Patterns)
 
@@ -986,7 +986,7 @@ function LoginPage() {
 ---`);
   }
 
-  if (enabled.has('layout')) {
+  if (active.has('layout')) {
     parts.push(`
 ## Layout — AppShell
 
@@ -1044,7 +1044,7 @@ const router = createBrowserRouter([
 ---`);
   }
 
-  if (enabled.has('patterns')) {
+  if (active.has('patterns')) {
     parts.push(`
 ## Patrones y Convenciones
 
@@ -1147,7 +1147,7 @@ ${p.code}
     parts.push(`---`);
   }
 
-  if (enabled.has('examples')) {
+  if (active.has('examples')) {
     parts.push(`
 ## Ejemplos de Codigo
 
@@ -1393,6 +1393,38 @@ export function AIExportPage() {
     }
   };
 
+  /* ─── Layer downloads (multi-guía para LLMs) ─── */
+  const layerConfigs: { id: string; label: string; filename: string; sectionIds: string[]; icon: string }[] = [
+    { id: 'tokens', label: 'Tokens', filename: 'khor-guia-tokens.md', sectionIds: ['tokens'], icon: '🎨' },
+    { id: 'atoms', label: 'Átomos', filename: 'khor-guia-atomos.md', sectionIds: ['atoms'], icon: '⚛️' },
+    { id: 'molecules', label: 'Moléculas', filename: 'khor-guia-moleculas.md', sectionIds: ['molecules'], icon: '🧬' },
+    { id: 'organisms', label: 'Organismos', filename: 'khor-guia-organismos.md', sectionIds: ['organisms'], icon: '🧠' },
+    { id: 'full', label: 'Guía Completa', filename: 'khor-guia-completa.md', sectionIds: [], icon: '📦' },
+  ];
+
+  const handleDownloadLayer = (layerId: string) => {
+    const layer = layerConfigs.find(l => l.id === layerId);
+    if (!layer) return;
+
+    let content: string;
+    if (layerId === 'full') {
+      content = markdown;
+    } else {
+      content = generateMarkdown(sections, theme, layer.sectionIds);
+    }
+
+    const blob = new Blob([content], { type: 'text/markdown;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = layer.filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    kToast({ type: 'success', title: `Descargado: ${layer.label}`, description: layer.filename });
+  };
+
   const handleSelectAll = () => {
     if (previewRef.current) {
       const range = document.createRange();
@@ -1576,26 +1608,33 @@ export function AIExportPage() {
           }}>
             <h3 style={{ margin: '0 0 16px', fontSize: 16, color: 'var(--foreground)' }}>
               <Zap size={18} style={{ display: 'inline', marginRight: 8, verticalAlign: 'middle' }} />
-              Acciones
+              Descargas por capa
             </h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <p style={{ fontSize: 12, color: 'var(--muted-foreground)', margin: '0 0 12px' }}>
+              Cada archivo cabe en contextos LLM pequeños. Usa la guía completa solo como referencia.
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {layerConfigs.map((layer) => (
+                <KButton
+                  key={layer.id}
+                  variant={layer.id === 'full' ? 'primary' : 'outline'}
+                  block
+                  icon={<Download size={16} />}
+                  onClick={() => handleDownloadLayer(layer.id)}
+                  disabled={enabledCount === 0}
+                  style={{ justifyContent: 'flex-start' }}
+                >
+                  {layer.icon} {layer.label} — {layer.filename}
+                </KButton>
+              ))}
               <KButton
-                variant="primary"
-                block
-                icon={<Download size={16} />}
-                onClick={handleDownload}
-                disabled={enabledCount === 0}
-              >
-                Descargar .md
-              </KButton>
-              <KButton
-                variant="outline"
+                variant="ghost"
                 block
                 icon={copied ? <Check size={16} /> : <Copy size={16} />}
                 onClick={handleCopy}
                 disabled={enabledCount === 0}
               >
-                {copied ? 'Copiado!' : 'Copiar al portapapeles'}
+                {copied ? 'Copiado!' : 'Copiar guía completa al portapapeles'}
               </KButton>
               <KButton
                 variant="ghost"
