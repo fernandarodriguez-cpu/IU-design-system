@@ -309,6 +309,9 @@ export const khorTokens = {
         spring: 'var(--khor-easing-spring)',
         enter: 'var(--khor-easing-enter)',
         exit: 'var(--khor-easing-exit)',
+        decelerate: 'var(--khor-easing-decelerate)',
+        accelerate: 'var(--khor-easing-accelerate)',
+        emphasized: 'var(--khor-easing-emphasized)',
       },
     },
     text: {

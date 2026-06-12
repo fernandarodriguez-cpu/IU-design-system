@@ -649,8 +649,8 @@ export const organisms: Record<string, OrganismEntry> = {
         'Uso de KSteps con estados de progreso ARIA.',
         'Regiones de contenido con anuncios de carga.',
       ],
-      contrast: 'AAA certificado.',
-      score: 100,
+      contrast: 'AA sobre blanco (ratio 4.8:1 — primary sobre white no alcanza AAA 7:1)',
+      score: 96,
     },
     code: `import { KFormWizard } from '@khor/design-system/organisms';
 
@@ -923,7 +923,7 @@ const [open, setOpen] = useState(false);
       { name: 'width', type: 'number', default: '520', description: 'Ancho en pixeles.' },
     ],
     guidelines: ['Usa para confirmaciones y formularios cortos.', 'Footer siempre con Cancelar (secondary) + Accion (primary).'],
-    aiNotes: 'KModal para diálogos modales. Paridad total AntD v5. Usar onOpenChange no onClose.',
+    aiNotes: 'KModal para diálogos modales. Usar onOpenChange (no onClose). Para confirmaciones usar KModalConfirm con onClose.',
   },
   sheet: {
     id: 'sheet',
@@ -1310,8 +1310,8 @@ const { open, setOpen } = useCommandBar();
     a11ySummary: {
       keyboard: ['Escape: Cierra el tour. Navegación en footer popover por flechas/tab.'],
       aria: ['Actúa como Alert Dialog (interrumpe flujo temporalmente). Mismo focus trap que los Modales.'],
-      contrast: 'AAA sobre capas altas oscurecedoras.',
-      score: 100,
+      contrast: 'AA sobre blanco (ratio 4.8:1 — primary sobre white no alcanza AAA 7:1)',
+      score: 96,
     },
     code: `import { KTour } from '@khor/design-system/organisms/index';
 
@@ -1360,13 +1360,20 @@ const { open, setOpen } = useCommandBar();
     a11ySummary: {
       keyboard: ['Escape: Cierra el diálogo.', 'Focus trap mientras está abierto.'],
       aria: ['role="alertdialog" para notificar severidad.'],
-      contrast: 'AAA sobre la superficie del sistema.',
-      score: 100,
+      contrast: 'AA sobre blanco (ratio 4.8:1 — primary sobre white no alcanza AAA 7:1)',
+      score: 96,
     },
     props: [
       { name: 'open', type: 'boolean', required: true, description: 'Visibilidad.' },
-      { name: 'type', type: "'confirm'|'success'|'error'", description: 'Tipo semántico.' },
+      { name: 'onClose', type: '() => void', required: true, description: 'Callback al cerrar.' },
+      { name: 'type', type: "'confirm'|'info'|'success'|'warning'|'error'", description: 'Tipo semántico.' },
+      { name: 'title', type: 'ReactNode', description: 'Título del diálogo.' },
+      { name: 'content', type: 'ReactNode', description: 'Contenido del diálogo.' },
       { name: 'onOk', type: '() => void | Promise', description: 'Callback al aceptar.' },
+      { name: 'okText', type: 'string', default: "'Aceptar'", description: 'Texto del botón OK.' },
+      { name: 'cancelText', type: 'string', default: "'Cancelar'", description: 'Texto del botón cancelar.' },
+      { name: 'showCancel', type: 'boolean', default: 'true', description: 'Muestra botón cancelar.' },
+      { name: 'width', type: 'number', default: '420', description: 'Ancho en pixeles.' },
     ],
     guidelines: ['Usa para acciones que requieren validación explícita del usuario.'],
     aiNotes: 'KModalConfirm para confirmaciones modales destructivas o importantes.',
@@ -1581,8 +1588,8 @@ const methods = KForm.useForm({ defaultValues: { username: '' } });
     a11ySummary: {
       keyboard: ['Tabulación rígida orientada a User->Password->Button.', 'Enter realiza Submit.'],
       aria: ['Type="email" y "password" nativos con autocompletado habilitado.'],
-      contrast: 'AAA según reglas universales de formulario.',
-      score: 100,
+      contrast: 'AA sobre blanco (ratio 4.8:1 — primary sobre white no alcanza AAA 7:1)',
+      score: 96,
     },
     props: [
       { name: 'onFinish', type: '(values) => void', description: 'Callback al enviar el formulario con éxito.' },

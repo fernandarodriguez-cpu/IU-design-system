@@ -580,10 +580,14 @@
   --khor-duration-normal:  200ms;
   --khor-duration-slow:    400ms;
 
-  --khor-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
-  --khor-easing-spring:   cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  --khor-easing-enter:    cubic-bezier(0, 0, 0.2, 1);
-  --khor-easing-exit:     cubic-bezier(0.4, 0, 1, 1);
+  --khor-easing-standard:    cubic-bezier(0.4, 0, 0.2, 1);
+  --khor-easing-spring:      cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --khor-easing-enter:       cubic-bezier(0, 0, 0.2, 1);
+  --khor-easing-exit:        cubic-bezier(0.4, 0, 1, 1);
+  --khor-easing-emphasized:  cubic-bezier(0.2, 0, 0, 1);
+  /* Aliases for JS static token parity */
+  --khor-easing-decelerate:  var(--khor-easing-enter);
+  --khor-easing-accelerate:  var(--khor-easing-exit);
 
   /* Elevation Tokens (Semantic) */
   --khor-elevation-0: none;
