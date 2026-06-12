@@ -1,7 +1,7 @@
 {
   "name": "@khor/design-system",
   "private": true,
-  "version": "6.2.0",
+  "version": "6.2.1",
   "type": "module",
   "scripts": {
     "build": "npm run generate-counts && vite build",
@@ -10,6 +10,9 @@
     "test:visual": "playwright test",
     "test:visual:update": "playwright test --update-snapshots",
     "khor-check": "npx tsx src/scripts/khor-check.ts",
+    "validate-tokens": "npx tsx src/scripts/validate-tokens.ts",
+    "test:a11y": "playwright test tests/a11y.spec.ts",
+    "test": "npm run validate-tokens && npm run khor-check",
     "figma-sync": "node --env-file=.env src/scripts/figma-token-sync.cjs"
   },
   "dependencies": {

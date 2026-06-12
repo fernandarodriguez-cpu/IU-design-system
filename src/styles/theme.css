@@ -20,6 +20,12 @@
   --khor-accent-hover: #ffaa33;
   --khor-accent-active: #e68600;
 
+  /* Action hover/active primitives */
+  --khor-secondary-hover: #0a2270;
+  --khor-secondary-active: #030f40;
+  --khor-error-hover: #E53935;
+  --khor-error-active: #B71C1C;
+
   /* ── Neutrals ── */
   /* ── Neutrals (v10.4 Slate-Blue Secondary) ── */
   --khor-neutral-secondary-50: #FFFFFF;
@@ -184,6 +190,7 @@
   --khor-radius-lg:   8px;
   --khor-radius-xl:   10px;
   --khor-radius-2xl:  12px;
+  --khor-radius-3xl:  32px;
   --khor-radius-full: 9999px;
 
   /* ── Khor Blur Scale (v10.4.5 Premium) ── */
@@ -814,7 +821,7 @@
   --color-khor-success-700: var(--khor-success-700);
   --color-khor-success-800: var(--khor-success-800);
   --color-khor-success-900: var(--khor-success-900);
-  --color-khor-success-light: var(--khor-success-light);
+  --color-khor-success-light: var(--khor-success-100);
 
   /* Error Scale */
   --color-khor-error: var(--khor-error);
@@ -828,7 +835,7 @@
   --color-khor-error-700: var(--khor-error-700);
   --color-khor-error-800: var(--khor-error-800);
   --color-khor-error-900: var(--khor-error-900);
-  --color-khor-error-light: var(--khor-error-light);
+  --color-khor-error-light: var(--khor-error-100);
 
   /* Warning Scale */
   --color-khor-warning: var(--khor-warning);
@@ -842,7 +849,7 @@
   --color-khor-warning-700: var(--khor-warning-700);
   --color-khor-warning-800: var(--khor-warning-800);
   --color-khor-warning-900: var(--khor-warning-900);
-  --color-khor-warning-light: var(--khor-warning-light);
+  --color-khor-warning-light: var(--khor-warning-100);
 
   /* Info Scale */
   --color-khor-info: var(--khor-info);
@@ -856,7 +863,7 @@
   --color-khor-info-700: var(--khor-info-700);
   --color-khor-info-800: var(--khor-info-800);
   --color-khor-info-900: var(--khor-info-900);
-  --color-khor-info-light: var(--khor-info-light);
+  --color-khor-info-light: var(--khor-info-100);
 
   /* Teal Scale */
   --color-khor-teal: var(--khor-teal);

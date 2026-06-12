@@ -827,7 +827,7 @@ Dialogo modal basado en Radix Dialog.
 ```tsx
 interface KModalProps {
   open: boolean;
-  onClose: () => void;
+  onOpenChange: (open: boolean) => void;
   title: string;
   children: ReactNode;
   footer?: ReactNode;        // Botones de accion
@@ -840,7 +840,7 @@ Panel lateral deslizante (desde la derecha).
 ```tsx
 interface KDrawerProps {
   open: boolean;
-  onClose: () => void;
+  onOpenChange: (open: boolean) => void;
   title: string;
   children: ReactNode;
   width?: number;            // Default: 400
@@ -971,7 +971,7 @@ Modal de confirmacion para acciones criticas.
 ```tsx
 interface KModalConfirmProps {
   open: boolean;
-  onClose: () => void;
+  onOpenChange: (open: boolean) => void;
   title: string;
   description: string;
   onConfirm: () => void;
@@ -981,7 +981,7 @@ interface KModalConfirmProps {
 
 <KModalConfirm
   open={confirmOpen}
-  onClose={() => setConfirmOpen(false)}
+  onOpenChange={(open) => !open && setConfirmOpen(false)}
   title="Confirmar eliminación"
   description="¿Estás seguro de que quieres eliminar este elemento?"
   onConfirm={handleDelete}

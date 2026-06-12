@@ -526,6 +526,44 @@ export function generateCssBlock(theme?: {
   --khor-info: ${c.info};
   --khor-teal: ${c.teal};
 
+  /* Feedback Color Scales (Full 50-900) */
+  --khor-success-50: #E8F5E9;   --khor-success-100: #C8E6C9;
+  --khor-success-200: #A5D6A7;  --khor-success-300: #81C784;
+  --khor-success-400: #66BB6A;  --khor-success-500: #4CAF50;
+  --khor-success-600: #43A047;  --khor-success-700: #2E7D32;
+  --khor-success-800: #1B5E20;  --khor-success-900: #0D3E12;
+
+  --khor-error-50: #FFEBEE;    --khor-error-100: #FFCDD2;
+  --khor-error-200: #EF9A9A;  --khor-error-300: #E57373;
+  --khor-error-400: #EF5350;  --khor-error-500: #F44336;
+  --khor-error-600: #E53935;  --khor-error-700: #B71C1C;
+  --khor-error-800: #C62828;  --khor-error-900: #B71C1C;
+
+  --khor-warning-50: #FFF4E5;  --khor-warning-100: #FFECB3;
+  --khor-warning-200: #FFE082; --khor-warning-300: #FFD54F;
+  --khor-warning-400: #FFCA28; --khor-warning-500: #FFC107;
+  --khor-warning-600: #FFB300; --khor-warning-700: #E07800;
+  --khor-warning-800: #FFA000; --khor-warning-900: #FF8F00;
+
+  --khor-info-50: #E3F2FD;    --khor-info-100: #BBDEFB;
+  --khor-info-200: #90CAF9;   --khor-info-300: #64B5F6;
+  --khor-info-400: #42A5F5;   --khor-info-500: #2196F3;
+  --khor-info-600: #1E88E5;   --khor-info-700: #1565C0;
+  --khor-info-800: #1565C0;   --khor-info-900: #0D47A1;
+
+  --khor-teal-50: #E0F2F2;    --khor-teal-100: #B2DFDF;
+  --khor-teal-200: #80CBCB;   --khor-teal-300: #4DB6B6;
+  --khor-teal-400: #26A6A6;   --khor-teal-500: #009696;
+  --khor-teal-600: #008989;   --khor-teal-700: #0D7D7D;
+  --khor-teal-800: #006969;   --khor-teal-900: #004D4D;
+
+  /* Extra Feedback Tokens */
+  --khor-feedback-processing: #0ea5e9;
+  --khor-feedback-volcano: #ea580c;
+  --khor-feedback-gold: #eab308;
+  --khor-feedback-lime: #84cc16;
+  --khor-feedback-purple: #a855f7;
+
   /* Semantic Layer 2: Surface & Overlay */
   --khor-surface-page: #f8faff; --khor-surface-card: #ffffff;
   --khor-surface-hover: rgba(5, 23, 88, 0.04); --khor-surface-pressed: rgba(5, 23, 88, 0.08);

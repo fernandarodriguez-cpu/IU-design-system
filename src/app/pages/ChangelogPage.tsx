@@ -43,6 +43,33 @@ const changeTypeConfig: Record<ChangeType, { color: string; bg: string; icon: Re
 
 const changelog: VersionEntry[] = [
   {
+    version: '6.2.1',
+    date: '12 de Junio, 2026',
+    codename: 'DevOps Hardening — Token SSOT, Event API Unification & A11y Sincerity',
+    summary: 'Ghost variables eliminadas, APIs de eventos unificadas, claims de accesibilidad sinceros, linter de tokens para CI/CD.',
+    highlights: [
+      '5 ghost variables eliminadas en theme.css :root (secondary-hover/active, error-hover/active, radius-3xl)',
+      '4 @theme inline mappings corregidas (*-light → *-100) alineando JS y CSS tokens',
+      'validate-tokens.ts: nuevo linter estático que previene ghost variables en CI/CD',
+      'Guidelines.md: KModal/KDrawer/KModalConfirm migrados de onClose a onOpenChange',
+      'khor-system-guide.md: KCommandBar corregido de onClose a onOpenChange',
+      'HomePage: WCAG 2.2 AAA → AA (honestidad de métricas, KButton real es 4.8:1)',
+      'Nuevo tests/a11y.spec.ts con axe-core para 7 páginas críticas (npm run test:a11y)',
+      'npm test ahora ejecuta validate-tokens + khor-check como gate de calidad',
+    ],
+    changes: [
+      { type: 'fixed', description: 'theme.css :root — agregadas 5 variables faltantes: --khor-secondary-hover, --khor-secondary-active, --khor-error-hover, --khor-error-active, --khor-radius-3xl.' },
+      { type: 'fixed', description: 'theme.css @theme inline — 4 variables *-light corregidas para apuntar a *-100 existentes (success/error/warning/info), eliminando ghost variables.' },
+      { type: 'added', description: 'src/scripts/validate-tokens.ts — linter estático que verifica que cada var(--khor-*) tenga su definición en :root o .dark.' },
+      { type: 'changed', description: 'guidelines/Guidelines.md — KModal, KDrawer, KModalConfirm migrados de onClose a onOpenChange (patrón Radix estándar).' },
+      { type: 'changed', description: 'dist-guides/khor-system-guide.md — KCommandBar corregido de onClose a onOpenChange.' },
+      { type: 'fixed', description: 'HomePage.tsx — claim WCAG sincerado de "AAA" a "AA (AAA en componentes específicos)" reflejando ratio real 4.8:1.' },
+      { type: 'added', description: 'tests/a11y.spec.ts — suite de accesibilidad axe-core para 7 páginas críticas con umbral WCAG 2.1 AA.' },
+      { type: 'added', description: 'package.json — scripts validate-tokens, test:a11y, y test (validate-tokens + khor-check) como gate de calidad pre-build.' },
+    ],
+    stats: { added: 3, changed: 2, fixed: 3 },
+  },
+  {
     version: '6.2.0',
     date: '11 de Junio, 2026',
     codename: 'Registry Patterns & Auto-Counts',

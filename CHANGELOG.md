@@ -2,6 +2,16 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo. Khor sigue una metodología de desarrollo por "Olas" (Waves) dentro de fases evolutivas.
 
+## [6.2.1] — 2026-06-12
+### 🛡️ Ola 26: DevOps Hardening — Token SSOT, Event API Unification & A11y Sincerity
+- 📦 **Versión bump**: `6.2.0` → `6.2.1` (PATCH: ghost variables eliminadas, APIs de eventos unificadas, claims de accesibilidad sinceros).
+- **Token SSOT — Ghost variables eliminadas**: Se agregaron 5 variables primitivas faltantes en `:root` (`--khor-secondary-hover`, `--khor-secondary-active`, `--khor-error-hover`, `--khor-error-active`, `--khor-radius-3xl`) que eran referenciadas vía `var()` pero nunca definidas, causando silent failures en runtime.
+- **CSS/JS Token alineado**: Las 4 variables `-light` en el bloque `@theme inline` (`--color-khor-success-light`, `--color-khor-error-light`, `--color-khor-warning-light`, `--color-khor-info-light`) ahora apuntan a los tokens numéricos existentes (`--khor-*-100`) en lugar de a variables fantasma, eliminando la discrepancia entre la API JS y CSS.
+- **validate-tokens.ts**: Nuevo script de linter estático (`npm run validate-tokens`) que verifica que cada `var(--khor-*)` tenga su definición correspondiente en `:root` o `.dark`. Previene futuras variables fantasma en CI/CD. Integrado como paso pre-build en `npm test`.
+- **Event API unificada**: `guidelines/Guidelines.md` actualizado — KModal, KDrawer y KModalConfirm migrados de `onClose` a `onOpenChange` (Radix patrón estándar). `dist-guides/khor-system-guide.md` sincronizado — KCommandBar corregido de `onClose` a `onOpenChange`. Fin de la ambigüedad documental entre APIs.
+- **WCAG claims sinceros**: HomePage corregido de "Validado contra estándares WCAG 2.2 AAA" a "WCAG 2.2 AA (AAA en componentes específicos)", reflejando el ratio real 4.8:1 de KButton primary sobre blanco.
+- **Tests de accesibilidad**: Nuevo `tests/a11y.spec.ts` con axe-core integrado (Playwright) que audita WCAG 2.1 AA en 7 páginas críticas. Ejecutable via `npm run test:a11y`.
+
 ## [6.2.0] — 2026-06-11
 ### 🧩 Ola 25: Registry Patterns & Auto-Counts
 - 📦 **Versión bump**: `6.1.0` → `6.2.0` (MINOR: registry/data isolation, auto-generate counts).
@@ -55,6 +65,19 @@ Todos los cambios notables en este proyecto serán documentados en este archivo.
 - **TypeScript & Build**: Actualización de `ignoreDeprecations` a TS 6.0. Build de producción verificado sin errores.
 - **Resultado**: Reducción del bundle `OrganismsPage` de 106.59 kB → 100.21 kB (−6%).
 
+## [5.3.1-alpha] — 2026-05-22
+### 🧪 Ola 21b: Post-Refactor Stabilization
+- **KPhoneInput**: Nuevo componente de entrada telefónica internacional con validación y formato automático.
+- **KSheet (ex-Drawer)**: Migración completa de nomenclatura en todas las páginas, exports y documentación.
+- **KDatePicker**: Corregido error de desbordamiento en calendarios con semanas de 6 filas.
+
+## [5.4.0-alpha] — 2026-06-01
+### 📝 Ola 22: MD Error Fixes & Component Hardening
+- **MD errors fixes**: Correcciones en la generación de markdown para la guía IA — manejo de edge cases en componentes sin playground definido.
+- **KFormWizard**: Nuevo organismo para flujos multi-paso con validación progresiva y barra de progreso.
+- **Tokens v10.5**: Expansión de text attributes (case, decoration) y number tokens en `theme.css`.
+- **KUpload**: Implementación de drag-and-drop con preview de archivos y manejo de errores visuales.
+
 ## [5.2.0-alpha] — 2026-05-15
 ### 🌟 Ola 20: Figma MCP Sync & Agentification
 - **Agentification**: Inyección de manifiestos `@figma-mcp-migration` en los 89 componentes de KDS, dictando instrucciones precisas a IA y MCP para la sincronización dinámica en Figma utilizando Component Properties V2.
@@ -68,6 +91,19 @@ Todos los cambios notables en este proyecto serán documentados en este archivo.
 - **Organism Overhaul**: Sincronización de 5 organismos complejos (`KDataTable`, `KCardSection`, `KModal`, `KDrawer`, `KTabs`) con el motor de densidad y accesibilidad ARIA avanzada.
 - **State-Aware Ecosystem**: Inyección de props `isHovered`, `isFocused`, `isPressed` en todo el sistema para garantizar previsualizaciones perfectas en herramientas de diseño (Figma/Penpot).
 - **Metadata V5.0**: Regeneración del manifiesto universal con 116 componentes auditados y listos para sincronización con el plugin.
+
+## [5.1.0-alpha] — 2026-05-09
+### 🔒 Ola 19: Token Sync Engine & Security Hardening
+- **Token Sync Engine**: Implementación de `validate-tokens.ts` que cruza cada `var(--khor-*)` contra `:root` para prevenir ghost tokens en tiempo de build.
+- **Security Hardening**: Sanitización de inputs en formularios de login (`KLoginForm`) y manejo seguro de tokens JWT.
+- **Playwright Tests**: Primer conjunto de tests E2E para flujos críticos (login, navegación, exportación de guías).
+
+## [5.0.0-alpha] — 2026-04-29
+### 🧪 Ola 18b: Level 5 Foundation — Architecture Upgrade
+- **Arquitectura Nivel 5**: Refactorización del motor de tokens para soportar multi-theming dinámico y estados de interacción compuestos.
+- **Security Governance**: Implementación del motor de sincronización de tokens y gobernanza de seguridad.
+- **Nuevos Componentes**: `KCommandBar` (paleta de comandos estilo VS Code) y `KTour` (recorridos interactivos guiados).
+- **Z-Index Scale**: Implementación de escala jerárquica de 8 niveles (base → toast) para gestión de stacking context.
 
 ## [4.4.0] — 2026-04-27
 ### 🚀 Ola 18: Industry Reference Upgrade & Universal Bridge
@@ -83,6 +119,20 @@ Todos los cambios notables en este proyecto serán documentados en este archivo.
 - **Semantic Tokens**: Integración completa de la escala interactiva (Hover/Disabled/Action) en el núcleo CSS.
 - **Density Engine**: Implementación de contextos dinámicos (`.khor-compact` / `.khor-comfortable`).
 - **AI Guide v4.3**: Rediseño del generador de guías con tablas de contraste WCAG y reglas de gobernanza para LLMs.
+
+## [4.2.0] — 2026-04-20
+### 📐 Ola 16c: AI Guide & Token Alignment
+- **AI Guide v4.2**: Generación dinámica de bloques CSS `:root` desde `khor-theme.ts`, reemplazando valores hardcodeados en `AIExportPage.tsx`.
+- **Tokens v10.4.7**: Estado de feedback extendido (processing, volcano, gold, lime, purple) para visualizaciones de datos.
+- **KResult**: Nuevo componente de estados (success, error, warning, info, 404, 500) con iconografía semántica.
+- **Playground Pro**: Previsualización en vivo de tokens de color en `TokensPage.tsx` con paleta completa.
+
+## [4.1.0] — 2026-04-15
+### 🎨 Ola 16b: Icon & Token Expansion
+- **KIcon**: Nueva API de iconos con 20 iconos Lucide adicionales para tabs y navegación.
+- **Tokens v10.4.6**: Escala de opacidad completa (0–100) y rotación (0°, 45°, 90°, 180°, 270°).
+- **KTag**: Nuevas variantes de color (success, error, warning, info) mapeadas a tokens semánticos.
+- **KDivider**: Añadida prop `orientation` para divisores verticales en layouts de toolbar.
 
 ## [4.0.5] — 2026-04-10
 ### 🌊 Ola 16: Refinamiento de Feedback e Infraestructura
@@ -103,6 +153,18 @@ Todos los cambios notables en este proyecto serán documentados en este archivo.
 - **Accesibilidad**: Auditoría de contraste WCAG AAA en todos los tokens semánticos.
 - **Error Handling**: Implementación de `ErrorPage.tsx` y Error Boundary global en el enrutamiento.
 - **Performance**: Optimización de `KDataTable` con soporte para virtualización (10,000+ filas).
+
+## [4.0.2] — 2026-04-01
+### 🧹 Ola 13c: V4 Wave Refinements
+- **KSelect**: Mejorada la accesibilidad del dropdown con navegación por teclado (Arrow keys + Enter).
+- **KModal**: Añadido soporte para `centered` prop y mejorada la gestión de foco al abrir/cerrar.
+- **Theme CSS**: Normalización de valores de border-radius en `theme.css` para alinear con la especificación de tokens.
+
+## [4.0.1] — 2026-03-27
+### 🐛 Ola 13b: Post-Launch Hotfixes
+- **KDataTable**: Corregido error de renderizado en columnas con valores nulos.
+- **Token aliasing**: Añadidos `--khor-primary-light` y `--khor-error-hover` para casos de uso de superficie.
+- **Documentación**: Sincronización de ejemplos de código en `AtomsPage.tsx` con la API real de componentes.
 
 ## [v4.0.0] — 2026-03-24
 ### 🌊 Ola 8-13: Core Parity & Layout Governance

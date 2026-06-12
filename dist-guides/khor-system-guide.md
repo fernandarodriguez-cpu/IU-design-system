@@ -1771,7 +1771,7 @@ Barra de búsqueda global activada con Ctrl+K (o Cmd+K en Mac). Permite buscar c
 | Prop | Tipo | Descripción |
 |------|------|-------------|
 | `open` | `boolean` | Controla la visibilidad del Command Bar. |
-| `onClose` | `() => void` | Callback al cerrar. |
+| `onOpenChange` | `(open: boolean) => void` | Callback al cambiar visibilidad. |
 
 **Accesibilidad:**
 - **Teclado:** Cmd/Ctrl + K: Activa modal. Up/Down: Navega entre filas de resultados al instante. Enter: Acción selectora.
