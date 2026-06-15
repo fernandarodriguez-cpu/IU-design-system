@@ -15,6 +15,7 @@ import {
 import { KNavItem } from '../design-system/molecules/KNavItem';
 import { patterns } from '../../patterns/index';
 import { khorTokens } from '../../theme/khor-theme';
+import { KHOR_VERSION } from '../../version/version';
 import { KCommandBar, useCommandBar } from '../design-system/command-bar';
 import { useTheme } from '../../theme/theme-context';
 import khorCounts from '../../metadata/khor-counts.json';
@@ -460,7 +461,7 @@ export function AppShell() {
               backgroundColor: 'var(--khor-success-light)',
               color: 'var(--khor-success)',
             }}>
-              v5.3.0-alpha
+              v{KHOR_VERSION}
             </span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>

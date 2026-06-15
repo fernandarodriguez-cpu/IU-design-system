@@ -1,14 +1,18 @@
 {
   "name": "@khor/design-system",
   "private": true,
-  "version": "5.0.0-alpha",
+  "version": "6.2.1",
   "type": "module",
   "scripts": {
-    "build": "vite build",
+    "build": "npm run generate-counts && vite build",
     "dev": "vite",
+    "generate-counts": "node scripts/generate-counts.mjs",
     "test:visual": "playwright test",
     "test:visual:update": "playwright test --update-snapshots",
     "khor-check": "npx tsx src/scripts/khor-check.ts",
+    "validate-tokens": "npx tsx src/scripts/validate-tokens.ts",
+    "test:a11y": "playwright test tests/a11y.spec.ts",
+    "test": "npm run validate-tokens && npm run khor-check",
     "figma-sync": "node --env-file=.env src/scripts/figma-token-sync.cjs"
   },
   "dependencies": {
@@ -90,6 +94,7 @@
     "playwright": "^1.58.2",
     "prop-types": "^15.8.1",
     "tailwindcss": "4.1.12",
+    "tsx": "^4.22.4",
     "typescript": "^6.0.2",
     "typescript-eslint": "^8.57.2",
     "vite": "^6.4.1",

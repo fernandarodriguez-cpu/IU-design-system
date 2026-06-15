@@ -13,20 +13,19 @@ import { KText } from '../components/design-system/atoms/KText/index';
 import { KBadge } from '../components/design-system/atoms/KBadge/index';
 import { KAlert } from '../components/design-system/atoms/KAlert/index';
 import { KSwitch } from '../components/design-system/atoms/KSwitch/index';
+import JSZip from 'jszip';
 import { KCardSection } from '../components/design-system/organisms/KCardSection/index';
 import { KTabs } from '../components/design-system/organisms/KTabs/index';
 import { kToast } from '../components/design-system/organisms/KToast/index';
 import { useTheme, ThemeConfig } from '../theme/theme-context';
 import { patterns } from '../patterns/index';
-import { atoms } from './AtomsPage';
-import { molecules } from './MoleculesPage';
-import { organisms } from './OrganismsPage';
-import { khorTokens } from '../theme/khor-theme';
+import { atomsData as atoms } from './AtomsPage';
+import { moleculesData as molecules } from './MoleculesPage';
+import { organismsData as organisms } from './OrganismsPage';
+import { khorTokens, generateCssBlock } from '../theme/khor-theme';
+import { KHOR_VERSION } from '../version/version';
 
 const t = khorTokens;
-
-/* ─── Version (must match ChangelogPage & AppShell) ─── */
-export const KHOR_VERSION = '5.1.6-alpha';
 
 
 /* ─── Sections config ───────────────────────── */
@@ -37,26 +36,58 @@ export interface SectionConfig {
   enabled: boolean;
 }
 
+const atomCount = Object.keys(atoms).length;
+const moleculeCount = Object.keys(molecules).length;
+const organismCount = Object.keys(organisms).length;
+const totalCount = atomCount + moleculeCount + organismCount + 11 + 6;
+
 export const defaultSections: SectionConfig[] = [
   { id: 'header', label: 'Encabezado y contexto', description: 'Nombre, versión, stack tecnológico y propósito del sistema.', enabled: true },
+  { id: 'index', label: 'Índice de Componentes', description: `Catálogo compacto con los ${totalCount} componentes del sistema.`, enabled: true },
   { id: 'tokens', label: 'Design Tokens', description: 'Charts elite, Forms semánticos, Icon scale, Colores, Tipografía, etc.', enabled: true },
   { id: 'darkmode', label: 'Dark Mode', description: 'Inversión semántica y tokens alternativos para modo oscuro.', enabled: true },
-  { id: 'atoms', label: 'Átomos (30)', description: 'API completa de 30 átomos: Sistema v5.0 optimizado.', enabled: true },
-  { id: 'molecules', label: 'Moléculas (33)', description: 'API completa de 33 moléculas coordinadas con el sistema Elite.', enabled: true },
-  { id: 'organisms', label: 'Organismos (15)', description: 'Componentes complejos coordinados con el sistema Elite.', enabled: true },
+  { id: 'atoms', label: `Átomos (${atomCount})`, description: `API completa de ${atomCount} átomos: Sistema v5.0 optimizado.`, enabled: true },
+  { id: 'molecules', label: `Moléculas (${moleculeCount})`, description: `API completa de ${moleculeCount} moléculas coordinadas con el sistema Elite.`, enabled: true },
+  { id: 'organisms', label: `Organismos (${organismCount})`, description: `Componentes complejos coordinados con el sistema Elite.`, enabled: true },
   { id: 'templates', label: 'Templates y Patrones', description: 'Patrones de página: Dashboard Admin, CRUD Elite, Login SaaS, etc.', enabled: true },
   { id: 'layout', label: 'Layout (AppShell)', description: 'Estructura sidebar + header + canvas con dimensiones Elite.', enabled: true },
   { id: 'patterns', label: 'Patrones y Convenciones', description: '3-Layer Architecture, Fluid Typography, Naming, A11y.', enabled: true },
   { id: 'examples', label: 'Ejemplos de Código', description: 'Snippets listos para copiar/pegar de casos de uso comunes.', enabled: true },
 ];
 
+/* ─── Front Matter for standalone guides ──── */
+const FRONT_MATTER: Record<string, { module: string; dependencies: string[]; context_rule: string }> = {
+  tokens: { module: 'Design Tokens', dependencies: [], context_rule: 'Este archivo define todos los Design Tokens del sistema Khor (colores, tipografía, espaciado, motion, radius, shadows). Es la fuente única de verdad para valores base y semánticos.' },
+  atoms: { module: 'Átomos Core', dependencies: ['khor-guia-tokens.md'], context_rule: 'Contiene los componentes anatómicos base. Para colores, espaciados y tipografía, hereda estrictamente las variables declaradas en khor-guia-tokens.md.' },
+  molecules: { module: 'Moléculas Compuestas', dependencies: ['khor-guia-tokens.md', 'khor-guia-atomos.md'], context_rule: 'Componentes compuestos. Cada molécula está construida combinando átomos de khor-guia-atomos.md bajo las reglas estéticas de khor-guia-tokens.md.' },
+  organisms: { module: 'Organismos Complejos', dependencies: ['khor-guia-tokens.md', 'khor-guia-atomos.md', 'khor-guia-moleculas.md'], context_rule: 'Componentes complejos y contextuales. Construidos sobre moléculas y átomos, con lógica de negocio integral del ecosistema Khor.' },
+};
+
+function buildFrontMatter(layerFilter: string[]): string {
+  const primaryLayer = layerFilter.find(id => FRONT_MATTER[id]);
+  if (!primaryLayer) return '';
+  const fm = FRONT_MATTER[primaryLayer];
+  return `---
+system: Sistema de Diseño Khor v${KHOR_VERSION}
+module: ${fm.module}
+dependencies: ${JSON.stringify(fm.dependencies)}
+context_rule: ${fm.context_rule}
+---
+
+`;
+}
+
 /* ─── Markdown Generator ────────────────────── */
-export function generateMarkdown(sections: SectionConfig[], theme: ThemeConfig): string {
-  const enabled = new Set(sections.filter((s) => s.enabled).map((s) => s.id));
+export function generateMarkdown(sections: SectionConfig[], theme: ThemeConfig, layerFilter?: string[]): string {
+  const active = layerFilter ? new Set(layerFilter) : new Set(sections.filter((s) => s.enabled).map((s) => s.id));
   const parts: string[] = [];
   const today = new Date().toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' });
 
-  if (enabled.has('header')) {
+  if (layerFilter) {
+    parts.push(buildFrontMatter(layerFilter));
+  }
+
+  if (active.has('header')) {
     parts.push(`
 # Sistema de Diseño Khor v${KHOR_VERSION}
 Generado el: ${today}
@@ -66,7 +97,7 @@ Este documento es la única fuente de verdad para el desarrollo en el ecosistema
 ## 🤖 Instrucciones Críticas para la IA (System Prompt)
 
 Como IA, DEBES seguir estas reglas estrictamente al generar código:
-1. **Identidad Visual:** NUNCA importes ni uses componentes directamente desde \`antd\`, \`@ant-design/*\`, Material UI o similares. Usa exclusivamente los componentes del sistema (prefijo \`K\`).
+1. **Identidad Visual y Core Engine:** Khor usa **Radix UI** para comportamiento/accesibilidad y **Tailwind CSS + CSS Variables** para la estética, emulando al 100% la API de Ant Design v5. **NUNCA importes ni instales componentes de \`antd\`, \`@ant-design/*\`, Material UI o similares**. Usa exclusivamente los componentes del sistema (prefijo \`K\`).
 2. **Uso de Tokens (Prohibido Hardcode):** NUNCA uses colores hexadecimales. Usa SIEMPRE los Design Tokens (\`khorTokens\`) o CSS Variables (\`var(--khor-*)\`).
 3. **Componentes Khor:** Ejemplo: \`KButton\`, \`KIcon\`, \`KCardSection\`.
 4. **Iconografía:** Usa únicamente el componente \`KIcon\` (wrapper de Lucide). NO importes iconos directamente de lucide-react si existe \`KIcon\`.
@@ -94,119 +125,55 @@ Como IA, DEBES elegir componentes basados en la **Intención Semántica** del fl
 | \`step_by_step_flow\` | \`KFormWizard\` | Media |
 | \`brand_call_to_action\` | \`KButton\` (Primary) + \`KIcon\` (Sparkles) | Baja |
 | \`system_feedback_error\` | \`kToast\` (Error) o \`KResult\` (500/403) | Alta |
-
-### 🔠 Fluid Typography (Responsive by Design)
-Khor v5.0 usa tipografía fluida basada en \`clamp()\`. NO sobrescribas tamaños de fuente con media queries. Usa los tokens semánticos:
-- \`display-2xl\`, \`display-xl\`: Para títulos de gran impacto (Fluid 48px -> 72px).
-- \`heading-lg\` a \`heading-xs\`: Para jerarquía de contenido (Fluid 24px -> 48px).
-- \`body-xl\`, \`body-lg\`, \`body-md\`, \`body-sm\`: Para lectura estandarizada.
 `);
   }
 
-  if (enabled.has('tokens')) {
+  /* ─── Component Index (compacto, para visibilidad en context windows pequeños) ─── */
+  const renderComponentIndex = (): string => {
+    const total = Object.keys(atoms).length + Object.keys(molecules).length + Object.keys(organisms).length;
+    let idx = `## 📋 Catálogo de Componentes (${total} en total)\n\n`;
+    idx += `*Este índice compacto permite a la IA ver el inventario completo incluso si el contexto se trunca en las secciones detalladas.*\n\n`;
+
+    const renderLayerTable = (dict: Record<string, any>) => {
+      let rows = '';
+      Object.keys(dict).forEach(key => {
+        const c = dict[key];
+        rows += `| \`${c.name}\` | ${c.description} |\n`;
+      });
+      return rows;
+    };
+
+    idx += `### Átomos (${Object.keys(atoms).length})\n`;
+    idx += `| Componente | Descripción |\n|-----------|-------------|\n`;
+    idx += renderLayerTable(atoms);
+    idx += `\n### Moléculas (${Object.keys(molecules).length})\n`;
+    idx += `| Componente | Descripción |\n|-----------|-------------|\n`;
+    idx += renderLayerTable(molecules);
+    idx += `\n### Organismos (${Object.keys(organisms).length})\n`;
+    idx += `| Componente | Descripción |\n|-----------|-------------|\n`;
+    idx += renderLayerTable(organisms);
+    idx += `\n---\n`;
+    return idx;
+  };
+
+  if (active.has('index')) {
+    parts.push(renderComponentIndex());
+  }
+
+  if (active.has('tokens')) {
     parts.push(`
 ## 🎨 Especificación Técnica de Tokens (Elite SaaS Architecture)
 
 La IA DEBE usar estos valores exactos:
 
 \`\`\`css
-:root {
-  /* Elite Charts Palette (12 Colores) */
-  --khor-chart-primary: ${theme.primary};   --khor-chart-secondary: ${theme.secondary};
-  --khor-chart-accent: ${theme.accent};    --khor-chart-success: ${theme.success};
-  --khor-chart-error: ${theme.error};     --khor-chart-info: ${theme.info};
-  --khor-chart-teal: #008080;      --khor-chart-purple: #9C27B0;
-  --khor-chart-pink: #E91E63;      --khor-chart-cyan: #00BCD4;
-  --khor-chart-amber: #FFC107;     --khor-chart-gray: #9E9E9E;
+${generateCssBlock(theme)}
+\`\`\`
 
-  /* Neutrals (Full Slate-Blue Scale) */
-  --khor-neutral-50: #f8faff;   --khor-neutral-100: #edf0f1;
-  --khor-neutral-200: #d5dbe0;  --khor-neutral-300: #a0aec0;
-  --khor-neutral-400: #718096;  --khor-neutral-500: #4a5568;
-  --khor-neutral-600: #5A6475;  --khor-neutral-700: #3D4552;
-  --khor-neutral-800: #252C38;  --khor-neutral-900: #000000;
-
-  /* Form Validation Semantic States */
-  --khor-form-error-bg: ${theme.error}15;   --khor-form-error-border: ${theme.error};   --khor-form-error-text: ${theme.error};
-  --khor-form-success-bg: ${theme.success}15; --khor-form-success-border: ${theme.success}; --khor-form-success-text: ${theme.success};
-  --khor-form-warning-bg: ${theme.warning}15; --khor-form-warning-border: ${theme.warning}; --khor-form-warning-text: ${theme.warning};
-  --khor-form-focus-ring: ${theme.primary};
-
-  /* Semantic Layer 2: Actions */
-  --khor-action-primary-default: ${theme.primary}; --khor-action-primary-hover: #e8644f;
-  --khor-action-secondary-default: ${theme.secondary}; --khor-action-secondary-hover: #0a2270;
-  --khor-action-danger-default: ${theme.error}; --khor-action-danger-hover: #B71C1C;
-  --khor-action-ghost-hover: rgba(5, 23, 88, 0.06);
-  --khor-action-disabled-bg: #EDF0F1; --khor-action-disabled-text: #A0AEC0;
-
-  /* Semantic Layer 2: Surface & Overlay (Interactive Ref) */
-  --khor-surface-page: #f8faff; --khor-surface-card: #ffffff;
-  --khor-surface-hover: rgba(5, 23, 88, 0.04); --khor-surface-pressed: rgba(5, 23, 88, 0.08);
-  --khor-surface-selected: ${theme.primary}15; --khor-surface-subtle: #F4F6F8;
-  --khor-surface-overlay: #ffffff; --khor-overlay-bg: rgba(255, 255, 255, 0.95);
-
-  /* Semantic Layer 2: Borders */
-  --khor-border-default: #D5DBE0; --khor-border-muted: #EDF0F1;
-  --khor-border-strong: #A0AEC0; --khor-border-focus: ${theme.primary};
-  --khor-border-error: ${theme.error}; --khor-border-disabled: #EDF0F1;
-
-  /* Semantic Layer 2: Typography */
-  --khor-text-primary: ${theme.secondary}; --khor-text-secondary: #475a8f;
-  --khor-text-muted: #94a9d8; --khor-text-disabled: #A0AEC0; --khor-text-on-action: #ffffff;
-
-  /* Motion Tokens (Elite Precision) */
-  --khor-duration-instant: 80ms; --khor-duration-fast: 100ms;
-  --khor-duration-normal: 200ms; --khor-duration-slow: 400ms;
-  --khor-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
-  --khor-easing-enter: cubic-bezier(0, 0, 0.2, 1);
-  --khor-easing-exit: cubic-bezier(0.4, 0, 1, 1);
-
-  /* Elevation & Shadows (Multi-Layer Strategy) */
-  --khor-shadow-sm: 0 1px 2px rgba(5,23,88,0.04), 0 1px 1px rgba(0,0,0,0.02);
-  --khor-shadow-md: 0 4px 6px -1px rgba(5,23,88,0.08), 0 2px 4px -1px rgba(0,0,0,0.04);
-  --khor-shadow-lg: 0 10px 15px -3px rgba(5,23,88,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
-  --khor-shadow-xl: 0 20px 25px -5px rgba(5,23,88,0.12), 0 10px 10px -5px rgba(0,0,0,0.04);
-  --khor-shadow-2xl: 0 25px 50px -12px rgba(5,23,88,0.25);
-  --khor-shadow-inner: inset 0 2px 4px 0 rgba(0,0,0,0.06);
-
-  /* Layout Grid System (12 Columns) */
-  --khor-grid-sm: cols: 12, gutter: 16px, margin: 16px;
-  --khor-grid-md: cols: 12, gutter: 24px, margin: 24px;
-  --khor-grid-lg: cols: 12, gutter: 32px, margin: 32px;
-  --khor-grid-xl: cols: 12, gutter: 32px, margin: 40px;
-
-  /* Semantic Spacing Tokens (Aliases) */
-  --khor-space-layout-xs: 16px; --khor-space-layout-sm: 24px;
-  --khor-space-layout-md: 32px; --khor-space-layout-lg: 48px;
-  --khor-space-layout-xl: 64px;
-  --khor-space-component-xs: 4px; --khor-space-component-sm: 8px;
-  --khor-space-component-md: 12px; --khor-space-component-lg: 16px;
-
-  /* 💎 Layer 3: Component Specific Tokens (Elite Precision) */
-  --khor-button-primary-bg:        var(--khor-action-primary-default);
-  --khor-button-primary-text:      var(--khor-text-on-action);
-  --khor-button-primary-shadow:    0 2px 4px rgba(224, 77, 54, 0.2);
-  --khor-button-secondary-bg:      var(--khor-action-secondary-default);
-  --khor-button-secondary-text:    var(--khor-text-on-action);
-  --khor-input-bg:                 var(--khor-surface-card);
-  --khor-input-border:             var(--khor-border-default);
-  --khor-input-focus-border:       var(--khor-border-focus);
-  --khor-input-focus-ring:         var(--khor-primary);
-  --khor-card-bg:                  var(--khor-surface-card);
-  --khor-card-shadow:              var(--khor-elevation-2);
-  --khor-card-radius:              var(--khor-radius-lg);
-
-  /* Layer 3: Contextual Tokens — Secciones Invertidas (Layout Core) */
-  --khor-context-sidebar-bg:        var(--khor-secondary);
-  --khor-context-sidebar-text:      var(--khor-neutral-50);
-  --khor-context-sidebar-text-muted:rgba(255, 255, 255, 0.55);
-  --khor-context-sidebar-border:    rgba(255, 255, 255, 0.08);
-  --khor-context-sidebar-hover:     rgba(255, 255, 255, 0.10);
-  --khor-context-sidebar-active:    rgba(255, 255, 255, 0.15);
-  --khor-context-header-bg:         var(--khor-surface-card);
-  --khor-context-header-border:     var(--khor-border-default);
-  --khor-context-header-text:       var(--khor-text-primary);
-}
+### 🧩 khorTokens (Objeto JS Estricto)
+Como referencia estructural, aquí tienes la definición de \`khorTokens\`. Úsala para referenciar variables en inline styles si Tailwind no es posible:
+\`\`\`json
+${JSON.stringify(khorTokens, null, 2)}
 \`\`\`
 
 ### 🌑 Dual-Theme Semantic Mapping (Dark Mode Strategy)
@@ -221,7 +188,6 @@ La IA debe invertir los valores semánticos siguiendo este mapeo de "Inversión 
 | \`--khor-border-default\` | \`#D5DBE0\` | \`#2E3148\` | Separadores sutiles |
 | \`--khor-surface-hover\` | \`rgba(5,23,88,0.04)\` | \`rgba(255,255,255,0.05)\` | Feedback interactivo |
 
-}
 \`\`\`
 
 ### ♿ Accesibilidad Global: Reduced Motion
@@ -273,12 +239,6 @@ La IA debe aplicar estas clases al contenedor raíz para heredar el modelo de ca
 }
 \`\`\`
 
-### 🌍 Internacionalización (i18n & RTL)
-Khor v5.0 está preparado para mercados globales. La IA debe seguir estas reglas:
-1. **Lógica Direccional:** NUNCA uses \`padding-left\` o \`right\`. Usa SIEMPRE propiedades lógicas: \`padding-inline-start\`, \`margin-inline-end\`.
-2. **Iconografía Espejada:** Iconos de navegación (flechas) DEBEN espejarse en RTL usando \`transform: scaleX(-1)\` si no hay una variante nativa.
-3. **Tipografía:** Para scripts árabes/hebreos, el sistema debe aumentar el \`line-height\` en un 20% automáticamente mediante el token \`--khor-line-height-dynamic\`.
-
 ### 🛡️ Seguridad y Robustez de Datos
 1. **Sanitización Obligatoria:** NUNCA uses \`dangerouslySetInnerHTML\` con datos provenientes de props sin pasar por una capa de sanitización (ej. DOMPurify).
 2. **Escape de Atributos:** Todo \`title\` o \`aria-label\` dinámico debe ser escapado para prevenir inyecciones de strings maliciosos.
@@ -309,8 +269,6 @@ Para asegurar la estabilidad en la era de la IA, Khor sigue un contrato estricto
 4. **Contrato para Agentes de IA:**
    Cuando la IA detecta que falta un patrón o componente, NO DEBE inventar estilos. Debe proponer una extensión del sistema basada en los **Design Tokens de Capa 1 y 2** existentes para mantener la coherencia del ADN visual.
 
-| **Border** | \`border-error\` | Bordes de validación fallida |
-
 ### ♿ Tabla de Contraste WCAG 2.1 (Pares Certificados)
 *IA: Usa solo estas combinaciones. Las marcadas con ⚠️ son solo para uso decorativo.*
 
@@ -340,13 +298,6 @@ Cuando \`prefers-contrast: more\` está activo, el sistema aplica:
 | warning-light | #FFF3E0 | #3B2500 |
 | info-light | #E3F2FD | #0D1F3C |
 
-### 📜 Gobernanza y Contribución (Khor Elite Standards)
-El sistema sigue estándares estrictos para mantener la paridad IA/Humanos.
-1. **Prefijo K:** Todo componente debe empezar con "K" (ej. \`KButton\`).
-2. **Cero Dependencias:** Prohibido instalar librerías de UI externas (MUI, AntD).
-3. **Capa Semántica 2:** Priorizar \`action-primary-default\` sobre colores base.
-4. **Metadata IA:** Todo componente nuevo debe incluir \`a11ySummary\` y \`aiNotes\` en su registro.
-5. **Checklist:** Props tipadas, Soporte Dark Mode, Soporte Densidad.
 
 ### Elevación — Guía de uso obligatoria
 
@@ -363,8 +314,6 @@ El sistema sigue estándares estrictos para mantener la paridad IA/Humanos.
 - **Breakpoints:** \`sm: 640px\`, \`md: 768px\`, \`lg: 1024px\`, \`xl: 1280px\`.
 - **Z-Index:** \`dropdown: 1000\`, \`modal: 1400\`, \`toast: 1700\`.
 - **Motion:** \`standard: cubic-bezier(0.4, 0, 0.2, 1)\`, \`spring: cubic-bezier(0.175, 0.885, 0.32, 1.275)\`.
-- **Reduced Motion:** El sistema respeta \`prefers-reduced-motion\` globalmente.
-
 ### 🌍 Internacionalización (i18n) — RTL Native Support
 Khor usa **CSS Logical Properties** en todos sus componentes, garantizando que la UI se espeje automáticamente en idiomas RTL (árabe, hebreo) sin cambios de código.
 
@@ -415,7 +364,7 @@ Khor utiliza un sistema de estados universales basado en capas semánticas.
 - **Anillo:** \`var(--khor-focus-ring-width)\` (2px).
 - **Offset:** \`var(--khor-focus-ring-offset)\` (2px).
 - **Activación:** Solo debe activarse mediante teclado (clase \`focus-visible\`).
-- **Color:** El color del anillo debe contrastar con el fondo. Por defecto es \`var(--khor-primary)\`.
+- **Color:** El color del anillo debe contrastar con el fondo. Por defecto es \`var(--khor-action-primary-default)\`.
 
 **State Layers (Opacity Multipliers):**
 La IA debe aplicar overlays de opacidad sobre el color base:
@@ -461,7 +410,7 @@ Khor implementa políticas estrictas de seguridad para contenido dinámico:
 **Reglas para la IA:**
 1. **NUNCA** uses \`dangerouslySetInnerHTML\` sin sanitización previa con DOMPurify.
 2. **SIEMPRE** escapa el contenido del usuario antes de renderizarlo en:
-   - \`KText\` con contenido dinámico
+   - \`KTypography.Text\` con contenido dinámico
    - \`KDataTable\` con celdas personalizadas
    - \`kToast\` con mensajes del servidor
    - \`KTooltip\` con contenido variable
@@ -590,7 +539,7 @@ Khor define reglas estrictas para la presentación de datos analíticos.
 **Data-Ink Ratio:**
 - Elimina bordes innecesarios, sombras internas y líneas de grilla pesadas.
 - Prioriza los datos sobre la decoración.
-- Los tooltips deben ser simples, usando \`KText\` con \`font-bold\` para el valor.
+- Los tooltips deben ser simples, usando \`KTypography.Text\` con \`font-bold\` para el valor.
 
 ### 🤖 Figma MCP Synchronization Protocol
 Este sistema está diseñado para ser la fuente de verdad absoluta para Agentes de IA vía el protocolo **MCP (Model Context Protocol)**.
@@ -605,7 +554,7 @@ Este sistema está diseñado para ser la fuente de verdad absoluta para Agentes 
 
 | Versión | Fecha | Cambios |
 |---------|-------|---------|
-| **v6.0.0-beta** | ${today} | **The Holistic Standard:** Integración total de UX Writing (Voz y Tono), Taxonomía W3C CTI, State Layers universales, matemática de Focus-Visible y protocolo de sincronización Figma MCP. |
+| **v6.0.0** | ${today} | **The Holistic Standard:** Integración total de UX Writing (Voz y Tono), Taxonomía W3C CTI, State Layers universales, matemática de Focus-Visible y protocolo de sincronización Figma MCP. |
 | **v5.0.0-beta** | ${today} | **Enterprise Hardening:** Layer 3 Component Tokens (KButton, KInput, KCard), RTL/i18n native con CSS Logical Properties, SSR guidelines (Next.js/Remix). |
 | **v5.0.1-alpha** | ${today} | **Shadow & Layout Precision:** Evolución masiva de la fidelidad visual. Sombras multi-capa y sistema de grillas responsivas certificado para todos los breakpoints. |
 | **v5.0.0-alpha** | ${today} | **The World-Class Foundation:** Migración total a arquitectura W3C Design Tokens, tipografía fluida, KDataTable empresarial, Command Palette con acciones, KFormWizard y testing con Playwright. |
@@ -620,7 +569,7 @@ Este sistema está diseñado para ser la fuente de verdad absoluta para Agentes 
 ---`);
   }
 
-  if (enabled.has('darkmode')) {
+  if (active.has('darkmode')) {
     parts.push(`
 ## Dark Mode
 
@@ -630,16 +579,16 @@ El sistema soporta modo oscuro via clase \`.dark\` en \`<html>\`. Se activa con 
 
 | Token | Light | Dark |
 |-------|-------|------|
-| neutral-50 | \`#FFFFFF\` | \`#1A1B2E\` |
-| neutral-100 | \`#EDF0F1\` | \`#22243A\` |
-| neutral-200 | \`#D5DBE0\` | \`#2E3148\` |
-| neutral-300 | \`#A0AEC0\` | \`#4A4E6A\` |
-| neutral-400 | \`#718096\` | \`#8B90A8\` |
-| neutral-500 | \`#4A5568\` | \`#B0B4C8\` |
-| neutral-600 | \`#5A6475\` | \`#9BA3B5\` |
-| neutral-700 | \`#3D4552\` | \`#B8BDC8\` |
-| neutral-800 | \`#252C38\` | \`#D0D3DA\` |
-| neutral-900 | \`#000000\` | \`#E8EAF0\` |
+| neutral-50 | \`#f8faff\` | \`#1A1B2E\` |
+| neutral-100 | \`#f1f4ff\` | \`#22243A\` |
+| neutral-200 | \`#e2eafc\` | \`#2E3148\` |
+| neutral-300 | \`#cbd8f1\` | \`#4A4E6A\` |
+| neutral-400 | \`#94a9d8\` | \`#8B90A8\` |
+| neutral-500 | \`#647bb1\` | \`#B0B4C8\` |
+| neutral-600 | \`#475a8f\` | \`#9BA3B5\` |
+| neutral-700 | \`#33446b\` | \`#B8BDC8\` |
+| neutral-800 | \`#1e2a4a\` | \`#D0D3DA\` |
+| neutral-900 | \`#0f1a35\` | \`#E8EAF0\` |
 | accent | \`#FF9500\` | \`#FFB340\` |
 | navy | \`#051758\` | \`#8BA3D9\` |
 | success | \`#2E7D32\` | \`#4CAF50\` |
@@ -722,19 +671,19 @@ style={{ backgroundColor: 'var(--card)', color: 'var(--foreground)' }}
     return md;
   };
 
-  if (enabled.has('atoms')) {
+  if (active.has('atoms')) {
     parts.push(renderDict('Átomos', 'Unidades indivisibles y fundamentales.', "import { KButton } from '@khor/design-system/atoms/index'", atoms));
   }
 
-  if (enabled.has('molecules')) {
+  if (active.has('molecules')) {
     parts.push(renderDict('Moléculas', 'Combinaciones de átomos con lógica de forma reutilizable.', "import { KFormField } from '@khor/design-system/molecules/index'", molecules));
   }
 
-  if (enabled.has('organisms')) {
+  if (active.has('organisms')) {
     parts.push(renderDict('Organismos', 'Componentes complejos o Layouts masivos con lógicas de portal, focus-traps y alto consumo de hooks.', "import { KDataTable } from '@khor/design-system/organisms/index'", organisms));
   }
 
-  if (enabled.has('templates')) {
+  if (active.has('templates')) {
     parts.push(`
 ## 🏗️ Elite Page Recipes (High-Fidelity Patterns)
 
@@ -745,6 +694,7 @@ Estructura responsiva con Sidebar colapsable y Header fijo.
 \`\`\`tsx
 import { AppShell } from './components/AppShell';
 import { SidebarItem } from './components/Sidebar';
+// Iconos: en producción usa <KIcon name="Home" /> etc.
 import { Home, Users, Settings, LogOut } from 'lucide-react';
 
 // Úsalo como el Layout principal de tus rutas
@@ -768,6 +718,7 @@ function MainLayout() {
 ### 2. KCRUDPage (Gestión de Datos Elite)
 Patrón avanzado para tablas con búsqueda, filtros y Drawer de detalle.
 \`\`\`tsx
+// Iconos: en producción usa <KIcon name="Plus" /> etc.
 import { Plus, Edit, Trash2, Filter } from 'lucide-react';
 import { KButton, KBadge, KInput } from './atoms';
 import { KFormField, KDropdownMenu } from './molecules';
@@ -778,8 +729,8 @@ function UserManagement() {
   const [selectedUser, setSelectedUser] = useState(null);
 
   return (
-    <div className="p-khor-6">
-      <div className="flex justify-between items-center mb-khor-6">
+    <div className="p-[var(--khor-space-layout-xs)]">
+      <div className="flex justify-between items-center mb-[var(--khor-space-component-lg)]">
         <div>
           <h1 className="text-khor-h2 font-bold text-khor-secondary">Usuarios</h1>
           <p className="text-khor-body-md text-khor-neutral-500">Gestión centralizada de colaboradores.</p>
@@ -813,6 +764,7 @@ function UserManagement() {
 ### 3. KDashboardGrid (Métricas y Visualización)
 Grid de alta densidad con StatCards y Chart Palette v5.0.0-alpha.
 \`\`\`tsx
+// Iconos: en producción usa <KIcon name="Users" /> etc.
 import { Users, TrendingUp, DollarSign } from 'lucide-react';
 import { KStatCard } from './molecules';
 import { KCardSection } from './organisms';
@@ -871,7 +823,7 @@ function LoginPage() {
 ---`);
   }
 
-  if (enabled.has('layout')) {
+  if (active.has('layout')) {
     parts.push(`
 ## Layout — AppShell
 
@@ -929,7 +881,7 @@ const router = createBrowserRouter([
 ---`);
   }
 
-  if (enabled.has('patterns')) {
+  if (active.has('patterns')) {
     parts.push(`
 ## Patrones y Convenciones
 
@@ -938,43 +890,33 @@ const router = createBrowserRouter([
 - Props siguen camelCase: \`onChange\`, \`showIcon\`, \`pageSize\`.
 - Variantes usan union types: \`'primary' | 'secondary' | 'outline'\`.
 
-### Imports
+### 📦 Pathing Contract (Mapa Estricto de Importación)
+La IA **DEBE** importar los componentes de manera indexada usando las rutas base del design system. NO busques subcarpetas profundas:
+
 \`\`\`tsx
-// Atomos base (17)
+// Atomos base (30)
 import { KButton, KInput, KBadge, KTag, KAvatar, KSwitch, KCheckbox, KRadio,
-         KTooltip, KProgress, KText, KDivider, KAlert, KSkeleton, KSlider,
-         KSpin, KTextArea } from './components/design-system/atoms/index';
+         KTooltip, KProgress, KTypography, KDivider, KAlert, KSkeleton, KSlider,
+         KSpin, KTextArea, KIcon, KButtonGroup, KFloatButton,
+         KSpace, KImage, KQRCode } from './components/design-system/atoms/index';
 
-// Atomos extendidos (7)
-import { KButtonGroup, KInputPassword, KInputSearch, KFloatButton,
-         KSpace, KImage, KQRCode } from './components/design-system/atoms-extended';
-
-// Moleculas base (12)
-import { KFormField, KSearchInput, KStatCard, KNavItem, KSelectField,
+// Moleculas (33)
+import { KFormField, KStatCard, KNavItem, KSelectField,
          KUserCell, KEmptyState, KBreadcrumb, KSteps, KDropdownMenu,
-         KPopover, KAccordion } from './components/design-system/molecules/index';
+         KPopover, KAccordion, KInputNumber, KSegmented, KAutocomplete, KDatePicker,
+         KDateRangePicker, KSelectAdvanced, KDescriptions, KPopconfirm, KResult,
+         KTimeline, KCascader, KStatistic, KTimePicker, KColorPicker,
+         KAnchor, KList, KDividerExtended } from './components/design-system/molecules/index';
 
-// Moleculas extendidas (10)
-import { KInputNumber, KSegmented, KAutocomplete, KDatePicker, KDateRangePicker,
-         KSelectAdvanced, KDescriptions, KPopconfirm, KResult, KTimeline } from './components/design-system/molecules-extended';
-
-// Moleculas wave3 (8)
-import { KCascader, KStatistic, KTimePicker, KColorPicker,
-         KAnchor, KList, KDividerExtended } from './components/design-system/molecules-wave3';
-
-// Organismos base (8)
+// Organismos (15)
 import { KDataTable, KModal, KSheet, KCardSection, KTabs,
-         KToastProvider, kToast, KSparklineCell } from './components/design-system/organisms/index';
-
-// Organismos extendidos (5)
-import { KUpload, KTree, KTour, KFormList } from './components/design-system/organisms/index';
+         KToastProvider, kToast, KSparklineCell, KUpload, KTree, KTour, KFormList } from './components/design-system/organisms/index';
 
 // Tokens
 import { khorTokens } from './theme/khor-theme';
-
-// Iconos (siempre Lucide)
-import { Plus, Edit, Trash2, Download, Search, ... } from 'lucide-react';
 \`\`\`
+
+> **Iconografía:** NO importes íconos directamente de \`lucide-react\` en la UI final. Usa SIEMPRE el wrapper \`<KIcon name="IconName" />\`.
 
 ### Espaciado consistente
 - Gaps entre elementos: \`khorTokens.spacing.sm\` (8px)
@@ -994,12 +936,39 @@ import { Plus, Edit, Trash2, Download, Search, ... } from 'lucide-react';
 - Navegacion completa por teclado (Tab, Enter, Escape, Flechas)
 - No anidar \`<button>\` dentro de \`<button>\` — usar \`<div role="button">\` si es necesario
 
-### Cosas a EVITAR
-- NO usar \`antd\`, \`@ant-design/*\`, Material UI, ni Chakra UI
-- NO usar \`react-router-dom\` — usar \`react-router\`
-- NO usar \`React.Fragment\` con props inválidos (key, className) — usar \`<span>\` o \`<div style={{ display: 'contents' }}>\`
-- NO anidar \`<button>\` dentro de \`<button>\`
-- NO hardcodear colores — usar tokens o CSS variables
+### 🛑 Anti-patrones y Guardarraíles (Negative Prompting)
+**❌ MAL (No hacer):**
+- Usar \`antd\`, \`@ant-design/*\`, MUI, Chakra UI.
+- Anidar modales (\`<KModal>\` dentro de \`<KModal>\`). Usa \`<KSheet>\` o wizards.
+- Hardcodear colores (\`color: '#FF0000'\`).
+- Escribir clases CSS globales no encapsuladas.
+- Importar íconos directamente de \`lucide-react\` en el JSX final.
+- Usar \`KText\` (Deprecado, usar \`KTypography.Text\`).
+- Usar \`KEmpty\` (Deprecado, usar \`KEmptyState\`).
+
+**✅ BIEN (Obligatorio):**
+- Usar \`KIcon\` para todos los íconos (\`<KIcon name="Plus" />\`).
+- Usar tokens semánticos (ej. \`var(--khor-text-primary)\`).
+- Manejar layouts con Tailwind (ej. \`className="flex flex-col gap-4"\`).
+
+### ⚙️ Gestión de Estado (State Assumption)
+En Khor, la arquitectura de estado y formularios es estricta:
+- **Estado Global:** Asume \`Zustand\`. No crees Contextos de React pesados para estado complejo.
+- **Formularios:** Asume \`React Hook Form\` integrado con \`Zod\` para validación. Usa \`<KFormField>\` para envolver los inputs.
+
+### 🎨 Tailwind Safe-List (Utilidades Permitidas)
+Usa Tailwind **ÚNICAMENTE** para la estructura de layout:
+- Permitido: Flexbox, Grid, Spacing (p-*, m-*, gap-*), Sizing (w-*, h-*), Position.
+- Prohibido: Tipografía (text-lg, font-bold), Colores (bg-red-500, text-blue-300). Estas capas pertenecen a los tokens de Khor.
+
+### 🌳 Component Decision Tree
+- **¿Selección única corta (2-4)?** -> \`KRadio\`
+- **¿Selección única larga (>5)?** -> \`KSelectField\`
+- **¿Selección múltiple larga (>10)?** -> \`KSelectAdvanced\`
+- **¿Búsqueda asíncrona?** -> \`KAutocomplete\`
+- **¿Feedback bloqueante?** -> \`KModal\`
+- **¿Feedback efímero?** -> \`kToast\`
+- **¿Panel lateral de detalle?** -> \`KSheet\`
 `);
 
     patterns.forEach(p => {
@@ -1015,13 +984,14 @@ ${p.code}
     parts.push(`---`);
   }
 
-  if (enabled.has('examples')) {
+  if (active.has('examples')) {
     parts.push(`
 ## Ejemplos de Codigo
 
 ### Pagina CRUD basica
 \`\`\`tsx
 import { useState } from 'react';
+// Iconos: en producción usa <KIcon name="Plus" /> etc.
 import { Plus, Edit, Trash2, MoreHorizontal } from 'lucide-react';
 import { KButton, KBadge, KInput } from './atoms';
 import { KFormField, KDropdownMenu } from './molecules';
@@ -1075,6 +1045,7 @@ function UsersPage() {
 
 ### Dashboard con metricas
 \`\`\`tsx
+// Iconos: en producción usa <KIcon name="Users" /> etc.
 import { Users, DollarSign, TrendingUp, Activity } from 'lucide-react';
 import { KStatCard } from './molecules';
 import { KCardSection, KTabs } from './organisms';
@@ -1147,8 +1118,8 @@ function ContactForm() {
 #### 1. Empty State (Primera vez / Sin resultados)
 Estructura: Ilustración → Título → Descripción → CTA primario.
 \`\`\`tsx
-<KEmpty
-  image={<KIcon name="inbox" size="2xl" color="var(--khor-text-muted)" />}
+<KEmptyState
+  icon={<KIcon name="Inbox" size="2xl" color="var(--khor-text-muted)" />}
   title="No hay registros aún"
   description="Crea tu primer registro para comenzar a ver datos aquí."
   extra={<KButton variant="primary">Crear registro</KButton>}
@@ -1259,6 +1230,61 @@ export function AIExportPage() {
     }
   };
 
+  /* ─── Layer downloads (multi-guía para LLMs) ─── */
+  const layerConfigs: { id: string; label: string; filename: string; sectionIds: string[]; icon: string }[] = [
+    { id: 'tokens', label: 'Tokens', filename: 'khor-guia-tokens.md', sectionIds: ['tokens'], icon: '🎨' },
+    { id: 'atoms', label: 'Átomos', filename: 'khor-guia-atomos.md', sectionIds: ['atoms'], icon: '⚛️' },
+    { id: 'molecules', label: 'Moléculas', filename: 'khor-guia-moleculas.md', sectionIds: ['molecules'], icon: '🧬' },
+    { id: 'organisms', label: 'Organismos', filename: 'khor-guia-organismos.md', sectionIds: ['organisms'], icon: '🧠' },
+    { id: 'full', label: 'Guía Completa', filename: 'khor-guia-completa.md', sectionIds: [], icon: '📦' },
+  ];
+
+  const handleDownloadLayer = (layerId: string) => {
+    const layer = layerConfigs.find(l => l.id === layerId);
+    if (!layer) return;
+
+    let content: string;
+    if (layerId === 'full') {
+      content = markdown;
+    } else {
+      content = generateMarkdown(sections, theme, layer.sectionIds);
+    }
+
+    const blob = new Blob([content], { type: 'text/markdown;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = layer.filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    kToast({ type: 'success', title: `Descargado: ${layer.label}`, description: layer.filename });
+  };
+
+  const handleDownloadAllLayers = async () => {
+    const zip = new JSZip();
+    const full = generateMarkdown(sections, theme);
+
+    for (const l of layerConfigs) {
+      if (l.id === 'full') continue;
+      const content = generateMarkdown(sections, theme, l.sectionIds);
+      zip.file(l.filename, content);
+    }
+    zip.file('khor-guia-completa.md', full);
+
+    const blob = await zip.generateAsync({ type: 'blob' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'khor-guias-completas.zip';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    kToast({ type: 'success', title: 'ZIP generado', description: '5 guías individuales empaquetadas en khor-guias-completas.zip' });
+  };
+
   const handleSelectAll = () => {
     if (previewRef.current) {
       const range = document.createRange();
@@ -1282,7 +1308,7 @@ export function AIExportPage() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
           <div style={{
             width: 44, height: 44, borderRadius: t.radius.md,
-            background: 'linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%)',
+            background: 'linear-gradient(135deg, var(--khor-chart-purple) 0%, var(--khor-chart-pink) 100%)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
             <Bot size={24} color="#fff" />
@@ -1442,26 +1468,44 @@ export function AIExportPage() {
           }}>
             <h3 style={{ margin: '0 0 16px', fontSize: 16, color: 'var(--foreground)' }}>
               <Zap size={18} style={{ display: 'inline', marginRight: 8, verticalAlign: 'middle' }} />
-              Acciones
+              Descargas por capa
             </h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <p style={{ fontSize: 12, color: 'var(--muted-foreground)', margin: '0 0 12px' }}>
+              Cada archivo cabe en contextos LLM pequeños. Usa la guía completa solo como referencia.
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {layerConfigs.map((layer) => (
+                <KButton
+                  key={layer.id}
+                  variant={layer.id === 'full' ? 'primary' : 'outline'}
+                  block
+                  icon={<Download size={16} />}
+                  onClick={() => handleDownloadLayer(layer.id)}
+                  disabled={enabledCount === 0}
+                  style={{ justifyContent: 'flex-start' }}
+                >
+                  {layer.icon} {layer.label} — {layer.filename}
+                </KButton>
+              ))}
+              <div style={{ height: 1, backgroundColor: 'var(--border)', margin: '4px 0' }} />
               <KButton
-                variant="primary"
+                variant="navy"
                 block
                 icon={<Download size={16} />}
-                onClick={handleDownload}
+                onClick={handleDownloadAllLayers}
                 disabled={enabledCount === 0}
+                style={{ justifyContent: 'flex-start' }}
               >
-                Descargar .md
+                📦 Descargar todo (ZIP) — khor-guias-completas.zip
               </KButton>
               <KButton
-                variant="outline"
+                variant="ghost"
                 block
                 icon={copied ? <Check size={16} /> : <Copy size={16} />}
                 onClick={handleCopy}
                 disabled={enabledCount === 0}
               >
-                {copied ? 'Copiado!' : 'Copiar al portapapeles'}
+                {copied ? 'Copiado!' : 'Copiar guía completa al portapapeles'}
               </KButton>
               <KButton
                 variant="ghost"

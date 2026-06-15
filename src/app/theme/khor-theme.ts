@@ -309,6 +309,9 @@ export const khorTokens = {
         spring: 'var(--khor-easing-spring)',
         enter: 'var(--khor-easing-enter)',
         exit: 'var(--khor-easing-exit)',
+        decelerate: 'var(--khor-easing-decelerate)',
+        accelerate: 'var(--khor-easing-accelerate)',
+        emphasized: 'var(--khor-easing-emphasized)',
       },
     },
     text: {
@@ -437,3 +440,272 @@ export const khorStaticTokens = {
     fontSecondary: "'Plus Jakarta Sans', sans-serif",
   }
 } as const;
+
+/* ─── CSS Variables Block Generator ────────── */
+export function generateCssBlock(theme?: {
+  primary?: string; secondary?: string; accent?: string;
+  success?: string; error?: string; warning?: string; info?: string;
+  radiusSm?: number; radiusMd?: number; radiusLg?: number; radiusXl?: number;
+}): string {
+  const c = { ...khorStaticTokens.colors };
+  const r = { ...khorStaticTokens.radius };
+  if (theme) {
+    if (theme.primary) c.primary = theme.primary;
+    if (theme.secondary) { c.secondary = theme.secondary; c.navy = theme.secondary; }
+    if (theme.accent) c.accent = theme.accent;
+    if (theme.success) c.success = theme.success;
+    if (theme.error) c.error = theme.error;
+    if (theme.warning) c.warning = theme.warning;
+    if (theme.info) c.info = theme.info;
+    if (theme.radiusSm != null) r.sm = theme.radiusSm;
+    if (theme.radiusMd != null) r.md = theme.radiusMd;
+    if (theme.radiusLg != null) r.lg = theme.radiusLg;
+    if (theme.radiusXl != null) r.xl = theme.radiusXl;
+  }
+  return `:root {
+  /* Layer 1: Primitives - Radios Base */
+  --khor-radius-xs: 2px;
+  --khor-radius-sm: ${r.sm}px;
+  --khor-radius-md: ${r.md}px;
+  --khor-radius-lg: ${r.lg}px;
+  --khor-radius-xl: ${r.xl}px;
+  --khor-radius-2xl: 24px;
+  --khor-radius-3xl: 32px;
+  --khor-radius-full: 9999px;
+
+  /* Elite Charts Palette (12 Colores) */
+  --khor-chart-primary: ${c.primary};   --khor-chart-secondary: ${c.secondary};
+  --khor-chart-accent: ${c.accent};    --khor-chart-success: ${c.success};
+  --khor-chart-error: ${c.error};     --khor-chart-info: ${c.info};
+  --khor-chart-teal: #008080;      --khor-chart-purple: #9C27B0;
+  --khor-chart-pink: #E91E63;      --khor-chart-cyan: #00BCD4;
+  --khor-chart-amber: #FFC107;     --khor-chart-gray: #9E9E9E;
+
+  /* Neutrals (Full Slate-Blue Scale) */
+  --khor-neutral-50: #f8faff;   --khor-neutral-100: #f1f4ff;
+  --khor-neutral-200: #e2eafc;  --khor-neutral-300: #cbd8f1;
+  --khor-neutral-400: #94a9d8;  --khor-neutral-500: #647bb1;
+  --khor-neutral-600: #475a8f;  --khor-neutral-700: #33446b;
+  --khor-neutral-800: #1e2a4a;  --khor-neutral-900: #0f1a35;
+  --khor-neutral-secondary-50: #f8faff;  --khor-neutral-secondary-100: #f1f4ff;
+  --khor-neutral-secondary-200: #e2eafc; --khor-neutral-secondary-300: #cbd8f1;
+  --khor-neutral-secondary-400: #94a9d8; --khor-neutral-secondary-500: #647bb1;
+  --khor-neutral-secondary-600: #475a8f; --khor-neutral-secondary-700: #33446b;
+  --khor-neutral-secondary-800: #1e2a4a; --khor-neutral-secondary-900: #0f1a35;
+
+  /* Form Validation Semantic States */
+  --khor-form-error-bg: ${c.error}15;   --khor-form-error-border: ${c.error};   --khor-form-error-text: ${c.error};
+  --khor-form-success-bg: ${c.success}15; --khor-form-success-border: ${c.success}; --khor-form-success-text: ${c.success};
+  --khor-form-warning-bg: ${c.warning}15; --khor-form-warning-border: ${c.warning}; --khor-form-warning-text: ${c.warning};
+  --khor-form-focus-ring: ${c.primary};
+
+  /* Semantic Layer 2: Actions */
+  --khor-action-primary-default: ${c.primary}; --khor-action-primary-hover: ${c.primaryHover};
+  --khor-action-secondary-default: ${c.secondary}; --khor-action-secondary-hover: ${c.secondaryHover};
+  --khor-action-danger-default: ${c.error}; --khor-action-danger-hover: #B71C1C;
+  --khor-action-ghost-hover: rgba(5, 23, 88, 0.06);
+  --khor-action-disabled-bg: #EDF0F1; --khor-action-disabled-text: #A0AEC0;
+  --khor-action-primary-active: #c73a2a;
+
+  /* Brand Color Aliases */
+  --khor-primary: var(--khor-action-primary-default);
+  --khor-primary-hover: var(--khor-action-primary-hover);
+  --khor-primary-active: var(--khor-action-primary-active);
+  --khor-secondary: var(--khor-action-secondary-default);
+  --khor-secondary-hover: var(--khor-action-secondary-hover);
+  --khor-secondary-active: #0d2a8a;
+  --khor-accent: ${c.accent};
+  --khor-accent-hover: #e68600;
+  --khor-accent-active: #cc7800;
+  --khor-navy: ${c.navy};
+  --khor-navy-hover: ${c.secondaryHover};
+  --khor-navy-active: #040f3a;
+  --khor-success: ${c.success};
+  --khor-error: #D32F2F;
+  --khor-warning: ${c.warning};
+  --khor-info: ${c.info};
+  --khor-teal: ${c.teal};
+
+  /* Feedback Color Scales (Full 50-900) */
+  --khor-success-50: #E8F5E9;   --khor-success-100: #C8E6C9;
+  --khor-success-200: #A5D6A7;  --khor-success-300: #81C784;
+  --khor-success-400: #66BB6A;  --khor-success-500: #4CAF50;
+  --khor-success-600: #43A047;  --khor-success-700: #2E7D32;
+  --khor-success-800: #1B5E20;  --khor-success-900: #0D3E12;
+
+  --khor-error-50: #FFEBEE;    --khor-error-100: #FFCDD2;
+  --khor-error-200: #EF9A9A;  --khor-error-300: #E57373;
+  --khor-error-400: #EF5350;  --khor-error-500: #F44336;
+  --khor-error-600: #E53935;  --khor-error-700: #B71C1C;
+  --khor-error-800: #C62828;  --khor-error-900: #B71C1C;
+
+  --khor-warning-50: #FFF4E5;  --khor-warning-100: #FFECB3;
+  --khor-warning-200: #FFE082; --khor-warning-300: #FFD54F;
+  --khor-warning-400: #FFCA28; --khor-warning-500: #FFC107;
+  --khor-warning-600: #FFB300; --khor-warning-700: #E07800;
+  --khor-warning-800: #FFA000; --khor-warning-900: #FF8F00;
+
+  --khor-info-50: #E3F2FD;    --khor-info-100: #BBDEFB;
+  --khor-info-200: #90CAF9;   --khor-info-300: #64B5F6;
+  --khor-info-400: #42A5F5;   --khor-info-500: #2196F3;
+  --khor-info-600: #1E88E5;   --khor-info-700: #1565C0;
+  --khor-info-800: #1565C0;   --khor-info-900: #0D47A1;
+
+  --khor-teal-50: #E0F2F2;    --khor-teal-100: #B2DFDF;
+  --khor-teal-200: #80CBCB;   --khor-teal-300: #4DB6B6;
+  --khor-teal-400: #26A6A6;   --khor-teal-500: #009696;
+  --khor-teal-600: #008989;   --khor-teal-700: #0D7D7D;
+  --khor-teal-800: #006969;   --khor-teal-900: #004D4D;
+
+  /* Extra Feedback Tokens */
+  --khor-feedback-processing: #0ea5e9;
+  --khor-feedback-volcano: #ea580c;
+  --khor-feedback-gold: #eab308;
+  --khor-feedback-lime: #84cc16;
+  --khor-feedback-purple: #a855f7;
+
+  /* Semantic Layer 2: Surface & Overlay */
+  --khor-surface-page: #f8faff; --khor-surface-card: #ffffff;
+  --khor-surface-hover: rgba(5, 23, 88, 0.04); --khor-surface-pressed: rgba(5, 23, 88, 0.08);
+  --khor-surface-selected: ${c.primary}15; --khor-surface-subtle: #F4F6F8;
+  --khor-surface-overlay: #ffffff; --khor-surface-raised: #ffffff;
+  --khor-surface-dragging: rgba(5, 23, 88, 0.12);
+  --khor-overlay-bg: rgba(255, 255, 255, 0.95); --khor-overlay-backdrop: rgba(0, 0, 0, 0.45);
+
+  /* Semantic Layer 2: Borders */
+  --khor-border-default: #D5DBE0; --khor-border-muted: #EDF0F1;
+  --khor-border-strong: #A0AEC0; --khor-border-hover: #A0AEC0;
+  --khor-border-focus: ${c.primary}; --khor-border-error: ${c.error};
+  --khor-border-disabled: #EDF0F1;
+
+  /* Focus Ring */
+  --khor-focus-ring-color: ${c.primary}; --khor-focus-ring-width: 2px;
+  --khor-focus-ring-offset: 2px; --khor-focus-ring-style: solid;
+
+  /* Semantic Layer 2: Typography */
+  --khor-text-primary: ${c.secondary}; --khor-text-secondary: #475a8f;
+  --khor-text-muted: #94a9d8; --khor-text-disabled: #A0AEC0; --khor-text-on-action: #ffffff;
+  --khor-text-link: ${c.primary}; --khor-text-link-hover: ${c.primaryHover};
+
+  /* Typography Base Sizing (Fluid) */
+  --khor-font-size-h1: clamp(1.75rem, 3vw + 1rem, 2.5rem);
+  --khor-font-size-h2: clamp(1.5rem, 2.5vw + 1rem, 2rem);
+  --khor-font-size-h3: clamp(1.25rem, 2vw + 0.5rem, 1.75rem);
+  --khor-font-size-h4: clamp(1.125rem, 1.5vw + 0.25rem, 1.375rem);
+  --khor-font-size-h5: clamp(1rem, 1.25vw + 0.2rem, 1.25rem);
+  --khor-font-size-h6: clamp(0.875rem, 1vw + 0.15rem, 1rem);
+  --khor-font-size-body-lg: clamp(1rem, 0.8vw + 0.15rem, 1.125rem);
+  --khor-font-size-body-md: clamp(0.875rem, 0.5vw + 0.1rem, 1rem);
+  --khor-font-size-body-sm: clamp(0.8125rem, 0.3vw + 0.05rem, 0.875rem);
+  --khor-font-size-body-xs: clamp(0.75rem, 0.25vw + 0.05rem, 0.8125rem);
+  --khor-font-size-display-1: clamp(2.5rem, 5vw + 1rem, 4.5rem);
+  --khor-font-size-display-2: clamp(2rem, 4vw + 0.8rem, 3rem);
+  --khor-font-size-display-2xl: clamp(4rem, 5vw + 1rem, 4.5rem);
+  --khor-font-size-display-xl: clamp(3rem, 4vw + 1rem, 3.5rem);
+  --khor-font-size-heading-lg: clamp(2rem, 3vw + 1rem, 2.5rem);
+  --khor-font-size-heading-md: clamp(1.5rem, 2vw + 1rem, 2rem);
+  --khor-font-size-heading-sm: clamp(1.25rem, 1.5vw + 1rem, 1.5rem);
+  --khor-font-size-heading-xs: clamp(1rem, 1.2vw + 0.25rem, 1.25rem);
+  --khor-font-size-body-xl: clamp(1.125rem, 1.2vw + 0.2rem, 1.375rem);
+  --khor-font-size-code: clamp(0.8125rem, 0.3vw + 0.05rem, 0.875rem);
+  --khor-font-size-label: clamp(0.875rem, 0.5vw + 0.1rem, 1rem);
+  --khor-font-size-caption: clamp(0.75rem, 0.25vw + 0.05rem, 0.8125rem);
+  --khor-font-weight-light: 300; --khor-font-weight-regular: 400;
+  --khor-font-weight-medium: 500; --khor-font-weight-semibold: 600;
+  --khor-font-weight-bold: 700; --khor-font-weight-extrabold: 800;
+  --khor-line-height-display: 1.1; --khor-line-height-heading: 1.25;
+  --khor-line-height-body: 1.5; --khor-line-height-dynamic: 1.6;
+  --khor-letter-spacing-tighter: -0.02em; --khor-letter-spacing-tight: -0.01em;
+  --khor-letter-spacing-normal: 0em; --khor-letter-spacing-wide: 0.02em;
+  --khor-letter-spacing-wider: 0.05em;
+
+  /* Motion Tokens */
+  --khor-duration-instant: 50ms; --khor-duration-fast: 150ms;
+  --khor-duration-normal: 250ms; --khor-duration-slow: 450ms;
+  --khor-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --khor-easing-enter: cubic-bezier(0, 0, 0.2, 1);
+  --khor-easing-exit: cubic-bezier(0.4, 0, 1, 1);
+  --khor-easing-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --khor-easing-decelerate: cubic-bezier(0, 0, 0.2, 1);
+  --khor-easing-accelerate: cubic-bezier(0.4, 0, 1, 1);
+  --khor-easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
+  --khor-transition-fade: opacity var(--khor-duration-normal) var(--khor-easing-standard);
+  --khor-transition-scale: transform var(--khor-duration-normal) var(--khor-easing-standard);
+  --khor-transition-slide: transform var(--khor-duration-normal) var(--khor-easing-standard);
+  --khor-transition-color: color var(--khor-duration-normal) var(--khor-easing-standard), background-color var(--khor-duration-normal) var(--khor-easing-standard), border-color var(--khor-duration-normal) var(--khor-easing-standard);
+
+  /* Elevation & Shadows */
+  --khor-shadow-sm: 0 1px 2px rgba(5,23,88,0.04), 0 1px 1px rgba(0,0,0,0.02);
+  --khor-shadow-md: 0 4px 6px -1px rgba(5,23,88,0.08), 0 2px 4px -1px rgba(0,0,0,0.04);
+  --khor-shadow-lg: 0 10px 15px -3px rgba(5,23,88,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+  --khor-shadow-xl: 0 20px 25px -5px rgba(5,23,88,0.12), 0 10px 10px -5px rgba(0,0,0,0.04);
+  --khor-shadow-2xl: 0 25px 50px -12px rgba(5,23,88,0.25);
+  --khor-shadow-inner: inset 0 2px 4px 0 rgba(0,0,0,0.06);
+  --khor-elevation-0: none;
+  --khor-elevation-1: var(--khor-shadow-sm);
+  --khor-elevation-2: var(--khor-shadow-md);
+  --khor-elevation-3: var(--khor-shadow-lg);
+  --khor-elevation-4: var(--khor-shadow-xl);
+  --khor-elevation-5: var(--khor-shadow-2xl);
+
+  /* Layout Grid System */
+  --khor-grid-cols: 12;
+  --khor-grid-gutter-sm: 16px; --khor-grid-margin-sm: 16px;
+  --khor-grid-gutter-md: 24px; --khor-grid-margin-md: 24px;
+  --khor-grid-gutter-lg: 32px; --khor-grid-margin-lg: 32px;
+  --khor-grid-gutter-xl: 32px; --khor-grid-margin-xl: 40px;
+
+  /* Semantic Spacing Tokens */
+  --khor-space-layout-xs: 16px; --khor-space-layout-sm: 24px;
+  --khor-space-layout-md: 32px; --khor-space-layout-lg: 48px;
+  --khor-space-layout-xl: 64px;
+  --khor-space-component-xs: 4px; --khor-space-component-sm: 8px;
+  --khor-space-component-md: 12px; --khor-space-component-lg: 16px;
+  --khor-density-spacing-xs: 4px; --khor-density-spacing-sm: 8px;
+  --khor-density-spacing-md: 16px; --khor-density-spacing-lg: 24px;
+
+  /* Sizing Scale */
+  --khor-size-0: 0px; --khor-size-1: 4px; --khor-size-2: 8px;
+  --khor-size-3: 12px; --khor-size-4: 16px; --khor-size-5: 20px;
+  --khor-size-6: 24px; --khor-size-8: 32px; --khor-size-10: 40px;
+  --khor-size-12: 48px; --khor-size-16: 64px; --khor-size-20: 80px;
+  --khor-size-24: 96px; --khor-size-32: 128px; --khor-size-40: 160px;
+  --khor-size-48: 192px; --khor-size-56: 224px; --khor-size-64: 256px;
+  --khor-size-full: 100%;
+
+  /* Icon Sizing */
+  --khor-icon-xs: 12px; --khor-icon-sm: 14px; --khor-icon-md: 16px;
+  --khor-icon-lg: 20px; --khor-icon-xl: 24px; --khor-icon-2xl: 32px;
+
+  /* Layer 3: Component Specific Tokens */
+  --khor-button-primary-bg:        var(--khor-action-primary-default);
+  --khor-button-primary-text:      var(--khor-text-on-action);
+  --khor-button-primary-shadow:    0 2px 4px rgba(224, 77, 54, 0.2);
+  --khor-button-secondary-bg:      var(--khor-action-secondary-default);
+  --khor-button-secondary-text:    var(--khor-text-on-action);
+  --khor-input-bg:                 var(--khor-surface-card);
+  --khor-input-border:             var(--khor-border-default);
+  --khor-input-focus-border:       var(--khor-border-focus);
+  --khor-input-focus-ring:         var(--khor-form-focus-ring);
+  --khor-card-bg:                  var(--khor-surface-card);
+  --khor-card-shadow:              var(--khor-shadow-md);
+  --khor-card-radius:              var(--khor-radius-lg);
+
+  /* Layer 3: Contextual Tokens */
+  --khor-context-sidebar-bg:        var(--khor-chart-secondary);
+  --khor-context-sidebar-text:      var(--khor-neutral-50);
+  --khor-context-sidebar-text-muted:rgba(255, 255, 255, 0.55);
+  --khor-context-sidebar-border:    rgba(255, 255, 255, 0.08);
+  --khor-context-sidebar-hover:     rgba(255, 255, 255, 0.10);
+  --khor-context-sidebar-active:    rgba(255, 255, 255, 0.15);
+  --khor-context-header-bg:         var(--khor-surface-card);
+  --khor-context-header-border:     var(--khor-border-default);
+  --khor-context-header-text:       var(--khor-text-primary);
+
+  /* Chart Array Mapping */
+  --khor-chart-1: var(--khor-chart-primary);
+  --khor-chart-2: var(--khor-chart-secondary);
+  --khor-chart-3: var(--khor-chart-accent);
+  --khor-chart-4: var(--khor-chart-success);
+}`;
+}

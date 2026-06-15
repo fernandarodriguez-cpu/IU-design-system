@@ -134,7 +134,7 @@ export function HomePage() {
           <FeatureCard
             icon={ShieldCheck}
             title="Enterprise Security"
-            description="Validado contra estándares WCAG 2.2 AAA y W3C DTCG. Tu sistema de diseño es ahora legalmente sólido y técnicamente invencible."
+            description="Validado contra estándares WCAG 2.2 AA (AAA en componentes específicos) y W3C DTCG. Auditoría continua con axe-core en pipeline CI."
           />
         </div>
       </KCardSection>

@@ -2,6 +2,57 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo. Khor sigue una metodología de desarrollo por "Olas" (Waves) dentro de fases evolutivas.
 
+## [6.2.1] — 2026-06-12
+### 🛡️ Ola 26: DevOps Hardening — Token SSOT, Event API Unification & A11y Sincerity
+- 📦 **Versión bump**: `6.2.0` → `6.2.1` (PATCH: ghost variables eliminadas, APIs de eventos unificadas, claims de accesibilidad sinceros).
+- **Token SSOT — Ghost variables eliminadas**: Se agregaron 5 variables primitivas faltantes en `:root` (`--khor-secondary-hover`, `--khor-secondary-active`, `--khor-error-hover`, `--khor-error-active`, `--khor-radius-3xl`) que eran referenciadas vía `var()` pero nunca definidas, causando silent failures en runtime.
+- **CSS/JS Token alineado**: Las 4 variables `-light` en el bloque `@theme inline` (`--color-khor-success-light`, `--color-khor-error-light`, `--color-khor-warning-light`, `--color-khor-info-light`) ahora apuntan a los tokens numéricos existentes (`--khor-*-100`) en lugar de a variables fantasma, eliminando la discrepancia entre la API JS y CSS.
+- **validate-tokens.ts**: Nuevo script de linter estático (`npm run validate-tokens`) que verifica que cada `var(--khor-*)` tenga su definición correspondiente en `:root` o `.dark`. Previene futuras variables fantasma en CI/CD. Integrado como paso pre-build en `npm test`.
+- **Event API unificada**: `guidelines/Guidelines.md` actualizado — KModal, KDrawer y KModalConfirm migrados de `onClose` a `onOpenChange` (Radix patrón estándar). `dist-guides/khor-system-guide.md` sincronizado — KCommandBar corregido de `onClose` a `onOpenChange`. Fin de la ambigüedad documental entre APIs.
+- **WCAG claims sinceros**: HomePage corregido de "Validado contra estándares WCAG 2.2 AAA" a "WCAG 2.2 AA (AAA en componentes específicos)", reflejando el ratio real 4.8:1 de KButton primary sobre blanco.
+- **Tests de accesibilidad**: Nuevo `tests/a11y.spec.ts` con axe-core integrado (Playwright) que audita WCAG 2.1 AA en 7 páginas críticas. Ejecutable via `npm run test:a11y`.
+
+## [6.2.0] — 2026-06-11
+### 🧩 Ola 25: Registry Patterns & Auto-Counts
+- 📦 **Versión bump**: `6.1.0` → `6.2.0` (MINOR: registry/data isolation, auto-generate counts).
+- **Registry types**: Nuevo `src/app/registry/registry-types.ts` con interfaces `AtomData`, `MoleculeData`, `OrganismData` (solo datos, sin JSX).
+- **Data-only exports**: `atomsData`, `moleculesData`, `organismsData` exportados desde `AtomsPage.tsx`, `MoleculesPage.tsx`, `OrganismsPage.tsx` vía destructuring que omite fields JSX (`preview`, `playground`, `stateShowcase`).
+- **AIExportPage migrado**: Importa de `atomsData` en vez de `atoms` — el generador de markdown ya no arrastra JSX ni imports de componentes React.
+- **Auto-generate counts**: Nuevo `scripts/generate-counts.mjs` que escupe `khor-counts.json` desde `Object.keys()` de cada página. Se ejecuta automáticamente en `npm run build`.
+- **Counts dinámicos en UI**: Labels de secciones (`Átomos (N)`, `Moléculas (N)`) se computan en runtime, no más hardcode.
+- **Version centralizada**: `AIExportPage.tsx` ahora importa `KHOR_VERSION` desde `src/app/version/version.ts`.
+- **CSS Block generado desde tokens**: `generateCssBlock()` en `khor-theme.ts` reemplaza el CSS de 200+ líneas hardcodeado en `AIExportPage.tsx`. Acepta `theme?: ThemeConfig` opcional — cuando se pasa (desde ThemingPage), los colores y radios reflejan el tema activo. La guía exportada ahora es completamente dinámica al tema.
+- **YAML Front Matter en guías modulares**: Cada archivo `.md` individual incluye cabecera `---` con `system`, `module`, `dependencies`, `context_rule` para auto-documentación de contexto.
+
+## [6.1.0] — 2026-06-11
+### 🧹 Ola 24: Multi-Guía LLM & Architecture Hardening
+- 📦 **Versión bump**: `6.0.0` → `6.1.0` (MINOR: nueva feature de multi-guía, sin breaking changes).
+- **Multi-guía para LLMs**: `AIExportPage.tsx` ahora permite descargar archivos `.md` individuales por capa (átomos, moléculas, organismos, tokens) además de la guía completa. Cada archivo cabe en context windows pequeños (~25-35KB), resolviendo el truncamiento que impedía a los LLMs ver todos los componentes.
+- **Descarga ZIP completa**: Nuevo botón "Descargar todo (ZIP)" que empaqueta las 5 guías individuales en `khor-guias-completas.zip` usando JSZip. El usuario elige si descarga solo una capa o todo el conjunto.
+- **Índice de componentes**: Nueva sección `📋 Catálogo de Componentes` con tabla compacta de los 81 componentes al inicio del markdown.
+- **Version centralizada**: `KHOR_VERSION` movido a `src/app/version/version.ts` como fuente única. `package.json` sincronizado a `6.1.0`.
+- **Fix KButton `danger` prop**: Preview en `AtomsPage.tsx` unificado a `variant="danger"` (era `<KButton danger>`), consistente con el code example y la tabla de props.
+- **Verificación de integridad**: Build de producción verificado sin errores.
+
+## [6.0.0] — 2026-06-11
+### 🧹 Ola 23: AI Guide Hardening — Token Purge & Elite Standards
+- 📦 **Versión promovida a stable**: `6.0.0-beta` → `6.0.0`. El sistema alcanza madurez de producción tras 3 rondas de auditoría y saneamiento completo.
+- **Índice de componentes en guía IA**: Nueva sección `📋 Catálogo de Componentes` al inicio del markdown con tabla compacta de los 81 componentes (30 átomos, 31 moléculas, 20 organismos). Garantiza que la IA vea el inventario completo incluso si el contexto se trunca en secciones detalladas.
+- **KText deprecado en guía IA**: Reemplazadas todas las referencias de `KText` por `KTypography.Text` en el markdown generado por `AIExportPage.tsx`, eliminando recomendaciones del componente deprecado.
+- **Tokenización de colores hardcodeados**: Sustitución de 11+ valores hex hardcodeados (`#eee`, `#f5f5f5`, `#ccc`, `#666`, `#333`, `#051758`, gradient purple/pink) por tokens semánticos de Khor (`khorTokens.colors.neutral`, `khorTokens.colors.brand`, `var(--khor-chart-*)`) en playgrounds y previews de `AtomsPage.tsx`, `MoleculesPage.tsx` y `AIExportPage.tsx`.
+- **Escala neutral corregida**: Actualización de la paleta neutral (50-900) en el generador de guía IA para coincidir con la escala Slate-Blue de `theme.css`.
+- **Auditoría de guía IA — Correcciones post-review**:
+  - **JSON tokens renderizado**: Se eliminó el escape `\$` en el bloque `khorTokens` del markdown, ahora la IA recibe el JSON real con valores concretos en lugar de un template literal.
+  - **Consistencia KButton**: Unificada la prop `danger` → `variant="danger"` en el ejemplo de código `AtomsPage.tsx`, eliminando la ambigüedad con la tabla de props.
+  - **Conteos precisos**: Corregidos labels de `AIExportPage.tsx` (Moléculas 33→31, Organismos 15→20) y `khor-counts.json` (atoms 31→30, molecules 33→31, organisms 24→20, total 105→98) para reflejar el inventario real del registry.
+- **Auditoría de guía IA — Sincronización CSS/JSON y saneamiento**:
+  - **CSS block expandido**: Añadidas +90 variables CSS faltantes (`--khor-primary`, `--khor-secondary`, `--khor-accent`, `--khor-navy`, `neutralSecondary` completo, tipografía base (font-size/weight/line-height/letter-spacing), sizing scale, icon sizing, focus ring, surface states, border hover, easing spring, density spacing) para alinear `:root` con el JSON `khorTokens`.
+  - **Radius corregidos**: Valores en CSS block sincronizados con `khorStaticTokens` (sm: 6px, md: 8px, lg: 10px, xl: 14px).
+  - **Contradicción A11y KButton**: Score corregido (100→96) y contraste (AAA→AA 4.8:1) para reflejar el ratio real de `#E04D36` sobre blanco.
+  - **Duplicados eliminados**: Fusionadas secciones repetidas de Internacionalización (i18n), Fluid Typography, Reduced Motion y Gobernanza; eliminadas las versiones cortas.
+  - **Compound components KInput**: Añadido `aiNotes` a KInput.Search y KInput.Password marcándolos como sub-componentes compuestos de KInput, no átomos independientes.
+- **Verificación de integridad**: Build de producción verificado sin errores.
+
 ## [5.3.0-alpha] — 2026-05-18
 ### 🧹 Ola 21: The Spring Cleaning — Independencia Arquitectónica
 - **Eliminación de Bloatware AntD**: Purga de 6 componentes heredados de bajo uso (`KTransfer`, `KTreeSelect`, `KAffix`, `KMentions`, `KWatermark`, `KRate`) reduciendo la superficie del sistema y el peso del bundle.
@@ -13,6 +64,19 @@ Todos los cambios notables en este proyecto serán documentados en este archivo.
 - **Limpieza de Registros**: Actualización de sidebar, índices de exportación, AI Guide, y documentación de organismos para reflejar la nueva arquitectura optimizada.
 - **TypeScript & Build**: Actualización de `ignoreDeprecations` a TS 6.0. Build de producción verificado sin errores.
 - **Resultado**: Reducción del bundle `OrganismsPage` de 106.59 kB → 100.21 kB (−6%).
+
+## [5.3.1-alpha] — 2026-05-22
+### 🧪 Ola 21b: Post-Refactor Stabilization
+- **KPhoneInput**: Nuevo componente de entrada telefónica internacional con validación y formato automático.
+- **KSheet (ex-Drawer)**: Migración completa de nomenclatura en todas las páginas, exports y documentación.
+- **KDatePicker**: Corregido error de desbordamiento en calendarios con semanas de 6 filas.
+
+## [5.4.0-alpha] — 2026-06-01
+### 📝 Ola 22: MD Error Fixes & Component Hardening
+- **MD errors fixes**: Correcciones en la generación de markdown para la guía IA — manejo de edge cases en componentes sin playground definido.
+- **KFormWizard**: Nuevo organismo para flujos multi-paso con validación progresiva y barra de progreso.
+- **Tokens v10.5**: Expansión de text attributes (case, decoration) y number tokens en `theme.css`.
+- **KUpload**: Implementación de drag-and-drop con preview de archivos y manejo de errores visuales.
 
 ## [5.2.0-alpha] — 2026-05-15
 ### 🌟 Ola 20: Figma MCP Sync & Agentification
@@ -28,6 +92,19 @@ Todos los cambios notables en este proyecto serán documentados en este archivo.
 - **State-Aware Ecosystem**: Inyección de props `isHovered`, `isFocused`, `isPressed` en todo el sistema para garantizar previsualizaciones perfectas en herramientas de diseño (Figma/Penpot).
 - **Metadata V5.0**: Regeneración del manifiesto universal con 116 componentes auditados y listos para sincronización con el plugin.
 
+## [5.1.0-alpha] — 2026-05-09
+### 🔒 Ola 19: Token Sync Engine & Security Hardening
+- **Token Sync Engine**: Implementación de `validate-tokens.ts` que cruza cada `var(--khor-*)` contra `:root` para prevenir ghost tokens en tiempo de build.
+- **Security Hardening**: Sanitización de inputs en formularios de login (`KLoginForm`) y manejo seguro de tokens JWT.
+- **Playwright Tests**: Primer conjunto de tests E2E para flujos críticos (login, navegación, exportación de guías).
+
+## [5.0.0-alpha] — 2026-04-29
+### 🧪 Ola 18b: Level 5 Foundation — Architecture Upgrade
+- **Arquitectura Nivel 5**: Refactorización del motor de tokens para soportar multi-theming dinámico y estados de interacción compuestos.
+- **Security Governance**: Implementación del motor de sincronización de tokens y gobernanza de seguridad.
+- **Nuevos Componentes**: `KCommandBar` (paleta de comandos estilo VS Code) y `KTour` (recorridos interactivos guiados).
+- **Z-Index Scale**: Implementación de escala jerárquica de 8 niveles (base → toast) para gestión de stacking context.
+
 ## [4.4.0] — 2026-04-27
 ### 🚀 Ola 18: Industry Reference Upgrade & Universal Bridge
 - **Elite Pillars**: Implementación de arquitectura de superficies (Layer 2), elevación semántica (0-5) y espaciado optimizado para SaaS.
@@ -42,6 +119,20 @@ Todos los cambios notables en este proyecto serán documentados en este archivo.
 - **Semantic Tokens**: Integración completa de la escala interactiva (Hover/Disabled/Action) en el núcleo CSS.
 - **Density Engine**: Implementación de contextos dinámicos (`.khor-compact` / `.khor-comfortable`).
 - **AI Guide v4.3**: Rediseño del generador de guías con tablas de contraste WCAG y reglas de gobernanza para LLMs.
+
+## [4.2.0] — 2026-04-20
+### 📐 Ola 16c: AI Guide & Token Alignment
+- **AI Guide v4.2**: Generación dinámica de bloques CSS `:root` desde `khor-theme.ts`, reemplazando valores hardcodeados en `AIExportPage.tsx`.
+- **Tokens v10.4.7**: Estado de feedback extendido (processing, volcano, gold, lime, purple) para visualizaciones de datos.
+- **KResult**: Nuevo componente de estados (success, error, warning, info, 404, 500) con iconografía semántica.
+- **Playground Pro**: Previsualización en vivo de tokens de color en `TokensPage.tsx` con paleta completa.
+
+## [4.1.0] — 2026-04-15
+### 🎨 Ola 16b: Icon & Token Expansion
+- **KIcon**: Nueva API de iconos con 20 iconos Lucide adicionales para tabs y navegación.
+- **Tokens v10.4.6**: Escala de opacidad completa (0–100) y rotación (0°, 45°, 90°, 180°, 270°).
+- **KTag**: Nuevas variantes de color (success, error, warning, info) mapeadas a tokens semánticos.
+- **KDivider**: Añadida prop `orientation` para divisores verticales en layouts de toolbar.
 
 ## [4.0.5] — 2026-04-10
 ### 🌊 Ola 16: Refinamiento de Feedback e Infraestructura
@@ -62,6 +153,18 @@ Todos los cambios notables en este proyecto serán documentados en este archivo.
 - **Accesibilidad**: Auditoría de contraste WCAG AAA en todos los tokens semánticos.
 - **Error Handling**: Implementación de `ErrorPage.tsx` y Error Boundary global en el enrutamiento.
 - **Performance**: Optimización de `KDataTable` con soporte para virtualización (10,000+ filas).
+
+## [4.0.2] — 2026-04-01
+### 🧹 Ola 13c: V4 Wave Refinements
+- **KSelect**: Mejorada la accesibilidad del dropdown con navegación por teclado (Arrow keys + Enter).
+- **KModal**: Añadido soporte para `centered` prop y mejorada la gestión de foco al abrir/cerrar.
+- **Theme CSS**: Normalización de valores de border-radius en `theme.css` para alinear con la especificación de tokens.
+
+## [4.0.1] — 2026-03-27
+### 🐛 Ola 13b: Post-Launch Hotfixes
+- **KDataTable**: Corregido error de renderizado en columnas con valores nulos.
+- **Token aliasing**: Añadidos `--khor-primary-light` y `--khor-error-hover` para casos de uso de superficie.
+- **Documentación**: Sincronización de ejemplos de código en `AtomsPage.tsx` con la API real de componentes.
 
 ## [v4.0.0] — 2026-03-24
 ### 🌊 Ola 8-13: Core Parity & Layout Governance

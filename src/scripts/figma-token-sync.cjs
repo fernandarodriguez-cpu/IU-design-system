@@ -82,9 +82,9 @@ async function syncTokens() {
   }
 
   // 1. Generar Manifiesto Local (Workflow para Planes Pro)
-  const collectionName = 'Khor v6.0 System';
+  const collectionName = 'Khor v6.2 System';
   const manifest = {
-    version: '6.0.0',
+    version: '6.2.1',
     generatedAt: new Date().toISOString(),
     collectionName,
     variables: variablesToCreate

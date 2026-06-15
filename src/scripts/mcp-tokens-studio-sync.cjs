@@ -27,7 +27,7 @@ async function startSync() {
     const init = await callMCP('initialize', {
       protocolVersion: '2024-11-05',
       capabilities: {},
-      clientInfo: { name: 'KDS-Agent-Sync', version: '6.0.0' }
+      clientInfo: { name: 'KDS-Agent-Sync', version: '6.2.1' }
     });
     
     if (init.error) throw new Error(init.error.message);
