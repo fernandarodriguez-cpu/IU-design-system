@@ -587,18 +587,29 @@ export function generateCssBlock(theme?: {
   --khor-text-muted: #94a9d8; --khor-text-disabled: #A0AEC0; --khor-text-on-action: #ffffff;
   --khor-text-link: ${c.primary}; --khor-text-link-hover: ${c.primaryHover};
 
-  /* Typography Base Sizing */
-  --khor-font-size-h1: 32px; --khor-font-size-h2: 28px;
-  --khor-font-size-h3: 24px; --khor-font-size-h4: 20px;
-  --khor-font-size-h5: 18px; --khor-font-size-h6: 16px;
-  --khor-font-size-body-lg: 16px; --khor-font-size-body-md: 14px;
-  --khor-font-size-body-sm: 13px; --khor-font-size-body-xs: 12px;
-  --khor-font-size-display-1: 48px; --khor-font-size-display-2: 40px;
-  --khor-font-size-display-2xl: 72px; --khor-font-size-display-xl: 56px;
-  --khor-font-size-heading-lg: 48px; --khor-font-size-heading-md: 40px;
-  --khor-font-size-heading-sm: 32px; --khor-font-size-heading-xs: 24px;
-  --khor-font-size-body-xl: 18px; --khor-font-size-code: 13px;
-  --khor-font-size-label: 14px; --khor-font-size-caption: 12px;
+  /* Typography Base Sizing (Fluid) */
+  --khor-font-size-h1: clamp(1.75rem, 3vw + 1rem, 2.5rem);
+  --khor-font-size-h2: clamp(1.5rem, 2.5vw + 1rem, 2rem);
+  --khor-font-size-h3: clamp(1.25rem, 2vw + 0.5rem, 1.75rem);
+  --khor-font-size-h4: clamp(1.125rem, 1.5vw + 0.25rem, 1.375rem);
+  --khor-font-size-h5: clamp(1rem, 1.25vw + 0.2rem, 1.25rem);
+  --khor-font-size-h6: clamp(0.875rem, 1vw + 0.15rem, 1rem);
+  --khor-font-size-body-lg: clamp(1rem, 0.8vw + 0.15rem, 1.125rem);
+  --khor-font-size-body-md: clamp(0.875rem, 0.5vw + 0.1rem, 1rem);
+  --khor-font-size-body-sm: clamp(0.8125rem, 0.3vw + 0.05rem, 0.875rem);
+  --khor-font-size-body-xs: clamp(0.75rem, 0.25vw + 0.05rem, 0.8125rem);
+  --khor-font-size-display-1: clamp(2.5rem, 5vw + 1rem, 4.5rem);
+  --khor-font-size-display-2: clamp(2rem, 4vw + 0.8rem, 3rem);
+  --khor-font-size-display-2xl: clamp(4rem, 5vw + 1rem, 4.5rem);
+  --khor-font-size-display-xl: clamp(3rem, 4vw + 1rem, 3.5rem);
+  --khor-font-size-heading-lg: clamp(2rem, 3vw + 1rem, 2.5rem);
+  --khor-font-size-heading-md: clamp(1.5rem, 2vw + 1rem, 2rem);
+  --khor-font-size-heading-sm: clamp(1.25rem, 1.5vw + 1rem, 1.5rem);
+  --khor-font-size-heading-xs: clamp(1rem, 1.2vw + 0.25rem, 1.25rem);
+  --khor-font-size-body-xl: clamp(1.125rem, 1.2vw + 0.2rem, 1.375rem);
+  --khor-font-size-code: clamp(0.8125rem, 0.3vw + 0.05rem, 0.875rem);
+  --khor-font-size-label: clamp(0.875rem, 0.5vw + 0.1rem, 1rem);
+  --khor-font-size-caption: clamp(0.75rem, 0.25vw + 0.05rem, 0.8125rem);
   --khor-font-weight-light: 300; --khor-font-weight-regular: 400;
   --khor-font-weight-medium: 500; --khor-font-weight-semibold: 600;
   --khor-font-weight-bold: 700; --khor-font-weight-extrabold: 800;
@@ -615,6 +626,9 @@ export function generateCssBlock(theme?: {
   --khor-easing-enter: cubic-bezier(0, 0, 0.2, 1);
   --khor-easing-exit: cubic-bezier(0.4, 0, 1, 1);
   --khor-easing-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --khor-easing-decelerate: cubic-bezier(0, 0, 0.2, 1);
+  --khor-easing-accelerate: cubic-bezier(0.4, 0, 1, 1);
+  --khor-easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
   --khor-transition-fade: opacity var(--khor-duration-normal) var(--khor-easing-standard);
   --khor-transition-scale: transform var(--khor-duration-normal) var(--khor-easing-standard);
   --khor-transition-slide: transform var(--khor-duration-normal) var(--khor-easing-standard);

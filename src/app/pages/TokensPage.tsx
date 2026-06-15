@@ -544,9 +544,13 @@ export function TokensPage() {
               </div>
               <div className="space-y-4">
                  {[
-                   { n: 'Standard', v: 'cubic-bezier(0.4, 0, 0.2, 1)', var: '--khor-easing-standard' },
-                   { n: 'Spring', v: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)', var: '--khor-easing-spring' },
-                   { n: 'Enter', v: 'cubic-bezier(0, 0, 0.2, 1)', var: '--khor-easing-enter' },
+                    { n: 'Standard', v: 'cubic-bezier(0.4, 0, 0.2, 1)', var: '--khor-easing-standard' },
+                    { n: 'Spring', v: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)', var: '--khor-easing-spring' },
+                    { n: 'Enter', v: 'cubic-bezier(0, 0, 0.2, 1)', var: '--khor-easing-enter' },
+                    { n: 'Exit', v: 'cubic-bezier(0.4, 0, 1, 1)', var: '--khor-easing-exit' },
+                    { n: 'Decelerate', v: 'cubic-bezier(0, 0, 0.2, 1)', var: '--khor-easing-decelerate' },
+                    { n: 'Accelerate', v: 'cubic-bezier(0.4, 0, 1, 1)', var: '--khor-easing-accelerate' },
+                    { n: 'Emphasized', v: 'cubic-bezier(0.2, 0, 0, 1)', var: '--khor-easing-emphasized' },
                  ].map(e => (
                    <div key={e.n} className="flex items-center gap-4 p-4 bg-white/50 dark:bg-khor-surface-card rounded-xl border border-khor-border-muted group overflow-hidden">
                      <div className="w-12 h-12 bg-khor-primary/10 rounded-lg flex items-center justify-center text-khor-primary group-hover:rotate-12 transition-transform">
