@@ -1,290 +1,324 @@
+/* ─── Figma tokens: KInput (187673-24767 / 187675-34963 / 187675-34761) ────
+   Size      : sm (32px) | md (36px) | lg (40px)
+   State     : normal | focused | error | warning | disabled
+   Disabled  : bg #F3F4F6, border #E5E7EB, text #9CA3AF — no opacity/grayscale
+   Focus     : border #E04D36, ring #E04D36/20
+   Error     : border #D32F2F, ring #D32F2F/20
+   Warning   : border #F59E0B, ring #F59E0B/20
+   Default border : #D1D5DB
+   Prefix/Suffix  : icon left / right inside input
+   Label position : top (upper label) | side (side label)
+   Label props    : required (*) | optional (text) | tooltip (ℹ) | helpText
+──────────────────────────────────────────────────────────────────────────── */
 import React, { useState, useRef, useImperativeHandle } from 'react';
-import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/utils/cn';
-import { Eye, EyeOff, XCircle } from 'lucide-react';
+import { Eye, EyeOff, X } from 'lucide-react';
+import { KLabel } from '../KLabel';
 
-// Sub-components
 import { KInputSearch } from './Search';
 import { KTextArea } from './TextArea';
 import { KInputOTP } from './OTP';
 
-const inputVariants = cva(
-  'flex w-full items-center justify-between rounded-md border text-sm transition-all focus-within:ring-2 focus-within:ring-khor-primary focus-within:ring-offset-2 overflow-hidden font-primary',
-  {
-    variants: {
-      variant: {
-        outlined: 'border-[var(--khor-input-border)] bg-[var(--khor-input-bg)] text-[var(--khor-input-text)] shadow-khor-sm focus-within:border-[var(--khor-input-focus-border)] focus-within:ring-[var(--khor-input-focus-ring)]/20',
-        borderless: 'border-transparent bg-transparent text-[var(--khor-input-text)] shadow-none focus-within:ring-0 px-0',
-        filled: 'border-transparent bg-khor-slate-100 text-[var(--khor-input-text)] focus-within:bg-khor-slate-50 focus-within:ring-[var(--khor-input-focus-ring)]/20',
-      },
-      size: {
-        sm: 'h-[var(--khor-density-height-sm)] px-2 text-xs',
-        md: 'h-[var(--khor-density-height-input)] px-3 text-sm',
-        lg: 'h-[var(--khor-density-height-lg)] px-4 text-base',
-      },
-      status: {
-        default: 'border-khor-border-default',
-        error: 'border-khor-border-error focus-within:ring-khor-border-error/20',
-        warning: 'border-khor-warning focus-within:ring-khor-warning/20',
-      },
-      disabled: {
-        true: 'bg-khor-slate-100 border-khor-slate-200 opacity-60 cursor-not-allowed select-none pointer-events-none grayscale-[0.5]',
-        false: '',
-      },
-      isFocused: {
-        true: 'ring-2 ring-khor-primary ring-offset-2 border-khor-primary',
-      },
-      isHovered: {
-        true: 'border-khor-primary/50 bg-khor-slate-50/50 shadow-khor-md',
-      }
-    },
-    defaultVariants: {
-      variant: 'outlined',
-      size: 'md',
-      status: 'default',
-      disabled: false,
-    },
-  }
-);
+// ─── size tokens ────────────────────────────────────────────────────────────
+const SIZE = {
+  sm: { h: 32, px: 10, fs: 12, iconSz: 13 },
+  md: { h: 36, px: 12, fs: 13, iconSz: 14 },
+  lg: { h: 40, px: 14, fs: 14, iconSz: 16 },
+} as const;
+
+// ─── border / ring per status ────────────────────────────────────────────────
+const STATUS_CLASSES: Record<string, string> = {
+  default: 'border-[#D1D5DB] focus-within:border-[#E04D36] focus-within:shadow-[0_0_0_3px_rgba(224,77,54,0.15)]',
+  error:   'border-[#D32F2F] focus-within:shadow-[0_0_0_3px_rgba(211,47,47,0.15)]',
+  warning: 'border-[#F59E0B] focus-within:shadow-[0_0_0_3px_rgba(245,158,11,0.15)]',
+};
+
+const STATUS_HELP: Record<string, string> = {
+  default: 'text-[#6B7280]',
+  error:   'text-[#D32F2F]',
+  warning: 'text-[#B45309]',
+};
+
+// ─── types ───────────────────────────────────────────────────────────────────
+export type KInputSize   = 'sm' | 'md' | 'lg';
+export type KInputStatus = 'default' | 'error' | 'warning';
+export type KInputLabelPosition = 'top' | 'side';
 
 export interface KInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size' | 'prefix' | 'status'> {
-  size?: 'sm' | 'md' | 'lg';
+  size?: KInputSize;
+  status?: KInputStatus;
   /** @deprecated use status="error" */
   error?: string | boolean;
   /** @deprecated use status="warning" */
   warning?: string | boolean;
-  /** Mensaje de feedback debajo del input */
-  helperText?: string;
-  /** Estado visual del input */
-  status?: 'error' | 'warning' | 'default';
-  /** Ocupar 100% del ancho */
-  block?: boolean;
-  /** Estilo visual */
-  variant?: 'outlined' | 'borderless' | 'filled';
-  /** Icono o elemento al inicio */
-  prefix?: React.ReactNode; 
-  /** Icono o elemento al final */
+  prefix?: React.ReactNode;
   suffix?: React.ReactNode;
-  /** Botón para limpiar el contenido */
   allowClear?: boolean | { clearIcon?: React.ReactNode };
-  /** Mostrar contador de caracteres */
   showCount?: boolean | { formatter: (info: { value: string; count: number; maxLength?: number }) => React.ReactNode };
-  /** Elemento pegado antes del input */
   addonBefore?: React.ReactNode;
-  /** Elemento pegado después del input */
   addonAfter?: React.ReactNode;
-  /** Callback llamado al presionar el botón de limpiar */
   onClear?: () => void;
-  /** Fuerza el estado de foco (útil para previews/playgrounds) */
+  block?: boolean;
+  /** Forces focused visual (playground/preview) */
   isFocused?: boolean;
-  /** Fuerza el estado de hover (útil para previews/playgrounds) */
+  /** Forces hovered visual (playground/preview) */
   isHovered?: boolean;
+
+  // ── label props (Upper / Side label) ──────────────────────────────────────
+  label?: React.ReactNode;
+  labelPosition?: KInputLabelPosition;
+  required?: boolean;
+  optional?: boolean;
+  tooltip?: string;
+  helpText?: string;
 }
 
-/**
- * Base Input Component
- */
+// ─── BaseInput ───────────────────────────────────────────────────────────────
 const BaseInput = React.forwardRef<HTMLInputElement, KInputProps>(function KInput(
-  { 
-    size = 'md', error, warning, helperText, status: propStatus, 
-    block, variant = 'outlined', prefix, suffix, 
-    allowClear, showCount, maxLength,
-    addonBefore, addonAfter,
-    onClear,
+  {
+    size = 'md', status: propStatus, error, warning,
+    prefix, suffix, allowClear, showCount, maxLength,
+    addonBefore, addonAfter, onClear,
     isFocused, isHovered,
-    className, style, disabled, value, defaultValue, onChange, ...rest 
+    block, className, style, disabled,
+    value, defaultValue, onChange,
+    label, labelPosition = 'top', required, optional, tooltip, helpText,
+    ...rest
   },
   ref,
 ) {
-  const [internalValue, setInternalValue] = useState(defaultValue || '');
-  const isControlled = value !== undefined;
-  const currentVal = String(isControlled ? value : internalValue);
-  
+  const s = SIZE[size];
   const inputRef = useRef<HTMLInputElement>(null);
   useImperativeHandle(ref, () => inputRef.current!);
 
-  const status = propStatus || (error ? 'error' : warning ? 'warning' : 'default');
-  const feedbackMsg = typeof error === 'string' ? error : typeof warning === 'string' ? warning : helperText;
-  
+  const [internalValue, setInternalValue] = useState<string>(
+    typeof defaultValue === 'string' ? defaultValue : '',
+  );
+  const isControlled = value !== undefined;
+  const currentVal = String(isControlled ? (value ?? '') : internalValue);
+
+  const status: KInputStatus = propStatus || (error ? 'error' : warning ? 'warning' : 'default');
+  const feedbackMsg = helpText
+    || (typeof error === 'string' ? error : '')
+    || (typeof warning === 'string' ? warning : '');
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!isControlled) setInternalValue(e.target.value);
+    onChange?.(e);
+  };
+
   const handleClear = () => {
     if (!isControlled) setInternalValue('');
-    if (onChange) {
-      const event = { target: { value: '' } } as React.ChangeEvent<HTMLInputElement>;
-      onChange(event);
-    }
+    onChange?.({ target: { value: '' } } as React.ChangeEvent<HTMLInputElement>);
     onClear?.();
     inputRef.current?.focus();
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!isControlled) setInternalValue(e.target.value);
-    if (onChange) onChange(e);
-  };
+  const showClearBtn = allowClear && currentVal && !disabled;
 
-  const renderAddon = (content: React.ReactNode, pos: 'before' | 'after') => {
-    if (!content) return null;
-    
-    // Si el contenido es un botón o un componente con estilos propios, 
-    // evitamos el padding y el fondo por defecto si es deseable.
-    // Aquí implementamos una lógica sutil para permitir "full-bleed" addons.
-    const isMinimal = React.isValidElement(content) && 
-      (typeof content.type === 'function' || (content.props as any)?.className?.includes('h-'));
-
-    return (
-      <div className={cn(
-        "flex items-center justify-center shrink-0 select-none",
-        !isMinimal && "bg-khor-slate-100 border border-khor-slate-200 px-3 text-khor-neutral-500",
-        pos === 'before' ? "rounded-l-md border-r-0" : "rounded-r-md border-l-0"
-      )}>
-        {content}
-      </div>
-    );
-  };
-
-  const countInfo = {
-    value: currentVal,
-    count: currentVal.length,
-    maxLength,
-  };
-
-  const renderCount = () => {
-    if (!showCount) return null;
-    if (typeof showCount === 'object' && showCount.formatter) {
-      return showCount.formatter(countInfo);
-    }
-    return (
-       <span className="text-[10px] text-khor-neutral-400 ml-auto font-mono">
-         {countInfo.count}{maxLength ? ` / ${maxLength}` : ''}
-       </span>
-    );
-  };
-
-  return (
-    <div style={{ width: block ? '100%' : undefined, ...style }} className={cn("flex flex-col gap-1", block ? "w-full" : "", className)}>
-      <div className="flex w-full group">
-        {renderAddon(addonBefore, 'before')}
-        <div className={cn(
-          inputVariants({ variant, size, status, disabled, isFocused, isHovered }),
-          addonBefore && "rounded-l-none",
-          addonAfter && "rounded-r-none"
-        )}>
-          {prefix && <div className="ml-3 mr-1 flex items-center text-khor-neutral-400 shrink-0">{prefix}</div>}
-          <input
-            ref={inputRef}
-            disabled={disabled}
-            value={currentVal}
-            onChange={handleChange}
-            maxLength={maxLength}
-            className="w-full bg-transparent outline-none placeholder:text-[var(--khor-input-placeholder)] h-full disabled:cursor-not-allowed px-1"
-            {...rest}
-          />
-          <div className="flex items-center gap-2 shrink-0 ml-2">
-            {allowClear && currentVal && !disabled && (
-              <button 
-                type="button" 
-                onClick={handleClear}
-                className="text-khor-neutral-400 hover:text-khor-neutral-600 transition-colors"
-                title="Limpiar"
-              >
-                {typeof allowClear === 'object' && allowClear.clearIcon ? allowClear.clearIcon : <XCircle size={16} />}
-              </button>
-            )}
-            {suffix && <div className="flex items-center text-khor-neutral-500">{suffix}</div>}
-          </div>
+  // ── wrapper ────────────────────────────────────────────────────────────────
+  const inputBox = (
+    <div className={cn('flex w-full', addonBefore || addonAfter ? '' : '')}>
+      {addonBefore && (
+        <div className="flex items-center justify-center shrink-0 px-3 bg-[#F9FAFB] border border-[#D1D5DB] border-r-0 rounded-l-md text-sm text-[#6B7280]">
+          {addonBefore}
         </div>
-        {renderAddon(addonAfter, 'after')}
-      </div>
-      
-      <div className="flex items-center justify-between px-1 text-[0px] leading-[0px]">
-        {feedbackMsg && (
-          <p className={cn(
-            "text-xs m-0 font-primary",
-            status === 'error' ? "text-khor-error" : status === 'warning' ? "text-khor-warning" : "text-khor-neutral-500"
-          )} style={{ lineHeight: '1.2' }}>
-            {feedbackMsg}
-          </p>
+      )}
+
+      {/* inner field */}
+      <div
+        className={cn(
+          'relative flex w-full items-center',
+          'rounded-md border bg-white transition-all duration-150',
+          // status-based border + focus ring
+          !disabled && STATUS_CLASSES[status],
+          // focus forced (playground)
+          isFocused && !disabled && 'border-[#E04D36] shadow-[0_0_0_3px_rgba(224,77,54,0.15)]',
+          // hover forced
+          isHovered && !disabled && 'border-[#E04D36]',
+          // disabled
+          disabled && 'bg-[#F3F4F6] border-[#E5E7EB] pointer-events-none',
+          addonBefore && 'rounded-l-none',
+          addonAfter  && 'rounded-r-none',
         )}
-        {renderCount()}
+        style={{ height: s.h }}
+      >
+        {/* prefix icon */}
+        {prefix && (
+          <div
+            className={cn('flex shrink-0 items-center', disabled ? 'text-[#D1D5DB]' : 'text-[#9CA3AF]')}
+            style={{ paddingLeft: s.px, paddingRight: 6 }}
+          >
+            {prefix}
+          </div>
+        )}
+
+        {/* input */}
+        <input
+          ref={inputRef}
+          disabled={disabled}
+          value={currentVal}
+          defaultValue={undefined}
+          onChange={handleChange}
+          maxLength={maxLength}
+          className={cn(
+            'min-w-0 flex-1 bg-transparent outline-none focus-visible:outline-none h-full',
+            'placeholder:text-[#9CA3AF]',
+            disabled ? 'text-[#9CA3AF] cursor-not-allowed' : 'text-[#1e293b]',
+          )}
+          style={{
+            paddingLeft: prefix ? 4 : s.px,
+            paddingRight: 4,
+            fontSize: s.fs,
+          }}
+          {...rest}
+        />
+
+        {/* right side: clear + suffix + count */}
+        <div
+          className="flex shrink-0 items-center gap-1 self-stretch"
+          style={{ paddingRight: suffix ? 0 : s.px }}
+        >
+          {showClearBtn && (
+            <button
+              type="button"
+              onClick={handleClear}
+              tabIndex={-1}
+              className="flex items-center text-[#9CA3AF] hover:text-[#6B7280] transition-colors"
+            >
+              {typeof allowClear === 'object' && allowClear.clearIcon
+                ? allowClear.clearIcon
+                : <X size={s.iconSz - 1} />}
+            </button>
+          )}
+
+          {showCount && (() => {
+            const info = { value: currentVal, count: currentVal.length, maxLength };
+            return typeof showCount === 'object' && showCount.formatter
+              ? showCount.formatter(info)
+              : <span className="text-[10px] text-[#9CA3AF] font-mono">{currentVal.length}{maxLength ? `/${maxLength}` : ''}</span>;
+          })()}
+
+          {suffix && (
+            <div className={cn('flex items-center', disabled ? 'text-[#D1D5DB]' : 'text-[#9CA3AF]')}>
+              {suffix}
+            </div>
+          )}
+        </div>
       </div>
+
+      {addonAfter && (
+        <div className="flex items-center justify-center shrink-0 px-3 bg-[#F9FAFB] border border-[#D1D5DB] border-l-0 rounded-r-md text-sm text-[#6B7280]">
+          {addonAfter}
+        </div>
+      )}
     </div>
   );
-});
 
+  // ── help text ──────────────────────────────────────────────────────────────
+  const helpNode = feedbackMsg ? (
+    <span
+      className={cn('text-xs leading-none', STATUS_HELP[status])}
+      style={{ fontSize: 11 }}
+    >
+      {feedbackMsg}
+    </span>
+  ) : null;
+
+  // ── label node ─────────────────────────────────────────────────────────────
+  const labelNode = label ? (
+    <KLabel
+      size={size === 'lg' ? 'md' : 'sm'}
+      required={required}
+      optional={optional}
+      info={tooltip}
+      disabled={disabled}
+    >
+      {label}
+    </KLabel>
+  ) : null;
+
+  // ── layout ─────────────────────────────────────────────────────────────────
+  const outerStyle: React.CSSProperties = { width: block ? '100%' : undefined, ...style };
+
+  if (!label) {
+    return (
+      <div className={cn('flex flex-col gap-1', block && 'w-full', className)} style={outerStyle}>
+        {inputBox}
+        {helpNode}
+      </div>
+    );
+  }
+
+  if (labelPosition === 'side') {
+    return (
+      <div className={cn('flex items-start gap-3', block && 'w-full', className)} style={outerStyle}>
+        <div className="flex items-center shrink-0" style={{ height: s.h }}>
+          {labelNode}
+          {label && <span className={cn('ml-0.5', disabled ? 'text-[#9CA3AF]' : 'text-[#374151]')} style={{ fontSize: s.fs }}>:</span>}
+        </div>
+        <div className="flex flex-col gap-1 flex-1">
+          {inputBox}
+          {helpNode}
+        </div>
+      </div>
+    );
+  }
+
+  // top (default)
+  return (
+    <div className={cn('flex flex-col gap-1', block && 'w-full', className)} style={outerStyle}>
+      {labelNode}
+      {inputBox}
+      {helpNode}
+    </div>
+  );
+},
+);
+
+// ─── KInputPassword ───────────────────────────────────────────────────────────
 export interface KInputPasswordProps extends KInputProps {
-  /** 
-   * Configuración del toggle de visibilidad.
-   * boolean o objeto para controlar estado.
-   */
   visibilityToggle?: boolean | { visible?: boolean; onVisibleChange?: (visible: boolean) => void };
-  /** Renderizado personalizado del icono */
   iconRender?: (visible: boolean) => React.ReactNode;
 }
 
-/**
- * KInputPassword — Variante de input para contraseñas con toggle de visibilidad.
- */
-/**
- * @figma-mcp-migration
- * Component: KInputPassword
- * 
- * INSTRUCCIONES PARA AGENTES DE IA (VS Code / MCP):
- * Para migrar este componente a Figma, NO generar una matriz multiplicando todas las variables.
- * Utilizar Figma Component Properties V2 con la siguiente estructura:
- * 
- * 1. Variants (Estructurales):
- *    - Definir variantes puramente visuales/estructurales.
- * 2. Booleans (Encendido/Apagado):
- *    - Definir encendido/apagado para iconos o estados (isLoading, hasIcon).
- * 3. Color Variables (No usar variantes para colores semánticos):
- *    - El relleno/borde debe usar Figma Variables (Khor v6.0 Colors) asignado dinámicamente.
- *    - El consumidor del UI Kit cambiará el color del layer.
- */
-export const KInputPassword = React.forwardRef<HTMLInputElement, KInputPasswordProps>(function KInputPassword(
-  { prefix, suffix, visibilityToggle = true, iconRender, ...rest },
-  ref,
-) {
-  const [internalVisible, setInternalVisible] = useState(false);
-  const isToggleControlled = typeof visibilityToggle === 'object' && visibilityToggle.visible !== undefined;
-  const visible = isToggleControlled ? (visibilityToggle as any).visible : internalVisible;
+export const KInputPassword = React.forwardRef<HTMLInputElement, KInputPasswordProps>(
+  function KInputPassword({ prefix, suffix, visibilityToggle = true, iconRender, ...rest }, ref) {
+    const [internalVisible, setInternalVisible] = useState(false);
+    const isControlled = typeof visibilityToggle === 'object' && visibilityToggle.visible !== undefined;
+    const visible = isControlled ? (visibilityToggle as any).visible : internalVisible;
 
-  const toggleVisibility = () => {
-    const next = !visible;
-    if (!isToggleControlled) setInternalVisible(next);
-    if (typeof visibilityToggle === 'object' && visibilityToggle.onVisibleChange) {
-      visibilityToggle.onVisibleChange(next);
-    }
-  };
+    const toggle = () => {
+      if (!isControlled) setInternalVisible(v => !v);
+      if (typeof visibilityToggle === 'object') visibilityToggle.onVisibleChange?.(!visible);
+    };
 
-  const passwordSuffix = visibilityToggle ? (
-    <button
-      type="button"
-      onClick={toggleVisibility}
-      className="flex items-center justify-center text-khor-neutral-400 hover:text-khor-neutral-600 outline-none transition-all hover:scale-110 active:scale-90"
-      style={{ width: 20, height: 20 }}
-      title={visible ? "Ocultar contraseña" : "Mostrar contraseña"}
-    >
-      {iconRender ? iconRender(visible) : (visible ? <EyeOff size={16} /> : <Eye size={16} />)}
-    </button>
-  ) : null;
+    const eyeBtn = visibilityToggle ? (
+      <button
+        type="button"
+        onClick={toggle}
+        className="flex items-center text-[#9CA3AF] hover:text-[#6B7280] transition-colors outline-none"
+        tabIndex={-1}
+      >
+        {iconRender ? iconRender(visible) : (visible ? <EyeOff size={14} /> : <Eye size={14} />)}
+      </button>
+    ) : null;
 
-  return (
-    <KInput
-      {...rest}
-      ref={ref}
-      type={visible ? 'text' : 'password'}
-      prefix={prefix}
-      suffix={
-        <div className="flex items-center gap-2">
-          {suffix}
-          {passwordSuffix}
-        </div>
-      }
-    />
-  );
-});
+    return (
+      <KInput
+        {...rest}
+        ref={ref}
+        type={visible ? 'text' : 'password'}
+        prefix={prefix}
+        suffix={<div className="flex items-center gap-1">{suffix}{eyeBtn}</div>}
+      />
+    );
+  },
+);
 
-// Composed Component Type
-export interface CompoundedComponent extends React.ForwardRefExoticComponent<KInputProps & React.RefAttributes<HTMLInputElement>> {
+// ─── Compound type ─────────────────────────────────────────────────────────────
+export interface CompoundedComponent
+  extends React.ForwardRefExoticComponent<KInputProps & React.RefAttributes<HTMLInputElement>> {
   Password: typeof KInputPassword;
   Search: typeof KInputSearch;
   TextArea: typeof KTextArea;
@@ -292,12 +326,10 @@ export interface CompoundedComponent extends React.ForwardRefExoticComponent<KIn
 }
 
 export const KInput = BaseInput as CompoundedComponent;
-
 KInput.Password = KInputPassword;
-KInput.Search = KInputSearch;
+KInput.Search   = KInputSearch;
 KInput.TextArea = KTextArea;
-KInput.OTP = KInputOTP;
-
-KInput.displayName = "KInput";
+KInput.OTP      = KInputOTP;
+KInput.displayName = 'KInput';
 
 export default KInput;

@@ -177,11 +177,11 @@ export const KTitle = React.forwardRef<HTMLHeadingElement, BaseTypographyProps &
   ({ level = 1, children, className, ...props }, ref) => {
     const Component = `h${level}` as any;
     const levelClasses = {
-      1: 'text-[var(--khor-font-size-h1)] font-bold leading-[var(--khor-line-height-heading)] tracking-tight',
-      2: 'text-[var(--khor-font-size-h2)] font-bold leading-[var(--khor-line-height-heading)] tracking-tight',
-      3: 'text-[var(--khor-font-size-h3)] font-semibold leading-[var(--khor-line-height-heading)]',
+      1: 'text-[var(--khor-font-size-h1)] font-bold leading-[var(--khor-line-height-heading)] tracking-normal',
+      2: 'text-[var(--khor-font-size-h2)] font-semibold leading-[var(--khor-line-height-heading)] tracking-normal',
+      3: 'text-[var(--khor-font-size-h3)] font-bold leading-[var(--khor-line-height-heading)]',
       4: 'text-[var(--khor-font-size-h4)] font-semibold leading-[var(--khor-line-height-heading)]',
-      5: 'text-[var(--khor-font-size-h5)] font-semibold leading-[var(--khor-line-height-body)]',
+      5: 'text-[var(--khor-font-size-h5)] font-bold leading-[var(--khor-line-height-body)]',
       6: 'text-[var(--khor-font-size-h6)] font-semibold leading-[var(--khor-line-height-body)]',
     }[level];
 
@@ -200,19 +200,38 @@ export const KTitle = React.forwardRef<HTMLHeadingElement, BaseTypographyProps &
   }
 );
 
-export const KText = React.forwardRef<HTMLSpanElement, BaseTypographyProps & { 
+/* Named color → CSS variable mapping. Any unknown value passes through as-is (CSS color / hex). */
+const COLOR_MAP: Record<string, string> = {
+  primary:             'var(--khor-text-primary)',
+  secondary:           'var(--khor-text-secondary)',
+  muted:               'var(--khor-text-muted)',
+  disabled:            'var(--khor-text-disabled)',
+  'on-dark':           'var(--khor-text-on-dark)',
+  'on-dark-secondary': 'var(--khor-text-on-dark-secondary)',
+  'on-dark-muted':     'var(--khor-text-on-dark-muted)',
+  label:               'var(--khor-text-label)',
+  white:               'var(--khor-text-on-dark)',
+  navy:                'var(--khor-text-primary)',   // "navy" CSS keyword is #000080 — map to design token
+  success:             'var(--khor-success)',
+  danger:              'var(--khor-error)',
+  warning:             'var(--khor-warning)',
+  link:                'var(--khor-text-link)',
+};
+
+export const KText = React.forwardRef<HTMLSpanElement, BaseTypographyProps & {
   variant?: 'display-1' | 'display-2' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'body-lg' | 'body-md' | 'small' | 'caption' | 'overline';
   color?: string;
 }>(
   ({ children, className, variant = 'body-md', color, ...props }, ref) => {
+    const resolvedColor = color ? (COLOR_MAP[color] ?? color) : props.style?.color;
     const variantClasses = {
       'display-1': 'text-[var(--khor-font-size-display-1)] font-extrabold leading-[var(--khor-line-height-display)] tracking-tighter',
       'display-2': 'text-[var(--khor-font-size-display-2)] font-extrabold leading-[var(--khor-line-height-display)] tracking-tighter',
-      h1: 'text-[var(--khor-font-size-h1)] font-bold leading-[var(--khor-line-height-heading)] tracking-tight',
-      h2: 'text-[var(--khor-font-size-h2)] font-bold leading-[var(--khor-line-height-heading)] tracking-tight',
-      h3: 'text-[var(--khor-font-size-h3)] font-semibold leading-[var(--khor-line-height-heading)]',
+      h1: 'text-[var(--khor-font-size-h1)] font-bold leading-[var(--khor-line-height-heading)] tracking-normal',
+      h2: 'text-[var(--khor-font-size-h2)] font-semibold leading-[var(--khor-line-height-heading)] tracking-normal',
+      h3: 'text-[var(--khor-font-size-h3)] font-bold leading-[var(--khor-line-height-heading)]',
       h4: 'text-[var(--khor-font-size-h4)] font-semibold leading-[var(--khor-line-height-heading)]',
-      h5: 'text-[var(--khor-font-size-h5)] font-semibold leading-[var(--khor-line-height-body)]',
+      h5: 'text-[var(--khor-font-size-h5)] font-bold leading-[var(--khor-line-height-body)]',
       h6: 'text-[var(--khor-font-size-h6)] font-semibold leading-[var(--khor-line-height-body)]',
       'body-lg': 'text-[var(--khor-font-size-body-lg)] leading-[var(--khor-line-height-body)]',
       'body-md': 'text-[var(--khor-font-size-body-md)] leading-[var(--khor-line-height-body)]',
@@ -236,7 +255,7 @@ export const KText = React.forwardRef<HTMLSpanElement, BaseTypographyProps & {
           variantClasses, 
           className
         )}
-        style={{ ...props.style, ...ellipsisStyles, color: color || props.style?.color }}
+        style={{ ...props.style, ...ellipsisStyles, color: resolvedColor }}
       >
         {formatContent(children, props)}
         <ExtraActions props={props} textValue={children?.toString() || ''} onUpdate={(val) => {

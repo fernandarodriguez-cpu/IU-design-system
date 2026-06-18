@@ -3,14 +3,14 @@
  * Permite ajustar colores, tipografía, sombras, radii, spacing y ver preview en tiempo real.
  * Incluye presets de marca y exportación multi-formato.
  */
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
-  Palette, RotateCcw, Download, Copy, Check, Sun, Moon,
-  Type, Maximize, Square, Eye, Layers, Zap, Droplets,
+  Palette, RotateCcw, Download, Copy, Check,
+  Type, Maximize, Square, Layers,
   ChevronDown, ChevronRight, Sparkles, FileText,
 } from 'lucide-react';
-import { KButton, KInput, KBadge, KSwitch, KProgress, KAlert, KAvatar, KTag, KCheckbox, KSearchInput } from '../components/design-system/atoms/index';
-import { KStatCard, KFormField } from '../components/design-system/molecules/index';
+import { KButton, KInput, KBadge, KSwitch, KProgress, KAlert, KAvatar, KTag, KCheckbox } from '../components/design-system/atoms/index';
+import { KFormField } from '../components/design-system/molecules/index';
 import { khorTokens } from '../theme/khor-theme';
 import { useTheme, ThemeConfig, defaultTheme } from '../theme/theme-context';
 import { generateMarkdown as generateCompleteGuide, defaultSections } from './AIExportPage';
@@ -34,7 +34,7 @@ const presets: ThemePreset[] = [
   {
     name: 'Khor Official',
     description: 'Configuración estándar del Design System',
-    accent_color: '#E04D36',
+    accent_color: '#051758',
     config: { ...defaultTheme },
   },
   {
@@ -180,7 +180,7 @@ function SectionCard({ icon, title, children, defaultOpen = true }: { icon: Reac
         onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'var(--muted)')}
         onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
       >
-        <span style={{ color: t.colors.brand.primary, display: 'flex', alignItems: 'center' }}>{icon}</span>
+        <span style={{ color: 'var(--khor-text-label)', display: 'flex', alignItems: 'center' }}>{icon}</span>
         <span style={{ flex: 1, textAlign: 'left', fontSize: 13, fontWeight: 600 }}>{title}</span>
         {open ? <ChevronDown size={14} color="var(--muted-foreground)" /> : <ChevronRight size={14} color="var(--muted-foreground)" />}
       </button>
@@ -498,7 +498,7 @@ $khor-space-xl: ${theme.spaceXl}px;`, [theme]);
     <div style={{ fontFamily: font }}>
       {/* Header */}
       <div style={{ marginBottom: 24 }}>
-        <span style={{ fontSize: 11, fontWeight: 600, color: t.colors.brand.primary, textTransform: 'uppercase', letterSpacing: 1 }}>Personalización</span>
+        <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--khor-text-label)', textTransform: 'uppercase', letterSpacing: 1 }}>Personalización</span>
         <h2 style={{ margin: '4px 0 0', fontSize: 30, fontWeight: 700, color: 'var(--foreground)' }}>Theming en Vivo</h2>
         <p style={{ margin: '8px 0 0', fontSize: 16, color: 'var(--muted-foreground)', lineHeight: 1.5 }}>
           Personaliza todos los tokens del Design System — colores, tipografía, sombras, border radius y espaciado.
@@ -671,7 +671,7 @@ $khor-space-xl: ${theme.spaceXl}px;`, [theme]);
               <Download size={14} /> JSON (W3C DTCG)
             </button>
             <div style={{ height: 1, backgroundColor: 'var(--border)', margin: '4px 0' }} />
-            <button onClick={() => handleDownload(generateCompleteGuide(defaultSections, theme), 'khor-system-guide.md')} style={{ ...exportBtnStyle, color: t.colors.brand.primary, fontWeight: 600 }}>
+            <button onClick={() => handleDownload(generateCompleteGuide(defaultSections, theme), 'khor-system-guide.md')} style={{ ...exportBtnStyle, color: 'var(--khor-text-primary)', fontWeight: 600 }}>
               <FileText size={14} /> Guía Completa del Sistema para AI (.md)
             </button>
             <button onClick={() => handleDownload(generateManifest(), 'khor-plugin-manifest.json')} style={{ ...exportBtnStyle, color: '#7C3AED', fontWeight: 600 }}>

@@ -16,7 +16,7 @@ const tagVariants = cva(
       color: {
         primary: 'bg-khor-primary/10 text-khor-primary border-khor-primary/20',
         secondary: 'bg-khor-secondary/10 text-khor-secondary border-khor-secondary/20',
-        navy: 'bg-khor-secondary/10 text-khor-secondary border-khor-secondary/20',
+        navy: 'bg-khor-navy/10 text-khor-navy border-khor-navy/20',
         accent: 'bg-khor-accent/10 text-khor-accent border-khor-accent/20',
         success: 'bg-khor-success/10 text-khor-success border-khor-success/20',
         error: 'bg-khor-error/10 text-khor-error border-khor-error/20',

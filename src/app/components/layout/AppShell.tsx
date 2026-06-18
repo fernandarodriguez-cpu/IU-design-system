@@ -1,23 +1,14 @@
-/**
- * ╔═══════════════════════════════════════════╗
- * ║  KHOR APP SHELL — Template Principal      ║
- * ║  Sidebar (260px Navy) + Header (64px) +   ║
- * ║  Canvas (#EDF0F1)                         ║
- * ╚═══════════════════════════════════════════╝
- */
 import React, { useState } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router';
 import {
-  Home, Atom, Layers, Box, LayoutTemplate, Palette,
-  ChevronDown, ChevronRight, Sparkles, Menu, X, Search,
-  Shield, Clock, Figma, Moon, Sun, Bot, Brush, BookOpen,
+  Home, Atom, Layers, Box, Palette, Wrench,
+  ChevronDown, ChevronLeft, ChevronRight, Search, BookOpen,
 } from 'lucide-react';
 import { KNavItem } from '../design-system/molecules/KNavItem';
 import { patterns } from '../../patterns/index';
 import { khorTokens } from '../../theme/khor-theme';
 import { KHOR_VERSION } from '../../version/version';
 import { KCommandBar, useCommandBar } from '../design-system/command-bar';
-import { useTheme } from '../../theme/theme-context';
 import khorCounts from '../../metadata/khor-counts.json';
 
 /* Dot estilizado para sub-items en sidebar expandido */
@@ -29,8 +20,8 @@ const NavDot = () => (
   }} />
 );
 
-/* Color fijo del sidebar — no debe cambiar con dark mode */
-const SIDEBAR_BG = khorTokens.colors.brand.secondary;
+/* Sidebar background uses the brand navy, fixed regardless of theme */
+const SIDEBAR_BG = khorTokens.colors.brand.navy;
 const SIDEBAR_COLLAPSED_WIDTH = khorTokens.sizing[16];
 
 interface NavSection {
@@ -43,12 +34,12 @@ interface NavSection {
 const navigation: NavSection[] = [
   {
     title: 'Inicio',
-    icon: <Home size={18} strokeWidth={2} />,
+    icon: <Home size={14} strokeWidth={1.5} />,
     path: '/',
   },
   {
     title: 'Tokens',
-    icon: <Palette size={18} strokeWidth={2} />,
+    icon: <Palette size={14} strokeWidth={1.5} />,
     items: [
       { label: 'Core Color Palette', path: '/tokens#color' },
       { label: 'Semantic Application Layer', path: '/tokens#semantic-layer' },
@@ -63,104 +54,108 @@ const navigation: NavSection[] = [
   },
   {
     title: 'Átomos',
-    icon: <Atom size={18} strokeWidth={2} />,
+    icon: <Atom size={14} strokeWidth={1.5} />,
     items: [
-      { label: 'KAlert', path: '/atoms/alert' },
-      { label: 'KAvatar', path: '/atoms/avatar' },
-      { label: 'KBadge', path: '/atoms/badge' },
-      { label: 'KButton', path: '/atoms/button' },
-      { label: 'KButtonGroup', path: '/atoms/button-group' },
-      { label: 'KCheckbox', path: '/atoms/checkbox' },
-      { label: 'KDivider', path: '/atoms/divider' },
-      { label: 'KScrollBar', path: '/atoms/scrollbar' },
-      { label: 'KSkeleton', path: '/atoms/skeleton' },
-      { label: 'KFlex', path: '/atoms/flex' },
-      { label: 'KFloatButton', path: '/atoms/float-button' },
-      { label: 'KGrid (Row/Col)', path: '/atoms/grid' },
-      { label: 'KImage', path: '/atoms/image' },
-      { label: 'KInput', path: '/atoms/input' },
-      { label: 'KInputPassword', path: '/atoms/input-password' },
-      { label: 'KSearchInput', path: '/atoms/search-input' },
-      { label: 'KPhoneInput', path: '/atoms/phone-input' },
-      { label: 'KProgress', path: '/atoms/progress' },
-      { label: 'KQRCode', path: '/atoms/qrcode' },
-      { label: 'KRadio', path: '/atoms/radio' },
-      { label: 'KSlider', path: '/atoms/slider' },
-      { label: 'KSpace', path: '/atoms/space' },
-      { label: 'KSpin', path: '/atoms/spin' },
-      { label: 'KSwitch', path: '/atoms/switch' },
-      { label: 'KTag', path: '/atoms/tag' },
-      { label: 'KTextArea', path: '/atoms/textarea' },
-      { label: 'KTooltip', path: '/atoms/tooltip' },
-      { label: 'KTypography', path: '/atoms/typography' },
+      { label: 'Alert', path: '/atoms/alert' },
+      { label: 'Avatar', path: '/atoms/avatar' },
+      { label: 'Badge', path: '/atoms/badge' },
+      { label: 'Button', path: '/atoms/button' },
+      { label: 'ButtonGroup', path: '/atoms/button-group' },
+      { label: 'Checkbox', path: '/atoms/checkbox' },
+      { label: 'Divider', path: '/atoms/divider' },
+      { label: 'ScrollBar', path: '/atoms/scrollbar' },
+      { label: 'Skeleton', path: '/atoms/skeleton' },
+      { label: 'Flex', path: '/atoms/flex' },
+      { label: 'FloatButton', path: '/atoms/float-button' },
+      { label: 'Grid (Row/Col)', path: '/atoms/grid' },
+      { label: 'Image', path: '/atoms/image' },
+      { label: 'Input', path: '/atoms/input' },
+      { label: 'InputPassword', path: '/atoms/input-password' },
+      { label: 'SearchInput', path: '/atoms/search-input' },
+      { label: 'PhoneInput', path: '/atoms/phone-input' },
+      { label: 'SelectInput', path: '/atoms/select-input' },
+      { label: 'Progress', path: '/atoms/progress' },
+      { label: 'QRCode', path: '/atoms/qrcode' },
+      { label: 'Radio', path: '/atoms/radio' },
+      { label: 'Slider', path: '/atoms/slider' },
+      { label: 'Space', path: '/atoms/space' },
+      { label: 'Spin', path: '/atoms/spin' },
+      { label: 'Switch', path: '/atoms/switch' },
+      { label: 'Tag', path: '/atoms/tag' },
+      { label: 'TextArea', path: '/atoms/textarea' },
+      { label: 'Tooltip', path: '/atoms/tooltip' },
+      { label: 'Typography', path: '/atoms/typography' },
     ],
   },
   {
     title: 'Moléculas',
-    icon: <Layers size={18} strokeWidth={2} />,
+    icon: <Layers size={14} strokeWidth={1.5} />,
     items: [
-      { label: 'KAccordion', path: '/molecules/accordion' },
-      { label: 'KAnchor', path: '/molecules/anchor' },
-      { label: 'KAutocomplete', path: '/molecules/autocomplete' },
-      { label: 'KBreadcrumb', path: '/molecules/breadcrumb' },
-      { label: 'KCascader', path: '/molecules/cascader' },
-      { label: 'KColorPicker', path: '/molecules/color-picker' },
-      { label: 'KContextMenu', path: '/molecules/context-menu' },
-      { label: 'KDatePicker', path: '/molecules/date-picker' },
-      { label: 'KDateRangePicker', path: '/molecules/date-range' },
-      { label: 'KDescriptions', path: '/molecules/descriptions' },
-      { label: 'KDividerExtended', path: '/molecules/divider-extended' },
-      { label: 'KDropdownMenu', path: '/molecules/dropdown' },
-      { label: 'KEmptyState', path: '/molecules/empty-state' },
-      { label: 'KFormField', path: '/molecules/form-field' },
-      { label: 'KHoverCard', path: '/molecules/hover-card' },
-      { label: 'KInputNumber', path: '/molecules/input-number' },
-      { label: 'KList', path: '/molecules/list' },
-      { label: 'KNavItem', path: '/molecules/nav-item' },
-      { label: 'KPopconfirm', path: '/molecules/popconfirm' },
-      { label: 'KPopover', path: '/molecules/popover' },
-      { label: 'KResult', path: '/molecules/result' },
-      { label: 'KSegmented', path: '/molecules/segmented' },
-      { label: 'KSelectAdvanced', path: '/molecules/select-advanced' },
-      { label: 'KSelectField', path: '/molecules/select-field' },
-      { label: 'KStatCard', path: '/molecules/stat-card' },
-      { label: 'KStatistic', path: '/molecules/statistic' },
-      { label: 'KSteps', path: '/molecules/steps' },
-      { label: 'KTimeline', path: '/molecules/timeline' },
-      { label: 'KTimePicker', path: '/molecules/time-picker' },
-      { label: 'KUserCell', path: '/molecules/user-cell' },
+      { label: 'Accordion', path: '/molecules/accordion' },
+      { label: 'Anchor', path: '/molecules/anchor' },
+      { label: 'Autocomplete', path: '/molecules/autocomplete' },
+      { label: 'Breadcrumb', path: '/molecules/breadcrumb' },
+      { label: 'Cascader', path: '/molecules/cascader' },
+      { label: 'ColorPicker', path: '/molecules/color-picker' },
+      { label: 'ContextMenu', path: '/molecules/context-menu' },
+      { label: 'DatePicker', path: '/molecules/date-picker' },
+      { label: 'Descriptions', path: '/molecules/descriptions' },
+      { label: 'DividerExtended', path: '/molecules/divider-extended' },
+      { label: 'DropdownMenu', path: '/molecules/dropdown' },
+      { label: 'EmptyState', path: '/molecules/empty-state' },
+      { label: 'FormField', path: '/molecules/form-field' },
+      { label: 'HoverCard', path: '/molecules/hover-card' },
+      { label: 'InputNumber', path: '/molecules/input-number' },
+      { label: 'List', path: '/molecules/list' },
+      { label: 'NavItem', path: '/molecules/nav-item' },
+      { label: 'Popconfirm', path: '/molecules/popconfirm' },
+      { label: 'Popover', path: '/molecules/popover' },
+      { label: 'Result', path: '/molecules/result' },
+      { label: 'Segmented', path: '/molecules/segmented' },
+      { label: 'SelectAdvanced', path: '/molecules/select-advanced' },
+      { label: 'SelectField', path: '/molecules/select-field' },
+      { label: 'StatCard', path: '/molecules/stat-card' },
+      { label: 'Statistic', path: '/molecules/statistic' },
+      { label: 'Steps', path: '/molecules/steps' },
+      { label: 'Timeline', path: '/molecules/timeline' },
+      { label: 'TimePicker', path: '/molecules/time-picker' },
+      { label: 'UserCell', path: '/molecules/user-cell' },
     ],
   },
   {
     title: 'Organismos',
-    icon: <Box size={18} strokeWidth={2} />,
+    icon: <Box size={14} strokeWidth={1.5} />,
     items: [
-      { label: 'KCalendar', path: '/organisms/calendar' },
-      { label: 'KCardSection', path: '/organisms/card-section' },
-      { label: 'KCarousel', path: '/organisms/carousel' },
-      { label: 'KCommandBar', path: '/organisms/command-bar' },
-      { label: 'KDataTable', path: '/organisms/data-table' },
-      { label: 'KForm', path: '/organisms/form' },
-      { label: 'KFormList', path: '/organisms/form-list' },
-      { label: 'KFormWizard', path: '/organisms/form-wizard' },
-      { label: 'KLoginForm', path: '/organisms/login-form' },
-      { label: 'KModal', path: '/organisms/modal' },
-      { label: 'KPagination', path: '/organisms/pagination' },
-      { label: 'KResizable', path: '/organisms/resizable' },
-      { label: 'KSheet', path: '/organisms/sheet' },
-      { label: 'KSparklineCell', path: '/organisms/sparkline' },
-      { label: 'KTabs', path: '/organisms/tabs' },
-      { label: 'KToastManager', path: '/organisms/toast-manager' },
-      { label: 'KTour', path: '/organisms/tour' },
-      { label: 'KTree', path: '/organisms/tree' },
-      { label: 'KUpload', path: '/organisms/upload' },
-      { label: 'KGantt Timeline', path: '/organisms/gantt' },
-      { label: 'KEditor Pro', path: '/organisms/editor' },
+      { label: 'Calendar', path: '/organisms/calendar' },
+      { label: 'CardSection', path: '/organisms/card-section' },
+      { label: 'Carousel', path: '/organisms/carousel' },
+      { label: 'CommandBar', path: '/organisms/command-bar' },
+      { label: 'DataTable', path: '/organisms/data-table' },
+      { label: 'Form', path: '/organisms/form' },
+      { label: 'FormList', path: '/organisms/form-list' },
+      { label: 'FormWizard', path: '/organisms/form-wizard' },
+      { label: 'LoginForm', path: '/organisms/login-form' },
+      { label: 'Modal', path: '/organisms/modal' },
+      { label: 'Pagination', path: '/organisms/pagination' },
+      { label: 'Resizable', path: '/organisms/resizable' },
+      { label: 'Sheet', path: '/organisms/sheet' },
+      { label: 'SparklineCell', path: '/organisms/sparkline' },
+      { label: 'Tabs', path: '/organisms/tabs' },
+      { label: 'ToastManager', path: '/organisms/toast-manager' },
+      { label: 'Tour', path: '/organisms/tour' },
+      { label: 'Tree', path: '/organisms/tree' },
+      { label: 'Upload', path: '/organisms/upload' },
+      { label: 'Gantt Timeline', path: '/organisms/gantt' },
+      { label: 'Header', path: '/organisms/header' },
+      { label: 'Editor Pro', path: '/organisms/editor' },
+      { label: 'SidebarMenu', path: '/organisms/sidebar-menu' },
+      { label: 'Gráficas', path: '/organisms/charts' },
+      { label: 'Page Layouts', path: '/layouts' },
     ],
   },
   {
     title: 'Patrones / Recipes',
-    icon: <BookOpen size={18} strokeWidth={2} />,
+    icon: <BookOpen size={14} strokeWidth={1.5} />,
     items: [
       { label: 'Todos los Patrones', path: '/patterns' },
       ...patterns.map(p => ({ label: p.title, path: `/patterns/${p.id}` })),
@@ -168,11 +163,11 @@ const navigation: NavSection[] = [
   },
   {
     title: 'Herramientas',
-    icon: <Sparkles size={18} strokeWidth={2} />,
+    icon: <Wrench size={14} strokeWidth={1.5} />,
     items: [
       { label: 'Theming en Vivo', path: '/theming' },
       { label: 'Explorador de Iconos', path: '/icons' },
-      { label: 'Khor Guardian (A11y)', path: '/guardian' },
+      { label: 'hor Guardian (A11y)', path: '/guardian' },
       { label: 'Exportar a Figma', path: '/figma-export' },
       { label: 'Inspiración Elite', path: '/inspiration' },
       { label: 'Guía para IA', path: '/ai-export' },
@@ -187,7 +182,6 @@ export function AppShell() {
   const [collapsed, setCollapsed] = useState(false);
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({});
   const { open: cmdOpen, setOpen: setCmdOpen } = useCommandBar();
-  const { mode, toggleDark, isDark } = useTheme();
 
   const toggleSection = (title: string) => {
     setOpenSections((prev) => ({ ...prev, [title]: !prev[title] }));
@@ -229,7 +223,7 @@ export function AppShell() {
               </div>
               <div>
                 <div style={{ color: khorTokens.colors.feedback.white, fontWeight: khorTokens.typography.fontWeights.bold, fontSize: khorTokens.typography.bodyLg.size, lineHeight: 1 }}>Khor</div>
-                <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: 10, fontWeight: khorTokens.typography.fontWeights.medium }}>Design System</div>
+                <div style={{ color: 'var(--khor-text-on-dark-muted)', fontSize: 10, fontWeight: khorTokens.typography.fontWeights.medium }}>Design System</div>
               </div>
             </div>
           )}
@@ -240,6 +234,11 @@ export function AppShell() {
           {navigation.map((section) => {
             const isDirectLink = !!section.path && !section.items;
             const isDirectActive = isDirectLink && location.pathname === section.path;
+            const isSectionActive = !isDirectLink && !!section.items?.some(item => {
+              const [itemPath] = item.path.split('#');
+              return location.pathname === itemPath || location.pathname.startsWith(itemPath + '/');
+            });
+            const isAnyActive = isDirectActive || isSectionActive;
 
             return (
               <div key={section.title} style={{ marginBottom: 4 }}>
@@ -259,27 +258,30 @@ export function AppShell() {
                       alignItems: 'center',
                       justifyContent: 'center',
                       width: '100%',
-                      height: 44,
+                      height: 50,
                       padding: 0,
                       border: 'none',
-                      background: isDirectActive ? 'rgba(255,255,255,0.12)' : 'none',
-                      color: isDirectActive ? khorTokens.colors.feedback.white : 'rgba(255,255,255,0.6)',
+                      background: isAnyActive ? 'rgba(255,255,255,0.08)' : 'none',
+                      color: isAnyActive ? 'var(--khor-text-on-dark)' : 'var(--khor-text-on-dark-secondary)',
                       cursor: 'pointer',
-                      borderRadius: khorTokens.radius.md,
-                      transition: 'all 0.15s ease',
+                      borderRadius: 0,
+                      transition: 'background 0.15s ease, color 0.15s ease',
                       position: 'relative',
+                      overflow: 'hidden',
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.08)';
-                      e.currentTarget.style.color = khorTokens.colors.feedback.white;
+                      if (!isAnyActive) {
+                        e.currentTarget.style.backgroundColor = 'rgba(47,71,143,1)';
+                        e.currentTarget.style.color = 'var(--khor-text-on-dark)';
+                      }
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = isDirectActive ? 'rgba(255,255,255,0.12)' : 'transparent';
-                      e.currentTarget.style.color = isDirectActive ? khorTokens.colors.feedback.white : 'rgba(255,255,255,0.6)';
+                      e.currentTarget.style.backgroundColor = isAnyActive ? 'rgba(255,255,255,0.08)' : 'transparent';
+                      e.currentTarget.style.color = isAnyActive ? 'var(--khor-text-on-dark)' : 'var(--khor-text-on-dark-secondary)';
                     }}
                   >
-                    {isDirectActive && (
-                      <div style={{ position: 'absolute', left: 0, top: '50%', transform: 'translateY(-50%)', width: 3, height: 20, borderRadius: '0 3px 3px 0', backgroundColor: khorTokens.colors.brand.primary }} />
+                    {isAnyActive && (
+                      <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 4, borderRadius: 0, backgroundColor: 'rgba(224,77,54,1)' }} />
                     )}
                     {section.icon}
                   </button>
@@ -292,35 +294,35 @@ export function AppShell() {
                       alignItems: 'center',
                       gap: khorTokens.spacing.sm,
                       width: '100%',
-                      padding: `${khorTokens.spacing.sm}px ${khorTokens.spacing.md}px`,
+                      height: 50,
+                      padding: `0 ${khorTokens.spacing.md}px`,
                       border: 'none',
-                      background: isDirectActive ? 'rgba(255,255,255,0.12)' : 'none',
-                      color: isDirectActive ? khorTokens.colors.feedback.white : 'rgba(255,255,255,0.7)',
-                      fontSize: 13,
-                      fontWeight: khorTokens.typography.fontWeights.semibold,
+                      background: isDirectActive ? 'rgba(255,255,255,0.08)' : 'none',
+                      color: isDirectActive ? '#ffffff' : 'rgba(179,180,187,1)',
+                      fontSize: 14,
+                      fontWeight: isDirectActive ? 600 : 400,
                       cursor: 'pointer',
                       fontFamily: khorTokens.typography.fontPrimary,
-                      borderRadius: khorTokens.radius.md,
-                      transition: 'all 0.15s ease',
+                      borderRadius: 0,
+                      transition: 'background 0.15s ease, color 0.15s ease',
                       position: 'relative',
-                      textTransform: 'uppercase',
-                      letterSpacing: khorTokens.typography.letterSpacing.wide,
+                      overflow: 'hidden',
                     }}
                     onMouseEnter={(e) => {
                       if (!isDirectActive) {
-                        e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.06)';
-                        e.currentTarget.style.color = khorTokens.colors.feedback.white;
+                        e.currentTarget.style.backgroundColor = 'rgba(47,71,143,1)';
+                        e.currentTarget.style.color = 'var(--khor-text-on-dark)';
                       }
                     }}
                     onMouseLeave={(e) => {
                       if (!isDirectActive) {
                         e.currentTarget.style.backgroundColor = 'transparent';
-                        e.currentTarget.style.color = 'rgba(255,255,255,0.7)';
+                        e.currentTarget.style.color = 'rgba(179,180,187,1)';
                       }
                     }}
                   >
                     {isDirectActive && (
-                      <div style={{ position: 'absolute', left: 0, top: '50%', transform: 'translateY(-50%)', width: 3, height: 20, borderRadius: '0 3px 3px 0', backgroundColor: '#E04D36' }} />
+                      <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 4, borderRadius: 0, backgroundColor: 'rgba(224,77,54,1)' }} />
                     )}
                     {section.icon}
                     <span>{section.title}</span>
@@ -335,25 +337,41 @@ export function AppShell() {
                         alignItems: 'center',
                         gap: khorTokens.spacing.sm,
                         width: '100%',
-                        padding: `6px ${khorTokens.spacing.md}px`,
+                        height: 50,
+                        padding: `0 ${khorTokens.spacing.md}px`,
                         border: 'none',
-                        background: 'none',
-                        color: 'rgba(255,255,255,0.4)',
-                        fontSize: 11,
-                        fontWeight: khorTokens.typography.fontWeights.semibold,
-                        textTransform: 'uppercase',
-                        letterSpacing: khorTokens.typography.letterSpacing.wider,
+                        background: isSectionActive ? 'rgba(255,255,255,0.08)' : 'none',
+                        color: isSectionActive ? '#ffffff' : 'rgba(179,180,187,1)',
+                        fontSize: 14,
+                        fontWeight: isSectionActive ? 600 : 400,
                         cursor: 'pointer',
                         fontFamily: khorTokens.typography.fontPrimary,
+                        borderRadius: 0,
+                        transition: 'background 0.15s ease, color 0.15s ease',
+                        position: 'relative',
+                        overflow: 'hidden',
+                      }}
+                      onMouseEnter={(e) => {
+                        if (!isSectionActive) {
+                          e.currentTarget.style.backgroundColor = 'rgba(47,71,143,1)';
+                          e.currentTarget.style.color = 'var(--khor-text-on-dark)';
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = isSectionActive ? 'rgba(255,255,255,0.08)' : 'transparent';
+                        e.currentTarget.style.color = isSectionActive ? '#ffffff' : 'rgba(179,180,187,1)';
                       }}
                     >
+                      {isSectionActive && (
+                        <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 4, borderRadius: 0, backgroundColor: 'rgba(224,77,54,1)' }} />
+                      )}
                       {section.icon}
                       <span style={{ flex: 1, textAlign: 'left' }}>{section.title}</span>
                       {!collapsed && (
                         <span style={{ 
                           fontSize: 10, 
-                          color: 'rgba(255,255,255,0.3)', 
-                          backgroundColor: 'rgba(255,255,255,0.05)', 
+                          color: 'var(--khor-text-on-dark-disabled)',
+                          backgroundColor: 'rgba(255,255,255,0.05)',
                           padding: '1px 6px', 
                           borderRadius: 4,
                           marginRight: 6,
@@ -362,15 +380,10 @@ export function AppShell() {
                           {section.title === 'Átomos' && khorCounts.atoms}
                           {section.title === 'Moléculas' && khorCounts.molecules}
                           {section.title === 'Organismos' && khorCounts.organisms}
-                          {section.title === 'Patrones / Recipes' && (
-                            <div style={{ display: 'flex', gap: 4 }}>
-                              <span title="Patrones">🧩 {khorCounts.patterns}</span>
-                              <span title="Templates">🖼️ {khorCounts.templates}</span>
-                            </div>
-                          )}
+                          {section.title === 'Patrones / Recipes' && khorCounts.patterns}
                         </span>
                       )}
-                      {openSections[section.title] ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
+                      {openSections[section.title] ? <ChevronDown size={14} strokeWidth={1.5} /> : <ChevronRight size={14} strokeWidth={1.5} />}
                     </button>
                     {openSections[section.title] && section.items && (
                       <div style={{ marginTop: 2 }}>
@@ -408,29 +421,44 @@ export function AppShell() {
           })}
         </nav>
 
-        {/* Collapse Toggle */}
-        <div style={{ padding: 8, borderTop: '1px solid rgba(255,255,255,0.08)', flexShrink: 0 }}>
-          <button
-            onClick={() => setCollapsed(!collapsed)}
-            style={{
-              width: '100%',
-              padding: '10px',
-              border: 'none',
-              background: 'rgba(255,255,255,0.05)',
-              color: 'rgba(255,255,255,0.5)',
-              borderRadius: khorTokens.radius.md,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 8,
-              fontSize: 12,
-              fontFamily: khorTokens.typography.fontPrimary,
-            }}
-          >
-            {collapsed ? <Menu size={16} /> : <><X size={14} /> Colapsar</>}
-          </button>
-        </div>
+        {/* Collapse Toggle — same style as KSidebarMenu Ocultar */}
+        <button
+          onClick={() => setCollapsed(!collapsed)}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 16,
+            paddingLeft: 16,
+            paddingRight: 16,
+            height: 50,
+            width: '100%',
+            border: 'none',
+            borderTop: '1px solid rgba(255,255,255,0.08)',
+            background: 'transparent',
+            color: 'rgba(236,238,247,1)',
+            cursor: 'pointer',
+            fontFamily: khorTokens.typography.fontPrimary,
+            fontSize: 14,
+            fontWeight: 600,
+            whiteSpace: 'nowrap',
+            flexShrink: 0,
+            overflow: 'hidden',
+            transition: 'background 0.15s ease, color 0.15s ease',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = 'rgba(47,71,143,1)';
+            e.currentTarget.style.color = '#ffffff';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = 'transparent';
+            e.currentTarget.style.color = 'rgba(236,238,247,1)';
+          }}
+        >
+          {collapsed
+            ? <ChevronRight size={14} strokeWidth={1.5} style={{ flexShrink: 0 }} />
+            : <><ChevronLeft size={14} strokeWidth={1.5} style={{ flexShrink: 0 }} />{!collapsed && <span>Ocultar</span>}</>
+          }
+        </button>
       </aside>
 
       {/* Main Content */}
@@ -438,7 +466,7 @@ export function AppShell() {
         {/* Header */}
         <header style={{
           height: khorTokens.layout.headerHeight,
-          backgroundColor: 'var(--card)',
+          backgroundColor: 'var(--khor-surface-card)',
           boxShadow: 'var(--khor-shadow-sm)',
           display: 'flex',
           alignItems: 'center',
@@ -465,22 +493,6 @@ export function AppShell() {
             </span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            {/* Dark mode toggle */}
-            <button
-              onClick={toggleDark}
-              title={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
-              style={{
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                width: 36, height: 36, borderRadius: khorTokens.radius.md,
-                border: '1px solid var(--border)',
-                backgroundColor: isDark ? 'var(--khor-neutral-200)' : 'transparent',
-                cursor: 'pointer', color: isDark ? 'var(--khor-accent)' : 'var(--muted-foreground)',
-                transition: 'all 0.2s ease',
-              }}
-            >
-              {isDark ? <Sun size={16} /> : <Moon size={16} />}
-            </button>
-            {/* Command bar hint */}
             <div
               onClick={() => setCmdOpen(true)}
               style={{
@@ -497,10 +509,6 @@ export function AppShell() {
               <Search size={14} />
               <span>Buscar componentes...</span>
               <kbd style={{ backgroundColor: 'var(--muted)', padding: '1px 6px', borderRadius: 4, fontSize: 11, border: '1px solid var(--border)' }}>Ctrl+K</kbd>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '6px 12px', borderRadius: khorTokens.radius.md, backgroundColor: 'rgba(224,77,54,0.08)', color: khorTokens.colors.brand.primary, fontSize: 12, fontWeight: 600 }}>
-              <Sparkles size={14} />
-              IA Ready
             </div>
           </div>
         </header>

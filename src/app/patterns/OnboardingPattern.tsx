@@ -29,7 +29,7 @@ function OnboardingInternal() {
       boxShadow: t.shadows.lg
     }}>
       {/* ... rest of the component exactly as before ... */}
-      <div style={{ backgroundColor: t.colors.brand.secondary, padding: t.spacing.xl, color: t.colors.feedback.white, backgroundImage: `linear-gradient(180deg, ${t.colors.brand.secondary} 0%, ${t.colors.brand.secondaryHover} 100%)`, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+      <div style={{ backgroundColor: t.colors.brand.navy, padding: t.spacing.xl, color: t.colors.feedback.white, backgroundImage: `linear-gradient(180deg, ${t.colors.brand.navy} 0%, ${t.colors.brand.navyHover} 100%)`, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: t.spacing.sm, marginBottom: t.spacing.xl }}>
             <div style={{ width: t.sizing[8], height: t.sizing[8], borderRadius: t.radius.md, backgroundColor: t.colors.brand.primary, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: t.typography.fontWeights.extrabold }}>K</div>

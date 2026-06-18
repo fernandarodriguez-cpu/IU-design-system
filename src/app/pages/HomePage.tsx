@@ -1,23 +1,16 @@
-/**
- * ╔═══════════════════════════════════════════╗
- * ║  KHOR DESIGN SYSTEM — v5.1.6-alpha        ║
- * ║  Elite SaaS & AI Architecture             ║
- * ╚═══════════════════════════════════════════╝
- */
-import React from 'react';
 import { useNavigate } from 'react-router';
 import JSZip from 'jszip';
 import {
   Atom, Layers, Box, ArrowRight,
-  Component, Sparkles, Zap, Shield, Smartphone,
-  Download, Package, Code2, ShieldCheck,
-  Figma, Clock, Bot, Brush, BookOpen, CheckCircle2,
+  Zap, Shield,
+  Download, ShieldCheck,
+  Pen, Clock, Bot, Brush, BookOpen,
   Terminal, Cpu, LayoutTemplate
 } from 'lucide-react';
+import { KHOR_VERSION } from '../version/version';
 import { KButton, KText, KBadge, KTag, KRow, KCol } from '../components/design-system/atoms';
 import { KStatCard } from '../components/design-system/molecules';
 import { kToast, KCardSection } from '../components/design-system/organisms';
-import { khorTokens } from '../theme/khor-theme';
 import { useTheme } from '../theme/theme-context';
 import { generateMarkdown, defaultSections } from './AIExportPage';
 import khorCounts from '../metadata/khor-counts.json';
@@ -28,7 +21,7 @@ const FeatureCard = ({ icon: Icon, title, description }: any) => (
       <Icon size={28} />
     </div>
     <div>
-      <KText variant="h3" className="mb-2 text-khor-secondary dark:text-white font-bold">{title}</KText>
+      <KText variant="h3" className="mb-2 text-khor-navy dark:text-white font-bold">{title}</KText>
       <KText variant="body-md" className="text-khor-neutral-500 leading-relaxed">{description}</KText>
     </div>
   </div>
@@ -39,18 +32,17 @@ export function HomePage() {
   const { themeConfig } = useTheme();
 
   const handleDownloadKDS = async () => {
-    const t = khorTokens;
     const zip = new JSZip();
-    const ds = zip.folder('khor-design-system-v5')!;
-    ds.file('README.md', `# Khor Design System v5.1.6-alpha\n...`);
+    const ds = zip.folder(`khor-design-system-v${KHOR_VERSION}`)!;
+    ds.file('README.md', `# Khor Design System v${KHOR_VERSION}\n...`);
     ds.file('KHOR_AI_GUIDE.md', generateMarkdown(defaultSections, themeConfig));
     const blob = await zip.generateAsync({ type: 'blob' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `khor-ds-v5.1.6-alpha.zip`;
+    a.download = `khor-ds-v${KHOR_VERSION}.zip`;
     a.click();
-    kToast({ type: 'success', title: 'Exportación Exitosa', description: 'Paquete v5.1.6-alpha listo.' });
+    kToast({ type: 'success', title: 'Descarga lista', description: `Paquete v${KHOR_VERSION} generado.` });
   };
 
   return (
@@ -63,19 +55,17 @@ export function HomePage() {
 
         <div className="relative z-10">
           <div className="flex flex-wrap gap-3 mb-10">
-            <KTag color="volcano" className="border-white/20 text-white bg-white/10 px-4 py-1 backdrop-blur-xl">v5.1.6-alpha</KTag>
-            <KTag color="volcano" className="border-white/20 text-white bg-white/10 px-4 py-1 backdrop-blur-xl">Enterprise Stack</KTag>
-            <KTag color="processing" className="border-white/20 text-white bg-white/10 px-4 py-1 backdrop-blur-xl">AI Native</KTag>
+            <KTag color="volcano" className="border-white/20 text-white bg-white/10 px-4 py-1 backdrop-blur-xl">v{KHOR_VERSION}</KTag>
           </div>
 
           <h1 className="text-5xl lg:text-6xl font-black mb-8 leading-[1.1] tracking-tightest text-white max-w-4xl drop-shadow-sm">
-            Diseña para <span className="text-khor-primary">Humanos</span>,<br />
-            construye para <span className="text-khor-accent italic">Inteligencia Artificial</span>.
+            Componentes, tokens y patrones<br />
+            para equipos de <span className="text-khor-primary">producto</span>.
           </h1>
 
           <KText variant="body-lg" className="mb-12 text-white/70 leading-relaxed max-w-3xl block text-xl">
-            Khor es la infraestructura visual definitiva para SaaS.
-            Arquitectura de 3 capas optimizada para renderizado masivo de datos y 100% preparada para agentes autónomos.
+            Khor es una biblioteca de componentes completa con tokens de diseño documentados,
+            sincronización con Figma y patrones listos para producción.
           </KText>
 
           <div className="flex flex-wrap gap-6">
@@ -87,7 +77,7 @@ export function HomePage() {
               iconPosition="end"
               className="h-16 px-10 text-lg shadow-khor-xl shadow-khor-primary/30 hover:scale-105 transition-transform"
             >
-              Explorar Ecosistema
+              Ver tokens
             </KButton>
             <KButton
               variant="outline"
@@ -105,36 +95,36 @@ export function HomePage() {
       {/* QUICK STATS - BALANCED */}
       <KRow gutter={[32, 32]} className="mb-24">
         <KCol xs={24} sm={12} lg={6}>
-          <KStatCard title="Átomos" value={khorCounts.atoms} icon={<Atom size={22} />} change={12} changeLabel="Audited Atoms" />
+          <KStatCard title="Átomos" value={khorCounts.atoms} icon={<Atom size={22} />} changeLabel="componentes base" />
         </KCol>
         <KCol xs={24} sm={12} lg={6}>
-          <KStatCard title="Moléculas" value={khorCounts.molecules} icon={<Layers size={22} />} change={8} changeLabel="Smart Molecules" />
+          <KStatCard title="Moléculas" value={khorCounts.molecules} icon={<Layers size={22} />} changeLabel="compuestos" />
         </KCol>
         <KCol xs={24} sm={12} lg={6}>
-          <KStatCard title="Organismos" value={khorCounts.organisms} icon={<Box size={22} />} change={15} changeLabel="Complex Suite" />
+          <KStatCard title="Organismos" value={khorCounts.organisms} icon={<Box size={22} />} changeLabel="bloques completos" />
         </KCol>
         <KCol xs={24} sm={12} lg={6}>
-          <KStatCard title="Patrones" value={khorCounts.patterns} icon={<LayoutTemplate size={22} />} changeLabel="SaaS Blueprints" />
+          <KStatCard title="Patrones" value={khorCounts.patterns} icon={<LayoutTemplate size={22} />} changeLabel="patrones documentados" />
         </KCol>
       </KRow>
 
       {/* CORE PILLARS */}
-      <KCardSection title="Principios v5.0 Elite" className="mb-24">
+      <KCardSection title="Principios" className="mb-24">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           <FeatureCard
             icon={Cpu}
-            title="Intent-Based Logic"
-            description="Tus componentes ya no son solo estética. Cada uno expone metadatos que permiten a la IA entender su propósito funcional en tiempo real."
+            title="Arquitectura en capas"
+            description="Átomos, moléculas y organismos con props bien tipadas y contratos claros. Componible sin efectos secundarios inesperados."
           />
           <FeatureCard
             icon={Zap}
-            title="Fluid Design Tokens"
-            description="Olvídate de los breakpoints manuales. Nuestro motor usa matemáticas fluidas para que tu UI se vea perfecta en un Apple Watch o una pantalla 8K."
+            title="Sistema de tokens"
+            description="Más de 200 tokens CSS organizados por categoría — color, tipografía, espacio, radio y sombra — sincronizados con Figma y aplicables en un clic."
           />
           <FeatureCard
             icon={ShieldCheck}
-            title="Enterprise Security"
-            description="Validado contra estándares WCAG 2.2 AA (AAA en componentes específicos) y W3C DTCG. Auditoría continua con axe-core en pipeline CI."
+            title="Accesibilidad"
+            description="Componentes validados contra WCAG 2.2 AA con auditoría axe-core en CI. Sin ajustes manuales para cumplir el estándar."
           />
         </div>
       </KCardSection>
@@ -177,9 +167,9 @@ export function HomePage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {[
             { icon: <Brush size={22} />, title: 'Theming Live', desc: 'ADN visual dinámico.', path: '/theming' },
-            { icon: <Figma size={22} />, title: 'Bridge Figma', desc: 'Sincronización total.', path: '/figma-export' },
-            { icon: <Bot size={22} />, title: 'IA Guide', desc: 'Source of Truth para Agentes.', path: '/ai-export' },
-            { icon: <Clock size={22} />, title: 'Changelog', desc: 'Evolución v5.0-alpha.', path: '/changelog' },
+            { icon: <Pen size={22} />, title: 'Bridge Figma', desc: 'Sincronización total.', path: '/figma-export' },
+            { icon: <Bot size={22} />, title: 'IA Guide', desc: 'Documentación para agentes.', path: '/ai-export' },
+            { icon: <Clock size={22} />, title: 'Changelog', desc: 'Historial de cambios.', path: '/changelog' },
             { icon: <Shield size={22} />, title: 'A11y Guardian', desc: 'Auditoría automática.', path: '/guardian' },
             { icon: <BookOpen size={22} />, title: 'Recipes', desc: 'Patrones listos para SaaS.', path: '/patterns' },
           ].map((tool) => (
@@ -188,11 +178,11 @@ export function HomePage() {
               onClick={() => navigate(tool.path)}
               className="flex items-center gap-5 p-6 rounded-3xl border border-khor-border-muted hover:bg-white dark:hover:bg-khor-surface-hover hover:shadow-khor-lg hover:border-khor-primary/20 cursor-pointer transition-all group"
             >
-              <div className="w-12 h-12 rounded-2xl bg-khor-neutral-100 dark:bg-khor-neutral-800 flex items-center justify-center text-khor-secondary dark:text-white group-hover:bg-khor-primary group-hover:text-white transition-all shadow-sm">
+              <div className="w-12 h-12 rounded-2xl bg-khor-neutral-100 dark:bg-khor-neutral-800 flex items-center justify-center text-khor-navy dark:text-white group-hover:bg-khor-primary group-hover:text-white transition-all shadow-sm">
                 {tool.icon}
               </div>
               <div>
-                <KText variant="body-lg" className="font-bold text-khor-secondary dark:text-white">{tool.title}</KText>
+                <KText variant="body-lg" className="font-bold text-khor-navy dark:text-white">{tool.title}</KText>
                 <KText variant="small" className="text-khor-neutral-500">{tool.desc}</KText>
               </div>
             </div>

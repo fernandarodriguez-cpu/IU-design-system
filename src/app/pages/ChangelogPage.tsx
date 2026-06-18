@@ -5,8 +5,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import {
-  Plus, RefreshCw, Wrench, Trash2, ArrowRight,
-  Tag, GitBranch, Calendar, Package, Zap, Star,
+  Plus, RefreshCw, Wrench, Trash2,
+  Tag, Calendar, Zap, Star,
   ChevronDown, ChevronRight,
 } from 'lucide-react';
 import { KButton, KBadge, KText } from '../components/design-system/atoms/index';
@@ -888,7 +888,7 @@ const changelog: VersionEntry[] = [
       { type: 'added', description: 'PatternsPage (/patterns): 7 patrones interactivos — Dashboard con Stats+Filtros, Formulario con Validación, Lista Filtrable, Login con Branding, Tabla con Paginación, Wizard Multi-Step, Settings Page. Cada patrón con código copiable.' },
       { type: 'added', description: 'ThemingPage (/theming): Panel de theming en vivo que modifica CSS custom properties en tiempo real. 5 colores + 3 radii + 3 spacings. Vista previa de botones, badges, alertas, formularios y progress. Exportación a CSS, SCSS, JSON y theme.css completo.' },
       { type: 'added', description: 'WCAGCheckerPage (/wcag-checker): Verificador de contraste WCAG 2.1 con 26 pares de colores del sistema (15 light mode + 11 dark mode). Checker personalizado para cualquier par de colores. Reporte copiable. Niveles AAA/AA/AA Large/Fail.' },
-      { type: 'fixed', component: 'KDateRangePicker', componentPath: '/molecules/date-range', description: 'Reconstrucción completa: hover preview del rango durante selección, indicador visual "from/to", botón X para limpiar, reset de tempFrom al usar presets, handleOpenChange resetea estado.' },
+      { type: 'fixed', component: 'KDateRangePicker', componentPath: '/molecules/date-picker', description: 'Reconstrucción completa: hover preview del rango durante selección, indicador visual "from/to", botón X para limpiar, reset de tempFrom al usar presets, handleOpenChange resetea estado.' },
       { type: 'added', component: 'ComponentDoc', description: 'Botón "Copiar Snippet" en header de cada documentación de componente. Dark mode fix en tabla de props y secciones de guías/AI notes.' },
       { type: 'changed', description: 'Átomos reordenados alfabéticamente A-Z en sidebar (KAffix → KWatermark, 27 items).' },
       { type: 'changed', description: 'Sidebar colapsado rediseñado: solo muestra iconos de las 7 secciones principales. Clic en cualquier icono expande el sidebar completo.' },
@@ -1049,7 +1049,7 @@ export function ChangelogPage() {
       {/* Header */}
       <div style={{ marginBottom: 32 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-          <span style={{ fontSize: 11, fontWeight: 600, color: t.colors.brand.primary, textTransform: 'uppercase', letterSpacing: 1 }}>
+          <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--khor-text-label)', textTransform: 'uppercase', letterSpacing: 1 }}>
             Historial
           </span>
         </div>

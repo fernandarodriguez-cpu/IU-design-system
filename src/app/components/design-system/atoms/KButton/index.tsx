@@ -6,47 +6,48 @@ export type { KButtonProps };
 import { Loader2 } from 'lucide-react';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all duration-200 disabled:pointer-events-none disabled:opacity-50 select-none cursor-pointer border border-transparent shadow-khor-sm relative overflow-hidden active:scale-[0.97]',
+  'inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-[var(--khor-button-font-weight)] leading-[var(--khor-button-line-height)] transition-all duration-200 disabled:pointer-events-none disabled:bg-[var(--khor-button-disabled-bg)] disabled:border-[var(--khor-button-disabled-border)] disabled:text-[var(--khor-button-disabled-text)] disabled:shadow-none select-none cursor-pointer border border-transparent shadow-khor-sm relative overflow-hidden active:scale-[0.97]',
   {
     variants: {
       variant: {
-        primary: 'bg-[var(--khor-button-primary-bg)] text-[var(--khor-button-primary-text)] hover:opacity-90 active:scale-[0.98] hover:shadow-[var(--khor-button-primary-shadow)] border-[var(--khor-button-primary-border)] transition-all rounded-[var(--khor-button-radius)] after:absolute after:inset-x-0 after:top-0 after:h-px after:bg-white/20 after:pointer-events-none',
-        secondary: 'bg-[var(--khor-button-secondary-bg)] text-[var(--khor-button-secondary-text)] hover:opacity-90 active:scale-[0.98] transition-all rounded-[var(--khor-button-radius)] after:absolute after:inset-x-0 after:top-0 after:h-px after:bg-white/20 after:pointer-events-none',
-        outline: 'border-khor-border-strong bg-transparent text-khor-text-primary hover:bg-khor-surface-hover active:bg-khor-surface-pressed hover:border-khor-border-hover shadow-none',
-        ghost: 'bg-transparent text-khor-text-primary hover:bg-[var(--khor-button-ghost-hover)] active:bg-khor-surface-pressed shadow-none',
+        primary: 'bg-[var(--khor-button-primary-bg)] text-[var(--khor-button-primary-text)] border-[var(--khor-button-primary-border)] hover:bg-[var(--khor-button-primary-bg-hover)] hover:border-[var(--khor-button-primary-bg-hover)] active:scale-[0.98] hover:shadow-[var(--khor-button-primary-shadow)] transition-all after:absolute after:inset-x-0 after:top-0 after:h-px after:bg-white/20 after:pointer-events-none',
+        secondary: 'bg-[var(--khor-button-secondary-bg)] text-[var(--khor-button-secondary-text)] border-[var(--khor-button-secondary-bg)] hover:bg-[var(--khor-button-secondary-bg-hover)] hover:border-[var(--khor-button-secondary-bg-hover)] active:scale-[0.98] transition-all after:absolute after:inset-x-0 after:top-0 after:h-px after:bg-white/20 after:pointer-events-none',
+        outline: 'border-[var(--khor-button-outline-border)] bg-transparent text-[var(--khor-button-outline-text)] hover:border-[var(--khor-button-outline-hover)] hover:text-[var(--khor-button-outline-hover)] shadow-none',
+        dashed: 'border-dashed border-[var(--khor-button-dashed-border)] bg-transparent text-[var(--khor-button-dashed-text)] hover:border-[var(--khor-button-outline-hover)] hover:text-[var(--khor-button-outline-hover)] shadow-none',
+        ghost: 'bg-transparent border-[var(--khor-button-ghost-border)] text-[var(--khor-button-ghost-text)] hover:border-[var(--khor-button-ghost-hover-color)] hover:text-[var(--khor-button-ghost-hover-color)] shadow-none',
+        navy: 'bg-khor-navy border-khor-navy text-[var(--khor-button-primary-text)] hover:bg-[var(--khor-button-primary-bg-hover)] hover:border-[var(--khor-button-primary-bg-hover)] active:scale-[0.98] transition-all',
         danger: 'bg-khor-action-danger text-khor-text-on-action hover:bg-khor-action-danger-hover active:bg-khor-action-danger-active hover:shadow-khor-md after:absolute after:inset-x-0 after:top-0 after:h-px after:bg-white/20',
-        link: 'bg-transparent text-khor-action-primary underline-offset-4 hover:underline !p-0 !min-h-0 !h-auto border-none shadow-none active:scale-100',
-        text: 'bg-transparent text-khor-text-primary hover:bg-khor-action-ghost-hover active:bg-khor-surface-pressed border-none shadow-none',
+        link: 'bg-transparent text-khor-action-primary underline-offset-4 hover:underline hover:text-[var(--khor-button-outline-hover)] !p-0 !min-h-0 !h-auto border-none shadow-none active:scale-100',
+        text: 'bg-transparent text-khor-text-primary hover:bg-khor-action-ghost-hover hover:text-[var(--khor-button-outline-hover)] active:bg-khor-surface-pressed border-none shadow-none',
         solid: 'bg-khor-action-primary text-khor-text-on-action hover:bg-khor-action-primary-hover active:bg-khor-action-primary-active hover:shadow-khor-md after:absolute after:inset-x-0 after:top-0 after:h-px after:bg-white/20',
         filled: 'bg-khor-surface-page text-khor-text-primary hover:bg-khor-surface-hover active:bg-khor-surface-pressed border-none shadow-none',
       },
       size: {
-        sm: 'h-[var(--khor-density-height-sm)] min-w-[var(--khor-density-min-width-button)] px-[var(--khor-space-3)] text-xs',
-        md: 'h-[var(--khor-density-height-md)] min-w-[var(--khor-density-min-width-button)] px-[var(--khor-space-4)] text-[length:var(--khor-density-font-body)]',
-        lg: 'h-[var(--khor-density-height-lg)] min-w-[var(--khor-density-min-width-button)] px-[var(--khor-space-8)]',
-        icon: 'h-[var(--khor-density-height-md)] w-[var(--khor-density-height-md)] p-0 !min-w-0',
+        sm: 'h-[var(--khor-button-height-sm)] min-w-[var(--khor-density-min-width-button)] px-[var(--khor-button-padding-x-sm)] text-[length:var(--khor-button-font-size)] rounded-[var(--khor-button-radius-sm)]',
+        md: 'h-[var(--khor-button-height-md)] min-w-[var(--khor-density-min-width-button)] px-[var(--khor-button-padding-x-md)] text-[length:var(--khor-button-font-size)] rounded-[var(--khor-button-radius-md)]',
+        lg: 'h-[var(--khor-button-height-lg)] min-w-[var(--khor-density-min-width-button)] px-[var(--khor-button-padding-x-lg)] text-[length:var(--khor-button-font-size)] rounded-[var(--khor-button-radius-lg)]',
+        icon: 'h-[var(--khor-button-height-md)] w-[var(--khor-button-height-md)] p-0 !min-w-0 rounded-[var(--khor-button-radius-md)]',
       },
+      // Figma Button "Color" axis (Blue/Red) — sin clases propias: el tinte real
+      // se aplica vía compoundVariants, ya que cada variant (filled/outlined/text)
+      // necesita pintar el color en una propiedad distinta (bg vs border/text).
       color: {
         default: '',
-        primary: 'bg-khor-action-primary text-khor-text-on-action hover:bg-khor-action-primary-hover',
-        secondary: 'bg-khor-secondary text-khor-text-on-action hover:bg-khor-secondary-hover',
-        danger: 'bg-khor-action-danger text-khor-text-on-action hover:bg-khor-action-danger-hover',
-        processing: 'bg-khor-feedback-processing text-khor-text-on-action hover:opacity-90',
-        volcano: 'bg-khor-feedback-volcano text-khor-text-on-action hover:opacity-90',
-        gold: 'bg-khor-feedback-gold text-khor-text-on-action hover:opacity-90',
-        lime: 'bg-khor-feedback-lime text-black hover:opacity-90',
-        purple: 'bg-khor-feedback-purple text-khor-text-on-action hover:opacity-90',
+        secondary: '',
+        danger: '',
       },
       shape: {
-        default: 'rounded-[var(--khor-radius-md)]',
+        default: '',
         circle: 'rounded-full aspect-square p-0 flex-shrink-0',
-        round: 'rounded-full px-6',
+        round: 'rounded-full',
       },
       fullWidth: {
         true: 'w-full',
       },
+      // Figma Button "Ghost=True" — convierte cualquier Type filled/outlined en el
+      // mismo tratamiento: fondo transparente, borde y texto en tono ghost (azul u rojo).
       ghost: {
-        true: 'bg-transparent shadow-none',
+        true: 'bg-transparent shadow-none border-[var(--khor-button-ghost-border)] text-[var(--khor-button-ghost-text)] hover:border-[var(--khor-button-ghost-hover-color)] hover:text-[var(--khor-button-ghost-hover-color)] after:hidden',
       },
       isHovered: {
         true: 'bg-khor-surface-hover shadow-khor-md ring-2 ring-khor-action-primary/10',
@@ -62,17 +63,24 @@ const buttonVariants = cva(
       }
     },
     compoundVariants: [
-      // Semantic Colors + Outline
-      { variant: 'outline', color: 'primary', className: 'text-khor-action-primary border-khor-action-primary/30 hover:bg-khor-success-light/20' },
-      { variant: 'outline', color: 'secondary', className: 'text-khor-secondary border-khor-secondary/30 hover:bg-khor-secondary/5' },
-      { variant: 'outline', color: 'danger', className: 'text-khor-action-danger border-khor-action-danger/30 hover:bg-khor-error-light/20' },
-      { variant: 'outline', color: 'volcano', className: 'text-khor-feedback-volcano border-khor-feedback-volcano/30 hover:bg-khor-feedback-volcano/5' },
-      
-      // Semantic Colors + Link/Text
-      { variant: 'link', color: 'secondary', className: 'text-khor-secondary' },
-      { variant: 'text', color: 'secondary', className: 'text-khor-secondary' },
+      // Figma Button "Color=Red" (--khor-secondary) sobre variantes "filled"
+      { variant: ['primary', 'secondary', 'solid', 'filled', 'navy'], color: 'secondary', className: 'bg-khor-secondary border-khor-secondary text-khor-text-on-action hover:bg-khor-secondary-hover hover:border-khor-secondary-hover' },
+      { variant: ['primary', 'secondary', 'solid', 'filled', 'navy'], color: 'danger', className: 'bg-khor-action-danger border-khor-action-danger text-khor-text-on-action hover:bg-khor-action-danger-hover' },
 
-      // Legacy Danger compatibility
+      // Figma Button "Color=Red" sobre variantes "outlined" (Outline/Dashed)
+      { variant: ['outline', 'dashed'], color: 'secondary', className: 'text-khor-secondary border-khor-secondary/60 hover:bg-khor-secondary/5' },
+      { variant: ['outline', 'dashed'], color: 'danger', className: 'text-khor-action-danger border-khor-action-danger/60 hover:bg-khor-error-light/20' },
+
+      // Figma Button "Color=Red" sobre variantes "text" (Ghost/Text/Link)
+      { variant: 'ghost', color: 'secondary', className: 'border-[var(--khor-button-ghost-border-red)] text-[var(--khor-button-ghost-border-red)]' },
+      { variant: 'ghost', color: 'danger', className: 'border-khor-action-danger text-khor-action-danger' },
+      { variant: ['link', 'text'], color: 'secondary', className: 'text-khor-secondary' },
+      { variant: ['link', 'text'], color: 'danger', className: 'text-khor-action-danger' },
+
+      // Figma Button "Ghost=True" boolean (combinable con Primary/Outline/Dashed) + Color=Red
+      { ghost: true, color: 'secondary', className: 'border-[var(--khor-button-ghost-border-red)] text-[var(--khor-button-ghost-border-red)] hover:border-[var(--khor-button-ghost-hover-color-red)] hover:text-[var(--khor-button-ghost-hover-color-red)]' },
+
+      // Legacy Danger compatibility (prop booleano danger, no relacionado con color)
       { variant: 'primary', danger: true, className: 'bg-khor-error hover:bg-khor-error/90' },
     ],
     defaultVariants: {
@@ -157,9 +165,8 @@ export const KButton = React.forwardRef<any, KButtonProps>(function KButton(
   const danger = rawDanger || color === 'danger';
   
   // Resolución de variate moderna vs legacy
-  let resolvedVariant = kVariant ?? variant ?? 'primary';
-  if (color === 'primary' && !variant) resolvedVariant = 'primary';
-  
+  const resolvedVariant = kVariant ?? variant ?? 'primary';
+
   const isFullWidth = fullWidth || block;
   const isDisabled = disabled || loading;
 

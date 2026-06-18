@@ -2,138 +2,210 @@ import React from 'react';
 import { ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react';
 import { cn } from '@/utils/cn';
 
+/* ─── Figma tokens: KPagination (187678-32777) ────────────────
+   Small  : borderless page numbers, active = navy border only
+   Default: all buttons bordered, active = navy filled
+   Large  : like default, 40px height
+   Disabled: all gray, no interaction
+──────────────────────────────────────────────────────────────── */
+
 export interface KPaginationProps {
   current?: number;
   pageSize?: number;
   total: number;
   onChange?: (page: number, pageSize: number) => void;
   showSizeChanger?: boolean;
+  showTotal?: boolean;
+  size?: 'small' | 'default' | 'large';
+  disabled?: boolean;
   className?: string;
   style?: React.CSSProperties;
-  disabled?: boolean;
 }
 
-/**
- * KPagination — Control de paginación (Headless v4)
- * Reemplaza AntD Pagination con una lógica de navegación pura y Tailwind.
- */
-/**
- * @figma-mcp-migration
- * Component: KPagination
- * 
- * INSTRUCCIONES PARA AGENTES DE IA (VS Code / MCP):
- * Para migrar este componente a Figma, NO generar una matriz multiplicando todas las variables.
- * Utilizar Figma Component Properties V2 con la siguiente estructura:
- * 
- * 1. Variants (Estructurales):
- *    - Definir variantes puramente visuales/estructurales.
- * 2. Booleans (Encendido/Apagado):
- *    - Definir encendido/apagado para iconos o estados (isLoading, hasIcon).
- * 3. Color Variables (No usar variantes para colores semánticos):
- *    - El relleno/borde debe usar Figma Variables (Khor v6.0 Colors) asignado dinámicamente.
- *    - El consumidor del UI Kit cambiará el color del layer.
- */
+const PAGE_SIZE_OPTIONS = [10, 20, 50, 100];
+
+const SIZES = {
+  small:   { h: 28, w: 28, fs: 13, iconSz: 12, gap: 2,  totalFs: 12 },
+  default: { h: 32, w: 32, fs: 14, iconSz: 14, gap: 4,  totalFs: 13 },
+  large:   { h: 40, w: 40, fs: 15, iconSz: 16, gap: 4,  totalFs: 14 },
+};
+
 export function KPagination({
   current = 1,
   pageSize = 10,
   total,
   onChange,
+  showSizeChanger = false,
+  showTotal = false,
+  size = 'default',
+  disabled = false,
   className,
   style,
-  disabled
 }: KPaginationProps) {
-  const totalPages = Math.ceil(total / pageSize);
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  const s = SIZES[size];
+  const isSmall = size === 'small';
 
-  const handlePageChange = (page: number) => {
-    if (disabled || page < 1 || page > totalPages) return;
+  const rangeStart = (current - 1) * pageSize + 1;
+  const rangeEnd   = Math.min(current * pageSize, total);
+
+  const go = (page: number) => {
+    if (disabled || page < 1 || page > totalPages || page === current) return;
     onChange?.(page, pageSize);
   };
 
-  const renderPageButtons = () => {
-    const pages = [];
-    const showThreshold = 5;
+  const changeSize = (newSize: number) => {
+    if (disabled) return;
+    const newTotal = Math.max(1, Math.ceil(total / newSize));
+    onChange?.(Math.min(current, newTotal), newSize);
+  };
 
-    if (totalPages <= showThreshold) {
-      for (let i = 1; i <= totalPages; i++) pages.push(i);
-    } else {
-      // Lógica de truncado simple
-      pages.push(1);
-      if (current > 3) pages.push('prev-ellipsis');
-      
-      const start = Math.max(2, current - 1);
-      const end = Math.min(totalPages - 1, current + 1);
-      
-      for (let i = start; i <= end; i++) {
-        if (!pages.includes(i)) pages.push(i);
-      }
+  /* ── Page list ── */
+  const buildPages = (): (number | 'el' | 'er')[] => {
+    if (totalPages <= 7) return Array.from({ length: totalPages }, (_, i) => i + 1);
+    const arr: (number | 'el' | 'er')[] = [1];
+    if (current > 3) arr.push('el');
+    const lo = Math.max(2, current - 1);
+    const hi = Math.min(totalPages - 1, current + 1);
+    for (let i = lo; i <= hi; i++) arr.push(i);
+    if (current < totalPages - 2) arr.push('er');
+    arr.push(totalPages);
+    return arr;
+  };
 
-      if (current < totalPages - 2) pages.push('next-ellipsis');
-      if (!pages.includes(totalPages)) pages.push(totalPages);
+  /* ── Styles ── */
+  const pageBtn = (isActive: boolean): React.CSSProperties => {
+    if (isSmall) {
+      return {
+        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+        width: s.w, height: s.h, borderRadius: 6, fontSize: s.fs,
+        fontWeight: isActive ? 600 : 400, fontFamily: 'inherit',
+        cursor: disabled ? 'not-allowed' : 'pointer',
+        border: isActive
+          ? `1px solid ${disabled ? '#b0b0b0' : '#e04d36'}`
+          : 'none',
+        backgroundColor: 'transparent',
+        color: isActive
+          ? disabled ? '#b0b0b0' : '#e04d36'
+          : disabled ? '#b0b0b0' : '#374151',
+        transition: 'color 0.12s',
+        outline: 'none',
+      };
     }
+    return {
+      display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+      width: s.w, height: s.h, borderRadius: 6, fontSize: s.fs,
+      fontWeight: isActive ? 600 : 400, fontFamily: 'inherit',
+      cursor: disabled ? 'not-allowed' : 'pointer',
+      border: `1px solid ${isActive ? (disabled ? '#b0b0b0' : '#e04d36') : (disabled ? '#e5e7eb' : '#d1d5db')}`,
+      backgroundColor: isActive
+        ? disabled ? '#d1d5db' : '#e04d36'
+        : disabled ? '#f5f5f5' : '#ffffff',
+      color: isActive
+        ? '#ffffff'
+        : disabled ? '#b0b0b0' : '#374151',
+      transition: 'all 0.12s',
+      outline: 'none',
+    };
+  };
 
-    return pages.map((page, index) => {
-      if (typeof page === 'string') {
-        return (
-          <span key={page + index} className="w-8 h-8 flex items-center justify-center text-khor-neutral-400">
-            <MoreHorizontal className="w-4 h-4" />
-          </span>
-        );
-      }
+  const navBtn = (atEdge: boolean): React.CSSProperties => {
+    if (isSmall) {
+      return {
+        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+        width: s.w, height: s.h, border: 'none', borderRadius: 6,
+        backgroundColor: 'transparent', fontFamily: 'inherit',
+        cursor: disabled || atEdge ? 'not-allowed' : 'pointer',
+        color: disabled || atEdge ? '#d1d5db' : '#374151',
+        outline: 'none', padding: 0,
+      };
+    }
+    return {
+      display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+      width: s.w, height: s.h, borderRadius: 6, fontFamily: 'inherit',
+      border: `1px solid ${disabled || atEdge ? '#e5e7eb' : '#d1d5db'}`,
+      backgroundColor: disabled || atEdge ? '#f5f5f5' : '#ffffff',
+      color: disabled || atEdge ? '#d1d5db' : '#374151',
+      cursor: disabled || atEdge ? 'not-allowed' : 'pointer',
+      transition: 'all 0.12s', outline: 'none', padding: 0,
+    };
+  };
 
-      const isActive = current === page;
-      return (
-        <button
-          key={page}
-          disabled={disabled}
-          onClick={() => handlePageChange(page)}
-          className={cn(
-            "w-8 h-8 flex items-center justify-center rounded-md text-sm font-bold transition-all",
-            isActive 
-              ? "bg-khor-primary text-white shadow-lg shadow-khor-primary/20" 
-              : "text-khor-neutral-600 hover:bg-khor-slate-100 hover:text-khor-primary",
-            disabled && "cursor-not-allowed opacity-50 grayscale"
-          )}
-        >
-          {page}
-        </button>
-      );
-    });
+  const ellipsisStyle: React.CSSProperties = {
+    display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+    width: s.w, height: s.h, color: disabled ? '#d1d5db' : '#9ca3af',
   };
 
   if (total === 0) return null;
 
   return (
-    <div 
-      className={cn("flex items-center gap-1 font-primary select-none", disabled && "pointer-events-none", className)} 
-      style={style}
+    <div
+      className={cn('select-none font-primary', disabled && 'pointer-events-none', className)}
+      style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', ...style }}
     >
-      <button
-        type="button"
-        disabled={disabled || current === 1}
-        onClick={() => handlePageChange(current - 1)}
-        className={cn(
-          "w-8 h-8 flex items-center justify-center rounded-md border border-khor-slate-200 transition-colors bg-white shadow-khor-sm",
-          current === 1 ? "text-khor-neutral-300 bg-khor-slate-50 shadow-none border-khor-slate-100" : "text-khor-neutral-600 hover:border-khor-primary hover:text-khor-primary active:bg-khor-slate-100"
-        )}
-      >
-        <ChevronLeft className="w-4 h-4" />
+      {/* Total */}
+      {showTotal && (
+        <span style={{
+          fontSize: s.totalFs, color: disabled ? '#b0b0b0' : '#5f6064',
+          whiteSpace: 'nowrap', fontFamily: 'inherit',
+        }}>
+          {rangeStart}–{rangeEnd} de {total.toLocaleString()}
+        </span>
+      )}
+
+      {/* Prev */}
+      <button type="button" disabled={disabled || current === 1}
+        onClick={() => go(current - 1)} style={navBtn(current === 1)}>
+        <ChevronLeft size={s.iconSz} />
       </button>
 
-      <div className="flex items-center gap-1">
-        {renderPageButtons()}
+      {/* Pages */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: s.gap }}>
+        {buildPages().map((page, idx) => {
+          if (page === 'el' || page === 'er') {
+            return (
+              <span key={`${page}-${idx}`} style={ellipsisStyle}>
+                <MoreHorizontal size={s.iconSz} />
+              </span>
+            );
+          }
+          return (
+            <button key={page} type="button" disabled={disabled}
+              onClick={() => go(page as number)} style={pageBtn(current === page)}>
+              {page}
+            </button>
+          );
+        })}
       </div>
 
-      <button
-        type="button"
-        disabled={disabled || current === totalPages}
-        onClick={() => handlePageChange(current + 1)}
-        className={cn(
-          "w-8 h-8 flex items-center justify-center rounded-md border border-khor-slate-200 transition-colors bg-white shadow-khor-sm",
-          current === totalPages ? "text-khor-neutral-300 bg-khor-slate-50 shadow-none border-khor-slate-100" : "text-khor-neutral-600 hover:border-khor-primary hover:text-khor-primary active:bg-khor-slate-100"
-        )}
-      >
-        <ChevronRight className="w-4 h-4" />
+      {/* Next */}
+      <button type="button" disabled={disabled || current === totalPages}
+        onClick={() => go(current + 1)} style={navBtn(current === totalPages)}>
+        <ChevronRight size={s.iconSz} />
       </button>
+
+      {/* Size changer */}
+      {showSizeChanger && (
+        <select
+          disabled={disabled}
+          value={pageSize}
+          onChange={(e) => changeSize(Number(e.target.value))}
+          style={{
+            height: s.h, paddingLeft: 8, paddingRight: 4,
+            borderRadius: 6,
+            border: `1px solid ${disabled ? '#e5e7eb' : '#d1d5db'}`,
+            backgroundColor: disabled ? '#f5f5f5' : '#ffffff',
+            color: disabled ? '#b0b0b0' : '#374151',
+            fontSize: s.totalFs, fontFamily: 'inherit',
+            cursor: disabled ? 'not-allowed' : 'pointer',
+            outline: 'none',
+          }}
+        >
+          {PAGE_SIZE_OPTIONS.map(n => (
+            <option key={n} value={n}>{n}/ page</option>
+          ))}
+        </select>
+      )}
     </div>
   );
 }

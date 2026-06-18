@@ -25,7 +25,7 @@ function SidebarPatternComponent() {
     { title: 'Configuración', icon: <Settings size={18} strokeWidth={2} />, path: '/settings' }
   ];
 
-  const SIDEBAR_BG = t.colors.brand.secondary;
+  const SIDEBAR_BG = t.colors.brand.navy;
   const toggleSection = (s: string) => setOpenSections(prev => ({ ...prev, [s]: !prev[s] }));
   const NavDot = () => <span style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: 'currentColor', opacity: 0.6, display: 'inline-block', flexShrink: 0 }} />;
 
@@ -171,7 +171,7 @@ export function AppSidebar() {
   return (
     <aside style={{
       width: collapsed ? t.sizing[16] : t.layout.sidebarWidth,
-      backgroundColor: t.colors.brand.secondary,
+      backgroundColor: t.colors.brand.navy,
       display: 'flex', flexDirection: 'column',
       transition: 'width 0.2s ease', overflow: 'hidden',
       height: '100vh'

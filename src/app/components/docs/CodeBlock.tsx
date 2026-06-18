@@ -36,7 +36,7 @@ export function CodeBlock({ code, filename, language = 'tsx' }: CodeBlockProps) 
       <div style={{
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
         padding: `${khorTokens.spacing.xs}px ${khorTokens.spacing.md}px`,
-        backgroundColor: khorTokens.colors.brand.secondary, color: khorTokens.colors.feedback.white, 
+        backgroundColor: khorTokens.colors.brand.navy, color: khorTokens.colors.feedback.white,
         fontSize: khorTokens.typography.bodyXs.size,
         fontWeight: khorTokens.typography.fontWeights.semibold,
         letterSpacing: khorTokens.typography.letterSpacing.wide,

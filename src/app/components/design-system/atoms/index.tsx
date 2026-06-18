@@ -3,6 +3,8 @@ export { default as KButtonGroup } from './KButtonGroup';
 export { default as KInput, KInputPassword } from './KInput';
 export * from './KIcon';
 export { default as KSearchInput } from './KSearchInput';
+export { KSearch } from './KSearch';
+export type { KSearchProps, KSearchEnter } from './KSearch';
 export { default as KLabel } from './KLabel';
 export { default as KTextArea } from './KTextArea';
 export { default as KBadge } from './KBadge';

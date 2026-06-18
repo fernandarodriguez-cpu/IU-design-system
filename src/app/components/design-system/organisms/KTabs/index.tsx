@@ -12,90 +12,202 @@ export interface KTabItem {
 
 export interface KTabsProps extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.Root> {
   items?: KTabItem[];
-  type?: 'line' | 'card' | 'pill';
+  type?: 'pill' | 'line' | 'card';
   centered?: boolean;
   size?: 'sm' | 'md' | 'lg';
+  label?: string;
   tabBarExtraContent?: React.ReactNode;
 }
 
 const KTabsRoot = TabsPrimitive.Root;
 
-// Context to share type/size properties with compound children
 const KTabsContext = React.createContext<{
-  type?: 'line' | 'card' | 'pill';
-  size?: 'sm' | 'md' | 'lg';
-  centered?: boolean;
-}>({
-  type: 'pill',
-  size: 'md',
-  centered: false,
-});
+  type: 'pill' | 'line' | 'card';
+  size: 'sm' | 'md' | 'lg';
+  centered: boolean;
+}>({ type: 'pill', size: 'md', centered: false });
 
-/**
- * @figma-mcp-migration
- * Component: KTabsList
- */
+/* ─── Figma tokens: type='pill' (187682-19747) ───
+   Container:  bg #dbdbdb  border #b5b5b5  padding 6px
+   Active btn: bg #ffffff  border #ffffff  text #0c1a66  fw 600
+   Inactive:   bg transparent  text #8f9096  fw 600
+
+   sm  → container h=36 r=4  / btn h=24 r=4
+   md  → container h=44 r=6  / btn h=32 r=8
+   lg  → container h=52 r=8  / btn h=40 r=8
+─────────────────────────────────────────────── */
+const PILL_SIZES = {
+  sm: { containerH: 36, containerR: 4, btnH: 24, btnR: 4, px: 12, fs: 12 },
+  md: { containerH: 44, containerR: 6, btnH: 32, btnR: 8, px: 16, fs: 14 },
+  lg: { containerH: 52, containerR: 8, btnH: 40, btnR: 8, px: 20, fs: 15 },
+};
+
+/* ─── Figma tokens: type='line' (187678-28957) ───
+   Active:   text #051758  fw 600  ink-bar 2px solid #051758
+   Inactive: text #8f9096  fw 400
+   Container bottom border: 2px solid #ced4da
+   Trigger heights: sm=38  md=46  lg=56  (fs=14 all sizes)
+─────────────────────────────────────────────── */
+const LINE_SIZES = {
+  sm: { h: 38, fs: 14 },
+  md: { h: 46, fs: 14 },
+  lg: { h: 56, fs: 14 },
+};
+
+/* ─── KTabsList ─────────────────────────────── */
 export const KTabsList = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.List>,
   React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>
->(({ className, ...props }, ref) => {
-  const { type = 'pill', size = 'md', centered } = React.useContext(KTabsContext);
+>(({ className, style, ...props }, ref) => {
+  const { type, size, centered } = React.useContext(KTabsContext);
+
+  if (type === 'pill') {
+    const s = PILL_SIZES[size];
+    return (
+      <TabsPrimitive.List
+        ref={ref}
+        className={cn('inline-flex items-center font-primary', centered && 'mx-auto', className)}
+        style={{
+          height: s.containerH,
+          borderRadius: s.containerR,
+          backgroundColor: '#dbdbdb',
+          border: '1px solid #b5b5b5',
+          padding: 6,
+          gap: 0,
+          boxSizing: 'border-box',
+          ...style,
+        }}
+        {...props}
+      />
+    );
+  }
+
+  if (type === 'line') {
+    return (
+      <TabsPrimitive.List
+        ref={ref}
+        className={cn(
+          'flex items-center w-full font-primary',
+          centered && 'justify-center',
+          className
+        )}
+        style={{
+          gap: 0,
+          padding: 0,
+          borderBottom: '2px solid #ced4da',
+          boxSizing: 'border-box',
+          ...style,
+        }}
+        {...props}
+      />
+    );
+  }
+
   return (
     <TabsPrimitive.List
       ref={ref}
       className={cn(
-        "inline-flex items-center justify-center font-primary",
-        
-        // Dynamic size classes for height
-        size === 'sm' ? "h-[var(--khor-density-height-sm)]" : size === 'lg' ? "h-[var(--khor-density-height-lg)]" : "h-[var(--khor-density-height-md)]",
-        
-        // Dynamic styling depending on variant
-        type === 'pill' && "rounded-xl bg-khor-surface-subtle p-1 text-khor-text-tertiary shadow-inner",
-        type === 'line' && "bg-transparent border-none p-0 h-auto gap-8 border-b border-khor-border-muted w-full justify-start",
-        type === 'card' && "bg-khor-surface-subtle border border-khor-border-default rounded-t-lg p-0 h-auto",
-        
-        centered && "mx-auto",
+        'flex items-center font-primary bg-khor-surface-subtle border border-khor-border-default rounded-t-lg',
+        centered && 'justify-center',
         className
       )}
+      style={style}
       {...props}
     />
   );
 });
-KTabsList.displayName = TabsPrimitive.List.displayName;
+KTabsList.displayName = 'KTabsList';
 
+/* ─── KTabsTrigger ──────────────────────────── */
 export const KTabsTrigger = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger> & { isHovered?: boolean }
->(({ className, isHovered, ...props }, ref) => {
-  const { type = 'pill', size = 'md' } = React.useContext(KTabsContext);
+  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>
+>(({ className, style, children, ...props }, ref) => {
+  const { type, size } = React.useContext(KTabsContext);
+
+  if (type === 'pill') {
+    const s = PILL_SIZES[size];
+    return (
+      <TabsPrimitive.Trigger
+        ref={ref}
+        className={cn(
+          'inline-flex items-center justify-center whitespace-nowrap font-semibold transition-all cursor-pointer',
+          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0c1a66] focus-visible:ring-offset-1',
+          'disabled:pointer-events-none disabled:opacity-40 font-primary',
+          'text-[#8f9096] bg-transparent border border-transparent',
+          'data-[state=active]:bg-white data-[state=active]:text-[#0c1a66]',
+          'data-[state=active]:shadow-[0_1px_4px_rgba(0,0,0,0.12)]',
+          'data-[state=active]:border-white',
+          className
+        )}
+        style={{
+          height: s.btnH,
+          borderRadius: s.btnR,
+          paddingLeft: s.px,
+          paddingRight: s.px,
+          fontSize: s.fs,
+          boxSizing: 'border-box',
+          ...style,
+        }}
+        {...props}
+      >
+        {children}
+      </TabsPrimitive.Trigger>
+    );
+  }
+
+  if (type === 'line') {
+    const ls = LINE_SIZES[size];
+    return (
+      <TabsPrimitive.Trigger
+        ref={ref}
+        className={cn(
+          'inline-flex items-center justify-center gap-1.5 whitespace-nowrap transition-all cursor-pointer',
+          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#051758] focus-visible:ring-offset-1',
+          'disabled:pointer-events-none disabled:opacity-40 font-primary',
+          'text-[#8f9096] font-normal border-b-2 border-transparent',
+          'data-[state=active]:text-[#051758] data-[state=active]:font-semibold data-[state=active]:border-[#051758]',
+          className
+        )}
+        style={{
+          height: ls.h,
+          fontSize: ls.fs,
+          background: 'transparent',
+          paddingLeft: 16,
+          paddingRight: 16,
+          marginBottom: -2,
+          boxSizing: 'border-box',
+          ...style,
+        }}
+        {...props}
+      >
+        {children}
+      </TabsPrimitive.Trigger>
+    );
+  }
+
   return (
     <TabsPrimitive.Trigger
       ref={ref}
       className={cn(
-        "inline-flex items-center justify-center whitespace-nowrap text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-khor-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 font-primary",
-        isHovered && "bg-khor-surface-hover",
-        
-        // Pill Styling
-        type === 'pill' && "rounded-lg px-3 py-1.5 hover:bg-khor-surface-hover data-[state=active]:bg-white data-[state=active]:text-khor-primary data-[state=active]:shadow-khor-sm data-[state=active]:hover:bg-white text-khor-text-secondary",
-        
-        // Line / Underline Styling
-        type === 'line' && "bg-transparent border-b-2 border-transparent rounded-none px-0 py-2.5 -mb-[1px] hover:text-khor-neutral-900 data-[state=active]:bg-transparent data-[state=active]:border-khor-primary data-[state=active]:text-khor-primary data-[state=active]:shadow-none text-khor-neutral-500",
-        
-        // Card Styling
-        type === 'card' && "bg-transparent border-r border-khor-border-default last:border-r-0 rounded-none px-6 py-3 data-[state=active]:bg-white data-[state=active]:text-khor-primary data-[state=active]:shadow-none data-[state=active]:border-b-white -mb-[1px] text-khor-text-secondary",
-        
-        // Responsive / Sizes adjustments
-        size === 'sm' && (type === 'pill' ? "text-xs px-2 py-1" : type === 'line' ? "text-xs py-1.5" : "text-xs px-4 py-2"),
-        size === 'lg' && (type === 'pill' ? "text-base px-5 py-2.5" : type === 'line' ? "text-base py-3" : "text-base px-8 py-4"),
-        
+        'inline-flex items-center justify-center whitespace-nowrap font-semibold text-sm transition-all',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0c1a66]',
+        'disabled:pointer-events-none disabled:opacity-40 font-primary',
+        'border-r border-khor-border-default last:border-r-0 rounded-none px-6 py-3',
+        'text-khor-text-secondary',
+        'data-[state=active]:bg-white data-[state=active]:text-khor-primary',
         className
       )}
+      style={{ cursor: 'pointer', ...style }}
       {...props}
-    />
+    >
+      {children}
+    </TabsPrimitive.Trigger>
   );
 });
-KTabsTrigger.displayName = TabsPrimitive.Trigger.displayName;
+KTabsTrigger.displayName = 'KTabsTrigger';
 
+/* ─── KTabsContent ──────────────────────────── */
 export const KTabsContent = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof TabsPrimitive.Content>
@@ -103,77 +215,55 @@ export const KTabsContent = React.forwardRef<
   <TabsPrimitive.Content
     ref={ref}
     className={cn(
-      "mt-4 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-khor-primary focus-visible:ring-offset-2 font-primary animate-in fade-in-0 zoom-in-95 duration-300",
+      'mt-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0c1a66] focus-visible:ring-offset-2 font-primary',
       className
     )}
     {...props}
   />
 ));
-KTabsContent.displayName = TabsPrimitive.Content.displayName;
+KTabsContent.displayName = 'KTabsContent';
 
-/**
- * KTabs — Sistema de pestañas altamente flexible (Headless v4)
- * Soporta API de alto nivel (items) y arquitectura de componentes compuestos.
- */
+/* ─── KTabs (main component) ────────────────── */
 export const KTabs = React.forwardRef<
   React.ElementRef<typeof KTabsRoot>,
   KTabsProps
->(({ items, type = 'pill', centered, size = 'md', tabBarExtraContent, className, children, ...props }, ref) => {
-  const contextValue = React.useMemo(() => ({ type, size, centered }), [type, size, centered]);
+>(({ items, type = 'pill', centered = false, size = 'md', label, tabBarExtraContent, className, children, ...props }, ref) => {
+  const ctx = React.useMemo(() => ({ type, size, centered }), [type, size, centered]);
 
-  if (items) {
-    return (
-      <KTabsContext.Provider value={contextValue}>
-        <KTabsRoot ref={ref} className={cn("w-full", className)} {...props}>
-          <div className={cn("flex items-center mb-4", type !== 'line' ? "border-none" : "border-none")}>
-            <KTabsList 
-              className={cn(
-                centered && "mx-auto",
-                type === 'line' && "bg-transparent border-none p-0 h-auto gap-8",
-                type === 'card' && "bg-khor-surface-subtle border border-khor-border-default rounded-t-lg p-0 h-auto",
-                size === 'sm' ? "h-[var(--khor-density-height-sm)]" : size === 'lg' ? "h-[var(--khor-density-height-lg)]" : "h-[var(--khor-density-height-md)]"
-              )}
-            >
+  return (
+    <KTabsContext.Provider value={ctx}>
+      <KTabsRoot ref={ref} className={cn('w-full', className)} {...props}>
+        {label && (
+          <span style={{ display: 'block', fontSize: 14, fontWeight: 400, color: '#5f6064', marginBottom: 4 }}>
+            {label} :
+          </span>
+        )}
+        <div className={cn('flex items-center', type === 'line' ? 'mb-0' : 'mb-4')}>
+          {items ? (
+            <KTabsList>
               {items.map((item) => (
-                <KTabsTrigger
-                  key={item.key}
-                  value={item.key}
-                  disabled={item.disabled}
-                  className={cn(
-                    type === 'line' && "bg-transparent border-b-2 border-transparent rounded-none px-0 py-2.5 data-[state=active]:bg-transparent data-[state=active]:border-khor-primary data-[state=active]:shadow-none",
-                    type === 'card' && "bg-transparent border-r border-khor-border-default last:border-r-0 rounded-none px-6 py-3 data-[state=active]:bg-white data-[state=active]:shadow-none data-[state=active]:border-b-white -mb-[1px]",
-                    size === 'sm' && "text-xs px-2 py-1",
-                    size === 'lg' && "text-base px-5 py-2.5"
-                  )}
-                >
-                  <div className="flex items-center gap-2">
-                    {item.icon && <span className="shrink-0">{item.icon}</span>}
+                <KTabsTrigger key={item.key} value={item.key} disabled={item.disabled}>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                    {item.icon}
                     {item.label}
-                  </div>
+                  </span>
                 </KTabsTrigger>
               ))}
             </KTabsList>
-            {tabBarExtraContent && <div className="ml-auto">{tabBarExtraContent}</div>}
-          </div>
-          {items.map((item) => (
-            <KTabsContent key={item.key} value={item.key}>
-              {item.children}
-            </KTabsContent>
-          ))}
-        </KTabsRoot>
-      </KTabsContext.Provider>
-    );
-  }
-
-  return (
-    <KTabsContext.Provider value={contextValue}>
-      <KTabsRoot ref={ref} className={className} {...props}>
-        {children}
+          ) : null}
+          {tabBarExtraContent && <div className="ml-auto">{tabBarExtraContent}</div>}
+        </div>
+        {items
+          ? items.map((item) => (
+              <KTabsContent key={item.key} value={item.key}>
+                {item.children}
+              </KTabsContent>
+            ))
+          : children}
       </KTabsRoot>
     </KTabsContext.Provider>
   );
 });
 
-KTabs.displayName = "KTabs";
-
+KTabs.displayName = 'KTabs';
 export default KTabs;

@@ -1,301 +1,727 @@
-import React, { useState, useEffect } from 'react';
-import { format, isValid, addDays, startOfDay, endOfDay, subDays } from 'date-fns';
-import { es } from 'date-fns/locale';
-import { DayPicker, DateRange } from 'react-day-picker';
-import { CalendarIcon, X, Clock, ChevronRight, ChevronLeft } from 'lucide-react';
-import { khorTokens } from '../../../../theme/khor-theme';
+/* ─── KDatePicker — Figma tokens (187675-42310 | 187677-9695 | 187677-9905)
+   Input height  : sm=32px | md=36px | lg=40px  (mirrors KInput)
+   Focus/accent  : #E04D36   |  Focus ring: rgba(224,77,54,0.15)
+   Border        : #D1D5DB default | #D32F2F error | #F59E0B warning
+   Disabled      : bg #F3F4F6, border #E5E7EB, text #9CA3AF
+   Calendar today: ring-1 ring-[#E04D36]
+   Calendar sel  : bg-[#E04D36] text-white
+   Range middle  : bg-[#FEE8E4]
+──────────────────────────────────────────────────────────────────────────────── */
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { format, isValid, isToday, isSameDay, isBefore, isAfter } from 'date-fns';
+import { CalendarDays, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
+import * as PopoverPrimitive from '@radix-ui/react-popover';
 import { cn } from '@/utils/cn';
-import { KPopoverRoot, KPopoverTrigger, KPopoverContent } from '../KPopover';
-import { KButton } from '../../atoms/KButton';
+import { KLabel } from '../../atoms/KLabel';
 
-const t = khorTokens;
+// ─── Size tokens ──────────────────────────────────────────────────────────────
+const SIZE = {
+  sm: { h: 32, px: 10, fs: 12, iconSz: 14 },
+  md: { h: 36, px: 12, fs: 13, iconSz: 15 },
+  lg: { h: 40, px: 14, fs: 14, iconSz: 16 },
+} as const;
 
-/* ═══════════════════════════════════════════════
-   Types & Interfaces
-   ═══════════════════════════════════════════════ */
+const STATUS_BORDER: Record<string, string> = {
+  default: 'border-[#D1D5DB]',
+  error:   'border-[#D32F2F]',
+  warning: 'border-[#F59E0B]',
+};
 
-export interface KDateRange {
-  from?: Date;
-  to?: Date;
+const STATUS_HELP: Record<string, string> = {
+  default: 'text-[#6B7280]',
+  error:   'text-[#D32F2F]',
+  warning: 'text-[#B45309]',
+};
+
+const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const DAY_NAMES   = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+// ─── Build 6-week grid (42 cells, Mon-start) ─────────────────────────────────
+function buildGrid(year: number, month: number): Date[] {
+  const first = new Date(year, month, 1);
+  const startOffset = (first.getDay() + 6) % 7; // Mon=0
+  const grid: Date[] = [];
+  for (let i = startOffset; i > 0; i--) grid.push(new Date(year, month, 1 - i));
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  for (let i = 1; i <= daysInMonth; i++) grid.push(new Date(year, month, i));
+  while (grid.length < 42) {
+    const prev = grid[grid.length - 1];
+    const d = new Date(prev);
+    d.setDate(d.getDate() + 1);
+    grid.push(d);
+  }
+  return grid;
 }
+
+// ─── Calendar nav header: << < Label > >> ─────────────────────────────────────
+function CalendarNav({
+  label, onPrevYear, onNextYear, onPrevMonth, onNextMonth,
+  showPrevYear = true, showNextYear = true, showPrevMonth = true, showNextMonth = true,
+}: {
+  label: string;
+  onPrevYear?: () => void; onNextYear?: () => void;
+  onPrevMonth?: () => void; onNextMonth?: () => void;
+  showPrevYear?: boolean; showNextYear?: boolean;
+  showPrevMonth?: boolean; showNextMonth?: boolean;
+}) {
+  const nb = 'p-1 rounded hover:bg-[#F3F4F6] text-[#9CA3AF] hover:text-[#374151] transition-colors';
+  return (
+    <div className="flex items-center justify-between mb-3 px-1">
+      <div className="flex">
+        {showPrevYear  && <button type="button" className={nb} onClick={onPrevYear}><ChevronsLeft size={13} /></button>}
+        {showPrevMonth && <button type="button" className={nb} onClick={onPrevMonth}><ChevronLeft size={13} /></button>}
+      </div>
+      <span className="text-[13px] font-semibold text-[#374151] select-none">{label}</span>
+      <div className="flex">
+        {showNextMonth && <button type="button" className={nb} onClick={onNextMonth}><ChevronRight size={13} /></button>}
+        {showNextYear  && <button type="button" className={nb} onClick={onNextYear}><ChevronsRight size={13} /></button>}
+      </div>
+    </div>
+  );
+}
+
+// ─── Day grid ─────────────────────────────────────────────────────────────────
+interface DayGridProps {
+  year: number; month: number;
+  selected?: Date;
+  rangeStart?: Date; rangeEnd?: Date; hoverDay?: Date | null;
+  onDayClick: (d: Date) => void;
+  onDayHover?: (d: Date | null) => void;
+  minDate?: Date; maxDate?: Date;
+}
+
+function DayGrid({ year, month, selected, rangeStart, rangeEnd, hoverDay, onDayClick, onDayHover, minDate, maxDate }: DayGridProps) {
+  const grid = buildGrid(year, month);
+  const effectiveEnd = rangeEnd || (hoverDay ?? undefined);
+  const hasRange = Boolean(rangeStart && effectiveEnd);
+  const [lo, hi] = hasRange
+    ? (isBefore(rangeStart!, effectiveEnd!) ? [rangeStart!, effectiveEnd!] : [effectiveEnd!, rangeStart!])
+    : [null, null];
+
+  return (
+    <div style={{ width: 252 }}>
+      <div className="grid grid-cols-7 mb-1">
+        {DAY_NAMES.map(d => (
+          <div key={d} className="text-[11px] font-medium text-[#9CA3AF] text-center h-7 flex items-center justify-center">{d}</div>
+        ))}
+      </div>
+      <div className="grid grid-cols-7">
+        {grid.map((day, i) => {
+          const inMonth    = day.getMonth() === month;
+          const todayDay   = isToday(day);
+          const isSel      = selected ? isSameDay(day, selected) : false;
+          const isStart    = rangeStart ? isSameDay(day, rangeStart) : false;
+          const isEnd      = effectiveEnd ? isSameDay(day, effectiveEnd) : false;
+          const inRange    = lo && hi && isAfter(day, lo) && isBefore(day, hi);
+          const isPicked   = isSel || isStart || isEnd;
+          const sameEnds   = hasRange && rangeStart && effectiveEnd && isSameDay(rangeStart, effectiveEnd);
+          const isDisabled = Boolean((minDate && isBefore(day, minDate)) || (maxDate && isAfter(day, maxDate)));
+
+          return (
+            <div key={i} className="relative flex items-center justify-center h-8">
+              {/* Range stripe */}
+              {hasRange && !sameEnds && (inRange || isStart || isEnd) && (
+                <div className={cn(
+                  'absolute inset-y-0 bg-[#FEE8E4] pointer-events-none',
+                  inRange  && 'inset-x-0',
+                  isStart  && !isEnd  && 'left-1/2 right-0',
+                  isEnd    && !isStart && 'left-0 right-1/2',
+                  isStart  && isEnd   && 'hidden',
+                )} />
+              )}
+              <button
+                type="button"
+                disabled={isDisabled}
+                onClick={() => onDayClick(day)}
+                onMouseEnter={() => onDayHover?.(day)}
+                onMouseLeave={() => onDayHover?.(null)}
+                className={cn(
+                  'relative w-7 h-7 flex items-center justify-center rounded-full',
+                  'text-[12px] font-primary transition-all select-none z-10',
+                  inMonth ? (isPicked ? 'text-white' : 'text-[#374151]') : 'text-[#D1D5DB]',
+                  isDisabled && 'opacity-40 cursor-not-allowed pointer-events-none',
+                  !isDisabled && !isPicked && 'hover:bg-[#F3F4F6]',
+                  todayDay  && !isPicked && 'ring-1 ring-[#E04D36] font-semibold',
+                  isPicked  && 'bg-[#E04D36] text-white',
+                )}
+              >
+                {day.getDate()}
+              </button>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ─── Month grid (3 × 4) ───────────────────────────────────────────────────────
+function MonthGrid({ year, selected, onChange }: { year: number; selected?: Date; onChange: (d: Date) => void }) {
+  return (
+    <div className="grid grid-cols-3 gap-1 p-2" style={{ width: 252 }}>
+      {MONTH_NAMES.map((m, i) => {
+        const isSel = Boolean(selected && selected.getMonth() === i && selected.getFullYear() === year);
+        return (
+          <button key={m} type="button"
+            onClick={() => onChange(new Date(year, i, selected?.getDate() ?? 1))}
+            className={cn(
+              'py-2 rounded-md text-[13px] font-primary transition-colors',
+              isSel ? 'bg-[#E04D36] text-white font-semibold' : 'hover:bg-[#F3F4F6] text-[#374151]',
+            )}
+          >{m}</button>
+        );
+      })}
+    </div>
+  );
+}
+
+// ─── Year grid (decade: 12 cells = prev + 10 + next) ─────────────────────────
+function YearGrid({ decadeStart, selected, onChange }: { decadeStart: number; selected?: Date; onChange: (d: Date) => void }) {
+  const years = Array.from({ length: 12 }, (_, i) => decadeStart - 1 + i);
+  return (
+    <div className="grid grid-cols-3 gap-1 p-2" style={{ width: 252 }}>
+      {years.map(y => {
+        const isSel    = selected?.getFullYear() === y;
+        const inDecade = y >= decadeStart && y <= decadeStart + 9;
+        return (
+          <button key={y} type="button"
+            onClick={() => onChange(new Date(y, selected?.getMonth() ?? 0, 1))}
+            className={cn(
+              'py-2 rounded-md text-[13px] font-primary transition-colors',
+              isSel     ? 'bg-[#E04D36] text-white font-semibold' :
+              inDecade  ? 'hover:bg-[#F3F4F6] text-[#374151]' : 'hover:bg-[#F3F4F6] text-[#D1D5DB]',
+            )}
+          >{y}</button>
+        );
+      })}
+    </div>
+  );
+}
+
+// ─── Scrollable time column ───────────────────────────────────────────────────
+const HH_OPTIONS = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0'));
+const MS_OPTIONS = Array.from({ length: 60 }, (_, i) => String(i).padStart(2, '0'));
+
+function TimeCol({ options, value, onChange }: { options: string[]; value: string; onChange: (v: string) => void }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const ITEM_H = 32;
+
+  const scrollTo = useCallback((v: string) => {
+    const el = ref.current;
+    if (!el) return;
+    const idx = options.indexOf(v);
+    if (idx >= 0) el.scrollTop = idx * ITEM_H;
+  }, [options]);
+
+  useEffect(() => { scrollTo(value); }, [value, scrollTo]);
+
+  const handleScroll = () => {
+    const el = ref.current;
+    if (!el) return;
+    const idx = Math.round(el.scrollTop / ITEM_H);
+    const clamped = Math.max(0, Math.min(idx, options.length - 1));
+    if (options[clamped] !== value) onChange(options[clamped]);
+  };
+
+  return (
+    <div
+      ref={ref}
+      onScroll={handleScroll}
+      className="overflow-y-auto"
+      style={{ height: ITEM_H * 6, scrollSnapType: 'y mandatory', scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+    >
+      <div style={{ paddingTop: ITEM_H * 2.5, paddingBottom: ITEM_H * 2.5 }}>
+        {options.map(opt => (
+          <div key={opt}
+            onClick={() => { onChange(opt); scrollTo(opt); }}
+            style={{ height: ITEM_H, scrollSnapAlign: 'start' }}
+            className={cn(
+              'flex items-center justify-center text-[13px] cursor-pointer font-primary select-none w-12 rounded-md transition-all',
+              opt === value ? 'bg-[#E04D36] text-white font-semibold shadow-sm' : 'text-[#374151] hover:bg-[#F3F4F6]',
+            )}
+          >{opt}</div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── Types ────────────────────────────────────────────────────────────────────
+export interface KDateRange { from?: Date; to?: Date; }
+
+export type KDatePickerType          = 'date' | 'datetime' | 'month' | 'year';
+export type KDatePickerSize          = 'sm' | 'md' | 'lg';
+export type KDatePickerStatus        = 'default' | 'error' | 'warning';
+export type KDatePickerLabelPosition = 'top' | 'side';
 
 export interface KDatePickerProps {
   value?: Date;
+  defaultValue?: Date;
   onChange?: (date: Date | undefined) => void;
   placeholder?: string;
   disabled?: boolean;
   minDate?: Date;
   maxDate?: Date;
-  status?: 'error' | 'warning';
-  size?: 'sm' | 'md' | 'lg' | 'small' | 'middle' | 'large';
+  status?: KDatePickerStatus;
+  size?: KDatePickerSize;
   className?: string;
   style?: React.CSSProperties;
-  picker?: 'date' | 'week' | 'month' | 'quarter' | 'year';
+  type?: KDatePickerType;
   allowClear?: boolean;
-  showTime?: boolean;
+  label?: React.ReactNode;
+  labelPosition?: KDatePickerLabelPosition;
+  required?: boolean;
+  optional?: boolean;
+  tooltip?: string;
+  helpText?: string;
+  block?: boolean;
 }
 
 export interface KDateRangePickerProps {
   value?: KDateRange;
+  defaultValue?: KDateRange;
   onChange?: (range: KDateRange | undefined) => void;
   placeholder?: [string, string];
   disabled?: boolean;
+  minDate?: Date;
+  maxDate?: Date;
+  status?: KDatePickerStatus;
+  size?: KDatePickerSize;
   className?: string;
-  size?: 'sm' | 'md' | 'lg' | 'small' | 'middle' | 'large';
+  style?: React.CSSProperties;
   allowClear?: boolean;
-  showTime?: boolean;
   presets?: { label: string; value: [Date, Date] }[];
+  label?: React.ReactNode;
+  labelPosition?: KDatePickerLabelPosition;
+  required?: boolean;
+  optional?: boolean;
+  tooltip?: string;
+  helpText?: string;
+  block?: boolean;
 }
 
-/* ═══════════════════════════════════════════════
-   KDatePicker — Single Selector
-   ═══════════════════════════════════════════════ */
-/**
- * @figma-mcp-migration
- * Component: KDatePicker
- * 
- * INSTRUCCIONES PARA AGENTES DE IA (VS Code / MCP):
- * Para migrar este componente a Figma, NO generar una matriz multiplicando todas las variables.
- * Utilizar Figma Component Properties V2 con la siguiente estructura:
- * 
- * 1. Variants (Estructurales):
- *    - Definir variantes puramente visuales/estructurales.
- * 2. Booleans (Encendido/Apagado):
- *    - Definir encendido/apagado para iconos o estados (isLoading, hasIcon).
- * 3. Color Variables (No usar variantes para colores semánticos):
- *    - El relleno/borde debe usar Figma Variables (Khor v6.0 Colors) asignado dinámicamente.
- *    - El consumidor del UI Kit cambiará el color del layer.
- */
+// ─── Trigger button style helper ─────────────────────────────────────────────
+function triggerCls(status: KDatePickerStatus, disabled: boolean | undefined, open: boolean) {
+  return cn(
+    'flex w-full items-center rounded-md border bg-white font-primary',
+    'outline-none transition-all duration-150',
+    !disabled && STATUS_BORDER[status],
+    !disabled && status === 'default' && 'hover:border-[#E04D36]',
+    open  && !disabled && 'border-[#E04D36] shadow-[0_0_0_3px_rgba(224,77,54,0.15)]',
+    status === 'error'   && open && !disabled && 'shadow-[0_0_0_3px_rgba(211,47,47,0.15)]',
+    status === 'warning' && open && !disabled && 'shadow-[0_0_0_3px_rgba(245,158,11,0.15)]',
+    disabled && 'bg-[#F3F4F6] border-[#E5E7EB] pointer-events-none',
+  );
+}
+
+// ─── KDatePicker ──────────────────────────────────────────────────────────────
 export function KDatePicker({
-  value,
-  onChange,
-  placeholder = 'Selecciona una fecha',
-  disabled,
-  minDate,
-  maxDate,
-  status,
-  size = 'md',
-  className,
-  style,
-  allowClear = true,
-  showTime = false,
+  value, defaultValue, onChange,
+  placeholder = 'Seleccionar día',
+  disabled, minDate, maxDate,
+  status = 'default', size = 'md',
+  className, style,
+  type = 'date', allowClear = true,
+  label, labelPosition = 'top',
+  required, optional, tooltip, helpText, block,
 }: KDatePickerProps) {
+  const s = SIZE[size];
   const [open, setOpen] = useState(false);
-  const [tempDate, setTempDate] = useState<Date | undefined>(value);
+  const [internalValue, setInternalValue] = useState<Date | undefined>(defaultValue);
+  const isControlled = value !== undefined;
+  const current = isControlled ? value : internalValue;
 
-  useEffect(() => { setTempDate(value); }, [value]);
+  const [viewDate, setViewDate] = useState(() => current || new Date());
+  const [decadeStart, setDecadeStart] = useState(() => Math.floor(((current || new Date()).getFullYear()) / 10) * 10);
+  const [tempDay, setTempDay] = useState<Date | undefined>(current);
+  const [timeH, setTimeH] = useState(() => current ? String(current.getHours()).padStart(2, '0') : '00');
+  const [timeM, setTimeM] = useState(() => current ? String(current.getMinutes()).padStart(2, '0') : '00');
+  const [timeS, setTimeS] = useState(() => current ? String(current.getSeconds()).padStart(2, '0') : '00');
 
-  const resolvedSize = size === 'small' ? 'sm' : size === 'large' ? 'lg' : size === 'middle' ? 'md' : (size as any);
-  const heights = { sm: 'h-8 text-xs', md: 'h-10 text-sm', lg: 'h-12 text-base' };
+  useEffect(() => {
+    const v = isControlled ? value : internalValue;
+    if (v) {
+      setViewDate(new Date(v));
+      setDecadeStart(Math.floor(v.getFullYear() / 10) * 10);
+      setTempDay(v);
+      setTimeH(String(v.getHours()).padStart(2, '0'));
+      setTimeM(String(v.getMinutes()).padStart(2, '0'));
+      setTimeS(String(v.getSeconds()).padStart(2, '0'));
+    }
+  }, [value, isControlled]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handleConfirm = () => {
-    onChange?.(tempDate);
+  const commit = (d: Date | undefined) => {
+    if (!isControlled) setInternalValue(d);
+    onChange?.(d);
     setOpen(false);
   };
 
-  return (
-    <div className={cn("relative w-full font-primary", className)} style={style}>
-      <KPopoverRoot open={open} onOpenChange={disabled ? undefined : setOpen}>
-        <KPopoverTrigger asChild>
-          <button
-            type="button"
-            disabled={disabled}
-            className={cn(
-              "flex w-full items-center justify-between px-3 border rounded-md shadow-sm transition-all outline-none focus:ring-2",
-              heights[resolvedSize as keyof typeof heights] || heights.md,
-              status === 'error' ? "border-khor-feedback-error focus:ring-khor-feedback-error" : "border-khor-neutral-200 focus:ring-khor-primary-light",
-              disabled ? "bg-khor-neutral-100 cursor-not-allowed" : "bg-khor-surface-page cursor-pointer hover:border-khor-primary"
-            )}
-          >
-            <div className="flex items-center gap-2 overflow-hidden flex-1">
-              <CalendarIcon className="w-4 h-4 text-khor-neutral-400 shrink-0" />
-              <span className={cn("truncate", !value && 'text-khor-neutral-400')}>
-                {value && isValid(value) ? format(value, showTime ? 'dd/MM/yyyy HH:mm' : 'dd/MM/yyyy', { locale: es }) : placeholder}
-              </span>
-            </div>
-            {allowClear && value && !disabled && (
-              <X className="w-3.5 h-3.5 text-khor-neutral-400 hover:text-khor-feedback-error" onClick={(e) => { e.stopPropagation(); onChange?.(undefined); }} />
-            )}
-          </button>
-        </KPopoverTrigger>
-        <KPopoverContent align="start" className="p-0 border rounded-lg shadow-xl w-auto bg-khor-surface-page z-[100] mt-1 overflow-hidden">
-          <DayPicker
-            mode="single"
-            selected={tempDate}
-            onSelect={(date) => {
-              setTempDate(date);
-              if (!showTime) {
-                onChange?.(date);
-                setOpen(false);
-              }
-            }}
-            locale={es}
-          />
-          {showTime && (
-            <div className="p-3 border-t bg-khor-neutral-50 flex items-center justify-between gap-4">
-              <input 
-                type="time" 
-                className="text-sm font-bold p-1 border rounded"
-                value={tempDate ? format(tempDate, 'HH:mm') : '00:00'}
-                onChange={(e) => {
-                  if (tempDate) {
-                    const [h, m] = e.target.value.split(':');
-                    const d = new Date(tempDate);
-                    d.setHours(parseInt(h), parseInt(m));
-                    setTempDate(d);
-                  }
-                }}
-              />
-              <KButton size="sm" onClick={handleConfirm}>OK</KButton>
+  const handleDaySelect = (d: Date) => {
+    if (type === 'datetime') {
+      setTempDay(d);
+    } else {
+      commit(d);
+    }
+  };
+
+  const handleNow = () => {
+    const now = new Date();
+    setTimeH(String(now.getHours()).padStart(2, '0'));
+    setTimeM(String(now.getMinutes()).padStart(2, '0'));
+    setTimeS(String(now.getSeconds()).padStart(2, '0'));
+    setTempDay(now);
+    setViewDate(now);
+  };
+
+  const handleAccept = () => {
+    const base = tempDay || current || new Date();
+    const nd = new Date(base);
+    nd.setHours(parseInt(timeH), parseInt(timeM), parseInt(timeS));
+    commit(nd);
+  };
+
+  const selectedForGrid = type === 'datetime' ? tempDay : current;
+
+  const displayValue = current && isValid(current)
+    ? type === 'month'
+      ? `${MONTH_NAMES[current.getMonth()]} ${current.getFullYear()}`
+    : type === 'year'
+      ? String(current.getFullYear())
+    : type === 'datetime'
+      ? `${format(current, 'dd/MM/yyyy')} ${timeH}:${timeM}:${timeS}`
+    : format(current, 'dd/MM/yyyy')
+    : undefined;
+
+  const prevYear  = () => setViewDate(d => { const n = new Date(d); n.setFullYear(n.getFullYear() - 1); return n; });
+  const nextYear  = () => setViewDate(d => { const n = new Date(d); n.setFullYear(n.getFullYear() + 1); return n; });
+  const prevMonth = () => setViewDate(d => { const n = new Date(d); n.setMonth(n.getMonth() - 1); return n; });
+  const nextMonth = () => setViewDate(d => { const n = new Date(d); n.setMonth(n.getMonth() + 1); return n; });
+
+  const popupContent = (
+    <div className="border border-[#E5E7EB] rounded-lg shadow-xl bg-white overflow-hidden" style={{ marginTop: 4 }}>
+      {/* Date / Datetime view */}
+      {(type === 'date' || type === 'datetime') && (
+        <div className="flex">
+          <div className="p-4">
+            <CalendarNav label={`${MONTH_NAMES[viewDate.getMonth()]} ${viewDate.getFullYear()}`}
+              onPrevYear={prevYear} onNextYear={nextYear}
+              onPrevMonth={prevMonth} onNextMonth={nextMonth} />
+            <DayGrid year={viewDate.getFullYear()} month={viewDate.getMonth()}
+              selected={selectedForGrid}
+              onDayClick={handleDaySelect}
+              minDate={minDate} maxDate={maxDate} />
+          </div>
+          {type === 'datetime' && (
+            <div className="border-l border-[#F3F4F6] flex">
+              {[{ label: 'HH', opts: HH_OPTIONS, val: timeH, set: setTimeH },
+                { label: 'MM', opts: MS_OPTIONS, val: timeM, set: setTimeM },
+                { label: 'SS', opts: MS_OPTIONS, val: timeS, set: setTimeS },
+              ].map(col => (
+                <div key={col.label} className="flex flex-col items-center px-2 pt-3 pb-2">
+                  <div className="text-[10px] font-semibold text-[#9CA3AF] uppercase mb-1 tracking-wider">{col.label}</div>
+                  <TimeCol options={col.opts} value={col.val} onChange={col.set} />
+                </div>
+              ))}
             </div>
           )}
-        </KPopoverContent>
-      </KPopoverRoot>
+        </div>
+      )}
+
+      {/* Month view */}
+      {type === 'month' && (
+        <div className="p-4">
+          <CalendarNav label={String(viewDate.getFullYear())}
+            onPrevYear={prevYear} onNextYear={nextYear}
+            showPrevMonth={false} showNextMonth={false} />
+          <MonthGrid year={viewDate.getFullYear()} selected={current}
+            onChange={(d) => commit(d)} />
+        </div>
+      )}
+
+      {/* Year view */}
+      {type === 'year' && (
+        <div className="p-4">
+          <CalendarNav label={`${decadeStart}–${decadeStart + 9}`}
+            onPrevYear={() => setDecadeStart(d => d - 10)}
+            onNextYear={() => setDecadeStart(d => d + 10)}
+            showPrevMonth={false} showNextMonth={false} />
+          <YearGrid decadeStart={decadeStart} selected={current}
+            onChange={(d) => commit(d)} />
+        </div>
+      )}
+
+      {/* Footer */}
+      {(type === 'date' || type === 'datetime') && (
+        <div className="border-t border-[#F3F4F6] px-4 py-2 flex items-center justify-between">
+          {type === 'date' && (
+            <button type="button" onClick={() => commit(new Date())}
+              className="text-[12px] font-medium text-[#E04D36] hover:text-[#C43D28] transition-colors">
+              Hoy
+            </button>
+          )}
+          {type === 'datetime' && (
+            <>
+              <button type="button" onClick={handleNow}
+                className="text-[12px] font-medium text-[#E04D36] hover:text-[#C43D28] transition-colors">
+                Ahora
+              </button>
+              <button type="button" onClick={handleAccept}
+                className="px-3 py-1 bg-[#E04D36] text-white text-[12px] font-medium rounded-md hover:bg-[#C43D28] transition-colors">
+                Aceptar
+              </button>
+            </>
+          )}
+        </div>
+      )}
+    </div>
+  );
+
+  const trigger = (
+    <PopoverPrimitive.Root open={open} onOpenChange={disabled ? undefined : setOpen}>
+      <PopoverPrimitive.Trigger asChild>
+        <button type="button" disabled={disabled}
+          className={triggerCls(status, disabled, open)}
+          style={{ height: s.h, paddingLeft: s.px, paddingRight: s.px }}>
+          <span className={cn('flex-1 text-left truncate', displayValue ? (disabled ? 'text-[#9CA3AF]' : 'text-[#1e293b]') : 'text-[#9CA3AF]')}
+            style={{ fontSize: s.fs }}>
+            {displayValue || placeholder}
+          </span>
+          <CalendarDays style={{ width: s.iconSz, height: s.iconSz, marginLeft: 6, flexShrink: 0 }}
+            className={disabled ? 'text-[#D1D5DB]' : 'text-[#9CA3AF]'} />
+        </button>
+      </PopoverPrimitive.Trigger>
+      <PopoverPrimitive.Portal>
+        <PopoverPrimitive.Content
+          align="start" sideOffset={4}
+          className="z-[200] outline-none animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95"
+        >
+          {popupContent}
+        </PopoverPrimitive.Content>
+      </PopoverPrimitive.Portal>
+    </PopoverPrimitive.Root>
+  );
+
+  const helpNode = helpText
+    ? <span className={cn('leading-none', STATUS_HELP[status])} style={{ fontSize: 11 }}>{helpText}</span>
+    : null;
+
+  const labelNode = label
+    ? <KLabel size={size === 'lg' ? 'md' : 'sm'} required={required} optional={optional} info={tooltip} disabled={disabled}>{label}</KLabel>
+    : null;
+
+  const outerStyle: React.CSSProperties = { ...(block ? { width: '100%' } : {}), ...style };
+
+  if (!label) {
+    return (
+      <div className={cn('flex flex-col gap-1 w-full', className)} style={outerStyle}>
+        {trigger}{helpNode}
+      </div>
+    );
+  }
+
+  if (labelPosition === 'side') {
+    return (
+      <div className={cn('flex items-start gap-3', block && 'w-full', className)} style={outerStyle}>
+        <div className="flex items-center shrink-0" style={{ height: s.h }}>
+          {labelNode}
+          <span className={cn('ml-0.5', disabled ? 'text-[#9CA3AF]' : 'text-[#374151]')} style={{ fontSize: s.fs }}>:</span>
+        </div>
+        <div className="flex flex-col gap-1 flex-1">{trigger}{helpNode}</div>
+      </div>
+    );
+  }
+
+  return (
+    <div className={cn('flex flex-col gap-1', block && 'w-full', className)} style={outerStyle}>
+      {labelNode}{trigger}{helpNode}
     </div>
   );
 }
 
-/* ═══════════════════════════════════════════════
-   KDateRangePicker — Selector de Rango
-   ═══════════════════════════════════════════════ */
+// ─── KDateRangePicker ─────────────────────────────────────────────────────────
 export function KDateRangePicker({
-  value,
-  onChange,
-  placeholder = ['Inicio', 'Fin'],
-  disabled,
-  className,
-  size = 'md',
-  allowClear = true,
-  showTime = false,
-  presets = [],
+  value, defaultValue, onChange,
+  placeholder = ['Fecha Inicio', 'Fecha fin'],
+  disabled, minDate, maxDate,
+  status = 'default', size = 'md',
+  className, style,
+  allowClear = true, presets = [],
+  label, labelPosition = 'top',
+  required, optional, tooltip, helpText, block,
 }: KDateRangePickerProps) {
+  const s = SIZE[size];
   const [open, setOpen] = useState(false);
-  const [tempRange, setTempRange] = useState<KDateRange | undefined>(value);
+  const [internalValue, setInternalValue] = useState<KDateRange | undefined>(defaultValue);
+  const isControlled = value !== undefined;
+  const current = isControlled ? value : internalValue;
 
-  useEffect(() => { setTempRange(value); }, [value]);
+  // Two-step picking: start → end
+  const [picking, setPicking] = useState<'start' | 'end'>('start');
+  const [tempRange, setTempRange] = useState<KDateRange | undefined>(current);
+  const [hoverDay, setHoverDay] = useState<Date | null>(null);
 
-  const resolvedSize = size === 'small' ? 'sm' : size === 'large' ? 'lg' : size === 'middle' ? 'md' : (size as any);
-  const heights = { sm: 'h-8 text-xs', md: 'h-10 text-sm', lg: 'h-12 text-base' };
+  // Left calendar view (right = left + 1 month)
+  const [leftView, setLeftView] = useState<Date>(() => {
+    const d = current?.from || new Date();
+    return new Date(d.getFullYear(), d.getMonth(), 1);
+  });
+  const rightView = new Date(leftView.getFullYear(), leftView.getMonth() + 1, 1);
 
-  const handleSelect = (range: DateRange | undefined) => {
-    if (!range) return;
-    const newRange = { from: range.from, to: range.to };
-    setTempRange(newRange);
-    if (!showTime && newRange.from && newRange.to) {
-      onChange?.(newRange);
+  useEffect(() => {
+    if (!open) {
+      setPicking('start');
+      setHoverDay(null);
+      setTempRange(current);
+    }
+  }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleDayClick = (d: Date) => {
+    if (picking === 'start') {
+      setTempRange({ from: d, to: undefined });
+      setPicking('end');
+    } else {
+      const from = tempRange?.from;
+      if (from) {
+        const [lo, hi] = isBefore(d, from) ? [d, from] : [from, d];
+        setTempRange({ from: lo, to: hi });
+        setPicking('start');
+      }
+    }
+  };
+
+  const handleAccept = () => {
+    if (tempRange?.from && tempRange?.to) {
+      if (!isControlled) setInternalValue(tempRange);
+      onChange?.(tempRange);
       setOpen(false);
     }
   };
 
-  const handleConfirm = () => {
-    onChange?.(tempRange);
-    setOpen(false);
-  };
+  const fmtDate = (d?: Date) => d && isValid(d) ? format(d, 'dd MMM yyyy') : undefined;
+  const startText = fmtDate(current?.from) || placeholder[0];
+  const endText   = fmtDate(current?.to)   || placeholder[1];
+  const hasStart  = Boolean(current?.from);
+  const hasEnd    = Boolean(current?.to);
 
-  const formattedValue = tempRange?.from
-    ? tempRange.to
-      ? `${format(tempRange.from, showTime ? 'dd/MM/yyyy HH:mm' : 'dd/MM/yyyy')} - ${format(tempRange.to, showTime ? 'dd/MM/yyyy HH:mm' : 'dd/MM/yyyy')}`
-      : `${format(tempRange.from, showTime ? 'dd/MM/yyyy HH:mm' : 'dd/MM/yyyy')} - ${placeholder[1]}`
-    : `${placeholder[0]} - ${placeholder[1]}`;
+  const prevYear  = () => setLeftView(d => { const n = new Date(d); n.setFullYear(n.getFullYear() - 1); return n; });
+  const nextYear  = () => setLeftView(d => { const n = new Date(d); n.setFullYear(n.getFullYear() + 1); return n; });
+  const prevMonth = () => setLeftView(d => { const n = new Date(d); n.setMonth(n.getMonth() - 1); return n; });
+  const nextMonth = () => setLeftView(d => { const n = new Date(d); n.setMonth(n.getMonth() + 1); return n; });
+
+  const popupContent = (
+    <div className="border border-[#E5E7EB] rounded-lg shadow-xl bg-white overflow-hidden" style={{ marginTop: 4 }}>
+      <div className="flex">
+        {/* Left calendar */}
+        <div className="p-4">
+          <CalendarNav label={`${MONTH_NAMES[leftView.getMonth()]} ${leftView.getFullYear()}`}
+            onPrevYear={prevYear} onPrevMonth={prevMonth}
+            onNextYear={nextYear} onNextMonth={nextMonth}
+            showNextMonth={false} showNextYear={false} />
+          <DayGrid year={leftView.getFullYear()} month={leftView.getMonth()}
+            rangeStart={tempRange?.from} rangeEnd={tempRange?.to}
+            hoverDay={picking === 'end' ? hoverDay : null}
+            onDayClick={handleDayClick}
+            onDayHover={d => setHoverDay(d)}
+            minDate={minDate} maxDate={maxDate} />
+        </div>
+        <div className="w-px bg-[#F3F4F6] self-stretch" />
+        {/* Right calendar */}
+        <div className="p-4">
+          <CalendarNav label={`${MONTH_NAMES[rightView.getMonth()]} ${rightView.getFullYear()}`}
+            onPrevYear={prevYear} onPrevMonth={prevMonth}
+            onNextYear={nextYear} onNextMonth={nextMonth}
+            showPrevMonth={false} showPrevYear={false} />
+          <DayGrid year={rightView.getFullYear()} month={rightView.getMonth()}
+            rangeStart={tempRange?.from} rangeEnd={tempRange?.to}
+            hoverDay={picking === 'end' ? hoverDay : null}
+            onDayClick={handleDayClick}
+            onDayHover={d => setHoverDay(d)}
+            minDate={minDate} maxDate={maxDate} />
+        </div>
+      </div>
+      {/* Footer */}
+      <div className="border-t border-[#F3F4F6] px-4 py-2 flex items-center justify-between">
+        <span className="text-[11px] text-[#9CA3AF]">
+          {picking === 'end' ? 'Selecciona fecha de fin' : 'Selecciona fecha de inicio'}
+        </span>
+        <div className="flex items-center gap-2">
+          <button type="button" onClick={() => setOpen(false)}
+            className="text-[12px] font-medium text-[#6B7280] hover:text-[#374151] transition-colors px-2 py-1 rounded">
+            Cancelar
+          </button>
+          <button type="button" onClick={handleAccept}
+            disabled={!tempRange?.from || !tempRange?.to}
+            className="px-3 py-1 bg-[#E04D36] text-white text-[12px] font-medium rounded-md hover:bg-[#C43D28] transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
+            Aceptar
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  const trigger = (
+    <PopoverPrimitive.Root open={open} onOpenChange={disabled ? undefined : setOpen}>
+      <PopoverPrimitive.Trigger asChild>
+        <button type="button" disabled={disabled}
+          className={triggerCls(status, disabled, open)}
+          style={{ height: s.h, paddingLeft: s.px, paddingRight: s.px }}>
+          <span className={cn('truncate', hasStart ? (disabled ? 'text-[#9CA3AF]' : 'text-[#1e293b]') : 'text-[#9CA3AF]')}
+            style={{ fontSize: s.fs }}>
+            {startText}
+          </span>
+          <span className="mx-1.5 text-[#9CA3AF] shrink-0" style={{ fontSize: s.fs }}>→</span>
+          <span className={cn('flex-1 truncate text-left', hasEnd ? (disabled ? 'text-[#9CA3AF]' : 'text-[#1e293b]') : 'text-[#9CA3AF]')}
+            style={{ fontSize: s.fs }}>
+            {endText}
+          </span>
+          <CalendarDays style={{ width: s.iconSz, height: s.iconSz, marginLeft: 6, flexShrink: 0 }}
+            className={disabled ? 'text-[#D1D5DB]' : 'text-[#9CA3AF]'} />
+        </button>
+      </PopoverPrimitive.Trigger>
+      <PopoverPrimitive.Portal>
+        <PopoverPrimitive.Content
+          align="start" sideOffset={4}
+          className="z-[200] outline-none animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95"
+        >
+          {popupContent}
+        </PopoverPrimitive.Content>
+      </PopoverPrimitive.Portal>
+    </PopoverPrimitive.Root>
+  );
+
+  const helpNode = helpText
+    ? <span className={cn('leading-none', STATUS_HELP[status])} style={{ fontSize: 11 }}>{helpText}</span>
+    : null;
+
+  const labelNode = label
+    ? <KLabel size={size === 'lg' ? 'md' : 'sm'} required={required} optional={optional} info={tooltip} disabled={disabled}>{label}</KLabel>
+    : null;
+
+  const outerStyle: React.CSSProperties = { ...(block ? { width: '100%' } : {}), ...style };
+
+  if (!label) {
+    return (
+      <div className={cn('flex flex-col gap-1 w-full', className)} style={outerStyle}>
+        {trigger}{helpNode}
+      </div>
+    );
+  }
+
+  if (labelPosition === 'side') {
+    return (
+      <div className={cn('flex items-start gap-3', block && 'w-full', className)} style={outerStyle}>
+        <div className="flex items-center shrink-0" style={{ height: s.h }}>
+          {labelNode}
+          <span className={cn('ml-0.5', disabled ? 'text-[#9CA3AF]' : 'text-[#374151]')} style={{ fontSize: s.fs }}>:</span>
+        </div>
+        <div className="flex flex-col gap-1 flex-1">{trigger}{helpNode}</div>
+      </div>
+    );
+  }
 
   return (
-    <div className={cn("relative w-full font-primary", className)}>
-      <KPopoverRoot open={open} onOpenChange={disabled ? undefined : setOpen}>
-        <KPopoverTrigger asChild>
-          <button
-            type="button"
-            disabled={disabled}
-            className={cn(
-              "flex w-full items-center justify-between px-3 border border-khor-neutral-200 rounded-md shadow-sm transition-all outline-none focus:ring-2 focus:ring-khor-primary-light",
-              heights[resolvedSize as keyof typeof heights] || heights.md,
-              disabled ? 'bg-khor-neutral-100 cursor-not-allowed' : 'bg-khor-surface-page hover:border-khor-primary'
-            )}
-          >
-            <div className="flex items-center gap-2 overflow-hidden flex-1">
-              <CalendarIcon className="w-4 h-4 text-khor-neutral-400" />
-              <span className={cn("truncate text-sm", !tempRange?.from && 'text-khor-neutral-400')}>
-                {formattedValue}
-              </span>
-            </div>
-            {allowClear && tempRange?.from && !disabled && (
-              <X className="w-3.5 h-3.5 text-khor-neutral-400" onClick={(e) => { e.stopPropagation(); onChange?.(undefined); }} />
-            )}
-          </button>
-        </KPopoverTrigger>
-        <KPopoverContent align="start" className="p-0 border rounded-lg shadow-2xl w-auto bg-khor-surface-page z-[100] mt-1 overflow-hidden flex flex-col sm:flex-row">
-          {presets.length > 0 && (
-            <div className="flex flex-col gap-1 p-3 border-r border-khor-neutral-100 bg-khor-neutral-50 min-w-32">
-              <span className="text-[10px] font-bold text-khor-neutral-400 uppercase mb-2">Atajos</span>
-              {presets.map((p, i) => (
-                <button
-                  key={i}
-                  onClick={() => { onChange?.({ from: p.value[0], to: p.value[1] }); setOpen(false); }}
-                  className="text-left py-1 text-xs hover:text-khor-primary"
-                >
-                  {p.label}
-                </button>
-              ))}
-            </div>
-          )}
-          <div className="flex flex-col">
-            <DayPicker
-              mode="range"
-              selected={tempRange ? { from: tempRange.from, to: tempRange.to } : undefined}
-              onSelect={handleSelect}
-              locale={es}
-              numberOfMonths={2}
-              classNames={{
-                months: "flex flex-col sm:flex-row gap-4 p-4",
-                head_cell: "text-khor-neutral-400 font-normal text-[0.8rem] pb-2",
-                day: "h-9 w-9 p-0 font-normal hover:bg-khor-neutral-100 rounded-md transition-all relative aria-selected:bg-khor-primary aria-selected:text-white",
-                day_range_start: "bg-khor-primary text-white rounded-l-md rounded-r-none",
-                day_range_end: "bg-khor-primary text-white rounded-r-md rounded-l-none",
-                day_range_middle: "bg-khor-primary-light/30 text-khor-primary rounded-none",
-                day_today: "font-bold text-khor-primary underline underline-offset-4",
-              }}
-            />
-            {(showTime || tempRange?.from) && (
-              <div className="p-3 border-t bg-khor-neutral-50 flex flex-col gap-3">
-                {showTime && (
-                  <div className="flex justify-around bg-white p-2 border rounded shadow-sm">
-                    <input 
-                      type="time" 
-                      value={tempRange?.from ? format(tempRange.from, 'HH:mm') : '00:00'}
-                      onChange={(e) => {
-                        if (tempRange?.from) {
-                          const [h, m] = e.target.value.split(':');
-                          const d = new Date(tempRange.from);
-                          d.setHours(parseInt(h), parseInt(m));
-                          setTempRange({ ...tempRange, from: d });
-                        }
-                      }}
-                      className="text-xs font-bold"
-                    />
-                    <span className="text-khor-neutral-300">|</span>
-                    <input 
-                      type="time" 
-                      value={tempRange?.to ? format(tempRange.to, 'HH:mm') : '23:59'}
-                      onChange={(e) => {
-                        if (tempRange?.to) {
-                          const [h, m] = e.target.value.split(':');
-                          const d = new Date(tempRange.to);
-                          d.setHours(parseInt(h), parseInt(m));
-                          setTempRange({...tempRange, to: d });
-                        }
-                      }}
-                      className="text-xs font-bold"
-                    />
-                  </div>
-                )}
-                <div className="flex justify-end gap-2">
-                  <KButton size="sm" variant="outline" onClick={() => setOpen(false)}>Cancelar</KButton>
-                  <KButton size="sm" onClick={handleConfirm} disabled={!tempRange?.from || !tempRange?.to}>Aplicar</KButton>
-                </div>
-              </div>
-            )}
-          </div>
-        </KPopoverContent>
-      </KPopoverRoot>
+    <div className={cn('flex flex-col gap-1', block && 'w-full', className)} style={outerStyle}>
+      {labelNode}{trigger}{helpNode}
     </div>
   );
 }

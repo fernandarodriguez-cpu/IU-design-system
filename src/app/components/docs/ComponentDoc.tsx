@@ -46,7 +46,7 @@ export function ComponentDoc({
   name, category, description, preview, playground, code, filename, props, guidelines, aiNotes, stateShowcase, a11ySummary
 }: ComponentDocProps) {
   const tabs: { key: TabKey; label: string; icon: React.ReactNode }[] = [
-    { key: 'preview', label: 'Vista Previa', icon: <Eye size={16} /> },
+    { key: 'preview', label: 'Propiedades', icon: <Eye size={16} /> },
     ...(playground ? [{ key: 'playground' as TabKey, label: 'Playground', icon: <Settings size={16} /> }] : []),
     { key: 'code', label: 'Código', icon: <Code size={16} /> },
     { key: 'docs', label: 'Documentación', icon: <BookOpen size={16} /> },
@@ -66,7 +66,7 @@ export function ComponentDoc({
       {/* Header */}
       <div style={{ marginBottom: 24 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-          <span style={{ fontSize: 11, fontWeight: 600, color: t.colors.brand.primary, textTransform: 'uppercase', letterSpacing: 1 }}>
+          <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--khor-text-label)', textTransform: 'uppercase', letterSpacing: 1 }}>
             {category}
           </span>
         </div>
@@ -116,26 +116,13 @@ export function ComponentDoc({
 
       {/* Tab Content */}
       {active === 'preview' && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-          {stateShowcase && (
-            <div>
-              <h4 style={{ fontSize: 14, fontWeight: 600, color: t.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Estados Exhaustivos</h4>
-              <div style={{ padding: 24, backgroundColor: t.colors.neutral[50], borderRadius: t.radius.lg, border: `1px solid ${t.colors.neutral[200]}` }}>
-                {stateShowcase}
-              </div>
-            </div>
-          )}
-          <div>
-            <h4 style={{ fontSize: 14, fontWeight: 600, color: t.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Ejemplos de Uso</h4>
-            <div style={{ padding: 32, backgroundColor: t.colors.neutral[100], borderRadius: t.radius.lg, border: `1px solid ${t.colors.neutral[200]}` }}>
-              {preview}
-            </div>
-          </div>
+        <div style={{ padding: 24, backgroundColor: '#e0e6fb', borderRadius: t.radius.lg, border: `1px solid #c8d4f0` }}>
+          {stateShowcase ?? preview}
         </div>
       )}
 
       {active === 'playground' && playground && (
-        <div id="khor-playground-root" style={{ padding: 24, backgroundColor: t.colors.neutral[50], borderRadius: t.radius.lg, border: `1px solid ${t.colors.neutral[200]}` }}>
+        <div id="khor-playground-root" style={{ padding: 24, backgroundColor: '#e0e6fb', borderRadius: t.radius.lg, border: `1px solid #c8d4f0` }}>
           {playground}
         </div>
       )}

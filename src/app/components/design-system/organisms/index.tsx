@@ -1,4 +1,5 @@
-export { default as KDataTable } from './KDataTable';
+export { default as KDataTable, KTableRowActions, KTableRowStart, KTableCell, kTableActionIconBtn } from './KDataTable';
+export type { KTableRowActionsProps, KTableRowActionsMenuItem, KTableRowStartProps, KTableCellProps } from './KDataTable';
 export { default as KFormWizard } from './KFormWizard';
 export { KTableDateCell } from './KDataTable/KTableDateCell';
 export { default as KModal } from './KModal';
@@ -21,3 +22,4 @@ export { kToast, KToastProvider } from './KToast';
 export * from './KGantt';
 export * from './KEditor';
 export * from './KResizable';
+export * from './KSidebarMenu';

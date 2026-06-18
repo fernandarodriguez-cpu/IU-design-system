@@ -234,4 +234,66 @@ export const KBadge = React.forwardRef<HTMLSpanElement, KBadgeProps>(
 KBadge.Ribbon = KBadgeRibbon;
 KBadge.displayName = 'KBadge';
 
+/* ─── KBadgeCount — Inline count pill (Figma: Badge/Count) ─────────
+   Sizes:  sm=16px  md=20px  lg=24px
+   Colors: blue (#051758 bg)  blue-invert (white bg + #051758 border)
+           gray (#dbdbdb bg)  red (#e04d36 bg)
+─────────────────────────────────────────────────────────────────── */
+export type KBadgeCountColor = 'blue' | 'blue-invert' | 'gray' | 'red';
+export type KBadgeCountSize  = 'sm' | 'md' | 'lg';
+
+export interface KBadgeCountProps {
+  count: React.ReactNode;
+  color?: KBadgeCountColor;
+  size?:  KBadgeCountSize;
+  className?: string;
+  style?: React.CSSProperties;
+}
+
+const COUNT_SIZE: Record<KBadgeCountSize, number> = { sm: 16, md: 20, lg: 24 };
+
+const COUNT_COLOR: Record<KBadgeCountColor, { bg: string; text: string; border?: string }> = {
+  'blue':        { bg: '#051758', text: '#ffffff' },
+  'blue-invert': { bg: '#ffffff', text: '#0c1a66', border: '#051758' },
+  'gray':        { bg: '#dbdbdb', text: '#8f9096' },
+  'red':         { bg: '#e04d36', text: '#ffffff' },
+};
+
+export const KBadgeCount: React.FC<KBadgeCountProps> = ({
+  count,
+  color = 'blue',
+  size  = 'md',
+  className,
+  style,
+}) => {
+  const dim = COUNT_SIZE[size];
+  const { bg, text, border } = COUNT_COLOR[color];
+  return (
+    <span
+      className={className}
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minWidth: dim,
+        height: dim,
+        borderRadius: 100,
+        backgroundColor: bg,
+        color: text,
+        fontSize: 12,
+        fontWeight: 400,
+        lineHeight: 1,
+        padding: '0 4px',
+        border: border ? `1px solid ${border}` : 'none',
+        boxSizing: 'border-box',
+        ...style,
+      }}
+    >
+      {count}
+    </span>
+  );
+};
+
+KBadgeCount.displayName = 'KBadgeCount';
+
 export default KBadge;

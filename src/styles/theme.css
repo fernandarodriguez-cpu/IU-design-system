@@ -5,24 +5,179 @@
   --font-primary: 'Montserrat', sans-serif;
   --font-secondary: 'Plus Jakarta Sans', sans-serif;
 
+  /* ══════════════════════════════════════════════════════
+     FIGMA DESIGN SYSTEM — COMPLETE COLOR PRIMITIVES
+     Extraído de: api.figma.com /files/5BaEkdwjC5rURZw13UM1tQ/styles
+     ══════════════════════════════════════════════════════ */
+
+  /* Primary Blue (= brand navy) — Figma: "Primary -Blue" */
+  --khor-blue-50:  #E0E6FB;
+  --khor-blue-100: #C2CCEF;
+  --khor-blue-200: #9FAEDD;
+  --khor-blue-300: #7A8EC8;
+  --khor-blue-400: #5268AE;
+  --khor-blue-500: #2F478F;
+  --khor-blue-600: #162D72;
+  --khor-blue-700: #0A1F60;
+  --khor-blue-800: #051758;
+  --khor-blue-900: #030E38;
+
+  /* Secondary Red (= CTA/primary) — Figma: "Secondary -Red" */
+  --khor-red-50:  #FFEDED;
+  --khor-red-100: #FFCCC4;
+  --khor-red-200: #FFA99C;
+  --khor-red-300: #FE8673;
+  --khor-red-400: #F75C43;
+  --khor-red-500: #E04D36;
+  --khor-red-600: #BE3823;
+  --khor-red-700: #9C2714;
+  --khor-red-800: #7A1809;
+  --khor-red-900: #580E02;
+
+  /* Neutral Gray — Figma: "Neutral colors" */
+  --khor-gray-25:  #FFFFFF;
+  --khor-gray-50:  #FFFFFF;
+  --khor-gray-100: #FDFDFD;
+  --khor-gray-200: #F4F4F4;
+  --khor-gray-300: #E9E9E9;
+  --khor-gray-400: #DBDBDB;
+  --khor-gray-500: #B5B5B5;
+  --khor-gray-600: #A1A1A1;
+  --khor-gray-700: #8C8C8C;
+  --khor-gray-800: #666666;
+  --khor-gray-900: #2F2F2F;
+
+  /* Tertiary — Orange — Figma: "Tertiary - Orange" */
+  --khor-orange-50:  #FFF4E5;
+  --khor-orange-100: #FFE1B7;
+  --khor-orange-200: #FECE89;
+  --khor-orange-300: #FEBA5B;
+  --khor-orange-400: #FEA72D;
+  --khor-orange-500: #FF9500;
+  --khor-orange-600: #D67D00;
+  --khor-orange-700: #AD6500;
+  --khor-orange-800: #844D00;
+  --khor-orange-900: #5B3500;
+
+  /* Tertiary — Gold — Figma: "Tertiary - Gold" */
+  --khor-gold-50:  #FFFAE9;
+  --khor-gold-100: #FFEFB9;
+  --khor-gold-200: #FEE389;
+  --khor-gold-300: #FED859;
+  --khor-gold-400: #FFCD29;
+  --khor-gold-500: #DDAE17;
+  --khor-gold-600: #BB9109;
+  --khor-gold-700: #997500;
+  --khor-gold-800: #775B00;
+  --khor-gold-900: #554100;
+
+  /* Tertiary — Cyan — Figma: "Tertiary - Cyan" */
+  --khor-cyan-50:  #F1FFFE;
+  --khor-cyan-100: #CBFCF9;
+  --khor-cyan-200: #A9F7F2;
+  --khor-cyan-300: #86ECE5;
+  --khor-cyan-400: #64DFD7;
+  --khor-cyan-500: #41BAB3;
+  --khor-cyan-600: #129990;
+  --khor-cyan-700: #1B8880;
+  --khor-cyan-800: #0C6660;
+  --khor-cyan-900: #02332F;
+
+  /* Tertiary — Leaf Green — Figma: "Tertiary - Leaf Green" */
+  --khor-leaf-50:  #FCFFF5;
+  --khor-leaf-100: #F7FFE4;
+  --khor-leaf-200: #F2FFD0;
+  --khor-leaf-300: #EDFFBD;
+  --khor-leaf-400: #D8EBA3;
+  --khor-leaf-500: #BACE86;
+  --khor-leaf-600: #9DB06B;
+  --khor-leaf-700: #829352;
+  --khor-leaf-800: #66763D;
+  --khor-leaf-900: #4C592A;
+
+  /* Tertiary — Magenta — Figma: "Tertiary - Magenta" */
+  --khor-magenta-50:  #FFF5F6;
+  --khor-magenta-100: #FFE4E6;
+  --khor-magenta-200: #FFD0D4;
+  --khor-magenta-300: #FFBDC2;
+  --khor-magenta-400: #EBA3A9;
+  --khor-magenta-500: #CD858B;
+  --khor-magenta-600: #B06B71;
+  --khor-magenta-700: #935258;
+  --khor-magenta-800: #763D41;
+  --khor-magenta-900: #592A2E;
+
+  /* Figma Surface Scale — Figma: "Surface" */
+  --khor-figma-surface-50:  #FDFEFF;
+  --khor-figma-surface-100: #FCFCFE;
+  --khor-figma-surface-200: #F7F8FD;
+  --khor-figma-surface-300: #F1F3FB;
+  --khor-figma-surface-400: #F0F2FB;
+  --khor-figma-surface-500: #8489AB;
+  --khor-figma-surface-900: #01072E;
+
+  /* Figma Background Scale — Figma: "Background" */
+  --khor-figma-bg-50:  #FFFFFF;
+  --khor-figma-bg-200: #FBFCFF;
+  --khor-figma-bg-500: #F1F3FB;
+  --khor-figma-bg-900: #E9EAF2;
+
+  /* Surface Opacity Overlays — Figma: "Surface black/white" */
+  --khor-surface-black-15: rgba(0, 0, 0, 0.15);
+  --khor-surface-black-25: rgba(0, 0, 0, 0.25);
+  --khor-surface-black-40: rgba(0, 0, 0, 0.40);
+  --khor-surface-black-60: rgba(0, 0, 0, 0.60);
+  --khor-surface-black-80: rgba(0, 0, 0, 0.80);
+  --khor-surface-white-50: rgba(255, 255, 255, 0.50);
+  --khor-surface-white-70: rgba(255, 255, 255, 0.70);
+  --khor-surface-white-80: rgba(255, 255, 255, 0.80);
+
+  /* Dark Surface Interactions (Sidebar, inverted panels) */
+  --khor-surface-on-dark-hover:    rgba(47, 71, 143, 1);
+  --khor-surface-on-dark-pressed:  rgba(255, 255, 255, 0.12);
+  --khor-surface-on-dark-selected: rgba(255, 255, 255, 0.08);
+
+  /* Figma Text Color Tokens — Figma: "Text colors" */
+  --khor-text-figma-blue-900:    #0C1A66;
+  --khor-text-figma-blue-100:    #8489AB;
+  --khor-text-figma-neutral-50:  #ECEEF7;
+  --khor-text-figma-neutral-100: #D6D8E1;
+  --khor-text-figma-neutral-300: #B3B4BB;
+  --khor-text-figma-neutral-500: #8F9096;
+  --khor-text-figma-neutral-700: #5F6064;
+  --khor-text-figma-neutral-800: #2A2727;
+  --khor-text-figma-neutral-900: #000000;
+  --khor-text-figma-red-900:     #E04D36;
+  --khor-text-figma-red-100:     #DEA198;
+  --khor-text-figma-gold-900:    #FF9500;
+  --khor-text-figma-gold-100:    #E9C28A;
+  --khor-text-figma-white:       #FFFFFF;
+
+  /* Figma Divider — Figma: "Dividers/Divider" */
+  --khor-divider: #CED4DA;
+
+  /* Figma Icon Colors — Figma: "Icon Colors" */
+  --khor-icon-color-default: #B3B4BB;
+  --khor-icon-color-white:   #FFFFFF;
+
   /* ── Brand Aliases — Layer 1 ── */
-  --khor-primary:   #E04D36;
-  --khor-secondary: #051758;
-  --khor-accent:    #FF9500;
+  --khor-primary:   var(--khor-blue-800);    /* #051758 — Figma: Primary-Blue 800 (NAVY) */
+  --khor-secondary: var(--khor-red-500);     /* #E04D36 — Figma: Secondary-Red 500 (CORAL) */
+  --khor-accent:    var(--khor-orange-500);  /* #FF9500 — Figma: Tertiary-Orange 500 */
 
   /* Legacy aliases for internal UI compatibility */
-  --khor-navy: var(--khor-secondary);
-  --khor-navy-hover: #0a2270;
-  --khor-navy-active: #030f40;
-  --khor-primary-hover: #e8644f;
-  --khor-primary-active: #c9442f;
-  --khor-primary-light: #FDECEA;
-  --khor-accent-hover: #ffaa33;
-  --khor-accent-active: #e68600;
+  --khor-navy: var(--khor-primary);          /* navy = primary */
+  --khor-navy-hover:     var(--khor-blue-700);   /* #0A1F60 */
+  --khor-navy-active:    var(--khor-blue-900);   /* #030E38 */
+  --khor-primary-hover:  var(--khor-blue-700);   /* #0A1F60 — hover del navy */
+  --khor-primary-active: var(--khor-blue-900);   /* #030E38 — active del navy */
+  --khor-primary-light:  var(--khor-blue-50);    /* #E0E6FB — light navy bg */
+  --khor-accent-hover:   var(--khor-orange-400); /* #FEA72D */
+  --khor-accent-active:  var(--khor-orange-600); /* #D67D00 */
 
   /* Action hover/active primitives */
-  --khor-secondary-hover: #0a2270;
-  --khor-secondary-active: #030f40;
+  --khor-secondary-hover:  var(--khor-red-600);  /* #BE3823 */
+  --khor-secondary-active: var(--khor-red-700);  /* #9C2714 */
   --khor-error-hover: #E53935;
   --khor-error-active: #B71C1C;
 
@@ -96,9 +251,9 @@
   --khor-info-800: #1565C0;
   --khor-info-900: #0D47A1;
 
-  --khor-success: var(--khor-success-700);
-  --khor-error: var(--khor-error-700);
-  --khor-warning: var(--khor-warning-700);
+  --khor-success: #52C41A;  /* Figma: Feedback/success */
+  --khor-error:   #FF4D4F;  /* Figma: Feedback/danger */
+  --khor-warning: #FAAD14;  /* Figma: Feedback/warning */
   --khor-info: var(--khor-info-700);
   --khor-teal: #0D7D7D;
   --khor-teal-50: #E0F2F2;
@@ -432,20 +587,22 @@
   --khor-size-screen-w: 100vw;
   --khor-size-screen-h: 100vh;
 
-  /* ── Khor Typography Scale (v5.0 Fluid/Responsive) ── */
+  /* ── Khor Typography Scale (v5.0 Fluid/Responsive) ──
+     Desktop/mobile endpoints match Figma "Typography" page (node 187649-10386):
+     Headline 1-3 + their Mobile counterparts. */
   --khor-font-size-display-2xl: clamp(4rem, 5vw + 1rem, 4.5rem); /* 64px - 72px */
   --khor-font-size-display-xl: clamp(3rem, 4vw + 1rem, 3.5rem);  /* 48px - 56px */
-  --khor-font-size-heading-lg: clamp(2rem, 3vw + 1rem, 2.5rem);  /* 32px - 40px */
-  --khor-font-size-heading-md: clamp(1.5rem, 2vw + 1rem, 2rem);  /* 24px - 32px */
-  --khor-font-size-heading-sm: clamp(1.25rem, 1.5vw + 1rem, 1.5rem); /* 20px - 24px */
-  --khor-font-size-heading-xs: 1.125rem; /* 18px */
+  --khor-font-size-heading-lg: clamp(1.5rem, 4vw + 1rem, 3rem);   /* 24px - 48px — Figma Headline 1 */
+  --khor-font-size-heading-md: clamp(1.25rem, 3vw + 1rem, 2.5rem); /* 20px - 40px — Figma Headline 2 */
+  --khor-font-size-heading-sm: clamp(1rem, 2.5vw + 0.75rem, 2rem); /* 16px - 32px — Figma Headline 3 */
+  --khor-font-size-heading-xs: 1.125rem; /* 18px — Figma Headline 4/5 */
   --khor-font-size-body-xl: 1.125rem; /* 18px */
-  --khor-font-size-body-lg: 1rem;     /* 16px */
-  --khor-font-size-body-md: 0.875rem; /* 14px */
-  --khor-font-size-body-sm: 0.75rem;  /* 12px */
+  --khor-font-size-body-lg: 1rem;     /* 16px — Figma Subtitle 1 */
+  --khor-font-size-body-md: 0.875rem; /* 14px — Figma Headline 6 / Body 1 */
+  --khor-font-size-body-sm: 0.75rem;  /* 12px — Figma Body 2 */
   --khor-font-size-caption: 0.625rem; /* 10px */
   --khor-font-size-code: 0.875rem;    /* 14px */
-  --khor-font-size-label: 0.75rem;    /* 12px */
+  --khor-font-size-label: 0.875rem;   /* 14px — Figma Label */
 
   /* Legacy Aliases (DO NOT REMOVE - for backwards compatibility) */
   --khor-font-size-display-1: var(--khor-font-size-display-2xl);
@@ -545,8 +702,8 @@
   /* Interactive Surface Tokens (Industry Ref) */
   --khor-surface-hover:     rgba(5, 23, 88, 0.04);
   --khor-surface-pressed:   rgba(5, 23, 88, 0.08);
-  --khor-surface-selected:  rgba(224, 77, 54, 0.08);
-  --khor-surface-dragging:  rgba(224, 77, 54, 0.04);
+  --khor-surface-selected:  rgba(5, 23, 88, 0.08);
+  --khor-surface-dragging:  rgba(5, 23, 88, 0.04);
   --khor-surface-subtle:    #F4F6F8;
 
   /* ── Semantic Layer 2: Borders ── */
@@ -573,13 +730,19 @@
   --khor-grid-resizer-color: var(--khor-primary);
 
   /* ── Semantic Layer 2: Typography ── */
-  --khor-text-primary: var(--khor-secondary);
-  --khor-text-secondary: var(--khor-slate-600);
-  --khor-text-muted: var(--khor-slate-400);
+  --khor-text-primary: var(--khor-blue-800);         /* #051758 — siempre navy, no sigue al brand primary */
+  --khor-text-secondary: var(--khor-slate-600);     /* #475a8f */
+  --khor-text-muted: var(--khor-slate-400);         /* #94a9d8 */
   --khor-text-disabled: var(--khor-slate-300);
-  --khor-text-on-action: #ffffff;
-  --khor-text-link: var(--khor-primary);
+  --khor-text-on-action: #ffffff;                   /* white on colored buttons */
+  --khor-text-link: #122699;                        /* Figma: Feedback/Link */
   --khor-text-link-hover: var(--khor-primary-hover);
+  /* Figma: text on dark navy backgrounds — extracted from Typography page #ECEEF7 */
+  --khor-text-on-dark:           #ECEEF7;                    /* primary on dark bg */
+  --khor-text-on-dark-secondary: rgba(236, 238, 247, 0.70);  /* secondary on dark bg */
+  --khor-text-on-dark-muted:     rgba(236, 238, 247, 0.45);  /* muted / captions on dark */
+  --khor-text-on-dark-disabled:  rgba(236, 238, 247, 0.30);  /* disabled on dark */
+  --khor-text-label:             #8489AB;                    /* labels/metadata on light bg */
 
   /* ── Motion Tokens ── */
   --khor-duration-instant: 80ms;
@@ -616,15 +779,44 @@
   --khor-space-layout-lg:    var(--khor-space-12);
   --khor-space-layout-xl:    var(--khor-space-16);
 
-  /* ── Component Layer 3: KButton Elite ── */
+  /* ── Component Layer 3: KButton Elite ──
+     Values matched against Figma "Buttons" page (node 187649-12608),
+     Button component set (Type/Size/State/Shape/Color/Ghost variants). */
   --khor-button-primary-bg:        var(--khor-action-primary-default);
-  --khor-button-primary-text:      var(--khor-text-on-action);
-  --khor-button-primary-border:    transparent;
+  --khor-button-primary-bg-hover:  var(--khor-blue-500);   /* #2F478F — Figma Hover/Focused */
+  --khor-button-primary-text:      var(--khor-text-on-dark); /* #ECEEF7 — Figma text on filled buttons */
+  --khor-button-primary-border:    var(--khor-button-primary-bg);
   --khor-button-primary-shadow:    var(--khor-shadow-sm);
   --khor-button-secondary-bg:      var(--khor-action-secondary-default);
-  --khor-button-secondary-text:    var(--khor-text-on-action);
-  --khor-button-ghost-hover:       var(--khor-action-ghost-hover);
+  --khor-button-secondary-bg-hover: var(--khor-red-600);   /* #BE3823 */
+  --khor-button-secondary-text:    var(--khor-text-on-dark);
+  --khor-button-outline-border:    var(--khor-primary);
+  --khor-button-outline-text:      var(--khor-primary);
+  --khor-button-outline-hover:     var(--khor-blue-500);   /* shared Hover color for Default/Dashed/Text/Link types */
+  --khor-button-dashed-border:     var(--khor-primary);
+  --khor-button-dashed-text:       var(--khor-primary);
+  --khor-button-ghost-border:      var(--khor-blue-400);   /* #5268AE — Figma Ghost=True */
+  --khor-button-ghost-text:        var(--khor-blue-400);
+  --khor-button-ghost-hover-color: var(--khor-blue-300);   /* #7A8EC8 */
+  --khor-button-ghost-border-red:  var(--khor-red-300);    /* #FE8673 — Ghost + Color=Red */
+  --khor-button-ghost-hover-color-red: var(--khor-red-200); /* #FFA99C — Figma Ghost+Red Hover/Focused */
+  --khor-button-ghost-hover:       var(--khor-action-ghost-hover); /* bg tint used by Text type hover */
+  --khor-button-disabled-bg:       var(--khor-gray-200);   /* #F4F4F4 */
+  --khor-button-disabled-border:   var(--khor-gray-500);   /* #B5B5B5 */
+  --khor-button-disabled-text:     var(--khor-text-figma-neutral-500); /* #8F9096 */
   --khor-button-radius:            var(--khor-radius-md);
+  --khor-button-radius-sm:         4px;  /* Figma Size=Small */
+  --khor-button-radius-md:         6px;  /* Figma Size=Default */
+  --khor-button-radius-lg:         8px;  /* Figma Size=Large */
+  --khor-button-height-sm:         24px; /* Figma Size=Small */
+  --khor-button-height-md:         32px; /* Figma Size=Default */
+  --khor-button-height-lg:         40px; /* Figma Size=Large */
+  --khor-button-padding-x-sm:      8px;
+  --khor-button-padding-x-md:      16px;
+  --khor-button-padding-x-lg:      16px;
+  --khor-button-font-size:         var(--khor-font-size-body-md); /* 14px */
+  --khor-button-font-weight:       var(--khor-font-weight-semibold); /* 600 */
+  --khor-button-line-height:       22px;
 
   /* ── Component Layer 3: KInput Elite ── */
   --khor-input-bg:                 var(--khor-surface-card);
@@ -658,6 +850,11 @@
   --foreground: var(--khor-text-primary);
   --primary: var(--khor-primary);
   --primary-foreground: var(--khor-text-on-action);
+  --muted-foreground: var(--khor-text-muted);
+  --card-foreground: var(--khor-text-primary);
+  --popover-foreground: var(--khor-text-primary);
+  --accent-foreground: var(--khor-text-primary);
+  --secondary-foreground: var(--khor-text-on-action);
   --border: var(--khor-border-default);
   --radius: var(--khor-radius-md);
 }
@@ -759,7 +956,7 @@
 
   /* ── Component Layer 3: Dark Overrides ── */
   --khor-button-primary-bg:        var(--khor-primary);
-  --khor-button-primary-text:      #FFFFFF;
+  --khor-button-primary-text:      var(--khor-text-on-dark);
   --khor-input-bg:                 var(--khor-neutral-200);
   --khor-input-border:             var(--khor-neutral-300);
   --khor-card-bg:                  var(--khor-neutral-100);
@@ -771,19 +968,22 @@
   --foreground: var(--khor-text-primary);
   --primary: var(--khor-primary);
   --primary-foreground: var(--khor-text-on-action);
+  --muted-foreground: var(--khor-text-muted);
+  --card-foreground: var(--khor-text-primary);
+  --popover-foreground: var(--khor-text-primary);
+  --accent-foreground: var(--khor-text-primary);
+  --secondary-foreground: var(--khor-text-on-action);
   --border: var(--khor-border-default);
   --radius: var(--khor-radius-md);
 }
 
-/* ── Responsive Typography Overrides ── */
+/* ── Responsive Typography Overrides ──
+   h1/h2/h3 mobile floors are already encoded in their clamp() values above;
+   display sizes have no fluid clamp so they still need explicit mobile values. */
 @media (max-width: 768px) {
   :root {
     --khor-font-size-display-1: 48px;
     --khor-font-size-display-2: 40px;
-    --khor-font-size-h1: 32px;
-    --khor-font-size-h2: 24px;
-    --khor-font-size-h3: 20px;
-    --khor-font-size-h4: 18px;
   }
 }
 
@@ -803,11 +1003,104 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);
-  
+  --color-primary-foreground: var(--primary-foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-border: var(--border);
+
   --color-khor-navy: var(--khor-navy);
   --color-khor-primary: var(--khor-primary);
   --color-khor-secondary: var(--khor-secondary);
   --color-khor-accent: var(--khor-accent);
+
+  /* Blue Scale (Figma: Primary-Blue / Brand Navy) */
+  --color-khor-blue-50:  var(--khor-blue-50);
+  --color-khor-blue-100: var(--khor-blue-100);
+  --color-khor-blue-200: var(--khor-blue-200);
+  --color-khor-blue-300: var(--khor-blue-300);
+  --color-khor-blue-400: var(--khor-blue-400);
+  --color-khor-blue-500: var(--khor-blue-500);
+  --color-khor-blue-600: var(--khor-blue-600);
+  --color-khor-blue-700: var(--khor-blue-700);
+  --color-khor-blue-800: var(--khor-blue-800);
+  --color-khor-blue-900: var(--khor-blue-900);
+
+  /* Red Scale (Figma: Secondary-Red / CTA) */
+  --color-khor-red-50:  var(--khor-red-50);
+  --color-khor-red-100: var(--khor-red-100);
+  --color-khor-red-200: var(--khor-red-200);
+  --color-khor-red-300: var(--khor-red-300);
+  --color-khor-red-400: var(--khor-red-400);
+  --color-khor-red-500: var(--khor-red-500);
+  --color-khor-red-600: var(--khor-red-600);
+  --color-khor-red-700: var(--khor-red-700);
+  --color-khor-red-800: var(--khor-red-800);
+  --color-khor-red-900: var(--khor-red-900);
+
+  /* Gray Scale (Figma: Neutral colors) */
+  --color-khor-gray-25:  var(--khor-gray-25);
+  --color-khor-gray-50:  var(--khor-gray-50);
+  --color-khor-gray-100: var(--khor-gray-100);
+  --color-khor-gray-200: var(--khor-gray-200);
+  --color-khor-gray-300: var(--khor-gray-300);
+  --color-khor-gray-400: var(--khor-gray-400);
+  --color-khor-gray-500: var(--khor-gray-500);
+  --color-khor-gray-600: var(--khor-gray-600);
+  --color-khor-gray-700: var(--khor-gray-700);
+  --color-khor-gray-800: var(--khor-gray-800);
+  --color-khor-gray-900: var(--khor-gray-900);
+
+  /* Orange Scale (Figma: Tertiary-Orange) */
+  --color-khor-orange-50:  var(--khor-orange-50);
+  --color-khor-orange-100: var(--khor-orange-100);
+  --color-khor-orange-300: var(--khor-orange-300);
+  --color-khor-orange-500: var(--khor-orange-500);
+  --color-khor-orange-700: var(--khor-orange-700);
+  --color-khor-orange-900: var(--khor-orange-900);
+
+  /* Gold Scale (Figma: Tertiary-Gold) */
+  --color-khor-gold-50:  var(--khor-gold-50);
+  --color-khor-gold-300: var(--khor-gold-300);
+  --color-khor-gold-500: var(--khor-gold-500);
+  --color-khor-gold-700: var(--khor-gold-700);
+  --color-khor-gold-900: var(--khor-gold-900);
+
+  /* Cyan Scale (Figma: Tertiary-Cyan) */
+  --color-khor-cyan-50:  var(--khor-cyan-50);
+  --color-khor-cyan-300: var(--khor-cyan-300);
+  --color-khor-cyan-500: var(--khor-cyan-500);
+  --color-khor-cyan-700: var(--khor-cyan-700);
+
+  /* Leaf Green Scale (Figma: Tertiary-Leaf Green) */
+  --color-khor-leaf-50:  var(--khor-leaf-50);
+  --color-khor-leaf-300: var(--khor-leaf-300);
+  --color-khor-leaf-500: var(--khor-leaf-500);
+  --color-khor-leaf-700: var(--khor-leaf-700);
+
+  /* Magenta Scale (Figma: Tertiary-Magenta) */
+  --color-khor-magenta-50:  var(--khor-magenta-50);
+  --color-khor-magenta-300: var(--khor-magenta-300);
+  --color-khor-magenta-500: var(--khor-magenta-500);
+  --color-khor-magenta-700: var(--khor-magenta-700);
+
+  /* Figma Surface Tokens */
+  --color-khor-figma-surface-50:  var(--khor-figma-surface-50);
+  --color-khor-figma-surface-100: var(--khor-figma-surface-100);
+  --color-khor-figma-surface-200: var(--khor-figma-surface-200);
+  --color-khor-figma-surface-300: var(--khor-figma-surface-300);
+  --color-khor-figma-surface-400: var(--khor-figma-surface-400);
+  --color-khor-figma-surface-500: var(--khor-figma-surface-500);
+  --color-khor-figma-surface-900: var(--khor-figma-surface-900);
+
+  /* Dark Surface Interactions */
+  --color-khor-surface-on-dark-hover:    var(--khor-surface-on-dark-hover);
+  --color-khor-surface-on-dark-selected: var(--khor-surface-on-dark-selected);
+
+  /* Figma Divider */
+  --color-khor-divider: var(--khor-divider);
   
   /* Success Scale */
   --color-khor-success: var(--khor-success);
@@ -930,6 +1223,11 @@
   --color-khor-text-on-action: var(--khor-text-on-action);
   --color-khor-text-link: var(--khor-text-link);
   --color-khor-text-disabled: var(--khor-text-disabled);
+  --color-khor-text-on-dark: var(--khor-text-on-dark);
+  --color-khor-text-on-dark-secondary: var(--khor-text-on-dark-secondary);
+  --color-khor-text-on-dark-muted: var(--khor-text-on-dark-muted);
+  --color-khor-text-on-dark-disabled: var(--khor-text-on-dark-disabled);
+  --color-khor-text-label: var(--khor-text-label);
 
   /* Semantic Action Tokens */
   --color-khor-action-primary: var(--khor-action-primary-default);

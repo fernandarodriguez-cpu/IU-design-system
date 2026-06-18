@@ -1,3 +1,11 @@
+/* ─── KDataTable — Figma-aligned (node 6132-115308)
+   Border       : #CED4DA  (all borders, outline)
+   Header/Footer: bg #F4F4F4
+   Row hover    : #F9FAFB | selected: #FEE8E4
+   Sort          : double-triangle ▲▼ (gray → red when active)
+   Toolbar       : search + filterTrigger + actions — ABOVE the card
+   Always renders header (thead #F4F4F4) + footer (pagination bar #F4F4F4)
+──────────────────────────────────────────────────────────────────── */
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import {
   useReactTable,
@@ -15,55 +23,227 @@ import {
   ColumnFiltersState,
 } from '@tanstack/react-table';
 import { useVirtualizer } from '@tanstack/react-virtual';
-import { 
-  Download, Columns3, ChevronUp, ChevronDown, ChevronLeft, 
-  ChevronRight, ChevronsLeft, ChevronsRight, Filter, ChevronRight as ExpandIcon,
-  Search, X
+import {
+  Download, Columns3,
+  ChevronRight as ExpandIcon,
+  Search, Eye, MoreHorizontal, Star,
 } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { KCheckbox } from '../../atoms/KCheckbox/index';
 import { KSearchInput } from '../../atoms/KSearchInput/index';
 import { KButton } from '../../atoms/KButton';
 import { KSkeleton } from '../../atoms/KSkeleton';
-import { 
+import { KSwitch } from '../../atoms/KSwitch';
+import {
   KDropdownMenuRoot,
-  KDropdownMenuTrigger, 
-  KDropdownMenuContent, 
-  KDropdownMenuLabel, 
-  KDropdownMenuSeparator, 
-  KDropdownMenuCheckboxItem 
+  KDropdownMenuTrigger,
+  KDropdownMenuContent,
+  KDropdownMenuCheckboxItem,
+  KDropdownMenuItem,
 } from '../../molecules/KDropdownMenu/index';
-import { KSelectAdvanced, KSelectAdvancedOption } from '../../molecules/KSelectAdvanced/index';
-import { KPopoverRoot, KPopoverTrigger, KPopoverContent } from '../../molecules/KPopover/index';
 import { KEmptyState } from '../../molecules/KEmptyState/index';
 import { KResult } from '../../molecules/KResult/index';
+import { KPagination } from '../KPagination/index';
 
-/* ─── Types ──────────────────────────────────────── */
+/* ─── Sort double-triangle icon ─────────────────────────────────── */
+function SortIcon({ sorted }: { sorted: 'asc' | 'desc' | false }) {
+  return (
+    <span
+      className="inline-flex flex-col items-center gap-[1px] shrink-0 ml-1 opacity-50 group-hover/th:opacity-100 transition-opacity"
+      aria-hidden
+    >
+      <svg width="7" height="4" viewBox="0 0 7 4">
+        <path d="M3.5 0L7 4H0L3.5 0Z" fill={sorted === 'asc' ? '#E04D36' : '#9CA3AF'} />
+      </svg>
+      <svg width="7" height="4" viewBox="0 0 7 4">
+        <path d="M3.5 4L0 0H7L3.5 4Z" fill={sorted === 'desc' ? '#E04D36' : '#9CA3AF'} />
+      </svg>
+    </span>
+  );
+}
+
+/* ─── KTableRowStart — first-cell helper ────────────────────────── */
+export interface KTableRowStartProps {
+  checked?: boolean;
+  indeterminate?: boolean;
+  onCheck?: (checked: boolean) => void;
+  starred?: boolean;
+  onStar?: (starred: boolean) => void;
+  disabled?: boolean;
+  className?: string;
+}
+
+export function KTableRowStart({
+  checked, indeterminate, onCheck,
+  starred, onStar,
+  disabled, className,
+}: KTableRowStartProps) {
+  return (
+    <div
+      className={cn('flex items-center gap-2', className)}
+      onClick={e => e.stopPropagation()}
+    >
+      {onCheck !== undefined && (
+        <KCheckbox
+          checked={indeterminate ? 'indeterminate' : (checked ?? false)}
+          onChange={(e) => onCheck((e.target as HTMLInputElement).checked)}
+          disabled={disabled}
+        />
+      )}
+      {onStar !== undefined && (
+        <button
+          type="button"
+          onClick={() => onStar(!starred)}
+          disabled={disabled}
+          className={cn(
+            'p-0.5 rounded transition-colors',
+            starred
+              ? 'text-[#F59E0B]'
+              : 'text-[#D1D5DB] hover:text-[#9CA3AF]',
+            disabled && 'opacity-40 pointer-events-none',
+          )}
+        >
+          <Star size={14} fill={starred ? 'currentColor' : 'none'} />
+        </button>
+      )}
+    </div>
+  );
+}
+
+/* ─── KTableRowActions — last-cell helper ───────────────────────── */
+export interface KTableRowActionsMenuItem {
+  label: string;
+  icon?: React.ReactNode;
+  onClick: () => void;
+  danger?: boolean;
+}
+
+export interface KTableRowActionsProps {
+  /** Convenience: toggle switch (active/inactive) */
+  active?: boolean;
+  onToggle?: (active: boolean) => void;
+  /** Convenience: eye/view icon button */
+  onView?: () => void;
+  /** Convenience: 3-dot dropdown */
+  menuItems?: KTableRowActionsMenuItem[];
+  disabled?: boolean;
+  className?: string;
+  /** Fully custom elements rendered after the convenience props */
+  children?: React.ReactNode;
+}
+
+/** Shared icon-button class — exported so consumers can style custom children consistently */
+export const kTableActionIconBtn =
+  'inline-flex items-center justify-center w-7 h-7 rounded-md transition-colors text-[#9CA3AF] hover:text-[#374151] hover:bg-[#F3F4F6]';
+
+export function KTableRowActions({
+  active, onToggle, onView, menuItems, disabled, className, children,
+}: KTableRowActionsProps) {
+  const iconBtn = cn(kTableActionIconBtn, disabled && 'pointer-events-none opacity-40');
+
+  return (
+    <div
+      className={cn('flex items-center gap-1', className)}
+      onClick={e => e.stopPropagation()}
+    >
+      {onToggle !== undefined && (
+        <KSwitch size="small" checked={active} disabled={disabled} onCheckedChange={onToggle} />
+      )}
+      {onView && (
+        <button type="button" className={iconBtn} onClick={onView} title="Ver">
+          <Eye size={15} />
+        </button>
+      )}
+      {menuItems && menuItems.length > 0 && (
+        <KDropdownMenuRoot>
+          <KDropdownMenuTrigger asChild>
+            <button type="button" className={iconBtn} title="Más acciones">
+              <MoreHorizontal size={15} />
+            </button>
+          </KDropdownMenuTrigger>
+          <KDropdownMenuContent align="end" className="w-44">
+            {menuItems.map((item, i) => (
+              <KDropdownMenuItem
+                key={i}
+                onClick={item.onClick}
+                className={item.danger ? 'text-red-600 focus:text-red-600' : ''}
+              >
+                {item.icon && <span className="mr-2 opacity-70">{item.icon}</span>}
+                {item.label}
+              </KDropdownMenuItem>
+            ))}
+          </KDropdownMenuContent>
+        </KDropdownMenuRoot>
+      )}
+      {children}
+    </div>
+  );
+}
+
+/* ─── KTableCell — multi-segment cell helper (up to 10 segments) ── */
+export interface KTableCellProps {
+  /**
+   * Array of segments to render. Each segment is separated by a full-width
+   * divider stroke when divider=true. Accepts 2–10 items.
+   * Legacy: pass primary+secondary instead; segments takes precedence when provided.
+   */
+  segments?: React.ReactNode[];
+  /** Legacy: first segment */
+  primary?: React.ReactNode;
+  /** Legacy: second segment */
+  secondary?: React.ReactNode;
+  /** Draw full-width #CED4DA strokes between segments */
+  divider?: boolean;
+  className?: string;
+}
+
+const DIVIDER_STYLE: React.CSSProperties = {
+  marginLeft:  'calc(-1 * var(--cell-px, 1rem))',
+  marginRight: 'calc(-1 * var(--cell-px, 1rem))',
+};
+
+export function KTableCell({ segments, primary, secondary, divider = false, className }: KTableCellProps) {
+  const items: React.ReactNode[] = segments
+    ?? [primary, ...(secondary !== undefined ? [secondary] : [])];
+
+  return (
+    <div className={cn('flex flex-col w-full', className)}>
+      {items.map((item, i) => (
+        <React.Fragment key={i}>
+          <div className="text-[#374151] text-sm leading-normal py-[3px]">{item}</div>
+          {divider && i < items.length - 1 && (
+            <div className="h-px bg-[#CED4DA]" style={DIVIDER_STYLE} />
+          )}
+        </React.Fragment>
+      ))}
+    </div>
+  );
+}
+
+/* ─── Props ──────────────────────────────────────────────────────── */
 export interface KDataTableProps<TData> {
   data: TData[];
   columns: ColumnDef<TData, any>[];
   loading?: boolean;
-  
-  // Features
+
   searchable?: boolean;
   searchPlaceholder?: string;
+  /** Rendered next to the search input (e.g. a filter panel trigger) */
+  filterTrigger?: React.ReactNode;
+  /** Extra action buttons at the right of the toolbar */
   actions?: React.ReactNode;
-  
-  // Layout & Pagination
+
   rowKey?: string | ((row: TData) => string);
   pageSize?: number;
   pageSizes?: number[];
   pagination?: boolean;
-  
-  // Interactions
+
   onRowClick?: (record: TData) => void;
   enableRowSelection?: boolean;
   enableColumnToggle?: boolean;
   enableExport?: boolean;
-  
-  // Advanced Features (Wave 11)
+
   stickyHeader?: boolean;
-  maxHeight?: string | number;
   scroll?: { x?: number | string; y?: number | string };
   virtual?: boolean;
   rowExpansion?: {
@@ -73,33 +253,16 @@ export interface KDataTableProps<TData> {
   size?: 'small' | 'middle' | 'large';
   onSelectionChange?: (selectedRows: TData[]) => void;
   className?: string;
-  /** Fuerza el estado hover (útil para previews/playgrounds) */
   isHovered?: boolean;
-  /** Fuerza el estado de foco (útil para previews/playgrounds) */
   isFocused?: boolean;
-  /** Activa el estado de error de la tabla */
   hasError?: boolean;
-  /** Contenido personalizado para el estado vacío. Por defecto usa KEmptyState. */
   emptyContent?: React.ReactNode;
-  /** Contenido personalizado para el estado de error. Por defecto usa KResult. */
   errorContent?: React.ReactNode;
 }
 
 /**
  * @figma-mcp-migration
- * Component: KDataTable
- * 
- * INSTRUCCIONES PARA AGENTES DE IA (VS Code / MCP):
- * Para migrar este componente a Figma, NO generar una matriz multiplicando todas las variables.
- * Utilizar Figma Component Properties V2 con la siguiente estructura:
- * 
- * 1. Variants (Estructurales):
- *    - Definir variantes puramente visuales/estructurales.
- * 2. Booleans (Encendido/Apagado):
- *    - Definir encendido/apagado para iconos o estados (isLoading, hasIcon).
- * 3. Color Variables (No usar variantes para colores semánticos):
- *    - El relleno/borde debe usar Figma Variables (Khor v6.0 Colors) asignado dinámicamente.
- *    - El consumidor del UI Kit cambiará el color del layer.
+ * Component: KDataTable (node 6132-115308)
  */
 export function KDataTable<TData>({
   data,
@@ -107,6 +270,7 @@ export function KDataTable<TData>({
   loading = false,
   searchable = true,
   searchPlaceholder = 'Buscar...',
+  filterTrigger,
   actions,
   rowKey,
   pageSize = 10,
@@ -129,31 +293,41 @@ export function KDataTable<TData>({
   emptyContent,
   errorContent,
 }: KDataTableProps<TData>) {
-  
-  // ─── Table States ───
-  const [globalFilter, setGlobalFilter] = useState('');
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [sorting, setSorting] = useState<SortingState>([]);
+
+  const [globalFilter, setGlobalFilter]         = useState('');
+  const [columnFilters, setColumnFilters]       = useState<ColumnFiltersState>([]);
+  const [sorting, setSorting]                   = useState<SortingState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
-  const [expanded, setExpanded] = useState<ExpandedState>(
+  const [rowSelection, setRowSelection]         = useState<RowSelectionState>({});
+  const [expanded, setExpanded]                 = useState<ExpandedState>(
     rowExpansion?.defaultExpandAllRows ? true : {}
   );
+  const [currentPage, setCurrentPage]           = useState(1);
+  const [currentPageSize, setCurrentPageSize]   = useState(pageSize);
 
-  // ─── Columns Enrichment ───
+  useEffect(() => { setCurrentPageSize(pageSize); setCurrentPage(1); }, [pageSize]);
+
+  // ─── Column injection ───
   const tableColumns = useMemo<ColumnDef<TData, any>[]>(() => {
     const cols = [...columns];
-    
-    // Inyectar Columna de Selección
+
     if (enableRowSelection) {
       cols.unshift({
         id: 'k-selection',
-        size: 50,
+        size: 48,
         header: ({ table }) => (
           <div className="flex justify-center">
             <KCheckbox
-              checked={table.getIsAllPageRowsSelected() ? true : table.getIsSomePageRowsSelected() ? 'indeterminate' : false}
-              onChange={(e) => table.toggleAllPageRowsSelected((e.target as HTMLInputElement).checked)}
+              checked={
+                table.getIsAllPageRowsSelected()
+                  ? true
+                  : table.getIsSomePageRowsSelected()
+                  ? 'indeterminate'
+                  : false
+              }
+              onChange={(e) =>
+                table.toggleAllPageRowsSelected((e.target as HTMLInputElement).checked)
+              }
             />
           </div>
         ),
@@ -170,7 +344,6 @@ export function KDataTable<TData>({
       });
     }
 
-    // Inyectar Columna de Expansión
     if (rowExpansion) {
       cols.unshift({
         id: 'k-expander',
@@ -180,11 +353,11 @@ export function KDataTable<TData>({
           <button
             onClick={(e) => { e.stopPropagation(); row.toggleExpanded(); }}
             className={cn(
-              "transition-transform duration-200 p-1 rounded-md hover:bg-neutral-100",
-              row.getIsExpanded() ? "rotate-90" : ""
+              'transition-transform duration-200 p-1 rounded-md hover:bg-[#F3F4F6]',
+              row.getIsExpanded() ? 'rotate-90' : '',
             )}
           >
-            <ExpandIcon size={16} className="text-khor-neutral-400" />
+            <ExpandIcon size={16} className="text-[#9CA3AF]" />
           </button>
         ),
       });
@@ -193,7 +366,7 @@ export function KDataTable<TData>({
     return cols;
   }, [columns, enableRowSelection, rowExpansion]);
 
-  // ─── React Table Core ───
+  // ─── React Table ───
   const table = useReactTable({
     data,
     columns: tableColumns,
@@ -204,6 +377,7 @@ export function KDataTable<TData>({
       columnVisibility,
       rowSelection,
       expanded,
+      pagination: { pageIndex: currentPage - 1, pageSize: currentPageSize },
     },
     onGlobalFilterChange: setGlobalFilter,
     onColumnFiltersChange: setColumnFilters,
@@ -218,57 +392,83 @@ export function KDataTable<TData>({
         }, 0);
       }
     },
-    getRowId: rowKey ? (typeof rowKey === 'string' ? (row: any) => row[rowKey] : rowKey) : undefined,
-    getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getSortedRowModel: getSortedRowModel(),
+    onPaginationChange: (updater) => {
+      const next = typeof updater === 'function'
+        ? updater({ pageIndex: currentPage - 1, pageSize: currentPageSize })
+        : updater;
+      setCurrentPage(next.pageIndex + 1);
+      setCurrentPageSize(next.pageSize);
+    },
+    getRowId: rowKey
+      ? (typeof rowKey === 'string' ? (row: any) => row[rowKey] : rowKey)
+      : undefined,
+    getCoreRowModel:       getCoreRowModel(),
+    getFilteredRowModel:   getFilteredRowModel(),
+    getSortedRowModel:     getSortedRowModel(),
     getPaginationRowModel: pagination ? getPaginationRowModel() : undefined,
-    getExpandedRowModel: getExpandedRowModel(),
+    getExpandedRowModel:   getExpandedRowModel(),
   });
 
-  // ─── Virtualization Logic ───
+  // ─── Virtualizer ───
   const parentRef = useRef<HTMLDivElement>(null);
   const { rows } = table.getRowModel();
-  
+
   const virtualizer = useVirtualizer({
     count: rows.length,
     getScrollElement: () => parentRef.current,
-    estimateSize: () => (size === 'small' ? 32 : size === 'large' ? 60 : 44),
+    estimateSize: () => (size === 'small' ? 36 : size === 'large' ? 56 : 44),
     overscan: 10,
     measureElement: (el) => el?.getBoundingClientRect().height ?? 0,
     enabled: virtual || !!scroll?.y,
   });
 
-  const virtualRows = virtualizer.getVirtualItems();
-  const totalHeight = virtualizer.getTotalSize();
+  const virtualRows  = virtualizer.getVirtualItems();
+  const totalHeight  = virtualizer.getTotalSize();
 
-  // ─── Auxiliary ───
+  // ─── CSV export ───
   const handleExportCSV = () => {
-    const visibleCols = table.getVisibleLeafColumns().filter(c => !['k-selection', 'k-expander'].includes(c.id));
+    const visibleCols = table
+      .getVisibleLeafColumns()
+      .filter(c => !['k-selection', 'k-expander'].includes(c.id));
     const headers = visibleCols.map(c => String(c.columnDef.header || c.id)).join(',');
     const csvRows = table.getCoreRowModel().rows.map(row =>
       visibleCols.map(c => {
-        const val = row.getValue(c.id);
-        const strVal = String(val ?? '');
-        return strVal.includes(',') ? `"${strVal}"` : strVal;
+        const s = String(row.getValue(c.id) ?? '');
+        return s.includes(',') ? `"${s}"` : s;
       }).join(',')
     );
-    const csv = [headers, ...csvRows].join('\n');
+    const csv  = [headers, ...csvRows].join('\n');
     const blob = new Blob([csv], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a'); a.href = url;
-    a.download = `khor-table-${new Date().getTime()}.csv`; a.click();
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href = url;
+    a.download = `khor-table-${Date.now()}.csv`;
+    a.click();
     URL.revokeObjectURL(url);
   };
 
-  /* ─── Components Locales ─── */
+  // ─── Size helpers (hardcoded — Tailwind JIT needs literal strings) ───
+  const cellPx    = size === 'small'  ? 'px-3 py-2'
+                 : size === 'large'  ? 'px-5 py-4'
+                 :                    'px-4 py-3';
+  const cellPxVar = size === 'small'  ? '0.75rem'
+                 : size === 'large'  ? '1.25rem'
+                 :                    '1rem';
+  const rowH   = size === 'small'  ? 36
+               : size === 'large'  ? 56
+               :                    44;
+
+  const totalFiltered  = table.getFilteredRowModel().rows.length;
+  const hasToolbar     = searchable || filterTrigger || actions || enableColumnToggle || enableExport;
+
+  // ─── Skeleton ───
   const TableSkeleton = () => (
     <>
-      {Array.from({ length: pageSize || 5 }).map((_, i) => (
-        <tr key={i} className="border-b transition-colors">
-          {table.getVisibleLeafColumns().map((col, j) => (
-            <td key={j} className="px-[var(--khor-density-spacing-md)] py-[var(--khor-density-spacing-sm)]">
-              <KSkeleton active height={16} width={j === 0 ? "40%" : "80%"} />
+      {Array.from({ length: currentPageSize }).map((_, i) => (
+        <tr key={i} className="border-b border-[#CED4DA]">
+          {table.getVisibleLeafColumns().map((_, j) => (
+            <td key={j} className={cellPx}>
+              <KSkeleton active height={14} width={j === 0 ? '40%' : '80%'} />
             </td>
           ))}
         </tr>
@@ -276,68 +476,67 @@ export function KDataTable<TData>({
     </>
   );
 
-  const FilterPopover = ({ column }: { column: any }) => {
-    const isFiltered = column.getIsFiltered();
-    return (
-      <KPopoverRoot>
-        <KPopoverTrigger asChild>
-          <button 
-            className={cn(
-               "p-1 rounded transition-colors hover:bg-neutral-200",
-               isFiltered ? "text-khor-primary" : "text-khor-neutral-300"
-            )}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <Filter size={13} fill={isFiltered ? "currentColor" : "none"} />
-          </button>
-        </KPopoverTrigger>
-        <KPopoverContent className="p-3 w-48 shadow-xl border">
-          <KSearchInput 
-            size="sm" 
-            placeholder="Filtrar..." 
-            value={(column.getFilterValue() as string) ?? ''}
-            onChange={(val) => column.setFilterValue(val)}
-            autoFocus
-          />
-          <div className="flex justify-between mt-3 pt-2 border-t">
-            <button className="text-xs text-khor-neutral-400 hover:text-khor-primary" onClick={() => column.setFilterValue(undefined)}>Limpiar</button>
-            <button className="text-xs font-bold text-khor-primary">OK</button>
-          </div>
-        </KPopoverContent>
-      </KPopoverRoot>
+  // ─── Row classes (all literals — no template interpolation) ───
+  const normalRowCls = (selected: boolean) =>
+    cn(
+      'border-b border-[#CED4DA] transition-colors',
+      onRowClick ? 'cursor-pointer' : '',
+      selected
+        ? 'bg-[#FEE8E4]'
+        : isHovered
+        ? 'bg-[#F9FAFB]'
+        : 'hover:bg-[#F9FAFB]',
     );
-  };
 
   return (
-    <div className={cn(
-      "flex flex-col rounded-xl overflow-hidden border bg-white shadow-khor-md font-primary",
-      size === 'small' ? "text-xs" : "text-sm",
-      className
-    )}>
-      {/* TOOLBAR */}
-      {(searchable || actions || enableColumnToggle || enableExport) && (
-        <div className="flex flex-wrap items-center justify-between gap-3 p-3 border-b bg-khor-neutral-50/50">
-          <div className="flex-1 min-w-[200px]">
+    <div className={cn('flex flex-col gap-3 font-primary', className)}>
+
+      {/* ── TOOLBAR (above card) ── */}
+      {hasToolbar && (
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
             {searchable && (
-              <KSearchInput 
-                placeholder={searchPlaceholder} 
-                value={globalFilter} 
-                onChange={(e: any) => setGlobalFilter(e.target.value)} 
-                className="max-w-xs"
-                size={size === 'small' ? 'sm' : 'md'}
-              />
+              <div className={cn(
+                'flex items-center w-[264px] rounded-lg border border-[#D1D5DB] bg-white overflow-hidden shrink-0',
+                size === 'small' ? 'h-8' : 'h-10',
+              )}>
+                <input
+                  type="text"
+                  placeholder={searchPlaceholder}
+                  value={globalFilter}
+                  onChange={e => { setGlobalFilter(e.target.value); setCurrentPage(1); }}
+                  className="flex-1 h-full pl-4 text-sm text-[#374151] placeholder:text-[#9CA3AF] outline-none bg-transparent"
+                />
+                <div className={cn(
+                  'flex items-center justify-center h-full border-l border-[#D1D5DB] shrink-0',
+                  size === 'small' ? 'w-9' : 'w-11',
+                )}>
+                  <Search size={size === 'small' ? 14 : 16} className="text-[#9CA3AF]" />
+                </div>
+              </div>
             )}
+            {filterTrigger}
           </div>
           <div className="flex items-center gap-2">
             {enableExport && (
-               <KButton variant="outline" size="sm" icon={<Download size={14} />} onClick={handleExportCSV}>Exportar</KButton>
+              <KButton variant="outline" size="sm" icon={<Download size={14} />} onClick={handleExportCSV}>
+                Exportar
+              </KButton>
             )}
             {enableColumnToggle && (
               <KDropdownMenuRoot>
-                <KDropdownMenuTrigger asChild><KButton variant="outline" size="sm" icon={<Columns3 size={14} />}>Columnas</KButton></KDropdownMenuTrigger>
+                <KDropdownMenuTrigger asChild>
+                  <KButton variant="outline" size="sm" icon={<Columns3 size={14} />}>Columnas</KButton>
+                </KDropdownMenuTrigger>
                 <KDropdownMenuContent className="w-48 max-h-64 overflow-auto">
-                    {table.getAllLeafColumns().filter(c => !c.id.startsWith('k-')).map(col => (
-                      <KDropdownMenuCheckboxItem key={col.id} checked={col.getIsVisible()} onCheckedChange={col.toggleVisibility}>
+                  {table.getAllLeafColumns()
+                    .filter(c => !c.id.startsWith('k-'))
+                    .map(col => (
+                      <KDropdownMenuCheckboxItem
+                        key={col.id}
+                        checked={col.getIsVisible()}
+                        onCheckedChange={col.toggleVisibility}
+                      >
                         {String(col.columnDef.header || col.id)}
                       </KDropdownMenuCheckboxItem>
                     ))}
@@ -349,180 +548,195 @@ export function KDataTable<TData>({
         </div>
       )}
 
-      {/* TABLE VIEWPORT */}
-      <div 
-        ref={parentRef}
-        className="relative w-full overflow-auto"
-        style={{ height: scroll?.y ?? 'auto', maxHeight: scroll?.y ? undefined : '70vh' }}
+      {/* ── TABLE CARD ── */}
+      <div
+        className={cn(
+          'rounded-lg overflow-hidden border border-[#CED4DA] bg-white',
+          size === 'small' ? 'text-xs' : 'text-sm',
+          isFocused && 'ring-2 ring-[#E04D36]',
+        )}
       >
-        <table className={cn("w-full border-collapse", scroll?.x ? "min-w-fit" : "min-w-full")}>
-          <thead className={cn(
-            "text-khor-text-secondary font-bold bg-khor-surface-page shadow-sm z-20 border-b transition-colors",
-            (stickyHeader || scroll?.y || virtual) ? "sticky top-0" : "",
-            isFocused && "ring-2 ring-khor-primary ring-inset"
-          )}>
-            {table.getHeaderGroups().map(hg => (
-              <tr key={hg.id}>
-                {hg.headers.map(header => (
-                  <th 
-                    key={header.id}
-                    scope="col"
-                    className="px-[var(--khor-density-spacing-md)] py-[var(--khor-density-spacing-sm)] border-b text-left transition-colors"
-                    style={{ width: header.getSize() }}
-                  >
-                    <div className="flex items-center justify-between gap-2 group/th">
-                      <div 
-                         role={header.column.getCanSort() ? "button" : undefined}
-                         aria-label={header.column.getCanSort() ? `Sort by ${header.id}` : undefined}
-                         className={cn("flex items-center gap-1.5 flex-1", header.column.getCanSort() ? "cursor-pointer hover:text-khor-primary" : "")}
-                         onClick={header.column.getToggleSortingHandler()}
-                      >
-                         {flexRender(header.column.columnDef.header, header.getContext())}
-                         {{
-                           asc: <ChevronUp size={14} className="text-khor-primary" />,
-                           desc: <ChevronDown size={14} className="text-khor-primary" />
-                         }[header.column.getIsSorted() as string] ?? (
-                           header.column.getCanSort() && <ChevronDown size={14} className="opacity-0 group-hover/th:opacity-30 transition-opacity" />
-                         )}
-                      </div>
-                      {header.column.getCanFilter() && <FilterPopover column={header.column} />}
-                    </div>
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
+        {/* Scrollable viewport */}
+        <div
+          ref={parentRef}
+          className="relative w-full overflow-auto"
+          style={{ height: scroll?.y ?? 'auto', maxHeight: scroll?.y ? undefined : '70vh' }}
+        >
+          <table
+            className={cn('w-full border-collapse', scroll?.x ? 'min-w-fit' : 'min-w-full')}
+            style={{ '--cell-px': cellPxVar } as React.CSSProperties}
+          >
 
-          <tbody style={{ height: (virtual || !!scroll?.y) ? `${totalHeight}px` : 'auto', position: 'relative' }}>
-            {hasError ? (
-              <tr>
-                <td colSpan={100} className="py-12">
-                  {errorContent || (
-                    <KResult 
-                      status="error" 
-                      title="Error al cargar datos" 
-                      subTitle="Ocurrió un problema al intentar recuperar la información. Por favor, intenta de nuevo."
-                    />
-                  )}
-                </td>
-              </tr>
-            ) : loading ? (
-              <TableSkeleton />
-            ) : rows.length === 0 ? (
-              <tr>
-                <td colSpan={100} className="py-12">
-                  {emptyContent || (
-                    <KEmptyState 
-                      title="No hay datos" 
-                      description="No se encontraron resultados para los filtros actuales."
-                      icon={<Search className="w-12 h-12 text-khor-text-tertiary opacity-50" />}
-                    />
-                  )}
-                </td>
-              </tr>
-            ) : (virtual || !!scroll?.y) ? (
-              // Virtualized Rows
-              virtualRows.map(virtualRow => {
-                const row = rows[virtualRow.index];
-                return (
-                  <tr 
-                    key={row.id}
-                    data-index={virtualRow.index}
-                    ref={virtualizer.measureElement}
-                    className={cn(
-                        "absolute left-0 w-full transition-colors border-b",
-                        "hover:bg-khor-surface-hover",
-                        row.getIsSelected() ? "bg-khor-surface-selected" : "",
-                        isHovered && "bg-khor-surface-hover"
-                    )}
-                    style={{ transform: `translateY(${virtualRow.start}px)` }}
-                    onClick={() => onRowClick?.(row.original)}
-                  >
-                    <td colSpan={100} className="p-0 border-none">
-                      <div className="flex items-center w-full">
-                        {row.getVisibleCells().map(cell => (
-                          <div 
-                            key={cell.id} 
-                            className="px-[var(--khor-density-spacing-md)] py-[var(--khor-density-spacing-sm)] whitespace-nowrap overflow-hidden text-ellipsis flex items-center" 
-                            style={{ 
-                              width: cell.column.getSize(),
-                              height: size === 'small' ? 'var(--khor-density-height-sm)' : size === 'large' ? 'var(--khor-density-height-lg)' : 'var(--khor-density-height-md)' 
-                            }}
-                          >
-                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                          </div>
-                        ))}
-                      </div>
-                      
-                      {row.getIsExpanded() && rowExpansion?.expandedRowRender && (
-                        <div className="p-4 bg-khor-surface-subtle border-t w-full">
-                           {rowExpansion.expandedRowRender(row.original)}
+            {/* ── HEADER — always bg-[#F4F4F4] ── */}
+            <thead
+              className={cn(
+                'bg-[#F4F4F4] z-20',
+                (stickyHeader || scroll?.y || virtual) ? 'sticky top-0' : '',
+              )}
+            >
+              {table.getHeaderGroups().map(hg => (
+                <tr key={hg.id} className="border-b border-[#CED4DA]">
+                  {hg.headers.map(header => {
+                    const sorted  = header.column.getIsSorted() as 'asc' | 'desc' | false;
+                    const canSort = header.column.getCanSort();
+                    return (
+                      <th
+                        key={header.id}
+                        scope="col"
+                        className={cn(
+                          cellPx,
+                          'text-left text-[#6B7280] font-medium whitespace-nowrap select-none',
+                          'group/th',
+                          canSort ? 'cursor-pointer hover:text-[#374151]' : '',
+                        )}
+                        style={{ width: header.getSize() }}
+                        onClick={canSort ? header.column.getToggleSortingHandler() : undefined}
+                      >
+                        <div className="flex items-center">
+                          {flexRender(header.column.columnDef.header, header.getContext())}
+                          {canSort && <SortIcon sorted={sorted} />}
                         </div>
-                      )}
-                    </td>
-                  </tr>
-                );
-              })
-            ) : (
-              // Normal Rows
-              rows.map(row => (
-                <React.Fragment key={row.id}>
-                  <tr 
-                    className={cn(
-                      "transition-colors border-b",
-                      "hover:bg-khor-surface-hover",
-                      onRowClick ? "cursor-pointer" : "",
-                      row.getIsSelected() ? "bg-khor-surface-selected" : "",
-                      isHovered && "bg-khor-surface-hover"
+                      </th>
+                    );
+                  })}
+                </tr>
+              ))}
+            </thead>
+
+            {/* ── BODY ── */}
+            <tbody
+              style={{
+                height:   (virtual || !!scroll?.y) ? `${totalHeight}px` : 'auto',
+                position: 'relative',
+              }}
+            >
+              {hasError ? (
+                <tr>
+                  <td colSpan={100} className="py-16">
+                    {errorContent || (
+                      <KResult
+                        status="error"
+                        title="Error al cargar datos"
+                        subTitle="Ocurrió un problema al intentar recuperar la información."
+                      />
                     )}
-                    onClick={() => onRowClick?.(row.original)}
-                  >
-                    {row.getVisibleCells().map(cell => (
-                      <td key={cell.id} className="px-[var(--khor-density-spacing-md)] py-[var(--khor-density-spacing-sm)] align-middle" style={{ width: cell.column.getSize() }}>
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                      </td>
-                    ))}
-                  </tr>
-                  {row.getIsExpanded() && rowExpansion?.expandedRowRender && (
-                    <tr className="bg-khor-surface-subtle border-b">
-                      <td colSpan={100} className="p-6">
-                        {rowExpansion.expandedRowRender(row.original)}
+                  </td>
+                </tr>
+              ) : loading ? (
+                <TableSkeleton />
+              ) : rows.length === 0 ? (
+                <tr>
+                  <td colSpan={100} className="py-16">
+                    {emptyContent || (
+                      <KEmptyState
+                        title="No hay datos"
+                        description="No se encontraron resultados para los filtros actuales."
+                        icon={<Search className="w-10 h-10 text-[#D1D5DB]" />}
+                      />
+                    )}
+                  </td>
+                </tr>
+              ) : (virtual || !!scroll?.y) ? (
+                // Virtualised rows
+                virtualRows.map(vr => {
+                  const row = rows[vr.index];
+                  return (
+                    <tr
+                      key={row.id}
+                      data-index={vr.index}
+                      ref={virtualizer.measureElement}
+                      className={cn('absolute left-0 w-full', normalRowCls(row.getIsSelected()))}
+                      style={{ transform: `translateY(${vr.start}px)` }}
+                      onClick={() => onRowClick?.(row.original)}
+                    >
+                      <td colSpan={100} className="p-0 border-none">
+                        <div className="flex items-center w-full">
+                          {row.getVisibleCells().map(cell => {
+                            const meta = cell.column.columnDef.meta as any;
+                            return (
+                              <div
+                                key={cell.id}
+                                className={cn(
+                                  cellPx,
+                                  'whitespace-nowrap overflow-hidden text-ellipsis flex items-center text-[#374151]',
+                                  meta?.splitCell && 'border-l border-r border-[#CED4DA]',
+                                )}
+                                style={{ width: cell.column.getSize(), height: rowH }}
+                              >
+                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                              </div>
+                            );
+                          })}
+                        </div>
+                        {row.getIsExpanded() && rowExpansion?.expandedRowRender && (
+                          <div className="p-4 border-t border-[#CED4DA] bg-[#F9FAFB] w-full">
+                            {rowExpansion.expandedRowRender(row.original)}
+                          </div>
+                        )}
                       </td>
                     </tr>
-                  )}
-                </React.Fragment>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
-
-      {/* PAGINATION */}
-      {pagination && !virtual && (
-        <div className="flex items-center justify-between p-3 border-t bg-khor-surface-page">
-          <div className="text-xs text-khor-text-tertiary font-medium">
-             {table.getFilteredSelectedRowModel().rows.length} de {table.getFilteredRowModel().rows.length} filas seleccionadas
-          </div>
-          <div className="flex items-center gap-4">
-             <div className="flex items-center gap-2">
-                <span className="text-xs text-khor-text-tertiary">Filas:</span>
-                <KSelectAdvanced 
-                  className="!min-h-[var(--khor-density-height-sm)] w-20 text-xs"
-                  options={pageSizes.map(ps => ({ label: String(ps), value: String(ps) }))}
-                  value={String(table.getState().pagination.pageSize)}
-                  onChange={val => table.setPageSize(Number(val))}
-                />
-             </div>
-             <div className="flex items-center gap-1">
-                <KButton variant="outline" size="sm" shape="circle" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}><ChevronLeft size={16}/></KButton>
-                <div className="px-3 text-xs font-bold text-khor-text-secondary">
-                   {table.getState().pagination.pageIndex + 1} / {table.getPageCount()}
-                </div>
-                <KButton variant="outline" size="sm" shape="circle" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}><ChevronRight size={16}/></KButton>
-             </div>
-          </div>
+                  );
+                })
+              ) : (
+                // Normal rows
+                rows.map(row => (
+                  <React.Fragment key={row.id}>
+                    <tr
+                      className={normalRowCls(row.getIsSelected())}
+                      onClick={() => onRowClick?.(row.original)}
+                    >
+                      {row.getVisibleCells().map(cell => {
+                        const meta = cell.column.columnDef.meta as any;
+                        return (
+                          <td
+                            key={cell.id}
+                            className={cn(
+                              cellPx, 'align-middle text-[#374151]',
+                              meta?.splitCell && 'border-l border-r border-[#CED4DA]',
+                            )}
+                            style={{ width: cell.column.getSize() }}
+                          >
+                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                          </td>
+                        );
+                      })}
+                    </tr>
+                    {row.getIsExpanded() && rowExpansion?.expandedRowRender && (
+                      <tr className="border-b border-[#CED4DA] bg-[#F9FAFB]">
+                        <td colSpan={100} className="p-5">
+                          {rowExpansion.expandedRowRender(row.original)}
+                        </td>
+                      </tr>
+                    )}
+                  </React.Fragment>
+                ))
+              )}
+            </tbody>
+          </table>
         </div>
-      )}
+
+        {/* ── FOOTER — always rendered when pagination=true ── */}
+        {pagination && (
+          <div className="flex items-center justify-end px-4 py-3 border-t border-[#CED4DA] bg-[#F4F4F4]">
+            {virtual ? (
+              /* virtual mode: all rows are rendered — just show the total count */
+              <span className="text-xs text-[#9CA3AF]">
+                {totalFiltered.toLocaleString()} registros
+              </span>
+            ) : (
+              <KPagination
+                size="small"
+                current={currentPage}
+                pageSize={currentPageSize}
+                total={totalFiltered}
+                showTotal
+                showSizeChanger
+                onChange={(page, ps) => { setCurrentPage(page); setCurrentPageSize(ps); }}
+              />
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

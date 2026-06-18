@@ -33,8 +33,8 @@ export interface ThemeConfig {
 }
 
 export const defaultTheme: ThemeConfig = {
-  primary: '#E04D36', secondary: '#051758', accent: '#FF9500',
-  success: '#2E7D32', error: '#D32F2F', warning: '#E68600', info: '#1976D2',
+  primary: '#051758', secondary: '#E04D36', accent: '#FF9500',
+  success: '#52C41A', error: '#FF4D4F', warning: '#FAAD14', info: '#1976D2',
   fontHeading: 'Montserrat', fontBody: 'Plus Jakarta Sans', fontMono: 'JetBrains Mono',
   h1Size: 38, h2Size: 30, h3Size: 24, bodySize: 14, smallSize: 12, baseLineHeight: 1.5,
   shadowSm: '0 1px 3px 0', shadowMd: '0 4px 12px 0', shadowLg: '0 10px 30px -4px', shadowColor: '#00000018',
@@ -87,22 +87,21 @@ export function useTheme() {
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [mode, setModeState] = useState<ThemeMode>(() => {
     try {
-      const stored = localStorage.getItem('khor-theme-mode') as ThemeMode;
-      if (stored === 'light' || stored === 'dark' || stored === 'high-contrast') {
-        return stored;
-      }
-      // System preference fallback
-      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        return 'dark';
-      }
-    } catch (e) {
-      // Ignorar errores de localStorage en SSR o modo incógnito
-    }
+      // Always clear any stored dark mode — light is the only supported mode
+      localStorage.removeItem('khor-theme-mode');
+    } catch {}
     return 'light';
   });
 
   const [themeConfig, setThemeConfigState] = useState<ThemeConfig>(() => {
     try {
+      const THEME_VERSION = '3'; // bump when defaultTheme brand colors change
+      const storedVersion = localStorage.getItem('khor-theme-version');
+      if (storedVersion !== THEME_VERSION) {
+        localStorage.removeItem('khor-custom-theme');
+        localStorage.setItem('khor-theme-version', THEME_VERSION);
+        return defaultTheme;
+      }
       const stored = localStorage.getItem('khor-custom-theme');
       return stored ? JSON.parse(stored) : defaultTheme;
     } catch {
@@ -124,24 +123,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   useEffect(() => {
-    try {
-      localStorage.setItem('khor-theme-mode', mode);
-    } catch {}
-    
     const html = document.documentElement;
-    
-    // Cleanup previous classes
+    // Light mode only — remove any dark classes that may have been set
     html.classList.remove('dark', 'high-contrast');
-    
-    // Apply new classes
-    if (mode === 'dark') {
-      html.classList.add('dark');
-    } else if (mode === 'high-contrast') {
-      html.classList.add('dark'); // High contrast builds upon dark topology in Khor
-      html.classList.add('high-contrast');
-    }
-    
-    html.setAttribute('data-theme', mode);
+    html.setAttribute('data-theme', 'light');
   }, [mode]);
 
   // Apply custom theme properties to :root
@@ -157,6 +142,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       '--khor-error': t.error,
       '--khor-warning': t.warning,
       '--khor-info': t.info,
+      // Text tokens are always fixed — never follow brand primary/secondary
+      '--khor-text-primary': '#051758',
+      '--khor-text-label': '#8489AB',
       '--font-primary': `'${t.fontHeading}', sans-serif`,
       '--font-secondary': `'${t.fontBody}', sans-serif`,
       '--font-mono': `'${t.fontMono}', monospace`,
@@ -194,13 +182,13 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <ThemeContext.Provider value={{ 
-      mode, 
-      setMode, 
-      toggleDark, 
-      toggleHighContrast, 
-      isDark: mode === 'dark' || mode === 'high-contrast',
-      isHighContrast: mode === 'high-contrast',
+    <ThemeContext.Provider value={{
+      mode: 'light',
+      setMode,
+      toggleDark,
+      toggleHighContrast,
+      isDark: false,
+      isHighContrast: false,
       themeConfig,
       setThemeConfig,
       resetTheme

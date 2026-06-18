@@ -32,7 +32,7 @@ function SaaSLoginInternal() {
       fontFamily: t.typography.fontPrimary,
       position: 'relative',
       overflow: 'hidden',
-      backgroundColor: t.colors.brand.secondary, // Deep Navy
+      backgroundColor: t.colors.brand.navy, // Deep Navy
     }}>
       {/* Dynamic Background Mesh */}
       <div style={{

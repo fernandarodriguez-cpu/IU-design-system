@@ -14,11 +14,13 @@ const FigmaExportPage = lazy(() => import('./pages/FigmaExportPage').then(m => (
 const AIExportPage = lazy(() => import('./pages/AIExportPage').then(m => ({ default: m.AIExportPage })));
 const PatternsPage = lazy(() => import('./pages/PatternsPage').then(m => ({ default: m.PatternsPage })));
 const ThemingPage = lazy(() => import('./pages/ThemingPage').then(m => ({ default: m.ThemingPage })));
+const LayoutsPage = lazy(() => import('./pages/LayoutsPage').then(m => ({ default: m.LayoutsPage })));
 const InspirationPage = lazy(() => import('./pages/InspirationPage').then(m => ({ default: m.InspirationPage })));
 const GanttShowcase = lazy(() => import('./pages/GanttShowcase').then(m => ({ default: m.GanttShowcase })));
 const KEditorShowcase = lazy(() => import('./pages/KEditorShowcase').then(m => ({ default: m.KEditorShowcase })));
 const ErrorPage = lazy(() => import('./pages/ErrorPage').then(m => ({ default: m.ErrorPage })));
 const IconExplorerPage = lazy(() => import('./pages/IconExplorerPage').then(m => ({ default: m.IconExplorerPage })));
+const ChartsPage = lazy(() => import('./pages/ChartsPage').then(m => ({ default: m.ChartsPage })));
 
 // Loading placeholder
 const PageLoader = () => (
@@ -93,13 +95,21 @@ export const router = createBrowserRouter([
           </Suspense>
         ) 
       },
-      { 
-        path: 'theming', 
+      {
+        path: 'theming',
         element: (
           <Suspense fallback={<PageLoader />}>
             <ThemingPage />
           </Suspense>
-        ) 
+        )
+      },
+      {
+        path: 'layouts',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <LayoutsPage />
+          </Suspense>
+        )
       },
       { 
         path: 'organisms/gantt', 
@@ -157,13 +167,21 @@ export const router = createBrowserRouter([
           </Suspense>
         ) 
       },
-      { 
-        path: 'changelog', 
+      {
+        path: 'changelog',
         element: (
           <Suspense fallback={<PageLoader />}>
             <ChangelogPage />
           </Suspense>
-        ) 
+        )
+      },
+      {
+        path: 'organisms/charts',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <ChartsPage />
+          </Suspense>
+        )
       },
     ],
   },

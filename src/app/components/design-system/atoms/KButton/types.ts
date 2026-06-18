@@ -1,7 +1,7 @@
 import { AnchorHTMLAttributes, ButtonHTMLAttributes, CSSProperties, ReactNode } from 'react';
 
 export type KButtonVariant = 'solid' | 'outlined' | 'dashed' | 'filled' | 'text' | 'link' | 'ghost' | 'outline' | 'primary' | 'secondary' | 'danger' | 'navy';
-export type KButtonColor = 'default' | 'primary' | 'secondary' | 'danger' | 'processing' | 'volcano' | 'gold' | 'lime' | 'purple';
+export type KButtonColor = 'default' | 'secondary' | 'danger';
 export type KButtonSize = 'sm' | 'md' | 'lg' | 'icon';
 export type KButtonShape = 'default' | 'circle' | 'round';
 
@@ -11,7 +11,7 @@ type CombinedAttributes = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'type' |
 export interface KButtonProps extends CombinedAttributes {
   /** Estilo funcional del botón (modern AntD 5.4+) */
   variant?: KButtonVariant | 'outlined' | 'navy';
-  /** Color semántico del botón (modern AntD 5.4+) */
+  /** Color del botón según Figma (Button: Color=Blue/Red). 'default' = Blue, 'secondary' = Red. 'danger' es alias legacy del prop danger. */
   color?: KButtonColor;
   /** Alias para variant (retrocompatibilidad) */
   kVariant?: KButtonVariant | 'outlined' | 'navy';

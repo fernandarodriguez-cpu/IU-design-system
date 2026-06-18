@@ -67,7 +67,7 @@ export function KStatCard({ title, value, change, changeLabel, sparkData, icon, 
         {icon && <span className="text-khor-neutral-300 group-hover:text-khor-primary transition-colors">{icon}</span>}
       </div>
       <div className="flex items-baseline justify-between gap-4 mt-auto">
-        <span className="text-3xl font-black text-khor-secondary dark:text-white leading-none tracking-tightest">
+        <span className="text-3xl font-black text-khor-navy dark:text-white leading-none tracking-tightest">
           {value}
         </span>
         {change !== undefined && (

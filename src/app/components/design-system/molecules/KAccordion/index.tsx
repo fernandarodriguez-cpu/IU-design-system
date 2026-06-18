@@ -3,6 +3,8 @@ import * as AccordionPrimitive from '@radix-ui/react-accordion';
 import { ChevronDown } from 'lucide-react';
 import { cn } from '@/utils/cn';
 
+// ─── Types ───────────────────────────────────────────────────────────────────
+
 export interface KAccordionItem {
   key: string;
   label: React.ReactNode;
@@ -19,35 +21,70 @@ export interface KAccordionProps {
   onValueChange?: (value: any) => void;
   collapsible?: boolean;
   className?: string;
-  variant?: 'ghost' | 'bordered';
-  // Props de paridad AntD
+  // AntD parity / shorthand
   accordion?: boolean;
-  ghost?: boolean;
   defaultActiveKey?: string | string[];
-  expandIconPosition?: 'start' | 'end';
-  showArrow?: boolean;
 }
 
-/**
- * KAccordion — Paneles de contenido colapsables (Headless v4)
- * Basado en Radix UI Accordion y Tailwind CSS v4 con animaciones nativas.
- */
-/**
- * @figma-mcp-migration
- * Component: KAccordion
- * 
- * INSTRUCCIONES PARA AGENTES DE IA (VS Code / MCP):
- * Para migrar este componente a Figma, NO generar una matriz multiplicando todas las variables.
- * Utilizar Figma Component Properties V2 con la siguiente estructura:
- * 
- * 1. Variants (Estructurales):
- *    - Definir variantes puramente visuales/estructurales.
- * 2. Booleans (Encendido/Apagado):
- *    - Definir encendido/apagado para iconos o estados (isLoading, hasIcon).
- * 3. Color Variables (No usar variantes para colores semánticos):
- *    - El relleno/borde debe usar Figma Variables (Khor v6.0 Colors) asignado dinámicamente.
- *    - El consumidor del UI Kit cambiará el color del layer.
- */
+// ─── KAccordionColumn ─────────────────────────────────────────────────────────
+// A single column inside KAccordionColumns. Optional title + any children.
+
+export interface KAccordionColumnProps {
+  title?: React.ReactNode;
+  gap?: number;
+  children: React.ReactNode;
+  className?: string;
+}
+
+export function KAccordionColumn({
+  title,
+  gap = 12,
+  children,
+  className,
+}: KAccordionColumnProps) {
+  return (
+    <div className={cn('flex flex-col', className)} style={{ gap }}>
+      {title && (
+        <p className="m-0 text-sm font-semibold" style={{ color: '#051758' }}>
+          {title}
+        </p>
+      )}
+      {children}
+    </div>
+  );
+}
+
+// ─── KAccordionColumns ────────────────────────────────────────────────────────
+// Grid wrapper: 1–4 columns. Use KAccordionColumn inside for structure.
+
+export interface KAccordionColumnsProps {
+  cols?: 1 | 2 | 3 | 4;
+  gap?: number;
+  children: React.ReactNode;
+  className?: string;
+}
+
+export function KAccordionColumns({
+  cols = 2,
+  gap = 24,
+  children,
+  className,
+}: KAccordionColumnsProps) {
+  const gridClass =
+    cols === 1 ? 'grid-cols-1'
+    : cols === 2 ? 'grid-cols-2'
+    : cols === 3 ? 'grid-cols-3'
+    : 'grid-cols-4';
+
+  return (
+    <div className={cn('grid', gridClass, className)} style={{ gap }}>
+      {children}
+    </div>
+  );
+}
+
+// ─── KAccordion ──────────────────────────────────────────────────────────────
+
 export function KAccordion({
   items,
   type = 'single',
@@ -56,26 +93,20 @@ export function KAccordion({
   onValueChange,
   collapsible = true,
   className,
-  variant = 'bordered',
   accordion,
-  ghost,
   defaultActiveKey,
-  expandIconPosition = 'end',
-  showArrow = true,
 }: KAccordionProps) {
-  // Paridad: Si accordion es true, forzar type="single"
   const resolvedType = accordion ? 'single' : type;
-  const resolvedVariant = ghost ? 'ghost' : variant;
-  const resolvedDefaultValue = defaultActiveKey || defaultValue;
-  const isIconStart = expandIconPosition === 'start';
+  const resolvedDefaultValue = defaultActiveKey ?? defaultValue;
+
   return (
     <AccordionPrimitive.Root
-      type={type as any}
-      defaultValue={defaultValue as any}
+      type={resolvedType as any}
+      defaultValue={resolvedDefaultValue as any}
       value={value as any}
       onValueChange={onValueChange}
       collapsible={collapsible}
-      className={cn("w-full space-y-2 font-primary", className)}
+      className={cn('w-full flex flex-col gap-3 font-primary', className)}
     >
       {items.map((item) => (
         <AccordionPrimitive.Item
@@ -83,40 +114,45 @@ export function KAccordion({
           value={item.key}
           disabled={item.disabled}
           className={cn(
-            "overflow-hidden transition-all duration-300",
-            variant === 'bordered' && "border border-khor-neutral-200 rounded-lg px-2",
-            variant === 'ghost' && "border-b border-khor-neutral-100"
+            'rounded-xl overflow-hidden transition-all duration-200',
+            item.disabled && 'opacity-50 pointer-events-none',
           )}
+          style={{ border: '1px solid #CED4DA' }}
         >
-          <AccordionPrimitive.Header className="flex">
+          {/* ── Header ── */}
+          <AccordionPrimitive.Header className="flex m-0">
             <AccordionPrimitive.Trigger
-              className={cn(
-                "flex flex-1 items-center gap-3 py-4 text-sm font-bold transition-all hover:text-khor-primary [&[data-state=open]>svg]:rotate-180",
-                isIconStart ? "flex-row" : "flex-row-reverse justify-end",
-                item.disabled && "opacity-50 cursor-not-allowed hover:text-current"
-              )}
+              className="group flex w-full items-center gap-4 px-6 py-4 text-left outline-none focus-visible:ring-2 focus-visible:ring-inset transition-colors"
+              style={{ backgroundColor: '#F4F4F4' }}
+              onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#EBEBEB')}
+              onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#F4F4F4')}
             >
-              {showArrow && (
-                <ChevronDown className="h-4 w-4 shrink-0 text-khor-neutral-400 transition-transform duration-300" />
-              )}
-              <div className="flex-1 text-left">
+              <span className="flex-1 text-[#051758] font-semibold text-sm leading-snug">
                 {item.label}
-              </div>
+              </span>
+
               {item.extra && (
-                <div 
-                  className={cn("ml-auto flex items-center", isIconStart ? "" : "order-first")}
+                <div
+                  className="flex items-center"
                   onClick={(e) => e.stopPropagation()}
                 >
                   {item.extra}
                 </div>
               )}
+
+              {/* Navy outline chevron icon button */}
+              <div className="flex shrink-0 items-center justify-center w-9 h-9 rounded-lg border border-[#051758] bg-white text-[#051758] transition-colors group-hover:bg-[#051758]/5">
+                <ChevronDown
+                  size={16}
+                  className="transition-transform duration-300 group-data-[state=open]:rotate-180"
+                />
+              </div>
             </AccordionPrimitive.Trigger>
           </AccordionPrimitive.Header>
-          
-          <AccordionPrimitive.Content
-            className="overflow-hidden text-sm data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down"
-          >
-            <div className="pb-4 pt-0 text-khor-neutral-600 leading-relaxed">
+
+          {/* ── Content ── */}
+          <AccordionPrimitive.Content className="overflow-hidden data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down">
+            <div className="bg-white px-6 py-5 text-sm text-[#374151] leading-relaxed">
               {item.children}
             </div>
           </AccordionPrimitive.Content>

@@ -8,7 +8,7 @@ import type { PropDef } from '../components/docs/ComponentDoc';
 import { KButton } from '../components/design-system/atoms/KButton/index';
 import { KInput } from '../components/design-system/atoms/KInput/index';
 import { KPhoneInput } from '../components/design-system/atoms/KPhoneInput/index';
-import { KBadge } from '../components/design-system/atoms/KBadge/index';
+import { KBadge, KBadgeCount } from '../components/design-system/atoms/KBadge/index';
 import { KTag } from '../components/design-system/atoms/KTag/index';
 import { KAvatar, KAvatarGroup } from '../components/design-system/atoms/KAvatar/index';
 import { KSwitch } from '../components/design-system/atoms/KSwitch/index';
@@ -33,10 +33,13 @@ import { KFlex } from '../components/design-system/atoms/KFlex/index';
 import { KRow, KCol } from '../components/design-system/atoms/KGrid/index';
 import { KIcon } from '../components/design-system/atoms/KIcon/index';
 import { KPagination } from '../components/design-system/organisms/KPagination/index';
+import { KSearch } from '../components/design-system/atoms/KSearch/index';
+import type { KSearchEnter } from '../components/design-system/atoms/KSearch/index';
+import { KSelectField } from '../components/design-system/molecules/KSelectField';
 import {
   Plus, Save, Trash2, Download, Mail, Lock, User,
   Bell, Star, Heart, Search, AlertCircle, Info, ThumbsUp,
-  CheckCircle,
+  CheckCircle, Smile,
 } from 'lucide-react';
 import { khorTokens } from '../theme/khor-theme';
 import type { AtomData } from '../registry/registry-types';
@@ -77,9 +80,11 @@ function ButtonPlayground() {
             </select>
           </div>
           <div>
-            <label style={ctrl}>Color (Total Tokenization v10.6)</label>
+            <label style={ctrl}>Color (Figma: Blue / Red)</label>
             <select value={btnColor} onChange={(e) => setBtnColor(e.target.value)} style={sel}>
-              {['default', 'primary', 'secondary', 'danger', 'processing', 'volcano', 'gold', 'lime', 'purple'].map((v) => <option key={v} value={v}>{v}</option>)}
+              <option value="default">default (Blue)</option>
+              <option value="secondary">secondary (Red)</option>
+              <option value="danger">danger (Red)</option>
             </select>
           </div>
           <div>
@@ -163,6 +168,22 @@ function ButtonPlayground() {
           {shape === 'circle' ? '' : (href ? 'Ir a Enlace' : 'Guardar Cambios')}
         </KButton>
       </div>
+    </div>
+  );
+}
+
+/** Fila de estados simulados (Default/Hover/Focused/Pressed/Disabled) para una combinacion Tipo+Color del Button de Figma. */
+function ButtonStateRow({ variant, color, ghost, label }: { variant: any; color?: any; ghost?: boolean; label: string }) {
+  const cell = { display: 'flex', flexDirection: 'column' as const, gap: 8, alignItems: 'center' as const };
+  const cap = { fontSize: 11, color: khorTokens.colors.neutral[500] };
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+      <span style={{ fontSize: 12, fontWeight: 600, color: khorTokens.colors.brand.navy, width: 96, flexShrink: 0 }}>{label}</span>
+      <div style={cell}><span style={cap}>Default</span><KButton variant={variant} color={color} ghost={ghost}>Botón</KButton></div>
+      <div style={cell}><span style={cap}>Hover</span><KButton variant={variant} color={color} ghost={ghost} style={{ filter: 'brightness(1.1)' }}>Botón</KButton></div>
+      <div style={cell}><span style={cap}>Focused</span><div style={{ outline: `2px solid ${khorTokens.colors.brand.primary}`, outlineOffset: '2px', borderRadius: khorTokens.radius.md }}><KButton variant={variant} color={color} ghost={ghost}>Botón</KButton></div></div>
+      <div style={cell}><span style={cap}>Pressed</span><KButton variant={variant} color={color} ghost={ghost} style={{ filter: 'brightness(0.9)', transform: 'scale(0.98)' }}>Botón</KButton></div>
+      <div style={cell}><span style={cap}>Disabled</span><KButton variant={variant} color={color} ghost={ghost} disabled>Botón</KButton></div>
     </div>
   );
 }
@@ -390,7 +411,8 @@ function SearchInputPlayground() {
   const [size, setSize] = useState<any>('md');
   const [placeholder, setPlaceholder] = useState('Buscar empleados...');
   const [loading, setLoading] = useState(false);
-  const [enterButton, setEnterButton] = useState<any>(true);
+  const [enterButton, setEnterButton] = useState<any>(false);
+  const [filterButton, setFilterButton] = useState(false);
   
   const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
   const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
@@ -418,22 +440,66 @@ function SearchInputPlayground() {
               <option value="custom">Texto personalizado</option>
             </select>
           </div>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}>
-            <input type="checkbox" checked={loading} onChange={(e) => setLoading(e.target.checked)} /> Loading State
-          </label>
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}>
+              <input type="checkbox" checked={loading} onChange={(e) => setLoading(e.target.checked)} /> Loading State
+            </label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}>
+              <input type="checkbox" checked={filterButton} onChange={(e) => setFilterButton(e.target.checked)} /> Botón Filtro
+            </label>
+          </div>
         </div>
       </div>
       <div style={{ flex: 1, minWidth: 300, display: 'flex', alignItems: 'center', padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
         <div style={{ width: '100%' }}>
-          <KInput.Search 
-            placeholder={placeholder} 
-            size={size} 
-            value={val} 
-            onChange={(e) => setVal(e.target.value)} 
+          <KInput.Search
+            placeholder={placeholder}
+            size={size}
+            value={val}
+            onChange={(e) => setVal(e.target.value)}
             onSearch={handleSearch}
             loading={loading}
             enterButton={enterButton}
+            filterButton={filterButton || undefined}
             allowClear
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PasswordPlayground() {
+  const [size, setSize] = useState<'sm' | 'md' | 'lg'>('md');
+  const [status, setStatus] = useState<'default' | 'error' | 'warning'>('default');
+  const [hasPrefix, setHasPrefix] = useState(true);
+  const [disabled, setDisabled] = useState(false);
+  const [helpText, setHelpText] = useState('');
+  const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
+  const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
+  return (
+    <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
+      <div style={{ flex: 1, minWidth: 240 }}>
+        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div><label style={ctrl}>Tamaño</label><select value={size} onChange={e => setSize(e.target.value as any)} style={sel}>{['sm','md','lg'].map(s=><option key={s}>{s}</option>)}</select></div>
+          <div><label style={ctrl}>Status</label><select value={status} onChange={e => setStatus(e.target.value as any)} style={sel}>{['default','error','warning'].map(s=><option key={s}>{s}</option>)}</select></div>
+          <div><label style={ctrl}>Help Text</label><input value={helpText} onChange={e => setHelpText(e.target.value)} placeholder="Ej: Contraseña incorrecta" style={sel} /></div>
+          <div style={{ display: 'flex', gap: 12 }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={hasPrefix} onChange={e => setHasPrefix(e.target.checked)} /> Ícono prefijo</label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={disabled} onChange={e => setDisabled(e.target.checked)} /> Disabled</label>
+          </div>
+        </div>
+      </div>
+      <div style={{ flex: 1, minWidth: 300, display: 'flex', alignItems: 'center', padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
+        <div style={{ width: '100%', maxWidth: 320 }}>
+          <KInput.Password
+            size={size}
+            status={status}
+            prefix={hasPrefix ? <Lock size={14} /> : undefined}
+            helpText={helpText || undefined}
+            disabled={disabled}
+            placeholder="Escribe tu contraseña"
           />
         </div>
       </div>
@@ -670,29 +736,62 @@ function ButtonGroupPlayground() {
 }
 
 function SwitchPlayground() {
-  const [checked, setChecked] = useState(false);
-  const [disabled, setDisabled] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [sizeS, setSizeS] = useState<any>('default');
-  const [checkedLabel, setCheckedLabel] = useState('');
-  const [unCheckedLabel, setUnCheckedLabel] = useState('');
-  const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
+  const [checked, setChecked]     = useState(false);
+  const [size, setSize]           = useState<'small' | 'medium'>('medium');
+  const [showText, setShowText]   = useState(false);
+  const [showIcon, setShowIcon]   = useState(false);
+  const [loading, setLoading]     = useState(false);
+  const [disabled, setDisabled]   = useState(false);
+
+  const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
+  const sel  = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%', fontFamily: khorTokens.typography.fontPrimary };
+  const chk  = { display: 'flex' as const, alignItems: 'center' as const, gap: 8, fontSize: 13, cursor: 'pointer' as const };
+
   return (
     <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
-      <div style={{ flex: 1, minWidth: 240 }}>
+      <div style={{ flex: '0 0 200px', minWidth: 200 }}>
         <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <div><label style={{ fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block', marginBottom: 4 }}>Tamano</label><select value={sizeS} onChange={(e) => setSizeS(e.target.value)} style={sel}>{['small','default'].map(s=><option key={s}>{s}</option>)}</select></div>
-          <div><label style={{ fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block', marginBottom: 4 }}>Checked Children</label><input value={checkedLabel} onChange={(e) => setCheckedLabel(e.target.value)} placeholder="Ej: SI" style={sel}/></div>
-          <div><label style={{ fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block', marginBottom: 4 }}>Unchecked Children</label><input value={unCheckedLabel} onChange={(e) => setUnCheckedLabel(e.target.value)} placeholder="Ej: NO" style={sel}/></div>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 4 }}>
-            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={disabled} onChange={(e) => setDisabled(e.target.checked)} /> Disabled</label>
-            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={loading} onChange={(e) => setLoading(e.target.checked)} /> Loading</label>
+          <div>
+            <label style={ctrl}>Tamaño</label>
+            <select value={size} onChange={(e) => setSize(e.target.value as 'small' | 'medium')} style={sel}>
+              <option value="small">Small</option>
+              <option value="medium">Medium</option>
+            </select>
           </div>
+          <label style={chk}>
+            <input type="checkbox" checked={checked} onChange={(e) => setChecked(e.target.checked)} />
+            Checked
+          </label>
+          <label style={chk}>
+            <input type="checkbox" checked={showText} onChange={(e) => { setShowText(e.target.checked); if (e.target.checked) setShowIcon(false); }} />
+            Text (ON / OFF)
+          </label>
+          <label style={chk}>
+            <input type="checkbox" checked={showIcon} onChange={(e) => { setShowIcon(e.target.checked); if (e.target.checked) setShowText(false); }} />
+            Icon (✓ / ✗)
+          </label>
+          <label style={chk}>
+            <input type="checkbox" checked={loading} onChange={(e) => setLoading(e.target.checked)} />
+            Loading
+          </label>
+          <label style={chk}>
+            <input type="checkbox" checked={disabled} onChange={(e) => setDisabled(e.target.checked)} />
+            Disabled
+          </label>
         </div>
       </div>
       <div style={{ flex: 1, minWidth: 240, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-        <KSwitch label="Notificaciones activas" checked={checked} onCheckedChange={setChecked} disabled={disabled} loading={loading} size={sizeS} checkedChildren={checkedLabel} unCheckedChildren={unCheckedLabel} />
+        <KSwitch
+          label="Notificaciones activas"
+          checked={checked}
+          onCheckedChange={setChecked}
+          size={size}
+          showText={showText}
+          showIcon={showIcon}
+          loading={loading}
+          disabled={disabled}
+        />
       </div>
     </div>
   );
@@ -702,80 +801,73 @@ function CheckboxPlayground() {
   const [checked, setChecked] = useState<boolean | 'indeterminate'>(false);
   const [disabled, setDisabled] = useState(false);
   const [status, setStatus] = useState<any>('default');
+  const [showLabel, setShowLabel] = useState(true);
+  const [isHovered, setIsHovered] = useState(false);
   const [groupValue, setGroupValue] = useState(['Apple', 'Orange']);
-  
+
   const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
   const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
 
   const options = [
-    { label: 'Apple', value: 'Apple' },
-    { label: 'Pear', value: 'Pear' },
-    { label: 'Orange', value: 'Orange' },
+    { label: 'Manzana', value: 'Apple' },
+    { label: 'Pera', value: 'Pear' },
+    { label: 'Naranja', value: 'Orange' },
   ];
 
-  const allAvailableValues = options.map(o => o.value);
-  const checkAllChecked = groupValue.length === allAvailableValues.length;
-  const checkAllIndeterminate = groupValue.length > 0 && groupValue.length < allAvailableValues.length;
-
-  const handleCheckAll = (checkedObj: boolean | 'indeterminate') => {
-    if (checkedObj === true) {
-      setGroupValue(allAvailableValues);
-    } else {
-      setGroupValue([]);
-    }
-  };
+  const allVals = options.map(o => o.value);
+  const checkAllChecked = groupValue.length === allVals.length;
+  const checkAllIndet = groupValue.length > 0 && groupValue.length < allVals.length;
 
   return (
     <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
-      <div style={{ flex: 1, minWidth: 280 }}>
-        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Individual Controls</h4>
+      <div style={{ flex: 1, minWidth: 260 }}>
+        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <div>
-            <label style={ctrl}>Estado (Status)</label>
-            <select value={status} onChange={(e) => setStatus(e.target.value)} style={sel}>
-              {['default','error','warning'].map(s=><option key={s}>{s}</option>)}
+            <label style={ctrl}>Estado</label>
+            <select value={status} onChange={e => setStatus(e.target.value)} style={sel}>
+              {['default', 'error', 'warning'].map(s => <option key={s}>{s}</option>)}
             </select>
           </div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
-            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}>
-              <input type="checkbox" checked={checked === true} onChange={(e) => setChecked(e.target.checked)} /> Checked
-            </label>
-            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}>
-              <input type="checkbox" checked={checked === 'indeterminate'} onChange={(e) => setChecked(e.target.checked ? 'indeterminate' : false)} /> Indeterminate
-            </label>
-            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}>
-              <input type="checkbox" checked={disabled} onChange={(e) => setDisabled(e.target.checked)} /> Disabled
-            </label>
+            {[
+              { label: 'Checked', active: checked === true, onChange: (v: boolean) => setChecked(v) },
+              { label: 'Indeterminate', active: checked === 'indeterminate', onChange: (v: boolean) => setChecked(v ? 'indeterminate' : false) },
+              { label: 'Disabled', active: disabled, onChange: setDisabled },
+              { label: 'Hovering', active: isHovered, onChange: setIsHovered },
+              { label: 'Label', active: showLabel, onChange: setShowLabel },
+            ].map(({ label, active, onChange }) => (
+              <label key={label} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}>
+                <input type="checkbox" checked={active} onChange={e => onChange(e.target.checked)} /> {label}
+              </label>
+            ))}
           </div>
         </div>
 
         <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 24 }}>Checkbox Group (Select All)</h4>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           <div style={{ borderBottom: `1px solid ${khorTokens.colors.neutral[200]}`, paddingBottom: 8, marginBottom: 8 }}>
-            <KCheckbox 
-              checked={checkAllIndeterminate ? 'indeterminate' : checkAllChecked} 
-              onCheckedChange={handleCheckAll}
+            <KCheckbox
+              checked={checkAllIndet ? 'indeterminate' : checkAllChecked}
+              onCheckedChange={v => { if (v === true) setGroupValue(allVals); else setGroupValue([]); }}
             >
-              Seleccionar Todos
+              Seleccionar todos
             </KCheckbox>
           </div>
-          <KCheckbox.Group 
-            options={options} 
-            value={groupValue} 
-            onChange={setGroupValue} 
-          />
+          <KCheckbox.Group options={options} value={groupValue} onChange={setGroupValue} />
           <pre style={{ fontSize: 11, color: khorTokens.colors.neutral[500], marginTop: 4 }}>
-            Selected: {JSON.stringify(groupValue)}
+            Selección: {JSON.stringify(groupValue)}
           </pre>
         </div>
       </div>
-      <div style={{ flex: 1, minWidth: 240, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-        <KCheckbox 
-          label="Acepto los términos" 
-          checked={checked} 
-          onCheckedChange={(val) => setChecked(val)} 
-          disabled={disabled} 
-          status={status} 
+      <div style={{ flex: 1, minWidth: 240, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 40, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
+        <KCheckbox
+          label={showLabel ? 'Label' : undefined}
+          checked={checked}
+          onCheckedChange={v => setChecked(v)}
+          disabled={disabled}
+          status={status}
+          isHovered={isHovered}
         />
       </div>
     </div>
@@ -1090,12 +1182,14 @@ function SliderPlayground() {
   const [reverse, setReverse] = useState(false);
   const [vertical, setVertical] = useState(false);
   const [showMarks, setShowMarks] = useState(false);
-  
+  const [showIcon, setShowIcon] = useState(false);
+  const [showLabel, setShowLabel] = useState(false);
+
   const marks = {
-    0: '0°C',
-    26: '26°C',
-    37: '37°C',
-    100: { style: { color: khorTokens.colors.feedback.error }, label: '100°C' },
+    0: '0',
+    8: '8',
+    16: '16',
+    24: '24',
   };
 
   const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
@@ -1113,24 +1207,28 @@ function SliderPlayground() {
             <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={reverse} onChange={(e) => setReverse(e.target.checked)} /> Reverse</label>
             <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={vertical} onChange={(e) => setVertical(e.target.checked)} /> Vertical</label>
             <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={showMarks} onChange={(e) => setShowMarks(e.target.checked)} /> Marks</label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={showIcon} onChange={(e) => setShowIcon(e.target.checked)} /> Icon</label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}><input type="checkbox" checked={showLabel} onChange={(e) => setShowLabel(e.target.checked)} /> Label</label>
           </div>
-          <p style={{ fontSize: 12, color: khorTokens.colors.neutral[400], margin: 0 }}>Valor: {range ? rangeVal.join(' - ') : value[0]}</p>
+          <p style={{ fontSize: 12, color: khorTokens.colors.neutral[400], margin: 0 }}>Valor: {range ? rangeVal.join(' – ') : value[0]}</p>
         </div>
       </div>
       <div style={{ flex: 1, minWidth: 280, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
-        <div style={{ width: vertical ? 100 : '100%', height: vertical ? 300 : 'auto', maxWidth: 300 }}>
-          <KSlider 
-            value={range ? rangeVal : value} 
-            onChange={(v) => range ? setRangeVal(v as number[]) : setValue(v as number[])} 
-            min={0} 
-            max={100} 
-            step={step} 
-            disabled={disabled} 
-            showValue={showValue} 
+        <div style={{ width: vertical ? 100 : '100%', height: vertical ? 300 : 'auto', maxWidth: 320, paddingBottom: showMarks ? 28 : 0 }}>
+          <KSlider
+            value={range ? rangeVal : value}
+            onChange={(v) => range ? setRangeVal(v as number[]) : setValue(v as number[])}
+            min={0}
+            max={showMarks ? 24 : 100}
+            step={step}
+            disabled={disabled}
+            showValue={showValue}
             range={range}
             reverse={reverse}
             vertical={vertical}
             marks={showMarks ? marks : undefined}
+            suffixIcon={showIcon ? <Smile size={18} /> : undefined}
+            label={showLabel ? 'Label' : undefined}
             tooltip={{ open: showValue ? true : undefined }}
           />
         </div>
@@ -1348,6 +1446,81 @@ function UnifiedInputPlayground() {
   );
 }
 
+function SelectInputPlayground() {
+  const [size, setSize] = useState<'sm' | 'md' | 'lg'>('md');
+  const [status, setStatus] = useState<'default' | 'error' | 'warning'>('default');
+  const [labelPosition, setLabelPosition] = useState<'top' | 'side'>('top');
+  const [required, setRequired] = useState(false);
+  const [optional, setOptional] = useState(false);
+  const [tooltip, setTooltip] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
+  const [disabled, setDisabled] = useState(false);
+  const [val, setVal] = useState('');
+
+  const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
+  const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
+  const chk = { display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' } as const;
+  const opts = [{ label: 'Opción A', value: 'a' }, { label: 'Opción B', value: 'b' }, { label: 'Opción C', value: 'c' }];
+
+  return (
+    <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
+      <div style={{ flex: 1, minWidth: 280 }}>
+        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div>
+            <label style={ctrl}>Tamaño</label>
+            <select value={size} onChange={e => setSize(e.target.value as any)} style={sel}>
+              <option value="sm">sm (32px)</option>
+              <option value="md">md (36px)</option>
+              <option value="lg">lg (40px)</option>
+            </select>
+          </div>
+          <div>
+            <label style={ctrl}>Estado</label>
+            <select value={status} onChange={e => setStatus(e.target.value as any)} style={sel}>
+              <option value="default">default</option>
+              <option value="error">error</option>
+              <option value="warning">warning</option>
+            </select>
+          </div>
+          <div>
+            <label style={ctrl}>Posición del label</label>
+            <select value={labelPosition} onChange={e => setLabelPosition(e.target.value as any)} style={sel}>
+              <option value="top">top</option>
+              <option value="side">side</option>
+            </select>
+          </div>
+          <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+            <label style={chk}><input type="checkbox" checked={required}  onChange={e => setRequired(e.target.checked)}  /> required</label>
+            <label style={chk}><input type="checkbox" checked={optional}  onChange={e => setOptional(e.target.checked)}  /> optional</label>
+            <label style={chk}><input type="checkbox" checked={tooltip}   onChange={e => setTooltip(e.target.checked)}   /> tooltip</label>
+            <label style={chk}><input type="checkbox" checked={showHelp}  onChange={e => setShowHelp(e.target.checked)}  /> helpText</label>
+            <label style={chk}><input type="checkbox" checked={disabled}  onChange={e => setDisabled(e.target.checked)}  /> disabled</label>
+          </div>
+        </div>
+      </div>
+      <div style={{ flex: 1, minWidth: 280, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, backgroundColor: 'rgba(255,255,255,0.5)', borderRadius: 8 }}>
+        <KSelectField
+          size={size}
+          status={status}
+          label="Label"
+          labelPosition={labelPosition}
+          required={required}
+          optional={optional}
+          tooltip={tooltip ? 'Información adicional sobre este campo.' : undefined}
+          helpText={showHelp ? "Please input passenger's name or delete this field." : undefined}
+          disabled={disabled}
+          value={val}
+          onChange={v => setVal(v)}
+          options={opts}
+          placeholder="Seleccionar"
+          block
+        />
+      </div>
+    </div>
+  );
+}
+
 function PhoneInputPlayground() {
   const [val, setVal] = useState('+52 5512345678');
   const [size, setSize] = useState<'sm' | 'md' | 'lg'>('md');
@@ -1414,6 +1587,63 @@ function PhoneInputPlayground() {
   );
 }
 
+function SearchPlayground() {
+  const [enter, setEnter] = useState<KSearchEnter>('default');
+  const [size, setSize] = useState<'small' | 'medium' | 'large'>('medium');
+  const [suffix, setSuffix] = useState(false);
+  const [allowClear, setAllowClear] = useState(true);
+  const [disabled, setDisabled] = useState(false);
+  const [lastSearch, setLastSearch] = useState('');
+
+  const ctrl = { fontSize: 12, color: khorTokens.colors.neutral[400], display: 'block' as const, marginBottom: 4 };
+  const sel = { padding: '6px 10px', borderRadius: 6, border: `1px solid ${khorTokens.colors.neutral[200]}`, fontSize: 13, width: '100%' };
+
+  return (
+    <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
+      <div style={{ flex: 1, minWidth: 240 }}>
+        <h4 style={{ fontSize: 14, fontWeight: 600, color: khorTokens.colors.brand.navy, marginBottom: 12, marginTop: 0 }}>Controles</h4>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div>
+            <label style={ctrl}>Size</label>
+            <select value={size} onChange={e => setSize(e.target.value as any)} style={sel}>
+              {['small', 'medium', 'large'].map(s => <option key={s}>{s}</option>)}
+            </select>
+          </div>
+          <div>
+            <label style={ctrl}>Enter</label>
+            <select value={enter} onChange={e => setEnter(e.target.value as KSearchEnter)} style={sel}>
+              {['default', 'icon', 'text'].map(s => <option key={s}>{s}</option>)}
+            </select>
+          </div>
+          {[
+            { label: 'Suffix (Mic)', active: suffix, onChange: setSuffix },
+            { label: 'Allow Clear', active: allowClear, onChange: setAllowClear },
+            { label: 'Disabled', active: disabled, onChange: setDisabled },
+          ].map(({ label, active, onChange }) => (
+            <label key={label} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, cursor: 'pointer' }}>
+              <input type="checkbox" checked={active} onChange={e => onChange(e.target.checked)} /> {label}
+            </label>
+          ))}
+        </div>
+      </div>
+      <div style={{ flex: 2, minWidth: 300, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 16, padding: 32, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
+        <KSearch
+          size={size}
+          enter={enter}
+          suffix={suffix}
+          allowClear={allowClear}
+          disabled={disabled}
+          onSearch={v => setLastSearch(v)}
+          style={{ maxWidth: 400, width: '100%' }}
+        />
+        {lastSearch && (
+          <p style={{ fontSize: 12, color: khorTokens.colors.neutral[500], margin: 0 }}>Búsqueda: "{lastSearch}"</p>
+        )}
+      </div>
+    </div>
+  );
+}
+
 /* ─── Component Registry ────────────────────── */
 export interface AtomEntry {
   id: string;
@@ -1438,48 +1668,128 @@ export interface AtomEntry {
 export const atoms: Record<string, AtomEntry> = {
   button: {
     id: 'button',
-    name: 'KButton',
+    name: 'Button',
     description: 'Boton principal del sistema con 6 variantes semanticas de Khor (Radix UI + custom), incluyendo estados de interaccion (hover +10% brightness, active -10% brightness, disabled greyscale 50%).',
     preview: (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
         <div>
-          <p style={{ fontSize: 12, color: khorTokens.colors.neutral[400], marginBottom: 8 }}>Variantes</p>
+          <p style={{ fontSize: 12, color: khorTokens.colors.neutral[400], marginBottom: 8 }}>Tipo × Color — Ghost OFF (Figma: Blue #051758 / Red #E04D36)</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+              <span style={{ fontSize: 11, color: khorTokens.colors.neutral[400], width: 56 }}>Primary</span>
+              <KButton variant="primary" icon={<Save size={16} />}>Azul</KButton>
+              <KButton variant="primary" color="secondary" icon={<Save size={16} />}>Rojo</KButton>
+            </div>
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+              <span style={{ fontSize: 11, color: khorTokens.colors.neutral[400], width: 56 }}>Outline</span>
+              <KButton variant="outline">Azul</KButton>
+              <KButton variant="outline" color="secondary">Rojo</KButton>
+            </div>
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+              <span style={{ fontSize: 11, color: khorTokens.colors.neutral[400], width: 56 }}>Dashed</span>
+              <KButton variant="dashed">Azul</KButton>
+              <KButton variant="dashed" color="secondary">Rojo</KButton>
+            </div>
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+              <span style={{ fontSize: 11, color: khorTokens.colors.neutral[400], width: 56 }}>Text</span>
+              <KButton variant="text">Azul</KButton>
+              <KButton variant="text" color="secondary">Rojo</KButton>
+            </div>
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+              <span style={{ fontSize: 11, color: khorTokens.colors.neutral[400], width: 56 }}>Link</span>
+              <KButton variant="link">Azul</KButton>
+              <KButton variant="link" color="secondary">Rojo</KButton>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <p style={{ fontSize: 12, color: khorTokens.colors.neutral[400], marginBottom: 8 }}>Ghost = ON (Figma solo lo define para Primary / Outline / Dashed)</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+              <span style={{ fontSize: 11, color: khorTokens.colors.neutral[400], width: 56 }}>Primary</span>
+              <KButton variant="primary" ghost>Azul</KButton>
+              <KButton variant="primary" ghost color="secondary">Rojo</KButton>
+            </div>
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+              <span style={{ fontSize: 11, color: khorTokens.colors.neutral[400], width: 56 }}>Outline</span>
+              <KButton variant="outline" ghost>Azul</KButton>
+              <KButton variant="outline" ghost color="secondary">Rojo</KButton>
+            </div>
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+              <span style={{ fontSize: 11, color: khorTokens.colors.neutral[400], width: 56 }}>Dashed</span>
+              <KButton variant="dashed" ghost>Azul</KButton>
+              <KButton variant="dashed" ghost color="secondary">Rojo</KButton>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <p style={{ fontSize: 12, color: khorTokens.colors.neutral[400], marginBottom: 8 }}>Tamaño × Color (Small 24px / Default 32px / Large 40px)</p>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <KButton size="sm">Small</KButton>
+            <KButton size="sm" color="secondary">Small</KButton>
+            <KButton size="md">Default</KButton>
+            <KButton size="md" color="secondary">Default</KButton>
+            <KButton size="lg">Large</KButton>
+            <KButton size="lg" color="secondary">Large</KButton>
+          </div>
+        </div>
+
+        <div>
+          <p style={{ fontSize: 12, color: khorTokens.colors.neutral[400], marginBottom: 8 }}>Contenido × Color (Icon Only / Texto+Icono izq. / Texto+Icono der. / Solo texto)</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+              <KButton size="icon" icon={<Save size={16} />} aria-label="Icono" />
+              <KButton icon={<Save size={16} />} iconPosition="start">Icono izq.</KButton>
+              <KButton icon={<Plus size={16} />} iconPosition="end">Icono der.</KButton>
+              <KButton>Solo texto</KButton>
+            </div>
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+              <KButton size="icon" color="secondary" icon={<Save size={16} />} aria-label="Icono" />
+              <KButton color="secondary" icon={<Save size={16} />} iconPosition="start">Icono izq.</KButton>
+              <KButton color="secondary" icon={<Plus size={16} />} iconPosition="end">Icono der.</KButton>
+              <KButton color="secondary">Solo texto</KButton>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <p style={{ fontSize: 12, color: khorTokens.colors.neutral[400], marginBottom: 8 }}>Forma × Color (Square / Round)</p>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <KButton shape="default">Square</KButton>
+            <KButton shape="round">Round</KButton>
+            <KButton shape="default" color="secondary">Square</KButton>
+            <KButton shape="round" color="secondary">Round</KButton>
+          </div>
+        </div>
+
+        <div>
+          <p style={{ fontSize: 12, color: khorTokens.colors.neutral[400], marginBottom: 8 }}>Otras variantes (no Figma / legacy)</p>
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-            <KButton variant="primary" icon={<Save size={16} />}>Primario</KButton>
             <KButton variant="secondary">Secundario</KButton>
-            <KButton variant="outline">Outline</KButton>
-            <KButton variant="ghost">Ghost</KButton>
             <KButton variant="danger" icon={<Trash2 size={16} />}>Peligro</KButton>
             <KButton variant="navy">Navy</KButton>
-          </div>
-        </div>
-        <div>
-          <p style={{ fontSize: 12, color: khorTokens.colors.neutral[400], marginBottom: 8 }}>Tamanos</p>
-          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-            <KButton size="sm">Pequeno</KButton>
-            <KButton size="md">Mediano</KButton>
-            <KButton size="lg">Grande</KButton>
-          </div>
-        </div>
-        <div>
-          <p style={{ fontSize: 12, color: khorTokens.colors.neutral[400], marginBottom: 8 }}>Estados</p>
-          <div style={{ display: 'flex', gap: 8 }}>
             <KButton loading>Cargando</KButton>
-            <KButton disabled>Desactivado</KButton>
-            <KButton icon={<Plus size={16} />}>Con Icono</KButton>
           </div>
         </div>
       </div>
     ),
     playground: <ButtonPlayground />,
     stateShowcase: (
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16 }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>Default</span><KButton>Botón</KButton></div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>Hover (CSS)</span><KButton style={{ filter: 'brightness(1.1)' }}>Botón</KButton></div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>Active (CSS)</span><KButton style={{ filter: 'brightness(0.9)', transform: 'scale(0.98)' }}>Botón</KButton></div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>Focus</span><div style={{ outline: `2px solid ${khorTokens.colors.brand.primary}`, outlineOffset: '2px', borderRadius: khorTokens.radius.md }}><KButton>Botón</KButton></div></div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>Disabled</span><KButton disabled>Botón</KButton></div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>Loading</span><KButton loading>Botón</KButton></div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <ButtonStateRow variant="primary" label="Primary / Blue" />
+        <ButtonStateRow variant="primary" color="secondary" label="Primary / Red" />
+        <ButtonStateRow variant="outline" label="Outline / Blue" />
+        <ButtonStateRow variant="outline" color="secondary" label="Outline / Red" />
+        <ButtonStateRow variant="dashed" label="Dashed / Blue" />
+        <ButtonStateRow variant="dashed" color="secondary" label="Dashed / Red" />
+        <ButtonStateRow variant="primary" ghost label="Ghost / Blue" />
+        <ButtonStateRow variant="primary" ghost color="secondary" label="Ghost / Red" />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'flex-start' }}>
+          <span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>Loading (estado adicional, no Figma)</span>
+          <KButton loading>Botón</KButton>
+        </div>
       </div>
     ),
     a11ySummary: {
@@ -1490,7 +1800,7 @@ export const atoms: Record<string, AtomEntry> = {
     },
     code: `import { KButton } from '@khor/design-system/atoms/index';
 
-// Variantes disponibles: primary | secondary | outline | ghost | danger | navy
+// Variantes disponibles: primary | secondary | outline | dashed | ghost | danger | navy
 // Tamanos: sm | md | lg
 
 <KButton variant="primary" size="md" icon={<Save size={16} />}>
@@ -1507,11 +1817,18 @@ export const atoms: Record<string, AtomEntry> = {
 
 <KButton variant="outline" disabled>
   Desactivado
+</KButton>
+
+<KButton variant="outline" color="secondary" ghost shape="round">
+  Ghost Rojo
 </KButton>`,
-    filename: 'KButton/index.tsx',
+    filename: 'Button/index.tsx',
     props: [
-      { name: 'variant', type: "'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'navy'", default: "'primary'", description: 'Variante visual del botón.' },
-      { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Tamaño del botón.' },
+      { name: 'variant', type: "'primary' | 'secondary' | 'outline' | 'dashed' | 'ghost' | 'danger' | 'navy'", default: "'primary'", description: 'Variante visual del botón.' },
+      { name: 'color', type: "'default' | 'secondary' | 'danger'", default: "'default'", description: 'Tinte del botón según Figma (Color: Blue/Red). \'default\' = Blue, \'secondary\' = Red. Aplica sobre cualquier variant.' },
+      { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Tamaño del botón (24px / 32px / 40px de alto, según Figma).' },
+      { name: 'shape', type: "'default' | 'circle' | 'round'", default: "'default'", description: 'Forma del botón. Figma define Default (square) y Round; circle es una variante extra para icon-only.' },
+      { name: 'ghost', type: 'boolean', default: 'false', description: 'Figma Ghost=True: fondo transparente con borde y texto en tono ghost (azul o rojo según color). Solo definido en Figma para Primary, Outline y Dashed.' },
       { name: 'icon', type: 'ReactNode', description: 'Icono Lucide. Tamaño recomendado: 16px.' },
       { name: 'iconPosition', type: "'start' | 'end'", default: "'start'", description: 'Posición del icono relativa al texto.' },
       { name: 'loading', type: 'boolean', default: 'false', description: 'Muestra spinner de carga y deshabilita el botón.' },
@@ -1530,7 +1847,7 @@ export const atoms: Record<string, AtomEntry> = {
   },
   input: {
     id: 'input',
-    name: 'KInput',
+    name: 'Input',
     description: 'Sistema unificado de entrada de datos. Incluye variantes para texto simple, contraseñas, búsquedas, áreas de texto multilínea y códigos OTP. Paridad 100% con Ant Design v5.',
     preview: (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 400 }}>
@@ -1542,15 +1859,137 @@ export const atoms: Record<string, AtomEntry> = {
       </div>
     ),
     playground: <UnifiedInputPlayground />,
-    stateShowcase: (
-      <div style={{ display: 'flex', gap: 16, overflowX: 'auto', paddingBottom: 8 }}>
-        <div style={{ minWidth: 150 }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500], display: 'block', marginBottom: 8 }}>Default</span><KInput placeholder="Escribe..." /></div>
-        <div style={{ minWidth: 150 }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500], display: 'block', marginBottom: 8 }}>Status: Error</span><KInput value="Inválido" status="error" /></div>
-        <div style={{ minWidth: 150 }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500], display: 'block', marginBottom: 8 }}>Status: Warning</span><KInput value="Aviso" status="warning" /></div>
-        <div style={{ minWidth: 150 }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500], display: 'block', marginBottom: 8 }}>Disabled</span><KInput placeholder="No disponible" disabled /></div>
-        <div style={{ minWidth: 150 }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500], display: 'block', marginBottom: 8 }}>Filled Variant</span><KInput variant="filled" placeholder="Relleno" /></div>
-      </div>
-    ),
+    stateShowcase: (() => {
+      const col = (label: string) => (
+        <div style={{ fontSize: 10, fontWeight: 700, color: '#8f9096', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10 }}>{label}</div>
+      );
+      const states: Array<{ label: string; props: Record<string, any> }> = [
+        { label: 'Normal',   props: {} },
+        { label: 'Focused',  props: { isFocused: true } },
+        { label: 'Error',    props: { status: 'error' } },
+        { label: 'Warning',  props: { status: 'warning' } },
+        { label: 'Disabled', props: { disabled: true } },
+      ];
+      const sizes: Array<'sm' | 'md' | 'lg'> = ['lg', 'md', 'sm'];
+      const colW = 160;
+
+      const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
+        <div style={{ marginBottom: 28 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: '#051758', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>{title}</div>
+          <div style={{ display: 'grid', gridTemplateColumns: `repeat(${states.length}, ${colW}px)`, gap: '8px 12px' }}>
+            {children}
+          </div>
+        </div>
+      );
+
+      return (
+        <div style={{ overflowX: 'auto', overflowY: 'visible', padding: '4px 4px 4px 4px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 0, minWidth: `${states.length * (colW + 12)}px` }}>
+          {/* Column headers */}
+          <div style={{ display: 'grid', gridTemplateColumns: `repeat(${states.length}, ${colW}px)`, gap: '0 12px', marginBottom: 4 }}>
+            {states.map(s => col(s.label))}
+          </div>
+
+          {/* ── Base input ── */}
+          <Section title="Sin ícono — Filled">
+            {sizes.map(sz => states.map(s => (
+              <KInput key={`${sz}-${s.label}`} size={sz} placeholder="Escribir" defaultValue="Escribir" {...s.props} />
+            )))}
+          </Section>
+
+          <Section title="Sin ícono — Empty">
+            {sizes.map(sz => states.map(s => (
+              <KInput key={`${sz}-${s.label}`} size={sz} placeholder="Escribir" {...s.props} />
+            )))}
+          </Section>
+
+          {/* ── Icon Prefix ── */}
+          <Section title="Icon Prefix — Filled">
+            {sizes.map(sz => states.map(s => (
+              <KInput key={`${sz}-${s.label}`} size={sz} prefix={<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>} defaultValue="Escribir" placeholder="Escribir" {...s.props} />
+            )))}
+          </Section>
+
+          <Section title="Icon Prefix — Empty">
+            {sizes.map(sz => states.map(s => (
+              <KInput key={`${sz}-${s.label}`} size={sz} prefix={<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>} placeholder="Escribir" {...s.props} />
+            )))}
+          </Section>
+
+          {/* ── Icon Suffix ── */}
+          <Section title="Icon Suffix — Filled">
+            {sizes.map(sz => states.map(s => (
+              <KInput key={`${sz}-${s.label}`} size={sz} suffix={<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>} defaultValue="Escribir" placeholder="Escribir" {...s.props} />
+            )))}
+          </Section>
+
+          <Section title="Icon Suffix — Empty">
+            {sizes.map(sz => states.map(s => (
+              <KInput key={`${sz}-${s.label}`} size={sz} suffix={<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>} placeholder="Escribir" {...s.props} />
+            )))}
+          </Section>
+
+          {/* ── Allow Clear ── */}
+          <Section title="Allow Clear — Filled">
+            {sizes.map(sz => states.map(s => (
+              <KInput key={`${sz}-${s.label}`} size={sz} allowClear defaultValue="Escribir" placeholder="Escribir" {...s.props} />
+            )))}
+          </Section>
+
+          <Section title="Allow Clear — Empty">
+            {sizes.map(sz => states.map(s => (
+              <KInput key={`${sz}-${s.label}`} size={sz} allowClear placeholder="Escribir" {...s.props} />
+            )))}
+          </Section>
+
+          {/* ── Upper Label ── */}
+          <div style={{ marginBottom: 28 }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: '#051758', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>Upper Label — variantes</div>
+            <div style={{ display: 'grid', gridTemplateColumns: `repeat(${states.length}, ${colW}px)`, gap: '16px 12px' }}>
+              {states.map(s => [
+                <KInput key={`${s.label}-lbl`}        label="Label" placeholder="Escribir" {...s.props} />,
+                <KInput key={`${s.label}-req`}        label="Label" required placeholder="Escribir" {...s.props} />,
+                <KInput key={`${s.label}-tip`}        label="Label" tooltip="Información adicional" placeholder="Escribir" {...s.props} />,
+                <KInput key={`${s.label}-req-tip`}    label="Label" required tooltip="Información adicional" placeholder="Escribir" {...s.props} />,
+                <KInput key={`${s.label}-opt-tip`}    label="Label" optional tooltip="Información adicional" placeholder="Escribir" {...s.props} />,
+                <KInput key={`${s.label}-opt`}        label="Label" optional placeholder="Escribir" {...s.props} />,
+              ])}
+            </div>
+          </div>
+
+          {/* ── Upper Label + Help Text ── */}
+          <div style={{ marginBottom: 28 }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: '#051758', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>Upper Label + Help Text</div>
+            <div style={{ display: 'grid', gridTemplateColumns: `repeat(${states.length}, ${colW}px)`, gap: '16px 12px' }}>
+              {states.map(s => [
+                <KInput key={`${s.label}-h`}         label="Label" helpText="Please input passenger's name or delete this field." placeholder="Escribir" {...(s.props.status === 'error' ? { ...s.props, status: 'error' } : s.props)} />,
+                <KInput key={`${s.label}-h-req`}     label="Label" required helpText="Please input passenger's name or delete this field." placeholder="Escribir" {...s.props} />,
+                <KInput key={`${s.label}-h-tip`}     label="Label" tooltip="Info" helpText="Please input passenger's name or delete this field." placeholder="Escribir" {...s.props} />,
+                <KInput key={`${s.label}-h-rt`}      label="Label" required tooltip="Info" helpText="Please input passenger's name or delete this field." placeholder="Escribir" {...s.props} />,
+                <KInput key={`${s.label}-h-ot`}      label="Label" optional tooltip="Info" helpText="Please input passenger's name or delete this field." placeholder="Escribir" {...s.props} />,
+                <KInput key={`${s.label}-h-o`}       label="Label" optional helpText="Please input passenger's name or delete this field." placeholder="Escribir" {...s.props} />,
+              ])}
+            </div>
+          </div>
+
+          {/* ── Side Label ── */}
+          <div style={{ marginBottom: 28 }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: '#051758', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>Side Label — variantes</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, maxWidth: 520 }}>
+              {states.slice(0, 1).map(s => ([
+                <KInput key="s1" label="Label" labelPosition="side" placeholder="Escribir" />,
+                <KInput key="s2" label="Label" labelPosition="side" required placeholder="Escribir" />,
+                <KInput key="s3" label="Label" labelPosition="side" tooltip="Info adicional" placeholder="Escribir" />,
+                <KInput key="s4" label="Label" labelPosition="side" required tooltip="Info adicional" placeholder="Escribir" />,
+                <KInput key="s5" label="Label" labelPosition="side" optional tooltip="Info adicional" placeholder="Escribir" />,
+                <KInput key="s6" label="Label" labelPosition="side" optional placeholder="Escribir" />,
+              ]))}
+            </div>
+          </div>
+        </div>
+        </div>
+      );
+    })(),
     a11ySummary: {
       keyboard: [
         'Tab: Foco nativo al input.', 
@@ -1590,7 +2029,7 @@ export const atoms: Record<string, AtomEntry> = {
 
 // 5. OTP (Compound)
 <KInput.OTP length={6} onComplete={v => alert(v)} />`,
-    filename: 'KInput/index.tsx',
+    filename: 'Input/index.tsx',
     props: [
       { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Tamaño del componente.' },
       { name: 'variant', type: "'outlined' | 'borderless' | 'filled'", default: "'outlined'", description: 'Variante visual.' },
@@ -1611,9 +2050,242 @@ export const atoms: Record<string, AtomEntry> = {
     ],
     aiNotes: 'KInput es ahora un Compound Component. Prioriza el uso de KInput.Password y KInput.Search sobre tipos de input nativos para mejor accesibilidad y funcionalidad.',
   },
+
+  'input-password': {
+    id: 'input-password',
+    name: 'Input.Password',
+    description: 'Variante de KInput para contraseñas con toggle de visibilidad (ojo). Hereda todos los tokens de color, tamaños y estados de KInput base.',
+    preview: (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 360 }}>
+        <KInput.Password placeholder="Contraseña" />
+        <KInput.Password placeholder="Contraseña" prefix={<Lock size={14} />} />
+        <KInput.Password placeholder="Contraseña" status="error" helpText="Contraseña incorrecta" prefix={<Lock size={14} />} />
+        <KInput.Password placeholder="Contraseña" disabled prefix={<Lock size={14} />} />
+      </div>
+    ),
+    playground: <PasswordPlayground />,
+    stateShowcase: (() => {
+      const states: Array<{ label: string; props: Record<string, any> }> = [
+        { label: 'Normal',   props: {} },
+        { label: 'Focused',  props: { isFocused: true } },
+        { label: 'Error',    props: { status: 'error' } },
+        { label: 'Warning',  props: { status: 'warning' } },
+        { label: 'Disabled', props: { disabled: true } },
+      ];
+      const sizes: Array<'sm' | 'md' | 'lg'> = ['lg', 'md', 'sm'];
+      const colW = 160;
+      const col = (label: string) => (
+        <div style={{ fontSize: 10, fontWeight: 700, color: '#8f9096', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10 }}>{label}</div>
+      );
+      const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
+        <div style={{ marginBottom: 28 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: '#051758', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>{title}</div>
+          <div style={{ display: 'grid', gridTemplateColumns: `repeat(${states.length}, ${colW}px)`, gap: '8px 12px' }}>
+            {children}
+          </div>
+        </div>
+      );
+      return (
+        <div style={{ overflowX: 'auto', padding: '4px 4px 4px 4px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 0, minWidth: `${states.length * (colW + 12)}px` }}>
+            <div style={{ display: 'grid', gridTemplateColumns: `repeat(${states.length}, ${colW}px)`, gap: '0 12px', marginBottom: 4 }}>
+              {states.map(s => col(s.label))}
+            </div>
+            <Section title="Sin prefijo — Empty">
+              {sizes.map(sz => states.map(s => (
+                <KInput.Password key={`${sz}-${s.label}`} size={sz} placeholder="Contraseña" {...s.props} />
+              )))}
+            </Section>
+            <Section title="Sin prefijo — Filled">
+              {sizes.map(sz => states.map(s => (
+                <KInput.Password key={`${sz}-${s.label}`} size={sz} defaultValue="mypassword123" placeholder="Contraseña" {...s.props} />
+              )))}
+            </Section>
+            <Section title="Con ícono Lock (prefix)">
+              {sizes.map(sz => states.map(s => (
+                <KInput.Password key={`${sz}-${s.label}`} size={sz} prefix={<Lock size={sz === 'sm' ? 12 : sz === 'lg' ? 16 : 14} />} placeholder="Contraseña" {...s.props} />
+              )))}
+            </Section>
+            <Section title="Con prefijo + Help Text">
+              {states.map(s => (
+                <KInput.Password key={s.label} size="md" prefix={<Lock size={14} />} placeholder="Contraseña" helpText={s.props.status === 'error' ? 'Contraseña incorrecta' : s.props.status === 'warning' ? 'Contraseña débil' : 'Mínimo 8 caracteres'} {...s.props} />
+              ))}
+            </Section>
+          </div>
+        </div>
+      );
+    })(),
+    anatomy: [
+      { label: 'Input Field', description: 'Campo de texto nativo. Alterna entre type="password" y type="text" según el toggle.' },
+      { label: 'Lock Prefix', description: 'Ícono opcional al inicio del campo (recomendado: lucide Lock).', optional: true },
+      { label: 'Eye Toggle', description: 'Botón al final que alterna la visibilidad. Eye = visible, EyeOff = oculta.' },
+      { label: 'Help Text', description: 'Texto debajo del campo para errores o instrucciones (hereda color del status).', optional: true },
+    ],
+    a11ySummary: {
+      keyboard: ['Tab: Foco al input, luego al botón Eye.', 'Enter / Space: Alterna visibilidad desde el botón Eye.'],
+      aria: ['type="password" por defecto — lectores de pantalla anuncian el campo como contraseña.', 'Botón Eye tiene title "Mostrar/Ocultar contraseña".'],
+      contrast: 'AA — texto sobre fondo blanco, ícono Eye gris sobre blanco.',
+      score: 95,
+    },
+    code: `import { KInput } from '@khor/design-system/atoms/index';
+import { Lock } from 'lucide-react';
+
+// Básico
+<KInput.Password placeholder="Contraseña" />
+
+// Con ícono y validación
+<KInput.Password
+  prefix={<Lock size={14} />}
+  status="error"
+  helpText="Contraseña incorrecta"
+  placeholder="Contraseña"
+/>
+
+// Control externo de visibilidad
+<KInput.Password
+  visibilityToggle={{ visible, onVisibleChange: setVisible }}
+  placeholder="Contraseña"
+/>
+
+// Deshabilitado
+<KInput.Password disabled placeholder="Contraseña" />`,
+    filename: 'Input/index.tsx',
+    props: [
+      { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Altura: 32px / 36px / 40px. Hereda de KInput.' },
+      { name: 'status', type: "'default' | 'error' | 'warning'", default: "'default'", description: 'Estado visual del borde.' },
+      { name: 'prefix', type: 'ReactNode', description: 'Elemento al inicio (ej: ícono Lock).', optional: true },
+      { name: 'helpText', type: 'string', description: 'Texto de ayuda / error debajo del campo.', optional: true },
+      { name: 'disabled', type: 'boolean', default: 'false', description: 'Desactiva el campo.' },
+      { name: 'visibilityToggle', type: 'boolean | { visible, onVisibleChange }', default: 'true', description: 'Controla el toggle de visibilidad.' },
+      { name: 'iconRender', type: '(visible: boolean) => ReactNode', description: 'Renderizado personalizado del ícono Eye.', optional: true },
+      { name: 'isFocused', type: 'boolean', description: 'Fuerza estado de foco (playground/preview).', optional: true },
+    ],
+    guidelines: [
+      'Siempre usa prefix={<Lock />} en formularios de login para reforzar el contexto visual.',
+      'Combina status="error" + helpText para mostrar errores de validación.',
+      'Usa visibilityToggle={{ visible, onVisibleChange }} para controlar la visibilidad desde el componente padre.',
+    ],
+    aiNotes: 'KInput.Password — parte del compound KInput. Mismos tokens que KInput base. Props extra: visibilityToggle, iconRender.',
+  },
+
+  'search-input': {
+    id: 'search-input',
+    name: 'Search',
+    description: 'Barra de búsqueda con tres estilos de botón (Enter: default, icon, text), tamaños small/medium/large, sufijo micrófono y soporte para allow-clear. Figma: 187676-6781.',
+    preview: (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 420 }}>
+        <KSearch placeholder="Buscar" enter="default" />
+        <KSearch placeholder="Buscar" enter="icon" />
+        <KSearch placeholder="Buscar" enter="text" />
+        <KSearch placeholder="Buscar" enter="text" suffix allowClear defaultValue="search text" />
+      </div>
+    ),
+    playground: <SearchPlayground />,
+    stateShowcase: (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+        {/* Enter variants × size */}
+        {(['default', 'icon', 'text'] as KSearchEnter[]).map(e => (
+          <div key={e}>
+            <p style={{ fontSize: 11, fontWeight: 700, color: '#8f9096', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10, marginTop: 0 }}>
+              Enter={e} — small / medium / large
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {(['small', 'medium', 'large'] as const).map(sz => (
+                <KSearch key={sz} enter={e} size={sz} placeholder="Buscar" style={{ maxWidth: 360 }} />
+              ))}
+            </div>
+          </div>
+        ))}
+
+        {/* With suffix (mic) */}
+        <div>
+          <p style={{ fontSize: 11, fontWeight: 700, color: '#8f9096', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10, marginTop: 0 }}>Suffix (micrófono) — default / icon / text</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <KSearch enter="default" suffix placeholder="Buscar" style={{ maxWidth: 360 }} />
+            <KSearch enter="icon" suffix placeholder="Buscar" style={{ maxWidth: 360 }} />
+            <KSearch enter="text" suffix placeholder="Buscar" style={{ maxWidth: 360 }} />
+          </div>
+        </div>
+
+        {/* Allow Clear — filled */}
+        <div>
+          <p style={{ fontSize: 11, fontWeight: 700, color: '#8f9096', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10, marginTop: 0 }}>Filled + Allow Clear</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <KSearch enter="default" allowClear defaultValue="search text" style={{ maxWidth: 360 }} />
+            <KSearch enter="icon" allowClear suffix defaultValue="search text" style={{ maxWidth: 360 }} />
+            <KSearch enter="text" allowClear suffix defaultValue="search text" style={{ maxWidth: 360 }} />
+          </div>
+        </div>
+
+        {/* Disabled */}
+        <div>
+          <p style={{ fontSize: 11, fontWeight: 700, color: '#8f9096', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10, marginTop: 0 }}>Disabled — default / icon / text</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <KSearch enter="default" disabled placeholder="Buscar" style={{ maxWidth: 360 }} />
+            <KSearch enter="icon" disabled suffix placeholder="Buscar" style={{ maxWidth: 360 }} />
+            <KSearch enter="text" disabled suffix placeholder="Buscar" style={{ maxWidth: 360 }} />
+          </div>
+        </div>
+      </div>
+    ),
+    anatomy: [
+      { label: 'Input Area', description: 'Campo de texto nativo (flex: 1). Placeholder gris, texto navy cuando filled.' },
+      { label: 'Clear Button (×)', description: 'Aparece cuando allowClear=true y el input tiene contenido. Limpia el valor y dispara onSearch("").', optional: true },
+      { label: 'Mic Icon (Suffix)', description: 'Ícono de micrófono opcional. Se muestra con suffix=true antes del botón de búsqueda.', optional: true },
+      { label: 'Enter — default', description: 'Ícono de lupa inline, sin fondo. Solo color hover. Dispara onSearch al click o Enter.' },
+      { label: 'Enter — icon', description: 'Botón rojo cuadrado (#E04D36) con ícono de lupa. Ancho = alto del input.' },
+      { label: 'Enter — text', description: 'Botón rojo rectangular (#E04D36) con ícono de lupa + texto "Buscar". Configurable vía enterText.' },
+    ],
+    a11ySummary: {
+      keyboard: ['Enter: Dispara onSearch con el valor actual.', 'Tab: Foco nativo al input, luego al botón Enter.', 'Esc / Clear: Limpia el valor si allowClear=true.'],
+      aria: ['Input nativo con placeholder y aria-label implícito.', 'Botón Enter tiene tipo "button" para no hacer submit accidental.'],
+      contrast: 'Texto white sobre #E04D36 cumple AA (4.5:1+).',
+      score: 98,
+    },
+    code: `import { KSearch } from '@khor/design-system/atoms/index';
+
+// Básico (enter inline)
+<KSearch placeholder="Buscar" onSearch={v => console.log(v)} />
+
+// Botón icono rojo
+<KSearch enter="icon" onSearch={v => console.log(v)} />
+
+// Botón texto rojo + micrófono + clear
+<KSearch
+  enter="text"
+  suffix
+  allowClear
+  size="large"
+  placeholder="Buscar empleados..."
+  onSearch={v => search(v)}
+/>
+
+// Deshabilitado
+<KSearch enter="icon" disabled />`,
+    filename: 'Search/index.tsx',
+    props: [
+      { name: 'size', type: "'small' | 'medium' | 'large'", default: "'medium'", description: 'Altura del buscador: 32px / 36px / 40px.' },
+      { name: 'enter', type: "'default' | 'icon' | 'text'", default: "'default'", description: 'Estilo del botón de búsqueda. default=lupa inline, icon=botón rojo cuadrado, text=botón rojo con texto.' },
+      { name: 'suffix', type: 'boolean', default: 'false', description: 'Muestra ícono de micrófono antes del botón Enter.' },
+      { name: 'allowClear', type: 'boolean', default: 'false', description: 'Muestra botón × para limpiar el input cuando tiene contenido.' },
+      { name: 'enterText', type: 'string', default: "'Buscar'", description: 'Texto del botón cuando enter="text".' },
+      { name: 'onSearch', type: '(value: string, e?) => void', description: 'Callback al presionar Enter o el botón de búsqueda.' },
+      { name: 'disabled', type: 'boolean', default: 'false', description: 'Desactiva el componente completo.' },
+      { name: 'loading', type: 'boolean', default: 'false', description: 'Anima el ícono de lupa (pulse) durante la búsqueda.' },
+      { name: 'placeholder', type: 'string', default: "'Buscar'", description: 'Texto placeholder del input.' },
+    ],
+    guidelines: [
+      'Usa enter="default" para buscadores compactos dentro de toolbars.',
+      'Usa enter="icon" o enter="text" cuando la acción de búsqueda es el CTA principal.',
+      'Activa suffix cuando la búsqueda por voz es soportada.',
+      'Combina allowClear con onSearch para resetear resultados al limpiar.',
+    ],
+    aiNotes: 'KSearch: barra de búsqueda standalone. Enter: default/icon/text. Colores: btn rojo #E04D36, hover #c73a2a. Distinto de KInput.Search (legacy).',
+  },
+
   badge: {
     id: 'badge',
-    name: 'KBadge',
+    name: 'Badge',
     description: 'Notificador de estados o contadores sobre elementos. Incluye variante Ribbon para cintas en esquinas. Paridad 100% con Ant Design v5.',
     preview: (
       <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
@@ -1653,7 +2325,7 @@ export const atoms: Record<string, AtomEntry> = {
 <KBadge.Ribbon text="VIP" color="gold">
   <Card>Contenido</Card>
 </KBadge.Ribbon>`,
-    filename: 'KBadge/index.tsx',
+    filename: 'Badge/index.tsx',
     props: [
       { name: 'status', type: "'success' | 'error' | 'warning' | 'info' | 'default' | 'processing'", description: 'Estado semántico predefinido.' },
       { name: 'text', type: 'ReactNode', description: 'Texto junto al punto (en standalone mode).' },
@@ -1664,7 +2336,7 @@ export const atoms: Record<string, AtomEntry> = {
       { name: 'color', type: 'string', description: 'Color de fondo personalizado (hex o preset).' },
       { name: 'size', type: "'default' | 'small'", description: 'Tamaño del badge.' },
       { name: 'title', type: 'string', description: 'Texto al pasar el mouse.' },
-      { name: 'KBadge.Ribbon', type: 'Sub-component', description: 'Cinta decorativa para esquinas.' },
+      { name: 'Badge.Ribbon', type: 'Sub-component', description: 'Cinta decorativa para esquinas.' },
     ],
     guidelines: [
       'Usa status para indicadores de sistema standalone.',
@@ -1673,9 +2345,72 @@ export const atoms: Record<string, AtomEntry> = {
     ],
     aiNotes: 'KBadge soporta modo standalone (dot+text) y modo flotante (count). Usa Ribbon para banners promocionales o de estado en esquinas.',
   },
+  'badge-count': {
+    id: 'badge-count',
+    name: 'BadgeCount',
+    description: 'Badge de conteo inline (Figma: Badge/Count). Pastilla circular con número, 4 colores y 3 tamaños. Usado junto a etiquetas de tabs y listas.',
+    preview: (
+      <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
+        <KBadgeCount count="99" color="blue" size="md" />
+        <KBadgeCount count="99" color="blue-invert" size="md" />
+        <KBadgeCount count="99" color="gray" size="md" />
+        <KBadgeCount count="99" color="red" size="md" />
+      </div>
+    ),
+    playground: (
+      <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
+        {(['blue','blue-invert','gray','red'] as const).map(c =>
+          (['sm','md','lg'] as const).map(s => (
+            <KBadgeCount key={`${c}-${s}`} count="99" color={c} size={s} />
+          ))
+        )}
+      </div>
+    ),
+    stateShowcase: (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          <KBadgeCount count="9"  color="blue" size="sm" />
+          <KBadgeCount count="99" color="blue" size="sm" />
+          <KBadgeCount count="9"  color="blue" size="md" />
+          <KBadgeCount count="99" color="blue" size="md" />
+          <KBadgeCount count="9"  color="blue" size="lg" />
+          <KBadgeCount count="99" color="blue" size="lg" />
+        </div>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          <KBadgeCount count="99" color="blue-invert" size="md" />
+          <KBadgeCount count="99" color="gray" size="md" />
+          <KBadgeCount count="99" color="red" size="md" />
+        </div>
+      </div>
+    ),
+    a11ySummary: {
+      keyboard: ['No interactivo — solo visual.'],
+      aria: ['aria-label en el contenedor padre indica el conteo.'],
+      contrast: 'AA — todos los colores cumplen contraste mínimo.',
+      score: 95,
+    },
+    code: `import { KBadgeCount } from '@khor/design-system/atoms/KBadge';
+
+<KBadgeCount count="99" color="blue" size="md" />
+<KBadgeCount count="9"  color="red"  size="sm" />
+<KBadgeCount count="99" color="gray" size="lg" />`,
+    filename: 'Badge/index.tsx',
+    props: [
+      { name: 'count', type: 'ReactNode', description: 'Número o texto a mostrar dentro de la pastilla.' },
+      { name: 'color', type: "'blue' | 'blue-invert' | 'gray' | 'red'", default: "'blue'", description: 'Esquema de color de la pastilla.' },
+      { name: 'size',  type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Tamaño (sm=16px, md=20px, lg=24px).' },
+    ],
+    guidelines: [
+      'Usar color "blue" para conteos primarios (tabs activos, notificaciones del sistema).',
+      'Usar color "red" para alertas críticas o conteos de error.',
+      'Usar "gray" para conteos secundarios o desactivados.',
+      '"blue-invert" para conteos sobre fondos claros que requieren contraste visual.',
+    ],
+    aiNotes: 'KBadgeCount es un badge inline sin hijos (no flotante). Úsalo dentro de KTabsTrigger junto al label para mostrar conteos.',
+  },
   tag: {
     id: 'tag',
-    name: 'KTag',
+    name: 'Tag',
     description: 'Etiqueta de categorizacion con colores del sistema. Soporta cierre (closable) para tags removibles.',
     preview: (
       <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
@@ -1728,7 +2463,7 @@ export const atoms: Record<string, AtomEntry> = {
 <KTag icon={<Star size={12} />} color="gold" bordered={false}>
   Premium
 </KTag>`,
-    filename: 'KTag/index.tsx',
+    filename: 'Tag/index.tsx',
     props: [
       { name: 'color', type: 'KTagColor | string', description: 'Presets de AntD (magenta, volcano, gold, etc.) o color CSS.' },
       { name: 'closable', type: 'boolean', description: 'Muestra un botón de cierre.' },
@@ -1737,7 +2472,7 @@ export const atoms: Record<string, AtomEntry> = {
       { name: 'onClose', type: '(e) => void', description: 'Callback al cerrar. Si no se provee, el componente se oculta automáticamente.' },
       { name: 'closeIcon', type: 'ReactNode', description: 'Icono de cierre personalizado.' },
       { name: 'checked', type: 'boolean', description: 'Estado en CheckableTag.' },
-      { name: 'KTag.CheckableTag', type: 'Sub-component', description: 'Variante interactiva tipo toggle.' },
+      { name: 'Tag.CheckableTag', type: 'Sub-component', description: 'Variante interactiva tipo toggle.' },
     ],
     guidelines: [
       'Usa CheckableTag para filtros persistentes.',
@@ -1748,7 +2483,7 @@ export const atoms: Record<string, AtomEntry> = {
   },
   avatar: {
     id: 'avatar',
-    name: 'KAvatar',
+    name: 'Avatar',
     description: 'Avatar de usuario con soporte para imagen, iniciales autoajustables, icono, estado de presencia y color personalizable. KAvatarGroup soporta max count con indicador +N. Paridad completa con AntD Avatar.',
     preview: (
       <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
@@ -1858,7 +2593,7 @@ export const atoms: Record<string, AtomEntry> = {
 
 // onError: prevenir fallback
 <KAvatar src="/maybe-broken.jpg" onError={() => { console.log('Error!'); return false; }} />`,
-    filename: 'KAvatar/index.tsx',
+    filename: 'Avatar/index.tsx',
     props: [
       { name: 'src', type: 'string', description: 'URL de imagen del avatar.' },
       { name: 'alt', type: 'string', description: 'Texto alternativo para la imagen (accesibilidad). Si se omite, usa name.' },
@@ -1888,176 +2623,430 @@ export const atoms: Record<string, AtomEntry> = {
   },
   switch: {
     id: 'switch',
-    name: 'KSwitch',
-    description: 'Interruptor on/off con etiqueta opcional. Para configuraciones binarias.',
-    preview: (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-        <KSwitch label="Notificaciones activas" checked={true} onCheckedChange={() => {}} />
-        <KSwitch label="Modo oscuro" checked={false} onCheckedChange={() => {}} />
-        <KSwitch label="Desactivado" disabled checked={true} onCheckedChange={() => {}} />
-        <KSwitch label="Tamano pequeno" size="small" onCheckedChange={() => {}} />
-      </div>
-    ),
+    name: 'Switch',
+    description: 'Interruptor on/off. Dos tamaños (small/medium), texto ON/OFF, íconos ✓/✗, estado loading y disabled.',
+    preview: (() => {
+      const row = (label: string, nodes: React.ReactNode) => (
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
+          <span style={{ fontSize: 11, color: khorTokens.colors.neutral[400], width: 80, flexShrink: 0 }}>{label}</span>
+          <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>{nodes}</div>
+        </div>
+      );
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+          {row('Medium', <>
+            <KSwitch size="medium" checked />
+            <KSwitch size="medium" />
+            <KSwitch size="medium" checked disabled />
+            <KSwitch size="medium" disabled />
+          </>)}
+          {row('+ Text', <>
+            <KSwitch size="medium" checked showText />
+            <KSwitch size="medium" showText />
+            <KSwitch size="medium" checked showText disabled />
+            <KSwitch size="medium" showText disabled />
+          </>)}
+          {row('+ Icon', <>
+            <KSwitch size="medium" checked showIcon />
+            <KSwitch size="medium" showIcon />
+            <KSwitch size="medium" checked showIcon disabled />
+            <KSwitch size="medium" showIcon disabled />
+          </>)}
+          {row('Loading', <>
+            <KSwitch size="medium" checked loading />
+            <KSwitch size="medium" loading />
+          </>)}
+          {row('Small', <>
+            <KSwitch size="small" checked />
+            <KSwitch size="small" />
+            <KSwitch size="small" checked showText />
+            <KSwitch size="small" showText />
+            <KSwitch size="small" checked showIcon />
+            <KSwitch size="small" showIcon />
+          </>)}
+        </div>
+      );
+    })(),
     playground: <SwitchPlayground />,
-    stateShowcase: (
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16 }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>Off</span><KSwitch /></div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>On</span><KSwitch checked /></div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>Focus</span><div style={{ outline: `2px solid ${khorTokens.colors.brand.primary}`, outlineOffset: '2px', borderRadius: 999 }}><KSwitch checked /></div></div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>Disabled Off</span><KSwitch disabled /></div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>Disabled On</span><KSwitch checked disabled /></div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>Loading</span><KSwitch loading /></div>
-      </div>
-    ),
     a11ySummary: {
-      keyboard: ['Tab: Navega.', 'Barra Espaciadora: Alterna (toggle).'],
-      aria: ['role="switch" (nativamente mapeado por Radix).', 'aria-checked se sincroniza.'],
-      contrast: 'AAA en el punto blanco sobre track activo',
+      keyboard: ['Tab: Navega al switch.', 'Espacio: Alterna (toggle).'],
+      aria: ['role="switch" nativo via Radix.', 'aria-checked sincronizado automáticamente.'],
+      contrast: 'AAA — texto blanco sobre navy #051758 (checked) y sobre slate-300 (unchecked).',
       score: 100,
     },
     code: `import { KSwitch } from '@khor/design-system/atoms/index';
 
-<KSwitch
-  label="Notificaciones activas"
-  checked={isActive}
-  onCheckedChange={setIsActive}
-  checkedChildren="ON"
-  unCheckedChildren="OFF"
-/>`,
-    filename: 'KSwitch/index.tsx',
+// Básico
+<KSwitch checked={isOn} onCheckedChange={setIsOn} label="Notificaciones" />
+
+// Con texto ON/OFF dentro del track
+<KSwitch checked={isOn} onCheckedChange={setIsOn} showText />
+
+// Con íconos ✓/✗ dentro del track
+<KSwitch checked={isOn} onCheckedChange={setIsOn} showIcon />
+
+// Small + loading
+<KSwitch size="small" loading />`,
+    filename: 'Switch/index.tsx',
     props: [
-      { name: 'checked', type: 'boolean', description: 'Estado actual.' },
-      { name: 'onCheckedChange', type: '(checked: boolean) => void', description: 'Callback al cambiar.' },
-      { name: 'size', type: "'small' | 'default'", default: "'default'", description: 'Tamaño del switch.' },
-      { name: 'checkedChildren / unCheckedChildren', type: 'ReactNode', description: 'Texto o iconos dentro del track.' },
+      { name: 'checked',            type: 'boolean',                         description: 'Estado controlado (on/off).' },
+      { name: 'defaultChecked',     type: 'boolean',                         description: 'Estado inicial no controlado.' },
+      { name: 'onCheckedChange',    type: '(checked: boolean) => void',      description: 'Callback al cambiar estado.' },
+      { name: 'size',               type: "'small' | 'medium'",              default: "'medium'", description: 'Tamaño del switch.' },
+      { name: 'showText',           type: 'boolean',                         default: 'false', description: 'Muestra "ON"/"OFF" dentro del track.' },
+      { name: 'showIcon',           type: 'boolean',                         default: 'false', description: 'Muestra ✓/✗ dentro del track.' },
+      { name: 'loading',            type: 'boolean',                         default: 'false', description: 'Spinner en el thumb, deshabilita interacción.' },
+      { name: 'disabled',           type: 'boolean',                         default: 'false', description: 'Estado deshabilitado.' },
+      { name: 'label',              type: 'ReactNode',                       description: 'Etiqueta externa al switch.' },
+      { name: 'checkedChildren',    type: 'ReactNode',                       description: 'Contenido custom en estado checked (reemplaza showText/showIcon).' },
+      { name: 'unCheckedChildren',  type: 'ReactNode',                       description: 'Contenido custom en estado unchecked.' },
     ],
-    guidelines: ['Siempre incluye una etiqueta descriptiva.', 'Usa para preferencias binarias, no para acciones transaccionales.'],
-    aiNotes: 'KSwitch para toggle booleano. Usar en lugar de checkbox para cambios que aplican inmediatamente.',
+    guidelines: [
+      'Siempre incluye label para accesibilidad.',
+      'Usa showText o showIcon para mayor claridad cuando el contexto lo requiera.',
+      'Para cambios que aplican inmediatamente; usa KCheckbox para selección en formularios.',
+      'No combinar showText + showIcon — usa uno u otro.',
+    ],
+    aiNotes: 'KSwitch: toggle booleano, 2 tamaños, showText/showIcon para contenido en track. Checked=navy #051758, unchecked=slate-300. Loading deshabilita automáticamente.',
   },
 
   checkbox: {
     id: 'checkbox',
-    name: 'KCheckbox',
-    description: 'Casilla de verificación básica para selección de estados booleanos o grupos de opciones múltiples con KCheckbox.Group.',
+    name: 'Checkbox',
+    description: 'Casilla de verificación para selección de opciones no excluyentes. Soporta estados checked, indeterminate, error y disabled. Incluye KCheckbox.Group para grupos con select-all.',
     preview: (
-      <div style={{ display: 'flex', gap: 16 }}>
-        <KCheckbox checked>Activo</KCheckbox>
-        <KCheckbox checked="indeterminate">Parcial</KCheckbox>
-        <KCheckbox disabled>Desactivado</KCheckbox>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+        <div style={{ display: 'flex', gap: 32 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <KCheckbox checked label="Label" />
+            <KCheckbox label="Label" />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <KCheckbox checked status="error" label="Label" />
+            <KCheckbox status="error" label="Label" />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <KCheckbox checked disabled label="Label" />
+            <KCheckbox disabled label="Label" />
+          </div>
+        </div>
+        <div style={{ display: 'flex', gap: 32 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <KCheckbox checked />
+            <KCheckbox />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <KCheckbox checked status="error" />
+            <KCheckbox status="error" />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <KCheckbox checked disabled />
+            <KCheckbox disabled />
+          </div>
+        </div>
       </div>
     ),
     playground: <CheckboxPlayground />,
     stateShowcase: (
-      <div style={{ display: 'flex', gap: 16 }}>
-        <KCheckbox status="error">Error State</KCheckbox>
-        <KCheckbox status="warning">Warning State</KCheckbox>
-        <KCheckbox.Group options={['A', 'B', 'C']} defaultValue={['A']} />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+        {/* Header row */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 24 }}>
+          {['Default', 'Error', 'Disabled'].map(h => (
+            <p key={h} style={{ fontSize: 11, fontWeight: 700, color: '#8f9096', textTransform: 'uppercase', letterSpacing: '0.08em', margin: 0 }}>{h}</p>
+          ))}
+        </div>
+
+        {/* Checked + Label */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 24, alignItems: 'center' }}>
+          <KCheckbox checked label="Label" />
+          <KCheckbox checked status="error" label="Label" />
+          <KCheckbox checked disabled label="Label" />
+        </div>
+
+        {/* Unchecked + Label */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 24, alignItems: 'center' }}>
+          <KCheckbox label="Label" />
+          <KCheckbox status="error" label="Label" />
+          <KCheckbox disabled label="Label" />
+        </div>
+
+        {/* Indeterminate + Label */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 24, alignItems: 'center' }}>
+          <KCheckbox checked="indeterminate" label="Label" />
+          <KCheckbox checked="indeterminate" status="error" label="Label" />
+          <KCheckbox checked="indeterminate" disabled label="Label" />
+        </div>
+
+        {/* Hover + Label */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 24, alignItems: 'center' }}>
+          <KCheckbox isHovered label="Label" />
+          <div />
+          <div />
+        </div>
+
+        {/* Divider */}
+        <div style={{ borderTop: '1px solid #c8d4f0', marginTop: 4 }} />
+
+        {/* Checked – no label */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 24, alignItems: 'center' }}>
+          <KCheckbox checked />
+          <KCheckbox checked status="error" />
+          <KCheckbox checked disabled />
+        </div>
+
+        {/* Unchecked – no label */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 24, alignItems: 'center' }}>
+          <KCheckbox />
+          <KCheckbox status="error" />
+          <KCheckbox disabled />
+        </div>
+
+        {/* Indeterminate – no label */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 24, alignItems: 'center' }}>
+          <KCheckbox checked="indeterminate" />
+          <KCheckbox checked="indeterminate" status="error" />
+          <KCheckbox checked="indeterminate" disabled />
+        </div>
+
+        {/* Group */}
+        <div style={{ borderTop: '1px solid #c8d4f0', paddingTop: 16 }}>
+          <p style={{ fontSize: 11, fontWeight: 700, color: '#8f9096', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12, marginTop: 0 }}>Grupo con Select All</p>
+          <KCheckbox.Group options={['Opción A', 'Opción B', 'Opción C']} defaultValue={['Opción A']} />
+        </div>
       </div>
     ),
+    anatomy: [
+      { label: 'Checkbox Box', description: 'Cuadrado 16×16px con border-radius 4px. Cambia fill y borde según estado: default, error o disabled.' },
+      { label: 'Check Icon', description: 'Icono ✓ blanco (10×10px, strokeWidth 3.5). Visible cuando checked=true.' },
+      { label: 'Minus Icon (Indeterminate)', description: 'Icono — blanco (10×10px). Visible cuando checked="indeterminate".', optional: true },
+      { label: 'Label Text', description: 'Texto descriptivo a la derecha del box. Color navy por defecto, rojo en error, gris en disabled.', optional: true },
+      { label: 'KCheckbox.Group', description: 'Contenedor que provee contexto de valores compartidos para múltiples checkboxes.', optional: true },
+    ],
     a11ySummary: {
-      keyboard: ['Tab: Enfocar casilla.', 'Space: Cambiar estado (checked/unchecked).'],
-      aria: ['role="checkbox" aplicado automáticamente.', 'aria-checked refleja el estado actual incluyendo indeterminate.'],
-      contrast: 'Borde y check cumplen con ratio 3:1 mínimo.',
+      keyboard: ['Tab: Enfocar la casilla.', 'Space: Alternar entre checked/unchecked.'],
+      aria: ['role="checkbox" aplicado automáticamente por Radix UI.', 'aria-checked refleja el estado actual incluyendo "mixed" para indeterminate.'],
+      contrast: 'Borde visible (3:1+). Check blanco sobre rojo #E04D36 cumple AA.',
       score: 100,
     },
     code: `import { KCheckbox } from '@khor/design-system/atoms/index';
 
-// 1. Uso básico
+// Básico con label
 <KCheckbox label="Aceptar términos" />
 
-// 2. Estado indeterminado (Radix/AntD Parity)
+// Checked
+<KCheckbox checked label="Seleccionado" />
+
+// Indeterminate (padre de lista)
 <KCheckbox checked="indeterminate" label="Selección parcial" />
 
-// 3. Grupo de opciones
-<KCheckbox.Group 
+// Error
+<KCheckbox status="error" label="Campo requerido" />
+
+// Disabled
+<KCheckbox checked disabled label="No editable" />
+
+// Grupo de opciones
+<KCheckbox.Group
   options={[
     { label: 'Manzana', value: 'apple' },
     { label: 'Pera', value: 'pear' },
     { label: 'Naranja', value: 'orange', disabled: true },
-  ]} 
-  defaultValue={['apple']} 
-  onChange={(values) => console.log(values)} 
+  ]}
+  defaultValue={['apple']}
+  onChange={(values) => console.log(values)}
 />`,
-    filename: 'KCheckbox/index.tsx',
+    filename: 'Checkbox/index.tsx',
     props: [
-      { name: 'checked', type: "boolean | 'indeterminate'", description: 'Estado de la casilla.' },
-      { name: 'label', type: 'ReactNode', description: 'Texto descriptivo adjunto.' },
-      { name: 'status', type: "'error' | 'warning' | 'default'", description: 'Variante de validación.' },
-      { name: 'disabled', type: 'boolean', description: 'Desactiva la interacción.' },
-      { name: 'KCheckbox.Group', type: 'Sub-component', description: 'Contenedor para múltiples opciones.' },
-      { name: 'options', type: 'string[] | Option[]', description: 'Opciones dinámicas para el grupo.' },
-      { name: 'styles', type: 'object', description: 'Estilos semánticos (root, input, label).' },
+      { name: 'checked', type: "boolean | 'indeterminate'", description: 'Estado del checkbox. "indeterminate" muestra el icono Minus.' },
+      { name: 'label', type: 'ReactNode', description: 'Texto o contenido adjunto al checkbox.', optional: true },
+      { name: 'status', type: "'default' | 'error' | 'warning'", default: "'default'", description: 'Variante de validación. Error muestra borde y fill rojo.' },
+      { name: 'disabled', type: 'boolean', default: 'false', description: 'Desactiva la interacción. Box y label toman color gris.' },
+      { name: 'isHovered', type: 'boolean', default: 'false', description: 'Fuerza el estado hover (útil para previews y playgrounds).' },
+      { name: 'isFocused', type: 'boolean', default: 'false', description: 'Fuerza el estado focus con ring visible.' },
+      { name: 'onCheckedChange', type: "(checked: boolean | 'indeterminate') => void", description: 'Callback al cambiar el estado.' },
+      { name: 'classNames', type: '{ root?, input?, label? }', description: 'Clases adicionales por parte del componente.' },
+      { name: 'styles', type: '{ root?, input?, label? }', description: 'Estilos inline por parte del componente.' },
+      { name: 'Checkbox.Group', type: 'Sub-component', description: 'Agrupa múltiples checkboxes. Props: options, value, defaultValue, onChange, disabled.' },
     ],
     guidelines: [
-      'Usa Checkbox para opciones no excluyentes (múltiple selección).',
-      'El estado indeterminate es útil para checkboxes "padre" que controlan una lista.',
-      'Prefiere KCheckbox.Group para manejar estados de formularios complejos.',
+      'Usa KCheckbox para opciones no excluyentes (el usuario puede seleccionar múltiples).',
+      'El estado indeterminate es para checkboxes "padre" que controlan una lista parcialmente seleccionada.',
+      'Usa status="error" para validación de formularios, combinado con un mensaje de error debajo.',
+      'Prefiere KCheckbox.Group para listas dinámicas y manejo de estado compartido.',
     ],
-    aiNotes: 'KCheckbox utiliza Radix UI Checkbox bajo el capó. Soporta paridad total con AntD v5 incluyendo Group y Indeterminate.',
+    aiNotes: 'KCheckbox usa Radix UI. Checked default=#E04D36, error=#D32F2F, disabled=gray. Soporta Group con select-all e indeterminate.',
   },
   radio: {
     id: 'radio',
-    name: 'KRadio',
-    description: 'Grupo de opciones mutuamente excluyentes con soporte para layout vertical/horizontal y variante de boton.',
+    name: 'Radio',
+    description: 'Grupo de opciones mutuamente excluyentes (Radio-Group). Layout horizontal o vertical con 2–10 ítems. Incluye variante de botones y soporte para disabled individual o de grupo.',
     preview: (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
         <div>
-          <p style={{ fontSize: 12, color: khorTokens.colors.neutral[400], marginBottom: 8 }}>Horizontal (default)</p>
-          <KRadio.Group options={[{ label: 'Empleado', value: '1' }, { label: 'Contratista', value: '2' }, { label: 'Becario', value: '3' }]} value="1" />
+          <p style={{ fontSize: 11, fontWeight: 700, color: '#8f9096', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8, marginTop: 0 }}>Horizontal — 2 / 3 / 4 ítems</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <KRadio.Group options={[{ label: '1st', value: '1' }, { label: '2nd', value: '2' }]} defaultValue="1" />
+            <KRadio.Group options={[{ label: '1st', value: '1' }, { label: '2nd', value: '2' }, { label: '3rd', value: '3' }]} defaultValue="1" />
+            <KRadio.Group options={[{ label: '1st', value: '1' }, { label: '2nd', value: '2' }, { label: '3rd', value: '3' }, { label: '4th', value: '4' }]} defaultValue="1" />
+          </div>
         </div>
         <div>
-          <p style={{ fontSize: 12, color: khorTokens.colors.neutral[400], marginBottom: 8 }}>Vertical</p>
-          <KRadio.Group options={[{ label: 'Nómina Quincenal', value: '1' }, { label: 'Nómina Mensual', value: '2' }]} value="1" direction="vertical" />
+          <p style={{ fontSize: 11, fontWeight: 700, color: '#8f9096', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8, marginTop: 0 }}>Vertical — 4 ítems con disabled</p>
+          <div style={{ display: 'flex', gap: 32 }}>
+            <KRadio.Group direction="vertical" options={[{ label: 'Option A', value: 'a' }, { label: 'Option B', value: 'b' }, { label: 'Option C', value: 'c' }, { label: 'Option D', value: 'd' }]} defaultValue="a" />
+            <KRadio.Group direction="vertical" options={[{ label: 'Option A', value: 'a' }, { label: 'Option B', value: 'b', disabled: true }, { label: 'Option C', value: 'c', disabled: true }]} defaultValue="a" />
+          </div>
         </div>
         <div>
-          <p style={{ fontSize: 12, color: khorTokens.colors.neutral[400], marginBottom: 8 }}>Botones</p>
-          <KRadio.Group options={[{ label: 'Día', value: 'd' }, { label: 'Semana', value: 'w' }, { label: 'Mes', value: 'm' }]} value="w" optionType="button" />
+          <p style={{ fontSize: 11, fontWeight: 700, color: '#8f9096', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8, marginTop: 0 }}>Variante botones — outline / solid</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <KRadio.Group options={[{ label: 'Día', value: 'd' }, { label: 'Semana', value: 'w' }, { label: 'Mes', value: 'm' }]} defaultValue="w" optionType="button" buttonStyle="outline" />
+            <KRadio.Group options={[{ label: 'Día', value: 'd' }, { label: 'Semana', value: 'w' }, { label: 'Mes', value: 'm' }]} defaultValue="w" optionType="button" buttonStyle="solid" />
+          </div>
         </div>
       </div>
     ),
     playground: <RadioPlayground />,
     stateShowcase: (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-        <KRadio.Group options={[{ label: 'Unchecked', value: '1' }, { label: 'Checked', value: '2' }]} defaultValue="2" direction="vertical" />
-        <KRadio.Group options={[{ label: 'Disabled Off', value: '3', disabled: true }, { label: 'Disabled On', value: '4', disabled: true }]} defaultValue="4" direction="vertical" />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+        {/* Horizontal groups – different item counts */}
+        <div>
+          <p style={{ fontSize: 11, fontWeight: 700, color: '#8f9096', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12, marginTop: 0 }}>Horizontal — 2 a 5 ítems</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {[2, 3, 4, 5].map(n => (
+              <KRadio.Group
+                key={n}
+                defaultValue="1"
+                options={Array.from({ length: n }, (_, i) => ({
+                  label: `${['1st','2nd','3rd','4th','5th'][i]}`,
+                  value: String(i + 1),
+                }))}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Vertical groups */}
+        <div>
+          <p style={{ fontSize: 11, fontWeight: 700, color: '#8f9096', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12, marginTop: 0 }}>Vertical — Option A…D / A…F</p>
+          <div style={{ display: 'flex', gap: 48 }}>
+            {[4, 6].map(n => (
+              <KRadio.Group
+                key={n}
+                direction="vertical"
+                defaultValue="a"
+                options={Array.from({ length: n }, (_, i) => ({
+                  label: `Option ${String.fromCharCode(65 + i)}`,
+                  value: String.fromCharCode(97 + i),
+                }))}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Disabled states */}
+        <div>
+          <p style={{ fontSize: 11, fontWeight: 700, color: '#8f9096', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12, marginTop: 0 }}>Disabled — seleccionado / no seleccionado / grupo completo</p>
+          <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
+            <KRadio.Group
+              direction="vertical"
+              defaultValue="a"
+              options={[
+                { label: 'Seleccionado (disabled)', value: 'a', disabled: true },
+                { label: 'No seleccionado (disabled)', value: 'b', disabled: true },
+              ]}
+            />
+            <KRadio.Group
+              direction="vertical"
+              defaultValue="a"
+              disabled
+              options={[
+                { label: 'Option A', value: 'a' },
+                { label: 'Option B', value: 'b' },
+                { label: 'Option C', value: 'c' },
+              ]}
+            />
+          </div>
+        </div>
+
+        {/* Button variants */}
+        <div>
+          <p style={{ fontSize: 11, fontWeight: 700, color: '#8f9096', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12, marginTop: 0 }}>Variante botones — outline / solid / disabled</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <KRadio.Group options={[{ label: 'Día', value: 'd' }, { label: 'Semana', value: 'w' }, { label: 'Mes', value: 'm' }, { label: 'Año', value: 'y' }]} defaultValue="w" optionType="button" buttonStyle="outline" />
+            <KRadio.Group options={[{ label: 'Día', value: 'd' }, { label: 'Semana', value: 'w' }, { label: 'Mes', value: 'm' }, { label: 'Año', value: 'y' }]} defaultValue="w" optionType="button" buttonStyle="solid" />
+            <KRadio.Group options={[{ label: 'Día', value: 'd' }, { label: 'Semana', value: 'w' }, { label: 'Mes', value: 'm' }]} defaultValue="w" optionType="button" disabled />
+          </div>
+        </div>
       </div>
     ),
+    anatomy: [
+      { label: 'KRadio.Group', description: 'Contenedor raíz (role="radiogroup"). Establece direction (horizontal/vertical) y el optionType.' },
+      { label: 'Radio Circle', description: 'Círculo 16×16px con border 1.5px. Estado: slate-300 sin selección, #E04D36 seleccionado, gray-200 disabled.' },
+      { label: 'Inner Dot', description: 'Círculo interior 7×7px relleno #E04D36. Solo visible cuando la opción está seleccionada. Gray cuando disabled.' },
+      { label: 'Label Text', description: 'Texto descriptivo a la derecha del círculo. Navy por defecto, gris (#9CA3AF) cuando disabled.', optional: true },
+      { label: 'KRadio.Button', description: 'Variante de botón segmentado. Se agrupa con -space-x-px para bordes superpuestos.', optional: true },
+    ],
     a11ySummary: {
-      keyboard: ['Up/Down/Left/Right: Mueve el foco al siguiente/previo item y lo selecciona.', 'Tab: Entra y sale del contenedor principal.'],
-      aria: ['role="radiogroup" asignado al contenedor', 'role="radio" y aria-checked asignados a cada elemento.'],
-      contrast: 'AAA en anillo indicador',
+      keyboard: ['Arrows: Mueve el foco y selecciona la siguiente/anterior opción del grupo.', 'Tab: Entra y sale del contenedor del grupo.'],
+      aria: ['role="radiogroup" en el contenedor.', 'role="radio" y aria-checked en cada ítem.', 'aria-disabled reflejado cuando disabled=true.'],
+      contrast: 'Inner dot blanco sobre #E04D36 cumple AA. Borde selected 3:1+.',
       score: 100,
     },
     code: `import { KRadio } from '@khor/design-system/atoms/index';
 
+// Horizontal (default)
 <KRadio.Group
   options={[
-    { label: 'Empleado', value: 'emp' },
-    { label: 'Contratista', value: 'con' },
+    { label: '1st', value: '1' },
+    { label: '2nd', value: '2' },
+    { label: '3rd', value: '3' },
   ]}
-  value={tipo}
-  onValueChange={setTipo}
+  defaultValue="1"
+  onValueChange={setValue}
 />
 
-// Variante de botones
-<KRadio.Group optionType="button" options={...} />`,
-    filename: 'KRadio/index.tsx',
+// Vertical
+<KRadio.Group
+  direction="vertical"
+  options={[
+    { label: 'Option A', value: 'a' },
+    { label: 'Option B', value: 'b', disabled: true },
+    { label: 'Option C', value: 'c' },
+  ]}
+  defaultValue="a"
+/>
+
+// Botones segmentados
+<KRadio.Group
+  optionType="button"
+  buttonStyle="solid"
+  options={[{ label: 'Día', value: 'd' }, { label: 'Semana', value: 'w' }]}
+  defaultValue="w"
+/>`,
+    filename: 'Radio/index.tsx',
     props: [
-      { name: 'options', type: '{ label: string; value: string | number; disabled?: boolean }[] | string[]', required: true, description: 'Array de opciones del grupo de radio.' },
-      { name: 'value', type: 'string', description: 'Valor actualmente seleccionado (controlado).' },
+      { name: 'options', type: '{ label: ReactNode; value: string; disabled?: boolean }[] | string[]', required: true, description: 'Opciones del grupo. Cada ítem puede tener su propio disabled.' },
+      { name: 'value', type: 'string', description: 'Valor seleccionado (controlado).' },
+      { name: 'defaultValue', type: 'string', description: 'Valor inicial (no controlado).' },
       { name: 'onValueChange', type: '(value: string) => void', description: 'Callback al cambiar la selección.' },
-      { name: 'direction', type: "'horizontal' | 'vertical'", default: "'horizontal'", description: 'Orientación del grupo de opciones.' },
-      { name: 'optionType', type: "'default' | 'button'", default: "'default'", description: 'Estilo visual: radio clásico o grupo de botones.' },
-      { name: 'buttonStyle', type: "'solid' | 'outline'", default: "'outline'", description: 'Aplica solo cuando optionType="button". solid=relleno, outline=solo borde.' },
-      { name: 'size', type: "'small' | 'default' | 'large'", default: "'default'", description: 'Tamaño del grupo de radio.' },
-      { name: 'disabled', type: 'boolean', default: 'false', description: 'Deshabilita todas las opciones del grupo.' },
+      { name: 'direction', type: "'horizontal' | 'vertical'", default: "'horizontal'", description: 'Layout del grupo. Horizontal usa flex-row con gap-4; vertical usa flex-col con gap-2.' },
+      { name: 'optionType', type: "'default' | 'button'", default: "'default'", description: 'default = radio clásico; button = segmented button group.' },
+      { name: 'buttonStyle', type: "'outline' | 'solid'", default: "'outline'", description: 'Solo aplica cuando optionType="button". solid tiene fondo relleno en el activo.' },
+      { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Tamaño de los botones (solo optionType="button").' },
+      { name: 'disabled', type: 'boolean', default: 'false', description: 'Deshabilita todo el grupo. Círculo y label toman color gris.' },
     ],
-    guidelines: ['Máximo 5-6 opciones. Para más opciones, usa KSelectField.', 'optionType="button" ideal para filtros y toggles de vista.', 'KRadio.Button puede usarse standalone para casos personalizados dentro de un Group.'],
-    aiNotes: 'KRadio para selección única. Agrupar con KRadio.Group. Paridad total AntD v5.',
+    guidelines: [
+      'Usa KRadio para selección única. Para múltiple, usa KCheckbox.Group.',
+      'Máximo 6 opciones en horizontal; para más usa direction="vertical" o KSelectField.',
+      'direction="vertical" es ideal para listas de opciones largas con descripciones.',
+      'optionType="button" es ideal para filtros de periodo, vista o tipo.',
+    ],
+    aiNotes: 'KRadio usa Radix RadioGroup. Selected=#E04D36, disabled=gray. Soporta horizontal/vertical y variante button (outline/solid).',
   },
   progress: {
     id: 'progress',
-    name: 'KProgress',
+    name: 'Progress',
     description: 'Barra de progreso para indicar completitud de procesos, cargas o pasos.',
     preview: (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 400 }}>
@@ -2088,7 +3077,7 @@ export const atoms: Record<string, AtomEntry> = {
 <KProgress value={75} />
 <KProgress value={100} status="success" />
 <KProgress value={30} strokeColor="var(--khor-chart-accent)" />`,
-    filename: 'KProgress/index.tsx',
+    filename: 'Progress/index.tsx',
     props: [
       { name: 'value', type: 'number', required: true, description: 'Porcentaje de progreso (0-100).' },
       { name: 'max', type: 'number', default: '100', description: 'Valor maximo.' },
@@ -2101,7 +3090,7 @@ export const atoms: Record<string, AtomEntry> = {
   },
   typography: {
     id: 'typography',
-    name: 'KTypography',
+    name: 'Typography',
     description: 'Sistema completo de texto que incluye encabezados (Title), párrafos, enlaces y texto básico con interacciones avanzadas (Edición, Copia, Truncado).',
     preview: (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -2149,9 +3138,9 @@ export const atoms: Record<string, AtomEntry> = {
 <KTypography.Link href="https://khor.com" target="_blank">
   Documentación
 </KTypography.Link>`,
-    filename: 'KTypography/index.tsx',
+    filename: 'Typography/index.tsx',
     props: [
-      { name: 'KTypography.Title', type: 'Sub-component', description: 'Heading con prop level (1-5).' },
+      { name: 'Typography.Title', type: 'Sub-component', description: 'Heading con prop level (1-5).' },
       { name: 'copyable', type: 'boolean | object', description: 'Permite copiar el texto al portapapeles.' },
       { name: 'editable', type: 'boolean | object', description: 'Habilita edición en línea in-place.' },
       { name: 'ellipsis', type: 'boolean | object', description: 'Truncado de texto con soporte multi-línea (rows).' },
@@ -2167,7 +3156,7 @@ export const atoms: Record<string, AtomEntry> = {
   },
   alert: {
     id: 'alert',
-    name: 'KAlert',
+    name: 'Alert',
     description: 'Componente de alerta con 4 tipos semánticos (success, error, warning, info). Incluye icono automático, título, descripción y opción de cerrar.',
     preview: (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -2198,7 +3187,7 @@ export const atoms: Record<string, AtomEntry> = {
 <KAlert type="error" title="Error" description="No se pudo procesar la solicitud." />
 <KAlert type="warning" title="Atención" description="Faltan campos obligatorios." />
 <KAlert type="info" title="Info" description="Nueva actualización disponible." />`,
-    filename: 'KAlert/index.tsx',
+    filename: 'Alert/index.tsx',
     props: [
       { name: 'type', type: "'success' | 'error' | 'warning' | 'info'", default: "'info'", description: 'Tipo semántico de la alerta.' },
       { name: 'title', type: 'string', required: true, description: 'Título de la alerta.' },
@@ -2212,7 +3201,7 @@ export const atoms: Record<string, AtomEntry> = {
   },
   skeleton: {
     id: 'skeleton',
-    name: 'KSkeleton',
+    name: 'Skeleton',
     description: 'Placeholder de carga que indica al usuario que el contenido está cargando. Soporta rectángulos, círculos y múltiples líneas de texto.',
     preview: (
       <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
@@ -2256,7 +3245,7 @@ export const atoms: Record<string, AtomEntry> = {
 <KSkeleton lines={3} />
 <KSkeleton circle height={48} />
 <KSkeleton width={200} height={40} />`,
-    filename: 'KSkeleton/index.tsx',
+    filename: 'Skeleton/index.tsx',
     props: [
       { name: 'width', type: "number | string", default: "'100%'", description: 'Ancho del skeleton.' },
       { name: 'height', type: "number | string", default: '16', description: 'Alto del skeleton.' },
@@ -2268,22 +3257,73 @@ export const atoms: Record<string, AtomEntry> = {
   },
   slider: {
     id: 'slider',
-    name: 'KSlider',
-    description: 'Control deslizante para seleccionar un valor numérico dentro de un rango. Basado en Radix UI Slider con tokens Khor.',
+    name: 'Slider',
+    description: 'Control deslizante para seleccionar un valor numérico dentro de un rango. Basado en Radix UI Slider con tokens Khor. Soporta rango dual, marcas, íconos y etiqueta superior.',
     preview: (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 20, maxWidth: 400 }}>
-        <KSlider defaultValue={[30]} />
-        <KSlider defaultValue={[75]} min={0} max={100} step={5} />
-        <KSlider defaultValue={[50]} disabled />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 24, maxWidth: 400, paddingBottom: 8 }}>
+        <KSlider defaultValue={[10]} min={0} max={24} step={1} marks={{ 0: '0', 8: '8', 16: '16', 24: '24' }} />
+        <KSlider range defaultValue={[6, 18]} min={0} max={24} step={1} suffixIcon={<Smile size={18} />} />
+        <KSlider label="Volumen" defaultValue={[14]} min={0} max={24} step={1} />
       </div>
     ),
     playground: <SliderPlayground />,
-    stateShowcase: (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 24, padding: '16px 8px', maxWidth: 400 }}>
-        <div><KText variant="small" color="muted">Default</KText><KSlider defaultValue={[30]} /></div>
-        <div><KText variant="small" color="muted">Disabled</KText><KSlider defaultValue={[60]} disabled /></div>
-      </div>
-    ),
+    stateShowcase: (() => {
+      const m24 = { 0: '0', 8: '8', 16: '16', 24: '24' };
+      const sectionTitle = (t: string) => (
+        <div style={{ fontSize: 10, fontWeight: 700, color: '#8f9096', textTransform: 'uppercase' as const, letterSpacing: '0.08em', marginBottom: 10 }}>{t}</div>
+      );
+      const colHeader = (t: string) => (
+        <div style={{ fontSize: 10, fontWeight: 600, color: '#8f9096', textTransform: 'uppercase' as const, letterSpacing: '0.06em' }}>{t}</div>
+      );
+      const Row = ({ children, extraBottom = 0 }: { children: React.ReactNode; extraBottom?: number }) => (
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, paddingBottom: extraBottom }}>
+          {children}
+        </div>
+      );
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 0, padding: '4px 4px 4px 4px', maxWidth: 660 }}>
+          {/* column headers */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, marginBottom: 8 }}>
+            {colHeader('Range')}
+            {colHeader('Single')}
+          </div>
+
+          {/* ── Sin ícono ─────────────────────── */}
+          {sectionTitle('Sin ícono')}
+          <Row extraBottom={32}>
+            <KSlider range defaultValue={[8, 16]} min={0} max={24} step={1} marks={m24} />
+            <KSlider defaultValue={[14]} min={0} max={24} step={1} />
+          </Row>
+          <Row extraBottom={16}>
+            <KSlider range defaultValue={[8, 16]} min={0} max={24} step={1} />
+            <KSlider defaultValue={[14]} min={0} max={24} step={1} marks={m24} />
+          </Row>
+
+          {/* ── Con ícono ─────────────────────── */}
+          {sectionTitle('Con ícono')}
+          <Row extraBottom={32}>
+            <KSlider range defaultValue={[8, 16]} min={0} max={24} step={1} marks={m24} suffixIcon={<Smile size={18} />} />
+            <KSlider defaultValue={[14]} min={0} max={24} step={1} suffixIcon={<Smile size={18} />} />
+          </Row>
+          <Row extraBottom={16}>
+            <KSlider range defaultValue={[8, 16]} min={0} max={24} step={1} marks={m24} suffixIcon={<Smile size={18} />} disabled />
+            <KSlider defaultValue={[14]} min={0} max={24} step={1} suffixIcon={<Smile size={18} />} disabled />
+          </Row>
+
+          {/* ── Upper Label ───────────────────── */}
+          {sectionTitle('Upper Label')}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 20, maxWidth: 320 }}>
+            <KSlider label="Label" defaultValue={[8]} min={0} max={24} step={1} />
+            <div style={{ paddingBottom: 28 }}>
+              <KSlider label="Label" defaultValue={[8]} min={0} max={24} step={1} marks={m24} />
+            </div>
+            <div style={{ paddingBottom: 28 }}>
+              <KSlider label="Label" defaultValue={[8]} min={0} max={24} step={1} marks={m24} suffixIcon={<Smile size={18} />} />
+            </div>
+          </div>
+        </div>
+      );
+    })(),
     a11ySummary: {
       keyboard: ['Up/Right: Sube valor.', 'Down/Left: Baja valor.', 'Home/End: Valores extremos.'],
       aria: ['role="slider"', 'aria-valuenow, aria-valuemin, aria-valuemax inyectados.', 'aria-disabled cuando aplica.'],
@@ -2291,27 +3331,53 @@ export const atoms: Record<string, AtomEntry> = {
       score: 95,
     },
     code: `import { KSlider } from '@khor/design-system/atoms/index';
+import { Smile } from 'lucide-react';
 
-<KSlider value={[volume]} onValueChange={(v) => setVolume(v[0])} min={0} max={100} step={1} />
-<KSlider defaultValue={[50]} disabled />`,
-    filename: 'KSlider/index.tsx',
+// Básico
+<KSlider defaultValue={[30]} min={0} max={100} step={1} />
+
+// Rango dual
+<KSlider range defaultValue={[20, 80]} min={0} max={100} />
+
+// Con marcas
+<KSlider defaultValue={[8]} min={0} max={24} step={1} marks={{ 0: '0', 8: '8', 16: '16', 24: '24' }} />
+
+// Con ícono
+<KSlider defaultValue={[14]} min={0} max={24} suffixIcon={<Smile size={18} />} />
+
+// Upper label
+<KSlider label="Volumen" defaultValue={[30]} />`,
+    filename: 'Slider/index.tsx',
     props: [
-      { name: 'value', type: 'number[]', description: 'Valor controlado (array de numeros).' },
-      { name: 'defaultValue', type: 'number[]', default: '[50]', description: 'Valor inicial.' },
+      { name: 'value', type: 'number | number[]', description: 'Valor controlado.' },
+      { name: 'defaultValue', type: 'number | number[]', description: 'Valor inicial no controlado.' },
       { name: 'min', type: 'number', default: '0', description: 'Valor mínimo.' },
       { name: 'max', type: 'number', default: '100', description: 'Valor máximo.' },
       { name: 'step', type: 'number', default: '1', description: 'Incremento.' },
-      { name: 'onValueChange', type: '(value: number[]) => void', description: 'Callback al cambiar.' },
-      { name: 'disabled', type: 'boolean', description: 'Desactiva el slider.' },
-      { name: 'showValue', type: 'boolean', default: 'true', description: 'Muestra el valor actual.' },
+      { name: 'range', type: 'boolean', default: 'false', description: 'Activa modo rango con dos thumbs.' },
+      { name: 'marks', type: 'Record<number, ReactNode>', description: 'Marcas sobre la pista con etiquetas.' },
+      { name: 'label', type: 'ReactNode', description: 'Etiqueta superior (Slider selector Upper label).' },
+      { name: 'prefixIcon', type: 'ReactNode', description: 'Ícono a la izquierda de la pista.' },
+      { name: 'suffixIcon', type: 'ReactNode', description: 'Ícono a la derecha de la pista.' },
+      { name: 'disabled', type: 'boolean', default: 'false', description: 'Desactiva el slider.' },
+      { name: 'showValue', type: 'boolean', default: 'false', description: 'Muestra el valor actual junto al track.' },
+      { name: 'reverse', type: 'boolean', default: 'false', description: 'Invierte la dirección.' },
+      { name: 'vertical', type: 'boolean', default: 'false', description: 'Orientación vertical.' },
+      { name: 'onChange', type: '(value: number | number[]) => void', description: 'Callback al cambiar valor.' },
+      { name: 'onAfterChange', type: '(value: number | number[]) => void', description: 'Callback al soltar el thumb.' },
     ],
-    guidelines: ['Usa para valores continuos como volumen, brillo, porcentaje.', 'Para valores discretos con pocas opciones, usa KRadio variant="button".'],
-    aiNotes: 'KSlider para entrada de rango numérico basado en Radix UI Slider. Soporta rangos duales y marcas.',
+    guidelines: [
+      'Usa para valores continuos como volumen, brillo o porcentaje.',
+      'Usa range={true} cuando el usuario debe seleccionar un intervalo (ej. filtro de precio).',
+      'Combina marks con min/max apropiados para comunicar puntos de referencia discretos.',
+      'El prop label genera el layout "Slider selector Upper label" del Figma.',
+    ],
+    aiNotes: 'KSlider para entrada de rango numérico basado en Radix UI Slider. Soporta rangos duales, marcas, íconos prefijo/sufijo y etiqueta superior (label). Usar suffixIcon con Lucide icons.',
   },
 
   spin: {
     id: 'spin',
-    name: 'KSpin',
+    name: 'Spin',
     description: 'Indicador de carga circular con texto opcional. Para estados de carga de página o secciones completas.',
     preview: (
       <div style={{ display: 'flex', gap: 32, alignItems: 'center' }}>
@@ -2340,7 +3406,7 @@ export const atoms: Record<string, AtomEntry> = {
 <KSpin size="md" />
 <KSpin size="lg" />
 <KSpin size="sm" color="#051758" />`,
-    filename: 'KSpin/index.tsx',
+    filename: 'Spin/index.tsx',
     props: [
       { name: 'size', type: "'sm' | 'md' | 'lg' | 'xl'", default: "'md'", description: 'Tamaño del spinner.' },
       { name: 'color', type: 'string', default: 'khor.primary', description: 'Color del spinner.' },
@@ -2350,7 +3416,7 @@ export const atoms: Record<string, AtomEntry> = {
   },
   divider: {
     id: 'divider',
-    name: 'KDivider',
+    name: 'Divider',
     description: 'Separador visual horizontal para dividir secciones de contenido. Usa el color neutral.200 del sistema.',
     preview: (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 400 }}>
@@ -2368,7 +3434,7 @@ export const atoms: Record<string, AtomEntry> = {
   <KDivider />
   <p>Contenido B</p>
 </div>`,
-    filename: 'KDivider/index.tsx',
+    filename: 'Divider/index.tsx',
     props: [
       { name: 'className', type: 'string', description: 'Clase CSS adicional.' },
     ],
@@ -2390,10 +3456,10 @@ export const atoms: Record<string, AtomEntry> = {
     aiNotes: 'KDivider para separación visual. Soporta orientación vertical y texto en línea.',
   },
   /* ═══ ÁTOMOS EXTENDIDOS (Wave 3) ═══ */
-  'button-group': { id: 'button-group', name: 'KButtonGroup', description: 'Agrupa botones relacionados en una fila unificada con bordes compartidos o espaciado controlado.',
+  'button-group': { id: 'button-group', name: 'ButtonGroup', description: 'Agrupa botones relacionados en una fila unificada con bordes compartidos o espaciado controlado.',
     preview: (<KButtonGroup><KButton variant="secondary" size="sm">Anterior</KButton><KButton variant="secondary" size="sm">Siguiente</KButton></KButtonGroup>),
     playground: <ButtonGroupPlayground />,
-    code: `<KButtonGroup>\n  <KButton variant="secondary">Anterior</KButton>\n  <KButton variant="secondary">Siguiente</KButton>\n</KButtonGroup>`, filename: 'KButtonGroup/index.tsx',
+    code: `<KButtonGroup>\n  <KButton variant="secondary">Anterior</KButton>\n  <KButton variant="secondary">Siguiente</KButton>\n</KButtonGroup>`, filename: 'ButtonGroup/index.tsx',
     props: [{ name: 'size', type: "'sm' | 'md' | 'lg'", description: 'Espaciado entre botones.' }, { name: 'direction', type: "'horizontal' | 'vertical'", description: 'Flujo.' }],
     a11ySummary: {
       keyboard: ['Tab: Navega entre botones del grupo.', 'Arrows: No implementado (comportamiento de toolbar nativo).'],
@@ -2404,10 +3470,10 @@ export const atoms: Record<string, AtomEntry> = {
     guidelines: ['Usa para acciones relacionadas como paginacion o vistas.'],
     aiNotes: 'Componente de agrupamiento visual. Asegura que los botones internos tengan el mismo tamaño.'
   },
-  'label': { id: 'label', name: 'KLabel', description: 'Etiqueta para campos de formulario con indicador de campo obligatorio y tooltip de informacion.',
+  'label': { id: 'label', name: 'Label', description: 'Etiqueta para campos de formulario con indicador de campo obligatorio y tooltip de informacion.',
     preview: (<KLabel required info="Ayuda">Campo</KLabel>),
     playground: <LabelPlayground />,
-    code: `<KLabel required info="Ingresa un correo institucional">Email</KLabel>`, filename: 'KLabel/index.tsx',
+    code: `<KLabel required info="Ingresa un correo institucional">Email</KLabel>`, filename: 'Label/index.tsx',
     props: [{ name: 'children', type: 'ReactNode', required: true, description: 'Texto.' }, { name: 'required', type: 'boolean', description: 'Muestra asterisco.' }, { name: 'info', type: 'string', description: 'Texto del icono de informacion.' }],
     a11ySummary: {
       keyboard: ['Tab: Navega al input asociado.'],
@@ -2418,9 +3484,9 @@ export const atoms: Record<string, AtomEntry> = {
     guidelines: ['Usa siempre para mejorar la accesibilidad de los inputs.'],
     aiNotes: 'KLabel para etiquetar inputs. Siempre asociar a un input mediante htmlFor.',
   },
-  'float-button': { id: 'float-button', name: 'KFloatButton', description: 'Botón flotante (FAB) fijo en la esquina de la pantalla. Ideal para acciones principales.',
+  'float-button': { id: 'float-button', name: 'FloatButton', description: 'Botón flotante (FAB) fijo en la esquina de la pantalla. Ideal para acciones principales.',
     preview: (<div style={{ position: 'relative', height: 80, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}><KText variant="small" color="muted" className="p-4">El botón flotante aparece fijo en la esquina inferior derecha.</KText></div>),
-    code: `<KFloatButton icon={<Plus />} onClick={handleAdd} tooltip="Nuevo empleado" />`, filename: 'KFloatButton/index.tsx',
+    code: `<KFloatButton icon={<Plus />} onClick={handleAdd} tooltip="Nuevo empleado" />`, filename: 'FloatButton/index.tsx',
     props: [{ name: 'icon', type: 'ReactNode', description: 'Ícono.' }, { name: 'onClick', type: '() => void', description: 'Callback.' }, { name: 'type', type: "'primary'|'default'", description: 'Estilo.' }],
     stateShowcase: (
       <div style={{ position: 'relative', height: 100, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg }}>
@@ -2437,9 +3503,9 @@ export const atoms: Record<string, AtomEntry> = {
     guidelines: ['Solo un FAB por pantalla. Usa para la acción más importante.'],
     aiNotes: 'KFloatButton para acción flotante FAB. Limitar a 1-2 por página.',
   },
-  'image': { id: 'image', name: 'KImage', description: 'Imagen con preview lightbox al hacer clic, fallback para errores de carga y bordes redondeados.',
+  'image': { id: 'image', name: 'Image', description: 'Imagen con preview lightbox al hacer clic, fallback para errores de carga y bordes redondeados.',
     preview: (<KImage src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=200&h=150&fit=crop" width={200} height={150} alt="Equipo" />),
-    code: `<KImage src="/photo.jpg" width={200} height={150} preview />`, filename: 'KImage/index.tsx',
+    code: `<KImage src="/photo.jpg" width={200} height={150} preview />`, filename: 'Image/index.tsx',
     props: [{ name: 'src', type: 'string', required: true, description: 'URL.' }, { name: 'preview', type: 'boolean', default: 'true', description: 'Lightbox.' }, { name: 'fallback', type: 'string', description: 'Fallback.' }],
     stateShowcase: (
       <div style={{ display: 'flex', gap: 16, alignItems: 'flex-end' }}>
@@ -2458,7 +3524,7 @@ export const atoms: Record<string, AtomEntry> = {
   },
 
   'space': { 
-    id: 'space', name: 'KSpace', 
+    id: 'space', name: 'Space', 
     description: 'Componente de layout para espaciar elementos con gap consistente. Soporta dirección, wrap, splitters y tamaños personalizados.',
     preview: (
       <KSpace size="md" wrap split={<KDivider />}>
@@ -2469,7 +3535,7 @@ export const atoms: Record<string, AtomEntry> = {
     ),
     playground: <SpacePlayground />,
     code: `import { KSpace, KDivider } from '@khor/design-system/atoms/index';\n\n<KSpace direction="horizontal" size="md" wrap split={<KDivider />}>\n  <KButton>A</KButton>\n  <KButton>B</KButton>\n</KSpace>`, 
-    filename: 'KSpace/index.tsx',
+    filename: 'Space/index.tsx',
     props: [
       { name: 'direction', type: "'horizontal' | 'vertical'", default: "'horizontal'", description: 'Dirección del flujo.' },
       { name: 'size', type: "number | 'sm' | 'md' | 'lg' | [number, number]", default: "'md'", description: 'Espacio entre elementos.' },
@@ -2486,9 +3552,9 @@ export const atoms: Record<string, AtomEntry> = {
     guidelines: ['Usa size="middle" (16px) por defecto para la mayoría de layouts.', 'El split con KDivider vertical es ideal para barras de herramientas.'],
     aiNotes: 'KSpace para layouts con gap consistente. Preferir sobre div con gap manual.',
   },
-  'qrcode': { id: 'qrcode', name: 'KQRCode', description: 'Generador visual de código QR a partir de texto o URL. Usa canvas para renderizado.',
+  'qrcode': { id: 'qrcode', name: 'QRCode', description: 'Generador visual de código QR a partir de texto o URL. Usa canvas para renderizado.',
     preview: (<div style={{ display: 'flex', gap: 16 }}><KQRCode value="https://khor.app" size={100} /><KQRCode value="https://khor.app/empleados" size={80} color={khorTokens.colors.brand.navy} /></div>),
-    code: `<KQRCode value="https://khor.app" size={128} />`, filename: 'KQRCode/index.tsx',
+    code: `<KQRCode value="https://khor.app" size={128} />`, filename: 'QRCode/index.tsx',
     props: [{ name: 'value', type: 'string', required: true, description: 'Texto o URL a codificar.' }, { name: 'size', type: 'number', default: '128', description: 'Tamaño en px.' }, { name: 'color', type: 'string', description: 'Color de los módulos.' }],
     a11ySummary: {
       keyboard: ['No interactivo — es un canvas estático.'],
@@ -2501,7 +3567,7 @@ export const atoms: Record<string, AtomEntry> = {
   },
 
   'flex': {
-    id: 'flex', name: 'KFlex',
+    id: 'flex', name: 'Flex',
     description: 'Contenedor Flex moderno para alinear y distribuir elementos fácilmente.',
     preview: (
       <KFlex gap="md" align="center" justify="space-between" style={{ padding: 16, backgroundColor: khorTokens.colors.neutral[100], borderRadius: khorTokens.radius.lg, width: '100%' }}>
@@ -2513,7 +3579,7 @@ export const atoms: Record<string, AtomEntry> = {
       </KFlex>
     ),
     code: `<KFlex gap="md" align="center" justify="space-between">\n  <div>Item 1</div>\n  <div>Item 2</div>\n</KFlex>`,
-    filename: 'KFlex/index.tsx',
+    filename: 'Flex/index.tsx',
     props: [
       { name: 'vertical', type: 'boolean', default: 'false', description: 'Dirección vertical (column).' },
       { name: 'wrap', type: 'boolean | string', description: 'Propiedad flex-wrap.' },
@@ -2531,7 +3597,7 @@ export const atoms: Record<string, AtomEntry> = {
     aiNotes: 'KFlex para layouts flexbox. Preferir sobre KSpace para layouts complejos con alineación específica.',
   },
   'grid': {
-    id: 'grid', name: 'KGrid (Row/Col)',
+    id: 'grid', name: 'Grid (Row/Col)',
     description: 'Sistema de rejilla responsiva de 24 columnas (Grid System) para crear layouts complejos que se adaptan a cualquier resolución.',
     preview: (
       <div style={{ width: '100%' }}>
@@ -2545,7 +3611,7 @@ export const atoms: Record<string, AtomEntry> = {
       </div>
     ),
     code: `import { KRow, KCol } from '@khor/design-system/atoms/index';\n\n<KRow gutter={[16, 16]}>\n  <KCol span={12}>\n    <Card />\n  </KCol>\n</KRow>`,
-    filename: 'KGrid/index.tsx',
+    filename: 'Grid/index.tsx',
     props: [
       { name: 'gutter', type: 'number | [number, number]', description: 'Espaciado entre columnas (horizontal, vertical).' },
       { name: 'span', type: 'number', description: 'Número de columnas a ocupar (1-24) para KCol.' },
@@ -2564,7 +3630,7 @@ export const atoms: Record<string, AtomEntry> = {
   },
   scrollbar: {
     id: 'scrollbar',
-    name: 'KScrollBar',
+    name: 'ScrollBar',
     description: 'Átomo para estilización premium de barras de desplazamiento. Centraliza la estética de los scrollbars en el sistema para evitar variaciones nativas feas.',
     preview: (
       <KScrollBar style={{ height: 120, border: `1px solid ${khorTokens.colors.neutral[200]}`, borderRadius: 8, padding: 12 }}>
@@ -2586,7 +3652,7 @@ export const atoms: Record<string, AtomEntry> = {
 >
   {/* contenido largo */}
 </KScrollBar>`,
-    filename: 'KScrollBar/index.tsx',
+    filename: 'ScrollBar/index.tsx',
     props: [
       { name: 'orientation', type: "'vertical' | 'horizontal' | 'both'", default: "'vertical'", description: 'Orientación del scroll.' },
       { name: 'size', type: "'small' | 'middle' | 'large'", default: "'middle'", description: 'Grosor de la barra.' },
@@ -2604,7 +3670,7 @@ export const atoms: Record<string, AtomEntry> = {
   },
   icon: {
     id: 'icon',
-    name: 'KIcon',
+    name: 'Icon',
     description: 'Átomo base para iconografía. Wrapper de Lucide React que implementa la escala Elite de tamaños (XS a 2XL) y tokens de color sistémicos.',
     preview: (
       <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
@@ -2615,7 +3681,7 @@ export const atoms: Record<string, AtomEntry> = {
     ),
     playground: <IconPlayground />,
     code: `import { KIcon } from '@khor/design-system/atoms/index';\n\n<KIcon name="Sparkles" size="md" color="var(--khor-primary)" />`,
-    filename: 'KIcon/index.tsx',
+    filename: 'Icon/index.tsx',
     props: [
       { name: 'name', type: 'string', required: true, description: 'Nombre de la propiedad exportada por lucide-react.' },
       { name: 'size', type: "'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl'", default: "'md'", description: 'Tamaño basado en tokens Elite.' },
@@ -2633,7 +3699,7 @@ export const atoms: Record<string, AtomEntry> = {
   },
   'phone-input': {
     id: 'phone-input',
-    name: 'KPhoneInput',
+    name: 'PhoneInput',
     description: 'Selector de país avanzado (con banderas emoji para alta compatibilidad) + formateo inteligente de prefijo y máscara de teléfono.',
     preview: (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -2643,7 +3709,7 @@ export const atoms: Record<string, AtomEntry> = {
     ),
     playground: <PhoneInputPlayground />,
     stateShowcase: (
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16, flexWrap: 'wrap', padding: '4px' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>Default</span><KPhoneInput /></div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>Hover</span><KPhoneInput isHovered /></div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}><span style={{ fontSize: 11, color: khorTokens.colors.neutral[500] }}>Focused</span><KPhoneInput isFocused /></div>
@@ -2666,7 +3732,7 @@ export const atoms: Record<string, AtomEntry> = {
   size="md"
   onChange={(val) => console.log('Teléfono:', val)}
 />`,
-    filename: 'KPhoneInput/index.tsx',
+    filename: 'PhoneInput/index.tsx',
     props: [
       { name: 'value', type: 'string', description: 'Valor del input.' },
       { name: 'onChange', type: '(value: string) => void', description: 'Callback al cambiar el número, retorna el valor con prefijo de marcado.' },
@@ -2679,6 +3745,201 @@ export const atoms: Record<string, AtomEntry> = {
     ],
     guidelines: ['Siempre define un país por defecto para acelerar la entrada.', 'Usa block={true} en formularios móviles.', 'Brinda helperText claro en caso de error.'],
     aiNotes: 'KPhoneInput para entrada de teléfono con selector de país y formateo automático.',
+  },
+
+  'select-input': {
+    id: 'select-input',
+    name: 'SelectInput',
+    description: 'Selector tipo dropdown para formularios. Mismos tokens que KInput: tamaños sm/md/lg, estados normal/focused/error/warning/disabled, label superior y lateral con required, optional y tooltip.',
+    preview: (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <KSelectField options={[{ label: 'Opción A', value: 'a' }, { label: 'Opción B', value: 'b' }]} placeholder="Seleccionar" />
+        <KSelectField label="Pasajero" required status="error" helpText="Este campo es requerido." options={[{ label: 'Opción A', value: 'a' }]} placeholder="Seleccionar" />
+      </div>
+    ),
+    playground: <SelectInputPlayground />,
+    stateShowcase: (() => {
+      const opts = [{ label: 'Opción A', value: 'a' }, { label: 'Opción B', value: 'b' }];
+      const states: Array<{ label: string; props: Record<string, any> }> = [
+        { label: 'Normal',   props: {} },
+        { label: 'Focused',  props: { isFocused: true } },
+        { label: 'Disabled', props: { disabled: true } },
+        { label: 'Error',    props: { status: 'error' } },
+        { label: 'Warning',  props: { status: 'warning' } },
+      ];
+      const sizes: Array<'sm' | 'md' | 'lg'> = ['lg', 'md', 'sm'];
+      const colW    = 180; // base + upper label
+      const colWSide = 290; // side label needs room for "Label (optional) ℹ: [dropdown]"
+
+      const colHeader = (label: string) => (
+        <div style={{ fontSize: 10, fontWeight: 700, color: '#8f9096', textTransform: 'uppercase' as const, letterSpacing: '0.08em', marginBottom: 10 }}>{label}</div>
+      );
+      const Section = ({ title, children, cw = colW }: { title: string; children: React.ReactNode; cw?: number }) => (
+        <div style={{ marginBottom: 28 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: '#051758', textTransform: 'uppercase' as const, letterSpacing: '0.08em', marginBottom: 12 }}>{title}</div>
+          <div style={{ display: 'grid', gridTemplateColumns: `repeat(${states.length}, ${cw}px)`, gap: '8px 16px' }}>
+            {children}
+          </div>
+        </div>
+      );
+
+      const minW = Math.max(
+        states.length * (colW + 16),
+        states.length * (colWSide + 16),
+      );
+
+      return (
+        <div style={{ overflowX: 'auto', padding: '4px 4px 8px 4px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 0, minWidth: `${minW}px` }}>
+
+            {/* ── Column headers (base width) ── */}
+            <div style={{ display: 'grid', gridTemplateColumns: `repeat(${states.length}, ${colW}px)`, gap: '0 16px', marginBottom: 4 }}>
+              {states.map(s => colHeader(s.label))}
+            </div>
+
+            {/* Base — Empty */}
+            <Section title="Sin label — Empty">
+              {sizes.map(sz => states.map(s => (
+                <KSelectField key={`e-${sz}-${s.label}`} size={sz} options={opts} placeholder="Seleccionar" {...s.props} />
+              )))}
+            </Section>
+
+            {/* Base — Filled */}
+            <Section title="Sin label — Filled">
+              {sizes.map(sz => states.map(s => (
+                <KSelectField key={`f-${sz}-${s.label}`} size={sz} options={opts} defaultValue="a" placeholder="Seleccionar" {...s.props} />
+              )))}
+            </Section>
+
+            {/* Upper Label */}
+            <div style={{ marginBottom: 28 }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: '#051758', textTransform: 'uppercase' as const, letterSpacing: '0.08em', marginBottom: 12 }}>Upper Label</div>
+              <div style={{ display: 'grid', gridTemplateColumns: `repeat(${states.length}, ${colW}px)`, gap: '20px 16px' }}>
+                {states.map(s => [
+                  <KSelectField key={`ul-${s.label}-l`}  label="Label" options={opts} placeholder="Seleccionar" {...s.props} />,
+                  <KSelectField key={`ul-${s.label}-r`}  label="Label" required options={opts} placeholder="Seleccionar" {...s.props} />,
+                  <KSelectField key={`ul-${s.label}-t`}  label="Label" tooltip="Información adicional" options={opts} placeholder="Seleccionar" {...s.props} />,
+                  <KSelectField key={`ul-${s.label}-rt`} label="Label" required tooltip="Información adicional" options={opts} placeholder="Seleccionar" {...s.props} />,
+                  <KSelectField key={`ul-${s.label}-ot`} label="Label" optional tooltip="Información adicional" options={opts} placeholder="Seleccionar" {...s.props} />,
+                  <KSelectField key={`ul-${s.label}-o`}  label="Label" optional options={opts} placeholder="Seleccionar" {...s.props} />,
+                ])}
+              </div>
+            </div>
+
+            {/* Upper Label + Help Text */}
+            <div style={{ marginBottom: 40 }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: '#051758', textTransform: 'uppercase' as const, letterSpacing: '0.08em', marginBottom: 12 }}>Upper Label + Help Text</div>
+              <div style={{ display: 'grid', gridTemplateColumns: `repeat(${states.length}, ${colW}px)`, gap: '24px 16px' }}>
+                {states.map(s => [
+                  <KSelectField key={`uh-${s.label}-l`}  label="Label" helpText="Please input passenger's name or delete this field." options={opts} placeholder="Seleccionar" {...s.props} />,
+                  <KSelectField key={`uh-${s.label}-r`}  label="Label" required helpText="Please input passenger's name or delete this field." options={opts} placeholder="Seleccionar" {...s.props} />,
+                  <KSelectField key={`uh-${s.label}-t`}  label="Label" tooltip="Info" helpText="Please input passenger's name or delete this field." options={opts} placeholder="Seleccionar" {...s.props} />,
+                  <KSelectField key={`uh-${s.label}-rt`} label="Label" required tooltip="Info" helpText="Please input passenger's name or delete this field." options={opts} placeholder="Seleccionar" {...s.props} />,
+                  <KSelectField key={`uh-${s.label}-ot`} label="Label" optional tooltip="Info" helpText="Please input passenger's name or delete this field." options={opts} placeholder="Seleccionar" {...s.props} />,
+                  <KSelectField key={`uh-${s.label}-o`}  label="Label" optional helpText="Please input passenger's name or delete this field." options={opts} placeholder="Seleccionar" {...s.props} />,
+                ])}
+              </div>
+            </div>
+
+            {/* ── Column headers (side label width) ── */}
+            <div style={{ display: 'grid', gridTemplateColumns: `repeat(${states.length}, ${colWSide}px)`, gap: '0 16px', marginBottom: 4 }}>
+              {states.map(s => colHeader(s.label))}
+            </div>
+
+            {/* Side Label */}
+            <div style={{ marginBottom: 28 }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: '#051758', textTransform: 'uppercase' as const, letterSpacing: '0.08em', marginBottom: 12 }}>Side Label</div>
+              <div style={{ display: 'grid', gridTemplateColumns: `repeat(${states.length}, ${colWSide}px)`, gap: '20px 16px' }}>
+                {states.map(s => [
+                  <KSelectField key={`sl-${s.label}-l`}  block label="Label" labelPosition="side" options={opts} placeholder="Seleccionar" {...s.props} />,
+                  <KSelectField key={`sl-${s.label}-r`}  block label="Label" labelPosition="side" required options={opts} placeholder="Seleccionar" {...s.props} />,
+                  <KSelectField key={`sl-${s.label}-t`}  block label="Label" labelPosition="side" tooltip="Información adicional" options={opts} placeholder="Seleccionar" {...s.props} />,
+                  <KSelectField key={`sl-${s.label}-rt`} block label="Label" labelPosition="side" required tooltip="Información adicional" options={opts} placeholder="Seleccionar" {...s.props} />,
+                  <KSelectField key={`sl-${s.label}-ot`} block label="Label" labelPosition="side" optional tooltip="Información adicional" options={opts} placeholder="Seleccionar" {...s.props} />,
+                  <KSelectField key={`sl-${s.label}-o`}  block label="Label" labelPosition="side" optional options={opts} placeholder="Seleccionar" {...s.props} />,
+                ])}
+              </div>
+            </div>
+
+            {/* Side Label + Help Text */}
+            <div style={{ marginBottom: 8 }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: '#051758', textTransform: 'uppercase' as const, letterSpacing: '0.08em', marginBottom: 12 }}>Side Label + Help Text</div>
+              <div style={{ display: 'grid', gridTemplateColumns: `repeat(${states.length}, ${colWSide}px)`, gap: '24px 16px' }}>
+                {states.map(s => [
+                  <KSelectField key={`sh-${s.label}-l`}  block label="Label" labelPosition="side" helpText="Please input passenger's name or delete this field." options={opts} placeholder="Seleccionar" {...s.props} />,
+                  <KSelectField key={`sh-${s.label}-r`}  block label="Label" labelPosition="side" required helpText="Please input passenger's name or delete this field." options={opts} placeholder="Seleccionar" {...s.props} />,
+                  <KSelectField key={`sh-${s.label}-t`}  block label="Label" labelPosition="side" tooltip="Info" helpText="Please input passenger's name or delete this field." options={opts} placeholder="Seleccionar" {...s.props} />,
+                  <KSelectField key={`sh-${s.label}-rt`} block label="Label" labelPosition="side" required tooltip="Info" helpText="Please input passenger's name or delete this field." options={opts} placeholder="Seleccionar" {...s.props} />,
+                  <KSelectField key={`sh-${s.label}-ot`} block label="Label" labelPosition="side" optional tooltip="Info" helpText="Please input passenger's name or delete this field." options={opts} placeholder="Seleccionar" {...s.props} />,
+                  <KSelectField key={`sh-${s.label}-o`}  block label="Label" labelPosition="side" optional helpText="Please input passenger's name or delete this field." options={opts} placeholder="Seleccionar" {...s.props} />,
+                ])}
+              </div>
+            </div>
+
+          </div>
+        </div>
+      );
+    })(),
+    a11ySummary: {
+      keyboard: ['Tab: Mueve el foco al trigger del selector.', 'Enter/Space: Abre el menú de opciones.', 'Up/Down: Navega entre opciones.', 'Esc: Cierra el menú.'],
+      aria: ['role="combobox" en el trigger.', 'aria-expanded para el estado abierto/cerrado.', 'aria-haspopup="listbox" en el trigger.'],
+      contrast: 'Todos los estados cumplen WCAG AA. Foco en #E04D36 sobre fondo blanco.',
+      score: 100,
+    },
+    code: `import { KSelectField } from '@khor/design-system/molecules/index';
+
+const options = [
+  { label: 'Opción A', value: 'a' },
+  { label: 'Opción B', value: 'b' },
+];
+
+// Base
+<KSelectField options={options} placeholder="Seleccionar" />
+
+// Con label superior + required + helpText
+<KSelectField
+  label="Pasajero"
+  required
+  tooltip="Selecciona el tipo de pasajero."
+  helpText="Este campo es requerido."
+  status="error"
+  options={options}
+  placeholder="Seleccionar"
+  onChange={(v) => console.log(v)}
+/>
+
+// Label lateral
+<KSelectField
+  label="Categoría"
+  labelPosition="side"
+  options={options}
+  placeholder="Seleccionar"
+/>`,
+    filename: 'SelectField/index.tsx',
+    props: [
+      { name: 'options',        type: 'KSelectOption[]',              required: true,  description: 'Lista de opciones { label, value, disabled? }.' },
+      { name: 'value',          type: 'string',                                        description: 'Valor controlado.' },
+      { name: 'defaultValue',   type: 'string',                                        description: 'Valor inicial no controlado.' },
+      { name: 'onChange',       type: '(value: string) => void',                       description: 'Callback al seleccionar una opción.' },
+      { name: 'placeholder',    type: 'string',                        default: "'Seleccionar'", description: 'Texto cuando no hay selección.' },
+      { name: 'size',           type: "'sm' | 'md' | 'lg'",           default: "'md'", description: 'Altura del trigger: 32 / 36 / 40px.' },
+      { name: 'status',         type: "'default' | 'error' | 'warning'", default: "'default'", description: 'Estado visual de validación.' },
+      { name: 'disabled',       type: 'boolean',                       default: 'false', description: 'Deshabilita la interacción.' },
+      { name: 'isFocused',      type: 'boolean',                       default: 'false', description: 'Fuerza el estado focused (playground).' },
+      { name: 'label',          type: 'React.ReactNode',                               description: 'Texto del label asociado al selector.' },
+      { name: 'labelPosition',  type: "'top' | 'side'",               default: "'top'", description: 'Posición del label: superior o lateral.' },
+      { name: 'required',       type: 'boolean',                       default: 'false', description: 'Muestra asterisco (*) antes del label.' },
+      { name: 'optional',       type: 'boolean',                       default: 'false', description: 'Muestra "(optional)" después del label.' },
+      { name: 'tooltip',        type: 'string',                                        description: 'Texto del ícono de información ℹ junto al label.' },
+      { name: 'helpText',       type: 'string',                                        description: 'Texto de ayuda o error debajo del selector.' },
+      { name: 'block',          type: 'boolean',                       default: 'false', description: 'Ocupa el 100% del ancho del contenedor.' },
+    ],
+    guidelines: [
+      'Usa status="error" + helpText para feedback de validación inmediato.',
+      'Prefiere labelPosition="top" en formularios verticales y "side" en layouts de detalle.',
+      'Combina required con helpText para guiar al usuario antes de validar.',
+    ],
+    aiNotes: 'KSelectField/KSelectInput: selector dropdown con tokens Figma compartidos con KInput.',
   }
 };
 

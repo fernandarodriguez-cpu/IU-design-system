@@ -89,7 +89,7 @@ function BillingInternal() {
               <KButton variant="ghost" size="sm" style={{ padding: t.spacing.xxs }}>Editar</KButton>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: t.spacing.sm, padding: t.spacing.md, borderRadius: t.radius.md, border: `1px solid ${t.semantic.border.muted}`, backgroundColor: t.semantic.surface.raised }}>
-              <div style={{ width: t.sizing[11], height: t.sizing[7], backgroundColor: t.colors.brand.secondary, borderRadius: t.radius.xs, display: 'flex', alignItems: 'center', justifyContent: 'center', color: t.colors.feedback.white, fontSize: t.typography.bodyXs.size, fontWeight: t.typography.fontWeights.extrabold }}>VISA</div>
+              <div style={{ width: t.sizing[11], height: t.sizing[7], backgroundColor: t.colors.brand.navy, borderRadius: t.radius.xs, display: 'flex', alignItems: 'center', justifyContent: 'center', color: t.colors.feedback.white, fontSize: t.typography.bodyXs.size, fontWeight: t.typography.fontWeights.extrabold }}>VISA</div>
               <div>
                 <div style={{ fontSize: t.typography.bodySm.size, fontWeight: t.typography.fontWeights.semibold }}>•••• 4242</div>
                 <div style={{ fontSize: t.typography.bodyXs.size, color: t.semantic.text.muted }}>Expira 12/26</div>
