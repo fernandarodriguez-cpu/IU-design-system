@@ -1,22 +1,24 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
-import { Check, Minus } from 'lucide-react';
+import React from 'react';
+import { Checkbox as AntCheckbox, type CheckboxProps as AntCheckboxProps } from 'antd';
 import { cn } from '@/utils/cn';
 
 /* ─── Figma tokens: KCheckbox (187656-7293) ────────────────────
-   States   : default | error | disabled
-   Checked  : bg #E04D36, border #E04D36, icon white
-   Unchecked: bg white, border #CBD5E1 (default) | #D32F2F (error) | #E5E7EB (disabled)
-   Disabled checked  : bg #D1D5DB, border #D1D5DB, icon #9CA3AF
-   Disabled unchecked: bg #F3F4F6, border #E5E7EB
-   Disabled label    : text #9CA3AF
-   Indeterminate: same fill as checked, Minus icon
-   Hover default: border #E04D36, bg #fff8f7
+   Migrated to Ant Design (was @radix-ui/react-checkbox).
+   Checked fill #E04D36 (secondary) comes from the Checkbox tokens in
+   khorAntdTheme.ts. error / warning states + the default hover tint
+   (#fff8f7) are applied here as className overrides on .ant-checkbox-inner,
+   because AntD's Checkbox has no native status axis.
 ──────────────────────────────────────────────────────────────── */
 
-export interface KCheckboxProps extends React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root> {
+export interface KCheckboxProps
+  extends Omit<AntCheckboxProps, 'checked' | 'onChange' | 'value'> {
   label?: React.ReactNode;
   status?: 'error' | 'warning' | 'default';
+  /** Radix-compatible: boolean or 'indeterminate' */
+  checked?: boolean | 'indeterminate';
+  /** Radix-compatible change handler kept for back-compat */
+  onCheckedChange?: (checked: boolean | 'indeterminate') => void;
+  value?: any;
   isHovered?: boolean;
   isFocused?: boolean;
   styles?: {
@@ -43,130 +45,76 @@ export interface KCheckboxGroupProps {
   children?: React.ReactNode;
 }
 
-const CheckboxGroupContext = createContext<{
-  value?: any[];
-  toggleValue?: (val: any) => void;
-  disabled?: boolean;
-} | null>(null);
+// status → override classes targeting AntD's inner box
+const STATUS_INPUT_CLASSES: Record<string, string> = {
+  default:
+    '[&_.ant-checkbox:hover_.ant-checkbox-inner]:border-[#E04D36] [&_.ant-checkbox:hover_.ant-checkbox-inner]:bg-[#fff8f7]',
+  error:
+    '[&_.ant-checkbox-inner]:border-[#D32F2F] [&_.ant-checkbox-checked_.ant-checkbox-inner]:!bg-[#D32F2F] [&_.ant-checkbox-checked_.ant-checkbox-inner]:!border-[#D32F2F]',
+  warning:
+    '[&_.ant-checkbox-inner]:border-amber-400 [&_.ant-checkbox-checked_.ant-checkbox-inner]:!bg-amber-500 [&_.ant-checkbox-checked_.ant-checkbox-inner]:!border-amber-500',
+};
 
-const KCheckboxInternal = React.forwardRef<
-  React.ElementRef<typeof CheckboxPrimitive.Root>,
-  KCheckboxProps
->(function KCheckbox(
-  { className, label, children, status = 'default', checked, onCheckedChange,
-    disabled, isHovered, isFocused, styles, classNames, ...rest },
-  ref
+const KCheckboxInternal = React.forwardRef<HTMLInputElement, KCheckboxProps>(function KCheckbox(
+  {
+    className,
+    label,
+    children,
+    status = 'default',
+    checked,
+    onCheckedChange,
+    disabled,
+    isHovered,
+    isFocused,
+    styles,
+    classNames,
+    value,
+    ...rest
+  },
+  ref,
 ) {
-  const groupContext = useContext(CheckboxGroupContext);
-  const content = label || children;
-
-  const isChecked = groupContext
-    ? groupContext.value?.includes(rest.value)
-    : checked;
-
-  const handleToggle = (val: boolean | 'indeterminate') => {
-    if (groupContext && rest.value !== undefined) groupContext.toggleValue?.(rest.value);
-    onCheckedChange?.(val);
-  };
-
-  const finalDisabled = disabled || groupContext?.disabled;
+  const content = label ?? children;
+  const indeterminate = checked === 'indeterminate';
+  const isChecked = checked === true;
 
   return (
-    <label
+    <AntCheckbox
+      ref={ref as any}
+      value={value}
+      // Only pass `checked` when standalone (controlled). Inside an AntD
+      // Checkbox.Group the group context drives the checked state.
+      checked={checked !== undefined ? isChecked : undefined}
+      indeterminate={indeterminate}
+      disabled={disabled}
+      onChange={(e) => onCheckedChange?.(e.target.checked)}
       className={cn(
-        'group inline-flex items-center gap-2 cursor-pointer select-none font-primary',
-        finalDisabled && 'cursor-not-allowed',
+        'font-primary',
+        STATUS_INPUT_CLASSES[status],
+        status === 'error' && '[&_.ant-checkbox+span]:text-[#D32F2F]',
+        status === 'warning' && '[&_.ant-checkbox+span]:text-amber-600',
+        isHovered &&
+          status === 'default' &&
+          '[&_.ant-checkbox-inner]:border-[#E04D36] [&_.ant-checkbox-inner]:bg-[#fff8f7]',
+        isFocused && '[&_.ant-checkbox-inner]:!border-[#E04D36]',
         classNames?.root,
+        classNames?.input,
         className,
       )}
-      style={styles?.root}
+      style={{ ...styles?.root }}
+      {...rest}
     >
-      <CheckboxPrimitive.Root
-        ref={ref}
-        checked={isChecked}
-        onCheckedChange={handleToggle}
-        disabled={finalDisabled}
-        className={cn(
-          'peer relative shrink-0 rounded-[4px] border-[1.5px] transition-all duration-150 outline-none',
-          'flex items-center justify-center',
-          'h-4 w-4',
-          // Focus ring
-          'focus-visible:ring-2 focus-visible:ring-[#E04D36]/40 focus-visible:ring-offset-1',
-          // ── Default unchecked ──
-          status === 'default' && [
-            'border-slate-300 bg-white',
-            !isHovered && 'hover:border-[#E04D36] hover:bg-[#fff8f7]',
-          ],
-          // ── Error unchecked ──
-          status === 'error' && 'border-[#D32F2F] bg-[#fff5f5]',
-          // ── Warning unchecked ──
-          status === 'warning' && 'border-amber-400 bg-amber-50',
-          // ── Forced hover ──
-          isHovered && status === 'default' && 'border-[#E04D36] bg-[#fff8f7]',
-          // ── Forced focus ──
-          isFocused && 'ring-2 ring-[#E04D36]/40 ring-offset-1 border-[#E04D36]',
-          // ── Checked / Indeterminate — default ──
-          status === 'default' && [
-            'data-[state=checked]:bg-[#E04D36] data-[state=checked]:border-[#E04D36]',
-            'data-[state=indeterminate]:bg-[#E04D36] data-[state=indeterminate]:border-[#E04D36]',
-          ],
-          // ── Checked / Indeterminate — error ──
-          status === 'error' && [
-            'data-[state=checked]:bg-[#D32F2F] data-[state=checked]:border-[#D32F2F]',
-            'data-[state=indeterminate]:bg-[#D32F2F] data-[state=indeterminate]:border-[#D32F2F]',
-          ],
-          // ── Checked / Indeterminate — warning ──
-          status === 'warning' && [
-            'data-[state=checked]:bg-amber-500 data-[state=checked]:border-amber-500',
-            'data-[state=indeterminate]:bg-amber-500 data-[state=indeterminate]:border-amber-500',
-          ],
-          // ── Disabled unchecked ──
-          'disabled:border-[#E5E7EB] disabled:bg-[#F3F4F6] disabled:cursor-not-allowed',
-          // ── Disabled checked ──
-          'disabled:data-[state=checked]:bg-[#D1D5DB] disabled:data-[state=checked]:border-[#D1D5DB]',
-          'disabled:data-[state=indeterminate]:bg-[#D1D5DB] disabled:data-[state=indeterminate]:border-[#D1D5DB]',
-          classNames?.input,
-        )}
-        style={styles?.input}
-        {...rest}
-      >
-        <CheckboxPrimitive.Indicator className="flex items-center justify-center">
-          {isChecked === 'indeterminate' ? (
-            <Minus
-              className={cn('text-white', finalDisabled && 'text-[#9CA3AF]')}
-              style={{ width: 10, height: 10, strokeWidth: 3.5 }}
-            />
-          ) : (
-            <Check
-              className={cn('text-white', finalDisabled && 'text-[#9CA3AF]')}
-              style={{ width: 10, height: 10, strokeWidth: 3.5 }}
-            />
-          )}
-        </CheckboxPrimitive.Indicator>
-      </CheckboxPrimitive.Root>
-
       {content && (
-        <span
-          className={cn(
-            'text-sm leading-none select-none transition-colors',
-            'text-[#1e293b]',
-            status === 'error' && 'text-[#D32F2F]',
-            status === 'warning' && 'text-amber-600',
-            finalDisabled && 'text-[#9CA3AF]',
-            classNames?.label,
-          )}
-          style={styles?.label}
-        >
+        <span className={cn(classNames?.label)} style={styles?.label}>
           {content}
         </span>
       )}
-    </label>
+    </AntCheckbox>
   );
 });
 
 const KCheckboxGroup = ({
-  value: controlledValue,
-  defaultValue = [],
+  value,
+  defaultValue,
   options,
   onChange,
   disabled,
@@ -175,38 +123,23 @@ const KCheckboxGroup = ({
   className,
   children,
 }: KCheckboxGroupProps) => {
-  const [value, setValue] = useState(controlledValue || defaultValue);
-
-  useEffect(() => {
-    if (controlledValue !== undefined) setValue(controlledValue);
-  }, [controlledValue]);
-
-  const toggleValue = (val: any) => {
-    const next = value.includes(val) ? value.filter(v => v !== val) : [...value, val];
-    if (controlledValue === undefined) setValue(next);
-    onChange?.(next);
-  };
+  const normalizedOptions = options?.map((opt) =>
+    typeof opt === 'string' ? { label: opt, value: opt } : opt,
+  );
 
   return (
-    <CheckboxGroupContext.Provider value={{ value, toggleValue, disabled }}>
-      <div className={cn('flex flex-wrap gap-4', className)} style={style}>
-        {options
-          ? options.map(opt => {
-              const option = typeof opt === 'string' ? { label: opt, value: opt } : opt;
-              return (
-                <KCheckboxInternal
-                  key={option.value}
-                  value={option.value}
-                  disabled={option.disabled}
-                  name={name}
-                >
-                  {option.label}
-                </KCheckboxInternal>
-              );
-            })
-          : children}
-      </div>
-    </CheckboxGroupContext.Provider>
+    <AntCheckbox.Group
+      value={value}
+      defaultValue={defaultValue}
+      onChange={(vals) => onChange?.(vals as any[])}
+      disabled={disabled}
+      name={name}
+      style={style}
+      className={cn('flex flex-wrap gap-4 font-primary', className)}
+      {...(normalizedOptions ? { options: normalizedOptions as any } : {})}
+    >
+      {!normalizedOptions ? children : undefined}
+    </AntCheckbox.Group>
   );
 };
 

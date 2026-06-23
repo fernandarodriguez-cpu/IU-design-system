@@ -6,7 +6,7 @@
    Sizes          : sm=32px, md=36px, lg=40px
 ──────────────────────────────────────────────────────────────────────────────── */
 import React, { useState, useMemo } from 'react';
-import * as PopoverPrimitive from '@radix-ui/react-popover';
+import { Popover as AntPopover } from 'antd';
 import { ChevronDown, Search } from 'lucide-react';
 import { cn } from '@/utils/cn';
 
@@ -148,30 +148,16 @@ export const KPhoneInput = React.forwardRef<HTMLInputElement, KPhoneInputProps>(
         style={{ height: s.h }}
       >
         {/* Country selector */}
-        <PopoverPrimitive.Root open={isOpen} onOpenChange={disabled ? undefined : setIsOpen}>
-          <PopoverPrimitive.Trigger asChild>
-            <button
-              type="button"
-              disabled={disabled}
-              className={cn(
-                'flex items-center shrink-0 gap-1 border-r bg-[#F9FAFB] transition-colors outline-none focus-visible:outline-none rounded-l-md',
-                'hover:bg-[#F3F4F6]',
-                disabled ? 'border-[#E5E7EB] text-[#9CA3AF]' : 'border-[#D1D5DB] text-[#374151]',
-              )}
-              style={{ paddingLeft: s.px, paddingRight: s.px, fontSize: s.fs }}
-            >
-              <span className="text-base leading-none select-none">{selectedCountry.flag}</span>
-              <span className="font-semibold">{selectedCountry.dialCode}</span>
-              <ChevronDown style={{ width: s.iconSz - 2, height: s.iconSz - 2 }} className={disabled ? 'text-[#D1D5DB]' : 'text-[#9CA3AF]'} />
-            </button>
-          </PopoverPrimitive.Trigger>
-
-          <PopoverPrimitive.Portal>
-            <PopoverPrimitive.Content
-              align="start"
-              sideOffset={6}
-              className="z-50 w-64 rounded-md border border-[#E5E7EB] bg-white p-2 shadow-lg outline-none font-primary max-h-80 flex flex-col overflow-hidden animate-in fade-in-0 zoom-in-95"
-            >
+        <AntPopover
+          open={disabled ? false : isOpen}
+          onOpenChange={disabled ? undefined : setIsOpen}
+          trigger="click"
+          placement="bottomLeft"
+          arrow={false}
+          // Neutralize AntD's default inner box so our panel is the only chrome
+          rootClassName="[&_.ant-popover-inner]:!p-0 [&_.ant-popover-inner]:!bg-transparent [&_.ant-popover-inner]:!shadow-none"
+          content={
+            <div className="w-64 rounded-md border border-[#E5E7EB] bg-white p-2 shadow-lg font-primary max-h-80 flex flex-col overflow-hidden">
               {/* Search */}
               <div className="flex items-center gap-2 px-2 py-1.5 border-b border-[#F3F4F6] mb-1">
                 <Search className="w-4 h-4 text-[#9CA3AF] shrink-0" />
@@ -207,9 +193,24 @@ export const KPhoneInput = React.forwardRef<HTMLInputElement, KPhoneInputProps>(
                   <div className="py-4 text-center text-xs text-[#9CA3AF]">No se encontraron países.</div>
                 )}
               </div>
-            </PopoverPrimitive.Content>
-          </PopoverPrimitive.Portal>
-        </PopoverPrimitive.Root>
+            </div>
+          }
+        >
+          <button
+            type="button"
+            disabled={disabled}
+            className={cn(
+              'flex items-center shrink-0 gap-1 border-r bg-[#F9FAFB] transition-colors outline-none focus-visible:outline-none rounded-l-md',
+              'hover:bg-[#F3F4F6]',
+              disabled ? 'border-[#E5E7EB] text-[#9CA3AF]' : 'border-[#D1D5DB] text-[#374151]',
+            )}
+            style={{ paddingLeft: s.px, paddingRight: s.px, fontSize: s.fs }}
+          >
+            <span className="text-base leading-none select-none">{selectedCountry.flag}</span>
+            <span className="font-semibold">{selectedCountry.dialCode}</span>
+            <ChevronDown style={{ width: s.iconSz - 2, height: s.iconSz - 2 }} className={disabled ? 'text-[#D1D5DB]' : 'text-[#9CA3AF]'} />
+          </button>
+        </AntPopover>
 
         {/* Phone input */}
         <input

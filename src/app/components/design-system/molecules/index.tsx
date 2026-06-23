@@ -34,4 +34,7 @@ export * from './KContextMenu';
 export { default as KContextMenu } from './KContextMenu';
 export * from './KHoverCard';
 export { default as KHoverCard } from './KHoverCard';
+export { default as KMentions } from './KMentions';
+export { default as KTreeSelect } from './KTreeSelect';
+export { default as KTransfer } from './KTransfer';
 

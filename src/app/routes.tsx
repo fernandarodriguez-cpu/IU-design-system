@@ -21,6 +21,7 @@ const KEditorShowcase = lazy(() => import('./pages/KEditorShowcase').then(m => (
 const ErrorPage = lazy(() => import('./pages/ErrorPage').then(m => ({ default: m.ErrorPage })));
 const IconExplorerPage = lazy(() => import('./pages/IconExplorerPage').then(m => ({ default: m.IconExplorerPage })));
 const ChartsPage = lazy(() => import('./pages/ChartsPage').then(m => ({ default: m.ChartsPage })));
+const AntdBridgePage = lazy(() => import('./pages/AntdBridgePage').then(m => ({ default: m.AntdBridgePage })));
 
 // Loading placeholder
 const PageLoader = () => (
@@ -180,6 +181,14 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<PageLoader />}>
             <ChartsPage />
+          </Suspense>
+        )
+      },
+      {
+        path: 'antd-bridge',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <AntdBridgePage />
           </Suspense>
         )
       },

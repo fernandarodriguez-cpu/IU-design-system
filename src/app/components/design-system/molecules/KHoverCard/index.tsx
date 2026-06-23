@@ -1,54 +1,35 @@
 import React from 'react';
-import * as HoverCardPrimitive from '@radix-ui/react-hover-card';
-import { cn } from '@/utils/cn';
+import { Popover as AntPopover } from 'antd';
 
 /* ═══════════════════════════════════════════════
-   KHoverCard — Primitivas (Radix UI + Tailwind)
+   KHoverCard — Migrado a Ant Design (antes @radix-ui/react-hover-card)
+   Implementado sobre AntD Popover con trigger="hover". Conserva la API
+   pública (children/content/align/side/sideOffset/arrow/openDelay/closeDelay)
+   + los exports compuestos como shims de compatibilidad.
    ═══════════════════════════════════════════════ */
 
-/**
- * @figma-mcp-migration
- * Component: KHoverCardRoot
- * 
- * INSTRUCCIONES PARA AGENTES DE IA (VS Code / MCP):
- * Para migrar este componente a Figma, utilizar Figma Component Properties V2:
- * 1. Variants: Estilo y alineación.
- * 2. Color Variables: Fondos, bordes y sombras enlazados a tokens Khor v6.0.
- */
-export const KHoverCardRoot = HoverCardPrimitive.Root;
-export const KHoverCardTrigger = HoverCardPrimitive.Trigger;
-export const KHoverCardPortal = HoverCardPrimitive.Portal;
+type Side = 'top' | 'right' | 'bottom' | 'left';
+type Align = 'start' | 'center' | 'end';
 
-export const KHoverCardContent = React.forwardRef<
-  React.ElementRef<typeof HoverCardPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof HoverCardPrimitive.Content>
->(({ className, align = "center", sideOffset = 4, ...props }, ref) => (
-  <HoverCardPrimitive.Portal>
-    <HoverCardPrimitive.Content
-      ref={ref}
-      align={align}
-      sideOffset={sideOffset}
-      className={cn(
-        "z-50 w-72 rounded-xl border border-khor-slate-200 bg-white p-4 text-khor-neutral-900 shadow-khor-lg outline-none animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 font-primary",
-        className
-      )}
-      {...props}
-    />
-  </HoverCardPrimitive.Portal>
-));
-KHoverCardContent.displayName = HoverCardPrimitive.Content.displayName;
+// side + align → AntD placement
+function toPlacement(side: Side, align: Align): string {
+  if (align === 'center') return side;
+  if (side === 'top' || side === 'bottom') return side + (align === 'start' ? 'Left' : 'Right');
+  return side + (align === 'start' ? 'Top' : 'Bottom');
+}
 
-/* ═══════════════════════════════════════════════
-   KHoverCard — Molécula de conveniencia
-   ═══════════════════════════════════════════════ */
-
-export interface KHoverCardProps extends HoverCardPrimitive.HoverCardProps {
+export interface KHoverCardProps {
   children: React.ReactNode;
   content: React.ReactNode;
-  align?: 'start' | 'center' | 'end';
-  side?: 'top' | 'right' | 'bottom' | 'left';
+  align?: Align;
+  side?: Side;
   sideOffset?: number;
   arrow?: boolean;
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  openDelay?: number;
+  closeDelay?: number;
 }
 
 export const KHoverCard = ({
@@ -56,23 +37,36 @@ export const KHoverCard = ({
   content,
   align = 'center',
   side = 'top',
-  sideOffset = 6,
   arrow = false,
+  open,
+  defaultOpen,
+  onOpenChange,
   openDelay = 300,
   closeDelay = 200,
-  ...props
 }: KHoverCardProps) => {
   return (
-    <KHoverCardRoot openDelay={openDelay} closeDelay={closeDelay} {...props}>
-      <KHoverCardTrigger asChild>
-        {children}
-      </KHoverCardTrigger>
-      <KHoverCardContent align={align} side={side} sideOffset={sideOffset}>
-        {content}
-        {arrow && <HoverCardPrimitive.Arrow className="fill-khor-slate-200" />}
-      </KHoverCardContent>
-    </KHoverCardRoot>
+    <AntPopover
+      content={content}
+      trigger="hover"
+      placement={toPlacement(side, align) as any}
+      arrow={arrow}
+      open={open}
+      defaultOpen={defaultOpen}
+      onOpenChange={onOpenChange}
+      mouseEnterDelay={openDelay / 1000}
+      mouseLeaveDelay={closeDelay / 1000}
+      overlayClassName="font-primary [&_.ant-popover-inner]:rounded-xl [&_.ant-popover-inner]:!p-4 [&_.ant-popover-inner]:max-w-72"
+    >
+      {children}
+    </AntPopover>
   );
 };
+
+/* ─── Compatibility shims for the former Radix compound primitives ───
+   Kept so the public export surface is unchanged; none are used directly. */
+export const KHoverCardRoot: React.FC<{ children?: React.ReactNode }> = ({ children }) => <>{children}</>;
+export const KHoverCardTrigger: React.FC<{ children?: React.ReactNode }> = ({ children }) => <>{children}</>;
+export const KHoverCardPortal: React.FC<{ children?: React.ReactNode }> = ({ children }) => <>{children}</>;
+export const KHoverCardContent: React.FC<{ children?: React.ReactNode }> = ({ children }) => <>{children}</>;
 
 export default KHoverCard;

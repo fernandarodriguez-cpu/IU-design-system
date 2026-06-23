@@ -1,12 +1,15 @@
-import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
-import * as AvatarPrimitive from '@radix-ui/react-avatar';
+import React, { useEffect, useState, useMemo } from 'react';
+import { Avatar as AntAvatar } from 'antd';
 import { cn } from '@/utils/cn';
 import { User } from 'lucide-react';
 import { KPopover } from '../../molecules/KPopover';
 
 /* ═══════════════════════════════════════════════
    KAvatar — Átomo de avatar con paridad AntD
-   Radix UI + CSS Variables (Tailwind v4 safe)
+   Migrado a Ant Design (antes @radix-ui/react-avatar).
+   AntD Avatar maneja imagen+fallback y el auto-ajuste de
+   iniciales vía `gap`. KAvatar conserva: tamaños responsivos,
+   color custom, punto de estado (presence) y KAvatarGroup.
    ═══════════════════════════════════════════════ */
 
 export type AvatarSize = 'sm' | 'md' | 'lg' | 'xl' | number;
@@ -159,52 +162,21 @@ export const KAvatar = React.forwardRef<HTMLDivElement, KAvatarProps>(({
   const baseFontSize = isCustomSize ? pxSize * 0.4 : fontSizeMap[size as string] || 14;
   const dotSize = isCustomSize ? Math.max(8, pxSize * 0.25) : statusDotMap[size as string] || 12;
 
-  // Auto-sizing text ref
-  const textRef = useRef<HTMLSpanElement>(null);
-  const [scale, setScale] = useState(1);
-
   const initials = name
     ? name.split(' ').filter(Boolean).map(n => n[0]).join('').toUpperCase().slice(0, 2)
     : '';
 
-  const textContent = children || icon || initials;
-
-  // Measure and scale text to fit within avatar
-  const autoFitText = useCallback(() => {
-    if (!textRef.current) return;
-    const node = textRef.current;
-    const parentWidth = pxSize - gap * 2;
-    const textWidth = node.scrollWidth;
-    if (textWidth > 0 && parentWidth > 0 && textWidth > parentWidth) {
-      setScale(parentWidth / textWidth);
-    } else {
-      setScale(1);
-    }
-  }, [pxSize, gap]);
-
-  useEffect(() => {
-    autoFitText();
-  }, [textContent, pxSize, gap, autoFitText]);
-
-  // Image error handling
-  const [imgError, setImgError] = useState(false);
-
-  const handleImageError = useCallback(() => {
+  // Image error handling — AntD onError returns boolean (false prevents fallback)
+  const handleImageError = (): boolean => {
     if (onError) {
       const result = onError();
-      if (result === false) return; // User prevents fallback
+      if (result === false) return false;
     }
-    setImgError(true);
-  }, [onError]);
-
-  // Reset error when src changes
-  useEffect(() => {
-    setImgError(false);
-  }, [src]);
-
-  const showImage = src && !imgError;
+    return true;
+  };
 
   const hasCustomColor = !!color;
+  const fallbackContent = children || initials || (icon ? null : <User size={pxSize * 0.55} strokeWidth={1.8} />);
 
   return (
     <div
@@ -215,79 +187,30 @@ export const KAvatar = React.forwardRef<HTMLDivElement, KAvatarProps>(({
       role={onClick ? 'button' : undefined}
       tabIndex={onClick ? 0 : undefined}
     >
-      <AvatarPrimitive.Root
+      <AntAvatar
+        src={src}
+        srcSet={srcSet}
+        alt={alt || name || ''}
+        icon={!children && !initials ? icon : undefined}
+        shape={shape}
+        size={pxSize}
+        gap={gap}
+        crossOrigin={crossOrigin}
+        draggable={draggable}
+        onError={handleImageError}
         className={cn(
-          "relative flex shrink-0 overflow-hidden font-primary font-semibold select-none items-center justify-center transition-all",
-          shape === 'circle' ? "rounded-full" : "rounded-[var(--khor-radius-md)]",
+          "font-primary font-semibold select-none transition-all",
           !hasCustomColor && "bg-khor-avatar-bg text-khor-avatar-fg",
-          "ring-offset-background focus:outline-none focus-visible:ring-[var(--khor-focus-ring-width)] focus-visible:ring-[var(--khor-focus-ring-color)] focus-visible:ring-offset-[var(--khor-focus-ring-offset)]",
           (isHovered || isFocused) && "ring-2 ring-khor-primary ring-offset-2",
         )}
         style={{
-          width: pxSize,
-          height: pxSize,
           ...(hasCustomColor ? { backgroundColor: color, color: '#FFFFFF' } : {}),
           fontSize: baseFontSize,
+          borderRadius: shape === 'circle' ? '50%' : 'var(--khor-radius-md)',
         }}
       >
-        {showImage ? (
-          <AvatarPrimitive.Image
-            src={src}
-            alt={alt || name || ''}
-            srcSet={srcSet}
-            crossOrigin={crossOrigin}
-            referrerPolicy={referrerPolicy}
-            draggable={draggable}
-            className="aspect-square h-full w-full object-cover"
-            style={{ animationDuration: '300ms' }}
-            onLoadingStatusChange={(status) => {
-              if (status === 'error') handleImageError();
-            }}
-          />
-        ) : null}
-        <AvatarPrimitive.Fallback
-          className={cn(
-            "flex h-full w-full items-center justify-center leading-none overflow-hidden",
-            !hasCustomColor && "bg-khor-avatar-bg text-khor-avatar-fg",
-          )}
-          style={hasCustomColor ? { backgroundColor: color, color: '#FFFFFF' } : undefined}
-          delayMs={showImage ? 600 : 0}
-        >
-          {icon ? (
-            <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              {icon}
-            </span>
-          ) : initials ? (
-            <span
-              ref={textRef}
-              style={{
-                transform: `scale(${scale})`,
-                transformOrigin: 'center',
-                whiteSpace: 'nowrap',
-                lineHeight: 1,
-                padding: `0 ${gap}px`,
-              }}
-            >
-              {children || initials}
-            </span>
-          ) : children ? (
-            <span
-              ref={textRef}
-              style={{
-                transform: `scale(${scale})`,
-                transformOrigin: 'center',
-                whiteSpace: 'nowrap',
-                lineHeight: 1,
-                padding: `0 ${gap}px`,
-              }}
-            >
-              {children}
-            </span>
-          ) : (
-            <User size={pxSize * 0.55} strokeWidth={1.8} />
-          )}
-        </AvatarPrimitive.Fallback>
-      </AvatarPrimitive.Root>
+        {icon && !children && !initials ? undefined : fallbackContent}
+      </AntAvatar>
 
       {status && (
         <span

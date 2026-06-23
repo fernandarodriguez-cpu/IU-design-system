@@ -1,93 +1,58 @@
 import React from 'react';
-import * as TooltipPrimitive from '@radix-ui/react-tooltip';
-import { cn } from '@/utils/cn';
+import { Tooltip as AntTooltip, type TooltipProps as AntTooltipProps } from 'antd';
 
 /* ═══════════════════════════════════════════════
-   KTooltip — Primitivas (Radix UI + Tailwind)
+   KTooltip — Migrado a Ant Design (antes @radix-ui/react-tooltip)
+   Tematizado por el bridge global (khorAntdTheme.ts). Conserva la
+   API pública: KTooltip (title/content/placement/trigger/color/open…)
+   + los exports compuestos (Provider/Root/Trigger/Content) como shims
+   de compatibilidad — ningún consumidor los usa directamente.
    ═══════════════════════════════════════════════ */
 
-/**
- * @figma-mcp-migration
- * Component: KTooltipProvider
- * 
- * INSTRUCCIONES PARA AGENTES DE IA (VS Code / MCP):
- * Para migrar este componente a Figma, NO generar una matriz multiplicando todas las variables.
- * Utilizar Figma Component Properties V2 con la siguiente estructura:
- * 
- * 1. Variants (Estructurales):
- *    - Definir variantes puramente visuales/estructurales.
- * 2. Booleans (Encendido/Apagado):
- *    - Definir encendido/apagado para iconos o estados (isLoading, hasIcon).
- * 3. Color Variables (No usar variantes para colores semánticos):
- *    - El relleno/borde debe usar Figma Variables (Khor v6.0 Colors) asignado dinámicamente.
- *    - El consumidor del UI Kit cambiará el color del layer.
- */
-export const KTooltipProvider = TooltipPrimitive.Provider;
-export const KTooltipRoot = TooltipPrimitive.Root;
-export const KTooltipTrigger = TooltipPrimitive.Trigger;
-
-export const KTooltipContent = React.forwardRef<
-  React.ElementRef<typeof TooltipPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content>
->(({ className, sideOffset = 4, style, ...props }, ref) => (
-  <TooltipPrimitive.Content
-    ref={ref}
-    sideOffset={sideOffset}
-    className={cn(
-      "z-50 overflow-hidden rounded-md px-3 py-1.5 text-xs animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 font-primary shadow-md",
-      className
-    )}
-    style={{
-      backgroundColor: 'var(--khor-tooltip-bg)',
-      color: 'var(--khor-tooltip-fg)',
-      ...style,
-    }}
-    {...props}
-  />
-));
-KTooltipContent.displayName = TooltipPrimitive.Content.displayName;
-
-/* ═══════════════════════════════════════════════
-   KTooltip — Molécula de conveniencia
-   ═══════════════════════════════════════════════ */
-
-export interface KTooltipProps extends TooltipPrimitive.TooltipProps {
+export interface KTooltipProps
+  extends Omit<AntTooltipProps, 'title' | 'placement' | 'trigger' | 'color'> {
   title?: React.ReactNode;
   content?: React.ReactNode;
   children: React.ReactElement;
   placement?: 'top' | 'bottom' | 'left' | 'right';
   trigger?: 'hover' | 'focus' | 'click';
-  color?: string; // Por paridad con AntD
+  color?: string;
 }
 
-export const KTooltip = ({ 
-  title, 
-  content, 
-  children, 
+export const KTooltip = ({
+  title,
+  content,
+  children,
   placement = 'top',
+  trigger = 'hover',
   color,
-  ...props 
+  ...props
 }: KTooltipProps) => {
-  const displayContent = title || content;
-
+  const displayContent = title ?? content;
   if (!displayContent) return children;
 
   return (
-    <KTooltipProvider>
-      <KTooltipRoot {...props}>
-        <KTooltipTrigger asChild>
-          {children}
-        </KTooltipTrigger>
-        <KTooltipContent 
-          side={placement} 
-          style={color ? { backgroundColor: color } : undefined}
-        >
-          {displayContent}
-          <TooltipPrimitive.Arrow style={{ fill: color || 'var(--khor-tooltip-bg)' }} />
-        </KTooltipContent>
-      </KTooltipRoot>
-    </KTooltipProvider>
+    <AntTooltip
+      title={displayContent}
+      placement={placement}
+      trigger={trigger}
+      // Default to the Khor tooltip background so the look matches; `color` overrides.
+      color={color ?? 'var(--khor-tooltip-bg)'}
+      overlayClassName="font-primary [&_.ant-tooltip-inner]:text-xs [&_.ant-tooltip-inner]:rounded-md"
+      {...props}
+    >
+      {children}
+    </AntTooltip>
   );
 };
+
+/* ─── Compatibility shims for the former Radix compound primitives ───
+   Kept so the public export surface is unchanged. AntD's Tooltip needs
+   no Provider and isn't composed of Root/Trigger/Content, so these are
+   light passthroughs. Prefer <KTooltip title=…> directly. */
+export const KTooltipProvider: React.FC<{ children?: React.ReactNode }> = ({ children }) => <>{children}</>;
+export const KTooltipRoot: React.FC<{ children?: React.ReactNode }> = ({ children }) => <>{children}</>;
+export const KTooltipTrigger: React.FC<{ children?: React.ReactNode }> = ({ children }) => <>{children}</>;
+export const KTooltipContent: React.FC<{ children?: React.ReactNode }> = ({ children }) => <>{children}</>;
 
 export default KTooltip;

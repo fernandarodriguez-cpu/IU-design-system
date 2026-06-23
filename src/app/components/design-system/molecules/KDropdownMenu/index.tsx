@@ -1,160 +1,144 @@
-import React from 'react';
-import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
+import React, { createContext, useContext, useState } from 'react';
+import { Dropdown as AntDropdown, type MenuProps } from 'antd';
 import { ChevronRight } from 'lucide-react';
 import { cn } from '@/utils/cn';
 
-/**
- * @figma-mcp-migration
- * Component: KDropdownMenuRoot
- * 
- * INSTRUCCIONES PARA AGENTES DE IA (VS Code / MCP):
- * Para migrar este componente a Figma, NO generar una matriz multiplicando todas las variables.
- * Utilizar Figma Component Properties V2 con la siguiente estructura:
- * 
- * 1. Variants (Estructurales):
- *    - Definir variantes puramente visuales/estructurales.
- * 2. Booleans (Encendido/Apagado):
- *    - Definir encendido/apagado para iconos o estados (isLoading, hasIcon).
- * 3. Color Variables (No usar variantes para colores semánticos):
- *    - El relleno/borde debe usar Figma Variables (Khor v6.0 Colors) asignado dinámicamente.
- *    - El consumidor del UI Kit cambiará el color del layer.
- */
-export const KDropdownMenuRoot = DropdownMenuPrimitive.Root;
-export const KDropdownMenuTrigger = DropdownMenuPrimitive.Trigger;
-export const KDropdownMenuGroup = DropdownMenuPrimitive.Group;
-export const KDropdownMenuPortal = DropdownMenuPrimitive.Portal;
-export const KDropdownMenuSub = DropdownMenuPrimitive.Sub;
-export const KDropdownMenuRadioGroup = DropdownMenuPrimitive.RadioGroup;
-
-export const KDropdownMenuSubTrigger = React.forwardRef<
-  React.ElementRef<typeof DropdownMenuPrimitive.SubTrigger>,
-  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubTrigger> & {
-    inset?: boolean;
-  }
->(({ className, inset, children, ...props }, ref) => (
-  <DropdownMenuPrimitive.SubTrigger
-    ref={ref}
-    className={cn(
-      "flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none focus:bg-khor-surface-hover data-[state=open]:bg-khor-surface-hover font-primary text-khor-neutral-900",
-      inset && "ps-8",
-      className
-    )}
-    {...props}
-  >
-    {children}
-    <ChevronRight className="ms-auto h-4 w-4" />
-  </DropdownMenuPrimitive.SubTrigger>
-));
-KDropdownMenuSubTrigger.displayName = DropdownMenuPrimitive.SubTrigger.displayName;
-
-export const KDropdownMenuSubContent = React.forwardRef<
-  React.ElementRef<typeof DropdownMenuPrimitive.SubContent>,
-  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubContent>
->(({ className, ...props }, ref) => (
-  <DropdownMenuPrimitive.SubContent
-    ref={ref}
-    className={cn(
-      "z-50 min-w-[8rem] overflow-hidden rounded-md border bg-khor-surface-page p-1 text-khor-neutral-900 shadow-lg font-primary data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
-      className
-    )}
-    {...props}
-  />
-));
-KDropdownMenuSubContent.displayName = DropdownMenuPrimitive.SubContent.displayName;
-
-export const KDropdownMenuContent = React.forwardRef<
-  React.ElementRef<typeof DropdownMenuPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content>
->(({ className, sideOffset = 4, ...props }, ref) => (
-  <DropdownMenuPrimitive.Portal>
-    <DropdownMenuPrimitive.Content
-      ref={ref}
-      sideOffset={sideOffset}
-      className={cn(
-        "z-50 min-w-[8rem] overflow-hidden rounded-xl border border-khor-slate-200 bg-white p-1 text-khor-neutral-900 shadow-khor-lg animate-in data-[state=open]:fade-in-0 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 font-primary",
-        className
-      )}
-      {...props}
-    />
-  </DropdownMenuPrimitive.Portal>
-));
-KDropdownMenuContent.displayName = DropdownMenuPrimitive.Content.displayName;
-
-export const KDropdownMenuItem = React.forwardRef<
-  React.ElementRef<typeof DropdownMenuPrimitive.Item>,
-  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item> & {
-    inset?: boolean;
-  }
->(({ className, inset, ...props }, ref) => (
-  <DropdownMenuPrimitive.Item
-    ref={ref}
-    className={cn(
-      "relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-khor-surface-hover focus:text-khor-neutral-900 data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-      inset && "ps-8",
-      className
-    )}
-    {...props}
-  />
-));
-KDropdownMenuItem.displayName = DropdownMenuPrimitive.Item.displayName;
-
-export const KDropdownMenuLabel = React.forwardRef<
-  React.ElementRef<typeof DropdownMenuPrimitive.Label>,
-  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Label> & {
-    inset?: boolean;
-  }
->(({ className, inset, ...props }, ref) => (
-  <DropdownMenuPrimitive.Label
-    ref={ref}
-    className={cn(
-      "px-2 py-1.5 text-sm font-semibold text-khor-neutral-500",
-      inset && "ps-8",
-      className
-    )}
-    {...props}
-  />
-));
-KDropdownMenuLabel.displayName = DropdownMenuPrimitive.Label.displayName;
-
-export const KDropdownMenuSeparator = React.forwardRef<
-  React.ElementRef<typeof DropdownMenuPrimitive.Separator>,
-  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Separator>
->(({ className, ...props }, ref) => (
-  <DropdownMenuPrimitive.Separator
-    ref={ref}
-    className={cn("-mx-1 my-1 h-px bg-khor-slate-200", className)}
-    {...props}
-  />
-));
-KDropdownMenuSeparator.displayName = DropdownMenuPrimitive.Separator.displayName;
-
-export const KDropdownMenuCheckboxItem = React.forwardRef<
-  React.ElementRef<typeof DropdownMenuPrimitive.CheckboxItem>,
-  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.CheckboxItem>
->(({ className, children, ...props }, ref) => (
-  <DropdownMenuPrimitive.CheckboxItem
-    ref={ref}
-    className={cn(
-      "relative flex cursor-pointer select-none items-center rounded-sm py-1.5 ps-8 pe-2 text-sm outline-none transition-colors focus:bg-khor-surface-hover focus:text-khor-neutral-900 data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-      className
-    )}
-    {...props}
-  >
-    <span className="absolute start-2 flex h-3.5 w-3.5 items-center justify-center">
-      <DropdownMenuPrimitive.ItemIndicator>
-        <div className="w-2 h-2 bg-khor-primary rounded-sm" />
-      </DropdownMenuPrimitive.ItemIndicator>
-    </span>
-    {children}
-  </DropdownMenuPrimitive.CheckboxItem>
-));
-KDropdownMenuCheckboxItem.displayName = DropdownMenuPrimitive.CheckboxItem.displayName;
-
 /* ═══════════════════════════════════════════════
-   KDropdownMenu — Molécula de conveniencia
+   KDropdownMenu — Migrado a Ant Design (antes @radix-ui/react-dropdown-menu)
+   • Convenience <KDropdownMenu menu={{items}}> → AntD Dropdown menu nativo.
+   • Compound (Root/Trigger/Content/Item/Label/Separator) preservado para
+     consumidores como KDashboardLayout, vía context + dropdownRender que
+     pinta los items (divs estilizados, sin Radix) dentro del popup de AntD.
    ═══════════════════════════════════════════════ */
 
-export interface KDropdownMenuProps extends DropdownMenuPrimitive.DropdownMenuProps {
+type Side = 'top' | 'bottom';
+type Align = 'start' | 'center' | 'end';
+
+function sideAlignToPlacement(side: Side = 'bottom', align: Align = 'start'): any {
+  const a = align === 'start' ? 'Left' : align === 'end' ? 'Right' : 'Center';
+  return side + a;
+}
+
+// ─── shared item styles (mirror the former Radix/shadcn classes) ──────────────
+const ITEM_CLS =
+  'relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-khor-surface-hover focus:bg-khor-surface-hover focus:text-khor-neutral-900';
+const LABEL_CLS = 'px-2 py-1.5 text-sm font-semibold text-khor-neutral-500';
+const SEP_CLS = '-mx-1 my-1 h-px bg-khor-slate-200';
+const PANEL_CLS =
+  'min-w-[8rem] overflow-hidden rounded-xl border border-khor-slate-200 bg-white p-1 text-khor-neutral-900 shadow-khor-lg font-primary';
+
+// ─── context to close the menu from an item ───────────────────────────────────
+const DDCtx = createContext<{ close: () => void }>({ close: () => {} });
+
+// ─── Compound: Root collects Trigger + Content and renders an AntD Dropdown ───
+interface KDropdownMenuRootProps {
+  children: React.ReactNode;
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  modal?: boolean;
+}
+
+export const KDropdownMenuRoot: React.FC<KDropdownMenuRootProps> = ({ children, open: openProp, defaultOpen, onOpenChange }) => {
+  const [openState, setOpenState] = useState(defaultOpen ?? false);
+  const isControlled = openProp !== undefined;
+  const open = isControlled ? openProp : openState;
+  const setOpen = (o: boolean) => {
+    if (!isControlled) setOpenState(o);
+    onOpenChange?.(o);
+  };
+
+  // collect trigger element + content (possibly wrapped in a Portal)
+  let triggerNode: React.ReactNode = null;
+  let triggerClassName: string | undefined;
+  let contentNode: React.ReactNode = null;
+  let contentProps: any = {};
+
+  const visit = (nodes: React.ReactNode) => {
+    React.Children.forEach(nodes, (child) => {
+      if (!React.isValidElement(child)) return;
+      if (child.type === KDropdownMenuTrigger) {
+        triggerNode = child.props.children;
+        triggerClassName = child.props.className;
+      } else if (child.type === KDropdownMenuContent) {
+        contentNode = child.props.children;
+        contentProps = child.props;
+      } else if (child.type === KDropdownMenuPortal) {
+        visit(child.props.children);
+      }
+    });
+  };
+  visit(children);
+
+  return (
+    <DDCtx.Provider value={{ close: () => setOpen(false) }}>
+      <AntDropdown
+        open={open}
+        onOpenChange={setOpen}
+        trigger={['click']}
+        placement={sideAlignToPlacement(contentProps.side, contentProps.align)}
+        dropdownRender={() => <div className={cn(PANEL_CLS, contentProps.className)}>{contentNode}</div>}
+      >
+        <span className={cn('inline-flex', triggerClassName)}>{triggerNode as React.ReactNode}</span>
+      </AntDropdown>
+    </DDCtx.Provider>
+  );
+};
+
+// Trigger / Content / Portal are markers introspected by Root (not rendered directly)
+export const KDropdownMenuTrigger: React.FC<{ children?: React.ReactNode; className?: string; asChild?: boolean }> = ({ children }) => <>{children}</>;
+export const KDropdownMenuContent: React.FC<{ children?: React.ReactNode; className?: string; side?: Side; align?: Align; sideOffset?: number }> = ({ children }) => <>{children}</>;
+export const KDropdownMenuPortal: React.FC<{ children?: React.ReactNode }> = ({ children }) => <>{children}</>;
+export const KDropdownMenuGroup: React.FC<{ children?: React.ReactNode }> = ({ children }) => <>{children}</>;
+export const KDropdownMenuSub: React.FC<{ children?: React.ReactNode }> = ({ children }) => <>{children}</>;
+export const KDropdownMenuRadioGroup: React.FC<{ children?: React.ReactNode }> = ({ children }) => <>{children}</>;
+
+export const KDropdownMenuItem: React.FC<{
+  children?: React.ReactNode;
+  className?: string;
+  onClick?: (e: React.MouseEvent) => void;
+  disabled?: boolean;
+  inset?: boolean;
+}> = ({ children, className, onClick, disabled, inset }) => {
+  const { close } = useContext(DDCtx);
+  return (
+    <div
+      role="menuitem"
+      className={cn(ITEM_CLS, inset && 'ps-8', disabled && 'pointer-events-none opacity-50', className)}
+      onClick={(e) => {
+        if (disabled) return;
+        onClick?.(e);
+        close();
+      }}
+    >
+      {children}
+    </div>
+  );
+};
+
+export const KDropdownMenuLabel: React.FC<{ children?: React.ReactNode; className?: string; inset?: boolean }> = ({ children, className, inset }) => (
+  <div className={cn(LABEL_CLS, inset && 'ps-8', className)}>{children}</div>
+);
+
+export const KDropdownMenuSeparator: React.FC<{ className?: string }> = ({ className }) => <div className={cn(SEP_CLS, className)} />;
+
+export const KDropdownMenuSubTrigger: React.FC<{ children?: React.ReactNode; className?: string; inset?: boolean }> = ({ children, className, inset }) => (
+  <div className={cn(ITEM_CLS, 'justify-between', inset && 'ps-8', className)}>
+    {children}
+    <ChevronRight className="ms-auto h-4 w-4" />
+  </div>
+);
+export const KDropdownMenuSubContent: React.FC<{ children?: React.ReactNode; className?: string }> = ({ children, className }) => (
+  <div className={cn(PANEL_CLS, className)}>{children}</div>
+);
+export const KDropdownMenuCheckboxItem: React.FC<{ children?: React.ReactNode; className?: string }> = ({ children, className }) => (
+  <div className={cn(ITEM_CLS, 'ps-8', className)}>{children}</div>
+);
+
+/* ═══════════════════════════════════════════════
+   KDropdownMenu — Molécula de conveniencia (AntD Dropdown nativo)
+   ═══════════════════════════════════════════════ */
+export interface KDropdownMenuProps {
   children: React.ReactElement;
   menu?: {
     items: any[];
@@ -163,45 +147,45 @@ export interface KDropdownMenuProps extends DropdownMenuPrimitive.DropdownMenuPr
   placement?: 'bottomLeft' | 'bottomCenter' | 'bottomRight' | 'topLeft' | 'topCenter' | 'topRight';
   trigger?: ('click' | 'hover' | 'contextMenu')[];
   arrow?: boolean;
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
-export const KDropdownMenu = ({ 
-  children, 
-  menu, 
+export const KDropdownMenu = ({
+  children,
+  menu,
   placement = 'bottomLeft',
   trigger = ['click'],
   arrow = false,
-  ...props 
+  open,
+  defaultOpen,
+  onOpenChange,
 }: KDropdownMenuProps) => {
-  const side = placement.startsWith('top') ? 'top' : 'bottom';
-  const align = placement.endsWith('Left') ? 'start' : placement.endsWith('Right') ? 'end' : 'center';
+  const items: MenuProps['items'] = (menu?.items ?? []).map((item, idx) => {
+    if (item.type === 'divider') return { type: 'divider', key: `sep-${idx}` };
+    return {
+      key: item.key ?? idx,
+      label: item.label,
+      icon: item.icon,
+      danger: item.danger,
+      disabled: item.disabled,
+    };
+  });
 
   return (
-    <KDropdownMenuRoot {...props}>
-      <KDropdownMenuTrigger asChild>
-        {children}
-      </KDropdownMenuTrigger>
-      <KDropdownMenuPortal>
-        <KDropdownMenuContent side={side} align={align} sideOffset={arrow ? 10 : 4}>
-          {menu?.items.map((item, idx) => {
-            if (item.type === 'divider') {
-              return <KDropdownMenuSeparator key={`sep-${idx}`} />;
-            }
-            return (
-              <KDropdownMenuItem 
-                key={item.key || idx} 
-                onClick={() => menu.onClick?.({ key: item.key })}
-                className={item.danger ? "text-red-600 focus:bg-khor-error-light focus:text-red-700" : ""}
-                disabled={item.disabled}
-              >
-                {item.icon && <span className="me-2">{item.icon}</span>}
-                {item.label}
-              </KDropdownMenuItem>
-            );
-          })}
-        </KDropdownMenuContent>
-      </KDropdownMenuPortal>
-    </KDropdownMenuRoot>
+    <AntDropdown
+      menu={{ items, onClick: ({ key }) => menu?.onClick?.({ key: String(key) }) }}
+      placement={placement}
+      trigger={trigger}
+      arrow={arrow}
+      open={open}
+      defaultOpen={defaultOpen}
+      onOpenChange={onOpenChange}
+      overlayClassName="font-primary"
+    >
+      {children}
+    </AntDropdown>
   );
 };
 

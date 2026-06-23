@@ -1,10 +1,15 @@
 import React from 'react';
-import * as AccordionPrimitive from '@radix-ui/react-accordion';
+import { Collapse as AntCollapse, type CollapseProps } from 'antd';
 import { ChevronDown } from 'lucide-react';
 import { cn } from '@/utils/cn';
 
-// ─── Types ───────────────────────────────────────────────────────────────────
+/* ─── KAccordion — Migrado a Ant Design (antes @radix-ui/react-accordion) ───
+   Implementado sobre AntD Collapse con el ícono al final (caja navy con
+   chevron) y tarjetas redondeadas separadas, replicando el look Khor:
+   header #F4F4F4 (hover #EBEBEB), borde #CED4DA, contenido blanco.
+   KAccordionColumns / KAccordionColumn (layout puro) se conservan igual. */
 
+// ─── Types ───────────────────────────────────────────────────────────────────
 export interface KAccordionItem {
   key: string;
   label: React.ReactNode;
@@ -26,9 +31,7 @@ export interface KAccordionProps {
   defaultActiveKey?: string | string[];
 }
 
-// ─── KAccordionColumn ─────────────────────────────────────────────────────────
-// A single column inside KAccordionColumns. Optional title + any children.
-
+// ─── KAccordionColumn (layout helper, unchanged) ──────────────────────────────
 export interface KAccordionColumnProps {
   title?: React.ReactNode;
   gap?: number;
@@ -36,27 +39,16 @@ export interface KAccordionColumnProps {
   className?: string;
 }
 
-export function KAccordionColumn({
-  title,
-  gap = 12,
-  children,
-  className,
-}: KAccordionColumnProps) {
+export function KAccordionColumn({ title, gap = 12, children, className }: KAccordionColumnProps) {
   return (
     <div className={cn('flex flex-col', className)} style={{ gap }}>
-      {title && (
-        <p className="m-0 text-sm font-semibold" style={{ color: '#051758' }}>
-          {title}
-        </p>
-      )}
+      {title && <p className="m-0 text-sm font-semibold" style={{ color: '#051758' }}>{title}</p>}
       {children}
     </div>
   );
 }
 
-// ─── KAccordionColumns ────────────────────────────────────────────────────────
-// Grid wrapper: 1–4 columns. Use KAccordionColumn inside for structure.
-
+// ─── KAccordionColumns (layout helper, unchanged) ─────────────────────────────
 export interface KAccordionColumnsProps {
   cols?: 1 | 2 | 3 | 4;
   gap?: number;
@@ -64,18 +56,9 @@ export interface KAccordionColumnsProps {
   className?: string;
 }
 
-export function KAccordionColumns({
-  cols = 2,
-  gap = 24,
-  children,
-  className,
-}: KAccordionColumnsProps) {
+export function KAccordionColumns({ cols = 2, gap = 24, children, className }: KAccordionColumnsProps) {
   const gridClass =
-    cols === 1 ? 'grid-cols-1'
-    : cols === 2 ? 'grid-cols-2'
-    : cols === 3 ? 'grid-cols-3'
-    : 'grid-cols-4';
-
+    cols === 1 ? 'grid-cols-1' : cols === 2 ? 'grid-cols-2' : cols === 3 ? 'grid-cols-3' : 'grid-cols-4';
   return (
     <div className={cn('grid', gridClass, className)} style={{ gap }}>
       {children}
@@ -84,81 +67,52 @@ export function KAccordionColumns({
 }
 
 // ─── KAccordion ──────────────────────────────────────────────────────────────
-
 export function KAccordion({
   items,
   type = 'single',
   defaultValue,
   value,
   onValueChange,
-  collapsible = true,
   className,
   accordion,
   defaultActiveKey,
 }: KAccordionProps) {
-  const resolvedType = accordion ? 'single' : type;
-  const resolvedDefaultValue = defaultActiveKey ?? defaultValue;
+  const isAccordion = accordion ?? type === 'single';
+  const resolvedDefault = defaultActiveKey ?? defaultValue;
+
+  const antItems: CollapseProps['items'] = items.map((item) => ({
+    key: item.key,
+    label: <span className="flex-1 text-[#051758] font-semibold text-sm leading-snug">{item.label}</span>,
+    children: <div className="text-sm text-[#374151] leading-relaxed">{item.children}</div>,
+    extra: item.extra,
+    collapsible: item.disabled ? 'disabled' : undefined,
+  }));
 
   return (
-    <AccordionPrimitive.Root
-      type={resolvedType as any}
-      defaultValue={resolvedDefaultValue as any}
-      value={value as any}
-      onValueChange={onValueChange}
-      collapsible={collapsible}
-      className={cn('w-full flex flex-col gap-3 font-primary', className)}
-    >
-      {items.map((item) => (
-        <AccordionPrimitive.Item
-          key={item.key}
-          value={item.key}
-          disabled={item.disabled}
-          className={cn(
-            'rounded-xl overflow-hidden transition-all duration-200',
-            item.disabled && 'opacity-50 pointer-events-none',
-          )}
-          style={{ border: '1px solid #CED4DA' }}
-        >
-          {/* ── Header ── */}
-          <AccordionPrimitive.Header className="flex m-0">
-            <AccordionPrimitive.Trigger
-              className="group flex w-full items-center gap-4 px-6 py-4 text-left outline-none focus-visible:ring-2 focus-visible:ring-inset transition-colors"
-              style={{ backgroundColor: '#F4F4F4' }}
-              onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#EBEBEB')}
-              onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#F4F4F4')}
-            >
-              <span className="flex-1 text-[#051758] font-semibold text-sm leading-snug">
-                {item.label}
-              </span>
-
-              {item.extra && (
-                <div
-                  className="flex items-center"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  {item.extra}
-                </div>
-              )}
-
-              {/* Navy outline chevron icon button */}
-              <div className="flex shrink-0 items-center justify-center w-9 h-9 rounded-lg border border-[#051758] bg-white text-[#051758] transition-colors group-hover:bg-[#051758]/5">
-                <ChevronDown
-                  size={16}
-                  className="transition-transform duration-300 group-data-[state=open]:rotate-180"
-                />
-              </div>
-            </AccordionPrimitive.Trigger>
-          </AccordionPrimitive.Header>
-
-          {/* ── Content ── */}
-          <AccordionPrimitive.Content className="overflow-hidden data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down">
-            <div className="bg-white px-6 py-5 text-sm text-[#374151] leading-relaxed">
-              {item.children}
-            </div>
-          </AccordionPrimitive.Content>
-        </AccordionPrimitive.Item>
-      ))}
-    </AccordionPrimitive.Root>
+    <AntCollapse
+      accordion={isAccordion}
+      defaultActiveKey={resolvedDefault as any}
+      activeKey={value as any}
+      onChange={(key) => onValueChange?.(key)}
+      bordered={false}
+      expandIconPosition="end"
+      expandIcon={({ isActive }) => (
+        <div className="flex shrink-0 items-center justify-center w-9 h-9 rounded-lg border border-[#051758] bg-white text-[#051758] transition-colors">
+          <ChevronDown size={16} className={cn('transition-transform duration-300', isActive && 'rotate-180')} />
+        </div>
+      )}
+      className={cn(
+        'w-full font-primary !bg-transparent',
+        // separated rounded cards
+        '[&_.ant-collapse-item]:!mb-3 [&_.ant-collapse-item]:!border [&_.ant-collapse-item]:!border-[#CED4DA] [&_.ant-collapse-item]:!rounded-xl [&_.ant-collapse-item]:!overflow-hidden',
+        // header (Khor grey, hover, padding, vertical-centered icon)
+        '[&_.ant-collapse-header]:!items-center [&_.ant-collapse-header]:!bg-[#F4F4F4] [&_.ant-collapse-header]:!px-6 [&_.ant-collapse-header]:!py-4 [&_.ant-collapse-header:hover]:!bg-[#EBEBEB]',
+        // content (white card body)
+        '[&_.ant-collapse-content]:!bg-white [&_.ant-collapse-content]:!border-t-0 [&_.ant-collapse-content-box]:!px-6 [&_.ant-collapse-content-box]:!py-5',
+        className,
+      )}
+      items={antItems}
+    />
   );
 }
 
